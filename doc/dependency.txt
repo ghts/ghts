@@ -1,0 +1,5 @@
+1. Python binding for ZeroMQ
+> pip install pyzmq
+
+2. Named constants
+> pip install named_constants
