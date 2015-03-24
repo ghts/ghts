@@ -1,3 +1,11 @@
+Go Dependency
+
+1. Go binding for ZeroMQ
+> go get github.com/pebbe/zmq4
+
+
+Python Dependency
+
 1. Python binding for ZeroMQ
 > pip install pyzmq
 
