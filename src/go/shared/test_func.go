@@ -21,6 +21,14 @@ func F출력_일시정지_중() bool { return 출력_일시정지_모드 }
 func F출력_일시정지_시작()     { 출력_일시정지_모드 = true }
 func F출력_일시정지_종료()     { 출력_일시정지_모드 = false }
 
+func F단일_스레드_모드() {
+    runtime.GOMAXPROCS(1)
+}
+
+func F멀티_스레드_모드() {
+    runtime.GOMAXPROCS(runtime.NumCPU())
+}    
+
 func AssertTrue(테스트 testing.TB, true이어야_하는_조건 bool, 추가_매개변수 ...interface{}) {
 	if true이어야_하는_조건 {
 		return
@@ -210,20 +218,27 @@ func F소스코드_위치(건너뛰는_단계 int) string {
 }
 
 func F문자열_출력(포맷_문자열 string, 추가_매개변수 ...interface{}) {
-	F호출경로_건너뛴_문자열_출력(1, 포맷_문자열, 추가_매개변수...)
+	if !strings.HasSuffix(포맷_문자열, "\n") {
+		포맷_문자열 += "\n"
+	}
+	
+	fmt.Printf(포맷_문자열, 추가_매개변수...)
 }
 
 func F호출경로_건너뛴_문자열_출력(건너뛰기_단계 int, 포맷_문자열 string, 추가_매개변수 ...interface{}) {
 	if F출력_일시정지_중() {
 		return
 	}
+	
+	포맷_문자열 = "%s: " + 포맷_문자열
+	추가_매개변수 = append([]interface{}{F소스코드_위치(건너뛰기_단계 + 1)}, 추가_매개변수...)
 
 	if !strings.HasSuffix(포맷_문자열, "\n") {
 		포맷_문자열 += "\n"
 	}
 
 	fmt.Println("")
-	fmt.Printf(F소스코드_위치(건너뛰기_단계+1)+": "+포맷_문자열, 추가_매개변수...)
+	fmt.Printf(포맷_문자열, 추가_매개변수...)
 
 	for 추가적인_건너뛰기 := 2; 추가적인_건너뛰기 < 20; 추가적인_건너뛰기++ {
 		fmt.Println(F소스코드_위치(건너뛰기_단계 + 추가적인_건너뛰기))
