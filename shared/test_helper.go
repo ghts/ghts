@@ -8,28 +8,35 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"sync"
 	"testing"
 )
 
 var 테스트_모드 bool = false
 var 출력_일시정지_모드 bool = false
+var 초기화 sync.WaitGroup
 
-func F테스트_중() bool     { return 테스트_모드 }
-func F테스트_모드_시작()      { 테스트_모드 = true }
-func F테스트_모드_종료()      { 테스트_모드 = false }
+func F테스트_중() bool { return 테스트_모드 }
+func F테스트_모드_시작()  { 테스트_모드 = true }
+func F테스트_모드_종료()  { 테스트_모드 = false }
+
 func F출력_일시정지_중() bool { return 출력_일시정지_모드 }
 func F출력_일시정지_시작()     { 출력_일시정지_모드 = true }
 func F출력_일시정지_종료()     { 출력_일시정지_모드 = false }
 
+func F초기화_대기열_추가(수량 int) { 초기화.Add(수량) }
+func F초기화_완료()           { 초기화.Done() }
+func F초기화_대기()           { 초기화.Wait() }
+
 func F단일_스레드_모드() {
-    runtime.GOMAXPROCS(1)
+	runtime.GOMAXPROCS(1)
 }
 
 func F멀티_스레드_모드() {
-    runtime.GOMAXPROCS(runtime.NumCPU())
-}    
+	runtime.GOMAXPROCS(runtime.NumCPU())
+}
 
-func AssertTrue(테스트 testing.TB, true이어야_하는_조건 bool, 추가_매개변수 ...interface{}) {
+func F테스트_참임(테스트 testing.TB, true이어야_하는_조건 bool, 추가_매개변수 ...interface{}) {
 	if true이어야_하는_조건 {
 		return
 	}
@@ -49,7 +56,7 @@ func AssertTrue(테스트 testing.TB, true이어야_하는_조건 bool, 추가_�
 	테스트.Fail()
 }
 
-func AssertFalse(테스트 testing.TB, false이어야_하는_조건 bool, 추가_매개변수 ...interface{}) {
+func F테스트_거짓임(테스트 testing.TB, false이어야_하는_조건 bool, 추가_매개변수 ...interface{}) {
 	if false이어야_하는_조건 == false {
 		return
 	}
@@ -69,7 +76,7 @@ func AssertFalse(테스트 testing.TB, false이어야_하는_조건 bool, 추가
 	테스트.Fail()
 }
 
-func AssertNoError(테스트 testing.TB, nil이어야_하는_에러 error) {
+func F테스트_에러없음(테스트 testing.TB, nil이어야_하는_에러 error) {
 	if nil이어야_하는_에러 == nil {
 		return
 	}
@@ -83,7 +90,7 @@ func AssertNoError(테스트 testing.TB, nil이어야_하는_에러 error) {
 	테스트.Fail()
 }
 
-func AssertError(테스트 testing.TB, nil이_아니어야_하는_에러 error) {
+func F테스트_에러발생(테스트 testing.TB, nil이_아니어야_하는_에러 error) {
 	if nil이_아니어야_하는_에러 != nil {
 		return
 	}
@@ -97,7 +104,7 @@ func AssertError(테스트 testing.TB, nil이_아니어야_하는_에러 error) 
 	테스트.Fail()
 }
 
-func AssertEqual(테스트 testing.TB, 값1, 값2 interface{}) {
+func F테스트_같음(테스트 testing.TB, 값1, 값2 interface{}) {
 	if reflect.DeepEqual(값1, 값2) {
 		return
 	}
@@ -112,7 +119,7 @@ func AssertEqual(테스트 testing.TB, 값1, 값2 interface{}) {
 	테스트.Fail()
 }
 
-func AssertNotEqual(테스트 testing.TB, 값1, 값2 interface{}) {
+func F테스트_다름(테스트 testing.TB, 값1, 값2 interface{}) {
 	if !reflect.DeepEqual(값1, 값2) {
 		return
 	}
@@ -127,7 +134,7 @@ func AssertNotEqual(테스트 testing.TB, 값1, 값2 interface{}) {
 	테스트.Fail()
 }
 
-func AssertPanic(테스트 testing.TB, 함수 interface{}, 추가_매개변수 ...interface{}) {
+func F테스트_패닉발생(테스트 testing.TB, 함수 interface{}, 추가_매개변수 ...interface{}) {
 	defer func() {
 		에러 := recover()
 
@@ -162,7 +169,7 @@ func AssertPanic(테스트 testing.TB, 함수 interface{}, 추가_매개변수 .
 	reflect.ValueOf(함수).Call(매개변수_모음)
 }
 
-func AssertNoPanic(테스트 testing.TB, 함수 interface{}, 추가_매개변수 ...interface{}) {
+func F테스트_패닉없음(테스트 testing.TB, 함수 interface{}, 추가_매개변수 ...interface{}) {
 	defer func() {
 		에러 := recover()
 
@@ -221,7 +228,7 @@ func F문자열_출력(포맷_문자열 string, 추가_매개변수 ...interface
 	if !strings.HasSuffix(포맷_문자열, "\n") {
 		포맷_문자열 += "\n"
 	}
-	
+
 	fmt.Printf(포맷_문자열, 추가_매개변수...)
 }
 
@@ -229,7 +236,7 @@ func F호출경로_건너뛴_문자열_출력(건너뛰기_단계 int, 포맷_�
 	if F출력_일시정지_중() {
 		return
 	}
-	
+
 	포맷_문자열 = "%s: " + 포맷_문자열
 	추가_매개변수 = append([]interface{}{F소스코드_위치(건너뛰기_단계 + 1)}, 추가_매개변수...)
 
@@ -250,8 +257,26 @@ func F호출경로_건너뛴_문자열_출력(건너뛰기_단계 int, 포맷_�
 // 체크포인트로 실행흐름을 따라가면서 에러가 발생하는 부분을
 // 추적하는 게 가장 단순하면서 확실함.
 func F체크포인트(체크포인트_번호 *int, 추가_매개변수 ...interface{}) {
-	fmt.Println("%s체크포인트 %v : %s", F소스코드_위치(1), *체크포인트_번호, F변수_내역_문자열(추가_매개변수))
-	(*체크포인트_번호)++
+    버퍼 := new(bytes.Buffer)
+    버퍼.WriteString("%s체크포인트 %v")
+    
+    for i := 0; i < len(추가_매개변수); i++ {
+        switch i {
+        case 0:
+        	버퍼.WriteString(" : %v")
+        default:
+        	버퍼.WriteString(", %v")
+		}
+    }
+    
+    버퍼.WriteString("\n")
+    
+    포맷_문자열 := 버퍼.String()
+    추가_매개변수 = append([]interface{}{F소스코드_위치(1), *체크포인트_번호}, 추가_매개변수...)
+    
+    fmt.Printf(포맷_문자열, 추가_매개변수...)
+    
+    (*체크포인트_번호)++
 }
 
 func F에러_생성(포맷_문자열 string, 추가_매개변수 ...interface{}) error {
