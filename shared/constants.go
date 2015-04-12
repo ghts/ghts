@@ -1,5 +1,4 @@
-/*
-This file is part of GHTS.
+/* This file is part of GHTS.
 
 GHTS is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -14,18 +13,17 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 
-Created on 2015. 4. 5.
-
-@author: UnHa Kim <unha.kim@gh-system.com>
-*/
+@author: UnHa Kim <unha.kim@gh-system.com> */
 
 package shared
 
 const (
-	P가격정보_입수_주소 string = "tcp://127.0.0.1:1001"
-	P가격정보_배포_주소 string = "tcp://127.0.0.1:1002"
-
-	P테스트_결과_회신_주소 string = "tcp://127.0.0.1:9990"
+    P주소_주소정보 string = "tcp://127.0.0.1:3003"
+    
+	P주소_가격정보_입수 string = "tcp://127.0.0.1:3004"
+	P주소_가격정보_배포 string = "tcp://127.0.0.1:3005"
+	
+	P주소_테스트_결과_회신 string = "tcp://127.0.0.1:3999"
 )
 
 const (

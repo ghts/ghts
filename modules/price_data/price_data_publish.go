@@ -1,5 +1,4 @@
-/*
-This file is part of GHTS.
+/* This file is part of GHTS.
 
 GHTS is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -14,10 +13,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 
-Created on 2015. 4. 5.
-
-@author: UnHa Kim <unha.kim@gh-system.com>
-*/
+@author: UnHa Kim <unha.kim@gh-system.com> */
 
 package price_data_publish
 
@@ -27,49 +23,44 @@ import (
 )
 
 func F가격정보_배포_모듈() {
-	// 가격정보_입수_소켓
-	가격정보_입수_소켓, 에러 := zmq.NewSocket(zmq.REP)
-	defer 가격정보_입수_소켓.Close()
+	// 가격정보_입수_REP
+	가격정보_입수_REP, 에러 := zmq.NewSocket(zmq.REP)
+	defer 가격정보_입수_REP.Close()
 
 	if 에러 != nil {
-		공용.F문자열_출력("가격정보_입수_소켓 초기화 중 에러 발생. %s", 에러.Error())
+		공용.F문자열_출력("가격정보_입수_REP 초기화 중 에러 발생. %s", 에러.Error())
 		panic(에러)
 	}
 
-	// 가격정보_배포_소켓
-	가격정보_배포_소켓, 에러 := zmq.NewSocket(zmq.PUB)
-	defer 가격정보_배포_소켓.Close()
+	// 가격정보_배포_PUB
+	가격정보_배포_PUB, 에러 := zmq.NewSocket(zmq.PUB)
+	defer 가격정보_배포_PUB.Close()
 
 	if 에러 != nil {
-		공용.F문자열_출력("가격정보_배포_소켓 초기화 중 에러 발생. %s", 에러.Error())
+		공용.F문자열_출력("가격정보_배포_PUB 초기화 중 에러 발생. %s", 에러.Error())
 		panic(에러)
 	}
 
-	가격정보_입수_소켓.Bind(공용.P가격정보_입수_주소)
-	가격정보_배포_소켓.Bind(공용.P가격정보_배포_주소)
+	가격정보_입수_REP.Bind(공용.P주소_가격정보_입수)
+	가격정보_배포_PUB.Bind(공용.P주소_가격정보_배포)
 
 	//공용.F문자열_출력("F가격정보_배포_모듈() 초기화 완료.")
 
-	var 메시지 []string
-	var 구분 string
-
-	회신_OK := []string{공용.P메시지_구분_OK, ""}
-
 	for {
 		// 가격정보 입수
-		메시지, 에러 = 가격정보_입수_소켓.RecvMessage(0)
+		메시지, 에러 := 가격정보_입수_REP.RecvMessage(0)
 
 		if 에러 != nil {
 			공용.F문자열_출력("가격정보 입수 중 에러 발생.\n %v\n %v\n", 에러.Error(), 공용.F변수_내역_문자열(메시지[0], 메시지[1]))
-			가격정보_입수_소켓.SendMessage([]string{공용.P메시지_구분_에러, 에러.Error()})
+			가격정보_입수_REP.SendMessage(공용.P메시지_구분_에러, 에러.Error())
 			//panic(에러)
 			continue
 		}
 
-		가격정보_입수_소켓.SendMessage(회신_OK)
+		가격정보_입수_REP.SendMessage(공용.P메시지_구분_OK, "")
 
 		// 가격정보 배포
-		_, 에러 = 가격정보_배포_소켓.SendMessage(메시지)
+		_, 에러 = 가격정보_배포_PUB.SendMessage(메시지)
 
 		if 에러 != nil {
 			공용.F문자열_출력("가격정보 배포 중 에러 발생.\n %v\n %v\n", 에러.Error(), 공용.F변수_내역_문자열(메시지[0], 메시지[1]))
@@ -78,7 +69,7 @@ func F가격정보_배포_모듈() {
 		}
 
 		// 종료 메시지 수신하면 반복루프 종료
-		if 구분 = 메시지[0]; 구분 == 공용.P메시지_구분_종료 {
+		if 메시지[0] == 공용.P메시지_구분_종료 {
 			//공용.F문자열_출력("배포횟수 : %v", 디버깅용_반복횟수)
 			break
 		}
