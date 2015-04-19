@@ -21,8 +21,8 @@ import (
 	"testing"
 )
 
-func Test종목(t *testing.T) {
+func Test종목(테스트 *testing.T) {
 	종목 := New종목("코드", "이름")
-
-	종목.G코드()
+	F테스트_같음(테스트, 종목.G코드(), "코드")
+	F테스트_같음(테스트, 종목.G이름(), "이름")
 }

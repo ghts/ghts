@@ -18,10 +18,11 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 package shared
 
 const (
-    P주소_주소정보 string = "tcp://127.0.0.1:3003"
-    
-	P주소_가격정보_입수 string = "tcp://127.0.0.1:3004"
-	P주소_가격정보_배포 string = "tcp://127.0.0.1:3005"
+	P주소_주소정보 string = "tcp://127.0.0.1:3003"
+
+	P주소_가격정보_입수 = "tcp://127.0.0.1:3004"
+	P주소_가격정보_배포 = "tcp://127.0.0.1:3005"
+	P주소_가격정보 = "tcp://127.0.0.1:3006"
 	
 	P주소_테스트_결과_회신 string = "tcp://127.0.0.1:3999"
 )
@@ -31,4 +32,23 @@ const (
 	P메시지_구분_종료 string = "Q"
 	P메시지_구분_OK string = "O"
 	P메시지_구분_에러 string = "E"
+	
+	P메시지_구분_GET string = "G"
+	P메시지_구분_PUT string = "P"
+)
+
+const (
+	KRW string = "KRW"
+	USD       = "USD"
+	EUR       = "EUR"
+	CNY       = "CNY"
+)
+
+type T비교결과 int
+
+const (
+	P같음   T비교결과 = 0
+	P더_큼        = 1
+	P더_작음       = -1
+	P비교불가       = -999
 )

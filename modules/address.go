@@ -15,7 +15,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 
 @author: UnHa Kim <unha.kim@gh-system.com> */
 
-package address
+package modules
 
 import (
 	공용 "github.com/gh-system/ghts/shared"
@@ -42,16 +42,16 @@ func F주소정보_모듈() {
 		if 에러 != nil {
 			panic(에러.Error())
 		}
-		
+
 		구분, 데이터 := 메시지[0], 메시지[1]
 
 		if 구분 == 공용.P메시지_구분_종료 {
-		    break
+			break
 		}
-		
+
 		회신_구분 = 공용.P메시지_구분_OK
 		var 회신_데이터 string
-		
+
 		switch 데이터 {
 		case "가격정보_입수":
 			회신_데이터 = 공용.P주소_가격정보_입수
@@ -66,9 +66,9 @@ func F주소정보_모듈() {
 		}
 
 		_, 에러 = 주소정보_REP.SendMessage(회신_구분, 회신_데이터)
-		
+
 		if 에러 != nil {
-		    panic(에러.Error())
+			panic(에러.Error())
 		}
 	}
 

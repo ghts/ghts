@@ -3,6 +3,9 @@ Go Dependency
 1. Go binding for ZeroMQ
 > go get github.com/pebbe/zmq4
 
+2. go-decimal
+> go get github.com/landjur/go-decimal
+
 
 Python Dependency
 

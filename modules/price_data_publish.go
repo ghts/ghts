@@ -15,7 +15,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 
 @author: UnHa Kim <unha.kim@gh-system.com> */
 
-package price_data_publish
+package modules
 
 import (
 	공용 "github.com/gh-system/ghts/shared"
