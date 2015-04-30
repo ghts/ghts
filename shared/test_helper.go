@@ -242,10 +242,14 @@ func F소스코드_위치(건너뛰는_단계 int) string {
 }
 
 func F문자열_출력(포맷_문자열 string, 추가_매개변수 ...interface{}) {
+    포맷_문자열 = "%s: " + 포맷_문자열
+    
 	if !strings.HasSuffix(포맷_문자열, "\n") {
 		포맷_문자열 += "\n"
 	}
 
+	추가_매개변수 = append([]interface{}{F소스코드_위치(1)}, 추가_매개변수...)
+	
 	fmt.Printf(포맷_문자열, 추가_매개변수...)
 }
 

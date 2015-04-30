@@ -23,41 +23,41 @@ import (
 	"strconv"
 	"testing"
 	"time"
+	
+	//"fmt"
 )
 
 func TestF가격정보_배포_모듈_Python(테스트 *testing.T) {
-	//공용.F문자열_출력("테스트 시작")
+	//fmt.Println("테스트 시작")
 
 	테스트_결과_REP, 에러 := zmq.NewSocket(zmq.REP)
+	공용.F테스트_에러없음(테스트, 에러)
+	
 	defer 테스트_결과_REP.Close()
 
-	if 에러 != nil {
-		공용.F문자열_출력("테스트_결과_REP 초기화 중 에러 발생. %s", 에러.Error())
-		테스트.Fail()
-	}
+	에러 = 테스트_결과_REP.Bind(공용.P주소_테스트_결과_회신)
+	공용.F테스트_에러없음(테스트, 에러)
 
-	테스트_결과_REP.Bind(공용.P주소_테스트_결과_회신)
-
-	//공용.F문자열_출력("테스트_결과_REP 초기화 완료")
+	//fmt.Println("테스트_결과_REP 초기화 완료")
 
 	가격정보_배포횟수 := 1000
 	구독_모듈_수량 := 10
 
 	go F가격정보_배포_모듈()
-	//공용.F문자열_출력("F가격정보_배포_모듈() launch")
+	//fmt.Println("F가격정보_배포_모듈() launch")
 
 	for i := 0; i < 구독_모듈_수량; i++ {
 		공용.F파이썬_프로세스_실행("price_data_publish_test.py", "subscriber", 공용.P주소_가격정보_배포, 공용.P주소_테스트_결과_회신)
 	}
-	//공용.F문자열_출력("파이썬 가격정보 구독 모듈 %v개 launch", 구독_모듈_수량)
+	//fmt.Printf("파이썬 가격정보 구독 모듈 %v개 launch.\n", 구독_모듈_수량)
 
-	공용.F파이썬_프로세스_실행("price_data_publish_test.py", "provider", strconv.Itoa(가격정보_배포횟수), 공용.P주소_가격정보_입수)
-	//공용.F문자열_출력("파이썬 가격정보 '제공' 모듈 launch")
+	공용.F파이썬_프로세스_실행("price_data_publish_test.py", "provider", 공용.P주소_가격정보_입수, strconv.Itoa(가격정보_배포횟수))
+	//fmt.Println("파이썬 가격정보 '제공' 모듈 launch")
 
 	for i := 0; i < 구독_모듈_수량; i++ {
-		//공용.F문자열_출력("테스트 결과 수신 RecvMessage() 시작", i)
+		//fmt.Println("테스트 결과 수신 RecvMessage() 시작", i)
 		메시지, 에러 := 테스트_결과_REP.RecvMessage(0)
-		//공용.F문자열_출력("테스트 결과 수신 RecvMessage() 완료", i)
+		//fmt.Println("테스트 결과 수신 RecvMessage() 완료", i)
 
 		if 에러 != nil {
 			공용.F문자열_출력("테스트 결과 수신 중 에러 발생.\n %v\n %v\n", 에러.Error(), 공용.F변수_내역_문자열(메시지))
@@ -65,21 +65,21 @@ func TestF가격정보_배포_모듈_Python(테스트 *testing.T) {
 			테스트_결과_REP.SendMessage(공용.P메시지_구분_에러, 에러.Error())
 			테스트.Fail()
 		} else {
-			//공용.F문자열_출력("테스트 결과 수신 후 회신 SendMessage() 시작", i)
+			//fmt.Println("테스트 결과 수신 후 회신 SendMessage() 시작", i)
 			테스트_결과_REP.SendMessage(공용.P메시지_구분_OK, "")
-			//공용.F문자열_출력("테스트 결과 수신 후 회신 SendMessage() 완료", i)
+			//fmt.Println("테스트 결과 수신 후 회신 SendMessage() 완료", i)
 		}
 
 		구분 := 메시지[0]
 		구독횟수 := 메시지[1]
 
-		//공용.F문자열_출력("결과 수신 반복문 테스트 시작", i)
+		//fmt.Println("결과 수신 반복문 테스트 시작", i)
 		공용.F테스트_같음(테스트, 구분, 공용.P메시지_구분_일반)
 		공용.F테스트_같음(테스트, 구독횟수, strconv.Itoa(가격정보_배포횟수))
-		//공용.F문자열_출력("결과 수신 반복문. 테스트 완료", i)
+		//fmt.Println("결과 수신 반복문. 테스트 완료", i)
 	}
 
-	//공용.F문자열_출력("테스트 종료")
+	//fmt.Println("테스트 종료")
 }
 
 func TestF가격정보_배포_모듈_Go(테스트 *testing.T) {
@@ -181,11 +181,16 @@ func f테스트용_가격정보_구독_모듈(결과값_채널 chan int) {
 	defer 가격정보_SUB.Close()
 
 	if 에러 != nil {
-		공용.F문자열_출력("가격정보_SUB 초기화 중 에러 발생. %v", 에러.Error())
+		공용.F문자열_출력("가격정보_SUB 생성 중 에러 발생. %v", 에러.Error())
 		panic(에러)
 	}
 
-	가격정보_SUB.Connect(공용.P주소_가격정보_배포)
+	에러 = 가격정보_SUB.Connect(공용.P주소_가격정보_배포)
+	if 에러 != nil {
+		공용.F문자열_출력("가격정보_SUB Connect 중 에러 발생. %v", 에러.Error())
+		panic(에러)
+	}
+	
 	가격정보_SUB.SetSubscribe("")
 
 	//공용.F문자열_출력("f테스트용_가격정보_구독_모듈() 초기화 완료.")
