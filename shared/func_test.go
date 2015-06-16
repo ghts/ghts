@@ -31,9 +31,9 @@ func TestF파이썬_프로세스_실행(테스트 *testing.T) {
 		테스트.Fail()
 	}
 
-	테스트_결과_회신_소켓.Bind(P테스트_결과_회신_주소)
+	테스트_결과_회신_소켓.Bind(P주소_테스트_결과_회신)
 
-	F파이썬_프로세스_실행("func_test.py", "exec_python_process", P테스트_결과_회신_주소)
+	F파이썬_프로세스_실행("func_test.py", "exec_python_process", P주소_테스트_결과_회신)
 
 	메시지, _ := 테스트_결과_회신_소켓.RecvMessage(0)
 	구분 := 메시지[0]
