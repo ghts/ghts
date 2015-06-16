@@ -13,7 +13,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 
-@author: UnHa Kim <unha.kim@gh-system.com> */
+@author: UnHa Kim <unha.kim.ghts@gmail.com> */
 
 package shared
 
@@ -119,7 +119,7 @@ type 통화 struct {
 }
 
 func (this *통화) G단위() string    { return this.단위 }
-func (this *통화) G실수값() float64 { return this.금액.Float64() }
+func (this *통화) G실수값() float64 { return this.금액.Float() }
 func (this *통화) G정밀값() *dec.Decimal {
 	// 참조형이므로 그대로 주지 않고, 복사본을 준다.
 	정밀값, 에러 := dec.Parse(this.금액.String())

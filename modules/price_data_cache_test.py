@@ -13,13 +13,13 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 
-@author: UnHa Kim <unha.kim@gh-system.com> '''
+@author: UnHa Kim <unha.kim.ghts@gmail.com> '''
 
 import sys
 import time
 import zmq
 
-P메시지_구분_일반 = "N"
+P메시지_구분_일반 = "N" 
 P메시지_구분_종료 = "Q"
 P메시지_구분_OK = "O"
 P메시지_구분_에러 = "E"

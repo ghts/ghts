@@ -1,7 +1,7 @@
 package modules
 
 import (
-	공용 "github.com/gh-system/ghts/shared"
+	공용 "github.com/ghts/ghts/shared"
 	zmq "github.com/pebbe/zmq4"
 	"time"
 )

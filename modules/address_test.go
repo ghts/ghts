@@ -13,12 +13,12 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 
-@author: UnHa Kim <unha.kim@gh-system.com> */
+@author: UnHa Kim <unha.kim.ghts@gmail.com> */
 
 package modules
 
 import (
-	공용 "github.com/gh-system/ghts/shared"
+	공용 "github.com/ghts/ghts/shared"
 	zmq "github.com/pebbe/zmq4"
 	"math/rand"
 	"strconv"
