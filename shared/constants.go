@@ -27,28 +27,38 @@ const (
 	P주소_테스트_결과_회신 string = "tcp://127.0.0.1:3999"
 )
 
-const (
-	P메시지_구분_일반 string = "N"
-	P메시지_구분_종료 string = "Q"
-	P메시지_구분_OK string = "O"
-	P메시지_구분_에러 string = "E"
-	
-	P메시지_구분_GET string = "G"
-	P메시지_구분_PUT string = "P"
-)
 
 const (
-	KRW string = "KRW"
-	USD       = "USD"
-	EUR       = "EUR"
-	CNY       = "CNY"
+	P메시지_구분_일반 string = "N"
+	P메시지_구분_종료 = "Q"
+	P메시지_구분_OK = "O"
+	P메시지_구분_에러 = "E"
+	P메시지_구분_GET = "G"
+	P메시지_구분_PUT = "P"
+)
+
+type T통화단위 string
+
+const (
+	KRW T통화단위 = "KRW"
+	USD T통화단위 = "USD"
+	EUR T통화단위 = "EUR"
+	CNY T통화단위 = "CNY"
 )
 
 type T비교결과 int
 
 const (
-	P같음   T비교결과 = 0
-	P더_큼        = 1
-	P더_작음       = -1
-	P비교불가       = -999
+	P같음 T비교결과 = 0
+	P큼 T비교결과 = -1
+	P작음 T비교결과 = 1
+	P비교불가 T비교결과 = -999
+)
+
+type T부호 int
+
+const (
+	P양수 T부호 = 1
+	P영 T부호 = 0
+	P음수 T부호 = -1
 )

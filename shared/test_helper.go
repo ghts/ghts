@@ -70,7 +70,7 @@ func F테스트_참임(테스트 testing.TB, true이어야_하는_조건 bool, �
 	}
 
 	F호출경로_건너뛴_문자열_출력(1, 출력_문자열)
-	테스트.Fail()
+	테스트.FailNow()
 }
 
 func F테스트_거짓임(테스트 testing.TB, false이어야_하는_조건 bool, 추가_매개변수 ...interface{}) {
@@ -90,7 +90,7 @@ func F테스트_거짓임(테스트 testing.TB, false이어야_하는_조건 boo
 	}
 
 	F호출경로_건너뛴_문자열_출력(1, 출력_문자열)
-	테스트.Fail()
+	테스트.FailNow()
 }
 
 func F테스트_에러없음(테스트 testing.TB, nil이어야_하는_에러 error) {
@@ -104,7 +104,7 @@ func F테스트_에러없음(테스트 testing.TB, nil이어야_하는_에러 er
 	}
 
 	F호출경로_건너뛴_문자열_출력(1, "예상과 달리 에러가 nil이 아님.\n" + nil이어야_하는_에러.Error())
-	테스트.Fail()
+	테스트.FailNow()
 }
 
 func F테스트_에러발생(테스트 testing.TB, nil이_아니어야_하는_에러 error) {
@@ -118,7 +118,7 @@ func F테스트_에러발생(테스트 testing.TB, nil이_아니어야_하는_�
 	}
 
 	F호출경로_건너뛴_문자열_출력(1, "예상과 달리 에러가 nil임.\n" + nil이_아니어야_하는_에러.Error())
-	테스트.Fail()
+	테스트.FailNow()
 }
 
 func F테스트_같음(테스트 testing.TB, 값1, 값2 interface{}) {
@@ -133,7 +133,7 @@ func F테스트_같음(테스트 testing.TB, 값1, 값2 interface{}) {
 
 	F호출경로_건너뛴_문자열_출력(1, "같아야 하는 2개의 값이 서로 다름.\n" + F변수_내역_문자열(값1, 값2))
 
-	테스트.Fail()
+	테스트.FailNow()
 }
 
 func F테스트_다름(테스트 testing.TB, 값1, 값2 interface{}) {
@@ -148,7 +148,7 @@ func F테스트_다름(테스트 testing.TB, 값1, 값2 interface{}) {
 
 	F호출경로_건너뛴_문자열_출력(1, "서로 달라야 하는 2개의 값이 서로 같음.\n" + F변수_내역_문자열(값1, 값2))
 
-	테스트.Fail()
+	테스트.FailNow()
 }
 
 func F테스트_패닉발생(테스트 testing.TB, 함수 interface{}, 추가_매개변수 ...interface{}) {
@@ -169,7 +169,7 @@ func F테스트_패닉발생(테스트 testing.TB, 함수 interface{}, 추가_�
 			F변수_내역_문자열(함수),
 			F변수_내역_문자열(추가_매개변수...))
 
-		테스트.Fail()
+		테스트.FailNow()
 	}()
 
 	// 주어진 함수 실행할 때 발생하는  메시지 출력 일시정지
@@ -204,7 +204,7 @@ func F테스트_패닉없음(테스트 testing.TB, 함수 interface{}, 추가_�
 			F변수_내역_문자열(함수),
 			F변수_내역_문자열(추가_매개변수...))
 
-		테스트.Fail()
+		테스트.FailNow()
 	}()
 
 	// 주어진 함수 실행할 때 발생하는  메시지 출력 일시정지

@@ -51,36 +51,14 @@ func (this *종목) G이름() string {
 	return this.이름
 }
 
-// 가격정보
-type I가격정보 interface {
-	G종목코드() string
-	G가격() I통화
-	G시점() time.Time
-}
-
-func New가격정보(종목코드 string, 가격 I통화) I가격정보 {
-	s := 가격정보{종목코드: 종목코드, 가격: 가격.G복사본(), 시점: time.Now()}
-	return &s
-}
-
-type 가격정보 struct {
-	종목코드 string
-	가격 I통화
-	시점 time.Time
-}
-
-func (this *가격정보) G종목코드() string       { return this.종목코드 }
-func (this *가격정보) G가격() I통화       { return this.가격.G복사본() }
-func (this *가격정보) G시점() time.Time { return this.시점 }
-
 // 통화
 type I통화 interface {
-	G단위() string
+	G단위() T통화단위
 	G실수값() float64
 	G정밀값() *dec.Decimal
 	G실수_문자열(소숫점_이하_자릿수 int) string
 	G비교(다른_통화 I통화) T비교결과
-	G부호() int
+	G부호() T부호
 	G복사본() I통화
 	G변경불가() bool
 	S동결()
@@ -88,7 +66,7 @@ type I통화 interface {
 	S빼기(다른_통화 I통화) I통화
 	S곱하기(다른_통화 I통화) I통화
 	S나누기(다른_통화 I통화) I통화
-	S금액(금액 string)
+	S금액(금액 string) I통화
 	String() string
 }
 
@@ -96,7 +74,7 @@ func New원화(금액 string) I통화 { return New통화(KRW, 금액) }
 func New달러(금액 string) I통화 { return New통화(USD, 금액) }
 func New유로(금액 string) I통화 { return New통화(EUR, 금액) }
 func New위안(금액 string) I통화 { return New통화(CNY, 금액) }
-func New통화(단위 string, 금액 string) I통화 {
+func New통화(단위 T통화단위, 금액 string) I통화 {
 	정밀값, 에러 := dec.Parse(금액)
 	
 	if 에러 != nil {
@@ -113,12 +91,12 @@ func New통화(단위 string, 금액 string) I통화 {
 }
 
 type 통화 struct {
-	단위   string
+	단위   T통화단위
 	금액   *dec.Decimal
 	변경불가 bool
 }
 
-func (this *통화) G단위() string    { return this.단위 }
+func (this *통화) G단위() T통화단위    { return this.단위 }
 func (this *통화) G실수값() float64 { return this.금액.Float() }
 func (this *통화) G정밀값() *dec.Decimal {
 	// 참조형이므로 그대로 주지 않고, 복사본을 준다.
@@ -143,8 +121,8 @@ func (this *통화) G비교(다른_통화 I통화) T비교결과 {
 	}
 }
 
-func (this *통화) G부호() int {
-	return this.금액.Sign()
+func (this *통화) G부호() T부호 {
+	return T부호(this.금액.Sign())
 }
 
 func (this *통화) G복사본() I통화 {
@@ -229,20 +207,20 @@ func (this *통화) S나누기(다른_통화 I통화) I통화 {
 		this.금액 == nil ||
 		다른_통화_금액 == nil {
 		this.금액 = nil
-
+		
 		return this
 	}
-
-	분자, 변환성공1 := new(big.Rat).SetString(this.String())
+		
+	분자, 변환성공1 := new(big.Rat).SetString(this.G정밀값().String())
 	분모, 변환성공2 := new(big.Rat).SetString(다른_통화_금액.String())
-
+	
 	// 변환에 실패하거나, 분모가 0이 되면 안 됨.
 	if !변환성공1 || !변환성공2 || 분모.Cmp(big.NewRat(0, 1)) == 0 {
 		this.금액 = nil
-
+		
 		return nil
 	}
-
+	
 	결과값 := new(big.Rat).Quo(분자, 분모)
 
 	// 소숫점 이하 1000자리 정도면 충분히 정밀하지 않을까?
@@ -260,16 +238,16 @@ func (this *통화) S나누기(다른_통화 I통화) I통화 {
 
 	if 에러 != nil {
 		this.금액 = nil
-
+		
 		return nil
 	}
 
 	this.금액 = 정밀값
-
+	
 	return this
 }
 
-func (this *통화) S금액(금액 string) {
+func (this *통화) S금액(금액 string) I통화 {
     if this.변경불가 {
 		panic("변경불가능한 값입니다.")
 	}
@@ -281,8 +259,33 @@ func (this *통화) S금액(금액 string) {
     }
     
     this.금액 = 정밀값
+    
+    return this
 }
 
 func (this *통화) String() string {
 	return string(this.단위) + " " + this.금액.String()
 }
+
+
+// 가격정보
+type I가격정보 interface {
+	G종목() I종목
+	G가격() I통화
+	G시점() time.Time
+}
+
+func New가격정보(종목 I종목, 가격 I통화) I가격정보 {
+	s := 가격정보{종목: 종목, 가격: 가격.G복사본(), 시점: time.Now()}
+	return &s
+}
+
+type 가격정보 struct {
+	종목 I종목
+	가격 I통화
+	시점 time.Time
+}
+
+func (this *가격정보) G종목() I종목 { return this.종목 }
+func (this *가격정보) G가격() I통화 { return this.가격.G복사본() }
+func (this *가격정보) G시점() time.Time { return this.시점 }
