@@ -19,10 +19,35 @@ package shared
 
 import (
 	zmq "github.com/pebbe/zmq4"
+	"strings"
 	"testing"
 )
 
+func TestF문자열_복사(테스트 *testing.T) {
+	테스트.Parallel()
+	
+	F테스트_같음(테스트, F문자열_복사("12 34 "), "12 34 ")
+}
+
+func TestF실행화일_검색(테스트 *testing.T) {
+	테스트.Parallel()
+	
+	F출력_일시정지_시작()
+	defer F출력_일시정지_종료()
+	
+	F테스트_참임(테스트, strings.HasSuffix(F실행화일_검색("go.exe"), "go.exe"))
+	F테스트_같음(테스트, F실행화일_검색("This_file_should_not_be_existing_random_characters_dlaoccpcqxvizpo.none"), "")
+}
+
+func TestF외부_프로세스_실행(테스트 *testing.T) {
+	테스트.Parallel()
+	
+	F테스트_에러발생(테스트, F외부_프로세스_실행("This_file_should_not_be_existing_random_characters_dlaoccpcqxvizpo.none"))
+}
+
 func TestF파이썬_프로세스_실행(테스트 *testing.T) {
+	테스트.Parallel()
+	
 	테스트_결과_회신_소켓, 에러 := zmq.NewSocket(zmq.REP)
 	defer 테스트_결과_회신_소켓.Close()
 
@@ -33,7 +58,7 @@ func TestF파이썬_프로세스_실행(테스트 *testing.T) {
 
 	테스트_결과_회신_소켓.Bind(P주소_테스트_결과_회신)
 
-	F파이썬_프로세스_실행("func_test.py", "exec_python_process", P주소_테스트_결과_회신)
+	F테스트_에러없음(테스트, F파이썬_프로세스_실행("func_test.py", "exec_python_process", P주소_테스트_결과_회신))
 
 	메시지, _ := 테스트_결과_회신_소켓.RecvMessage(0)
 	구분 := 메시지[0]

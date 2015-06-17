@@ -33,7 +33,9 @@ var 테스트_모드 bool = false
 var 출력_일시정지_모드 bool = false
 var 초기화 sync.WaitGroup
 
-func F테스트_중() bool { return 테스트_모드 }
+type i모의_테스트 interface { S모의_테스트_리셋() }
+
+func F테스트_모드임() bool { return 테스트_모드 }
 func F테스트_모드_시작()  { 테스트_모드 = true }
 func F테스트_모드_종료()  { 테스트_모드 = false }
 
@@ -41,28 +43,21 @@ func F출력_일시정지_중() bool { return 출력_일시정지_모드 }
 func F출력_일시정지_시작()     { 출력_일시정지_모드 = true }
 func F출력_일시정지_종료()     { 출력_일시정지_모드 = false }
 
+/*
 func F초기화_대기열_추가(수량 int) { 초기화.Add(수량) }
 func F초기화_완료()           { 초기화.Done() }
-func F초기화_대기()           { 초기화.Wait() }
-
-func F단일_스레드_모드() {
-	runtime.GOMAXPROCS(1)
-}
-
-func F멀티_스레드_모드() {
-	runtime.GOMAXPROCS(runtime.NumCPU())
-}
+func F초기화_대기()           { 초기화.Wait() } */
 
 func F테스트_참임(테스트 testing.TB, true이어야_하는_조건 bool, 추가_매개변수 ...interface{}) {
 	if true이어야_하는_조건 {
 		return
 	}
-
+	
 	if F출력_일시정지_중() {
 		F출력_일시정지_종료()
 		defer F출력_일시정지_시작()
 	}
-
+	
 	출력_문자열 := "true이어야 하는 조건이 false임. "
 
 	if 추가_매개변수 != nil && len(추가_매개변수) != 0 {
@@ -70,6 +65,7 @@ func F테스트_참임(테스트 testing.TB, true이어야_하는_조건 bool, �
 	}
 
 	F호출경로_건너뛴_문자열_출력(1, 출력_문자열)
+
 	테스트.FailNow()
 }
 
@@ -82,7 +78,7 @@ func F테스트_거짓임(테스트 testing.TB, false이어야_하는_조건 boo
 		F출력_일시정지_종료()
 		defer F출력_일시정지_시작()
 	}
-
+	
 	출력_문자열 := "false이어야 하는 조건이 true임. "
 
 	if 추가_매개변수 != nil && len(추가_매개변수) != 0 {
@@ -103,7 +99,7 @@ func F테스트_에러없음(테스트 testing.TB, nil이어야_하는_에러 er
 		defer F출력_일시정지_시작()
 	}
 
-	F호출경로_건너뛴_문자열_출력(1, "예상과 달리 에러가 nil이 아님.\n" + nil이어야_하는_에러.Error())
+	F호출경로_건너뛴_문자열_출력(1, "예상과 달리 에러가 nil이 아님.\n"+nil이어야_하는_에러.Error())
 	테스트.FailNow()
 }
 
@@ -117,12 +113,16 @@ func F테스트_에러발생(테스트 testing.TB, nil이_아니어야_하는_�
 		defer F출력_일시정지_시작()
 	}
 
-	F호출경로_건너뛴_문자열_출력(1, "예상과 달리 에러가 nil임.\n" + nil이_아니어야_하는_에러.Error())
+	F호출경로_건너뛴_문자열_출력(1, "예상과 달리 에러가 nil임.\n")
 	테스트.FailNow()
 }
 
 func F테스트_같음(테스트 testing.TB, 값1, 값2 interface{}) {
 	if reflect.DeepEqual(값1, 값2) {
+		return
+	}
+	
+	if F포맷된_문자열("%v", 값1) == "<nil>" && F포맷된_문자열("%v", 값2) == "<nil>" {
 		return
 	}
 
@@ -131,7 +131,7 @@ func F테스트_같음(테스트 testing.TB, 값1, 값2 interface{}) {
 		defer F출력_일시정지_시작()
 	}
 
-	F호출경로_건너뛴_문자열_출력(1, "같아야 하는 2개의 값이 서로 다름.\n" + F변수_내역_문자열(값1, 값2))
+	F호출경로_건너뛴_문자열_출력(1, "같아야 하는 2개의 값이 서로 다름.\n"+F변수_내역_문자열(값1, 값2))
 
 	테스트.FailNow()
 }
@@ -146,7 +146,7 @@ func F테스트_다름(테스트 testing.TB, 값1, 값2 interface{}) {
 		defer F출력_일시정지_시작()
 	}
 
-	F호출경로_건너뛴_문자열_출력(1, "서로 달라야 하는 2개의 값이 서로 같음.\n" + F변수_내역_문자열(값1, 값2))
+	F호출경로_건너뛴_문자열_출력(1, "서로 달라야 하는 2개의 값이 서로 같음.\n"+F변수_내역_문자열(값1, 값2))
 
 	테스트.FailNow()
 }
@@ -173,8 +173,10 @@ func F테스트_패닉발생(테스트 testing.TB, 함수 interface{}, 추가_�
 	}()
 
 	// 주어진 함수 실행할 때 발생하는  메시지 출력 일시정지
-	F출력_일시정지_시작()
-	defer F출력_일시정지_종료()
+	if !F출력_일시정지_중() {
+		F출력_일시정지_시작()
+		defer F출력_일시정지_종료()
+	}
 
 	// 매개변수 준비.
 	매개변수_모음 := make([]reflect.Value, len(추가_매개변수))
@@ -208,8 +210,10 @@ func F테스트_패닉없음(테스트 testing.TB, 함수 interface{}, 추가_�
 	}()
 
 	// 주어진 함수 실행할 때 발생하는  메시지 출력 일시정지
-	F출력_일시정지_시작()
-	defer F출력_일시정지_종료()
+	if !F출력_일시정지_중() {
+		F출력_일시정지_시작()
+		defer F출력_일시정지_종료()
+	}
 
 	// 매개변수 준비.
 	매개변수_모음 := make([]reflect.Value, len(추가_매개변수))
@@ -242,14 +246,18 @@ func F소스코드_위치(건너뛰는_단계 int) string {
 }
 
 func F문자열_출력(포맷_문자열 string, 추가_매개변수 ...interface{}) {
-    포맷_문자열 = "%s: " + 포맷_문자열
-    
+	if F출력_일시정지_중() {
+		return
+	}
+	
+	포맷_문자열 = "%s: " + 포맷_문자열
+
 	if !strings.HasSuffix(포맷_문자열, "\n") {
 		포맷_문자열 += "\n"
 	}
 
 	추가_매개변수 = append([]interface{}{F소스코드_위치(1)}, 추가_매개변수...)
-	
+
 	fmt.Printf(포맷_문자열, 추가_매개변수...)
 }
 
@@ -270,12 +278,12 @@ func F호출경로_건너뛴_문자열_출력(건너뛰기_단계 int, 포맷_�
 
 	for 추가적인_건너뛰기 := 2; 추가적인_건너뛰기 < 20; 추가적인_건너뛰기++ {
 		문자열 := F소스코드_위치(건너뛰기_단계 + 추가적인_건너뛰기)
-		
+
 		if strings.HasPrefix(문자열, ".:0:()") {
 			continue
 		}
-			
-		fmt.Println(F소스코드_위치(건너뛰기_단계 + 추가적인_건너뛰기))	
+
+		fmt.Println(F소스코드_위치(건너뛰기_단계 + 추가적인_건너뛰기))
 	}
 }
 
@@ -307,10 +315,6 @@ func F체크포인트(체크포인트_번호 *int, 추가_매개변수 ...interf
 }
 
 func F에러_생성(포맷_문자열 string, 추가_매개변수 ...interface{}) error {
-	for strings.HasSuffix(포맷_문자열, "\n") {
-		포맷_문자열 += "\n"
-	}
-
 	return fmt.Errorf(포맷_문자열, 추가_매개변수...)
 }
 
