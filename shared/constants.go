@@ -17,24 +17,31 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 
 package shared
 
+type T주소 string
+
+func (this T주소) String() string { return string(this) }
+
 const (
-	P주소_주소정보 string = "tcp://127.0.0.1:3003"
+	P주소_주소정보 T주소 = "tcp://127.0.0.1:3001"
+	P주소_종목정보 T주소 = "tcp://127.0.0.1:3002"
 
-	P주소_가격정보_입수 = "tcp://127.0.0.1:3004"
-	P주소_가격정보_배포 = "tcp://127.0.0.1:3005"
-	P주소_가격정보    = "tcp://127.0.0.1:3006"
+	P주소_가격정보_입수 T주소 = "tcp://127.0.0.1:3010"
+	P주소_가격정보_배포 T주소 = "tcp://127.0.0.1:3011"
+	P주소_가격정보 T주소 = "tcp://127.0.0.1:3012"
 
-	P주소_테스트_결과_회신 string = "tcp://127.0.0.1:3999"
+	P주소_테스트_결과_회신 T주소 = "tcp://127.0.0.1:3999"
 )
 
 const (
-	P메시지_구분_일반  string = "N"
-	P메시지_구분_종료         = "Q"
-	P메시지_구분_OK         = "O"
-	P메시지_구분_에러         = "E"
-	P메시지_구분_GET        = "G"
-	P메시지_구분_PUT        = "P"
+	P메시지_구분_일반 string = "N"
+	P메시지_구분_종료 string = "Q"
+	P메시지_구분_OK string = "O"
+	P메시지_구분_에러 string = "E"
+	P메시지_구분_GET string = "G"
+	P메시지_구분_PUT string = "P"
 )
+
+
 
 type T통화단위 string
 

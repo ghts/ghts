@@ -18,6 +18,8 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 package shared
 
 import (
+	zmq "github.com/pebbe/zmq4"
+	
 	"os"
 	"os/exec"
 )
@@ -58,4 +60,18 @@ func F파이썬_프로세스_실행(파일명 string, 실행옵션 ...string) er
 	실행옵션 = append([]string{파일명}, 실행옵션...)
 	
 	return F외부_프로세스_실행(p파이썬_경로, 실행옵션...)
+}
+
+func F메시지_송신(소켓 *zmq.Socket, 내용 ...interface{}) error {
+	_, 에러 := 소켓.SendMessage(내용...)
+	
+	if 에러 != nil { F문자열_출력(에러.Error()) }
+	
+	return  에러
+}
+
+func F에러_메세지_송신(소켓 *zmq.Socket, 에러 error) error {
+	F호출경로_건너뛴_문자열_출력(1, 에러.Error())
+	
+	return F메시지_송신(소켓, P메시지_구분_에러, 에러.Error())
 }
