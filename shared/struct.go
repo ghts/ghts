@@ -103,7 +103,7 @@ func (this *통화) G정밀값() *dec.Decimal {
 	if this.금액 == nil {
 		return nil
 	}
-	
+
 	정밀값, _ := dec.Parse(this.금액.String())
 
 	return 정밀값
@@ -217,7 +217,7 @@ func (this *통화) S나누기(다른_통화 I통화) I통화 {
 	// 변환에 실패하거나, 분모가 0이 되면 안 됨.
 	if !변환성공1 || !변환성공2 || 분모.Cmp(big.NewRat(0, 1)) == 0 {
 		this.금액 = nil
-		
+
 		return this
 	}
 

@@ -17,33 +17,37 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 
 package shared
 
-type T주소 string
+import (
+	"strconv"
+)
 
-func (this T주소) String() string { return string(this) }
+type T주소 int
+
+func (this T주소) String() string { return "tcp://127.0.0.1:" + strconv.Itoa(3001+int(this)) }
 
 const (
-	P주소_주소정보 T주소 = "tcp://127.0.0.1:3001"
-	P주소_종목정보 T주소 = "tcp://127.0.0.1:3002"
+	P주소_주소정보 T주소 = iota
+	P주소_종목정보
 
-	P주소_가격정보_입수 T주소 = "tcp://127.0.0.1:3010"
-	P주소_가격정보_배포 T주소 = "tcp://127.0.0.1:3011"
-	P주소_가격정보 T주소 = "tcp://127.0.0.1:3012"
+	P주소_가격정보_입수
+	P주소_가격정보_배포
+	P주소_가격정보
 
-	P주소_테스트_결과_회신 T주소 = "tcp://127.0.0.1:3999"
+	P주소_테스트_결과_회신
 )
 
 const (
-	P메시지_구분_일반 string = "N"
-	P메시지_구분_종료 string = "Q"
-	P메시지_구분_OK string = "O"
-	P메시지_구분_에러 string = "E"
-	P메시지_구분_GET string = "G"
-	P메시지_구분_PUT string = "P"
+	P메시지_구분_일반  = "N"
+	P메시지_구분_종료  = "Q"
+	P메시지_구분_OK  = "O"
+	P메시지_구분_에러  = "E"
+	P메시지_구분_GET = "G"
+	P메시지_구분_PUT = "P"
 )
-
-
 
 type T통화단위 string
+
+func (this T통화단위) String() string { return string(this) }
 
 const (
 	KRW T통화단위 = "KRW"

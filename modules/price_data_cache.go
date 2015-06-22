@@ -1,5 +1,6 @@
 package modules
 
+/*
 import (
 	공용 "github.com/ghts/ghts/shared"
 	zmq "github.com/pebbe/zmq4"
@@ -61,7 +62,7 @@ func F가격정보_캐시_모듈() {
 			}
 		case 공용.P메시지_구분_PUT:
 			종목코드 = 메시지[1]
-			통화단위 = T통화단위(메시지[2])
+			통화단위 = 공용.T통화단위(메시지[2])
 			금액 = 메시지[3]
 			가격 = 공용.New통화(통화단위, 금액)
 			가격정보 = 공용.New가격정보(종목코드, 가격)
@@ -92,3 +93,4 @@ func F가격정보_캐시_모듈() {
 		}
 	}
 }
+*/

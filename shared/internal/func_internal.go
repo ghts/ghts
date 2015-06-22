@@ -1,25 +1,11 @@
-/* This file is part of GHTS.
-
-GHTS is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-GHTS is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
-
-@author: UnHa Kim <unha.kim.ghts@gmail.com> */
-
-package shared
+package internal
 
 import (
+	"bufio"
 	"bytes"
 	"fmt"
+	"os"
+	"os/exec"
 	"path/filepath"
 	"reflect"
 	"runtime"
@@ -27,37 +13,218 @@ import (
 	"strings"
 	"sync"
 	"testing"
+	"time"
 )
+
+func F문자열_복사(문자열 string) string {
+	return (문자열 + " ")[:len(문자열)]
+}
+
+func F호출경로_건너뛴_에러체크(건너뛰기 int, 에러 error) {
+	if 에러 != nil {
+		F호출경로_건너뛴_문자열_출력(건너뛰기+1, 에러.Error())
+		panic(에러)
+	}
+}
+
+func F에러_체크(에러 error) { F호출경로_건너뛴_에러체크(0, 에러) }
+
+func F실행화일_검색(파일명 string) string {
+	파일경로, 에러 := exec.LookPath(파일명)
+
+	if 에러 != nil {
+		F문자열_출력("'%v' : 파일을 찾을 수 없습니다.", 파일명)
+		return ""
+	}
+
+	return 파일경로
+}
+
+// 이하 외부 프로세스 실행 및 정리 관련
+var p파이썬_경로 string = ""
+
+func F파이썬_프로세스_실행(파일명 string, 실행옵션 ...interface{}) error {
+	if p파이썬_경로 == "" {
+		p파이썬_경로 = F실행화일_검색("python.exe")
+	}
+
+	실행옵션_전달 := make([]interface{}, 0)
+	실행옵션_전달 = append(실행옵션_전달, 파일명)
+	실행옵션_전달 = append(실행옵션_전달, 실행옵션...)
+
+	외부_명령어, 에러 := F외부_프로세스_실행(p파이썬_경로, 실행옵션_전달...)
+
+	if 에러 != nil {
+		// 당분간은 파이썬 프로세스만 관리.
+		Ch외부_프로세스_통보 <- 외부_명령어
+	}
+
+	return 에러
+}
+
+func F외부_프로세스_실행(프로그램 string, 실행옵션 ...interface{}) (*exec.Cmd, error) {
+	실행옵션_문자열 := make([]string, 0)
+
+	for i := 0; i < len(실행옵션); i++ {
+		실행옵션_문자열 = append(실행옵션_문자열, F포맷된_문자열("%v", 실행옵션[i]))
+	}
+
+	외부_명령어 := exec.Command(프로그램, 실행옵션_문자열...)
+	외부_명령어.Stdin = os.Stdin
+	외부_명령어.Stdout = os.Stdout
+	외부_명령어.Stderr = os.Stderr
+	에러 := 외부_명령어.Start()
+
+	return 외부_명령어, 에러
+}
+
+var Ch외부_프로세스_통보 chan *exec.Cmd = make(chan *exec.Cmd, 100)
+var Ch외부_프로세스_관리_go루틴_종료 chan bool = make(chan bool)
+var 외부_프로세스_관리_루틴_이미_존재함 = false
+var 외부_프로세스_관리_루틴_뮤텍스 = &sync.Mutex{}
+
+func F외부_프로세스_관리() {
+	F남겨진_외부_프로세스_모두_종료()
+
+	외부_프로세스_관리_루틴_뮤텍스.Lock()
+
+	if 외부_프로세스_관리_루틴_이미_존재함 {
+		return
+	} else {
+		외부_프로세스_관리_루틴_이미_존재함 = true
+	}
+
+	외부_프로세스_관리_루틴_뮤텍스.Unlock()
+
+	defer func() {
+		외부_프로세스_관리_루틴_뮤텍스.Lock()
+		외부_프로세스_관리_루틴_이미_존재함 = false
+		외부_프로세스_관리_루틴_뮤텍스.Unlock()
+
+		F남겨진_외부_프로세스_모두_종료()
+	}()
+
+	// 일정 주기마다 파일에 기록하고, 종료할 때 한꺼번에 정리.
+	// 제대로 정리하지 못하고 끝나면, 시작하기 전에 한꺼번에 정리.
+
+	ticker := time.NewTicker(500 * time.Millisecond)
+
+	파일, 에러 := os.Create(P외부_명령어_기록_파일)
+	F에러_체크(에러)
+	defer 파일.Close()
+
+	버퍼된_쓰기 := bufio.NewWriter(파일)
+	임시_저장소 := make(map[int]*exec.Cmd)
+
+반복문:
+	for {
+		select {
+		case 외부_명령어 := <-Ch외부_프로세스_통보:
+			임시_저장소[외부_명령어.Process.Pid] = 외부_명령어
+		case <-ticker.C:
+			if len(임시_저장소) == 0 {
+				continue
+			}
+
+			// 일정시간마다 버퍼 내용을 파일에 기록하기.
+
+			for pid, 외부_명령어 := range 임시_저장소 {
+				if 외부_명령어.ProcessState != nil &&
+					외부_명령어.ProcessState.Exited() {
+					continue
+				}
+
+				버퍼된_쓰기.WriteString(strconv.Itoa(pid) + "\n")
+			}
+
+			버퍼된_쓰기.Flush()
+
+			// 처음부터 다시 시작
+			임시_저장소 = make(map[int]*exec.Cmd)
+		case <-Ch외부_프로세스_관리_go루틴_종료:
+			break 반복문
+		}
+	}
+}
+
+func F남겨진_외부_프로세스_모두_종료() int {
+	외부_프로세스_관리_루틴_뮤텍스.Lock()
+	defer 외부_프로세스_관리_루틴_뮤텍스.Unlock()
+
+	if 외부_프로세스_관리_루틴_이미_존재함 {
+		return 0
+	}
+
+	파일, 에러 := os.Open(P외부_명령어_기록_파일)
+
+	if os.IsNotExist(에러) {
+		return 0
+	}
+
+	F에러_체크(에러)
+
+	스캐너 := bufio.NewScanner(파일)
+	스캐너.Split(bufio.ScanLines)
+
+	var pid int
+
+	외부_프로세스_종료_횟수 := 0
+
+	for 스캐너.Scan() {
+		pid문자열 := 스캐너.Text()
+		pid, 에러 = strconv.Atoi(pid문자열)
+
+		if 에러 != nil {
+			F문자열_출력("예상치 못한 입력값 : '%v'\n%v", pid문자열, 에러.Error())
+			panic(에러)
+		}
+
+		외부_프로세스, 에러 := os.FindProcess(pid)
+
+		if 에러 != nil {
+			continue
+		}
+
+		에러 = 외부_프로세스.Kill()
+
+		if 에러 == nil {
+			외부_프로세스_종료_횟수++
+		}
+	}
+
+	파일.Close()
+	os.Remove(P외부_명령어_기록_파일)
+
+	if 외부_프로세스_종료_횟수 > 0 {
+		F문자열_출력("%v개의 외부 프로세스가 정리 되었습니다.")
+	}
+
+	return 외부_프로세스_종료_횟수
+}
+
+// 이하 테스트 관련 함수 모음
 
 var 테스트_모드 bool = false
 var 출력_일시정지_모드 bool = false
-var 초기화 sync.WaitGroup
-
-type i모의_테스트 interface { S모의_테스트_리셋() }
 
 func F테스트_모드임() bool { return 테스트_모드 }
-func F테스트_모드_시작()  { 테스트_모드 = true }
-func F테스트_모드_종료()  { 테스트_모드 = false }
+func F테스트_모드_시작()    { 테스트_모드 = true }
+func F테스트_모드_종료()    { 테스트_모드 = false }
 
 func F출력_일시정지_중() bool { return 출력_일시정지_모드 }
 func F출력_일시정지_시작()     { 출력_일시정지_모드 = true }
 func F출력_일시정지_종료()     { 출력_일시정지_모드 = false }
 
-/*
-func F초기화_대기열_추가(수량 int) { 초기화.Add(수량) }
-func F초기화_완료()           { 초기화.Done() }
-func F초기화_대기()           { 초기화.Wait() } */
-
 func F테스트_참임(테스트 testing.TB, true이어야_하는_조건 bool, 추가_매개변수 ...interface{}) {
 	if true이어야_하는_조건 {
 		return
 	}
-	
+
 	if F출력_일시정지_중() {
 		F출력_일시정지_종료()
 		defer F출력_일시정지_시작()
 	}
-	
+
 	출력_문자열 := "true이어야 하는 조건이 false임. "
 
 	if 추가_매개변수 != nil && len(추가_매개변수) != 0 {
@@ -78,7 +245,7 @@ func F테스트_거짓임(테스트 testing.TB, false이어야_하는_조건 boo
 		F출력_일시정지_종료()
 		defer F출력_일시정지_시작()
 	}
-	
+
 	출력_문자열 := "false이어야 하는 조건이 true임. "
 
 	if 추가_매개변수 != nil && len(추가_매개변수) != 0 {
@@ -121,7 +288,7 @@ func F테스트_같음(테스트 testing.TB, 값1, 값2 interface{}) {
 	if reflect.DeepEqual(값1, 값2) {
 		return
 	}
-	
+
 	if F포맷된_문자열("%v", 값1) == "<nil>" && F포맷된_문자열("%v", 값2) == "<nil>" {
 		return
 	}
@@ -246,19 +413,7 @@ func F소스코드_위치(건너뛰는_단계 int) string {
 }
 
 func F문자열_출력(포맷_문자열 string, 추가_매개변수 ...interface{}) {
-	if F출력_일시정지_중() {
-		return
-	}
-	
-	포맷_문자열 = "%s: " + 포맷_문자열
-
-	if !strings.HasSuffix(포맷_문자열, "\n") {
-		포맷_문자열 += "\n"
-	}
-
-	추가_매개변수 = append([]interface{}{F소스코드_위치(1)}, 추가_매개변수...)
-
-	fmt.Printf(포맷_문자열, 추가_매개변수...)
+	F호출경로_건너뛴_문자열_출력(1, 포맷_문자열, 추가_매개변수...)
 }
 
 func F호출경로_건너뛴_문자열_출력(건너뛰기_단계 int, 포맷_문자열 string, 추가_매개변수 ...interface{}) {
@@ -287,38 +442,10 @@ func F호출경로_건너뛴_문자열_출력(건너뛰기_단계 int, 포맷_�
 	}
 }
 
-// 디버깅 편의 함수.
-// goroutine으로 concurrent하게 실행되는 Go언어의 특성 상,
-// 체크포인트로 실행흐름을 따라가면서 에러가 발생하는 부분을
-// 추적하는 게 가장 단순하면서 확실함.
-func F체크포인트(체크포인트_번호 *int, 추가_매개변수 ...interface{}) {
-	버퍼 := new(bytes.Buffer)
-	버퍼.WriteString("%s체크포인트 %v")
-
-	for i := 0; i < len(추가_매개변수); i++ {
-		switch i {
-		case 0:
-			버퍼.WriteString(" : %v")
-		default:
-			버퍼.WriteString(", %v")
-		}
-	}
-
-	버퍼.WriteString("\n")
-
-	포맷_문자열 := 버퍼.String()
-	추가_매개변수 = append([]interface{}{F소스코드_위치(1), *체크포인트_번호}, 추가_매개변수...)
-
-	fmt.Printf(포맷_문자열, 추가_매개변수...)
-
-	(*체크포인트_번호)++
-}
-
 func F에러_생성(포맷_문자열 string, 추가_매개변수 ...interface{}) error {
 	return fmt.Errorf(포맷_문자열, 추가_매개변수...)
 }
 
-// fmt.Errorf()의 문자열 생성 기능을 이용해서 문자열을 생성하는 편의함수.
 func F포맷된_문자열(포맷_문자열 string, 추가_매개변수 ...interface{}) string {
 	return F에러_생성(포맷_문자열, 추가_매개변수...).Error()
 }
@@ -349,7 +476,7 @@ func F변수_내역_문자열(변수_모음 ...interface{}) string {
 var 이미_출력한_TODO_모음 []string = make([]string, 0)
 
 // 해야할 일을 소스코드 위치와 함께 표기해 주는 메소드.
-func F메모(문자열 string) {
+func F호출단계_건너뛴_메모(건너뛰기 int, 문자열 string) {
 	for _, 이미_출력한_TODO := range 이미_출력한_TODO_모음 {
 		if 문자열 == 이미_출력한_TODO {
 			// 중복 출력 방지.
@@ -357,6 +484,8 @@ func F메모(문자열 string) {
 		}
 	}
 
-	fmt.Printf("TODO : %s %s\n\n", F소스코드_위치(1), 문자열)
+	fmt.Printf("TODO : %s %s\n\n", F소스코드_위치(1+건너뛰기), 문자열)
 	이미_출력한_TODO_모음 = append(이미_출력한_TODO_모음, 문자열)
 }
+
+func F메모(문자열 string) { F호출단계_건너뛴_메모(1, 문자열) }

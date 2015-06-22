@@ -20,7 +20,7 @@ package modules
 import (
 	공용 "github.com/ghts/ghts/shared"
 	zmq "github.com/pebbe/zmq4"
-	
+
 	"os"
 )
 
@@ -30,32 +30,35 @@ var 종목정보_맵 map[string]공용.I종목
 func init() {
 	주소정보_맵 = make(map[string]공용.T주소)
 	주소정보_맵["P주소_주소정보"] = 공용.P주소_주소정보
+	주소정보_맵["P주소_종목정보"] = 공용.P주소_종목정보
 	주소정보_맵["P주소_가격정보_입수"] = 공용.P주소_가격정보_입수
 	주소정보_맵["P주소_가격정보_배포"] = 공용.P주소_가격정보_배포
 	주소정보_맵["P주소_가격정보"] = 공용.P주소_가격정보
 	주소정보_맵["P주소_테스트_결과_회신"] = 공용.P주소_테스트_결과_회신
-	
+
 	종목정보_맵 = make(map[string]공용.I종목)
 }
 
 func F공용정보_모듈() {
-	// 공용정보 모듈에서는 다수의 소켓을 취급하므로 poller를 이용한다.
 	// 초기화
-	
 	주소정보_REP, 에러 := zmq.NewSocket(zmq.REP)
 	defer 주소정보_REP.Close()
-	if 에러 != nil { panic(에러) }
+	if 에러 != nil {
+		panic(에러)
+	}
 	주소정보_REP.Bind(공용.P주소_주소정보.String())
-	
+
 	종목정보_REP, 에러 := zmq.NewSocket(zmq.REP)
 	defer 종목정보_REP.Close()
-	if 에러 != nil { panic(에러) }
+	if 에러 != nil {
+		panic(에러)
+	}
 	종목정보_REP.Bind(공용.P주소_종목정보.String())
-	
+
 	reactor := zmq.NewReactor()
 	reactor.AddSocket(주소정보_REP, zmq.POLLIN, func(e zmq.State) error { return f주소정보_제공(주소정보_REP) })
 	reactor.AddSocket(종목정보_REP, zmq.POLLIN, func(e zmq.State) error { return f종목정보_제공(종목정보_REP) })
-	
+
 	for {
 		에러 = reactor.Run(-1)
 		if 에러 != nil {
@@ -76,25 +79,25 @@ func f주소정보_제공(주소정보_REP *zmq.Socket) error {
 
 	switch 구분 {
 	case 공용.P메시지_구분_일반:
-		break;
+		break
 	case 공용.P메시지_구분_종료:
 		os.Exit(0)
 	default:
 		에러 := 공용.F에러_생성("예상치 못한 메시지 구분 : %v", 구분)
 		공용.F에러_메세지_송신(주소정보_REP, 에러)
-		
+
 		return 에러
 	}
-	
+
 	주소, 존재함 := 주소정보_맵[데이터]
-	
+
 	if !존재함 {
 		에러 := 공용.F에러_생성("예상치 못한 입력값 : %v", 데이터)
 		공용.F에러_메세지_송신(주소정보_REP, 에러)
-		
+
 		return 에러
 	}
-	
+
 	return 공용.F메시지_송신(주소정보_REP, 공용.P메시지_구분_OK, 주소.String())
 }
 
@@ -106,28 +109,35 @@ func f종목정보_제공(종목정보_REP *zmq.Socket) error {
 		return 에러
 	}
 
-	구분, 데이터 := 메시지[0], 메시지[1]
+	구분, 종목코드 := 메시지[0], 메시지[1]
 
 	switch 구분 {
 	case 공용.P메시지_구분_일반:
-		break;
+		break
 	case 공용.P메시지_구분_종료:
 		os.Exit(0)
 	default:
 		에러 := 공용.F에러_생성("예상치 못한 메시지 구분 : %v", 구분)
 		공용.F에러_메세지_송신(종목정보_REP, 에러)
-		
+
 		return 에러
 	}
-	
-	종목, 존재함 := 종목정보_맵[데이터]
-	
+
+	종목, 존재함 := 종목정보_맵[종목코드]
+
 	if !존재함 {
-		에러 := 공용.F에러_생성("예상치 못한 입력값 : %v", 데이터)
-		공용.F에러_메세지_송신(종목정보_REP, 에러)
+		공용.F문자열_출력("종목정보_맵 내용")
+		공용.F변수값_출력(len(종목정보_맵))
 		
+		for 키, 값 := range 종목정보_맵 {
+			공용.F변수값_출력(키, 값)
+		}
+		
+		에러 := 공용.F에러_생성("예상치 못한 종목코드 : %v", 종목코드)
+		공용.F에러_메세지_송신(종목정보_REP, 에러)
+
 		return 에러
 	}
-	
+
 	return 공용.F메시지_송신(종목정보_REP, 공용.P메시지_구분_OK, 종목.G코드(), 종목.G이름())
 }

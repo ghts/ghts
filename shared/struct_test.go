@@ -24,7 +24,7 @@ import (
 
 func Test종목(테스트 *testing.T) {
 	테스트.Parallel()
-	
+
 	종목 := New종목("코드", "이름")
 	F테스트_같음(테스트, 종목.G코드(), "코드")
 	F테스트_같음(테스트, 종목.G이름(), "이름")
@@ -32,7 +32,7 @@ func Test종목(테스트 *testing.T) {
 
 func Test통화(테스트 *testing.T) {
 	테스트.Parallel()
-	
+
 	통화 := New통화(KRW, "100.01")
 	F테스트_같음(테스트, 통화.G단위(), KRW)
 	F테스트_같음(테스트, 통화.G실수값(), 100.01)
@@ -69,24 +69,24 @@ func Test통화(테스트 *testing.T) {
 	F테스트_같음(테스트, New달러("100.00").G비교(New통화(USD, "100.00")), P같음)
 	F테스트_같음(테스트, New유로("100.00").G비교(New통화(EUR, "100.00")), P같음)
 	F테스트_같음(테스트, New위안("100.00").G비교(New통화(CNY, "100.00")), P같음)
-	
+
 	F출력_일시정지_시작()
 	defer F출력_일시정지_종료()
-	
+
 	F테스트_같음(테스트, New통화(KRW, "Not_a_number"), nil)
 	F테스트_같음(테스트, New원화("100").S금액("Not_a_number").G정밀값(), nil)
 	F테스트_같음(테스트, New통화(KRW, "100.00").S더하기(New통화(USD, "100.00")).G정밀값(), nil)
 	F테스트_같음(테스트, New통화(KRW, "100.00").S더하기(New통화(KRW, "100.00").S금액("Invalid_value")).G정밀값(), nil)
 	F테스트_같음(테스트, New통화(KRW, "100.00").S금액("Invalid_value").S더하기(New통화(KRW, "100.00")).G정밀값(), nil)
-	
+
 	F테스트_같음(테스트, New통화(KRW, "100.00").S빼기(New통화(USD, "100.00")).G정밀값(), nil)
 	F테스트_같음(테스트, New통화(KRW, "100.00").S빼기(New통화(KRW, "100.00").S금액("Invalid_value")).G정밀값(), nil)
 	F테스트_같음(테스트, New통화(KRW, "100.00").S금액("Invalid_value").S빼기(New통화(KRW, "100.00")).G정밀값(), nil)
-	
+
 	F테스트_같음(테스트, New통화(KRW, "100.00").S곱하기(New통화(USD, "100.00")).G정밀값(), nil)
 	F테스트_같음(테스트, New통화(KRW, "100.00").S곱하기(New통화(KRW, "100.00").S금액("Invalid_value")).G정밀값(), nil)
 	F테스트_같음(테스트, New통화(KRW, "100.00").S금액("Invalid_value").S곱하기(New통화(KRW, "100.00")).G정밀값(), nil)
-	
+
 	F테스트_같음(테스트, New통화(KRW, "100.00").S나누기(New통화(USD, "100.00")).G정밀값(), nil)
 	F테스트_같음(테스트, New통화(KRW, "100.00").S나누기(New통화(KRW, "100.00").S금액("Invalid_value")).G정밀값(), nil)
 	F테스트_같음(테스트, New통화(KRW, "100.00").S금액("Invalid_value").S나누기(New통화(KRW, "100.00")).G정밀값(), nil)
@@ -95,7 +95,7 @@ func Test통화(테스트 *testing.T) {
 
 func Test가격정보(테스트 *testing.T) {
 	테스트.Parallel()
-	
+
 	시점1 := time.Now()
 	가격정보 := New가격정보(New종목("종목코드", "종목이름"), New원화("100.00"))
 	시점2 := time.Now()

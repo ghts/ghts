@@ -4,3 +4,4 @@
 /temp
 /shared/count.out
 /shared/coverage.out
+shared/spawned_process_list.txt
