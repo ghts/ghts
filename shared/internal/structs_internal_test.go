@@ -4,6 +4,6 @@ import (
 	"testing"
 )
 
-func TestF외부_프로세스_정리(테스트 *testing.T) {
-	F메모("TestF외부_프로세스_정리() 작성")
+func TestFXYZ(테스트 *testing.T) {
+	F메모("인터페이스 구현 구조체 테스트 작성.")
 }

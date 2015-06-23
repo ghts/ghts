@@ -43,7 +43,7 @@ func F실행화일_검색(파일명 string) string {
 // 이하 외부 프로세스 실행 및 정리 관련
 var p파이썬_경로 string = ""
 
-func F파이썬_프로세스_실행(파일명 string, 실행옵션 ...interface{}) error {
+func F파이썬_프로세스_실행(파일명 string, 실행옵션 ...interface{}) (*exec.Cmd, error) {
 	if p파이썬_경로 == "" {
 		p파이썬_경로 = F실행화일_검색("python.exe")
 	}
@@ -53,13 +53,12 @@ func F파이썬_프로세스_실행(파일명 string, 실행옵션 ...interface{
 	실행옵션_전달 = append(실행옵션_전달, 실행옵션...)
 
 	외부_명령어, 에러 := F외부_프로세스_실행(p파이썬_경로, 실행옵션_전달...)
+	F에러_체크(에러)
 
-	if 에러 != nil {
-		// 당분간은 파이썬 프로세스만 관리.
-		Ch외부_프로세스_통보 <- 외부_명령어
-	}
+	// 당분간은 파이썬 프로세스만 관리.
+	Ch외부_프로세스_통보 <- 외부_명령어
 
-	return 에러
+	return 외부_명령어, 에러
 }
 
 func F외부_프로세스_실행(프로그램 string, 실행옵션 ...interface{}) (*exec.Cmd, error) {
@@ -79,7 +78,9 @@ func F외부_프로세스_실행(프로그램 string, 실행옵션 ...interface{
 }
 
 var Ch외부_프로세스_통보 chan *exec.Cmd = make(chan *exec.Cmd, 100)
+var Ch외부_프로세스_관리_go루틴_초기화_완료 chan bool = make(chan bool, 1)
 var Ch외부_프로세스_관리_go루틴_종료 chan bool = make(chan bool)
+var Ch외부_프로세스_관리_go루틴_종료_완료 chan int = make(chan int, 1)
 var 외부_프로세스_관리_루틴_이미_존재함 = false
 var 외부_프로세스_관리_루틴_뮤텍스 = &sync.Mutex{}
 
@@ -101,46 +102,44 @@ func F외부_프로세스_관리() {
 		외부_프로세스_관리_루틴_이미_존재함 = false
 		외부_프로세스_관리_루틴_뮤텍스.Unlock()
 
-		F남겨진_외부_프로세스_모두_종료()
+		정리된_외부_프로세스_수량 := F남겨진_외부_프로세스_모두_종료()
+
+		Ch외부_프로세스_관리_go루틴_종료_완료 <- 정리된_외부_프로세스_수량
 	}()
-
-	// 일정 주기마다 파일에 기록하고, 종료할 때 한꺼번에 정리.
-	// 제대로 정리하지 못하고 끝나면, 시작하기 전에 한꺼번에 정리.
-
-	ticker := time.NewTicker(500 * time.Millisecond)
 
 	파일, 에러 := os.Create(P외부_명령어_기록_파일)
 	F에러_체크(에러)
 	defer 파일.Close()
 
-	버퍼된_쓰기 := bufio.NewWriter(파일)
-	임시_저장소 := make(map[int]*exec.Cmd)
+	Ch외부_프로세스_관리_go루틴_초기화_완료 <- true
 
 반복문:
 	for {
 		select {
 		case 외부_명령어 := <-Ch외부_프로세스_통보:
-			임시_저장소[외부_명령어.Process.Pid] = 외부_명령어
-		case <-ticker.C:
-			if len(임시_저장소) == 0 {
-				continue
-			}
+			for i := 0; i < 10; i++ {
+				_, 에러 = 파일.WriteString(strconv.Itoa(외부_명령어.Process.Pid) + "\n")
 
-			// 일정시간마다 버퍼 내용을 파일에 기록하기.
-
-			for pid, 외부_명령어 := range 임시_저장소 {
-				if 외부_명령어.ProcessState != nil &&
-					외부_명령어.ProcessState.Exited() {
-					continue
+				if 에러 == nil {
+					break
 				}
 
-				버퍼된_쓰기.WriteString(strconv.Itoa(pid) + "\n")
+				time.Sleep(100 * time.Millisecond)
 			}
 
-			버퍼된_쓰기.Flush()
+			F에러_체크(에러)
 
-			// 처음부터 다시 시작
-			임시_저장소 = make(map[int]*exec.Cmd)
+			for i := 0; i < 10; i++ {
+				에러 = 파일.Sync()
+
+				if 에러 == nil {
+					break
+				}
+
+				time.Sleep(100 * time.Millisecond)
+			}
+
+			F에러_체크(에러)
 		case <-Ch외부_프로세스_관리_go루틴_종료:
 			break 반복문
 		}
@@ -186,18 +185,13 @@ func F남겨진_외부_프로세스_모두_종료() int {
 		}
 
 		에러 = 외부_프로세스.Kill()
+		F에러_체크(에러)
 
-		if 에러 == nil {
-			외부_프로세스_종료_횟수++
-		}
+		외부_프로세스_종료_횟수++
 	}
 
 	파일.Close()
 	os.Remove(P외부_명령어_기록_파일)
-
-	if 외부_프로세스_종료_횟수 > 0 {
-		F문자열_출력("%v개의 외부 프로세스가 정리 되었습니다.")
-	}
 
 	return 외부_프로세스_종료_횟수
 }
@@ -304,7 +298,10 @@ func F테스트_같음(테스트 testing.TB, 값1, 값2 interface{}) {
 }
 
 func F테스트_다름(테스트 testing.TB, 값1, 값2 interface{}) {
-	if !reflect.DeepEqual(값1, 값2) {
+	if F포맷된_문자열("%v", 값1) == "<nil>" && F포맷된_문자열("%v", 값2) == "<nil>" {
+		// 둘 다 nil값이므로, 서로 같음.
+		// PASS
+	} else if !reflect.DeepEqual(값1, 값2) {
 		return
 	}
 

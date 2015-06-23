@@ -28,12 +28,10 @@ func (this T주소) String() string { return "tcp://127.0.0.1:" + strconv.Itoa(3
 const (
 	P주소_주소정보 T주소 = iota
 	P주소_종목정보
-
 	P주소_가격정보_입수
 	P주소_가격정보_배포
 	P주소_가격정보
-
-	P주소_테스트_결과_회신
+	P주소_테스트_결과_회신 T주소 = 998 // 테스트 결과 회신 주소는 3999번 포트로 고정
 )
 
 const (

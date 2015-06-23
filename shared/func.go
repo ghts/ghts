@@ -46,13 +46,17 @@ func F실행화일_검색(파일명 string) string {
 
 // 이하 외부 명령어 관련 함수 모음
 
-func F외부_프로세스_관리() { go 내부공용.F외부_프로세스_관리() }
+func F외부_프로세스_관리() {
+	go 내부공용.F외부_프로세스_관리()
+
+	<-내부공용.Ch외부_프로세스_관리_go루틴_초기화_완료
+}
 
 func F외부_프로세스_실행(프로그램 string, 실행옵션 ...interface{}) (*exec.Cmd, error) {
 	return 내부공용.F외부_프로세스_실행(프로그램, 실행옵션...)
 }
 
-func F파이썬_프로세스_실행(파일명 string, 실행옵션 ...interface{}) error {
+func F파이썬_프로세스_실행(파일명 string, 실행옵션 ...interface{}) (*exec.Cmd, error) {
 	return 내부공용.F파이썬_프로세스_실행(파일명, 실행옵션...)
 }
 
