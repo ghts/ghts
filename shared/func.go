@@ -22,9 +22,9 @@ import (
 	zmq "github.com/pebbe/zmq4"
 
 	"fmt"
-	"os/exec"
 	"runtime"
 	"testing"
+	"time"
 )
 
 type i모의_테스트 interface {
@@ -46,18 +46,12 @@ func F실행화일_검색(파일명 string) string {
 
 // 이하 외부 명령어 관련 함수 모음
 
-func F외부_프로세스_관리() {
-	go 내부공용.F외부_프로세스_관리()
-
-	<-내부공용.Ch외부_프로세스_관리_go루틴_초기화_완료
+func F외부_프로세스_실행(에러_채널 chan error, 타임아웃 time.Duration, 프로그램 string, 실행옵션 ...interface{}) {
+	내부공용.F외부_프로세스_실행(에러_채널, 타임아웃, 프로그램, 실행옵션...)
 }
 
-func F외부_프로세스_실행(프로그램 string, 실행옵션 ...interface{}) (*exec.Cmd, error) {
-	return 내부공용.F외부_프로세스_실행(프로그램, 실행옵션...)
-}
-
-func F파이썬_프로세스_실행(파일명 string, 실행옵션 ...interface{}) (*exec.Cmd, error) {
-	return 내부공용.F파이썬_프로세스_실행(파일명, 실행옵션...)
+func F파이썬_스크립트_실행(에러_채널 chan error, 타임아웃 time.Duration, 파일명 string, 실행옵션 ...interface{}) {
+	내부공용.F파이썬_스크립트_실행(에러_채널, 타임아웃, 파일명, 실행옵션...)
 }
 
 func F메시지_송신(소켓 *zmq.Socket, 내용 ...interface{}) error {
@@ -90,7 +84,7 @@ func F출력_일시정지_중() bool { return 내부공용.F출력_일시정지_
 func F출력_일시정지_시작()     { 내부공용.F출력_일시정지_시작() }
 func F출력_일시정지_종료()     { 내부공용.F출력_일시정지_종료() }
 
-func F테스트_모드임() bool { return 내부공용.F테스트_모드임() }
+func F테스트_모드_실행_중() bool { return 내부공용.F테스트_모드_실행_중() }
 func F테스트_모드_시작()    { 내부공용.F테스트_모드_시작() }
 func F테스트_모드_종료()    { 내부공용.F테스트_모드_종료() }
 

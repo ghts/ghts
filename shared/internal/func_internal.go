@@ -1,10 +1,8 @@
 package internal
 
 import (
-	"bufio"
 	"bytes"
 	"fmt"
-	"os"
 	"os/exec"
 	"path/filepath"
 	"reflect"
@@ -13,9 +11,11 @@ import (
 	"strings"
 	"sync"
 	"testing"
-	"time"
 )
 
+
+// 이하 편의 함수 모음
+ 
 func F문자열_복사(문자열 string) string {
 	return (문자열 + " ")[:len(문자열)]
 }
@@ -40,174 +40,57 @@ func F실행화일_검색(파일명 string) string {
 	return 파일경로
 }
 
-// 이하 외부 프로세스 실행 및 정리 관련
-var p파이썬_경로 string = ""
 
-func F파이썬_프로세스_실행(파일명 string, 실행옵션 ...interface{}) (*exec.Cmd, error) {
-	if p파이썬_경로 == "" {
-		p파이썬_경로 = F실행화일_검색("python.exe")
-	}
-
-	실행옵션_전달 := make([]interface{}, 0)
-	실행옵션_전달 = append(실행옵션_전달, 파일명)
-	실행옵션_전달 = append(실행옵션_전달, 실행옵션...)
-
-	외부_명령어, 에러 := F외부_프로세스_실행(p파이썬_경로, 실행옵션_전달...)
-	F에러_체크(에러)
-
-	// 당분간은 파이썬 프로세스만 관리.
-	Ch외부_프로세스_통보 <- 외부_명령어
-
-	return 외부_명령어, 에러
-}
-
-func F외부_프로세스_실행(프로그램 string, 실행옵션 ...interface{}) (*exec.Cmd, error) {
-	실행옵션_문자열 := make([]string, 0)
-
-	for i := 0; i < len(실행옵션); i++ {
-		실행옵션_문자열 = append(실행옵션_문자열, F포맷된_문자열("%v", 실행옵션[i]))
-	}
-
-	외부_명령어 := exec.Command(프로그램, 실행옵션_문자열...)
-	외부_명령어.Stdin = os.Stdin
-	외부_명령어.Stdout = os.Stdout
-	외부_명령어.Stderr = os.Stderr
-	에러 := 외부_명령어.Start()
-
-	return 외부_명령어, 에러
-}
-
-var Ch외부_프로세스_통보 chan *exec.Cmd = make(chan *exec.Cmd, 100)
-var Ch외부_프로세스_관리_go루틴_초기화_완료 chan bool = make(chan bool, 1)
-var Ch외부_프로세스_관리_go루틴_종료 chan bool = make(chan bool)
-var Ch외부_프로세스_관리_go루틴_종료_완료 chan int = make(chan int, 1)
-var 외부_프로세스_관리_루틴_이미_존재함 = false
-var 외부_프로세스_관리_루틴_뮤텍스 = &sync.Mutex{}
-
-func F외부_프로세스_관리() {
-	F남겨진_외부_프로세스_모두_종료()
-
-	외부_프로세스_관리_루틴_뮤텍스.Lock()
-
-	if 외부_프로세스_관리_루틴_이미_존재함 {
-		return
-	} else {
-		외부_프로세스_관리_루틴_이미_존재함 = true
-	}
-
-	외부_프로세스_관리_루틴_뮤텍스.Unlock()
-
-	defer func() {
-		외부_프로세스_관리_루틴_뮤텍스.Lock()
-		외부_프로세스_관리_루틴_이미_존재함 = false
-		외부_프로세스_관리_루틴_뮤텍스.Unlock()
-
-		정리된_외부_프로세스_수량 := F남겨진_외부_프로세스_모두_종료()
-
-		Ch외부_프로세스_관리_go루틴_종료_완료 <- 정리된_외부_프로세스_수량
-	}()
-
-	파일, 에러 := os.Create(P외부_명령어_기록_파일)
-	F에러_체크(에러)
-	defer 파일.Close()
-
-	Ch외부_프로세스_관리_go루틴_초기화_완료 <- true
-
-반복문:
-	for {
-		select {
-		case 외부_명령어 := <-Ch외부_프로세스_통보:
-			for i := 0; i < 10; i++ {
-				_, 에러 = 파일.WriteString(strconv.Itoa(외부_명령어.Process.Pid) + "\n")
-
-				if 에러 == nil {
-					break
-				}
-
-				time.Sleep(100 * time.Millisecond)
-			}
-
-			F에러_체크(에러)
-
-			for i := 0; i < 10; i++ {
-				에러 = 파일.Sync()
-
-				if 에러 == nil {
-					break
-				}
-
-				time.Sleep(100 * time.Millisecond)
-			}
-
-			F에러_체크(에러)
-		case <-Ch외부_프로세스_관리_go루틴_종료:
-			break 반복문
-		}
-	}
-}
-
-func F남겨진_외부_프로세스_모두_종료() int {
-	외부_프로세스_관리_루틴_뮤텍스.Lock()
-	defer 외부_프로세스_관리_루틴_뮤텍스.Unlock()
-
-	if 외부_프로세스_관리_루틴_이미_존재함 {
-		return 0
-	}
-
-	파일, 에러 := os.Open(P외부_명령어_기록_파일)
-
-	if os.IsNotExist(에러) {
-		return 0
-	}
-
-	F에러_체크(에러)
-
-	스캐너 := bufio.NewScanner(파일)
-	스캐너.Split(bufio.ScanLines)
-
-	var pid int
-
-	외부_프로세스_종료_횟수 := 0
-
-	for 스캐너.Scan() {
-		pid문자열 := 스캐너.Text()
-		pid, 에러 = strconv.Atoi(pid문자열)
-
-		if 에러 != nil {
-			F문자열_출력("예상치 못한 입력값 : '%v'\n%v", pid문자열, 에러.Error())
-			panic(에러)
-		}
-
-		외부_프로세스, 에러 := os.FindProcess(pid)
-
-		if 에러 != nil {
-			continue
-		}
-
-		에러 = 외부_프로세스.Kill()
-		F에러_체크(에러)
-
-		외부_프로세스_종료_횟수++
-	}
-
-	파일.Close()
-	os.Remove(P외부_명령어_기록_파일)
-
-	return 외부_프로세스_종료_횟수
-}
 
 // 이하 테스트 관련 함수 모음
 
 var 테스트_모드 bool = false
 var 출력_일시정지_모드 bool = false
 
-func F테스트_모드임() bool { return 테스트_모드 }
-func F테스트_모드_시작()    { 테스트_모드 = true }
-func F테스트_모드_종료()    { 테스트_모드 = false }
+var 테스트_모드_잠금 = &sync.RWMutex{}
+var 출력_일시정지_모드_잠금 = &sync.RWMutex{}
 
-func F출력_일시정지_중() bool { return 출력_일시정지_모드 }
-func F출력_일시정지_시작()     { 출력_일시정지_모드 = true }
-func F출력_일시정지_종료()     { 출력_일시정지_모드 = false }
+func F테스트_모드_실행_중() bool {
+	테스트_모드_잠금.RLock()
+	defer 테스트_모드_잠금.RUnlock()
+	
+	return 테스트_모드
+}
+
+func F테스트_모드_시작()    {
+	테스트_모드_잠금.Lock()
+	defer 테스트_모드_잠금.Unlock()
+	
+	테스트_모드 = true
+}
+
+func F테스트_모드_종료()    {
+	테스트_모드_잠금.Lock()
+	defer 테스트_모드_잠금.Unlock()
+	
+	테스트_모드 = false
+}
+
+func F출력_일시정지_중() bool {
+	출력_일시정지_모드_잠금.RLock()
+	defer 출력_일시정지_모드_잠금.RUnlock()
+	
+	return 출력_일시정지_모드
+}
+
+func F출력_일시정지_시작()     {
+	출력_일시정지_모드_잠금.Lock()
+	defer 출력_일시정지_모드_잠금.Unlock()
+	
+	출력_일시정지_모드 = true
+}
+
+func F출력_일시정지_종료()     {
+	출력_일시정지_모드_잠금.Lock()
+	defer 출력_일시정지_모드_잠금.Unlock()
+	
+	출력_일시정지_모드 = false
+}
 
 func F테스트_참임(테스트 testing.TB, true이어야_하는_조건 bool, 추가_매개변수 ...interface{}) {
 	if true이어야_하는_조건 {
