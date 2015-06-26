@@ -17,25 +17,8 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
 import time
-import zmq
-
-UTF8 = 'utf-8'
-
-def 프로세스_실행_통보(P주소_테스트_결과_회신: str):
-    메시지 = ["".encode(UTF8)]
-    
-    context = zmq.Context()
-    통보_REQ = context.socket(zmq.REQ)
-    통보_REQ.connect(P주소_테스트_결과_회신)
-    통보_REQ.send_multipart(메시지)
-    통보_REQ.recv_multipart()
-    통보_REQ.close()
-    context.destroy()
-    
-    # 1분동안 종료되지 않음.
-    time.sleep(60)
 
 if __name__ == "__main__":
-    P주소_테스트_결과_회신 = sys.argv[1]
+    대기시간 = float(sys.argv[1])
     
-    프로세스_실행_통보(P주소_테스트_결과_회신)
+    time.sleep(대기시간)

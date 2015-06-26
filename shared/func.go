@@ -34,6 +34,14 @@ type i모의_테스트 interface {
 func F단일_스레드_모드() { runtime.GOMAXPROCS(1) }
 func F멀티_스레드_모드() { runtime.GOMAXPROCS(runtime.NumCPU()) }
 
+func F단일_스레드_모드임() bool {
+	if runtime.GOMAXPROCS(-1) == 1 {
+		return true
+	} else {
+		return false
+	}
+}
+
 func F에러_체크(에러 error) { 내부공용.F호출경로_건너뛴_에러체크(1, 에러) }
 
 func F문자열_복사(문자열 string) string {
@@ -68,14 +76,6 @@ func F에러_메세지_송신(소켓 *zmq.Socket, 에러 error) error {
 	F호출경로_건너뛴_문자열_출력(1, 에러.Error())
 
 	return F메시지_송신(소켓, P메시지_구분_에러, 에러.Error())
-}
-
-func F단일_스레드_모드임() bool {
-	if runtime.GOMAXPROCS(-1) == 1 {
-		return true
-	} else {
-		return false
-	}
 }
 
 // 이하 테스트 편의 함수 모음
