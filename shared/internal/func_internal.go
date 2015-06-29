@@ -40,8 +40,6 @@ func F실행화일_검색(파일명 string) string {
 	return 파일경로
 }
 
-
-
 // 이하 테스트 관련 함수 모음
 
 var 테스트_모드 bool = false
@@ -286,14 +284,30 @@ func F소스코드_위치(건너뛰는_단계 int) string {
 	건너뛰는_단계 = 건너뛰는_단계 + 1 // 이 메소드를 호출한 함수를 기준으로 0이 되게 하기 위함.
 	pc, 파일_경로, 행_번호, _ := runtime.Caller(건너뛰는_단계)
 	함수명 := runtime.FuncForPC(pc).Name()
-	함수명 = strings.Replace(함수명, "github.com/gh-system/", "", -1)
+	함수명 = strings.Replace(함수명, "github.com/ghts/ghts", "", -1)
 	파일명 := filepath.Base(파일_경로)
 
 	return 파일명 + ":" + strconv.Itoa(행_번호) + ":" + 함수명 + "() "
 }
 
 func F문자열_출력(포맷_문자열 string, 추가_매개변수 ...interface{}) {
-	F호출경로_건너뛴_문자열_출력(1, 포맷_문자열, 추가_매개변수...)
+	if F출력_일시정지_중() {
+		return
+	}
+
+	포맷_문자열 = "%s: " + 포맷_문자열
+	
+	if !strings.HasSuffix(포맷_문자열, "\n") {
+		포맷_문자열 += "\n"
+	}
+	
+	추가_매개변수 = append([]interface{}{F소스코드_위치(1)}, 추가_매개변수...)
+	
+	fmt.Printf(포맷_문자열, 추가_매개변수...)
+}
+
+func F에러_출력(에러 error) {
+	F호출경로_건너뛴_문자열_출력(1, 에러.Error())
 }
 
 func F호출경로_건너뛴_문자열_출력(건너뛰기_단계 int, 포맷_문자열 string, 추가_매개변수 ...interface{}) {
@@ -301,14 +315,14 @@ func F호출경로_건너뛴_문자열_출력(건너뛰기_단계 int, 포맷_�
 		return
 	}
 
-	포맷_문자열 = "%s: " + 포맷_문자열
-	추가_매개변수 = append([]interface{}{F소스코드_위치(건너뛰기_단계 + 1)}, 추가_매개변수...)
-
+	포맷_문자열 = "\n%s: " + 포맷_문자열
+	
 	if !strings.HasSuffix(포맷_문자열, "\n") {
 		포맷_문자열 += "\n"
 	}
+	
+	추가_매개변수 = append([]interface{}{F소스코드_위치(건너뛰기_단계 + 1)}, 추가_매개변수...)
 
-	fmt.Println("")
 	fmt.Printf(포맷_문자열, 추가_매개변수...)
 
 	for 추가적인_건너뛰기 := 2; 추가적인_건너뛰기 < 20; 추가적인_건너뛰기++ {
@@ -322,12 +336,8 @@ func F호출경로_건너뛴_문자열_출력(건너뛰기_단계 int, 포맷_�
 	}
 }
 
-func F에러_생성(포맷_문자열 string, 추가_매개변수 ...interface{}) error {
-	return fmt.Errorf(포맷_문자열, 추가_매개변수...)
-}
-
 func F포맷된_문자열(포맷_문자열 string, 추가_매개변수 ...interface{}) string {
-	return F에러_생성(포맷_문자열, 추가_매개변수...).Error()
+	return fmt.Errorf(포맷_문자열, 추가_매개변수...).Error()
 }
 
 func F디버깅용_변수값_확인(값_모음 ...interface{}) {
@@ -364,7 +374,7 @@ func F호출단계_건너뛴_메모(건너뛰기 int, 문자열 string) {
 		}
 	}
 
-	fmt.Printf("TODO : %s %s\n\n", F소스코드_위치(1+건너뛰기), 문자열)
+	fmt.Printf("\nTODO : %s %s\n\n", F소스코드_위치(1+건너뛰기), 문자열)
 	이미_출력한_TODO_모음 = append(이미_출력한_TODO_모음, 문자열)
 }
 

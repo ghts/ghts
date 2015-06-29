@@ -8,6 +8,6 @@ func F공통_종료_채널() chan S비어있는_구조체 {
 	return ch공통_종료_채널
 }
 
-func F등록된_모든_Go루틴_종료() {
+func F등록된_Go루틴_종료() {
 	close(ch공통_종료_채널)
 }

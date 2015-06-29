@@ -58,8 +58,8 @@ func TestF파이썬_프로세스_실행(테스트 *testing.T) {
 	defer 테스트_결과_회신_소켓.Close()
 
 	if 에러 != nil {
-		F문자열_출력(에러.Error())
-		테스트.Fail()
+		F에러_출력(에러)
+		테스트.FailNow()
 	}
 
 	테스트_결과_회신_소켓.Bind(P주소_테스트_결과_회신.String())
