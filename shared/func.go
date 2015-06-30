@@ -42,6 +42,8 @@ func F단일_스레드_모드임() bool {
 	}
 }
 
+func F멀티_스레드_모드임() bool { return !F단일_스레드_모드임() }
+
 func F에러_체크(에러 error) { 내부공용.F호출경로_건너뛴_에러체크(1, 에러) }
 
 func F문자열_복사(문자열 string) string {
@@ -82,7 +84,7 @@ func F에러_메세지_송신(소켓 *zmq.Socket, 에러 error) error {
 
 func F출력_일시정지_중() bool { return 내부공용.F출력_일시정지_중() }
 func F출력_일시정지_시작()     { 내부공용.F출력_일시정지_시작() }
-func F출력_일시정지_종료()     { 내부공용.F출력_일시정지_종료() }
+func F출력_일시정지_종료()     { 내부공용.F출력_일시정지_해제() }
 
 func F테스트_모드_실행_중() bool { return 내부공용.F테스트_모드_실행_중() }
 func F테스트_모드_시작()    { 내부공용.F테스트_모드_시작() }
@@ -129,7 +131,7 @@ func F호출경로_건너뛴_문자열_출력(건너뛰기_단계 int, 포맷_�
 }
 
 func F에러_생성(포맷_문자열 string, 추가_매개변수 ...interface{}) error {
-	return 내부공용.F에러_생성(포맷_문자열, 추가_매개변수...)
+	return fmt.Errorf(포맷_문자열, 추가_매개변수...)
 }
 
 func F포맷된_문자열(포맷_문자열 string, 추가_매개변수 ...interface{}) string {
