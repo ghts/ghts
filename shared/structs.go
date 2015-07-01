@@ -15,7 +15,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 
 @author: UnHa Kim <unha.kim.ghts@gmail.com> */
 
-package internal
+package shared
 
 import (
 	dec "github.com/landjur/go-decimal"
@@ -24,29 +24,30 @@ import (
 	"time"
 )
 
-type S종목 struct {
+// 종목
+type s종목 struct {
 	코드 string
 	이름 string
 }
 
-func (this *S종목) G코드() string {
+func (this *s종목) G코드() string {
 	return this.코드
 }
 
-func (this *S종목) G이름() string {
+func (this *s종목) G이름() string {
 	return this.이름
 }
 
 // 통화
-type S통화 struct {
+type s통화 struct {
 	단위   T통화단위
 	금액   *dec.Decimal
 	변경불가 bool
 }
 
-func (this *통화) G단위() T통화단위    { return this.단위 }
-func (this *통화) G실수값() float64 { return this.금액.Float() }
-func (this *통화) G정밀값() *dec.Decimal {
+func (this *s통화) G단위() T통화단위    { return this.단위 }
+func (this *s통화) G실수값() float64 { return this.금액.Float() }
+func (this *s통화) G정밀값() *dec.Decimal {
 	// 참조형이므로 그대로 주지 않고, 복사본을 준다.
 	if this.금액 == nil {
 		return nil
@@ -56,11 +57,11 @@ func (this *통화) G정밀값() *dec.Decimal {
 
 	return 정밀값
 }
-func (this *통화) G실수_문자열(소숫점_이하_자릿수 int) string {
+func (this *s통화) G실수_문자열(소숫점_이하_자릿수 int) string {
 	return this.금액.FloatString(소숫점_이하_자릿수)
 }
 
-func (this *통화) G비교(다른_통화 I통화) T비교결과 {
+func (this *s통화) G비교(다른_통화 I통화) T비교결과 {
 	switch {
 	case this.단위 != 다른_통화.G단위():
 		return P비교불가
@@ -69,12 +70,12 @@ func (this *통화) G비교(다른_통화 I통화) T비교결과 {
 	}
 }
 
-func (this *통화) G부호() T부호 {
+func (this *s통화) G부호() T부호 {
 	return T부호(this.금액.Sign())
 }
 
-func (this *통화) G복사본() I통화 {
-	s := new(통화)
+func (this *s통화) G복사본() I통화 {
+	s := new(s통화)
 	s.단위 = this.G단위()
 	s.금액 = this.G정밀값()
 	s.변경불가 = false
@@ -82,15 +83,15 @@ func (this *통화) G복사본() I통화 {
 	return s
 }
 
-func (this *통화) G변경불가() bool {
+func (this *s통화) G변경불가() bool {
 	return this.변경불가
 }
 
-func (this *통화) S동결() {
+func (this *s통화) S동결() {
 	this.변경불가 = true
 }
 
-func (this *통화) S더하기(다른_통화 I통화) I통화 {
+func (this *s통화) S더하기(다른_통화 I통화) I통화 {
 	if this.변경불가 {
 		panic("변경불가능한 값입니다.")
 	}
@@ -108,7 +109,7 @@ func (this *통화) S더하기(다른_통화 I통화) I통화 {
 	return this
 }
 
-func (this *통화) S빼기(다른_통화 I통화) I통화 {
+func (this *s통화) S빼기(다른_통화 I통화) I통화 {
 	if this.변경불가 {
 		panic("변경불가능한 값입니다.")
 	}
@@ -126,7 +127,7 @@ func (this *통화) S빼기(다른_통화 I통화) I통화 {
 	return this
 }
 
-func (this *통화) S곱하기(다른_통화 I통화) I통화 {
+func (this *s통화) S곱하기(다른_통화 I통화) I통화 {
 	if this.변경불가 {
 		panic("변경불가능한 값입니다.")
 	}
@@ -144,7 +145,7 @@ func (this *통화) S곱하기(다른_통화 I통화) I통화 {
 	return this
 }
 
-func (this *통화) S나누기(다른_통화 I통화) I통화 {
+func (this *s통화) S나누기(다른_통화 I통화) I통화 {
 	if this.변경불가 {
 		panic("변경불가능한 값입니다.")
 	}
@@ -187,7 +188,7 @@ func (this *통화) S나누기(다른_통화 I통화) I통화 {
 	return this
 }
 
-func (this *통화) S금액(금액 string) I통화 {
+func (this *s통화) S금액(금액 string) I통화 {
 	if this.변경불가 {
 		panic("변경불가능한 값입니다.")
 	}
@@ -203,29 +204,17 @@ func (this *통화) S금액(금액 string) I통화 {
 	return this
 }
 
-func (this *통화) String() string {
+func (this *s통화) String() string {
 	return string(this.단위) + " " + this.금액.String()
 }
 
 // 가격정보
-type I가격정보 interface {
-	G종목() I종목
-	G가격() I통화
-	G시점() time.Time
-}
-
-func New가격정보(종목 I종목, 가격 I통화) I가격정보 {
-	s := 가격정보{종목: 종목, 가격: 가격.G복사본(), 시점: time.Now()}
-	return &s
-}
-
-type 가격정보 struct {
+type s가격정보 struct {
 	종목 I종목
 	가격 I통화
 	시점 time.Time
 }
 
-func (this *가격정보) G종목() I종목       { return this.종목 }
-func (this *가격정보) G가격() I통화       { return this.가격.G복사본() }
-func (this *가격정보) G시점() time.Time { return this.시점 }
-
+func (this *s가격정보) G종목() I종목       { return this.종목 }
+func (this *s가격정보) G가격() I통화       { return this.가격.G복사본() }
+func (this *s가격정보) G시점() time.Time { return this.시점 }
