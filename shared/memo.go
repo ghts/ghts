@@ -1,11 +1,27 @@
 package shared
 
 import (
+	"bytes"
 	"fmt"
+	"strings"
 )
 
 func init() {
-	fmt.Println("에러 발생 원인을 모르겠다면, 테스트를 추적하기 쉽게 단순화 시킨 후,")
-	fmt.Println("실행 과정을 하나, 하나 출력해 보면서 내부 흐름 추적하자.")
-	fmt.Println("더 이상 좋은 방법은 없다.")
+	f메모()
+}
+
+func f메모() {
+	버퍼 := new(bytes.Buffer)
+	버퍼.WriteString("에러가 발생했는 데 원인도 모르겠고 막막하다면?\n")
+	버퍼.WriteString("문제를 쪼개고, 단순화 시킨 후, 내부 실행과정을 추적하자.\n")
+	버퍼.WriteString("이보다 달리 더 좋은 방법은 없다.\n")
+	
+	문자열 := 버퍼.String()
+	
+	if !strings.HasSuffix(문자열, "\n") {
+		문자열 += "\n"
+	}
+	 
+	fmt.Println(버퍼.String())
+	fmt.Println("")
 }

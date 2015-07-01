@@ -18,14 +18,15 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 package shared
 
 import (
-	zmq "github.com/pebbe/zmq4"
-
+	내부공용 "github.com/ghts/ghts/shared/internal"
+	
 	"bytes"
 	"fmt"
 	"io"
 	"os"
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestF문자열_복사(테스트 *testing.T) {
@@ -46,36 +47,33 @@ func TestF실행화일_검색(테스트 *testing.T) {
 
 func TestF외부_프로세스_실행(테스트 *testing.T) {
 	테스트.Parallel()
-
-	_, 에러 := F외부_프로세스_실행("This_file_should_not_be_existing.none")
-	F테스트_에러발생(테스트, 에러)
-}
-
-func TestF파이썬_프로세스_실행(테스트 *testing.T) {
-	테스트.Parallel()
-
-	테스트_결과_회신_소켓, 에러 := zmq.NewSocket(zmq.REP)
-	defer 테스트_결과_회신_소켓.Close()
-
+	
+	회신_채널 := make(chan error)
+	타임아웃 := time.Second
+	
+	//화면 출력을 안 보이게 하기
+	원래_출력장치 := os.Stdout
+	입력장치, 출력장치, 에러 := os.Pipe()
 	if 에러 != nil {
-		F에러_출력(에러)
 		테스트.FailNow()
 	}
 
-	테스트_결과_회신_소켓.Bind(P주소_테스트_결과_회신.String())
+	os.Stdout = 출력장치
+	
+	F외부_프로세스_실행(회신_채널, 타임아웃, "This_file_should_not_be_existing.none")
+	
+	에러 = <-회신_채널
+	F테스트_에러발생(테스트, 에러)
+	
+	출력장치.Close()
+	os.Stdout = 원래_출력장치
 
-	_, 에러 = F파이썬_프로세스_실행("func_test.py", "exec_python_process", P주소_테스트_결과_회신)
+	var 버퍼 bytes.Buffer
+	io.Copy(&버퍼, 입력장치)
 
-	F테스트_에러없음(테스트, 에러)
+	F테스트_참임(테스트, len(버퍼.String()) > 10)
 
-	메시지, _ := 테스트_결과_회신_소켓.RecvMessage(0)
-	구분 := 메시지[0]
-	데이터 := 메시지[1]
-
-	F테스트_같음(테스트, 구분, P메시지_구분_OK)
-	F테스트_같음(테스트, 데이터, "")
-
-	테스트_결과_회신_소켓.SendMessage([]string{P메시지_구분_OK, ""})
+	입력장치.Close()
 }
 
 // 테스트 편의함수 Fxxx_확인() 테스트용 Mock-Up
@@ -148,11 +146,11 @@ func TestS모의_테스트(테스트 *testing.T) {
 }
 
 func TestF테스트_중(테스트 *testing.T) {
-	F테스트_모드_종료()
-	F테스트_거짓임(테스트, F테스트_모드임())
+	내부공용.F테스트_모드_종료()
+	F테스트_거짓임(테스트, F테스트_모드_실행_중())
 
-	F테스트_모드_시작()
-	F테스트_참임(테스트, F테스트_모드임())
+	내부공용.F테스트_모드_시작()
+	F테스트_참임(테스트, F테스트_모드_실행_중())
 }
 
 func TestF테스트_참임(테스트 *testing.T) {
