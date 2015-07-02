@@ -64,7 +64,7 @@ func New통화(단위 T통화단위, 금액 string) I통화 {
 	정밀값, 에러 := dec.Parse(금액)
 
 	if 에러 != nil {
-		F문자열_출력(에러.Error())
+		F에러_출력(에러)
 		return nil
 	}
 

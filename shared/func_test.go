@@ -18,11 +18,14 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 package shared
 
 import (
+	zmq "github.com/pebbe/zmq4"
+	
 	"bytes"
 	"fmt"
 	"io"
 	"math/rand"
 	"os"
+	"reflect"
 	"runtime"
 	"strings"
 	"testing"
@@ -31,20 +34,172 @@ import (
 
 // 이하 편의함수 모음
 
+func TestF에러_체크(테스트 *testing.T) {
+	// 그냥 nil을 넘겨주면 reflect.ValueOf(nil)이 무효한 값이 되어서 에러 발생함.
+	// nil 대신에 error형식의 reflect.Zero값을 넘겨줘야 함.
+
+	빈_에러값 := reflect.Zero(reflect.TypeOf(fmt.Errorf("")))
+	F테스트_패닉없음(테스트, F에러_체크, 빈_에러값)
+
+	//화면 출력을 안 보이게 하기
+	원래_출력장치 := os.Stdout
+	_, 출력장치, 에러 := os.Pipe()
+
+	if 에러 != nil {
+		테스트.FailNow()
+	}
+
+	os.Stdout = 출력장치
+
+	F테스트_패닉발생(테스트, F에러_체크, fmt.Errorf("테스트용 에러"))
+
+	출력장치.Close()
+	os.Stdout = 원래_출력장치
+}
+
 func TestF문자열_복사(테스트 *testing.T) {
 	테스트.Parallel()
 
 	F테스트_같음(테스트, F문자열_복사("12 34 "), "12 34 ")
 }
 
-func TestF실행화일_검색(테스트 *testing.T) {
-	테스트.Parallel()
+func TestF메시지_송신(테스트 *testing.T) {
+	회신_채널 := make(chan bool)
+	
+	질의_메시지 := []interface{}{P메시지_구분_일반, "질의_메시지"}
+	회신_에러 := fmt.Errorf("회신_에러")
+	
+	go f메시지_송신_테스트_REQ(회신_채널, 질의_메시지, 회신_에러)
+	go f에러_메시지_송신_테스트_REP(회신_채널, 질의_메시지, 회신_에러)
+	
+	for i:=0 ; i < 2 ; i++ {
+		테스트_결과 := <-회신_채널
+		F테스트_참임(테스트, 테스트_결과)
+	} 
+}
 
-	F문자열_출력_일시정지_시작()
-	defer F문자열_출력_일시정지_해제()
+func f메시지_송신_테스트_REQ(회신_채널 chan bool, 질의_메시지 []interface{}, 회신_에러 error) {
+	
+	var 에러 error = nil
+	
+	defer func() {
+		if 에러 != nil {
+			회신_채널 <- false
+		}
+	}()
+	
+	소켓_REQ, 에러 := zmq.NewSocket(zmq.REQ)
+	if 에러 != nil { return }
 
-	F테스트_참임(테스트, strings.HasSuffix(F실행화일_검색("go.exe"), "go.exe"))
-	F테스트_같음(테스트, F실행화일_검색("This_file_should_not_be_existing.none"), "")
+	defer 소켓_REQ.Close()
+
+	에러 = 소켓_REQ.Connect(P주소_테스트_결과_회신.String())
+	if 에러 != nil { return }
+	
+	에러 = F메시지_송신(소켓_REQ, 질의_메시지...)
+	if 에러 != nil { return }
+	
+	메시지, 에러 := 소켓_REQ.RecvMessage(0)
+	if 에러 != nil { return }
+	
+	if len(메시지) != 2 ||
+		메시지[0] != P메시지_구분_에러 ||
+		메시지[1] != 회신_에러.Error() {
+		회신_채널 <- false
+		return
+	}
+	
+	회신_채널 <- true
+}
+
+func f에러_메시지_송신_테스트_REP(회신_채널 chan bool, 질의_메시지 []interface{}, 회신_에러 error) {
+	var 에러 error = nil
+	
+	defer func() {
+		if 에러 != nil {
+			회신_채널 <- false
+		}
+	}()
+	
+	소켓_REP, 에러 := zmq.NewSocket(zmq.REP)
+	if 에러 != nil { return }
+
+	defer 소켓_REP.Close()
+
+	에러 = 소켓_REP.Bind(P주소_테스트_결과_회신.String())
+	if 에러 != nil { return }
+	
+	메시지, 에러 := 소켓_REP.RecvMessage(0)
+	if 에러 != nil { return }
+	
+	if len(메시지) != len(질의_메시지) {
+		회신_채널 <- false
+		return
+	}
+	
+	for i:=0 ; i < len(메시지) ; i++ {
+		if 메시지[i] != 질의_메시지[i] {
+			회신_채널 <- false
+			return
+		}
+	}
+	
+	에러 = F에러_메시지_송신(소켓_REP, 회신_에러)
+	if 에러 != nil { return }
+	
+	회신_채널 <- true
+}
+
+// 이하 최대 스레드 수량 관련 함수
+
+func TestF단일_스레드_모드(테스트 *testing.T) {
+	최대_스레드_수량_원본 := runtime.GOMAXPROCS(-1)
+	defer func() {
+		runtime.GOMAXPROCS(최대_스레드_수량_원본)
+	}()
+
+	runtime.GOMAXPROCS(2)
+	F단일_스레드_모드()
+
+	F테스트_같음(테스트, runtime.GOMAXPROCS(-1), 1)
+}
+
+func TestF멀티_스레드_모드(테스트 *testing.T) {
+	최대_스레드_수량_원본 := runtime.GOMAXPROCS(-1)
+	defer func() {
+		runtime.GOMAXPROCS(최대_스레드_수량_원본)
+	}()
+
+	runtime.GOMAXPROCS(1)
+	F멀티_스레드_모드()
+
+	F테스트_같음(테스트, runtime.GOMAXPROCS(-1), runtime.NumCPU())
+}
+
+func TestF단일_스레드_모드임(테스트 *testing.T) {
+	최대_스레드_수량_원본 := runtime.GOMAXPROCS(-1)
+	defer func() {
+		runtime.GOMAXPROCS(최대_스레드_수량_원본)
+	}()
+
+	F단일_스레드_모드()
+	F테스트_참임(테스트, F단일_스레드_모드임())
+
+	F멀티_스레드_모드()
+	F테스트_거짓임(테스트, F단일_스레드_모드임())
+}
+
+func TestF멀티_스레드_모드임(테스트 *testing.T) {
+	최대_스레드_수량_원본 := runtime.GOMAXPROCS(-1)
+	defer func() {
+		runtime.GOMAXPROCS(최대_스레드_수량_원본)
+	}()
+
+	F단일_스레드_모드()
+	F테스트_거짓임(테스트, F멀티_스레드_모드임())
+
+	F멀티_스레드_모드()
+	F테스트_참임(테스트, F멀티_스레드_모드임())
 }
 
 // Go루틴 정리 관련 기능 테스트
@@ -136,11 +291,13 @@ func TestF외부_프로세스_실행(테스트 *testing.T) {
 
 func TestF외부_프로세스_관리_Go루틴(테스트 *testing.T) {
 	// 멀티 스레드 모드로 전환
-	if runtime.GOMAXPROCS(-1) == 1 {
-		runtime.GOMAXPROCS(runtime.NumCPU())
+	if F단일_스레드_모드임() {
+		F멀티_스레드_모드()
 
-		defer runtime.GOMAXPROCS(1)
+		defer F단일_스레드_모드()
 	}
+
+	f외부_프로세스_관리_Go루틴_테스트_도우미(테스트, 1, 1, 1)
 
 	// 랜덤값 생성기
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
@@ -175,15 +332,15 @@ func f외부_프로세스_관리_Go루틴_테스트_도우미(테스트 *testing
 
 	// 외부 프로세스 생성
 	for i := 0; i < 정상_종료_프로세스_수량; i++ {
-		F파이썬_스크립트_실행(에러_회신_채널, p정상_종료_타임아웃, "func_external_process_test.py", p정상_종료_대기시간)
+		F파이썬_스크립트_실행(에러_회신_채널, p정상_종료_타임아웃, "func_test_external_process.py", p정상_종료_대기시간)
 	}
 
 	for i := 0; i < 강제_종료_프로세스_수량; i++ {
-		F파이썬_스크립트_실행(에러_회신_채널, p강제_종료_타임아웃, "func_external_process_test.py", p강제_종료_대기시간)
+		F파이썬_스크립트_실행(에러_회신_채널, p강제_종료_타임아웃, "func_test_external_process.py", p강제_종료_대기시간)
 	}
 
 	for i := 0; i < 끝까지_남는_프로세스_수량; i++ {
-		F파이썬_스크립트_실행(에러_회신_채널, p끝까지_남는_타임아웃, "func_external_process_test.py", p끝까지_남는_대기시간)
+		F파이썬_스크립트_실행(에러_회신_채널, p끝까지_남는_타임아웃, "func_test_external_process.py", p끝까지_남는_대기시간)
 	}
 
 	총_프로세스_수량 := 정상_종료_프로세스_수량 + 강제_종료_프로세스_수량 + 끝까지_남는_프로세스_수량
@@ -265,6 +422,16 @@ func f외부_프로세스_관리_Go루틴_테스트_도우미(테스트 *testing
 	F테스트_같음(테스트, 누적_정상_종료_수량+누적_강제_종료_수량+누적_정리된_프로세스_수량_by_파일, 총_프로세스_수량)
 	F테스트_같음(테스트, 누적_정리된_프로세스_수량_by_파일, 끝까지_남는_프로세스_수량)
 	F테스트_같음(테스트, 누적_정상_종료_수량+누적_강제_종료_수량, 정상_종료_프로세스_수량+강제_종료_프로세스_수량)
+}
+	
+func TestF실행화일_검색(테스트 *testing.T) {
+	테스트.Parallel()
+
+	F문자열_출력_일시정지_시작()
+	defer F문자열_출력_일시정지_해제()
+
+	F테스트_참임(테스트, strings.HasSuffix(F실행화일_검색("go.exe"), "go.exe"))
+	F테스트_같음(테스트, F실행화일_검색("This_file_should_not_be_existing.none"), "")
 }
 
 // 테스트 편의함수 Fxxx_확인() 테스트용 Mock-Up
@@ -524,11 +691,17 @@ func TestF테스트_다름(테스트 *testing.T) {
 	입력장치.Close()
 }
 
-func 패닉_발생(매개변수 int) { panic("") }
+func 패닉_발생(매개변수 error) {
+	if 매개변수 == nil ||
+		F포맷된_문자열("%v", 매개변수) == "<nil>" {
+		panic("")
+	}
+}
 func 패닉_없음(매개변수 int) {}
 
 func TestF테스트_패닉발생(테스트 *testing.T) {
-	F테스트_패닉발생(테스트, 패닉_발생, 1)
+	매개변수 := reflect.Zero(reflect.TypeOf(fmt.Errorf("테스트용 에러")))
+	F테스트_패닉발생(테스트, 패닉_발생, 매개변수)
 
 	//화면 출력을 안 보이게 하기
 	원래_출력장치 := os.Stdout
@@ -572,7 +745,7 @@ func TestF테스트_패닉없음(테스트 *testing.T) {
 
 	모의_테스트 := new(s모의_테스트)
 	F문자열_출력_일시정지_시작()
-	F테스트_패닉없음(모의_테스트, 패닉_발생, 1)
+	F테스트_패닉없음(모의_테스트, 패닉_발생, 0)
 	F문자열_출력_일시정지_해제()
 	F테스트_참임(테스트, 모의_테스트.Failed())
 
