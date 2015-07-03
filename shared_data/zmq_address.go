@@ -2,7 +2,7 @@ package shared_data
 
 import (
 	공용 "github.com/ghts/ghts/shared"
-	zmq "github.com/pebbe/zmq4"
+	//zmq "github.com/pebbe/zmq4"
 	
 	"strconv"
 	"sync"
@@ -22,10 +22,8 @@ const (
 
 func init() {
 	// 아래 2개의 주소는 고정.
-	주소정보_맵.Lock()
 	주소정보_맵[P주소정보] = "tcp://127.0.0.1:3001"
 	주소정보_맵[P테스트_결과] = "tcp://127.0.0.1:3002"
-	주소정보_맵.Unlock()
 	
 	// 나머지 주소는 생성자 함수를 이용해서 자동 생성.
 	f주소_추가(P종목정보)
@@ -34,18 +32,34 @@ func init() {
 	f주소_추가(P가격정보_배포)
 }
 
-var 주소정보_맵 = make(map[string]string)
-var 주소정보_맵_잠금 = &sync.RWMutex{}
-
 var 포트번호 = 3010
 
-func f주소_추가(주소 T주소_이름) {
-	주소정보_맵_잠금.Lock()
-	주소정보_맵[주소.(string)] = "tcp://127.0.0.1:" + strconv.Itoa(포트번호)
-	주소정보_맵_잠금.Unlock()
-	
+func f주소_추가(주소_이름 T주소_이름) {
+	주소정보_맵[주소_이름] = "tcp://127.0.0.1:" + strconv.Itoa(포트번호)
 	포트번호++
 }
+
+type I주소정보_질의 interface {
+	G주소_이름() T주소_이름
+	G회신_채널() chan 공용.I회신
+}
+
+func New주소정보_질의(주소_이름 T주소_이름, 회신_채널 chan 공용.I회신) I주소정보_질의 {
+	return s주소정보_질의 {주소_이름: 주소_이름, 회신_채널: 회신_채널}
+}
+
+type s주소정보_질의 struct {
+	주소_이름 T주소_이름
+	회신_채널 chan 공용.I회신
+}
+func (this s주소정보_질의) G주소_이름() T주소_이름 { return this.주소_이름 }
+func (this s주소정보_질의) G회신_채널() chan 공용.I회신 { return this.회신_채널 }
+
+// 테스트에서 에러가 발생하지 않고 정상 동작한다면 가능한한 버퍼 추가할 것.
+var Ch주소정보_질의채널 = make(chan I주소정보_질의)
+var ch주소정보_종료채널 = 공용.F공통_종료_채널()
+
+var 주소정보_맵 = make(map[T주소_이름]string)
 
 var 주소정보_관리_채널방식_Go루틴_실행_중 = false
 var 주소정보_관리_채널방식_Go루틴_잠금 = &sync.RWMutex{}
@@ -53,102 +67,86 @@ var 주소정보_관리_채널방식_Go루틴_잠금 = &sync.RWMutex{}
 var 주소정보_관리_소켓방식_Go루틴_실행_중 = false
 var 주소정보_관리_소켓방식_Go루틴_잠금 = &sync.RWMutex{}
 
-type S주소정보_질의 struct {
-	M주소_이름 T주소_이름
-	M회신_채널 chan I회신
-} 
-
-var Ch주소정보_질의채널 = chan S주소정보_질의
-
-func F주소정보_관리_채널방식_Go루틴_실행_중() bool {
-	주소정보_관리_채널방식_Go루틴_잠금.RLock()
-	defer 주소정보_관리_채널방식_Go루틴_잠금.RUnlock()
-	
-	return 주소정보_관리_채널방식_Go루틴_실행_중
-}
-
-func F주소정보_관리_소켓방식_Go루틴_실행_중() bool {
-	주소정보_관리_소켓방식_Go루틴_잠금.RLock()
-	defer 주소정보_관리_소켓방식_Go루틴_잠금.RUnlock()
-	
-	return 주소정보_관리_소켓방식_Go루틴_실행_중
-}
-
 func F주소정보_관리_채널방식_Go루틴(실행_성공_회신_채널 chan bool) {
-	if F주소정보_관리_채널방식_Go루틴_실행_중() {
+	주소정보_관리_채널방식_Go루틴_잠금.RLock()
+	실행_중 := 주소정보_관리_채널방식_Go루틴_실행_중
+	주소정보_관리_채널방식_Go루틴_잠금.RUnlock()
+	
+	if 실행_중 {
 		실행_성공_회신_채널 <- false
 		return
 	}
-
+	
 	주소정보_관리_채널방식_Go루틴_잠금.Lock()
 
-	// Go루틴 시작하기 전에 마지막으로 1번 더 확인.
-	if 주소정보_관리_Go루틴_실행_중 {
-		// 그 짧은 시간 사이에 Go 루틴이 생성되었다면 바로 종료.
-		주소정보_관리_Go루틴_잠금.Unlock()
-
+	if 주소정보_관리_채널방식_Go루틴_실행_중 {
+		주소정보_관리_채널방식_Go루틴_잠금.Unlock()
 		실행_성공_회신_채널 <- false
 		return
+	} else {
+		주소정보_관리_채널방식_Go루틴_실행_중 = true
+		주소정보_관리_채널방식_Go루틴_잠금.Unlock()
+		실행_성공_회신_채널 <- true
 	}
-
-	주소정보_관리_Go루틴_실행_중 = true
-	주소정보_관리_Go루틴_잠금.Unlock()
-	
-	// 준비 완료
-	실행_성공_회신_채널 <- true
 	
 	for {
 		select {
 		case 주소정보_질의 := <-Ch주소정보_질의채널:
-			주소정보_맵_잠금.RLock()
-			주소, ok := 주소정보_맵[주소정보_질의.M주소_이름]
-			실행_내역_맵[실행_내역.M_pid] = 실행_내역
-
-			에러 = f실행_내역_맵_파일에_저장(실행_내역_맵)
-			F에러_체크(에러)
-		case <-종료_채널:
+			주소, 존재함 := 주소정보_맵[주소정보_질의.G주소_이름()]
+			
+			var 회신 공용.I회신
+			
+			if !존재함 {
+				에러 := 공용.F에러_생성("존재하지 않는 주소 이름. %v", 주소정보_질의.G주소_이름())
+				회신 = 공용.New회신(nil, 에러)
+			} else {
+				회신 = 공용.New회신([]string{주소}, nil)
+			}
+			
+			주소정보_질의.G회신_채널() <- 회신
+		case <-ch주소정보_종료채널:
 			주소정보_관리_채널방식_Go루틴_잠금.Lock()
 			주소정보_관리_채널방식_Go루틴_실행_중 = false
 			주소정보_관리_채널방식_Go루틴_잠금.Unlock()
 
 			return
+		}
 	}
-	
 }
 
 func F주소정보_관리_소켓방식_Go루틴(실행_성공_회신_채널 chan bool) {
-	if F주소정보_관리_Go루틴_실행_중() {
+	주소정보_관리_소켓방식_Go루틴_잠금.RLock()
+	실행_중 := 주소정보_관리_소켓방식_Go루틴_실행_중
+	주소정보_관리_소켓방식_Go루틴_잠금.RUnlock()
+	
+	주소정보_관리_소켓방식_Go루틴_잠금.Lock()
+
+	if 주소정보_관리_소켓방식_Go루틴_실행_중 {
+		주소정보_관리_소켓방식_Go루틴_잠금.Unlock()
 		실행_성공_회신_채널 <- false
 		return
+	} else {
+		주소정보_관리_소켓방식_Go루틴_실행_중 = true
+		주소정보_관리_소켓방식_Go루틴_잠금.Unlock()
 	}
-
-	주소정보_관리_Go루틴_잠금.Lock()
-
-	// Go루틴 시작하기 전에 마지막으로 1번 더 확인.
-	if 주소정보_관리_Go루틴_실행_중 {
-		// 그 짧은 시간 사이에 Go 루틴이 생성되었다면 바로 종료.
-		주소정보_관리_Go루틴_잠금.Unlock()
-
-		실행_성공_회신_채널 <- false
-		return
-	}
-
-	주소정보_관리_Go루틴_실행_중 = true
-	주소정보_관리_Go루틴_잠금.Unlock()
+	
+	기저_Go루틴_실행_채널 := make(chan bool)
+	go F주소정보_관리_채널방식_Go루틴(기저_Go루틴_실행_채널)
+	<-기저_Go루틴_실행_채널
+	
+	회신_채널 := make(chan 공용.I회신)
+	Ch주소정보_질의채널 <- New주소정보_질의(P주소정보, 회신_채널)
+	주소_질의_회신 := <-회신_채널
+	공용.F에러_체크(주소_질의_회신.G에러())
 	
 	// 소켓 초기화
 	주소정보_REP, 에러 := zmq.NewSocket(zmq.REP)
 	공용.F에러_체크(에러)
 	defer 주소정보_REP.Close()
-	
-	주소정보_REP.Bind(공용.P주소_주소정보.String())
+	주소정보_REP.Bind(주소_질의_회신.G내용()[0])
 
-	종목정보_REP, 에러 := zmq.NewSocket(zmq.REP)
-	defer 종목정보_REP.Close()
-	if 에러 != nil {
-		panic(에러)
-	}
-	종목정보_REP.Bind(공용.P주소_종목정보.String())
+	// 초기화 완료.
+	실행_성공_회신_채널 <- true
 
 	reactor := zmq.NewReactor()
 	reactor.AddSocket(주소정보_REP, zmq.POLLIN, func(e zmq.State) error { return f주소정보_제공(주소정보_REP) })
@@ -162,9 +160,4 @@ func F주소정보_관리_소켓방식_Go루틴(실행_성공_회신_채널 chan
 			공용.F문자열_출력("reactor 재시작 : %v", 에러)
 		}
 	}
-	
-	// 주소 정보 서비스 제공 준비 완료.
-	실행_성공_회신_채널 <- true
-
 }
-

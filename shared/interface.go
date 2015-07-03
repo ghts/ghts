@@ -29,7 +29,7 @@ type I회신 interface {
 	G에러() error
 }
 
-func New회신(에러 error, 내용 ...string) I회신 {
+func New회신(내용 []string, 에러 error) I회신 {
 	return s회신{내용: 내용, 에러: 에러}
 }
 

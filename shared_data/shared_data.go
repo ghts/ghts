@@ -15,8 +15,9 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 
 @author: UnHa Kim <unha.kim.ghts@gmail.com> */
 
-package modules
+package shared_data
 
+/*
 import (
 	공용 "github.com/ghts/ghts/shared"
 	zmq "github.com/pebbe/zmq4"
@@ -141,3 +142,4 @@ func f종목정보_제공(종목정보_REP *zmq.Socket) error {
 
 	return 공용.F메시지_송신(종목정보_REP, 공용.P메시지_구분_OK, 종목.G코드(), 종목.G이름())
 }
+*/
