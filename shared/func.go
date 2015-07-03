@@ -39,6 +39,10 @@ type i모의_테스트 interface {
 	S모의_테스트_리셋()
 }
 
+func F타입_이름(i interface{}) string {
+	return reflect.TypeOf(i).Name()
+}
+
 func F에러_체크(에러 error) {
 	if F포맷된_문자열("%v", 에러) != "<nil>" {
 		F호출경로_건너뛴_문자열_출력(1, 에러.Error())
@@ -183,7 +187,7 @@ type S외부_프로세스_실행내역 struct {
 var Ch외부_프로세스_실행 = make(chan S외부_프로세스_실행내역) // 버퍼가 있으니까 엄청 어렵더라.
 var Ch외부_프로세스_정상_종료 = make(chan int)        // 동기식은 간단한 데, 비동기식은 이유를 알 수 없는 에러 발생.
 
-var ch외부_프로세스_관리_루틴_종료 chan (chan int) = make(chan (chan int))
+var Ch외부_프로세스_관리_루틴_종료 chan (chan int) = make(chan (chan int))
 var ch외부_프로세스_테스트용_채널_활성화 chan bool = make(chan bool)
 
 var ch프로세스_강제_종료_테스트용 chan int = nil
@@ -299,7 +303,7 @@ func F외부_프로세스_관리_Go루틴(실행_성공_회신_채널 chan bool)
 			if 테스트용_채널_활성화 && len(정리된_pid_모음) > 0 {
 				ch프로세스_강제_종료_테스트용 <- len(정리된_pid_모음)
 			}
-		case 회신_채널 := <-ch외부_프로세스_관리_루틴_종료:
+		case 회신_채널 := <-Ch외부_프로세스_관리_루틴_종료:
 			파일_기반_강제_종료_수량, 에러 := f외부_프로세스_정리_by_파일()
 			F에러_체크(에러)
 
@@ -334,7 +338,7 @@ func F외부_프로세스_관리_Go루틴_종료() (bool, int) {
 	}
 
 	회신_채널 := make(chan int)
-	ch외부_프로세스_관리_루틴_종료 <- 회신_채널
+	Ch외부_프로세스_관리_루틴_종료 <- 회신_채널
 
 	파일_기반_프로세스_강제_종료_수량 := <-회신_채널
 

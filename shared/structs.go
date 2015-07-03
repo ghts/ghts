@@ -24,6 +24,20 @@ import (
 	"time"
 )
 
+// 회신 내용
+type s회신 struct {
+	내용 []string
+	에러 error
+}
+
+func (this s회신) G내용() []string {
+	return this.내용
+}
+
+func (this s회신) G에러() error {
+	return this.에러
+}
+
 // 종목
 type s종목 struct {
 	코드 string

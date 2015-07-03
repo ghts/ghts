@@ -23,6 +23,16 @@ import (
 	"time"
 )
 
+// 회신
+type I회신 interface {
+	G내용() []string
+	G에러() error
+}
+
+func New회신(에러 error, 내용 ...string) I회신 {
+	return s회신{내용: 내용, 에러: 에러}
+}
+
 // 종목
 type I종목 interface {
 	G코드() string

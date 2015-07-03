@@ -60,8 +60,8 @@ func TestF공용정보_모듈_Python(테스트 *testing.T) {
 	for i := 0; i < 주소정보_요청_모듈_수량; i++ {
 		공용.F문자열_출력("6 - %v", i)
 		
-		공용.F파이썬_프로세스_실행("shared_data_test_address.py", 공용.P주소_주소정보, 공용.P주소_테스트_결과_회신, strconv.Itoa(테스트_반복횟수))
-		공용.F파이썬_프로세스_실행("shared_data_test_stock_ticker.py", 공용.P주소_종목정보, 공용.P주소_테스트_결과_회신, strconv.Itoa(테스트_반복횟수))
+		공용.F파이썬_스크립트_실행("shared_data_test_address.py", 공용.P주소_주소정보, 공용.P주소_테스트_결과_회신, strconv.Itoa(테스트_반복횟수))
+		공용.F파이썬_스크립트_실행("shared_data_test_stock_ticker.py", 공용.P주소_종목정보, 공용.P주소_테스트_결과_회신, strconv.Itoa(테스트_반복횟수))
 	}
 	//공용.F문자열_출력("파이썬 주소정보 요청 모듈 %v개 launch", 주소정보_요청_모듈_수량)
 

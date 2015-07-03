@@ -17,23 +17,6 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 
 package shared
 
-import (
-	"strconv"
-)
-
-type T주소 int
-
-func (this T주소) String() string { return "tcp://127.0.0.1:" + strconv.Itoa(3001+int(this)) }
-
-const (
-	P주소_주소정보 T주소 = iota
-	P주소_종목정보
-	P주소_가격정보_입수
-	P주소_가격정보_배포
-	P주소_가격정보
-	P주소_테스트_결과_회신 T주소 = 998 // 테스트 결과 회신 주소는 3999번 포트로 고정
-)
-
 const (
 	P메시지_구분_일반  = "N"
 	P메시지_구분_종료  = "Q"
