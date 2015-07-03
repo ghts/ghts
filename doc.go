@@ -15,21 +15,5 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 
 @author: UnHa Kim <unha.kim.ghts@gmail.com> */
 
-package shared
-
-import (
-	"os"
-	"testing"
-)
-
-func TestMain(m *testing.M) {
-	F테스트_모드_시작()
-	defer F테스트_모드_종료()
-
-	if F단일_스레드_모드임() {
-		F멀티_스레드_모드()
-		defer F단일_스레드_모드()
-	}
-
-	os.Exit(m.Run())
-}
+// 프로그램 매매 시스템 작성용 모듈 모음
+package ghts

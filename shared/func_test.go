@@ -19,7 +19,7 @@ package shared
 
 import (
 	zmq "github.com/pebbe/zmq4"
-	
+
 	"bytes"
 	"fmt"
 	"io"
@@ -65,88 +65,104 @@ func TestF문자열_복사(테스트 *testing.T) {
 
 func TestF메시지_송신(테스트 *testing.T) {
 	회신_채널 := make(chan bool)
-	
+
 	질의_메시지 := []interface{}{P메시지_구분_일반, "질의_메시지"}
 	회신_에러 := fmt.Errorf("회신_에러")
-	
+
 	go f메시지_송신_테스트_REQ(회신_채널, 질의_메시지, 회신_에러)
 	go f에러_메시지_송신_테스트_REP(회신_채널, 질의_메시지, 회신_에러)
-	
-	for i:=0 ; i < 2 ; i++ {
+
+	for i := 0; i < 2; i++ {
 		테스트_결과 := <-회신_채널
 		F테스트_참임(테스트, 테스트_결과)
-	} 
+	}
 }
 
 func f메시지_송신_테스트_REQ(회신_채널 chan bool, 질의_메시지 []interface{}, 회신_에러 error) {
-	
+
 	var 에러 error = nil
-	
+
 	defer func() {
 		if 에러 != nil {
 			회신_채널 <- false
 		}
 	}()
-	
+
 	소켓_REQ, 에러 := zmq.NewSocket(zmq.REQ)
-	if 에러 != nil { return }
+	if 에러 != nil {
+		return
+	}
 
 	defer 소켓_REQ.Close()
 
 	에러 = 소켓_REQ.Connect(P주소_테스트_결과_회신.String())
-	if 에러 != nil { return }
-	
+	if 에러 != nil {
+		return
+	}
+
 	에러 = F메시지_송신(소켓_REQ, 질의_메시지...)
-	if 에러 != nil { return }
-	
+	if 에러 != nil {
+		return
+	}
+
 	메시지, 에러 := 소켓_REQ.RecvMessage(0)
-	if 에러 != nil { return }
-	
+	if 에러 != nil {
+		return
+	}
+
 	if len(메시지) != 2 ||
 		메시지[0] != P메시지_구분_에러 ||
 		메시지[1] != 회신_에러.Error() {
 		회신_채널 <- false
 		return
 	}
-	
+
 	회신_채널 <- true
 }
 
 func f에러_메시지_송신_테스트_REP(회신_채널 chan bool, 질의_메시지 []interface{}, 회신_에러 error) {
 	var 에러 error = nil
-	
+
 	defer func() {
 		if 에러 != nil {
 			회신_채널 <- false
 		}
 	}()
-	
+
 	소켓_REP, 에러 := zmq.NewSocket(zmq.REP)
-	if 에러 != nil { return }
+	if 에러 != nil {
+		return
+	}
 
 	defer 소켓_REP.Close()
 
 	에러 = 소켓_REP.Bind(P주소_테스트_결과_회신.String())
-	if 에러 != nil { return }
-	
+	if 에러 != nil {
+		return
+	}
+
 	메시지, 에러 := 소켓_REP.RecvMessage(0)
-	if 에러 != nil { return }
-	
+	if 에러 != nil {
+		return
+	}
+
 	if len(메시지) != len(질의_메시지) {
 		회신_채널 <- false
 		return
 	}
-	
-	for i:=0 ; i < len(메시지) ; i++ {
+
+	for i := 0; i < len(메시지); i++ {
 		if 메시지[i] != 질의_메시지[i] {
 			회신_채널 <- false
 			return
 		}
 	}
-	
+
 	에러 = F에러_메시지_송신(소켓_REP, 회신_에러)
-	if 에러 != nil { return }
-	
+	if 에러 != nil {
+		return
+	}
+
 	회신_채널 <- true
 }
 
@@ -423,7 +439,7 @@ func f외부_프로세스_관리_Go루틴_테스트_도우미(테스트 *testing
 	F테스트_같음(테스트, 누적_정리된_프로세스_수량_by_파일, 끝까지_남는_프로세스_수량)
 	F테스트_같음(테스트, 누적_정상_종료_수량+누적_강제_종료_수량, 정상_종료_프로세스_수량+강제_종료_프로세스_수량)
 }
-	
+
 func TestF실행화일_검색(테스트 *testing.T) {
 	테스트.Parallel()
 
@@ -815,7 +831,13 @@ func TestF호출경로_건너뛴_문자열_출력(테스트 *testing.T) {
 	입력장치.Close()
 }
 
-func TestF디버깅용_변수값_확인(테스트 *testing.T) {
+func TestF에러_생성(테스트 *testing.T) {
+	var 에러 error = F에러_생성("테스트용 에러. %v", 100)
+
+	F테스트_같음(테스트, 에러.Error(), "테스트용 에러. 100")
+}
+
+func TestF변수값_확인(테스트 *testing.T) {
 	원래_출력장치 := os.Stdout
 	입력장치, 출력장치, 에러 := os.Pipe()
 
@@ -825,7 +847,7 @@ func TestF디버깅용_변수값_확인(테스트 *testing.T) {
 
 	os.Stdout = 출력장치
 
-	F디버깅용_변수값_확인("테스트_문자열", 1)
+	F변수값_확인("테스트_문자열", 1)
 
 	출력장치.Close()
 	os.Stdout = 원래_출력장치

@@ -908,7 +908,11 @@ func F포맷된_문자열(포맷_문자열 string, 추가_매개변수 ...interf
 	return fmt.Errorf(포맷_문자열, 추가_매개변수...).Error()
 }
 
-func F디버깅용_변수값_확인(값_모음 ...interface{}) {
+func F에러_생성(포맷_문자열 string, 추가_매개변수 ...interface{}) error {
+	return fmt.Errorf(포맷_문자열, 추가_매개변수...)
+}
+
+func F변수값_확인(값_모음 ...interface{}) {
 	fmt.Println(F소스코드_위치(1), "변수값 확인", F변수_내역_문자열(값_모음...))
 }
 

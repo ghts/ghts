@@ -15,8 +15,5 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 
 @author: UnHa Kim <unha.kim.ghts@gmail.com> */
 
-/*
-다른 모듈들을 위한 공용 기능 모음.
-(Shared functionality for other modules.)
-*/
+// 공용 기능
 package shared
