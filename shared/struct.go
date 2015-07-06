@@ -27,17 +27,17 @@ import (
 type S비어있는_구조체 struct {}
 
 // 회신 내용
-type s회신 struct {
+type s메시지 struct {
+	구분 string
 	내용 []string
-	에러 error
 }
 
-func (this s회신) G내용() []string {
+func (this s메시지) G구분() string {
+	return this.구분
+}
+
+func (this s메시지) G내용() []string {
 	return this.내용
-}
-
-func (this s회신) G에러() error {
-	return this.에러
 }
 
 // 종목

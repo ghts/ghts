@@ -49,14 +49,14 @@ func F메시지_송신(소켓 *zmq.Socket, 내용 ...interface{}) error {
 	_, 에러 := 소켓.SendMessage(내용...)
 
 	if 에러 != nil {
-		F에러_출력(에러)
+		F에러_출력(에러.Error())
 	}
 
 	return 에러
 }
 
 func F에러_메시지_송신(소켓 *zmq.Socket, 에러 error) error {
-	return F메시지_송신(소켓, P메시지_구분_에러, 에러.Error())
+	return F메시지_송신(소켓, P메시지_에러, 에러.Error())
 }
 
 // 이하 최대 스레드 수량 관련 함수

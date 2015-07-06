@@ -24,13 +24,19 @@ import (
 )
 
 // 회신
-type I회신 interface {
+type I메시지 interface {
+	G구분() string
 	G내용() []string
-	G에러() error
 }
 
-func New회신(내용 []string, 에러 error) I회신 {
-	return s회신{내용: 내용, 에러: 에러}
+func New메시지(구분 string, 내용 ...interface{}) I메시지 {
+	내용_모음 := make([]string, len(내용))
+	
+	for i:=0 ; i < len(내용) ; i++ {
+		내용_모음[i] = F포맷된_문자열("%v", 내용[i]) 
+	}
+	
+	return s메시지{구분: 구분, 내용: 내용_모음}
 }
 
 // 종목
@@ -74,7 +80,7 @@ func New통화(단위 T통화단위, 금액 string) I통화 {
 	정밀값, 에러 := dec.Parse(금액)
 
 	if 에러 != nil {
-		F에러_출력(에러)
+		F에러_출력(에러.Error())
 		return nil
 	}
 

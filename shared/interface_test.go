@@ -22,7 +22,21 @@ import (
 	"time"
 )
 
-func Test종목(테스트 *testing.T) {
+func TestI메시지(테스트 *testing.T) {
+	테스트.Parallel()
+	
+	메시지 := New메시지(P메시지_일반, "테스트")
+	F테스트_같음(테스트, 메시지.G구분(), P메시지_일반)
+	F테스트_같음(테스트, 메시지.G내용()[0], "테스트")
+	
+	메시지 = New메시지(P메시지_OK, "테스트", 1)
+	F테스트_같음(테스트, 메시지.G구분(), P메시지_OK)
+	F테스트_같음(테스트, 메시지.G내용()[0], "테스트")
+	F테스트_같음(테스트, 메시지.G내용()[1], "1")
+	  
+}
+
+func TestI종목(테스트 *testing.T) {
 	테스트.Parallel()
 
 	종목 := New종목("코드", "이름")
@@ -30,7 +44,7 @@ func Test종목(테스트 *testing.T) {
 	F테스트_같음(테스트, 종목.G이름(), "이름")
 }
 
-func Test통화(테스트 *testing.T) {
+func TestI통화(테스트 *testing.T) {
 	테스트.Parallel()
 
 	통화 := New통화(KRW, "100.01")
@@ -93,7 +107,7 @@ func Test통화(테스트 *testing.T) {
 	F테스트_같음(테스트, New통화(KRW, "100.00").S나누기(New통화(KRW, "0.00")).G정밀값(), nil)
 }
 
-func Test가격정보(테스트 *testing.T) {
+func TestI가격정보(테스트 *testing.T) {
 	테스트.Parallel()
 
 	시점1 := time.Now()

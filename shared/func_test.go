@@ -61,7 +61,7 @@ func TestF문자열_복사(테스트 *testing.T) {
 func TestF메시지_송신(테스트 *testing.T) {
 	회신_채널 := make(chan bool)
 
-	질의_메시지 := []interface{}{P메시지_구분_일반, "질의_메시지"}
+	질의_메시지 := []interface{}{P메시지_일반, "질의_메시지"}
 	회신_에러 := fmt.Errorf("회신_에러")
 
 	go f메시지_송신_테스트_REQ(회신_채널, 질의_메시지, 회신_에러)
@@ -106,7 +106,7 @@ func f메시지_송신_테스트_REQ(회신_채널 chan bool, 질의_메시지 [
 	}
 
 	if len(메시지) != 2 ||
-		메시지[0] != P메시지_구분_에러 ||
+		메시지[0] != P메시지_에러 ||
 		메시지[1] != 회신_에러.Error() {
 		회신_채널 <- false
 		return

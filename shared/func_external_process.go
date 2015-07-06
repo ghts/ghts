@@ -94,7 +94,7 @@ func f외부_프로세스_생성_도우미(ch에러_전달 chan error,
 	에러 := 외부_명령어.Start()
 
 	if 에러 != nil {
-		F에러_출력(에러)
+		F에러_출력(에러.Error())
 	}
 
 	ch에러_전달 <- 에러
@@ -291,7 +291,7 @@ func f외부_프로세스_정리() (int, error) {
 	pid맵, 에러 := f_pid맵_읽기()
 
 	if 에러 != nil {
-		F에러_출력(에러)
+		F에러_출력(에러.Error())
 
 		return 0, 에러
 	}
@@ -309,7 +309,7 @@ func f외부_프로세스_정리() (int, error) {
 	에러 = f_pid맵_파일_초기화()
 
 	if 에러 != nil {
-		F에러_출력(에러)
+		F에러_출력(에러.Error())
 
 		return 정리된_프로세스_수량, 에러
 	}
@@ -327,7 +327,7 @@ func f프로세스_종료_by_PID(pid int) error {
 	에러 = 프로세스.Kill()
 
 	if 에러 != nil {
-		//F에러_출력(에러)
+		//F에러_출력(에러.Error())
 		return 에러
 	}
 
@@ -363,13 +363,13 @@ func f_pid맵_읽기() (map[int]S비어있는_구조체, error) {
 
 	switch {
 	case 에러 != nil:
-		F에러_출력(에러)
+		F에러_출력(에러.Error())
 		return nil, 에러
 	case !존재함:
 		에러 = f_pid맵_파일_초기화()
 
 		if 에러 != nil {
-			F에러_출력(에러)
+			F에러_출력(에러.Error())
 			return nil, 에러
 		}
 	}
@@ -380,7 +380,7 @@ func f_pid맵_읽기() (map[int]S비어있는_구조체, error) {
 	파일, 에러 := os.Open(PID_맵_파일명)
 
 	if 에러 != nil {
-		F에러_출력(에러)
+		F에러_출력(에러.Error())
 		return nil, 에러
 	}
 
@@ -402,7 +402,7 @@ func f_pid맵_읽기() (map[int]S비어있는_구조체, error) {
 
 		return 비어있는_맵, nil
 	default:
-		F에러_출력(에러)
+		F에러_출력(에러.Error())
 		return nil, 에러
 	}
 }
@@ -414,7 +414,7 @@ func f_pid맵_파일에_저장(pid맵 map[int]S비어있는_구조체) error {
 	파일, 에러 := os.Create(PID_맵_파일명)
 
 	if 에러 != nil {
-		F에러_출력(에러)
+		F에러_출력(에러.Error())
 		return 에러
 	}
 
@@ -424,7 +424,7 @@ func f_pid맵_파일에_저장(pid맵 map[int]S비어있는_구조체) error {
 	에러 = 인코더.Encode(pid맵)
 
 	if 에러 != nil {
-		F에러_출력(에러)
+		F에러_출력(에러.Error())
 		return 에러
 	}
 
