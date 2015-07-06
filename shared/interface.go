@@ -39,16 +39,28 @@ func New메시지(구분 string, 내용 ...interface{}) I메시지 {
 	return s기본_메시지{구분: 구분, 내용: 내용_모음}
 }
 
-// 회신 
+// 질의
 type I질의 interface {
-	I메시지
-	G회신_채널() chan I메시지
+	I메시지	// 질의 내용
+	G회신_채널() chan I회신
 }
 
-func New질의(회신_채널 chan I메시지, 구분 string, 내용 ...interface{}) I질의 {
+func New질의(회신_채널 chan I회신, 구분 string, 내용 ...interface{}) I질의 {
 	메시지 := New메시지(구분, 내용...)
 	
 	return s질의_메시지{회신_채널: 회신_채널, s기본_메시지: 메시지.(s기본_메시지)}
+}
+
+// 회신
+type I회신 interface {
+	I메시지
+	G에러() error
+}
+
+func New회신(에러 error, 구분 string, 내용 ...interface{}) I회신 {
+	메시지 := New메시지(구분, 내용...)
+	
+	return s회신_메시지{에러: 에러, s기본_메시지: 메시지.(s기본_메시지)}
 }
 
 // 종목

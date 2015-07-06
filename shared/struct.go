@@ -43,11 +43,21 @@ func (this s기본_메시지) G내용() []string {
 // 질의 메시지
 type s질의_메시지 struct {
 	s기본_메시지	// Go언어 구조체 embedding(임베딩) 기능. 상속 비스무리함.
-	회신_채널 chan I메시지
+	회신_채널 chan I회신
 }
 
-func (this s질의_메시지) G회신_채널() chan I메시지 {
+func (this s질의_메시지) G회신_채널() chan I회신 {
 	return this.회신_채널
+}
+
+// 회신 메시지
+type s회신_메시지 struct {
+	s기본_메시지	// Go언어 구조체 embedding(임베딩)
+	에러 error
+}
+
+func (this s회신_메시지) G에러() error {
+	return  this.에러
 }
 
 
