@@ -24,6 +24,8 @@ import (
 	"time"
 )
 
+type S비어있는_구조체 struct {}
+
 // 회신 내용
 type s회신 struct {
 	내용 []string

@@ -18,6 +18,11 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 package shared
 
 const (
+	P주소정보_주소 string = "tcp://127.0.0.1:3001"
+	P테스트_결과_주소 = "tcp://127.0.0.1:3002"
+)
+
+const (
 	P메시지_구분_일반  = "N"
 	P메시지_구분_종료  = "Q"
 	P메시지_구분_OK  = "O"
