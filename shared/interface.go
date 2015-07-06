@@ -23,7 +23,7 @@ import (
 	"time"
 )
 
-// 회신
+// 기본 메시지
 type I메시지 interface {
 	G구분() string
 	G내용() []string
@@ -36,7 +36,19 @@ func New메시지(구분 string, 내용 ...interface{}) I메시지 {
 		내용_모음[i] = F포맷된_문자열("%v", 내용[i]) 
 	}
 	
-	return s메시지{구분: 구분, 내용: 내용_모음}
+	return s기본_메시지{구분: 구분, 내용: 내용_모음}
+}
+
+// 회신 
+type I질의 interface {
+	I메시지
+	G회신_채널() chan I메시지
+}
+
+func New질의(회신_채널 chan I메시지, 구분 string, 내용 ...interface{}) I질의 {
+	메시지 := New메시지(구분, 내용...)
+	
+	return s질의_메시지{회신_채널: 회신_채널, s기본_메시지: 메시지.(s기본_메시지)}
 }
 
 // 종목

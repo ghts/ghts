@@ -26,19 +26,31 @@ import (
 
 type S비어있는_구조체 struct {}
 
-// 회신 내용
-type s메시지 struct {
+// 기본 메시지
+type s기본_메시지 struct {
 	구분 string
 	내용 []string
 }
 
-func (this s메시지) G구분() string {
+func (this s기본_메시지) G구분() string {
 	return this.구분
 }
 
-func (this s메시지) G내용() []string {
+func (this s기본_메시지) G내용() []string {
 	return this.내용
 }
+
+// 질의 메시지
+type s질의_메시지 struct {
+	s기본_메시지	// Go언어 구조체 embedding(임베딩) 기능. 상속 비스무리함.
+	회신_채널 chan I메시지
+}
+
+func (this s질의_메시지) G회신_채널() chan I메시지 {
+	return this.회신_채널
+}
+
+
 
 // 종목
 type s종목 struct {
