@@ -219,7 +219,7 @@ func F외부_프로세스_관리_Go루틴(실행_회신_채널 chan bool) {
 
 			if !존재함 {
 				//F문자열_출력("외부 프로세스 정상종료 : 이미 타임아웃 됨.")
-				break
+				continue
 			}
 
 			delete(pid맵, pid)
@@ -233,7 +233,7 @@ func F외부_프로세스_관리_Go루틴(실행_회신_채널 chan bool) {
 
 			if !존재함 {
 				//F문자열_출력("외부 프로세스 타임아웃 : 이미 정상종료 됨.")
-				break
+				continue
 			}
 
 			delete(pid맵, pid)

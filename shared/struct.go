@@ -19,8 +19,11 @@ package shared
 
 import (
 	dec "github.com/landjur/go-decimal"
+	
+	"bytes"
 	"math/big"
 	"strings"
+	"strconv"
 	"time"
 )
 
@@ -36,8 +39,39 @@ func (this s기본_메시지) G구분() string {
 	return this.구분
 }
 
-func (this s기본_메시지) G내용() []string {
+func (this s기본_메시지) G내용(인덱스 int) string {
+	if 인덱스 >= len(this.내용) {
+		F에러_출력("인덱스 입력값은 '길이'보다 작아야 함 : 길이 %v, 입력값 %v", len(this.내용), 인덱스)
+		panic("무효한 인덱스")
+	}
+	
+	return this.내용[인덱스]
+}
+
+func (this s기본_메시지) G내용_전체() []string {
 	return this.내용
+}
+
+func (this s기본_메시지) G길이() int {
+	return len(this.내용)
+}
+
+func (this s기본_메시지) String() string {
+	var 버퍼 bytes.Buffer
+	
+	버퍼.WriteString("구분 : " + this.구분 + "\n")
+	
+	if len(this.내용) == 0 {
+		버퍼.WriteString("내용 없음. len(내용) == 0. \n")
+	} else {
+		버퍼.WriteString("내용\n")
+	
+		for i:=0 ; i<len(this.내용) ; i++ {
+			버퍼.WriteString(strconv.Itoa(i) + " : " + this.내용[i] + "\n")
+		}
+	}
+	
+	return 버퍼.String()
 }
 
 // 질의 메시지

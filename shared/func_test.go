@@ -90,7 +90,7 @@ func f메시지_송신_테스트_REQ(회신_채널 chan bool, 질의_메시지 [
 
 	defer 소켓_REQ.Close()
 
-	에러 = 소켓_REQ.Connect(P테스트_결과_주소)
+	에러 = 소켓_REQ.Connect(P주소_테스트_결과)
 	if 에러 != nil {
 		return
 	}
@@ -131,7 +131,7 @@ func f에러_메시지_송신_테스트_REP(회신_채널 chan bool, 질의_메�
 
 	defer 소켓_REP.Close()
 
-	에러 = 소켓_REP.Bind(P테스트_결과_주소)
+	에러 = 소켓_REP.Bind(P주소_테스트_결과)
 	if 에러 != nil {
 		return
 	}

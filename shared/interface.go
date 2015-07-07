@@ -26,7 +26,10 @@ import (
 // 기본 메시지
 type I메시지 interface {
 	G구분() string
-	G내용() []string
+	G내용(인덱스 int) string
+	G내용_전체() []string
+	G길이() int
+	String() string
 }
 
 func New메시지(구분 string, 내용 ...interface{}) I메시지 {
@@ -35,6 +38,7 @@ func New메시지(구분 string, 내용 ...interface{}) I메시지 {
 	for i:=0 ; i < len(내용) ; i++ {
 		내용_모음[i] = F포맷된_문자열("%v", 내용[i]) 
 	}
+	
 	
 	return s기본_메시지{구분: 구분, 내용: 내용_모음}
 }
@@ -46,6 +50,11 @@ type I질의 interface {
 }
 
 func New질의(회신_채널 chan I회신, 구분 string, 내용 ...interface{}) I질의 {
+	if 회신_채널 == nil {
+		F에러_출력("nil 회신 채널.")
+		panic("")	
+	}
+	
 	메시지 := New메시지(구분, 내용...)
 	
 	return s질의_메시지{회신_채널: 회신_채널, s기본_메시지: 메시지.(s기본_메시지)}
