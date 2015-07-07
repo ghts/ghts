@@ -110,6 +110,10 @@ func (this *s종목) G이름() string {
 	return this.이름
 }
 
+func (this *s종목) String() string {
+	return this.코드 + " " + this.이름
+}
+
 // 통화
 type s통화 struct {
 	단위   T통화단위

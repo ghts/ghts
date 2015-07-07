@@ -76,6 +76,7 @@ func New회신(에러 error, 구분 string, 내용 ...interface{}) I회신 {
 type I종목 interface {
 	G코드() string
 	G이름() string
+	String() string
 }
 
 func New종목(코드 string, 이름 string) I종목 {
