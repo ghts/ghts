@@ -132,8 +132,7 @@ var ch외부_프로세스_생성 = make(chan int, 100)
 var ch외부_프로세스_정상종료 = make(chan int, 100)
 var ch외부_프로세스_타임아웃 = make(chan int, 100)
 
-var 외부_프로세스_관리_Go루틴_실행_중 = false
-var 외부_프로세스_관리_Go루틴_잠금 = &sync.RWMutex{}
+var 외부_프로세스_관리_Go루틴_실행_중 = New안전한_bool(false)
 
 const PID_맵_파일명 string = "spawned_process_list"
 var 외부_프로세스_목록_파일_잠금 = &sync.RWMutex{}
@@ -144,24 +143,12 @@ var ch테스트용_중간_회신 = make(chan (chan []int))
 var ch테스트용_종료 = make(chan (chan []int))
 
 func F외부_프로세스_관리_Go루틴(실행_회신_채널 chan bool) {
-	if F외부_프로세스_관리_Go루틴_실행_중() {
+	에러 := 외부_프로세스_관리_Go루틴_실행_중.S값(true)
+	
+	if 에러 != nil {
 		실행_회신_채널 <- false
 		return
 	}
-
-	외부_프로세스_관리_Go루틴_잠금.Lock()
-
-	// Go루틴 시작하기 전에 마지막으로 1번 더 확인.
-	if 외부_프로세스_관리_Go루틴_실행_중 {
-		// 그 짧은 시간 사이에 Go 루틴이 생성되었다면 바로 종료.
-		외부_프로세스_관리_Go루틴_잠금.Unlock()
-
-		실행_회신_채널 <- false
-		return
-	}
-
-	외부_프로세스_관리_Go루틴_실행_중 = true
-	외부_프로세스_관리_Go루틴_잠금.Unlock()
 
 	// 채널 버퍼 비우기.
 	if len(ch외부_프로세스_생성) > 0 {
@@ -279,10 +266,7 @@ func F외부_프로세스_관리_Go루틴(실행_회신_채널 chan bool) {
 }
 
 func F외부_프로세스_관리_Go루틴_실행_중() bool {
-	외부_프로세스_관리_Go루틴_잠금.RLock()
-	defer 외부_프로세스_관리_Go루틴_잠금.RUnlock()
-
-	return 외부_프로세스_관리_Go루틴_실행_중
+	return 외부_프로세스_관리_Go루틴_실행_중.G값()
 }
 
 func f외부_프로세스_정리() (int, error) {
@@ -443,9 +427,7 @@ func f외부_프로세스_관리_Go루틴_종료() int {
 	강제종료_수량, 에러 := f외부_프로세스_정리()
 	F에러_체크(에러)
 
-	외부_프로세스_관리_Go루틴_잠금.Lock()
-	외부_프로세스_관리_Go루틴_실행_중 = false
-	외부_프로세스_관리_Go루틴_잠금.Unlock()
+	외부_프로세스_관리_Go루틴_실행_중.S값(false)
 			
 	return 강제종료_수량 
 }

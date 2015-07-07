@@ -4,38 +4,24 @@ import (
 	공용 "github.com/ghts/ghts/shared"
 	
 	"strconv"
-	"sync"
 )
 
 var Ch주소 = make(chan 공용.I질의, 100)
 var Ch종목 = make(chan 공용.I질의, 100)
 
-var 공용_데이터_Go루틴_실행_중 = false
-var 공용_데이터_Go루틴_잠금 = &sync.RWMutex{}
+var 공용_데이터_Go루틴_실행_중 = 공용.New안전한_bool(false)
 
 func F공용_데이터_Go루틴_실행_중() bool {
-	공용_데이터_Go루틴_잠금.RLock()
-	defer 공용_데이터_Go루틴_잠금.RUnlock()
-
-	return 공용_데이터_Go루틴_실행_중
+	return 공용_데이터_Go루틴_실행_중.G값()
 }
 
 func F공용_데이터_Go루틴(Go루틴_생성_결과 chan bool) {
-	if F공용_데이터_Go루틴_실행_중() {
+	에러 := 공용_데이터_Go루틴_실행_중.S값(true)
+	
+	if 에러 != nil {
 		Go루틴_생성_결과 <- false
 		return
 	}
-	
-	공용_데이터_Go루틴_잠금.Lock()
-	
-	if 공용_데이터_Go루틴_실행_중 {
-		Go루틴_생성_결과 <- false
-		공용_데이터_Go루틴_잠금.Unlock()
-		return
-	}
-	
-	공용_데이터_Go루틴_실행_중 = true
-	공용_데이터_Go루틴_잠금.Unlock()
 	
 	주소_맵 := f_주소_맵_초기화()
 	종목_맵 := f종목_맵_초기화()

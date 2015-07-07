@@ -24,10 +24,36 @@ import (
 	"math/big"
 	"strings"
 	"strconv"
+	"sync"
 	"time"
 )
 
 type S비어있는_구조체 struct {}
+
+// 안전한 bool
+type s안전한_bool struct {
+	sync.RWMutex
+	값 bool
+}
+
+func (this *s안전한_bool) G값() bool {
+	this.RLock()	// Go언어의 Embedded Lock
+	defer this.RUnlock()
+	
+	return this.값
+}
+
+func (this *s안전한_bool) S값(값 bool) error {
+	this.Lock()
+	defer this.Unlock()
+	
+	if this.값 == 값 {
+		return F에러_생성("이미 %v임.", 값)
+	} else {
+		this.값 = 값
+		return nil
+	}
+}
 
 // 기본 메시지
 type s기본_메시지 struct {

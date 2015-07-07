@@ -23,6 +23,19 @@ import (
 	"time"
 )
 
+func TestI안전한_bool(테스트 *testing.T) {
+	테스트.Parallel()
+	
+	안전한_bool := New안전한_bool(false)
+	
+	F테스트_거짓임(테스트, 안전한_bool.G값())
+	F테스트_에러발생(테스트, 안전한_bool.S값(false))
+	F테스트_거짓임(테스트, 안전한_bool.G값())
+	
+	F테스트_에러없음(테스트, 안전한_bool.S값(true))
+	F테스트_참임(테스트, 안전한_bool.G값())
+}
+
 func TestI메시지(테스트 *testing.T) {
 	테스트.Parallel()
 	

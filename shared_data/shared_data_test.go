@@ -9,8 +9,6 @@ import (
 )
 
 func TestF공용_데이터_Go루틴(테스트 *testing.T) {
-	공용.F메모("sync.RWMutex 로 보호된 bool을 구조체로 만들어서 하나만 존재해야 하는 모듈 생성할 때 편의성을 높이자.")
-	
 	테스트.Parallel()
 	
 	// Go루틴 준비

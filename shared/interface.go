@@ -23,6 +23,16 @@ import (
 	"time"
 )
 
+// 안전한 bool
+type I안전한_bool interface {
+	G값() bool
+	S값(값 bool) error
+}
+
+func New안전한_bool(초기값 bool) I안전한_bool {
+	return &s안전한_bool{값: 초기값}
+}
+
 // 기본 메시지
 type I메시지 interface {
 	G구분() string

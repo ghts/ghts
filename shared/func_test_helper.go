@@ -8,58 +8,35 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
-	"sync"
 	"testing"
 )
 
 // 이하 테스트 관련 함수 모음
-
-var 테스트_모드 bool = false
-var 문자열_출력_일시정지_모드 bool = false
-
-var 테스트_모드_잠금 = &sync.RWMutex{}
-var 문자열_출력_일시정지_모드_잠금 = &sync.RWMutex{}
+var 테스트_모드 = New안전한_bool(false)
+var 문자열_출력_일시정지_모드 = New안전한_bool(false)
 
 func F테스트_모드_실행_중() bool {
-	테스트_모드_잠금.RLock()
-	defer 테스트_모드_잠금.RUnlock()
-
-	return 테스트_모드
+	return 테스트_모드.G값()
 }
 
-func F테스트_모드_시작() {
-	테스트_모드_잠금.Lock()
-	defer 테스트_모드_잠금.Unlock()
-
-	테스트_모드 = true
+func F테스트_모드_시작() error {
+	return 테스트_모드.S값(true)
 }
 
-func F테스트_모드_종료() {
-	테스트_모드_잠금.Lock()
-	defer 테스트_모드_잠금.Unlock()
-
-	테스트_모드 = false
+func F테스트_모드_종료() error {
+	return 테스트_모드.S값(false)
 }
 
 func F문자열_출력_일시정지_중() bool {
-	문자열_출력_일시정지_모드_잠금.RLock()
-	defer 문자열_출력_일시정지_모드_잠금.RUnlock()
-
-	return 문자열_출력_일시정지_모드
+	return 문자열_출력_일시정지_모드.G값()
 }
 
-func F문자열_출력_일시정지_시작() {
-	문자열_출력_일시정지_모드_잠금.Lock()
-	defer 문자열_출력_일시정지_모드_잠금.Unlock()
-
-	문자열_출력_일시정지_모드 = true
+func F문자열_출력_일시정지_시작() error {
+	return 문자열_출력_일시정지_모드.S값(true)
 }
 
-func F문자열_출력_일시정지_해제() {
-	문자열_출력_일시정지_모드_잠금.Lock()
-	defer 문자열_출력_일시정지_모드_잠금.Unlock()
-
-	문자열_출력_일시정지_모드 = false
+func F문자열_출력_일시정지_해제() error {
+	return 문자열_출력_일시정지_모드.S값(false)
 }
 
 func F테스트_참임(테스트 testing.TB, true이어야_하는_조건 bool, 추가_매개변수 ...interface{}) {
