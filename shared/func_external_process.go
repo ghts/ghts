@@ -142,11 +142,11 @@ var ch테스트용_누적수량_초기화 = make(chan (chan S비어있는_구조
 var ch테스트용_중간_회신 = make(chan (chan []int))
 var ch테스트용_종료 = make(chan (chan []int))
 
-func F외부_프로세스_관리_Go루틴(실행_회신_채널 chan bool) {
+func F외부_프로세스_관리_Go루틴(Go루틴_생성_결과 chan bool) {
 	에러 := 외부_프로세스_관리_Go루틴_실행_중.S값(true)
 	
 	if 에러 != nil {
-		실행_회신_채널 <- false
+		Go루틴_생성_결과 <- false
 		return
 	}
 
@@ -190,7 +190,7 @@ func F외부_프로세스_관리_Go루틴(실행_회신_채널 chan bool) {
 	var 누적_생성_수량, 누적_정상종료_수량, 누적_타임아웃_수량 = 0, 0, 0 
 	
 	// 준비완료.
-	실행_회신_채널 <- true
+	Go루틴_생성_결과 <- true
 
 	for {
 		select {
