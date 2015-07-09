@@ -44,6 +44,11 @@ func TestF외부_프로세스_실행(테스트 *testing.T) {
 }
 
 func TestF외부_프로세스_관리_Go루틴(테스트 *testing.T) {
+	//F문자열_출력("외부_프로세스_관리 테스트 시작")
+	//defer F문자열_출력("외부_프로세스_관리 테스트 종료")
+	
+	//F메모("외부 프로세스 관리 테스트가 가끔씩 먹통이 되곤 하는 데, 그 이유를 모르겠음.")
+	
 	// 멀티 스레드 모드로 전환
 	if F단일_스레드_모드임() {
 		F멀티_스레드_모드()
@@ -56,7 +61,7 @@ func TestF외부_프로세스_관리_Go루틴(테스트 *testing.T) {
 	// 랜덤값 생성기
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 
-	f외부_프로세스_관리_Go루틴_테스트_도우미(테스트, r.Intn(10), r.Intn(10), r.Intn(10))
+	f외부_프로세스_관리_Go루틴_테스트_도우미(테스트, r.Intn(5), r.Intn(5), r.Intn(5))
 }
 
 const p정상종료_프로세스_타임아웃 = 500 * time.Millisecond // 0.5초

@@ -18,7 +18,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 package shared
 
 import (
-	dec "github.com/landjur/go-decimal"
+	dec "github.com/wayn3h0/go-decimal"
 	
 	"bytes"
 	"math/big"

@@ -15,6 +15,10 @@ import (
 var 테스트_모드 = New안전한_bool(false)
 var 문자열_출력_일시정지_모드 = New안전한_bool(false)
 
+type i모의_테스트 interface {
+	S모의_테스트_리셋()
+}
+
 func F테스트_모드_실행_중() bool {
 	return 테스트_모드.G값()
 }

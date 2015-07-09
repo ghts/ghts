@@ -18,8 +18,6 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 package shared
 
 import (
-	zmq "github.com/pebbe/zmq4"
-
 	"fmt"
 	"os"
 	"reflect"
@@ -56,109 +54,6 @@ func TestF문자열_복사(테스트 *testing.T) {
 	테스트.Parallel()
 
 	F테스트_같음(테스트, F문자열_복사("12 34 "), "12 34 ")
-}
-
-func TestF메시지_송신(테스트 *testing.T) {
-	회신_채널 := make(chan bool)
-
-	질의_메시지 := []interface{}{P메시지_일반, "질의_메시지"}
-	회신_에러 := fmt.Errorf("회신_에러")
-
-	go f메시지_송신_테스트_REQ(회신_채널, 질의_메시지, 회신_에러)
-	go f에러_메시지_송신_테스트_REP(회신_채널, 질의_메시지, 회신_에러)
-
-	for i := 0; i < 2; i++ {
-		테스트_결과 := <-회신_채널
-		F테스트_참임(테스트, 테스트_결과)
-	}
-}
-
-func f메시지_송신_테스트_REQ(회신_채널 chan bool, 질의_메시지 []interface{}, 회신_에러 error) {
-
-	var 에러 error = nil
-
-	defer func() {
-		if 에러 != nil {
-			회신_채널 <- false
-		}
-	}()
-
-	소켓_REQ, 에러 := zmq.NewSocket(zmq.REQ)
-	if 에러 != nil {
-		return
-	}
-
-	defer 소켓_REQ.Close()
-
-	에러 = 소켓_REQ.Connect(P주소_테스트_결과)
-	if 에러 != nil {
-		return
-	}
-
-	에러 = F메시지_송신(소켓_REQ, 질의_메시지...)
-	if 에러 != nil {
-		return
-	}
-
-	메시지, 에러 := 소켓_REQ.RecvMessage(0)
-	if 에러 != nil {
-		return
-	}
-
-	if len(메시지) != 2 ||
-		메시지[0] != P메시지_에러 ||
-		메시지[1] != 회신_에러.Error() {
-		회신_채널 <- false
-		return
-	}
-
-	회신_채널 <- true
-}
-
-func f에러_메시지_송신_테스트_REP(회신_채널 chan bool, 질의_메시지 []interface{}, 회신_에러 error) {
-	var 에러 error = nil
-
-	defer func() {
-		if 에러 != nil {
-			회신_채널 <- false
-		}
-	}()
-
-	소켓_REP, 에러 := zmq.NewSocket(zmq.REP)
-	if 에러 != nil {
-		return
-	}
-
-	defer 소켓_REP.Close()
-
-	에러 = 소켓_REP.Bind(P주소_테스트_결과)
-	if 에러 != nil {
-		return
-	}
-
-	메시지, 에러 := 소켓_REP.RecvMessage(0)
-	if 에러 != nil {
-		return
-	}
-
-	if len(메시지) != len(질의_메시지) {
-		회신_채널 <- false
-		return
-	}
-
-	for i := 0; i < len(메시지); i++ {
-		if 메시지[i] != 질의_메시지[i] {
-			회신_채널 <- false
-			return
-		}
-	}
-
-	에러 = F에러_메시지_송신(소켓_REP, 회신_에러)
-	if 에러 != nil {
-		return
-	}
-
-	회신_채널 <- true
 }
 
 // 이하 최대 스레드 수량 관련 함수

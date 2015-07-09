@@ -18,15 +18,9 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 package shared
 
 import (
-	zmq "github.com/pebbe/zmq4"
-
 	"reflect"
 	"runtime"
 )
-
-type i모의_테스트 interface {
-	S모의_테스트_리셋()
-}
 
 func F타입_이름(i interface{}) string {
 	return reflect.TypeOf(i).Name()
@@ -41,22 +35,6 @@ func F에러_체크(에러 error) {
 
 func F문자열_복사(문자열 string) string {
 	return (문자열 + " ")[:len(문자열)]
-}
-
-// ZeroMQ 관련 도우미 함수 모음
-
-func F메시지_송신(소켓 *zmq.Socket, 내용 ...interface{}) error {
-	_, 에러 := 소켓.SendMessage(내용...)
-
-	if 에러 != nil {
-		F에러_출력(에러.Error())
-	}
-
-	return 에러
-}
-
-func F에러_메시지_송신(소켓 *zmq.Socket, 에러 error) error {
-	return F메시지_송신(소켓, P메시지_에러, 에러.Error())
 }
 
 // 이하 최대 스레드 수량 관련 함수

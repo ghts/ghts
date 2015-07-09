@@ -18,7 +18,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 package shared
 
 import (
-	dec "github.com/landjur/go-decimal"
+	dec "github.com/wayn3h0/go-decimal"
 
 	"time"
 )
@@ -59,12 +59,8 @@ type I질의 interface {
 	G회신_채널() chan I회신
 }
 
-func New질의(회신_채널 chan I회신, 구분 string, 내용 ...interface{}) I질의 {
-	if 회신_채널 == nil {
-		F에러_출력("nil 회신 채널.")
-		panic("")	
-	}
-	
+func New질의(구분 string, 내용 ...interface{}) I질의 {
+	회신_채널 := make(chan I회신, 1)
 	메시지 := New메시지(구분, 내용...)
 	
 	return s질의_메시지{회신_채널: 회신_채널, s기본_메시지: 메시지.(s기본_메시지)}

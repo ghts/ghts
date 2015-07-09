@@ -34,12 +34,12 @@ const (
 
 
 const (
-	P메시지_일반 = "N"
+	//P메시지_일반 = "N"
+	P메시지_GET = "G"
+	P메시지_SET = "S"
 	P메시지_종료 = "Q"
 	P메시지_OK = "O"
 	P메시지_에러 = "E"
-	P메시지_GET = "G"
-	P메시지_PUT = "P"
 )
 
 type T통화단위 string
