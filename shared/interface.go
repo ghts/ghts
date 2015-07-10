@@ -61,6 +61,16 @@ type I질의 interface {
 }
 
 func New질의(구분 string, 내용 ...interface{}) I질의 {
+	switch 구분 {
+	case P메시지_GET:
+	case P메시지_SET:
+	case P메시지_종료:
+	default:
+		에러 := F에러_생성("잘못된 질의 메시지 구분 %v", 구분)
+		F에러_출력(에러.Error())
+		panic(에러)
+	}
+	
 	회신_채널 := make(chan I회신, 1)
 	메시지 := New메시지(구분, 내용...)
 	
@@ -74,9 +84,22 @@ type I회신 interface {
 }
 
 func New회신(에러 error, 구분 string, 내용 ...interface{}) I회신 {
-	메시지 := New메시지(구분, 내용...)
-	
-	return s회신_메시지{에러: 에러, s기본_메시지: 메시지.(s기본_메시지)}
+	switch {
+	case 구분 != P메시지_OK && 구분 != P메시지_에러:
+		에러 := F에러_생성("잘못된 회신 메시지 구분 %v", 구분)
+		F에러_출력(에러.Error())
+		panic(에러)
+	case 에러 != nil && 구분 != P메시지_에러:
+		에러 := F에러_생성("회신 에러가 존재하지만, 메시지 구분은 에러가 아님. %v  %v", 에러, 구분)
+		F에러_출력(에러.Error())
+		panic(에러)
+	case 에러 == nil && 구분 != P메시지_OK:
+		에러 := F에러_생성("회신 에러는 nil이지만, 메시지 구분은 OK가 아님. %v  %v", 에러, 구분)
+		F에러_출력(에러.Error())
+		panic(에러)
+	default:
+		return s회신_메시지{에러: 에러, s기본_메시지: New메시지(구분, 내용...).(s기본_메시지)}
+	}
 }
 
 // 종목
