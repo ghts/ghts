@@ -110,6 +110,20 @@ func (this s질의_메시지) G회신_채널() chan I회신 {
 	return this.회신_채널
 }
 
+func (this s질의_메시지) G검사(타이틀 string, 질의_길이 int) error {
+	if this.G구분() == P메시지_GET && 
+		this.G길이() == 질의_길이 {
+		return nil
+	}
+	
+	에러 := F에러_생성("잘못된 %s 질의 메시지. 구분 '%v', 길이 %v, 내용 '%v'", 
+				타이틀, this.G구분(), this.G길이(), this.G내용_전체())
+	
+	this.G회신_채널() <- New회신(에러, P메시지_에러)
+	
+	return 에러
+}
+
 // 회신 메시지
 type s회신_메시지 struct {
 	s기본_메시지	// Go언어 구조체 embedding(임베딩)

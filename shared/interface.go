@@ -57,6 +57,7 @@ func New메시지(구분 string, 내용 ...interface{}) I메시지 {
 type I질의 interface {
 	I메시지	// 질의 내용
 	G회신_채널() chan I회신
+	G검사(타이틀 string, 질의_길이 int) error
 }
 
 func New질의(구분 string, 내용 ...interface{}) I질의 {
