@@ -9,22 +9,21 @@ import (
 )
 
 // 이하 외부 프로세스 실행 및 관리 관련 함수 모음
-
-// 문자열은 immutable이라서 mutex로 보호해 줄 필요없음.
-var p파이썬_경로 string = ""
+var 파이썬_경로 = New안전한_string("")
 
 func F파이썬_스크립트_실행(
 	에러_반환_채널 chan error, 타임아웃 time.Duration,
 	파이썬_스크립트_경로 string, 실행옵션 ...interface{}) {
-	if p파이썬_경로 == "" {
-		p파이썬_경로 = F실행화일_검색("python.exe")
+
+	if 파이썬_경로.G값() == "" {
+		파이썬_경로.S값(F실행화일_검색("python.exe"))
 	}
 
 	실행옵션_전달 := make([]interface{}, 0)
 	실행옵션_전달 = append(실행옵션_전달, 파이썬_스크립트_경로)
 	실행옵션_전달 = append(실행옵션_전달, 실행옵션...)
 
-	F외부_프로세스_실행(에러_반환_채널, 타임아웃, p파이썬_경로, 실행옵션_전달...)
+	F외부_프로세스_실행(에러_반환_채널, 타임아웃, 파이썬_경로.G값(), 실행옵션_전달...)
 }
 
 func F외부_프로세스_실행(ch에러_회신 chan error, 타임아웃 time.Duration,
@@ -58,7 +57,7 @@ func f외부_프로세스_타임아웃_관리(ch에러_회신 chan error, 타임
 		return
 	}
 
-	var pid int = -999
+	pid := -999
 
 	select {
 	case pid = <-ch프로세스_생성_전달:
@@ -128,16 +127,16 @@ func F실행화일_검색(파일명 string) string {
 	return 파일경로
 }
 
-// 테스트 에러 나면 버퍼 없앨 것.
-var ch외부_프로세스_생성 = make(chan int, 100)
-var ch외부_프로세스_정상종료 = make(chan int, 100)
-var ch외부_프로세스_타임아웃 = make(chan int, 100)
-
 var 외부_프로세스_관리_Go루틴_실행_중 = New안전한_bool(false)
 
 const PID_맵_파일명 string = "spawned_process_list"
 
 var 외부_프로세스_목록_파일_잠금 = &sync.RWMutex{}
+
+// 테스트 에러 나면 버퍼 없앨 것.
+var ch외부_프로세스_생성 = make(chan int, 100)
+var ch외부_프로세스_정상종료 = make(chan int, 100)
+var ch외부_프로세스_타임아웃 = make(chan int, 100)
 
 // For 테스트 only
 var ch테스트용_누적수량_초기화 = make(chan (chan S비어있는_구조체))
@@ -189,7 +188,7 @@ func F외부_프로세스_관리_Go루틴(Go루틴_생성_결과 chan bool) {
 	pid맵 := make(map[int]S비어있는_구조체)
 	종료_채널 := F공통_종료_채널()
 
-	var 누적_생성_수량, 누적_정상종료_수량, 누적_타임아웃_수량 = 0, 0, 0
+	누적_생성_수량, 누적_정상종료_수량, 누적_타임아웃_수량 := 0, 0, 0
 
 	// 준비완료.
 	Go루틴_생성_결과 <- true
@@ -272,7 +271,7 @@ func F외부_프로세스_관리_Go루틴_실행_중() bool {
 }
 
 func f외부_프로세스_정리() (int, error) {
-	var 정리된_프로세스_수량 = 0
+	정리된_프로세스_수량 := 0
 
 	pid맵, 에러 := f_pid맵_읽기()
 
@@ -372,8 +371,7 @@ func f_pid맵_읽기() (map[int]S비어있는_구조체, error) {
 
 	defer 파일.Close()
 
-	var pid맵 map[int]S비어있는_구조체
-
+	pid맵 := make(map[int]S비어있는_구조체)
 	디코더 := gob.NewDecoder(파일)
 	에러 = 디코더.Decode(&pid맵)
 

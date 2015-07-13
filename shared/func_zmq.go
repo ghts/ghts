@@ -42,7 +42,7 @@ func F에러_메시지_송신(소켓 *zmq.Socket, 에러 error) error {
 // zmq소켓에서 온 질의 메시지를 Go채널로 중계해 주고,
 // 그 회신을 다시 zmq소켓으로 전달해 주는 함수.
 func F_zmq소켓_Go채널_중계(zmq소켓 *zmq.Socket, Go채널 chan I질의) (에러 error) {
-	var zmq메시지 []string
+	zmq메시지 := make([]string, 0) // GC압력을 줄이기 위한 재활용 변수.
 
 	defer func() {
 		r := recover()
@@ -95,7 +95,7 @@ func F_zmq소켓_Go채널_중계(zmq소켓 *zmq.Socket, Go채널 chan I질의) (
 	질의 := New질의(구분, 데이터...)
 	Go채널 <- 질의
 
-	var 회신 I회신
+	회신 := New회신(nil, P메시지_OK) // GC 압력을 줄이기 위한 비어있는 재활용 변수
 
 	select {
 	case 회신 = <-질의.G회신_채널():

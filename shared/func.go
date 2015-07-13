@@ -62,3 +62,5 @@ func F공통_종료_채널() chan S비어있는_구조체 {
 func F등록된_Go루틴_종료() {
 	close(ch공통_종료_채널)
 }
+
+func F_Nil에러() error { return nil }

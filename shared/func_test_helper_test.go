@@ -7,46 +7,27 @@ import (
 	"os"
 	"reflect"
 	"strings"
-	"sync"
 	"testing"
 )
 
 // 테스트 편의함수 Fxxx_확인() 테스트용 Mock-Up
 // testing.TB 인터페이스를 구현함.
-var 모의_테스트_통과 bool
-var 모의_테스트_통과_잠금 = &sync.RWMutex{}
+var 모의_테스트_통과 = New안전한_bool(false)
 
 type s모의_테스트 struct{ *testing.T }
 
-func (this s모의_테스트) g모의_테스트_통과() bool {
-	모의_테스트_통과_잠금.RLock()
-	defer 모의_테스트_통과_잠금.RUnlock()
-
-	return 모의_테스트_통과
-}
-
-func (this s모의_테스트) s모의_테스트_통과(통과_여부 bool) {
-	if this.g모의_테스트_통과() == 통과_여부 {
-		return
-	}
-
-	모의_테스트_통과_잠금.Lock()
-	모의_테스트_통과 = 통과_여부
-	모의_테스트_통과_잠금.Unlock()
-}
-
 func (this s모의_테스트) Error(args ...interface{}) {
-	this.s모의_테스트_통과(false)
+	모의_테스트_통과.S값(false)
 }
 func (this s모의_테스트) Errorf(format string, args ...interface{}) {
-	this.s모의_테스트_통과(false)
+	모의_테스트_통과.S값(false)
 }
-func (this s모의_테스트) Fail()                     { this.s모의_테스트_통과(false) }
-func (this s모의_테스트) FailNow()                  { this.s모의_테스트_통과(false) }
-func (this s모의_테스트) Failed() bool              { return !this.g모의_테스트_통과() }
-func (this s모의_테스트) Fatal(args ...interface{}) { this.s모의_테스트_통과(false) }
+func (this s모의_테스트) Fail()                     { 모의_테스트_통과.S값(false) }
+func (this s모의_테스트) FailNow()                  { 모의_테스트_통과.S값(false) }
+func (this s모의_테스트) Failed() bool              { return !모의_테스트_통과.G값() }
+func (this s모의_테스트) Fatal(args ...interface{}) { 모의_테스트_통과.S값(false) }
 func (this s모의_테스트) Fatalf(format string, args ...interface{}) {
-	this.s모의_테스트_통과(false)
+	모의_테스트_통과.S값(false)
 }
 func (this s모의_테스트) Log(args ...interface{})                  {}
 func (this s모의_테스트) Logf(format string, args ...interface{})  {}
@@ -54,14 +35,17 @@ func (this s모의_테스트) Skip(args ...interface{})                 {}
 func (this s모의_테스트) SkipNow()                                 {}
 func (this s모의_테스트) Skipf(format string, args ...interface{}) {}
 func (this s모의_테스트) Skipped() bool                            { return false }
-func (this s모의_테스트) S모의_테스트_리셋()                              { this.s모의_테스트_통과(true) }
+func (this s모의_테스트) S모의_테스트_리셋()                              { 모의_테스트_통과.S값(true) }
 
 func TestS모의_테스트(테스트 *testing.T) {
-	var tb testing.TB = new(s모의_테스트)
-	tb.SkipNow()
+	모의_테스트_인터페이스 := *(new(interface{}))
+	모의_테스트_인터페이스 = new(s모의_테스트)
 
-	var i모의_테스트_인스턴스 i모의_테스트 = new(s모의_테스트)
-	i모의_테스트_인스턴스.S모의_테스트_리셋()
+	_, ok := 모의_테스트_인터페이스.(testing.TB)
+	F테스트_참임(테스트, ok)
+
+	_, ok = 모의_테스트_인터페이스.(i모의_테스트)
+	F테스트_참임(테스트, ok)
 
 	모의_테스트 := new(s모의_테스트)
 
@@ -69,7 +53,7 @@ func TestS모의_테스트(테스트 *testing.T) {
 	F테스트_거짓임(테스트, 모의_테스트.Failed())
 
 	모의_테스트.S모의_테스트_리셋()
-	모의_테스트.s모의_테스트_통과(false)
+	모의_테스트_통과.S값(false)
 	F테스트_참임(테스트, 모의_테스트.Failed())
 
 	모의_테스트.S모의_테스트_리셋()
@@ -130,8 +114,8 @@ func TestF테스트_참임(테스트 *testing.T) {
 	출력장치.Close()
 	os.Stdout = 원래_출력장치
 
-	var 버퍼 bytes.Buffer
-	io.Copy(&버퍼, 입력장치)
+	버퍼 := new(bytes.Buffer)
+	io.Copy(버퍼, 입력장치)
 
 	F테스트_참임(테스트, len(버퍼.String()) > 10)
 
@@ -160,8 +144,8 @@ func TestF테스트_거짓임(테스트 *testing.T) {
 	출력장치.Close()
 	os.Stdout = 원래_출력장치
 
-	var 버퍼 bytes.Buffer
-	io.Copy(&버퍼, 입력장치)
+	버퍼 := new(bytes.Buffer)
+	io.Copy(버퍼, 입력장치)
 
 	F테스트_참임(테스트, len(버퍼.String()) > 10)
 
@@ -190,8 +174,8 @@ func TestF에러_없음(테스트 *testing.T) {
 	출력장치.Close()
 	os.Stdout = 원래_출력장치
 
-	var 버퍼 bytes.Buffer
-	io.Copy(&버퍼, 입력장치)
+	버퍼 := new(bytes.Buffer)
+	io.Copy(버퍼, 입력장치)
 
 	F테스트_참임(테스트, len(버퍼.String()) > 10)
 
@@ -220,8 +204,8 @@ func TestF테스트_에러발생(테스트 *testing.T) {
 	출력장치.Close()
 	os.Stdout = 원래_출력장치
 
-	var 버퍼 bytes.Buffer
-	io.Copy(&버퍼, 입력장치)
+	버퍼 := new(bytes.Buffer)
+	io.Copy(버퍼, 입력장치)
 
 	F테스트_참임(테스트, len(버퍼.String()) > 10)
 
@@ -250,8 +234,8 @@ func TestF테스트_같음(테스트 *testing.T) {
 	출력장치.Close()
 	os.Stdout = 원래_출력장치
 
-	var 버퍼 bytes.Buffer
-	io.Copy(&버퍼, 입력장치)
+	버퍼 := new(bytes.Buffer)
+	io.Copy(버퍼, 입력장치)
 
 	F테스트_참임(테스트, len(버퍼.String()) > 10)
 
@@ -280,8 +264,8 @@ func TestF테스트_다름(테스트 *testing.T) {
 	출력장치.Close()
 	os.Stdout = 원래_출력장치
 
-	var 버퍼 bytes.Buffer
-	io.Copy(&버퍼, 입력장치)
+	버퍼 := new(bytes.Buffer)
+	io.Copy(버퍼, 입력장치)
 
 	F테스트_참임(테스트, len(버퍼.String()) > 10)
 
@@ -319,8 +303,8 @@ func TestF테스트_패닉발생(테스트 *testing.T) {
 	출력장치.Close()
 	os.Stdout = 원래_출력장치
 
-	var 버퍼 bytes.Buffer
-	io.Copy(&버퍼, 입력장치)
+	버퍼 := new(bytes.Buffer)
+	io.Copy(버퍼, 입력장치)
 
 	F테스트_참임(테스트, len(버퍼.String()) > 10)
 
@@ -349,8 +333,8 @@ func TestF테스트_패닉없음(테스트 *testing.T) {
 	출력장치.Close()
 	os.Stdout = 원래_출력장치
 
-	var 버퍼 bytes.Buffer
-	io.Copy(&버퍼, 입력장치)
+	버퍼 := new(bytes.Buffer)
+	io.Copy(버퍼, 입력장치)
 
 	F테스트_참임(테스트, len(버퍼.String()) > 10)
 
@@ -375,8 +359,8 @@ func TestF문자열_출력(테스트 *testing.T) {
 	출력장치.Close()
 	os.Stdout = 원래_출력장치
 
-	var 버퍼 bytes.Buffer
-	io.Copy(&버퍼, 입력장치)
+	버퍼 := new(bytes.Buffer)
+	io.Copy(버퍼, 입력장치)
 
 	F테스트_참임(테스트, strings.Contains(버퍼.String(), "테스트_문자열, 1\n"))
 
@@ -404,8 +388,8 @@ func TestF호출경로_건너뛴_문자열_출력(테스트 *testing.T) {
 	출력장치.Close()
 	os.Stdout = 원래_출력장치
 
-	var 버퍼 bytes.Buffer
-	io.Copy(&버퍼, 입력장치)
+	버퍼 := new(bytes.Buffer)
+	io.Copy(버퍼, 입력장치)
 
 	F테스트_참임(테스트, strings.Contains(버퍼.String(), "테스트_문자열, 1\n"))
 
@@ -413,8 +397,10 @@ func TestF호출경로_건너뛴_문자열_출력(테스트 *testing.T) {
 }
 
 func TestF에러_생성(테스트 *testing.T) {
-	var 에러 error = F에러_생성("테스트용 에러. %v", 100)
+	에러 := F에러_생성("테스트용 에러. %v", 100)
+	_, ok := 에러.(error)
 
+	F테스트_참임(테스트, ok)
 	F테스트_같음(테스트, 에러.Error(), "테스트용 에러. 100")
 }
 
@@ -433,8 +419,8 @@ func TestF변수값_확인(테스트 *testing.T) {
 	출력장치.Close()
 	os.Stdout = 원래_출력장치
 
-	var 버퍼 bytes.Buffer
-	io.Copy(&버퍼, 입력장치)
+	버퍼 := new(bytes.Buffer)
+	io.Copy(버퍼, 입력장치)
 
 	F테스트_참임(테스트, strings.Contains(버퍼.String(), F변수_내역_문자열("테스트_문자열", 1)))
 
@@ -460,8 +446,8 @@ func TestF메모(테스트 *testing.T) {
 	출력장치.Close()
 	os.Stdout = 원래_출력장치
 
-	var 버퍼 bytes.Buffer
-	io.Copy(&버퍼, 입력장치)
+	버퍼 := new(bytes.Buffer)
+	io.Copy(버퍼, 입력장치)
 
 	F테스트_같음(테스트, strings.Count(버퍼.String(), "테스트_메모_1"), 1)
 	F테스트_같음(테스트, strings.Count(버퍼.String(), "테스트_메모_2"), 1)

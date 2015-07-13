@@ -39,7 +39,7 @@ func TestF메시지_송신(테스트 *testing.T) {
 }
 
 func f메시지_송신_테스트_REQ(회신_채널 chan bool, 질의_메시지 []interface{}, 회신_에러 error) {
-	var 에러 error
+	에러 := F_Nil에러()
 
 	defer func() {
 		if 에러 != nil {
@@ -80,7 +80,7 @@ func f메시지_송신_테스트_REQ(회신_채널 chan bool, 질의_메시지 [
 }
 
 func f에러_메시지_송신_테스트_REP(회신_채널 chan bool, 질의_메시지 []interface{}, 회신_에러 error) {
-	var 에러 error
+	에러 := F_Nil에러()
 
 	defer func() {
 		if 에러 != nil {

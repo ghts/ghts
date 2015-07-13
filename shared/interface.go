@@ -29,8 +29,18 @@ type I안전한_bool interface {
 	S값(값 bool) error
 }
 
-func New안전한_bool(초기값 bool) I안전한_bool {
-	return &s안전한_bool{값: 초기값}
+func New안전한_bool(값 bool) I안전한_bool {
+	return &s안전한_bool{값: 값}
+}
+
+// 안전한 string
+type I안전한_string interface {
+	G값() string
+	S값(값 string)
+}
+
+func New안전한_string(값 string) I안전한_string {
+	return &s안전한_string{값: 값}
 }
 
 // 기본 메시지

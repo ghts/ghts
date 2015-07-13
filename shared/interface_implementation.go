@@ -55,6 +55,26 @@ func (this *s안전한_bool) S값(값 bool) error {
 	}
 }
 
+// 안전한 string
+type s안전한_string struct {
+	sync.RWMutex
+	값 string
+}
+
+func (this *s안전한_string) G값() string {
+	this.RLock() // Go언어의 Embedded Lock
+	defer this.RUnlock()
+
+	return this.값
+}
+
+func (this *s안전한_string) S값(값 string) {
+	this.Lock()
+	defer this.Unlock()
+
+	this.값 = 값
+}
+
 // 기본 메시지
 type s기본_메시지 struct {
 	구분 string
@@ -83,7 +103,7 @@ func (this s기본_메시지) G길이() int {
 }
 
 func (this s기본_메시지) String() string {
-	var 버퍼 bytes.Buffer
+	버퍼 := new(bytes.Buffer)
 
 	버퍼.WriteString("구분 : " + this.구분 + "\n")
 

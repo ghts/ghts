@@ -36,6 +36,16 @@ func TestI안전한_bool(테스트 *testing.T) {
 	F테스트_참임(테스트, 안전한_bool.G값())
 }
 
+func TestI안전한_string(테스트 *testing.T) {
+	테스트.Parallel()
+
+	안전한_string := New안전한_string("테스트")
+
+	F테스트_같음(테스트, 안전한_string.G값(), "테스트")
+	안전한_string.S값("테스트 2")
+	F테스트_같음(테스트, 안전한_string.G값(), "테스트 2")
+}
+
 func TestI메시지(테스트 *testing.T) {
 	테스트.Parallel()
 

@@ -35,8 +35,8 @@ func TestF외부_프로세스_실행(테스트 *testing.T) {
 	출력장치.Close()
 	os.Stdout = 원래_출력장치
 
-	var 버퍼 bytes.Buffer
-	io.Copy(&버퍼, 입력장치)
+	버퍼 := new(bytes.Buffer)
+	io.Copy(버퍼, 입력장치)
 
 	F테스트_참임(테스트, len(버퍼.String()) > 10)
 
@@ -113,7 +113,7 @@ func f외부_프로세스_관리_Go루틴_테스트_도우미(테스트 *testing
 
 	// 외부 프로세스 Go루틴 모니터링
 	회신_채널 := make(chan []int)
-	var 생성_수량, 정상종료_수량, 타임아웃_수량, 강제종료_수량 int
+	생성_수량, 정상종료_수량, 타임아웃_수량, 강제종료_수량 := 0, 0, 0, 0
 
 반복문:
 	for {
