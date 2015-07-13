@@ -15,21 +15,5 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 
 @author: UnHa Kim <unha.kim.ghts@gmail.com> */
 
+// 공용 정보
 package shared_data
-
-import (
-	공용 "github.com/ghts/ghts/shared"
-
-	"os"
-	"testing"
-)
-
-func TestMain(m *testing.M) {
-	공용.F멀티_스레드_모드()
-
-	공용.F테스트_모드_시작()
-	defer 공용.F테스트_모드_종료()
-
-	// 테스트 실행
-	os.Exit(m.Run())
-}

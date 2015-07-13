@@ -36,8 +36,8 @@ func TestF공용_데이터_zmq소켓_중계_Go루틴(테스트 *testing.T) {
 
 	const 테스트_반복횟수 = 100
 	const 정보_요청_Go루틴_수량 = 10
-	
-	ch테스트_결과 := make(chan bool, 2 * 정보_요청_Go루틴_수량)
+
+	ch테스트_결과 := make(chan bool, 2*정보_요청_Go루틴_수량)
 
 	for i := 0; i < 정보_요청_Go루틴_수량; i++ {
 		go f테스트용_주소정보_요청_Go루틴(ch테스트_결과, 테스트_반복횟수, i)
@@ -45,7 +45,7 @@ func TestF공용_데이터_zmq소켓_중계_Go루틴(테스트 *testing.T) {
 	}
 
 	// 테스트 결과 수신
-	for i := 0; i < 정보_요청_Go루틴_수량 * 2; i++ {
+	for i := 0; i < 정보_요청_Go루틴_수량*2; i++ {
 		테스트_결과 := <-ch테스트_결과
 		공용.F테스트_참임(테스트, 테스트_결과)
 		//공용.F문자열_출력("완료 횟수 : %v", i+1)
@@ -88,7 +88,7 @@ func f테스트용_주소정보_요청_Go루틴(결과값_채널 chan bool, 테�
 			결과값_채널 <- false
 			return
 		}
-		
+
 		if len(메시지) != 2 {
 			결과값_채널 <- false
 			return
@@ -105,7 +105,7 @@ func f테스트용_주소정보_요청_Go루틴(결과값_채널 chan bool, 테�
 		case 주소명 == 공용.P주소명_주소정보:
 			if 데이터 != 공용.P주소_주소정보 {
 				결과값_채널 <- false
-				return	
+				return
 			}
 		case 주소명 == 공용.P주소명_테스트_결과:
 			if 데이터 != 공용.P주소_테스트_결과 {
@@ -114,14 +114,14 @@ func f테스트용_주소정보_요청_Go루틴(결과값_채널 chan bool, 테�
 			}
 		default:
 			_, 에러 = strconv.Atoi(strings.Replace(데이터, "tcp://127.0.0.1:", "", -1))
-			
-			if 에러!= nil ||
+
+			if 에러 != nil ||
 				!strings.HasPrefix(데이터, "tcp://127.0.0.1:") {
 				결과값_채널 <- false
 				return
 			}
 		}
-		
+
 		결과값_채널 <- true
 	}
 }
@@ -134,22 +134,22 @@ func f테스트용_종목정보_요청_Go루틴(결과값_채널 chan bool, 테�
 		결과값_채널 <- false
 		return
 	}
-	
+
 	질의 := 공용.New질의(공용.P메시지_GET, 공용.P주소명_종목정보)
 	Ch주소 <- 질의
 	주소_종목정보 := <-질의.G회신_채널()
-	
+
 	if 주소_종목정보.G에러() != nil {
 		결과값_채널 <- false
 		return
 	}
-	 
+
 	종목정보_REQ.Connect(주소_종목정보.G내용(0))
 
 	샘플_종목_모음 := 공용.F샘플_종목_모음()
 	예상값_모음 := make([][]string, 0)
 
-	for i:=0 ; i < len(샘플_종목_모음) ; i++ {
+	for i := 0; i < len(샘플_종목_모음); i++ {
 		샘플_종목 := 샘플_종목_모음[i]
 		예상값_모음 = append(예상값_모음, []string{샘플_종목.G코드(), 샘플_종목.G코드(), 샘플_종목.G이름()})
 	}
@@ -187,7 +187,7 @@ func f테스트용_종목정보_요청_Go루틴(결과값_채널 chan bool, 테�
 
 		if 실제값1 != 예상값1 || 실제값2 != 예상값2 {
 			공용.F문자열_출력("불일치[%v] : 질의값 %v, 예상값1 %v, 실제값1 %v, 예상값2 %v, 실제값2 %v",
-								구분_인덱스, 질의값, 예상값1, 실제값1, 예상값2, 실제값2)
+				구분_인덱스, 질의값, 예상값1, 실제값1, 예상값2, 실제값2)
 
 			결과값_채널 <- false
 			return
@@ -197,64 +197,63 @@ func f테스트용_종목정보_요청_Go루틴(결과값_채널 chan bool, 테�
 	}
 }
 
-
 func TestF공용_데이터_zmq소켓_중계_Go루틴_Python(테스트 *testing.T) {
 	// Go루틴 준비
 	ch대기 := make(chan bool)
 	go F공용_데이터_zmq소켓_중계_Go루틴(ch대기)
 	<-ch대기
-	
+
 	//const 테스트_반복횟수 = 100
 	//const 주소정보_요청_Python스크립트_수량 = 10
 	//const 종목정보_요청_Python스크립트_수량 = 10
-	
+
 	const 테스트_반복횟수 = 100
 	const 주소정보_요청_Python스크립트_수량 = 10
 	const 종목정보_요청_Python스크립트_수량 = 10
-	
-	const 수량_합계 = 주소정보_요청_Python스크립트_수량 + 종목정보_요청_Python스크립트_수량 
-	
+
+	const 수량_합계 = 주소정보_요청_Python스크립트_수량 + 종목정보_요청_Python스크립트_수량
+
 	질의 := 공용.New질의(공용.P메시지_GET, 공용.P주소명_종목정보)
 	Ch주소 <- 질의
 	주소_종목정보 := <-질의.G회신_채널()
-	
+
 	// zmq 소켓 초기화
-	테스트_결과_REP, 에러 := zmq.NewSocket(zmq.REP);
+	테스트_결과_REP, 에러 := zmq.NewSocket(zmq.REP)
 	공용.F테스트_에러없음(테스트, 에러)
-	  
+
 	defer 테스트_결과_REP.Close()
-	
+
 	에러 = 테스트_결과_REP.Bind(공용.P주소_테스트_결과)
 	공용.F테스트_에러없음(테스트, 에러)
-	
+
 	ch에러 := make(chan error, 수량_합계)
-	
-	for i:=0; i < 주소정보_요청_Python스크립트_수량; i++ {
-		공용.F파이썬_스크립트_실행(ch에러, 20 * time.Second, 
+
+	for i := 0; i < 주소정보_요청_Python스크립트_수량; i++ {
+		공용.F파이썬_스크립트_실행(ch에러, 20*time.Second,
 			"shared_data_zmq_test_address.py",
 			공용.P주소_주소정보, 공용.P주소_테스트_결과, 테스트_반복횟수)
 	}
-	
-	for i:=0; i < 종목정보_요청_Python스크립트_수량; i++ {
-		공용.F파이썬_스크립트_실행(ch에러, 20 * time.Second, 
-			"shared_data_zmq_test_ticker.py", 
+
+	for i := 0; i < 종목정보_요청_Python스크립트_수량; i++ {
+		공용.F파이썬_스크립트_실행(ch에러, 20*time.Second,
+			"shared_data_zmq_test_ticker.py",
 			주소_종목정보.G내용(0), 공용.P주소_테스트_결과, 테스트_반복횟수)
 	}
-	
-	for i:=0; i < 수량_합계; i++ {
+
+	for i := 0; i < 수량_합계; i++ {
 		에러 = <-ch에러
 		공용.F테스트_에러없음(테스트, 에러)
 	}
-	
+
 	// 테스트 결과 수신
-	var 메시지 []string
-	
+	메시지 := make([]string, 0) // 재활용을 위한 비어있는 변수
+
 	for i := 0; i < 수량_합계; i++ {
 		메시지, 에러 = 테스트_결과_REP.RecvMessage(0)
 		공용.F테스트_에러없음(테스트, 에러)
 		공용.F테스트_같음(테스트, 메시지[0], 공용.P메시지_GET)
 		공용.F테스트_같음(테스트, strings.ToLower(메시지[1]), "true")
-		
+
 		_, 에러 = 테스트_결과_REP.SendMessage(0)
 		공용.F테스트_에러없음(테스트, 에러)
 	}
