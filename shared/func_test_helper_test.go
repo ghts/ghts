@@ -7,25 +7,46 @@ import (
 	"os"
 	"reflect"
 	"strings"
+	"sync"
 	"testing"
 )
 
 // 테스트 편의함수 Fxxx_확인() 테스트용 Mock-Up
 // testing.TB 인터페이스를 구현함.
 var 모의_테스트_통과 bool
+var 모의_테스트_통과_잠금 = &sync.RWMutex{}
 
 type s모의_테스트 struct{ *testing.T }
 
-func (this s모의_테스트) Error(args ...interface{}) { 모의_테스트_통과 = false }
-func (this s모의_테스트) Errorf(format string, args ...interface{}) {
-	모의_테스트_통과 = false
+func (this s모의_테스트) g모의_테스트_통과() bool {
+	모의_테스트_통과_잠금.RLock()
+	defer 모의_테스트_통과_잠금.RUnlock()
+
+	return 모의_테스트_통과
 }
-func (this s모의_테스트) Fail()                     { 모의_테스트_통과 = false }
-func (this s모의_테스트) FailNow()                  { 모의_테스트_통과 = false }
-func (this s모의_테스트) Failed() bool              { return !모의_테스트_통과 }
-func (this s모의_테스트) Fatal(args ...interface{}) { 모의_테스트_통과 = false }
+
+func (this s모의_테스트) s모의_테스트_통과(통과_여부 bool) {
+	if this.g모의_테스트_통과() == 통과_여부 {
+		return
+	}
+
+	모의_테스트_통과_잠금.Lock()
+	모의_테스트_통과 = 통과_여부
+	모의_테스트_통과_잠금.Unlock()
+}
+
+func (this s모의_테스트) Error(args ...interface{}) {
+	this.s모의_테스트_통과(false)
+}
+func (this s모의_테스트) Errorf(format string, args ...interface{}) {
+	this.s모의_테스트_통과(false)
+}
+func (this s모의_테스트) Fail()                     { this.s모의_테스트_통과(false) }
+func (this s모의_테스트) FailNow()                  { this.s모의_테스트_통과(false) }
+func (this s모의_테스트) Failed() bool              { return !this.g모의_테스트_통과() }
+func (this s모의_테스트) Fatal(args ...interface{}) { this.s모의_테스트_통과(false) }
 func (this s모의_테스트) Fatalf(format string, args ...interface{}) {
-	모의_테스트_통과 = false
+	this.s모의_테스트_통과(false)
 }
 func (this s모의_테스트) Log(args ...interface{})                  {}
 func (this s모의_테스트) Logf(format string, args ...interface{})  {}
@@ -33,7 +54,7 @@ func (this s모의_테스트) Skip(args ...interface{})                 {}
 func (this s모의_테스트) SkipNow()                                 {}
 func (this s모의_테스트) Skipf(format string, args ...interface{}) {}
 func (this s모의_테스트) Skipped() bool                            { return false }
-func (this s모의_테스트) S모의_테스트_리셋()                              { 모의_테스트_통과 = true }
+func (this s모의_테스트) S모의_테스트_리셋()                              { this.s모의_테스트_통과(true) }
 
 func TestS모의_테스트(테스트 *testing.T) {
 	var tb testing.TB = new(s모의_테스트)
@@ -44,13 +65,13 @@ func TestS모의_테스트(테스트 *testing.T) {
 
 	모의_테스트 := new(s모의_테스트)
 
-	모의_테스트_통과 = true
+	모의_테스트.S모의_테스트_리셋()
 	F테스트_거짓임(테스트, 모의_테스트.Failed())
 
-	모의_테스트_통과 = false
+	모의_테스트.S모의_테스트_리셋()
+	모의_테스트.s모의_테스트_통과(false)
 	F테스트_참임(테스트, 모의_테스트.Failed())
 
-	모의_테스트_통과 = false
 	모의_테스트.S모의_테스트_리셋()
 	F테스트_거짓임(테스트, 모의_테스트.Failed())
 

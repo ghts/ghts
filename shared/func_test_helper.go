@@ -8,6 +8,7 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"sync"
 	"testing"
 )
 
@@ -401,16 +402,22 @@ func F변수_내역_문자열(변수_모음 ...interface{}) string {
 
 // 메모 해야할 일을 소스코드 위치와 함께 표기해 주는 메소드.
 
-var 이미_출력한_메모_모음 []string = make([]string, 0)	// 중복 방지용
+// 중복 방지용
+var 이미_출력한_메모_모음 = make(map[string]S비어있는_구조체)
+var 이미_출력한_메모_모음_잠금 = &sync.RWMutex{}
 
 func F메모(문자열 string) {
-	for _, 이미_출력한_메모 := range 이미_출력한_메모_모음 {
-		if 문자열 == 이미_출력한_메모 {
-			// 중복 출력 방지.
-			return
-		}
+	이미_출력한_메모_모음_잠금.RLock()
+	_, 존재함 := 이미_출력한_메모_모음[문자열]
+	이미_출력한_메모_모음_잠금.RUnlock()
+
+	if 존재함 {
+		return
 	}
 
 	fmt.Printf("\nTODO : %s %s\n\n", F소스코드_위치(1), 문자열)
-	이미_출력한_메모_모음 = append(이미_출력한_메모_모음, 문자열)
+
+	이미_출력한_메모_모음_잠금.Lock()
+	이미_출력한_메모_모음[문자열] = S비어있는_구조체{}
+	이미_출력한_메모_모음_잠금.Unlock()
 }

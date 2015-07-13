@@ -44,18 +44,17 @@ type I메시지 interface {
 
 func New메시지(구분 string, 내용 ...interface{}) I메시지 {
 	내용_모음 := make([]string, len(내용))
-	
-	for i:=0 ; i < len(내용) ; i++ {
-		내용_모음[i] = F포맷된_문자열("%v", 내용[i]) 
+
+	for i := 0; i < len(내용); i++ {
+		내용_모음[i] = F포맷된_문자열("%v", 내용[i])
 	}
-	
-	
+
 	return s기본_메시지{구분: 구분, 내용: 내용_모음}
 }
 
 // 질의
 type I질의 interface {
-	I메시지	// 질의 내용
+	I메시지 // 질의 내용
 	G회신_채널() chan I회신
 	G검사(타이틀 string, 질의_길이 int) error
 }
@@ -70,10 +69,10 @@ func New질의(구분 string, 내용 ...interface{}) I질의 {
 		F에러_출력(에러.Error())
 		panic(에러)
 	}
-	
+
 	회신_채널 := make(chan I회신, 1)
 	메시지 := New메시지(구분, 내용...)
-	
+
 	return s질의_메시지{회신_채널: 회신_채널, s기본_메시지: 메시지.(s기본_메시지)}
 }
 

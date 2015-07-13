@@ -19,16 +19,16 @@ package shared
 
 import (
 	dec "github.com/wayn3h0/go-decimal"
-	
+
 	"bytes"
 	"math/big"
-	"strings"
 	"strconv"
+	"strings"
 	"sync"
 	"time"
 )
 
-type S비어있는_구조체 struct {}
+type S비어있는_구조체 struct{}
 
 // 안전한 bool
 type s안전한_bool struct {
@@ -37,16 +37,16 @@ type s안전한_bool struct {
 }
 
 func (this *s안전한_bool) G값() bool {
-	this.RLock()	// Go언어의 Embedded Lock
+	this.RLock() // Go언어의 Embedded Lock
 	defer this.RUnlock()
-	
+
 	return this.값
 }
 
 func (this *s안전한_bool) S값(값 bool) error {
 	this.Lock()
 	defer this.Unlock()
-	
+
 	if this.값 == 값 {
 		return F에러_생성("이미 %v임.", 값)
 	} else {
@@ -70,7 +70,7 @@ func (this s기본_메시지) G내용(인덱스 int) string {
 		F에러_출력("인덱스 입력값은 '길이'보다 작아야 함 : 길이 %v, 입력값 %v", len(this.내용), 인덱스)
 		panic("무효한 인덱스")
 	}
-	
+
 	return this.내용[인덱스]
 }
 
@@ -84,26 +84,26 @@ func (this s기본_메시지) G길이() int {
 
 func (this s기본_메시지) String() string {
 	var 버퍼 bytes.Buffer
-	
+
 	버퍼.WriteString("구분 : " + this.구분 + "\n")
-	
+
 	if len(this.내용) == 0 {
 		버퍼.WriteString("내용 없음. len(내용) == 0. \n")
 	} else {
 		버퍼.WriteString("내용\n")
-	
-		for i:=0 ; i<len(this.내용) ; i++ {
+
+		for i := 0; i < len(this.내용); i++ {
 			버퍼.WriteString(strconv.Itoa(i) + " : " + this.내용[i] + "\n")
 		}
 	}
-	
+
 	return 버퍼.String()
 }
 
 // 질의 메시지
 type s질의_메시지 struct {
-	s기본_메시지	// Go언어 구조체 embedding(임베딩) 기능. 상속 비스무리함.
-	회신_채널 chan I회신
+	s기본_메시지 // Go언어 구조체 embedding(임베딩) 기능. 상속 비스무리함.
+	회신_채널   chan I회신
 }
 
 func (this s질의_메시지) G회신_채널() chan I회신 {
@@ -111,30 +111,28 @@ func (this s질의_메시지) G회신_채널() chan I회신 {
 }
 
 func (this s질의_메시지) G검사(타이틀 string, 질의_길이 int) error {
-	if this.G구분() == P메시지_GET && 
+	if this.G구분() == P메시지_GET &&
 		this.G길이() == 질의_길이 {
 		return nil
 	}
-	
-	에러 := F에러_생성("잘못된 %s 질의 메시지. 구분 '%v', 길이 %v, 내용 '%v'", 
-				타이틀, this.G구분(), this.G길이(), this.G내용_전체())
-	
+
+	에러 := F에러_생성("잘못된 %s 질의 메시지. 구분 '%v', 길이 %v, 내용 '%v'",
+		타이틀, this.G구분(), this.G길이(), this.G내용_전체())
+
 	this.G회신_채널() <- New회신(에러, P메시지_에러)
-	
+
 	return 에러
 }
 
 // 회신 메시지
 type s회신_메시지 struct {
-	s기본_메시지	// Go언어 구조체 embedding(임베딩)
-	에러 error
+	s기본_메시지 // Go언어 구조체 embedding(임베딩)
+	에러      error
 }
 
 func (this s회신_메시지) G에러() error {
-	return  this.에러
+	return this.에러
 }
-
-
 
 // 종목
 type s종목 struct {
