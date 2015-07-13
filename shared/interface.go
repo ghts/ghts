@@ -65,25 +65,35 @@ func New메시지(구분 string, 내용 ...interface{}) I메시지 {
 // 질의
 type I질의 interface {
 	I메시지 // 질의 내용
+	G회신(채널 chan I질의) I회신
 	G회신_채널() chan I회신
 	G검사(타이틀 string, 질의_길이 int) error
 }
 
-func New질의(구분 string, 내용 ...interface{}) I질의 {
-	switch 구분 {
+// New질의(...).G회신() 혹은 F질의(...) 둘 다 똑같다.
+func New질의(메시지_구분 string, 내용 ...interface{}) I질의 {
+	switch 메시지_구분 {
 	case P메시지_GET:
 	case P메시지_SET:
+	case P메시지_DEL:
 	case P메시지_종료:
 	default:
-		에러 := F에러_생성("잘못된 질의 메시지 구분 %v", 구분)
+		에러 := F에러_생성("잘못된 질의 메시지 구분 %v", 메시지_구분)
 		F에러_출력(에러.Error())
 		panic(에러)
 	}
 
 	회신_채널 := make(chan I회신, 1)
-	메시지 := New메시지(구분, 내용...)
+	메시지 := New메시지(메시지_구분, 내용...)
 
 	return s질의_메시지{회신_채널: 회신_채널, s기본_메시지: 메시지.(s기본_메시지)}
+}
+
+func F질의(질의_채널 chan I질의, 메시지_구분 string, 내용 ...interface{}) I회신 {
+	질의 := New질의(메시지_구분, 내용...)
+	질의_채널 <- 질의
+
+	return <-질의.G회신_채널()
 }
 
 // 회신
@@ -92,23 +102,29 @@ type I회신 interface {
 	G에러() error
 }
 
-func New회신(에러 error, 구분 string, 내용 ...interface{}) I회신 {
-	switch {
-	case 구분 != P메시지_OK && 구분 != P메시지_에러:
-		에러 := F에러_생성("잘못된 회신 메시지 구분 %v", 구분)
-		F에러_출력(에러.Error())
-		panic(에러)
-	case 에러 != nil && 구분 != P메시지_에러:
-		에러 := F에러_생성("회신 에러가 존재하지만, 메시지 구분은 에러가 아님. %v  %v", 에러, 구분)
-		F에러_출력(에러.Error())
-		panic(에러)
-	case 에러 == nil && 구분 != P메시지_OK:
-		에러 := F에러_생성("회신 에러는 nil이지만, 메시지 구분은 OK가 아님. %v  %v", 에러, 구분)
-		F에러_출력(에러.Error())
-		panic(에러)
-	default:
-		return s회신_메시지{에러: 에러, s기본_메시지: New메시지(구분, 내용...).(s기본_메시지)}
+func New회신(에러 error, 내용 ...interface{}) I회신 {
+	메시지_구분 := ""
+
+	if 에러 == nil || F포맷된_문자열("%v", 에러) == "<nil>" {
+		메시지_구분 = P메시지_OK
+	} else {
+		메시지_구분 = P메시지_에러
 	}
+
+	if len(내용) == 1 {
+		문자열_모음, ok := 내용[0].([]string)
+
+		if ok {
+			내용_원본 := 내용
+			내용 = make([]interface{}, len(내용_원본))
+
+			for 인덱스, 문자열 := range 문자열_모음 {
+				내용[인덱스] = 문자열
+			}
+		}
+	}
+
+	return s회신_메시지{에러: 에러, s기본_메시지: New메시지(메시지_구분, 내용...).(s기본_메시지)}
 }
 
 // 종목

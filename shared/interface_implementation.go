@@ -106,6 +106,7 @@ func (this s기본_메시지) String() string {
 	버퍼 := new(bytes.Buffer)
 
 	버퍼.WriteString("구분 : " + this.구분 + "\n")
+	버퍼.WriteString("길이 : " + strconv.Itoa(this.G길이()) + "\n")
 
 	if len(this.내용) == 0 {
 		버퍼.WriteString("내용 없음. len(내용) == 0. \n")
@@ -126,22 +127,28 @@ type s질의_메시지 struct {
 	회신_채널   chan I회신
 }
 
-func (this s질의_메시지) G회신_채널() chan I회신 {
-	return this.회신_채널
-}
-
-func (this s질의_메시지) G검사(타이틀 string, 질의_길이 int) error {
-	if this.G구분() == P메시지_GET &&
+func (this s질의_메시지) G검사(메시지_구분 string, 질의_길이 int) error {
+	if this.G구분() == 메시지_구분 &&
 		this.G길이() == 질의_길이 {
 		return nil
 	}
 
-	에러 := F에러_생성("잘못된 %s 질의 메시지. 구분 '%v', 길이 %v, 내용 '%v'",
-		타이틀, this.G구분(), this.G길이(), this.G내용_전체())
+	에러 := F에러_생성("잘못된 질의 메시지.\n%s", this.String())
+	F에러_출력(에러.Error())
 
 	this.G회신_채널() <- New회신(에러, P메시지_에러)
 
 	return 에러
+}
+
+func (this s질의_메시지) G회신(질의_채널 chan I질의) I회신 {
+	질의_채널 <- this
+
+	return <-this.회신_채널
+}
+
+func (this s질의_메시지) G회신_채널() chan I회신 {
+	return this.회신_채널
 }
 
 // 회신 메시지

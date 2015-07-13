@@ -23,8 +23,9 @@ import (
 	"strconv"
 )
 
-var Ch주소 = make(chan 공용.I질의)
+var Ch주소 = make(chan 공용.I질의, 10)
 var Ch종목 = make(chan 공용.I질의, 100)
+var Ch문자열_캐시 = make(chan 공용.I질의, 100)
 
 var 공용_데이터_Go루틴_실행_중 = 공용.New안전한_bool(false)
 
@@ -56,6 +57,10 @@ func F공용_데이터_Go루틴(go루틴_생성_결과 chan bool) {
 		return
 	}
 
+	문자열_캐시_맵 := make(map[string]string)
+
+	공통_종료_채널 := 공용.F공통_종료_채널()
+
 	// 초기화 완료
 	go루틴_생성_결과 <- true
 
@@ -66,7 +71,7 @@ func F공용_데이터_Go루틴(go루틴_생성_결과 chan bool) {
 	for {
 		select {
 		case 질의 = <-Ch주소:
-			if 에러 = 질의.G검사("주소", 1); 에러 != nil {
+			if 에러 = 질의.G검사(공용.P메시지_GET, 1); 에러 != nil {
 				continue
 			}
 
@@ -74,12 +79,12 @@ func F공용_데이터_Go루틴(go루틴_생성_결과 chan bool) {
 
 			if !존재함 {
 				에러 = 공용.F에러_생성("잘못된 주소 질의값 '%v'", 질의.G내용(0))
-				질의.G회신_채널() <- 공용.New회신(에러, 공용.P메시지_에러)
+				질의.G회신_채널() <- 공용.New회신(에러)
 			} else {
-				질의.G회신_채널() <- 공용.New회신(nil, 공용.P메시지_OK, 주소)
+				질의.G회신_채널() <- 공용.New회신(nil, 주소)
 			}
 		case 질의 = <-Ch종목:
-			if 에러 = 질의.G검사("종목", 1); 에러 != nil {
+			if 에러 = 질의.G검사(공용.P메시지_GET, 1); 에러 != nil {
 				continue
 			}
 
@@ -87,10 +92,20 @@ func F공용_데이터_Go루틴(go루틴_생성_결과 chan bool) {
 
 			if !존재함 {
 				에러 = 공용.F에러_생성("잘못된 종목 질의값 '%v'", 질의.G내용(0))
-				질의.G회신_채널() <- 공용.New회신(에러, 공용.P메시지_에러)
+				질의.G회신_채널() <- 공용.New회신(에러)
 			} else {
-				질의.G회신_채널() <- 공용.New회신(nil, 공용.P메시지_OK, 종목.G코드(), 종목.G이름())
+				질의.G회신_채널() <- 공용.New회신(nil, 종목.G코드(), 종목.G이름())
 			}
+		case 질의 = <-Ch문자열_캐시:
+			if 질의.G구분() == 공용.P메시지_종료 {
+				질의.G회신_채널() <- 공용.New회신(nil)
+				return
+			}
+
+			// shared_data_string_cache.go 참조
+			f문자열_캐시_질의_처리(문자열_캐시_맵, 질의)
+		case <-공통_종료_채널:
+			return
 		}
 	}
 }

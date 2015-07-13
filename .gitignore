@@ -1,8 +1,6 @@
 /.pydevproject
 /.project
 /.settings
-/shared/count.out
-/shared/coverage.out
-/shared/spawned_process_list
-/shared/dev.go
-/shared/dev_test.go
+count.out
+coverage.out
+spawned_process_list
