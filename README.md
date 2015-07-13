@@ -26,7 +26,7 @@ It is NOT RECOMMENDED for any real use.
 저작권자, 개발자, 개발에 참여한 기여자들은 이 소프트웨어에 대한 어떠한 보증도 하지 않으며, 
 이 소프트웨어를 사용하면서 발생하는 그 어떠한 손실 및 손상에 대해서 책임지지 않음.
 
-소스코드 파일에 별도의 언급이 없는 한, 모든 소스코드는 GNU GPL V3 라이센스를 따름.
+소스코드 파일에 별도의 언급이 없는 한, 모든 소스코드는 GNU LGPL V3 라이센스를 따름.
 저작권에 대한 자세한 사항은 'LICENSE' 파일을 참고할 것.
 
 ---------------------------------------------------------------------
@@ -51,5 +51,5 @@ You should develop your own strategy and risk management for real trading.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-If not specified in the source code file, all the source code files are licensed under the term of GNU GPL V3.
+If not specified in the source code file, all the source code files are licensed under the term of GNU LGPL V3.
 Refer to 'LICENSE' file, for the licensing detail.
