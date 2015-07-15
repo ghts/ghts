@@ -136,19 +136,24 @@ func (this s질의_메시지) G검사(메시지_구분 string, 질의_길이 int
 	에러 := F에러_생성("잘못된 질의 메시지.\n%s", this.String())
 	F에러_출력(에러.Error())
 
-	this.G회신_채널() <- New회신(에러, P메시지_에러)
+	this.회신_채널 <- New회신(에러, P메시지_에러)
 
 	return 에러
 }
 
-func (this s질의_메시지) G회신(질의_채널 chan I질의) I회신 {
+func (this s질의_메시지) G회신(질의_채널 chan I질의, 타임아웃 time.Duration) I회신 {
 	질의_채널 <- this
-
-	return <-this.회신_채널
+	
+	select {
+	case 회신 := <-this.회신_채널:
+		return 회신
+	case <-time.After(타임아웃):
+		return New회신(F에러_생성("I질의.G회신() 타임아웃.\n%v", this))
+	}
 }
 
-func (this s질의_메시지) G회신_채널() chan I회신 {
-	return this.회신_채널
+func (this s질의_메시지) S회신(에러 error, 내용 ...interface{}) {
+	this.회신_채널 <- New회신(에러)
 }
 
 // 회신 메시지
@@ -351,11 +356,11 @@ func (this *s통화) String() string {
 
 // 가격정보
 type s가격정보 struct {
-	종목 I종목
+	종목코드 string
 	가격 I통화
 	시점 time.Time
 }
 
-func (this *s가격정보) G종목() I종목       { return this.종목 }
+func (this *s가격정보) G종목코드() string  { return this.종목코드 }
 func (this *s가격정보) G가격() I통화       { return this.가격.G복사본() }
 func (this *s가격정보) G시점() time.Time { return this.시점 }

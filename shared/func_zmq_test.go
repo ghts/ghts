@@ -39,7 +39,7 @@ func TestF메시지_송신(테스트 *testing.T) {
 }
 
 func f메시지_송신_테스트_REQ(회신_채널 chan bool, 질의_메시지 []interface{}, 회신_에러 error) {
-	에러 := F_Nil에러()
+	에러 := F_nil에러()
 
 	defer func() {
 		if 에러 != nil {
@@ -80,7 +80,7 @@ func f메시지_송신_테스트_REQ(회신_채널 chan bool, 질의_메시지 [
 }
 
 func f에러_메시지_송신_테스트_REP(회신_채널 chan bool, 질의_메시지 []interface{}, 회신_에러 error) {
-	에러 := F_Nil에러()
+	에러 := F_nil에러()
 
 	defer func() {
 		if 에러 != nil {
@@ -126,15 +126,21 @@ func f에러_메시지_송신_테스트_REP(회신_채널 chan bool, 질의_메�
 }
 
 func TestF_zmq소켓_Go채널_중계(테스트 *testing.T) {
-	테스트.Parallel()
-
+	defer func() {
+		r := recover()
+		
+		if r != nil {
+			F에러_출력(F포맷된_문자열("%v", r))
+		}
+	}()
+	
 	go채널 := make(chan I질의, 1)
-
+	
 	소켓_REP, 에러 := zmq.NewSocket(zmq.REP)
 	F테스트_에러없음(테스트, 에러)
 	F테스트_에러없음(테스트, 소켓_REP.Bind(P주소_테스트_결과))
 	defer 소켓_REP.Close()
-
+	
 	소켓_REQ, 에러 := zmq.NewSocket(zmq.REQ)
 	F테스트_에러없음(테스트, 에러)
 	F테스트_에러없음(테스트, 소켓_REQ.Connect(P주소_테스트_결과))
@@ -144,25 +150,42 @@ func TestF_zmq소켓_Go채널_중계(테스트 *testing.T) {
 	F테스트_에러없음(테스트, 에러)
 
 	go func() {
+		F문자열_출력("Go 1")
+		
 		질의 := <-go채널
+		
+		F문자열_출력("Go 2")
 
 		switch {
 		case 질의.G구분() != P메시지_GET,
 			질의.G길이() != 1,
 			질의.G내용(0) != "테스트":
-			에러 := F에러_생성("잘못된 메시지 구분 %v 길이 %v 내용 %v", 질의.G구분(), 질의.G길이(), 질의.G내용_전체())
-			질의.G회신_채널() <- New회신(에러)
+			F문자열_출력("Go case 1")
+			질의.S회신(F에러_생성("잘못된 메시지.\n%v", 질의))
 		default:
-			질의.G회신_채널() <- New회신(nil, "회신")
+			F문자열_출력("Go default")
+			질의.S회신(nil, "회신")
 		}
+		
+		F문자열_출력("Go 3")
 
 		return
 	}()
-
+	
 	F_zmq소켓_Go채널_중계(소켓_REP, go채널)
+	
+	
 
 	메시지, 에러 := 소켓_REQ.RecvMessage(0)
+	
 	F테스트_에러없음(테스트, 에러)
 	F테스트_같음(테스트, 메시지[0], P메시지_OK)
+	
+	F문자열_출력("7")
+	
+	F메모("여기서 에러 발생")
+	
 	F테스트_같음(테스트, 메시지[1], "회신")
+	
+	F문자열_출력("8")
 }

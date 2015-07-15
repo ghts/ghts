@@ -17,6 +17,17 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 
 package shared
 
+import (
+	"time"
+)
+
+const (
+	P시간_형식 string = time.RFC3339Nano
+	
+	P타임아웃_Go time.Duration = 10 * time.Second
+	P타임아웃_zmq time.Duration = 10 * time.Second 
+)
+
 const (
 	P주소_주소정보   string = "tcp://127.0.0.1:3001"
 	P주소_테스트_결과        = "tcp://127.0.0.1:3002"
@@ -37,7 +48,7 @@ const (
 	P메시지_GET = "G"
 	P메시지_SET = "S"
 	P메시지_DEL = "D"
-	P메시지_종료  = "Q"
+	P메시지_종료  = "Q"	// 주로 zmq에서만 사용함.
 
 	// 회신 메시지 구분
 	P메시지_OK = "O"

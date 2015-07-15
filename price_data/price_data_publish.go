@@ -15,7 +15,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 
 @author: UnHa Kim <unha.kim.ghts@gmail.com> */
 
-package modules
+package price_data
 
 /*
 import (

@@ -22,6 +22,34 @@ import (
 	"runtime"
 )
 
+func F문자열_모음2인터페이스_모음(문자열_모음 []string) []interface{} {
+	if 문자열_모음 == nil {
+		return nil
+	}
+	
+	인터페이스_모음 := make([]interface{}, len(문자열_모음))
+	
+	for i:=0 ; i < len(문자열_모음) ; i++ {
+		인터페이스_모음[i] = 문자열_모음[i]
+	}
+	
+	return 인터페이스_모음
+}
+
+func F인터페이스_모음2문자열_모음(인터페이스_모음 []interface{}) []string {
+	if 인터페이스_모음 == nil {
+		return nil
+	}
+	
+	문자열_모음 := make([]string, len(인터페이스_모음))
+	
+	for i:=0 ; i < len(인터페이스_모음) ; i++ {
+		문자열_모음[i] = F포맷된_문자열("%v", 인터페이스_모음[i])
+	}
+	
+	return 문자열_모음
+}
+
 func F타입_이름(i interface{}) string {
 	return reflect.TypeOf(i).Name()
 }
@@ -63,4 +91,4 @@ func F등록된_Go루틴_종료() {
 	close(ch공통_종료_채널)
 }
 
-func F_Nil에러() error { return nil }
+func F_nil에러() error { return nil }

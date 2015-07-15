@@ -65,12 +65,11 @@ func New메시지(구분 string, 내용 ...interface{}) I메시지 {
 // 질의
 type I질의 interface {
 	I메시지 // 질의 내용
-	G회신(채널 chan I질의) I회신
-	G회신_채널() chan I회신
-	G검사(타이틀 string, 질의_길이 int) error
+	G검사(메시지_구분 string, 질의_길이 int) error
+	G회신(채널 chan I질의, 타임아웃 time.Duration) I회신
+	S회신(에러 error, 내용 ...interface{})
 }
 
-// New질의(...).G회신() 혹은 F질의(...) 둘 다 똑같다.
 func New질의(메시지_구분 string, 내용 ...interface{}) I질의 {
 	switch 메시지_구분 {
 	case P메시지_GET:
@@ -80,7 +79,8 @@ func New질의(메시지_구분 string, 내용 ...interface{}) I질의 {
 	default:
 		에러 := F에러_생성("잘못된 질의 메시지 구분 %v", 메시지_구분)
 		F에러_출력(에러.Error())
-		panic(에러)
+		//panic(에러)
+		return nil
 	}
 
 	회신_채널 := make(chan I회신, 1)
@@ -89,11 +89,20 @@ func New질의(메시지_구분 string, 내용 ...interface{}) I질의 {
 	return s질의_메시지{회신_채널: 회신_채널, s기본_메시지: 메시지.(s기본_메시지)}
 }
 
-func F질의(질의_채널 chan I질의, 메시지_구분 string, 내용 ...interface{}) I회신 {
-	질의 := New질의(메시지_구분, 내용...)
-	질의_채널 <- 질의
-
-	return <-질의.G회신_채널()
+func New질의_zmq메시지(zmq메시지 []string) I질의 {
+	if zmq메시지 == nil || len(zmq메시지) == 0 {
+		return nil
+	}
+	
+	메시지_구분 := zmq메시지[0]
+	
+	if len(zmq메시지) == 1 {
+		return New질의(메시지_구분)
+	}
+	
+	질의 := New질의(메시지_구분, F문자열_모음2인터페이스_모음(zmq메시지[1:])...)
+	
+	return 질의
 }
 
 // 회신
@@ -183,12 +192,12 @@ func New통화(단위 T통화단위, 금액 string) I통화 {
 
 // 가격정보
 type I가격정보 interface {
-	G종목() I종목
+	G종목코드() string
 	G가격() I통화
 	G시점() time.Time
 }
 
-func New가격정보(종목 I종목, 가격 I통화) I가격정보 {
-	s := s가격정보{종목: 종목, 가격: 가격.G복사본(), 시점: time.Now()}
+func New가격정보(종목코드 string, 가격 I통화) I가격정보 {
+	s := s가격정보{종목코드: 종목코드, 가격: 가격.G복사본(), 시점: time.Now()}
 	return &s
 }
