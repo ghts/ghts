@@ -51,9 +51,9 @@ func F_zmq소켓_Go채널_중계(zmq소켓 *zmq.Socket, Go채널 chan I질의) (
 			F에러_메시지_송신(zmq소켓, 에러)
 		}
 	}()
-	
+
 	zmq메시지, 에러 := zmq소켓.RecvMessage(0)
-	
+
 	// 비어있는 zmq메시지 걸러내기.
 	switch {
 	case 에러 != nil:
@@ -61,10 +61,10 @@ func F_zmq소켓_Go채널_중계(zmq소켓 *zmq.Socket, Go채널 chan I질의) (
 	case zmq메시지 == nil, len(zmq메시지) == 0:
 		return F에러_생성("비어있는 zmq메시지.\n'%v'\n", zmq메시지)
 	}
-	
+
 	질의 := New질의_zmq메시지(zmq메시지)
 	회신 := 질의.G회신(Go채널, P타임아웃_Go)
-	
+
 	// Go채널 회신을 zmq소켓으로 전달.
 	switch {
 	case 회신.G에러() != nil:
@@ -72,7 +72,7 @@ func F_zmq소켓_Go채널_중계(zmq소켓 *zmq.Socket, Go채널 chan I질의) (
 	case 회신.G구분() == P메시지_OK:
 		메시지 := []string{회신.G구분()}
 		메시지 = append(메시지, 회신.G내용_전체()...)
-		
+
 		return F메시지_송신(zmq소켓, 메시지)
 	default:
 		// 예상치 못한 경우

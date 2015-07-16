@@ -93,15 +93,15 @@ func New질의_zmq메시지(zmq메시지 []string) I질의 {
 	if zmq메시지 == nil || len(zmq메시지) == 0 {
 		return nil
 	}
-	
+
 	메시지_구분 := zmq메시지[0]
-	
+
 	if len(zmq메시지) == 1 {
 		return New질의(메시지_구분)
 	}
-	
+
 	질의 := New질의(메시지_구분, F문자열_모음2인터페이스_모음(zmq메시지[1:])...)
-	
+
 	return 질의
 }
 

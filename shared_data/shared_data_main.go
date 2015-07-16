@@ -99,7 +99,7 @@ func F공용_데이터_Go루틴(go루틴_생성_결과 chan bool) {
 			// shared_data_string_cache.go 참조
 			f문자열_캐시_질의_처리(문자열_캐시_맵, 질의)
 		case <-공통_종료_채널:
-			ch종료_공용_데이터_Go루틴 <- 공용.S비어있는_구조체{}	
+			ch종료_공용_데이터_Go루틴 <- 공용.S비어있는_구조체{}
 		case <-ch종료_공용_데이터_Go루틴:
 			공용_데이터_Go루틴_실행_중.S값(false)
 			return

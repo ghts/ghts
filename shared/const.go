@@ -23,9 +23,9 @@ import (
 
 const (
 	P시간_형식 string = time.RFC3339Nano
-	
-	P타임아웃_Go time.Duration = 10 * time.Second
-	P타임아웃_zmq time.Duration = 10 * time.Second 
+
+	P타임아웃_Go  time.Duration = 10 * time.Second
+	P타임아웃_zmq time.Duration = 10 * time.Second
 )
 
 const (
@@ -48,7 +48,7 @@ const (
 	P메시지_GET = "G"
 	P메시지_SET = "S"
 	P메시지_DEL = "D"
-	P메시지_종료  = "Q"	// 주로 zmq에서만 사용함.
+	P메시지_종료  = "Q" // 주로 zmq에서만 사용함.
 
 	// 회신 메시지 구분
 	P메시지_OK = "O"

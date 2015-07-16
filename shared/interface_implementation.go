@@ -143,7 +143,7 @@ func (this s질의_메시지) G검사(메시지_구분 string, 질의_길이 int
 
 func (this s질의_메시지) G회신(질의_채널 chan I질의, 타임아웃 time.Duration) I회신 {
 	질의_채널 <- this
-	
+
 	select {
 	case 회신 := <-this.회신_채널:
 		return 회신
@@ -357,8 +357,8 @@ func (this *s통화) String() string {
 // 가격정보
 type s가격정보 struct {
 	종목코드 string
-	가격 I통화
-	시점 time.Time
+	가격   I통화
+	시점   time.Time
 }
 
 func (this *s가격정보) G종목코드() string  { return this.종목코드 }

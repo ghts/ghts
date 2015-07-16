@@ -135,16 +135,14 @@ func f테스트용_종목정보_요청_Go루틴(결과값_채널 chan bool, 테�
 		return
 	}
 
-	질의 := 공용.New질의(공용.P메시지_GET, 공용.P주소명_종목정보)
-	Ch주소 <- 질의
-	주소_종목정보 := <-질의.G회신_채널()
+	회신 := 공용.New질의(공용.P메시지_GET, 공용.P주소명_종목정보).G회신(Ch주소, 공용.P타임아웃_Go)
 
-	if 주소_종목정보.G에러() != nil {
+	if 회신.G에러() != nil {
 		결과값_채널 <- false
 		return
 	}
 
-	종목정보_REQ.Connect(주소_종목정보.G내용(0))
+	종목정보_REQ.Connect(회신.G내용(0))
 
 	샘플_종목_모음 := 공용.F샘플_종목_모음()
 	예상값_모음 := make([][]string, 0)
@@ -213,9 +211,7 @@ func TestF공용_데이터_zmq소켓_중계_Go루틴_Python(테스트 *testing.T
 
 	const 수량_합계 = 주소정보_요청_Python스크립트_수량 + 종목정보_요청_Python스크립트_수량
 
-	질의 := 공용.New질의(공용.P메시지_GET, 공용.P주소명_종목정보)
-	Ch주소 <- 질의
-	주소_종목정보 := <-질의.G회신_채널()
+	회신 := 공용.New질의(공용.P메시지_GET, 공용.P주소명_종목정보).G회신(Ch주소, 공용.P타임아웃_Go)
 
 	// zmq 소켓 초기화
 	테스트_결과_REP, 에러 := zmq.NewSocket(zmq.REP)
@@ -237,7 +233,7 @@ func TestF공용_데이터_zmq소켓_중계_Go루틴_Python(테스트 *testing.T
 	for i := 0; i < 종목정보_요청_Python스크립트_수량; i++ {
 		공용.F파이썬_스크립트_실행(ch에러, 20*time.Second,
 			"shared_data_zmq_test_ticker.py",
-			주소_종목정보.G내용(0), 공용.P주소_테스트_결과, 테스트_반복횟수)
+			회신.G내용(0), 공용.P주소_테스트_결과, 테스트_반복횟수)
 	}
 
 	for i := 0; i < 수량_합계; i++ {

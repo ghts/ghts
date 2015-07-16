@@ -128,19 +128,19 @@ func f에러_메시지_송신_테스트_REP(회신_채널 chan bool, 질의_메�
 func TestF_zmq소켓_Go채널_중계(테스트 *testing.T) {
 	defer func() {
 		r := recover()
-		
+
 		if r != nil {
 			F에러_출력(F포맷된_문자열("%v", r))
 		}
 	}()
-	
+
 	go채널 := make(chan I질의, 1)
-	
+
 	소켓_REP, 에러 := zmq.NewSocket(zmq.REP)
 	F테스트_에러없음(테스트, 에러)
 	F테스트_에러없음(테스트, 소켓_REP.Bind(P주소_테스트_결과))
 	defer 소켓_REP.Close()
-	
+
 	소켓_REQ, 에러 := zmq.NewSocket(zmq.REQ)
 	F테스트_에러없음(테스트, 에러)
 	F테스트_에러없음(테스트, 소켓_REQ.Connect(P주소_테스트_결과))
@@ -149,9 +149,9 @@ func TestF_zmq소켓_Go채널_중계(테스트 *testing.T) {
 	_, 에러 = 소켓_REQ.SendMessage(P메시지_GET, "테스트")
 	F테스트_에러없음(테스트, 에러)
 
-	go func() {	
+	go func() {
 		질의 := <-go채널
-		
+
 		switch {
 		case 질의.G구분() != P메시지_GET,
 			질의.G길이() != 1,
@@ -163,12 +163,12 @@ func TestF_zmq소켓_Go채널_중계(테스트 *testing.T) {
 		}
 
 		return
-	
+
 	}()
 	F_zmq소켓_Go채널_중계(소켓_REP, go채널)
-	
+
 	메시지, 에러 := 소켓_REQ.RecvMessage(0)
-		
+
 	F테스트_에러없음(테스트, 에러)
 	F테스트_같음(테스트, 메시지[0], P메시지_OK)
 	F테스트_같음(테스트, 메시지[1], "회신")

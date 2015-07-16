@@ -29,7 +29,8 @@ var 공용_데이터_zmq소켓_중계_Go루틴_실행_중 = 공용.New안전한_
 func F공용_데이터_zmq소켓_중계_Go루틴(go루틴_생성_결과 chan bool) {
 	에러 := 공용_데이터_zmq소켓_중계_Go루틴_실행_중.S값(true)
 	if 에러 != nil {
-		go루틴_생성_결과 <- false; return
+		go루틴_생성_결과 <- false
+		return
 	}
 
 	// 공용 데이터 Go루틴이 존재하는 것을 확인.
@@ -39,37 +40,42 @@ func F공용_데이터_zmq소켓_중계_Go루틴(go루틴_생성_결과 chan boo
 
 	// 종목정보 zmq소켓 주소 검색.
 	회신 := 공용.New질의(공용.P메시지_GET, 공용.P주소명_종목정보).G회신(Ch주소, 공용.P타임아웃_Go)
-	
+
 	switch {
 	case 회신.G에러() != nil, 회신.G길이() != 1:
-		go루틴_생성_결과 <- false; return
+		go루틴_생성_결과 <- false
+		return
 	}
-	
+
 	주소_종목정보 := 회신.G내용(0)
 
 	// zmq 소켓 초기화
 	주소정보_REP, 에러 := zmq.NewSocket(zmq.REP)
 	if 에러 != nil {
-		go루틴_생성_결과 <- false; return
+		go루틴_생성_결과 <- false
+		return
 	}
 
 	defer 주소정보_REP.Close()
 
 	에러 = 주소정보_REP.Bind(공용.P주소_주소정보)
 	if 에러 != nil {
-		go루틴_생성_결과 <- false; return
+		go루틴_생성_결과 <- false
+		return
 	}
 
 	종목정보_REP, 에러 := zmq.NewSocket(zmq.REP)
 	if 에러 != nil {
-		go루틴_생성_결과 <- false; return
+		go루틴_생성_결과 <- false
+		return
 	}
 
 	defer 종목정보_REP.Close()
 
 	에러 = 종목정보_REP.Bind(주소_종목정보)
 	if 에러 != nil {
-		go루틴_생성_결과 <- false; return
+		go루틴_생성_결과 <- false
+		return
 	}
 
 	reactor := zmq.NewReactor()

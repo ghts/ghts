@@ -26,13 +26,13 @@ func F문자열_모음2인터페이스_모음(문자열_모음 []string) []inter
 	if 문자열_모음 == nil {
 		return nil
 	}
-	
+
 	인터페이스_모음 := make([]interface{}, len(문자열_모음))
-	
-	for i:=0 ; i < len(문자열_모음) ; i++ {
+
+	for i := 0; i < len(문자열_모음); i++ {
 		인터페이스_모음[i] = 문자열_모음[i]
 	}
-	
+
 	return 인터페이스_모음
 }
 
@@ -40,13 +40,13 @@ func F인터페이스_모음2문자열_모음(인터페이스_모음 []interface
 	if 인터페이스_모음 == nil {
 		return nil
 	}
-	
+
 	문자열_모음 := make([]string, len(인터페이스_모음))
-	
-	for i:=0 ; i < len(인터페이스_모음) ; i++ {
+
+	for i := 0; i < len(인터페이스_모음); i++ {
 		문자열_모음[i] = F포맷된_문자열("%v", 인터페이스_모음[i])
 	}
-	
+
 	return 문자열_모음
 }
 
