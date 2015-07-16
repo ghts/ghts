@@ -131,7 +131,7 @@ func f종료_메시지_송신(테스트 *testing.T) {
 
 	defer 종료_메시지_REQ.Close()
 
-	에러 = 종료_메시지_REQ.Connect(공용.P주소_가격정보.String())
+	에러 = 종료_메시지_REQ.Connect(공용.P주소_가격정보)
 	공용.F테스트_에러없음(테스트, 에러)
 
 	_, 에러 = 종료_메시지_REQ.SendMessage(공용.P메시지_구분_종료, "")

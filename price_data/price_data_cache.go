@@ -17,14 +17,14 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 
 package price_data
 
-/*
+
 import (
 	공용 "github.com/ghts/ghts/shared"
 	zmq "github.com/pebbe/zmq4"
 	"time"
 )
 
-func F가격정보_캐시_모듈() {
+func F가격정보_캐시_Go루틴() {
 	가격정보_맵 := make(map[string]공용.I가격정보)
 
 	// 소켓 초기화
@@ -110,4 +110,3 @@ func F가격정보_캐시_모듈() {
 		}
 	}
 }
-*/
