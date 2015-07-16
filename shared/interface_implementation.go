@@ -153,7 +153,7 @@ func (this s질의_메시지) G회신(질의_채널 chan I질의, 타임아웃 t
 }
 
 func (this s질의_메시지) S회신(에러 error, 내용 ...interface{}) {
-	this.회신_채널 <- New회신(에러)
+	this.회신_채널 <- New회신(에러, 내용...)
 }
 
 // 회신 메시지
