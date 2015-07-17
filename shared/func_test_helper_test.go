@@ -432,7 +432,7 @@ func TestF에러_생성(테스트 *testing.T) {
 	_, ok := 에러.(error)
 
 	F테스트_참임(테스트, ok)
-	F테스트_같음(테스트, 에러.Error(), "테스트용 에러. 100")
+	F테스트_참임(테스트, strings.Contains(에러.Error(), "테스트용 에러. 100"))
 }
 
 func TestF변수값_확인(테스트 *testing.T) {

@@ -54,13 +54,6 @@ func F타입_이름(i interface{}) string {
 	return reflect.TypeOf(i).Name()
 }
 
-func F에러_체크(에러 error) {
-	if F포맷된_문자열("%v", 에러) != "<nil>" {
-		F호출경로_건너뛴_문자열_출력(1, 에러.Error())
-		panic(에러)
-	}
-}
-
 func F문자열_복사(문자열 string) string {
 	return (문자열 + " ")[:len(문자열)]
 }

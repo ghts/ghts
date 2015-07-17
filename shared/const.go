@@ -55,30 +55,22 @@ const (
 	P메시지_에러 = "E"
 )
 
-type T통화단위 string
-
-func (this T통화단위) String() string { return string(this) }
-
 const (
-	KRW T통화단위 = "KRW"
-	USD T통화단위 = "USD"
-	EUR T통화단위 = "EUR"
-	CNY T통화단위 = "CNY"
+	KRW string = "KRW"
+	USD = "USD"
+	EUR = "EUR"
+	CNY = "CNY"
 )
 
-type T비교결과 int
-
 const (
-	P같음   T비교결과 = 0
-	P큼    T비교결과 = -1
-	P작음   T비교결과 = 1
-	P비교불가 T비교결과 = -999
+	P같음 int = 0
+	P큼 = -1
+	P작음 = 1
+	P비교불가 = -999
 )
 
-type T부호 int
-
 const (
-	P양수 T부호 = 1
-	P영  T부호 = 0
-	P음수 T부호 = -1
+	P양수 int = 1
+	P영  int = 0
+	P음수 int = -1
 )

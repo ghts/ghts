@@ -78,7 +78,7 @@ func New질의(메시지_구분 string, 내용 ...interface{}) I질의 {
 	case P메시지_종료:
 	default:
 		에러 := F에러_생성("잘못된 질의 메시지 구분 %v", 메시지_구분)
-		F에러_출력(에러.Error())
+		F에러_출력(에러)
 		//panic(에러)
 		return nil
 	}
@@ -153,41 +153,52 @@ func New종목(코드 string, 이름 string) I종목 {
 
 // 통화
 type I통화 interface {
-	G단위() T통화단위
+	G단위() string
 	G실수값() float64
 	G정밀값() *dec.Decimal
-	G실수_문자열(소숫점_이하_자릿수 int) string
-	G비교(다른_통화 I통화) T비교결과
-	G부호() T부호
+	G문자열값() string
+	G문자열값_고정소숫점(소숫점_이하_자릿수 int) string
+	G비교(다른_통화 I통화) int
+	G부호() int
 	G복사본() I통화
 	G변경불가() bool
 	S동결()
-	S더하기(다른_통화 I통화) I통화
-	S빼기(다른_통화 I통화) I통화
-	S곱하기(다른_통화 I통화) I통화
-	S나누기(다른_통화 I통화) I통화
-	S금액(금액 string) I통화
+	S더하기(값 float64) I통화
+	S빼기(값 float64) I통화
+	S곱하기(값 float64) I통화
+	S나누기(값 float64) (I통화, error)
+	S금액(값 float64) I통화
 	String() string
 }
 
-func New원화(금액 string) I통화 { return New통화(KRW, 금액) }
-func New달러(금액 string) I통화 { return New통화(USD, 금액) }
-func New유로(금액 string) I통화 { return New통화(EUR, 금액) }
-func New위안(금액 string) I통화 { return New통화(CNY, 금액) }
-func New통화(단위 T통화단위, 금액 string) I통화 {
-	정밀값, 에러 := dec.Parse(금액)
+// go-decimaldec.New()는 float64를 문자열로 바꾼 후 정밀값으로 변환하므로,
+// 인수로 float64를 사용해도 큰 문제없다.
 
-	if 에러 != nil {
-		F에러_출력(에러.Error())
-		return nil
+func New원화(금액 float64) I통화 { return New통화(KRW, 금액) }
+func New달러(금액 float64) I통화 { return New통화(USD, 금액) }
+func New유로(금액 float64) I통화 { return New통화(EUR, 금액) }
+func New위안(금액 float64) I통화 { return New통화(CNY, 금액) }
+func New통화(단위 string, 금액 float64) I통화 {
+	에러 := f통화단위_검사(단위)
+	if 에러 != nil{
+		panic(에러)
 	}
-
+	
 	s := new(s통화)
 	s.단위 = 단위
-	s.금액 = 정밀값
+	s.금액 = dec.New(금액)
 	s.변경불가 = false
 
 	return s
+}
+
+func f통화단위_검사(통화단위 string) error {
+	switch 통화단위 {
+	case "KRW", "USD", "EUR", "CNY":
+		return nil
+	default:
+		return F에러_생성("잘못된 통화단위 %v", 통화단위) 
+	}
 }
 
 // 가격정보

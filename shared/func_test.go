@@ -18,9 +18,6 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 package shared
 
 import (
-	"fmt"
-	"os"
-	"reflect"
 	"runtime"
 	"testing"
 	"time"
@@ -48,29 +45,6 @@ func TestF인터페이스_모음2문자열_모음(테스트 *testing.T) {
 	for i := 0; i < len(문자열_모음); i++ {
 		F테스트_같음(테스트, F포맷된_문자열("%v", 인터페이스_모음[i]), 문자열_모음[i])
 	}
-}
-
-func TestF에러_체크(테스트 *testing.T) {
-	// 그냥 nil을 넘겨주면 reflect.ValueOf(nil)이 무효한 값이 되어서 에러 발생함.
-	// nil 대신에 error형식의 reflect.Zero값을 넘겨줘야 함.
-
-	빈_에러값 := reflect.Zero(reflect.TypeOf(fmt.Errorf("")))
-	F테스트_패닉없음(테스트, F에러_체크, 빈_에러값)
-
-	//화면 출력을 안 보이게 하기
-	원래_출력장치 := os.Stdout
-	_, 출력장치, 에러 := os.Pipe()
-
-	if 에러 != nil {
-		테스트.FailNow()
-	}
-
-	os.Stdout = 출력장치
-
-	F테스트_패닉발생(테스트, F에러_체크, fmt.Errorf("테스트용 에러"))
-
-	출력장치.Close()
-	os.Stdout = 원래_출력장치
 }
 
 func TestF문자열_복사(테스트 *testing.T) {

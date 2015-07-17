@@ -27,7 +27,7 @@ func F메시지_송신(소켓 *zmq.Socket, 내용 ...interface{}) error {
 	_, 에러 := 소켓.SendMessage(내용...)
 
 	if 에러 != nil {
-		F에러_출력(에러.Error())
+		F에러_출력(에러)
 	}
 
 	return 에러
