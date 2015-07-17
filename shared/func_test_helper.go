@@ -419,7 +419,7 @@ func F문자열_출력(포맷_문자열 string, 추가_매개변수 ...interface
 	fmt.Printf(포맷_문자열, 추가_매개변수...)
 }
 
-func F문자열_및_호출경로_출력(포맷_문자열 string, 추가_매개변수 ...interface{}) {
+func F에러_및_호출경로_출력(포맷_문자열 string, 추가_매개변수 ...interface{}) {
 	if F문자열_출력_일시정지_중() {
 		return
 	}
