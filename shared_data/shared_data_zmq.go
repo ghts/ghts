@@ -95,7 +95,7 @@ func F공용_데이터_zmq소켓_중계_Go루틴(go루틴_생성_결과 chan boo
 		case 에러.Error() == 공용.P메시지_종료:
 			return
 		default:
-			공용.F에러_출력("핸들러 에러 발생.\n%v\nreactor 재시작.\n", 에러)
+			공용.F에러_및_호출경로_출력("핸들러 에러 발생.\n%v\nreactor 재시작.\n", 에러)
 			continue
 		}
 	}
