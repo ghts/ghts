@@ -115,12 +115,12 @@ func TestI질의_I회신(테스트 *testing.T) {
 	F테스트_같음(테스트, 회신.G내용(1), "10")
 
 	// 실제로 'I질의'와 'I회신'을 주고받는 테스트
-	ch실행 := make(chan bool)
+	ch초기화_대기 := make(chan bool)
 	ch질의 := make(chan I질의)
 	ch종료 := make(chan S비어있는_구조체)
 
-	go testI질의_도우미_Go루틴(ch실행, ch질의, ch종료)
-	<-ch실행
+	go testI질의_도우미_Go루틴(ch초기화_대기, ch질의, ch종료)
+	<-ch초기화_대기
 
 	회신 = New질의(P메시지_SET, "키1", "값1").G회신(ch질의, P타임아웃_Go)
 	F테스트_에러없음(테스트, 회신.G에러())
@@ -169,9 +169,9 @@ func TestI질의_I회신(테스트 *testing.T) {
 	ch종료 <- S비어있는_구조체{}
 }
 
-func testI질의_도우미_Go루틴(ch실행 chan bool, ch질의 chan I질의, ch종료 chan S비어있는_구조체) {
+func testI질의_도우미_Go루틴(ch초기화 chan bool, ch질의 chan I질의, ch종료 chan S비어있는_구조체) {
 	맵 := make(map[string][]string)
-	ch실행 <- true
+	ch초기화 <- true
 
 	// 받은 문자열을 그대로 되돌려 줌.
 

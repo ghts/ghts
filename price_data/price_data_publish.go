@@ -17,13 +17,14 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 
 package price_data
 
-/*
 import (
 	공용 "github.com/ghts/ghts/shared"
 	zmq "github.com/pebbe/zmq4"
 )
 
 func F가격정보_배포_모듈() {
+	공용.F메모("전면 수정 필요함")
+	
 	// 가격정보_입수_REP
 	가격정보_입수_REP, 에러 := zmq.NewSocket(zmq.REP)
 	defer 가격정보_입수_REP.Close()
@@ -78,4 +79,3 @@ func F가격정보_배포_모듈() {
 
 	//공용.F문자열_출력("F가격정보_배포_모듈() 종료.")
 }
-*/

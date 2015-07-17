@@ -29,9 +29,9 @@ func TestF공용_데이터_Go루틴(테스트 *testing.T) {
 	테스트.Parallel()
 
 	// Go루틴 준비
-	대기 := make(chan bool)
-	go F공용_데이터_Go루틴(대기)
-	<-대기
+	ch초기화_대기 := make(chan bool)
+	go F공용_데이터_Go루틴(ch초기화_대기)
+	<-ch초기화_대기
 
 	공용.F테스트_참임(테스트, F공용_데이터_Go루틴_실행_중())
 

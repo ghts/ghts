@@ -47,9 +47,9 @@ func F외부_프로세스_실행(ch에러_회신 chan error, 타임아웃 time.D
 	프로그램 string, 실행옵션 ...interface{}) {
 
 	if !F외부_프로세스_관리_Go루틴_실행_중() {
-		ch대기 := make(chan bool)
-		go F외부_프로세스_관리_Go루틴(ch대기)
-		<-ch대기
+		ch초기화_대기 := make(chan bool)
+		go F외부_프로세스_관리_Go루틴(ch초기화_대기)
+		<-ch초기화_대기
 	}
 
 	go f외부_프로세스_타임아웃_관리(ch에러_회신, 타임아웃, 프로그램, 실행옵션...)
@@ -160,11 +160,11 @@ var ch테스트용_누적수량_초기화 = make(chan (chan S비어있는_구조
 var ch테스트용_중간_회신 = make(chan (chan []int))
 var ch테스트용_종료 = make(chan (chan []int))
 
-func F외부_프로세스_관리_Go루틴(Go루틴_생성_결과 chan bool) {
+func F외부_프로세스_관리_Go루틴(ch초기화 chan bool) {
 	에러 := 외부_프로세스_관리_Go루틴_실행_중.S값(true)
 
 	if 에러 != nil {
-		Go루틴_생성_결과 <- false
+		ch초기화 <- false
 		return
 	}
 
@@ -196,7 +196,7 @@ func F외부_프로세스_관리_Go루틴(Go루틴_생성_결과 chan bool) {
 	// 남은 외부 프로세스 목록 정리.
 	시작_전에_파일로_정리된_수량, 에러 := f외부_프로세스_정리()
 	if 에러 != nil {
-		Go루틴_생성_결과 <- false
+		ch초기화 <- false
 		return
 	}
 
@@ -211,7 +211,7 @@ func F외부_프로세스_관리_Go루틴(Go루틴_생성_결과 chan bool) {
 	누적_생성_수량, 누적_정상종료_수량, 누적_타임아웃_수량 := 0, 0, 0
 
 	// 준비완료.
-	Go루틴_생성_결과 <- true
+	ch초기화 <- true
 
 	for {
 		select {

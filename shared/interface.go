@@ -179,9 +179,10 @@ func New달러(금액 float64) I통화 { return New통화(USD, 금액) }
 func New유로(금액 float64) I통화 { return New통화(EUR, 금액) }
 func New위안(금액 float64) I통화 { return New통화(CNY, 금액) }
 func New통화(단위 string, 금액 float64) I통화 {
-	에러 := f통화단위_검사(단위)
+	에러 := F통화단위_검사(단위)
 	if 에러 != nil{
 		panic(에러)
+		return nil
 	}
 	
 	s := new(s통화)
@@ -192,7 +193,7 @@ func New통화(단위 string, 금액 float64) I통화 {
 	return s
 }
 
-func f통화단위_검사(통화단위 string) error {
+func F통화단위_검사(통화단위 string) error {
 	switch 통화단위 {
 	case "KRW", "USD", "EUR", "CNY":
 		return nil

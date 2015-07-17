@@ -26,24 +26,24 @@ var 공용_데이터_zmq소켓_중계_Go루틴_실행_중 = 공용.New안전한_
 
 // zmq소켓 요청을 받아서 공용 정보 Go루틴에 그 요청을 중계해 주는 역할.
 // 물론, 그에 회신도 Go루틴에서 zmq소켓으로 중계해 준다.
-func F공용_데이터_zmq소켓_중계_Go루틴(go루틴_생성_결과 chan bool) {
+func F공용_데이터_zmq소켓_중계_Go루틴(ch초기화 chan bool) {
 	에러 := 공용_데이터_zmq소켓_중계_Go루틴_실행_중.S값(true)
 	if 에러 != nil {
-		go루틴_생성_결과 <- false
+		ch초기화 <- false
 		return
 	}
 
 	// 공용 데이터 Go루틴이 존재하는 것을 확인.
-	ch대기 := make(chan bool)
-	go F공용_데이터_Go루틴(ch대기)
-	<-ch대기
+	ch초기화_대기 := make(chan bool)
+	go F공용_데이터_Go루틴(ch초기화_대기)
+	<-ch초기화_대기
 
 	// 종목정보 zmq소켓 주소 검색.
 	회신 := 공용.New질의(공용.P메시지_GET, 공용.P주소명_종목정보).G회신(Ch주소, 공용.P타임아웃_Go)
 
 	switch {
 	case 회신.G에러() != nil, 회신.G길이() != 1:
-		go루틴_생성_결과 <- false
+		ch초기화 <- false
 		return
 	}
 
@@ -52,7 +52,7 @@ func F공용_데이터_zmq소켓_중계_Go루틴(go루틴_생성_결과 chan boo
 	// zmq 소켓 초기화
 	주소정보_REP, 에러 := zmq.NewSocket(zmq.REP)
 	if 에러 != nil {
-		go루틴_생성_결과 <- false
+		ch초기화 <- false
 		return
 	}
 
@@ -60,13 +60,13 @@ func F공용_데이터_zmq소켓_중계_Go루틴(go루틴_생성_결과 chan boo
 
 	에러 = 주소정보_REP.Bind(공용.P주소_주소정보)
 	if 에러 != nil {
-		go루틴_생성_결과 <- false
+		ch초기화 <- false
 		return
 	}
 
 	종목정보_REP, 에러 := zmq.NewSocket(zmq.REP)
 	if 에러 != nil {
-		go루틴_생성_결과 <- false
+		ch초기화 <- false
 		return
 	}
 
@@ -74,7 +74,7 @@ func F공용_데이터_zmq소켓_중계_Go루틴(go루틴_생성_결과 chan boo
 
 	에러 = 종목정보_REP.Bind(주소_종목정보)
 	if 에러 != nil {
-		go루틴_생성_결과 <- false
+		ch초기화 <- false
 		return
 	}
 
@@ -83,7 +83,7 @@ func F공용_데이터_zmq소켓_중계_Go루틴(go루틴_생성_결과 chan boo
 	reactor.AddSocket(종목정보_REP, zmq.POLLIN, func(e zmq.State) error { return 공용.F_zmq소켓_Go채널_중계(종목정보_REP, Ch종목) })
 
 	// 초기화 완료
-	go루틴_생성_결과 <- true
+	ch초기화 <- true
 
 	// reactor 실행.
 	for {
@@ -95,7 +95,7 @@ func F공용_데이터_zmq소켓_중계_Go루틴(go루틴_생성_결과 chan boo
 		case 에러.Error() == 공용.P메시지_종료:
 			return
 		default:
-			공용.F에러_및_호출경로_출력("핸들러 에러 발생.\n%v\nreactor 재시작.\n", 에러)
+			공용.F문자열_및_호출경로_출력("핸들러 에러 발생.\n%v\nreactor 재시작.\n", 에러)
 			continue
 		}
 	}

@@ -130,7 +130,7 @@ func TestF_zmq소켓_Go채널_중계(테스트 *testing.T) {
 		r := recover()
 
 		if r != nil {
-			F에러_및_호출경로_출력("%v", r)
+			F문자열_및_호출경로_출력("%v", r)
 		}
 	}()
 

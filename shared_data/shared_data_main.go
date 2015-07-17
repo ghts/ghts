@@ -34,12 +34,12 @@ func F공용_데이터_Go루틴_실행_중() bool {
 	return 공용_데이터_Go루틴_실행_중.G값()
 }
 
-func F공용_데이터_Go루틴(go루틴_생성_결과 chan bool) {
+func F공용_데이터_Go루틴(ch초기화 chan bool) {
 	초기화_에러 := 공용.F_nil에러()
 
 	defer func() {
 		if 초기화_에러 != nil {
-			go루틴_생성_결과 <- false
+			ch초기화 <- false
 		}
 	}()
 
@@ -63,7 +63,7 @@ func F공용_데이터_Go루틴(go루틴_생성_결과 chan bool) {
 	공통_종료_채널 := 공용.F공통_종료_채널()
 
 	// 초기화 완료
-	go루틴_생성_결과 <- true
+	ch초기화 <- true
 
 	// 변수를 재활용 하여 조금이라도 GC 부담을 덜자.
 	질의 := 공용.New질의(공용.P메시지_GET) //비어있는 내용
