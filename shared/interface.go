@@ -19,6 +19,7 @@ package shared
 
 import (
 	dec "github.com/wayn3h0/go-decimal"
+	zmq "github.com/pebbe/zmq4"
 
 	"time"
 )
@@ -41,6 +42,16 @@ type I안전한_string interface {
 
 func New안전한_string(값 string) I안전한_string {
 	return &s안전한_string{값: 값}
+}
+
+// 안전한 zmq소켓
+type I안전한_zmq소켓 interface {
+	G메시지_수신() ([]string, error)
+	G메시지_송신(메시지 ...interface{}) error
+}
+
+func New안전한_zmq소켓(소켓 *zmq.Socket) I안전한_zmq소켓 {
+	return &s안전한_zmq소켓{소켓: 소켓}
 }
 
 // 기본 메시지
@@ -180,11 +191,11 @@ func New유로(금액 float64) I통화 { return New통화(EUR, 금액) }
 func New위안(금액 float64) I통화 { return New통화(CNY, 금액) }
 func New통화(단위 string, 금액 float64) I통화 {
 	에러 := F통화단위_검사(단위)
-	if 에러 != nil{
+	if 에러 != nil {
 		panic(에러)
 		return nil
 	}
-	
+
 	s := new(s통화)
 	s.단위 = 단위
 	s.금액 = dec.New(금액)
@@ -198,7 +209,7 @@ func F통화단위_검사(통화단위 string) error {
 	case "KRW", "USD", "EUR", "CNY":
 		return nil
 	default:
-		return F에러_생성("잘못된 통화단위 %v", 통화단위) 
+		return F에러_생성("잘못된 통화단위 %v", 통화단위)
 	}
 }
 

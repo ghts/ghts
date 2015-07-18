@@ -19,6 +19,7 @@ package shared
 
 import (
 	dec "github.com/wayn3h0/go-decimal"
+	zmq "github.com/pebbe/zmq4"
 
 	"bytes"
 	"strconv"
@@ -71,6 +72,28 @@ func (this *s안전한_string) S값(값 string) {
 	defer this.Unlock()
 
 	this.값 = 값
+}
+
+// 안전한 zmq소켓
+type s안전한_zmq소켓 struct {
+	sync.RWMutex
+	소켓 *zmq.Socket
+}
+
+func (this *s안전한_zmq소켓) G메시지_수신() ([]string, error) {
+	this.Lock()
+	defer this.Unlock()
+	
+	return this.소켓.RecvMessage(0)
+}
+
+func (this *s안전한_zmq소켓) G메시지_송신(메시지 ...interface{}) error {
+	this.Lock()
+	defer this.Unlock()
+	
+	_, 에러 := this.소켓.SendMessage(메시지...)
+	
+	return 에러
 }
 
 // 기본 메시지
@@ -189,11 +212,11 @@ type s통화 struct {
 	변경불가 bool
 }
 
-func (this *s통화) G단위() string    { return this.단위 }
+func (this *s통화) G단위() string   { return this.단위 }
 func (this *s통화) G실수값() float64 { return this.금액.Float() }
 func (this *s통화) G정밀값() *dec.Decimal {
 	정밀값, _ := dec.Parse(this.금액.String())
-	
+
 	return 정밀값
 }
 func (this *s통화) G문자열값() string { return this.금액.String() }
@@ -236,7 +259,7 @@ func (this *s통화) S더하기(값 float64) I통화 {
 		panic(F에러_생성("변경불가능한 값입니다."))
 		return this
 	}
-	
+
 	this.금액 = this.금액.Add(dec.New(값))
 
 	return this
@@ -247,9 +270,9 @@ func (this *s통화) S빼기(값 float64) I통화 {
 		panic(F에러_생성("변경불가능한 값입니다."))
 		return this
 	}
-	
+
 	this.금액 = this.금액.Sub(dec.New(값))
-	
+
 	return this
 }
 
@@ -258,9 +281,9 @@ func (this *s통화) S곱하기(값 float64) I통화 {
 		panic(F에러_생성("변경불가능한 값입니다."))
 		return this
 	}
-	
+
 	this.금액 = this.금액.Mul(dec.New(값))
-	
+
 	return this
 }
 

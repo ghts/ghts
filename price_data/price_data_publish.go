@@ -1,81 +1,90 @@
-/* This file is part of GHTS.
-
-GHTS is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-GHTS is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
-
-@author: UnHa Kim <unha.kim.ghts@gmail.com> */
-
 package price_data
 
 import (
 	공용 "github.com/ghts/ghts/shared"
+	공용_정보 "github.com/ghts/ghts/shared_data"
 	zmq "github.com/pebbe/zmq4"
 )
 
-func F가격정보_배포_모듈() {
-	공용.F메모("전면 수정 필요함")
+type S구독소켓_등록 struct {
+	M구독_소켓 *zmq.Socket
+	M회신_채널 chan error
+}
+
+var zmq소켓_가격정보_배포_Go루틴_실행_중 = 공용.New안전한_bool(false)
+var ch종료_zmq소켓_가격정보_배포_Go루틴 = make(chan 공용.S비어있는_구조체)
+var ch가격정보_배포_zmq소켓 = make(chan 공용.I질의, 10000)
+
+// zmq소켓은 동시에 사용하면 에러난다.
+// 그렇다고 mutex로 보호하면 데드락이 생길 위험이 있다.
+// 그래서, 별도의 go루틴으로 분리하고, 버퍼가 있는 채널을 이용해서,
+// 데드락도 방지하면서, 동시 사용으로 인한 문제도 방지한다.
+// 버퍼가 있는 채널도 블록될 가능성이 있으니, 이 문제에 대해서 추가 연구 필요함.
+func f_zmq소켓_가격정보_배포_Go루틴(ch초기화 chan bool) {
+	에러 := zmq소켓_가격정보_배포_Go루틴_실행_중.S값(true)
+	if 에러 != nil {
+		ch초기화 <- false; return
+	}
 	
-	// 가격정보_입수_REP
-	가격정보_입수_REP, 에러 := zmq.NewSocket(zmq.REP)
-	defer 가격정보_입수_REP.Close()
-
-	if 에러 != nil {
-		공용.F문자열_출력("가격정보_입수_REP 초기화 중 에러 발생. %s", 에러.Error())
-		panic(에러)
+	// 가격정보_PUB 주소 알아내기
+	if !공용_정보.F공용_데이터_Go루틴_실행_중() {
+		ch초기화_대기 := make(chan bool)
+		go 공용_정보.F공용_데이터_Go루틴(ch초기화_대기)
+		<-ch초기화_대기
 	}
-
-	// 가격정보_배포_PUB
-	가격정보_배포_PUB, 에러 := zmq.NewSocket(zmq.PUB)
-	defer 가격정보_배포_PUB.Close()
-
-	if 에러 != nil {
-		공용.F문자열_출력("가격정보_배포_PUB 초기화 중 에러 발생. %s", 에러.Error())
-		panic(에러)
+	
+	회신 := 공용.New질의(공용.P메시지_GET, 공용.P주소명_가격정보_배포).G회신(공용_정보.Ch주소, 공용.P타임아웃_Go)
+		
+	if 회신.G에러() != nil {
+		공용.F에러_출력(회신.G에러())
+		ch초기화 <- false; return
 	}
-
-	가격정보_입수_REP.Bind(공용.P주소_가격정보_입수.String())
-	가격정보_배포_PUB.Bind(공용.P주소_가격정보_배포.String())
-
-	//공용.F문자열_출력("F가격정보_배포_모듈() 초기화 완료.")
-
+	
+	p주소_가격정보_배포 := 회신.G내용(0)
+	
+	// 가격정보_PUB 소켓 초기화
+	가격정보_PUB, 에러 := zmq.NewSocket(zmq.PUB)
+	if 에러 != nil {
+		공용.F에러_출력(에러)
+		ch초기화 <- false; return
+	}
+	
+	에러 = 가격정보_PUB.Bind(p주소_가격정보_배포)
+	if 에러 != nil {
+		공용.F에러_출력(에러)
+		ch초기화 <- false; return
+	}
+	
+	defer 가격정보_PUB.Close()
+	
+	공통_종료_채널 := 공용.F공통_종료_채널()
+	
+	// 초기화 완료
+	ch초기화 <- true
+	
 	for {
-		// 가격정보 입수
-		메시지, 에러 := 가격정보_입수_REP.RecvMessage(0)
-
-		if 에러 != nil {
-			공용.F문자열_출력("가격정보 입수 중 에러 발생.\n %v\n %v\n", 에러.Error(), 공용.F변수_내역_문자열(메시지[0], 메시지[1]))
-			가격정보_입수_REP.SendMessage(공용.P메시지_구분_에러, 에러.Error())
-			//panic(에러)
-			continue
-		}
-
-		가격정보_입수_REP.SendMessage(공용.P메시지_구분_OK, "")
-
-		// 가격정보 배포
-		_, 에러 = 가격정보_배포_PUB.SendMessage(메시지)
-
-		if 에러 != nil {
-			공용.F문자열_출력("가격정보 배포 중 에러 발생.\n %v\n %v\n", 에러.Error(), 공용.F변수_내역_문자열(메시지[0], 메시지[1]))
-			//panic(에러)
-			continue
-		}
-
-		// 종료 메시지 수신하면 반복루프 종료
-		if 메시지[0] == 공용.P메시지_구분_종료 {
-			//공용.F문자열_출력("배포횟수 : %v", 디버깅용_반복횟수)
-			break
+		select {
+		case 질의 := <-ch가격정보_배포_zmq소켓:
+			공용.F메모("채널 버퍼에 있는 내용을 모두 읽어서 슬라이스에 임시로 저장하고,\n" +
+				"슬라이스에 저장된 내용을 모두를 송신하는 것을 검토해 볼 것.\n" +
+				"목표는 버퍼가 꽉 차는 것을 방지하는 것.")
+			
+			에러 := 질의.G검사(공용.P메시지_SET, 4)
+			if 에러 != nil {
+				질의.S회신(에러)
+				continue
+			}
+			
+			_, 에러 = 가격정보_PUB.SendMessage(공용.F문자열_모음2인터페이스_모음(질의.G내용_전체()))
+			질의.S회신(에러)
+		case 구독신청 := <-Ch가격정보_구독_소켓:
+			에러 := 구독신청.M구독_소켓.Connect(p주소_가격정보_배포)		
+			구독신청.M회신_채널 <-에러
+		case <-공통_종료_채널:
+			ch종료_zmq소켓_가격정보_배포_Go루틴 <- 공용.S비어있는_구조체{}
+		case <-ch종료_zmq소켓_가격정보_배포_Go루틴:
+			return
+		default:
 		}
 	}
-
-	//공용.F문자열_출력("F가격정보_배포_모듈() 종료.")
 }

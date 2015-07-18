@@ -57,16 +57,16 @@ const (
 
 const (
 	KRW string = "KRW"
-	USD = "USD"
-	EUR = "EUR"
-	CNY = "CNY"
+	USD        = "USD"
+	EUR        = "EUR"
+	CNY        = "CNY"
 )
 
 const (
-	P같음 int = 0
-	P큼 = -1
-	P작음 = 1
-	P비교불가 = -999
+	P같음   int = 0
+	P큼        = -1
+	P작음       = 1
+	P비교불가     = -999
 )
 
 const (
