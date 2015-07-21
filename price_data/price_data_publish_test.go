@@ -17,6 +17,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 
 package price_data
 
+/*
 import (
 	공용 "github.com/ghts/ghts/shared"
 	zmq "github.com/pebbe/zmq4"
@@ -231,3 +232,4 @@ func f테스트용_가격정보_구독_모듈(초기화_완료_채널 chan bool,
 		결과값_채널 <- true
 	}
 }
+*/

@@ -20,7 +20,16 @@ package shared
 import (
 	"reflect"
 	"runtime"
+	"strconv"
 )
+
+func F실수2문자열(값 float64) string {
+	return strconv.FormatFloat(값, 'f', -1, 64)
+}
+
+func F문자열2실수(값 string) (float64, error) {
+	return strconv.ParseFloat(값, 64)
+}
 
 func F문자열_모음2인터페이스_모음(문자열_모음 []string) []interface{} {
 	if 문자열_모음 == nil {
