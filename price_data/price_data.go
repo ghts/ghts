@@ -39,6 +39,14 @@ func F가격정보_Go루틴(ch초기화 chan bool) {
 	go f_zmq소켓_가격정보_배포_Go루틴(초기화_대기)
 	<-초기화_대기
 	
+	defer func() {
+		ch종료_zmq소켓_가격정보_배포_Go루틴 <- 공용.S비어있는_구조체{}
+		
+		for zmq소켓_가격정보_배포_Go루틴_실행_중.G값() {
+			time.Sleep(50 * time.Millisecond)
+		}
+	}()
+	
 	// 변수 초기화
 	가격정보_맵 := make(map[string]공용.I가격정보)
 	구독채널_맵 := make(map[chan 공용.I가격정보]공용.S비어있는_구조체)
@@ -50,13 +58,9 @@ func F가격정보_Go루틴(ch초기화 chan bool) {
 	
 	for {
 		select {
-		case 질의 = <-Ch가격정보:
-			공용. F문자열_출력("질의 수신")
-			
+		case 질의 = <-Ch가격정보:	
 			switch 질의.G구분() {
-			case 공용.P메시지_GET:
-				공용. F문자열_출력("P메시지_GET")
-				
+			case 공용.P메시지_GET:	
 				가격정보, 에러 := f캐시된_가격정보_검색(질의, 가격정보_맵)
 				
 				// 에러가 발생하면 캐시된 데이터가 없다는 뜻이므로,
@@ -84,8 +88,6 @@ func F가격정보_Go루틴(ch초기화 chan bool) {
 					공용.F에러_출력(에러)
 				}
 			case 공용.P메시지_SET:
-				공용. F문자열_출력("P메시지_SET")
-				
 				가격정보, 에러 := f가격정보_캐시_저장(질의, 가격정보_맵)
 				
 				if 에러 != nil {
@@ -245,4 +247,18 @@ func f가격정보_배포_zmq소켓(
 					가격정보.G시점().Format(공용.P시간_형식)).G회신(ch가격정보_배포_zmq소켓, 공용.P타임아웃_Go) 
 	
 	ch실행_결과 <- 회신.G에러()
+}
+		
+func f가격정보_Go루틴_종료_후_재시작() {
+	if F가격정보_Go루틴_실행_중() {
+		ch종료_가격정보_Go루틴 <- 공용.S비어있는_구조체{}
+	}
+		
+	for F가격정보_Go루틴_실행_중() {
+		time.Sleep(100 * time.Millisecond)
+	}
+	
+	초기화_대기 := make(chan bool)
+	go F가격정보_Go루틴(초기화_대기)
+	<-초기화_대기
 }
