@@ -46,10 +46,6 @@ func TestI안전한_string(테스트 *testing.T) {
 	F테스트_같음(테스트, 안전한_string.G값(), "테스트 2")
 }
 
-func TestI안전한_zmq소켓(테스트 *testing.T) {
-	F메모("TestI안전한_zmq소켓()")
-}
-
 func TestI메시지(테스트 *testing.T) {
 	테스트.Parallel()
 

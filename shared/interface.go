@@ -19,7 +19,6 @@ package shared
 
 import (
 	dec "github.com/wayn3h0/go-decimal"
-	zmq "github.com/pebbe/zmq4"
 
 	"time"
 )
@@ -42,16 +41,6 @@ type I안전한_string interface {
 
 func New안전한_string(값 string) I안전한_string {
 	return &s안전한_string{값: 값}
-}
-
-// 안전한 zmq소켓
-type I안전한_zmq소켓 interface {
-	G메시지_수신() ([]string, error)
-	G메시지_송신(메시지 ...interface{}) error
-}
-
-func New안전한_zmq소켓(소켓 *zmq.Socket) I안전한_zmq소켓 {
-	return &s안전한_zmq소켓{소켓: 소켓}
 }
 
 // 기본 메시지
@@ -86,6 +75,7 @@ func New질의(메시지_구분 string, 내용 ...interface{}) I질의 {
 	case P메시지_GET:
 	case P메시지_SET:
 	case P메시지_DEL:
+	case P메시지_초기화:
 	case P메시지_종료:
 	default:
 		에러 := F에러_생성("잘못된 질의 메시지 구분 %v", 메시지_구분)
