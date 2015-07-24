@@ -20,7 +20,6 @@ package shared
 import (
 	"bytes"
 	"io"
-	"math/rand"
 	"os"
 	"strings"
 	"testing"
@@ -76,9 +75,16 @@ func TestF외부_프로세스_관리_Go루틴(테스트 *testing.T) {
 	f외부_프로세스_관리_Go루틴_테스트_도우미(테스트, 1, 1, 1)
 
 	// 랜덤값 생성기
-	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	r := F임의값_생성기()
+	
+	정상종료_수량, 타임아웃_수량, 강제종료_수량 := 0, 0, 0
+	
+	for 정상종료_수량 + 타임아웃_수량 + 강제종료_수량 > 0 &&
+		정상종료_수량 + 타임아웃_수량 + 강제종료_수량 < 8 { 
+		정상종료_수량, 타임아웃_수량, 강제종료_수량 = r.Intn(5), r.Intn(5), r.Intn(5)
+	}
 
-	f외부_프로세스_관리_Go루틴_테스트_도우미(테스트, r.Intn(5), r.Intn(5), r.Intn(5))
+	f외부_프로세스_관리_Go루틴_테스트_도우미(테스트, 정상종료_수량, 타임아웃_수량, 강제종료_수량)
 }
 
 const p정상종료_프로세스_타임아웃 = 500 * time.Millisecond // 0.5초

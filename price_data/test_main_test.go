@@ -19,11 +19,22 @@ package price_data
 
 import (
 	공용 "github.com/ghts/ghts/shared"
-	//zmq "github.com/pebbe/zmq4"
 	
+	"os"
 	"testing"
 )
 
-func TestF가격정보_배포_Go루틴_zmq소켓_등록(테스트 *testing.T) {
-	공용.F메모("가격정보_배포_Go루틴_zmq소켓_등록()")
+func TestMain(m *testing.M) {
+	공용.F테스트_모드_시작()
+	defer 공용.F테스트_모드_종료()
+
+	if 공용.F단일_스레드_모드임() {
+		공용.F멀티_스레드_모드()
+		defer 공용.F단일_스레드_모드()
+	}
+	
+	f가격정보_Go루틴_테스트_초기화()
+	defer f가격정보_Go루틴_테스트_초기화()
+	
+	os.Exit(m.Run())
 }

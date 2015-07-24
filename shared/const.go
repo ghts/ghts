@@ -75,3 +75,8 @@ const (
 	P영  int = 0
 	P음수 int = -1
 )
+
+const (
+	P포지션_롱 string = "L"
+	P포지션_숏 string = "S"
+)

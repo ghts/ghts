@@ -72,7 +72,7 @@ func f_zmq소켓_가격정보_배포_Go루틴(ch초기화 chan bool) {
 				continue
 			}
 			
-			_, 에러 = 가격정보_PUB.SendMessage(공용.F문자열_모음2인터페이스_모음(질의.G내용_전체()))
+			_, 에러 = 가격정보_PUB.SendMessage(공용.F2인터페이스_모음(질의.G내용_전체()))
 			질의.S회신(에러)
 		case 구독신청 := <-Ch가격정보_구독소켓_등록:
 			에러 := 구독신청.M구독_소켓.Connect(p주소_가격정보_배포)		

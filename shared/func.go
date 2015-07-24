@@ -49,12 +49,16 @@ func F2문자열_모음(인터페이스_모음 []interface{}) []string {
 	return 문자열_모음
 }
 
-func F2실수(값 string) (float64, error) {
-	return strconv.ParseFloat(값, 64)
+func F2정수(문자열 string) (int, error) {
+	return strconv.Atoi(문자열)
 }
 
-func F2시점(값 string) (time.Time, error) {
-	return time.Parse(P시간_형식, 값)
+func F2실수(문자열 string) (float64, error) {
+	return strconv.ParseFloat(문자열, 64)
+}
+
+func F2시점(문자열 string) (time.Time, error) {
+	return time.Parse(P시간_형식, 문자열)
 }
 
 func F2인터페이스_모음(문자열_모음 []string) []interface{} {
