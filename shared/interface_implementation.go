@@ -23,6 +23,7 @@ import (
 	"bytes"
 	"strconv"
 	"sync"
+	"sync/atomic"
 	"time"
 )
 
@@ -303,3 +304,42 @@ type s가격정보 struct {
 func (this *s가격정보) G종목코드() string  { return this.종목코드 }
 func (this *s가격정보) G가격() I통화       { return this.가격.G복사본() }
 func (this *s가격정보) G시점() time.Time { return this.시점 }
+
+// 종목별 보유량
+type s종목별_보유량 struct {
+	종목코드 string
+	롱포지션 int64
+	숏포지션 int64
+}
+
+func (this *s종목별_보유량) G종목코드() string { return this.종목코드 }
+func (this *s종목별_보유량) G롱포지션() int { return int(atomic.LoadInt64(&this.롱포지션)) }
+func (this *s종목별_보유량) G숏포지션() int { return int(atomic.LoadInt64(&this.숏포지션)) }
+func (this *s종목별_보유량) G순보유량() int {
+	return this.G롱포지션() - this.G숏포지션()
+}
+func (this *s종목별_보유량) G총보유량() int { return this.G롱포지션() + this.G숏포지션() }
+func (this *s종목별_보유량) S더하기_롱포지션(수량 int) error {
+	atomic.AddInt64(&this.롱포지션, int64(수량))
+	
+	if this.롱포지션 < 0 {
+		에러 := F에러_생성("롱포지션이 음수임. %v", this.롱포지션)
+		F에러_출력(에러)
+		//panic(에러)
+		return 에러
+	}
+	
+	return nil
+}
+func (this *s종목별_보유량) S더하기_숏포지션(수량 int) error {
+	atomic.AddInt64(&this.숏포지션, int64(수량))
+	
+	if this.숏포지션 < 0 {
+		에러 := F에러_생성("숏포지션이 음수임. %v", this.숏포지션)
+		F에러_출력(에러)
+		//panic(에러)
+		return 에러
+	}
+	
+	return nil
+}

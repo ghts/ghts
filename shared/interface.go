@@ -56,7 +56,7 @@ func New메시지(구분 string, 내용 ...interface{}) I메시지 {
 	내용_모음 := make([]string, len(내용))
 
 	for i := 0; i < len(내용); i++ {
-		내용_모음[i] = F포맷된_문자열("%v", 내용[i])
+		내용_모음[i] = F2문자열(내용[i])
 	}
 
 	return s기본_메시지{구분: 구분, 내용: 내용_모음}
@@ -101,7 +101,7 @@ func New질의_zmq메시지(zmq메시지 []string) I질의 {
 		return New질의(메시지_구분)
 	}
 
-	질의 := New질의(메시지_구분, F문자열_모음2인터페이스_모음(zmq메시지[1:])...)
+	질의 := New질의(메시지_구분, F2인터페이스_모음(zmq메시지[1:])...)
 
 	return 질의
 }
@@ -210,7 +210,29 @@ type I가격정보 interface {
 	G시점() time.Time
 }
 
-func New가격정보(종목코드 string, 가격 I통화) I가격정보 {
-	s := s가격정보{종목코드: 종목코드, 가격: 가격.G복사본(), 시점: time.Now()}
+func New가격정보(종목코드 string, 가격 I통화, 시점 time.Time) I가격정보 {
+	s := s가격정보{종목코드: 종목코드, 가격: 가격.G복사본(), 시점: 시점}
+	return &s
+}
+
+// 종목별 보유량
+type I종목별_보유량 interface {
+	G종목코드() string
+	G롱포지션() int
+	G숏포지션() int
+	G순보유량() int
+	G총보유량() int
+	S더하기_롱포지션(수량 int) error
+	S더하기_숏포지션(수량 int) error
+}
+
+func New종목별_보유량(종목코드 string, 롱포지션 int, 숏포지션 int) I종목별_보유량 {
+	if 롱포지션 < 0 || 숏포지션 < 0 {
+		에러 := F에러_생성("입력된 보유량 음수임. %v %v", 롱포지션, 숏포지션)
+		F에러_출력(에러)
+		panic(에러)
+	}
+	
+	s := s종목별_보유량{종목코드: 종목코드, 롱포지션: int64(롱포지션), 숏포지션: int64(숏포지션)}
 	return &s
 }

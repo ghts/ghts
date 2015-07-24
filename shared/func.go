@@ -21,17 +21,43 @@ import (
 	"reflect"
 	"runtime"
 	"strconv"
+	"time"
 )
 
-func F실수2문자열(값 float64) string {
-	return strconv.FormatFloat(값, 'f', -1, 64)
+func F2문자열(값 interface{}) string {
+	switch 값.(type) {
+	case time.Time:
+		return 값.(time.Time).Format(P시간_형식)
+	case float64:
+		return strconv.FormatFloat(값.(float64), 'f', -1, 64)
+	default:
+		return F포맷된_문자열("%v", 값)
+	}
 }
 
-func F문자열2실수(값 string) (float64, error) {
+func F2문자열_모음(인터페이스_모음 []interface{}) []string {
+	if 인터페이스_모음 == nil {
+		return nil
+	}
+
+	문자열_모음 := make([]string, len(인터페이스_모음))
+
+	for i := 0; i < len(인터페이스_모음); i++ {
+		문자열_모음[i] = F2문자열(인터페이스_모음[i])
+	}
+
+	return 문자열_모음
+}
+
+func F2실수(값 string) (float64, error) {
 	return strconv.ParseFloat(값, 64)
 }
 
-func F문자열_모음2인터페이스_모음(문자열_모음 []string) []interface{} {
+func F2시점(값 string) (time.Time, error) {
+	return time.Parse(P시간_형식, 값)
+}
+
+func F2인터페이스_모음(문자열_모음 []string) []interface{} {
 	if 문자열_모음 == nil {
 		return nil
 	}
@@ -43,20 +69,6 @@ func F문자열_모음2인터페이스_모음(문자열_모음 []string) []inter
 	}
 
 	return 인터페이스_모음
-}
-
-func F인터페이스_모음2문자열_모음(인터페이스_모음 []interface{}) []string {
-	if 인터페이스_모음 == nil {
-		return nil
-	}
-
-	문자열_모음 := make([]string, len(인터페이스_모음))
-
-	for i := 0; i < len(인터페이스_모음); i++ {
-		문자열_모음[i] = F포맷된_문자열("%v", 인터페이스_모음[i])
-	}
-
-	return 문자열_모음
 }
 
 func F타입_이름(i interface{}) string {
@@ -87,6 +99,10 @@ var ch공통_종료_채널 = make(chan S비어있는_구조체)
 
 func F공통_종료_채널() chan S비어있는_구조체 {
 	return ch공통_종료_채널
+}
+
+func F공통_종료_채널_재설정() {
+	ch공통_종료_채널 = make(chan S비어있는_구조체)
 }
 
 func F등록된_Go루틴_종료() {
