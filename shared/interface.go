@@ -48,6 +48,7 @@ type I메시지 interface {
 	G구분() string
 	G내용(인덱스 int) string
 	G내용_전체() []string
+	G내용_전체_가변형() []interface{}	// zmq소켓 사용 시 편리함.
 	G길이() int
 	String() string
 }
@@ -66,8 +67,8 @@ func New메시지(구분 string, 내용 ...interface{}) I메시지 {
 type I질의 interface {
 	I메시지 // 질의 내용
 	G검사(메시지_구분 string, 질의_길이 int) error
-	G회신(채널 chan I질의, 타임아웃 time.Duration) I회신
-	S회신(에러 error, 내용 ...interface{})
+	G회신(채널 chan I질의) I회신
+	S회신(에러 error, 내용 ...interface{}) error
 }
 
 func New질의(메시지_구분 string, 내용 ...interface{}) I질의 {

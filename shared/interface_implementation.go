@@ -97,6 +97,16 @@ func (this s기본_메시지) G내용_전체() []string {
 	return this.내용
 }
 
+func (this s기본_메시지) G내용_전체_가변형() []interface{} {
+	가변형_모음 := make([]interface{}, len(this.내용))
+	
+	for i:=0 ; i < len(this.내용) ; i++ {
+		가변형_모음[i] = this.내용[i]	
+	}
+	
+	return 가변형_모음
+}
+
 func (this s기본_메시지) G길이() int {
 	return len(this.내용)
 }
@@ -140,19 +150,25 @@ func (this s질의_메시지) G검사(메시지_구분 string, 질의_길이 int
 	return 에러
 }
 
-func (this s질의_메시지) G회신(질의_채널 chan I질의, 타임아웃 time.Duration) I회신 {
+func (this s질의_메시지) G회신(질의_채널 chan I질의) I회신 {
 	질의_채널 <- this
 
 	select {
 	case 회신 := <-this.회신_채널:
 		return 회신
-	case <-time.After(타임아웃):
+	case <-time.After(P타임아웃_Go):
 		return New회신(F에러_생성("I질의.G회신() 타임아웃.\n%v", this))
 	}
 }
 
-func (this s질의_메시지) S회신(에러 error, 내용 ...interface{}) {
-	this.회신_채널 <- New회신(에러, 내용...)
+func (this s질의_메시지) S회신(에러 error, 내용 ...interface{}) error {
+	select {
+	case this.회신_채널 <- New회신(에러, 내용...):
+		return nil
+	case <-time.After(P타임아웃_Go):
+		return F에러_생성("I질의.S회신() 타임아웃.\n%v", this)
+	}
+	
 }
 
 // 회신 메시지

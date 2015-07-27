@@ -63,7 +63,7 @@ func F_zmq소켓_Go채널_중계(zmq소켓 *zmq.Socket, Go채널 chan I질의) (
 	}
 
 	질의 := New질의_zmq메시지(zmq메시지)
-	회신 := 질의.G회신(Go채널, P타임아웃_Go)
+	회신 := 질의.G회신(Go채널)
 
 	// Go채널 회신을 zmq소켓으로 전달.
 	switch {

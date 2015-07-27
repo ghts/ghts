@@ -4,18 +4,27 @@ import (
 	공용 "github.com/ghts/ghts/shared"
 	
 	"math"
-	"runtime"
 	"strconv"
 	"time"
 )
 
 var Ch가격정보 = make(chan 공용.I질의, 1000)
 var Ch가격정보_구독채널_등록 = make(chan (chan 공용.I가격정보))	// 버퍼 만들지 말 것.
-var ch가격정보_Go루틴_제어 = make(chan 공용.I질의)
+var ch제어_가격정보_Go루틴 = make(chan 공용.I질의)
 var 가격정보_Go루틴_실행_중 = 공용.New안전한_bool(false)
 
-func F가격정보_Go루틴_실행_중() bool {
+func F가격정보_모듈_실행_중() bool {
 	return 가격정보_Go루틴_실행_중.G값()
+}
+
+func F가격정보_모듈_실행() bool {
+	if 가격정보_Go루틴_실행_중.G값() {
+		return false
+	}
+	
+	ch초기화_대기 := make(chan bool)
+	go f가격정보_Go루틴(ch초기화_대기)
+	return <-ch초기화_대기
 }
 
 // 가격정보에 관련된 모든 기능의 허브
@@ -27,7 +36,7 @@ func F가격정보_Go루틴_실행_중() bool {
 // - 가격정보 입수 : 증권사 서버에서 가격을 수신하는 기능
 // - 가격정보 질의 응답 : 가격정보 질의 응답 (캐시 데이터 확인 혹은 새로운 데이터 입수)
 
-func F가격정보_Go루틴(ch초기화 chan bool) {
+func f가격정보_Go루틴(ch초기화 chan bool) {
 	// 이미 실행 중인 가격정보_Go루틴이 존재하는 지 확인
 	에러 := 가격정보_Go루틴_실행_중.S값(true)
 	if 에러 != nil {
@@ -36,16 +45,10 @@ func F가격정보_Go루틴(ch초기화 chan bool) {
 	
 	// zmq소켓을 통해서 가격정보 배포하는 Go루틴 실행.
 	초기화_대기 := make(chan bool)
-	go f_zmq소켓_가격정보_배포_Go루틴(초기화_대기)
+	go f가격정보_배포_Go루틴_zmq소켓(초기화_대기)
 	<-초기화_대기
 	
-	defer func() {
-		ch종료_zmq소켓_가격정보_배포_Go루틴 <- 공용.S비어있는_구조체{}
-		
-		for zmq소켓_가격정보_배포_Go루틴_실행_중.G값() {
-			time.Sleep(50 * time.Millisecond)
-		}
-	}()
+	defer 공용.New질의(공용.P메시지_종료).G회신(ch제어_가격정보_배포_Go루틴_zmq소켓)
 	
 	// 변수 초기화
 	가격정보_맵 := make(map[string]공용.I가격정보)
@@ -62,23 +65,23 @@ func F가격정보_Go루틴(ch초기화 chan bool) {
 			switch 질의.G구분() {
 			case 공용.P메시지_GET:	
 				가격정보, 에러 := f캐시된_가격정보_검색(질의, 가격정보_맵)
-				
-				// 에러가 발생하면 캐시된 데이터가 없다는 뜻이므로,
-				// 에러가 발생해도 무시하고 다음 단계로 넘어간다.
 				if 에러 == nil {
 					f가격정보_회신_보내기(질의, 가격정보)
-					break
+					continue
 				}
 				
-				공용.F메모("TODO : f새로운_가격정보_회신()")
+				공용.F메모("TODO : f증권사_API_가격정보_질의()")
 				
-				가격정보, 에러 = f새로운_가격정보_회신(질의, 가격정보_맵)
+				가격정보, 에러 = f증권사_API_가격정보_질의(질의)
 				if 에러 != nil {
 					공용.F문자열_출력(질의.String())
 					공용.F에러_출력(에러)
 					질의.S회신(에러)
 					break
 				}
+				
+				// 캐시에 저장
+				가격정보_맵[가격정보.G종목코드()] = 가격정보
 				
 				f가격정보_회신_보내기(질의, 가격정보)
 				
@@ -109,7 +112,7 @@ func F가격정보_Go루틴(ch초기화 chan bool) {
 			}
 		case ch구독 := <-Ch가격정보_구독채널_등록:
 			구독채널_맵[ch구독] = 공용.S비어있는_구조체{}
-		case 질의 := <-ch가격정보_Go루틴_제어:
+		case 질의 := <-ch제어_가격정보_Go루틴:
 			switch 질의.G구분() {
 			case 공용.P메시지_초기화:
 				가격정보_맵 = make(map[string]공용.I가격정보)
@@ -166,7 +169,7 @@ func f캐시된_가격정보_검색(질의 공용.I질의, 가격정보_맵 map[
 	return 가격정보, nil
 }
 
-func f새로운_가격정보_회신(질의 공용.I질의, 가격정보_맵 map[string]공용.I가격정보) (공용.I가격정보, error) {
+func f증권사_API_가격정보_질의(질의 공용.I질의) (공용.I가격정보, error) {
 	return nil, 공용.F에러_생성("아직 구현하지 못함.")
 }
 	
@@ -216,68 +219,25 @@ func f가격정보_캐시_저장(질의 공용.I질의, 가격정보_맵 map[str
 
 func f가격정보_배포(가격정보 공용.I가격정보, 
 	구독채널_맵 map[chan 공용.I가격정보]공용.S비어있는_구조체) error {
-	ch실행_결과 := make(chan error, 2)
-	
-	go f가격정보_배포_Go채널(ch실행_결과, 가격정보, 구독채널_맵)
-	go f가격정보_배포_zmq소켓(ch실행_결과, 가격정보)
-	
-	에러_모음 := make([]error, 0)
-	
-	for i:=0 ; i < 2 ; i++ {
-		에러 := <- ch실행_결과
-		
-		if 에러 != nil {
-			공용.F문자열_출력("f가격정보_배포 4-%v 에러.\n%v", i, 에러)
-			에러_모음 = append(에러_모음, 에러)
-		}
-	}
-	
-	if len(에러_모음) == 0 {
-		return nil
-	}
-	에러_문자열 := ""
-	
-	for i:=0 ; i<len(에러_모음); i++ {
-		에러_문자열 += 에러_모음[i].Error() + "\n"
-	}
-	
-	return 공용.F에러_생성(에러_문자열)
-}
-
-func f가격정보_배포_Go채널(
-		ch실행_결과 chan error,
-		가격정보 공용.I가격정보,
-		구독채널_맵 map[chan 공용.I가격정보]공용.S비어있는_구조체) {
-	동시_실행_수량 := runtime.NumCPU()
-	
-	if 동시_실행_수량 < 4 {
-		동시_실행_수량 = 4
-	}
-			
-	ch실행_대기열 := make(chan 공용.S비어있는_구조체, 동시_실행_수량)
-	
+	// Go채널로 배포
 	for ch구독, _ := range 구독채널_맵 {
-		ch실행_대기열 <- 공용.S비어있는_구조체{}
-		go f가격정보_배포_Go채널_도우미(ch실행_대기열, 가격정보, ch구독)
+		go f가격정보_배포_도우미(가격정보, ch구독)
 	}
 	
-	ch실행_결과 <- nil
-}
-		
-func f가격정보_배포_Go채널_도우미(ch실행_대기열 chan 공용.S비어있는_구조체, 가격정보 공용.I가격정보, ch구독 chan 공용.I가격정보) {
-	<-ch실행_대기열
-	ch구독 <- 가격정보
-} 
-		
-func f가격정보_배포_zmq소켓(
-		ch실행_결과 chan error,
-		가격정보 공용.I가격정보) {
 	회신 := 공용.New질의(
 					공용.P메시지_SET, 
 					가격정보.G종목코드(),
 					가격정보.G가격().G단위(), 
 					가격정보.G가격().G문자열값(),
-					가격정보.G시점().Format(공용.P시간_형식)).G회신(ch가격정보_배포_zmq소켓, 공용.P타임아웃_Go) 
+					가격정보.G시점().Format(공용.P시간_형식)).
+						G회신(ch가격정보_배포_zmq소켓)
 	
-	ch실행_결과 <- 회신.G에러()
+	return 회신.G에러()
+}
+
+func f가격정보_배포_도우미(가격정보 공용.I가격정보, ch구독 chan 공용.I가격정보) {
+	select {
+	case ch구독 <- 가격정보:
+	case <-time.After(공용.P타임아웃_Go):
+	}
 }

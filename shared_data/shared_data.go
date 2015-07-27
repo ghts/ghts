@@ -31,11 +31,18 @@ var ch제어_공용_데이터_Go루틴 = make(chan 공용.I질의, 1)
 
 var 공용_데이터_Go루틴_실행_중 = 공용.New안전한_bool(false)
 
-func F공용_데이터_Go루틴_실행_중() bool {
-	return 공용_데이터_Go루틴_실행_중.G값()
+// true는 새로 시작한 것. false는 이미 존재하거나, 초기화 에러 발생한 것.
+func F공용정보_모듈_실행() bool {
+	if 공용_데이터_Go루틴_실행_중.G값() {
+		return false
+	}
+	
+	ch초기화_대기 := make(chan bool)
+	go f공용정보_Go루틴(ch초기화_대기)
+	return <-ch초기화_대기
 }
 
-func F공용_데이터_Go루틴(ch초기화 chan bool) {
+func f공용정보_Go루틴(ch초기화 chan bool) {
 	초기화_에러 := 공용.F_nil에러()
 
 	defer func() {
@@ -242,7 +249,7 @@ func f주소_맵_초기화() (맵 map[string]string, 에러 error) {
 }
 
 func f종목_맵_초기화() (맵 map[string]공용.I종목, 에러 error) {
-	공용.F메모("개발할 것. (현재 샘플 데이터만 넣은 상태)")
+	공용.F메모 ("DB, 파일, 증권사 서버 등에서 읽어오도록 할 것.")
 
 	defer func() {
 		if r := recover(); r != nil {
@@ -264,7 +271,7 @@ func f종목_맵_초기화() (맵 map[string]공용.I종목, 에러 error) {
 }
 
 func f종목별_보유량_맵_초기화() (맵 map[string]공용.I종목별_보유량, 에러 error) {
-	공용.F메모("개발할 것. (현재 비어있는 상태로 시작함.)")
+	공용.F메모("DB나 로그파일에서 읽어오도록 할 것.")
 
 	defer func() {
 		if r := recover(); r != nil {
