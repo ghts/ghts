@@ -55,7 +55,7 @@ func TestF가격정보_배포_zmq소켓(테스트 *testing.T) {
 	
 	// 잠시 대기해야 테스트가 통과함.
 	// 소켓이 연결하는 데 시간이 필요한 듯.
-	time.Sleep(100 * time.Millisecond)	// 필수
+	time.Sleep(100 * time.Millisecond)	// 꼭 필요함.
 	
 	r := 공용.F임의값_생성기()
 	샘플_종목_모음 := 공용.F샘플_종목_모음()

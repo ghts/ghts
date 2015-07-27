@@ -135,7 +135,7 @@ func f테스트용_종목정보_요청_Go루틴(ch테스트_결과 chan bool, �
 		return
 	}
 
-	회신 := 공용.New질의(공용.P메시지_GET, 공용.P주소명_종목정보).G회신(Ch주소, 공용.P타임아웃_Go)
+	회신 := 공용.New질의(공용.P메시지_GET, 공용.P주소명_종목정보).G회신(Ch주소)
 
 	if 회신.G에러() != nil {
 		ch테스트_결과 <- false
@@ -207,7 +207,7 @@ func TestF공용_데이터_zmq소켓_중계_Go루틴_Python(테스트 *testing.T
 	
 	const 수량_합계 = 주소정보_요청_Python스크립트_수량 + 종목정보_요청_Python스크립트_수량
 	
-	회신 := 공용.New질의(공용.P메시지_GET, 공용.P주소명_종목정보).G회신(Ch주소, 공용.P타임아웃_Go)
+	회신 := 공용.New질의(공용.P메시지_GET, 공용.P주소명_종목정보).G회신(Ch주소)
 	
 	// zmq 소켓 초기화
 	테스트_결과_REP, 에러 := zmq.NewSocket(zmq.REP)
