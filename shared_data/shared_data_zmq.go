@@ -22,12 +22,12 @@ import (
 	zmq "github.com/pebbe/zmq4"
 )
 
-var 공용_데이터_zmq소켓_중계_Go루틴_실행_중 = 공용.New안전한_bool(false)
+var 공용정보_zmq소켓_중계_Go루틴_실행_중 = 공용.New안전한_bool(false)
 
 // zmq소켓 요청을 받아서 공용 정보 Go루틴에 그 요청을 중계해 주는 역할.
 // 물론, 그에 회신도 Go루틴에서 zmq소켓으로 중계해 준다.
-func F공용_데이터_zmq소켓_중계_Go루틴(ch초기화 chan bool) {
-	에러 := 공용_데이터_zmq소켓_중계_Go루틴_실행_중.S값(true)
+func F공용정보_zmq소켓_중계_Go루틴(ch초기화 chan bool) {
+	에러 := 공용정보_zmq소켓_중계_Go루틴_실행_중.S값(true)
 	if 에러 != nil {
 		ch초기화 <- false
 		return

@@ -28,10 +28,10 @@ import (
 	"time"
 )
 
-func TestF공용_데이터_zmq소켓_중계_Go루틴(테스트 *testing.T) {
+func TestF공용정보_zmq소켓_중계_Go루틴(테스트 *testing.T) {
 	// Go루틴 준비
 	ch초기화_대기 := make(chan bool)
-	go F공용_데이터_zmq소켓_중계_Go루틴(ch초기화_대기)
+	go F공용정보_zmq소켓_중계_Go루틴(ch초기화_대기)
 	<-ch초기화_대기
 	
 	const 테스트_반복횟수 = 100
@@ -195,10 +195,10 @@ func f테스트용_종목정보_요청_Go루틴(ch테스트_결과 chan bool, �
 	}
 }
 
-func TestF공용_데이터_zmq소켓_중계_Go루틴_Python(테스트 *testing.T) {
+func TestF공용정보_zmq소켓_중계_Go루틴_Python(테스트 *testing.T) {
 	// Go루틴 준비
 	ch초기화_대기 := make(chan bool)
-	go F공용_데이터_zmq소켓_중계_Go루틴(ch초기화_대기)
+	go F공용정보_zmq소켓_중계_Go루틴(ch초기화_대기)
 	<-ch초기화_대기
 	
 	const 테스트_반복횟수 = 100

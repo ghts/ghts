@@ -137,17 +137,20 @@ type s질의_메시지 struct {
 }
 
 func (this s질의_메시지) G검사(메시지_구분 string, 질의_길이 int) error {
-	if this.G구분() == 메시지_구분 &&
-		this.G길이() == 질의_길이 {
-		return nil
+	switch {
+	case this.G구분() != 메시지_구분:
+		에러 := F에러_생성("잘못된 질의 메시지 구분.\n%s", this.String())
+		F에러_출력(에러)
+		this.회신_채널 <- New회신(에러, P메시지_에러)
+		return 에러
+	case this.G길이() != 질의_길이:
+		에러 := F에러_생성("잘못된 질의 내용 길이.\n%s", this.String())
+		F에러_출력(에러)
+		this.회신_채널 <- New회신(에러, P메시지_에러)
+		return 에러
 	}
 
-	에러 := F에러_생성("잘못된 질의 메시지.\n%s", this.String())
-	F에러_출력(에러)
-
-	this.회신_채널 <- New회신(에러, P메시지_에러)
-
-	return 에러
+	return nil
 }
 
 func (this s질의_메시지) G회신(질의_채널 chan I질의) I회신 {
@@ -359,3 +362,14 @@ func (this *s종목별_보유량) S더하기_숏포지션(수량 int) error {
 	
 	return nil
 }
+
+type s증권사 struct {
+	이름 string
+	전송_한도 int
+	전송_한도_초기화_주기 time.Duration
+}
+
+func (this *s증권사) G이름() string { return this.이름 }
+func (this *s증권사) G전송_한도() int { return this.전송_한도 }
+func (this *s증권사) G전송_한도_초기화_주기() time.Duration { return this.전송_한도_초기화_주기 }
+

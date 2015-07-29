@@ -237,3 +237,16 @@ func New종목별_보유량(종목코드 string, 롱포지션 int, 숏포지션 
 	s := s종목별_보유량{종목코드: 종목코드, 롱포지션: int64(롱포지션), 숏포지션: int64(숏포지션)}
 	return &s
 }
+
+// 증권사
+type I증권사 interface {
+	G이름() string
+	G전송_한도() int
+	G전송_한도_초기화_주기() time.Duration
+}
+
+func New증권사(이름 string, 전송_한도 int, 전송_한도_초기화_주기 time.Duration) I증권사 {
+	s := s증권사{이름: 이름, 전송_한도: 전송_한도, 전송_한도_초기화_주기: 전송_한도_초기화_주기}
+	
+	return &s
+}

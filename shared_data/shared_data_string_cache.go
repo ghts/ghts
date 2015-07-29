@@ -21,7 +21,7 @@ import (
 	공용 "github.com/ghts/ghts/shared"
 )
 
-func f문자열_캐시_질의_처리(문자열_캐시_맵 map[string][]string, 질의 공용.I질의) {
+func f문자열_캐시_질의_처리(질의 공용.I질의, 문자열_캐시_맵 map[string][]string) {
 	switch 질의.G구분() {
 	case 공용.P메시지_GET:
 		에러 := 질의.G검사(공용.P메시지_GET, 1)
