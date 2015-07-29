@@ -373,3 +373,78 @@ func (this *s증권사) G이름() string { return this.이름 }
 func (this *s증권사) G전송_한도() int { return this.전송_한도 }
 func (this *s증권사) G전송_한도_초기화_주기() time.Duration { return this.전송_한도_초기화_주기 }
 
+// 전송 권한 관련
+// Go언어의 채널(chan)은 thread-safe 하므로,
+// 이를 이용하여 전송 권한을 관리하면 잠금(Lock)을 사용할 필요성이 없다.
+
+type s전송_권한 struct {
+	ch전송_권한 chan S비어있는_구조체
+	갱신_주기 time.Duration
+	마지막_갱신_시점 time.Time
+}
+
+func (this *s전송_권한) G전송_권한_획득() {
+	<-this.ch전송_권한
+}
+
+func (this *s전송_권한) S전송_권한_재충전(기준_시점 time.Time) {
+	if 기준_시점.Sub(this.마지막_갱신_시점) < this.갱신_주기 {
+		return
+	}
+	
+	추가해야_할_권한_수량 := cap(this.ch전송_권한) - len(this.ch전송_권한)
+	
+	for i:=0 ; i < 추가해야_할_권한_수량 ; i++ {
+		this.ch전송_권한 <- S비어있는_구조체{}
+	}
+}
+
+type s코드별_전송_권한 struct {
+	코드 string
+	전송_권한_모음 []I전송_권한
+}
+
+func (this *s코드별_전송_권한) G코드() string { return this.코드 }
+
+func (this *s코드별_전송_권한) G전송_권한_획득() {
+	for _, 전송_권한 := range this.전송_권한_모음 {
+		전송_권한.G전송_권한_획득()
+	}
+}
+
+func (this *s코드별_전송_권한) S전송_권한_재충전(기준_시점 time.Time) {
+	for _, 전송_권한 := range this.전송_권한_모음 {
+		전송_권한.S전송_권한_재충전(기준_시점)
+	}
+}
+
+type s증권사별_전송_권한 struct {
+	증권사 I증권사
+	코드별_전송_권한_맵 map[string]I코드별_전송_권한
+	기본_전송_권한_모음 []I전송_권한
+}
+
+func (this *s증권사별_전송_권한) G증권사() I증권사 { return this.증권사 }
+
+func (this *s증권사별_전송_권한) G전송_권한_획득(코드 string) {
+	코드별_전송_권한, 존재함 := this.코드별_전송_권한_맵[코드]
+	
+	if 존재함 {
+		코드별_전송_권한.G전송_권한_획득()
+		return
+	}
+	
+	for _, 기본_전송_권한 := range this.기본_전송_권한_모음 {
+		 기본_전송_권한.G전송_권한_획득()
+	}
+}
+
+func (this *s증권사별_전송_권한) 	S전송_권한_재충전(기준_시점 time.Time) {
+	for _, 코드별_전송_권한 := range this.코드별_전송_권한_맵 {
+		코드별_전송_권한.S전송_권한_재충전(기준_시점)
+	}
+	
+	for _, 기본_전송_권한 := range this.기본_전송_권한_모음 {
+		기본_전송_권한.S전송_권한_재충전(기준_시점)
+	}
+}

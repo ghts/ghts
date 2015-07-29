@@ -250,3 +250,20 @@ func New증권사(이름 string, 전송_한도 int, 전송_한도_초기화_주�
 	
 	return &s
 }
+
+// 전송 권한 관련
+type I전송_권한 interface {
+	G전송_권한_획득()
+	S전송_권한_재충전(기준_시점 time.Time)
+}
+
+type I코드별_전송_권한 interface {
+	G코드() string
+	I전송_권한
+}
+
+type I증권사별_전송_권한 interface {
+	G증권사() I증권사
+	G전송_권한_획득(코드 string)
+	S전송_권한_재충전(기준_시점 time.Time)
+}
