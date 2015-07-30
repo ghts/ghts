@@ -79,9 +79,10 @@ func f외부_프로세스_타임아웃_관리(ch에러_회신 chan error, 타임
 	select {
 	case pid = <-ch프로세스_생성_전달:
 		ch외부_프로세스_생성 <- pid
-	case <-time.After(5 * time.Second):
+	case <-time.After(10 * time.Second):
 		에러 := F에러_생성("외부 프로세스 PID 수신 타임아웃.")
-		panic(에러)
+		F에러_출력(에러)
+		//panic(에러)
 	}
 
 	// 이게 핵심.

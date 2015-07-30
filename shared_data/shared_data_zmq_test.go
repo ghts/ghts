@@ -33,17 +33,17 @@ func TestF공용정보_zmq소켓_중계_Go루틴(테스트 *testing.T) {
 	ch초기화_대기 := make(chan bool)
 	go F공용정보_zmq소켓_중계_Go루틴(ch초기화_대기)
 	<-ch초기화_대기
-	
+
 	const 테스트_반복횟수 = 100
 	const 정보_요청_Go루틴_수량 = 10
-	
+
 	ch테스트_결과 := make(chan bool, 2*정보_요청_Go루틴_수량)
-	
+
 	for i := 0; i < 정보_요청_Go루틴_수량; i++ {
 		go f테스트용_주소정보_요청_Go루틴(ch테스트_결과, 테스트_반복횟수, i)
 		go f테스트용_종목정보_요청_Go루틴(ch테스트_결과, 테스트_반복횟수, i)
 	}
-	
+
 	// 테스트 결과 수신
 	for i := 0; i < 정보_요청_Go루틴_수량*2; i++ {
 		테스트_결과 := <-ch테스트_결과
@@ -200,24 +200,24 @@ func TestF공용정보_zmq소켓_중계_Go루틴_Python(테스트 *testing.T) {
 	ch초기화_대기 := make(chan bool)
 	go F공용정보_zmq소켓_중계_Go루틴(ch초기화_대기)
 	<-ch초기화_대기
-	
+
 	const 테스트_반복횟수 = 100
 	const 주소정보_요청_Python스크립트_수량 = 2
 	const 종목정보_요청_Python스크립트_수량 = 2
-	
+
 	const 수량_합계 = 주소정보_요청_Python스크립트_수량 + 종목정보_요청_Python스크립트_수량
-	
+
 	회신 := 공용.New질의(공용.P메시지_GET, 공용.P주소명_종목정보).G회신(Ch주소)
-	
+
 	// zmq 소켓 초기화
 	테스트_결과_REP, 에러 := zmq.NewSocket(zmq.REP)
 	defer 테스트_결과_REP.Close()
-	
+
 	공용.F테스트_에러없음(테스트, 에러)
-	
+
 	에러 = 테스트_결과_REP.Bind(공용.P주소_테스트_결과)
 	공용.F테스트_에러없음(테스트, 에러)
-	
+
 	ch에러 := make(chan error, 수량_합계)
 
 	for i := 0; i < 주소정보_요청_Python스크립트_수량; i++ {
@@ -225,18 +225,18 @@ func TestF공용정보_zmq소켓_중계_Go루틴_Python(테스트 *testing.T) {
 			"shared_data_zmq_test_address.py",
 			공용.P주소_주소정보, 공용.P주소_테스트_결과, 테스트_반복횟수)
 	}
-	
+
 	for i := 0; i < 종목정보_요청_Python스크립트_수량; i++ {
 		공용.F파이썬_스크립트_실행(ch에러, 20*time.Second,
 			"shared_data_zmq_test_ticker.py",
 			회신.G내용(0), 공용.P주소_테스트_결과, 테스트_반복횟수)
 	}
-	
+
 	for i := 0; i < 수량_합계; i++ {
 		에러 = <-ch에러
 		공용.F테스트_에러없음(테스트, 에러)
 	}
-	
+
 	// 테스트 결과 수신
 	메시지 := make([]string, 0) // 재활용을 위한 비어있는 변수
 

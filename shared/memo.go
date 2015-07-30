@@ -30,13 +30,13 @@ func f메모() {
 	버퍼 := new(bytes.Buffer)
 	버퍼.WriteString("에러가 발생했는 데 원인도 모르겠고 막막하다면?\n")
 	버퍼.WriteString("1. 문제를 잘게 쪼갠다.\n")
-	버퍼.WriteString("2. 문제를 단순화 시킨다. 예:) 테스트 데이터를 1개로 한정.\n") 
+	버퍼.WriteString("2. 문제를 단순화 시킨다. 예:) 테스트 데이터를 1개로 한정.\n")
 	버퍼.WriteString("3. 내부 실행과정을 추적한다.\n")
 	버퍼.WriteString("디버깅에 이보다 달리 더 좋은 방법은 없다.\n\n")
 	버퍼.WriteString("\n")
-	버퍼.WriteString("초당 전송횟수를 일정범위 이내로 제한하는 알고리즘을 생각해 볼 것.\n")
-	버퍼.WriteString("알고리즘이 당장 떠오르지 않으면,\n")
-	버퍼.WriteString("시간을 두고 다른 부분 먼저 작업하면서 천천히 생각해 보는 것도 방법임.\n")
+
+	버퍼.WriteString("테스트 실행 시 가끔씩 zmq소켓 초기화 에러 발생함.\n")
+	버퍼.WriteString("해당 포트가 사용 중이라고 하는 데, 이것을 깨끗하게 정리할 방법은 없는가?\n")
 
 	문자열 := 버퍼.String() + "\n\n"
 

@@ -19,7 +19,7 @@ package price_data
 
 import (
 	공용 "github.com/ghts/ghts/shared"
-	
+
 	"os"
 	"testing"
 )
@@ -32,9 +32,9 @@ func TestMain(m *testing.M) {
 		공용.F멀티_스레드_모드()
 		defer 공용.F단일_스레드_모드()
 	}
-	
+
 	f가격정보_Go루틴_테스트_초기화()
 	defer f가격정보_Go루틴_테스트_초기화()
-	
+
 	os.Exit(m.Run())
 }
