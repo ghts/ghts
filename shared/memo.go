@@ -45,7 +45,11 @@ func f메모() {
 	버퍼.WriteString("wmcaConnect(), wmcaDisconnect(), wmcaQuery()등 대부분의 함수는 REQ-REP 소켓.\n")
 	버퍼.WriteString("wmcaAttach()로 수신하는 실시간 데이터는 PUB-SUB 소켓으로 전달해 주면 됨.\n")
 	버퍼.WriteString("문제는 내가 C++ 문외한이라는 것.\n")
-	버퍼.WriteString("\n")
+	버퍼.WriteString("잘 알지도 못하는 복잡한 C++을 다시 공부하는 것은 어려우니,\n")
+	버퍼.WriteString("Go언어나 파이썬 같은 가독성이 좋고 접근성이 좋은 언어로,\n")
+	버퍼.WriteString("바로 DLL을 호출한 후 수신한 데이터를 MsgPack, ZeroMQ를 통해서 중계하도록 하자.\n")
+	버퍼.WriteString("Go언어는 go.sys, 파이썬은 ctype으로 직접 DLL을 호출할 수 있다.\n") 
+	버퍼.WriteString("github.com/golang/sys 참조할 것.\n")
 
 	문자열 := 버퍼.String() + "\n\n"
 
