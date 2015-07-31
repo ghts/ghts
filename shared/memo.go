@@ -37,6 +37,15 @@ func f메모() {
 
 	버퍼.WriteString("테스트 실행 시 가끔씩 zmq소켓 초기화 에러 발생함.\n")
 	버퍼.WriteString("해당 포트가 사용 중이라고 하는 데, 이것을 깨끗하게 정리할 방법은 없는가?\n")
+	버퍼.WriteString("\n")
+	
+	버퍼.WriteString("NH tx OpenAPI(혹은 WMCA SDK)는 Win32 dll 임.\n")
+	버퍼.WriteString("64비트 윈도우에서 사용하기 위해서는 Win32 중계 프로그램이 필요함.\n")
+	버퍼.WriteString("MsgPack, ZeroMQ를 사용하면 간단히 작성할 수 있을 듯 함.\n")
+	버퍼.WriteString("wmcaConnect(), wmcaDisconnect(), wmcaQuery()등 대부분의 함수는 REQ-REP 소켓.\n")
+	버퍼.WriteString("wmcaAttach()로 수신하는 실시간 데이터는 PUB-SUB 소켓으로 전달해 주면 됨.\n")
+	버퍼.WriteString("문제는 내가 C++ 문외한이라는 것.\n")
+	버퍼.WriteString("\n")
 
 	문자열 := 버퍼.String() + "\n\n"
 
