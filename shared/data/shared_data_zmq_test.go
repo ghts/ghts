@@ -15,11 +15,12 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 
 @author: UnHa Kim <unha.kim.ghts@gmail.com> */
 
-package shared_data
+package data
 
 import (
-	공용 "github.com/ghts/ghts/shared"
-	zmq "github.com/pebbe/zmq4"
+	공용 "github.com/ghts/ghts/shared/minimal"
+	
+	"github.com/pebbe/zmq4"
 
 	"math/rand"
 	"strconv"
@@ -53,7 +54,7 @@ func TestF공용정보_zmq소켓_중계_Go루틴(테스트 *testing.T) {
 }
 
 func f테스트용_주소정보_요청_Go루틴(ch테스트_결과 chan bool, 테스트_반복횟수 int, 구분_인덱스 int) {
-	주소정보_REQ, 에러 := zmq.NewSocket(zmq.REQ)
+	주소정보_REQ, 에러 := zmq4.NewSocket(zmq4.REQ)
 	defer 주소정보_REQ.Close()
 
 	if 에러 != nil {
@@ -127,7 +128,7 @@ func f테스트용_주소정보_요청_Go루틴(ch테스트_결과 chan bool, �
 }
 
 func f테스트용_종목정보_요청_Go루틴(ch테스트_결과 chan bool, 테스트_반복횟수 int, 구분_인덱스 int) {
-	종목정보_REQ, 에러 := zmq.NewSocket(zmq.REQ)
+	종목정보_REQ, 에러 := zmq4.NewSocket(zmq4.REQ)
 	defer 종목정보_REQ.Close()
 
 	if 에러 != nil {
@@ -210,7 +211,7 @@ func TestF공용정보_zmq소켓_중계_Go루틴_Python(테스트 *testing.T) {
 	회신 := 공용.New질의(공용.P메시지_GET, 공용.P주소명_종목정보).G회신(Ch주소)
 
 	// zmq 소켓 초기화
-	테스트_결과_REP, 에러 := zmq.NewSocket(zmq.REP)
+	테스트_결과_REP, 에러 := zmq4.NewSocket(zmq4.REP)
 	defer 테스트_결과_REP.Close()
 
 	공용.F테스트_에러없음(테스트, 에러)

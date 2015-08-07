@@ -18,9 +18,9 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 package price_data
 
 import (
-	공용 "github.com/ghts/ghts/shared"
-	공용_정보 "github.com/ghts/ghts/shared_data"
-	zmq "github.com/pebbe/zmq4"
+	공용 "github.com/ghts/ghts/shared/minimal"
+	공용_정보 "github.com/ghts/ghts/shared/data"
+	"github.com/pebbe/zmq4"
 
 	"testing"
 	"time"
@@ -36,10 +36,10 @@ func TestF가격정보_배포_zmq소켓(테스트 *testing.T) {
 	공용.F테스트_에러없음(테스트, 회신.G에러())
 	p주소_가격정보_배포 := 회신.G내용(0)
 
-	구독소켓_모음 := make([]*zmq.Socket, 구독소켓_수량)
+	구독소켓_모음 := make([]*zmq4.Socket, 구독소켓_수량)
 
 	for i := 0; i < 구독소켓_수량; i++ {
-		가격정보_SUB, 에러 := zmq.NewSocket(zmq.SUB)
+		가격정보_SUB, 에러 := zmq4.NewSocket(zmq4.SUB)
 		공용.F테스트_에러없음(테스트, 에러)
 
 		에러 = 가격정보_SUB.Connect(p주소_가격정보_배포)

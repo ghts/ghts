@@ -18,7 +18,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 package price_data
 
 import (
-	공용 "github.com/ghts/ghts/shared"
+	공용 "github.com/ghts/ghts/shared/minimal"
 
 	"os"
 	"testing"

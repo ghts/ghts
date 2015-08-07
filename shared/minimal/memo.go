@@ -35,22 +35,19 @@ func f메모() {
 	버퍼.WriteString("디버깅에 이보다 달리 더 좋은 방법은 없다.\n\n")
 	버퍼.WriteString("\n")
 
-	버퍼.WriteString("테스트 실행 시 가끔씩 zmq소켓 초기화 에러 발생함.\n")
+	버퍼.WriteString("테스트 중 가끔 zmq소켓 초기화 에러 발생함.\n")
 	버퍼.WriteString("해당 포트가 사용 중이라고 하는 데, 이것을 깨끗하게 정리할 방법은 없는가?\n")
 	버퍼.WriteString("\n")
 	
-	버퍼.WriteString("NH tx OpenAPI(혹은 WMCA SDK)는 Win32 dll 임.\n")
-	버퍼.WriteString("64비트 윈도우에서 사용하기 위해서는 Win32 중계 프로그램이 필요함.\n")
-	버퍼.WriteString("MsgPack, ZeroMQ를 사용하면 간단히 작성할 수 있을 듯 함.\n")
+	버퍼.WriteString("64비트 윈도우에서 32비트 DLL을 사용하기 위해서 32비트 중계 프로그램이 필요함.\n")
+	버퍼.WriteString("곧 발표될 Go 1.5부터는 64비트에서 32비트 컴파일하기 쉬워지니,\n")
+	버퍼.WriteString("Go 1.5에서 'golang.org/x/sys/windows' 패키지를 이용해서,\n")
+	버퍼.WriteString("32비트로 DLL을 호출한 후 그 결과를 'encoding/gob'형태로 변환한 후,\n")
+	버퍼.WriteString("'net/rpc'을 통해서 주고받으면, 64비트에서도 32비트 DLL을 손쉽게 사용가능.\n")
+	버퍼.WriteString("wmca.dll의 wmcaIsConnected()부터 시작해서 API사용법을 알아보면 될 듯 함.\n")
 	버퍼.WriteString("wmcaConnect(), wmcaDisconnect(), wmcaQuery()등 대부분의 함수는 REQ-REP 소켓.\n")
-	버퍼.WriteString("wmcaAttach()로 수신하는 실시간 데이터는 PUB-SUB 소켓으로 전달해 주면 됨.\n")
-	버퍼.WriteString("문제는 내가 C++ 문외한이라는 것.\n")
-	버퍼.WriteString("잘 알지도 못하는 복잡한 C++을 다시 공부하는 것은 어려우니,\n")
-	버퍼.WriteString("Go언어나 파이썬 같은 가독성이 좋고 접근성이 좋은 언어로,\n")
-	버퍼.WriteString("바로 DLL을 호출한 후 수신한 데이터를 MsgPack, ZeroMQ를 통해서 중계하도록 하자.\n")
-	버퍼.WriteString("Go언어는 go.sys, 파이썬은 ctype으로 직접 DLL을 호출할 수 있다.\n") 
-	버퍼.WriteString("github.com/golang/sys 참조할 것.\n")
-
+	버퍼.WriteString("wmcaAttach()로 수신하는 실시간 데이터는 PUB-SUB 소켓으로 전달해 주면 됨.\n\n")
+ 
 	문자열 := 버퍼.String() + "\n\n"
 
 	fmt.Println(문자열)
