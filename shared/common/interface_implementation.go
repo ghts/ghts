@@ -332,20 +332,20 @@ type s종목별_보유량 struct {
 }
 
 func (this *s종목별_보유량) G종목코드() string { return this.종목코드 }
-func (this *s종목별_보유량) G롱포지션() int {
-	return int(atomic.LoadInt64(&this.롱포지션))
+func (this *s종목별_보유량) G롱포지션() int64 {
+	return atomic.LoadInt64(&this.롱포지션)
 }
-func (this *s종목별_보유량) G숏포지션() int {
-	return int(atomic.LoadInt64(&this.숏포지션))
+func (this *s종목별_보유량) G숏포지션() int64 {
+	return atomic.LoadInt64(&this.숏포지션)
 }
-func (this *s종목별_보유량) G순보유량() int {
+func (this *s종목별_보유량) G순보유량() int64 {
 	return this.G롱포지션() - this.G숏포지션()
 }
-func (this *s종목별_보유량) G총보유량() int {
+func (this *s종목별_보유량) G총보유량() int64 {
 	return this.G롱포지션() + this.G숏포지션()
 }
-func (this *s종목별_보유량) S더하기_롱포지션(수량 int) error {
-	atomic.AddInt64(&this.롱포지션, int64(수량))
+func (this *s종목별_보유량) S더하기_롱포지션(수량 int64) error {
+	atomic.AddInt64(&this.롱포지션, 수량)
 
 	if this.롱포지션 < 0 {
 		에러 := F에러_생성("롱포지션이 음수임. %v", this.롱포지션)
@@ -356,7 +356,7 @@ func (this *s종목별_보유량) S더하기_롱포지션(수량 int) error {
 
 	return nil
 }
-func (this *s종목별_보유량) S더하기_숏포지션(수량 int) error {
+func (this *s종목별_보유량) S더하기_숏포지션(수량 int64) error {
 	atomic.AddInt64(&this.숏포지션, int64(수량))
 
 	if this.숏포지션 < 0 {

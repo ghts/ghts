@@ -18,7 +18,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 package price_data
 
 import (
-	공용 "github.com/ghts/ghts/shared/minimal"
+	공용 "github.com/ghts/ghts/shared/common"
 	공용_정보 "github.com/ghts/ghts/shared/data"
 	"github.com/pebbe/zmq4"
 

@@ -1,7 +1,7 @@
 package price_data
 
 import (
-	공용 "github.com/ghts/ghts/shared/minimal"
+	공용 "github.com/ghts/ghts/shared/common"
 
 	"math"
 	"testing"

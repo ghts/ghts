@@ -219,22 +219,22 @@ func New가격정보(종목코드 string, 가격 I통화, 시점 time.Time) I가
 // 종목별 보유량
 type I종목별_보유량 interface {
 	G종목코드() string
-	G롱포지션() int
-	G숏포지션() int
-	G순보유량() int
-	G총보유량() int
-	S더하기_롱포지션(수량 int) error
-	S더하기_숏포지션(수량 int) error
+	G롱포지션() int64
+	G숏포지션() int64
+	G순보유량() int64
+	G총보유량() int64
+	S더하기_롱포지션(수량 int64) error
+	S더하기_숏포지션(수량 int64) error
 }
 
-func New종목별_보유량(종목코드 string, 롱포지션 int, 숏포지션 int) I종목별_보유량 {
+func New종목별_보유량(종목코드 string, 롱포지션 int64, 숏포지션 int64) I종목별_보유량 {
 	if 롱포지션 < 0 || 숏포지션 < 0 {
 		에러 := F에러_생성("입력된 보유량 음수임. %v %v", 롱포지션, 숏포지션)
 		F에러_출력(에러)
 		panic(에러)
 	}
 
-	s := s종목별_보유량{종목코드: 종목코드, 롱포지션: int64(롱포지션), 숏포지션: int64(숏포지션)}
+	s := s종목별_보유량{종목코드: 종목코드, 롱포지션: 롱포지션, 숏포지션: 숏포지션}
 	return &s
 }
 

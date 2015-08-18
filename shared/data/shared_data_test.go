@@ -18,7 +18,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 package data
 
 import (
-	공용 "github.com/ghts/ghts/shared/minimal"
+	공용 "github.com/ghts/ghts/shared/common"
 	
 	"strconv"
 	"strings"
@@ -104,8 +104,8 @@ func TestF공용정보_Go루틴_종목별_보유량(테스트 *testing.T) {
 
 	// 쓰기
 	for _, 종목 := range 종목_모음 {
-		롱포지션 := int(r.Int31())
-		숏포지션 := int(r.Int31())
+		롱포지션 := int64(r.Int31())
+		숏포지션 := int64(r.Int31())
 		종목별_보유량 := 공용.New종목별_보유량(종목.G코드(), 롱포지션, 숏포지션)
 
 		종목별_보유량_맵[종목.G코드()] = 종목별_보유량
@@ -136,8 +136,8 @@ func TestF공용정보_Go루틴_종목별_보유량(테스트 *testing.T) {
 
 	// 수정하기
 	for _, 종목 := range 종목_모음 {
-		롱포지션_추가 := int(r.Int31())
-		숏포지션_추가 := int(r.Int31())
+		롱포지션_추가 := int64(r.Int31())
+		숏포지션_추가 := int64(r.Int31())
 		종목별_보유량 := 종목별_보유량_맵[종목.G코드()]
 
 		종목별_보유량.S더하기_롱포지션(롱포지션_추가)

@@ -18,7 +18,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 package data
 
 import (
-	공용 "github.com/ghts/ghts/shared/minimal"
+	공용 "github.com/ghts/ghts/shared/common"
 	zmq도우미 "github.com/ghts/ghts/shared/zmq_helper"
 	
 	"github.com/pebbe/zmq4"

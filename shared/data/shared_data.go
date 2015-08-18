@@ -18,7 +18,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 package data
 
 import (
-	공용 "github.com/ghts/ghts/shared/minimal"
+	공용 "github.com/ghts/ghts/shared/common"
 
 	"strconv"
 )
@@ -283,7 +283,7 @@ func f종목별_보유량_질의_처리(질의 공용.I질의, 보유량_맵 map
 
 		종목코드 := 질의.G내용(0)
 		종류 := 질의.G내용(1)
-		수량, 에러 := 공용.F2정수(질의.G내용(2))
+		수량, 에러 := 공용.F2정수64(질의.G내용(2))
 
 		if 에러 != nil {
 			공용.F에러_출력(에러)

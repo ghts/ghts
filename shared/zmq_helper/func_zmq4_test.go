@@ -18,10 +18,11 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 package zmq4_helper
 
 import (
-	공용 "github.com/ghts/ghts/shared/minimal"
+	공용 "github.com/ghts/ghts/shared/common"
 	zmq "github.com/pebbe/zmq4"
 
 	"testing"
+	"time"
 )
 
 func TestF메시지_송신(테스트 *testing.T) {
@@ -137,9 +138,24 @@ func TestF_zmq소켓_Go채널_중계(테스트 *testing.T) {
 
 	go채널 := make(chan 공용.I질의, 1)
 
+	
 	소켓_REP, 에러 := zmq.NewSocket(zmq.REP)
 	공용.F테스트_에러없음(테스트, 에러)
-	공용.F테스트_에러없음(테스트, 소켓_REP.Bind(공용.P주소_테스트_결과))
+	
+	// 이전 테스트에서 열린 소켓이 닫히는 데 시간이 필요함.
+	// 미처 닫히기도 전에 bind하면 'Address already in use' 에러 발생.
+	for i :=0 ; i < 10 ; i++ {
+		
+		에러 = 소켓_REP.Bind(공용.P주소_테스트_결과)	
+	
+		if 에러 == nil {
+			break
+		}
+		 
+		time.Sleep(100 * time.Millisecond)
+	}
+	
+	공용.F테스트_에러없음(테스트, 에러)
 	defer 소켓_REP.Close()
 
 	소켓_REQ, 에러 := zmq.NewSocket(zmq.REQ)

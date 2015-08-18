@@ -18,7 +18,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 package data
 
 import (
-	공용 "github.com/ghts/ghts/shared/minimal"
+	공용 "github.com/ghts/ghts/shared/common"
 )
 
 func f문자열_캐시_질의_처리(질의 공용.I질의, 문자열_캐시_맵 map[string][]string) {

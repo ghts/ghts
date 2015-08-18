@@ -53,6 +53,10 @@ func F2정수(문자열 string) (int, error) {
 	return strconv.Atoi(문자열)
 }
 
+func F2정수64(문자열 string) (int64, error) {
+	return strconv.ParseInt(문자열, 10, 64)
+}
+
 func F2실수(문자열 string) (float64, error) {
 	return strconv.ParseFloat(문자열, 64)
 }

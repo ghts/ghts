@@ -33,7 +33,7 @@ func f메모() {
 	버퍼.WriteString("2. 문제를 단순화 시킨다. 예:) 테스트 데이터를 1개로 한정.\n")
 	버퍼.WriteString("3. 내부 실행과정을 추적한다.\n")
 	버퍼.WriteString("디버깅에 이보다 달리 더 좋은 방법은 없다.\n\n")
-	버퍼.WriteString("C언어 소스코드를 컴파일 할 때는 -Wall 옵션으로 모든 경고를 보도록 하자.")
+	버퍼.WriteString("C언어는 컴파일 옵션에 -Wall 옵션을 사용해서 모든 경고 메시지를 본다.")
 	버퍼.WriteString("C언어에서 코드 한 줄에 변수 여러 개가 선언되면, 마지막 변수 1개만 초기화 된다는.\n")
 	버퍼.WriteString("어이없지만 찾기 힘든 버그를 -Wall 옵션을 사용하고 나서야 알았음.\n")
 	버퍼.WriteString("\n")
