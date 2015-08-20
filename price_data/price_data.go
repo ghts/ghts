@@ -1,17 +1,27 @@
 package price_data
 
 import (
-	공용 "github.com/ghts/ghts/shared/common"
+	공용 "github.com/ghts/ghts/common"
 
 	"math"
 	"strconv"
+	"runtime"
 	"time"
 )
+
+type s가격정보_배포_대기 struct {
+	가격정보 공용.I가격정보
+	ch구독 chan 공용.I가격정보
+}
 
 var Ch가격정보 = make(chan 공용.I질의, 1000)
 var Ch가격정보_구독채널_등록 = make(chan (chan 공용.I가격정보)) // 버퍼 만들지 말 것.
 var ch제어_가격정보_Go루틴 = make(chan 공용.I질의)
-var 가격정보_Go루틴_실행_중 = 공용.New안전한_bool(false)
+
+var ch가격정보_배포_대기열 = make(chan *s가격정보_배포_대기, 100000)	// 버퍼가 아주 큰 대기열
+var ch가격정보_배포_Go루틴_종료 chan 공용.S비어있는_구조체
+
+var 가격정보_Go루틴_실행_중 = 공용.New안전한_bool(false) 
 
 func F가격정보_모듈_실행_중() bool {
 	return 가격정보_Go루틴_실행_중.G값()
@@ -45,9 +55,10 @@ func f가격정보_Go루틴(ch초기화 chan bool) {
 	}
 
 	// zmq소켓을 통해서 가격정보 배포하는 Go루틴 실행.
-	초기화_대기 := make(chan bool)
-	go f가격정보_배포_Go루틴_zmq소켓(초기화_대기)
-	<-초기화_대기
+	ch초기화_대기 := make(chan bool)
+	
+	go f가격정보_배포_Go루틴_zmq소켓(ch초기화_대기)
+	<-ch초기화_대기
 
 	defer 공용.New질의(공용.P메시지_종료).G회신(ch제어_가격정보_배포_Go루틴_zmq소켓)
 
@@ -56,7 +67,16 @@ func f가격정보_Go루틴(ch초기화 chan bool) {
 	구독채널_맵 := make(map[chan 공용.I가격정보]공용.S비어있는_구조체)
 	ch공통_종료 := 공용.F공통_종료_채널()
 	질의 := 공용.New질의(공용.P메시지_GET) // GC 압력을 줄이기 위한 재활용 변수
-
+	
+	// 가격정보 배포 Go루틴 시작
+	가격정보_배포_Go루틴_수량 := runtime.NumCPU()
+	
+	for i:=0; i < 가격정보_배포_Go루틴_수량; i++ {
+		go f가격정보_배포_Go루틴()
+	}
+	
+	ch가격정보_배포_Go루틴_종료 = make(chan 공용.S비어있는_구조체) 
+	
 	// 초기화 완료
 	ch초기화 <- true
 
@@ -85,12 +105,8 @@ func f가격정보_Go루틴(ch초기화 chan bool) {
 				가격정보_맵[가격정보.G종목코드()] = 가격정보
 
 				f가격정보_회신_보내기(질의, 가격정보)
-
-				에러 = f가격정보_배포(가격정보, 구독채널_맵)
-				if 에러 != nil {
-					공용.F문자열_출력(질의.String())
-					공용.F에러_출력(에러)
-				}
+				
+				f가격정보_배포_대기열에_추가(가격정보, 구독채널_맵)
 			case 공용.P메시지_SET:
 				가격정보, 에러 := f가격정보_캐시_저장(질의, 가격정보_맵)
 
@@ -102,11 +118,16 @@ func f가격정보_Go루틴(ch초기화 chan bool) {
 				}
 
 				질의.S회신(nil)
+				
+				f가격정보_배포_대기열에_추가(가격정보, 구독채널_맵)
+				
+				회신 := 공용.New질의(공용.P메시지_SET, 가격정보.G종목코드(), 
+									가격정보.G가격().G단위(), 
+									가격정보.G가격().G문자열값(), 
+									가격정보.G시점()).G회신(ch가격정보_배포_zmq소켓)
 
-				에러 = f가격정보_배포(가격정보, 구독채널_맵)
-				if 에러 != nil {
-					공용.F문자열_출력(질의.String())
-					공용.F에러_출력(에러)
+				if 회신.G에러() != nil {
+					공용.F에러_출력(회신.G에러())
 				}
 			default:
 				질의.S회신(공용.F에러_생성("예상치 못한 메시지 구분.\n%v", 질의))
@@ -120,7 +141,7 @@ func f가격정보_Go루틴(ch초기화 chan bool) {
 				구독채널_맵 = make(map[chan 공용.I가격정보]공용.S비어있는_구조체)
 				질의.S회신(nil)
 			case 공용.P메시지_종료:
-				가격정보_Go루틴_실행_중.S값(false)
+				f가격정보_Go루틴_종료()
 				질의.S회신(nil)
 				return
 			default:
@@ -130,7 +151,7 @@ func f가격정보_Go루틴(ch초기화 chan bool) {
 				panic("")
 			}
 		case <-ch공통_종료:
-			가격정보_Go루틴_실행_중.S값(false)
+			f가격정보_Go루틴_종료()
 			return
 		}
 	}
@@ -218,22 +239,30 @@ func f가격정보_캐시_저장(질의 공용.I질의, 가격정보_맵 map[str
 	return 가격정보, nil
 }
 
-func f가격정보_배포(가격정보 공용.I가격정보,
-	구독채널_맵 map[chan 공용.I가격정보]공용.S비어있는_구조체) error {
-	// Go채널로 배포
+func f가격정보_배포_대기열에_추가(가격정보 공용.I가격정보, 구독채널_맵 map[chan 공용.I가격정보]공용.S비어있는_구조체) {
 	for ch구독, _ := range 구독채널_맵 {
-		go f가격정보_배포_도우미(가격정보, ch구독)
+		대기열_구성요소 := s가격정보_배포_대기{가격정보: 가격정보, ch구독: ch구독}
+		ch가격정보_배포_대기열 <- &대기열_구성요소
 	}
+}
 
-	회신 := 공용.New질의(
-		공용.P메시지_SET,
-		가격정보.G종목코드(),
-		가격정보.G가격().G단위(),
-		가격정보.G가격().G문자열값(),
-		가격정보.G시점().Format(공용.P시간_형식)).
-		G회신(ch가격정보_배포_zmq소켓)
-
-	return 회신.G에러()
+func f가격정보_배포_Go루틴() {
+	종료신호_수신 := false
+	
+	for {
+		select {
+		case s := <-ch가격정보_배포_대기열:
+			f가격정보_배포_도우미(s.가격정보, s.ch구독)
+		case <-ch가격정보_배포_Go루틴_종료:
+			종료신호_수신 = true
+		default:
+			if len(ch가격정보_배포_대기열) == 0 && 종료신호_수신 {
+				 return
+			}
+			
+			time.Sleep(50 * time.Millisecond)
+		} 
+	}
 }
 
 func f가격정보_배포_도우미(가격정보 공용.I가격정보, ch구독 chan 공용.I가격정보) {
@@ -241,4 +270,11 @@ func f가격정보_배포_도우미(가격정보 공용.I가격정보, ch구독 
 	case ch구독 <- 가격정보:
 	case <-time.After(공용.P타임아웃_Go):
 	}
+}
+
+
+func f가격정보_Go루틴_종료() {
+	close(ch가격정보_배포_Go루틴_종료)
+	
+	가격정보_Go루틴_실행_중.S값(false)
 }

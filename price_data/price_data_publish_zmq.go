@@ -1,8 +1,8 @@
 package price_data
 
 import (
-	공용 "github.com/ghts/ghts/shared/common"
-	공용_정보 "github.com/ghts/ghts/shared/data"
+	공용 "github.com/ghts/ghts/common"
+	공용_정보 "github.com/ghts/ghts/data"
 	
 	"github.com/pebbe/zmq4"
 )
