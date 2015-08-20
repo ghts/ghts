@@ -15,7 +15,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 
 @author: UnHa Kim <unha.kim.ghts@gmail.com> */
 
-package shared
+package common
 
 import (
 	"time"
@@ -64,10 +64,10 @@ const (
 )
 
 const (
-	P같음   int = 0
-	P큼        = -1
-	P작음       = 1
-	P비교불가     = -999
+	P비교_같음   int = 0
+	P비교_큼        = -1
+	P비교_작음       = 1
+	P비교_불가     = -999
 )
 
 const (

@@ -15,7 +15,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 
 @author: UnHa Kim <unha.kim.ghts@gmail.com> */
 
-package shared
+package common
 
 import (
 	"math"
@@ -56,7 +56,7 @@ func F임의_통화단위() string {
 	return 통화단위_모음[r.Intn(len(통화단위_모음))]
 }
 
-func F샘플_통화값_모음(수량 int) []I통화 {
+func F임의_통화값_모음(수량 int) []I통화 {
 	통화_모음 := make([]I통화, 수량)
 	통화단위_모음 := F샘플_통화단위_모음()
 	r := F임의값_생성기()
@@ -75,7 +75,7 @@ func F샘플_통화값_모음(수량 int) []I통화 {
 }
 
 func F임의_통화값() I통화 {
-	return F샘플_통화값_모음(1)[0]
+	return F임의_통화값_모음(1)[0]
 }
 
 func F임의_정수값() int {

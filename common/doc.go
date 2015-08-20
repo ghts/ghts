@@ -16,4 +16,4 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 @author: UnHa Kim <unha.kim.ghts@gmail.com> */
 
 // 공용 기능
-package shared
+package common

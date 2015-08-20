@@ -15,7 +15,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 
 @author: UnHa Kim <unha.kim.ghts@gmail.com> */
 
-package shared
+package common
 
 import (
 	"reflect"
@@ -23,6 +23,12 @@ import (
 	"strconv"
 	"time"
 )
+
+func F에러이면_패닉(에러 error) {
+	if 에러 != nil {
+		panic(에러)
+	}
+}
 
 func F2문자열(값 interface{}) string {
 	switch 값.(type) {

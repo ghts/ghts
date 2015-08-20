@@ -15,10 +15,9 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 
 @author: UnHa Kim <unha.kim.ghts@gmail.com> */
 
-package zmq4_helper
+package common
 
 import (
-	공용 "github.com/ghts/ghts/shared/common"
 	"github.com/pebbe/zmq4"
 )
 
@@ -28,24 +27,24 @@ func F메시지_송신(소켓 *zmq4.Socket, 내용 ...interface{}) error {
 	_, 에러 := 소켓.SendMessage(내용...)
 
 	if 에러 != nil {
-		공용.F에러_출력(에러)
+		F에러_출력(에러)
 	}
 
 	return 에러
 }
 
 func F에러_메시지_송신(소켓 *zmq4.Socket, 에러 error) error {
-	return F메시지_송신(소켓, 공용.P메시지_에러, 에러.Error())
+	return F메시지_송신(소켓, P메시지_에러, 에러.Error())
 }
 
 // zmq소켓에서 온 질의 메시지를 Go채널로 중계해 주고,
 // 그 회신을 다시 zmq소켓으로 전달해 주는 함수.
-func F_zmq소켓_Go채널_중계(zmq소켓 *zmq4.Socket, Go채널 chan 공용.I질의) (에러 error) {
+func F_zmq소켓_Go채널_중계(zmq소켓 *zmq4.Socket, Go채널 chan I질의) (에러 error) {
 	defer func() {
 		r := recover()
 
 		if r != nil {
-			에러 = 공용.F에러_생성("%v", r)
+			에러 = F에러_생성("%v", r)
 		}
 
 		if 에러 != nil {
@@ -60,24 +59,24 @@ func F_zmq소켓_Go채널_중계(zmq소켓 *zmq4.Socket, Go채널 chan 공용.I�
 	case 에러 != nil:
 		return 에러
 	case zmq메시지 == nil, len(zmq메시지) == 0:
-		return 공용.F에러_생성("비어있는 zmq메시지.\n'%v'\n", zmq메시지)
+		return F에러_생성("비어있는 zmq메시지.\n'%v'\n", zmq메시지)
 	}
 
-	질의 := 공용.New질의_zmq메시지(zmq메시지)
+	질의 := New질의_zmq메시지(zmq메시지)
 	회신 := 질의.G회신(Go채널)
 
 	// Go채널 회신을 zmq소켓으로 전달.
 	switch {
 	case 회신.G에러() != nil:
 		return F에러_메시지_송신(zmq소켓, 회신.G에러())
-	case 회신.G구분() == 공용.P메시지_OK:
+	case 회신.G구분() == P메시지_OK:
 		메시지 := []string{회신.G구분()}
 		메시지 = append(메시지, 회신.G내용_전체()...)
 
 		return F메시지_송신(zmq소켓, 메시지)
 	default:
 		// 예상치 못한 경우
-		panic(공용.F에러_생성("잘못된 회신.\n에러 '%v'\n구분 '%v'\n길이 %v\n내용 '%v'\n",
+		panic(F에러_생성("잘못된 회신.\n에러 '%v'\n구분 '%v'\n길이 %v\n내용 '%v'\n",
 			회신.G에러(), 회신.G구분(), 회신.G길이(), 회신.G내용_전체()))
 	}
 }

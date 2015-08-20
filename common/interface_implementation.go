@@ -15,7 +15,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 
 @author: UnHa Kim <unha.kim.ghts@gmail.com> */
 
-package shared
+package common
 
 import (
 	dec "github.com/wayn3h0/go-decimal"
@@ -224,7 +224,7 @@ func (this *s통화) G문자열값_고정소숫점(소숫점_이하_자릿수 in
 func (this *s통화) G비교(다른_통화 I통화) int {
 	switch {
 	case this.단위 != 다른_통화.G단위():
-		return P비교불가
+		return P비교_불가
 	default:
 		return this.금액.Cmp(다른_통화.G정밀값())
 	}

@@ -18,11 +18,9 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 package data
 
 import (
-	공용 "github.com/ghts/ghts/shared/common"
-	zmq도우미 "github.com/ghts/ghts/shared/zmq_helper"
+	공용 "github.com/ghts/ghts/common"
 	
 	"github.com/pebbe/zmq4"
-	
 )
 
 var 공용정보_zmq소켓_중계_Go루틴_실행_중 = 공용.New안전한_bool(false)
@@ -80,8 +78,8 @@ func F공용정보_zmq소켓_중계_Go루틴(ch초기화 chan bool) {
 	}
 
 	reactor := zmq4.NewReactor()
-	reactor.AddSocket(주소정보_REP, zmq4.POLLIN, func(e zmq4.State) error { return zmq도우미.F_zmq소켓_Go채널_중계(주소정보_REP, Ch주소) })
-	reactor.AddSocket(종목정보_REP, zmq4.POLLIN, func(e zmq4.State) error { return zmq도우미.F_zmq소켓_Go채널_중계(종목정보_REP, Ch종목) })
+	reactor.AddSocket(주소정보_REP, zmq4.POLLIN, func(e zmq4.State) error { return 공용.F_zmq소켓_Go채널_중계(주소정보_REP, Ch주소) })
+	reactor.AddSocket(종목정보_REP, zmq4.POLLIN, func(e zmq4.State) error { return 공용.F_zmq소켓_Go채널_중계(종목정보_REP, Ch종목) })
 
 	// 초기화 완료
 	ch초기화 <- true
