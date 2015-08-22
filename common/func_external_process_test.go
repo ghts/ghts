@@ -190,7 +190,7 @@ func f외부_프로세스_관리_Go루틴_테스트_도우미(테스트 *testing
 
 func TestF실행화일_검색(테스트 *testing.T) {
 	F테스트_참임(테스트, strings.HasSuffix(F실행화일_검색("go.exe"), "go.exe"))
-	
+
 	F문자열_출력_일시정지_시작()
 	F테스트_같음(테스트, F실행화일_검색("This_file_should_not_be_existing.none"), "")
 	defer F문자열_출력_일시정지_해제()

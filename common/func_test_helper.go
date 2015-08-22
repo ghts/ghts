@@ -446,6 +446,11 @@ func F에러_출력(에러 error) {
 		return
 	}
 
+	if 에러 == nil {
+		fmt.Println(nil)
+		return
+	}
+
 	fmt.Println(에러.Error())
 
 	// 에러 자체에 호출경로가 포함되어 있으면 중복 출력하지 않는다.
