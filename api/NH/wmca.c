@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <windows.h>
-#include "./wmca_const.h"
-#include "./wmca_type.h"
+#include "wmca_const.h"
+#include "_cgo_export.h"
 
 //-------------------------------------------------//
 //      도우미 함수
@@ -126,88 +126,71 @@ bool wmcaDetach(char* type, char* data, int unitLen, int totalLen) {
 //      콜백 함수
 //-------------------------------------------------//
 
-void OnConnected(LOGINBLOCK* pLogin) {
-    printf("Connected.");
+void OnConnected_C(LOGINBLOCK* loginData) {
+	//로그인이 성공하면, 접속시각 및 계좌번호 정보를 받아 적절히 보관/출력합니다.
+	//계좌번호에 대한 순서(인덱스)는 계좌관련 서비스 호출시 사용되므로 중요합니다.
 
-    //로그인이 성공하면, 접속시각 및 계좌번호 정보를 받아 적절히 보관/출력합니다.
-    //계좌번호에 대한 순서(인덱스)는 계좌관련 서비스 호출시 사용되므로 중요합니다.
-
-    // TODO Go언어 콜백 추가. pLogin구조체 전달.
+	printf("Connected C.");
+    OnConnected_Go(loginData);
 }
 
-void OnTrData(OUTDATABLOCK* data) {
-    printf("Transaction Data.");
-
-    // TODO Go언어 콜백 추가. 구조체 데이터 전달.
+void OnTrData_C(OUTDATABLOCK* data) {
+    printf("Transaction Data C.");
+    OnTrData_Go(data);
 }
 
-void OnRealtimeData(OUTDATABLOCK* data) {
-    printf("Realtime Data.");
-
-    // TODO Go언어 콜백 추가. 구조체 데이터 전달.
+void OnRealTimeData_C(OUTDATABLOCK* data) {
+    printf("Realtime Data C.");
+    OnRealTimeData_Go(data);
 }
 
-void OnMessage(OUTDATABLOCK* message) {
-    printf("Message.");
-
-    // TODO Go언어 콜백 추가. 구조체 데이터 전달.
+void OnMessage_C(OUTDATABLOCK* message) {
+    printf("Message C.");
+    OnMessage_Go(message);
 }
 
-void OnComplete(OUTDATABLOCK* data) {
-    printf("Completed.");
-
-    // TODO Go언어 콜백 추가. 구조체 데이터 전달.
+void OnComplete_C(OUTDATABLOCK* data) {
+    printf("Completed C.");
+    OnComplete_Go(data);
 }
 
-void OnError(OUTDATABLOCK* error ) {
-    printf("Error message.");
-
-    // TODO Go언어 콜백 추가. 구조체 데이터 전달.
+void OnError_C(OUTDATABLOCK* error) {
+    printf("Error message C.");
+    OnError_Go(error);
 }
 
-void OnSocketError(int socket_error_code) {
-    printf("Socket error. %d", socket_error_code);
-
-    // TODO Go언어 콜백 추가
+void OnSocketError_C(int socketErrorCode) {
+    printf("Socket error C. %d", socketErrorCode);
+    OnSocketError_Go(socketErrorCode);
 }
 
-void OnDisconnected() {
-    printf("Disconnected.");
-
-    // TODO Go언어 콜백 추가
+void OnDisconnected_C() {
+    printf("Disconnected C.");
+    OnDisconnected_Go();
 }
 
-// API에서 오는 응답을 처리하는 함수.
-// 전달할 메시지가 있으면 윈도우 운영체제가 이 함수를 호출해 준다.
-// 예제코드의 CWMCALOADERDlg::OnWmcaEvent메소드를 거의 그대로 가져옴.
+// API에서 오는 응답을 처리하는 함수. 윈도우 운영체제가 이 함수를 호출함.
+// 예제코드의 CWMCALOADERDlg::OnWmcaEvent메소드를 조금 수정함.
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-    // C++과 달리 C언어에서는 const가 switch문에서 라벨 역할을 할 수 없다고 함.
-    // 그래서, C++ 예제코드의 switch문을 if문으로 바꿈.
+    // C++과 달리 C언어에서는 const로 선언된 변수가 switch문에서 라벨 역할을 할 수 없다고 함.
+    // 그래서, C++ 예제코드의 switch문을 if문으로 변환함.
 
     if (uMsg == CA_CONNECTED) {
-        // 로그인 성공
-        OnConnected((LOGINBLOCK*)lParam);
+        OnConnected_C((LOGINBLOCK*)lParam);			// 로그인 성공
     } else if (uMsg == CA_TR_DATA) {
-        // 서비스 응답 수신(TR)
-        OnTrData((OUTDATABLOCK*)lParam);
+        OnTrData_C((OUTDATABLOCK*)lParam);			// 서비스 응답 수신(TR)
     } else if (uMsg == CA_REALTIME_DATA) {
-        // 실시간 데이터 수신(BC)
-        OnRealtimeData((OUTDATABLOCK*)lParam);
+        OnRealTimeData_C((OUTDATABLOCK*)lParam);	// 실시간 데이터 수신(BC)
     } else if (uMsg == CA_MESSAGE) {
-        //상태 메시지 수신 (입력값이 잘못되었을 경우 문자열형태로 설명이 수신됨)
-        OnMessage((OUTDATABLOCK*)lParam);
+        OnMessage_C((OUTDATABLOCK*)lParam);			//상태 메시지 수신 (입력값이 잘못되었을 경우 문자열형태로 설명이 수신됨)
     } else if (uMsg == CA_COMPLETE) {
-        //서비스 처리 완료
-        OnComplete((OUTDATABLOCK*)lParam);
+        OnComplete_C((OUTDATABLOCK*)lParam);		//서비스 처리 완료
     } else if (uMsg == CA_ERROR) {
-        //서비스 처리중 오류 발생 (입력값 오류등)
-        OnError((OUTDATABLOCK*)lParam);
+        OnError_C((OUTDATABLOCK*)lParam);			//서비스 처리중 오류 발생 (입력값 오류등)
     } else if (uMsg == CA_SOCKET_ERROR) {
-        // 통신 오류 발생
-        OnSocketError((int)lParam);
+        OnSocketError_C((int)lParam);				// 통신 오류 발생
     } else if (uMsg == CA_DISCONNECTED) {
-        // 접속 끊김
-        OnDisconnected();
+        OnDisconnected_C();							// 접속 끊김
     }
 
     return TRUE;

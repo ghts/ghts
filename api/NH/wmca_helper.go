@@ -12,7 +12,6 @@ import (
 	"golang.org/x/sys/windows"
 
 	"strings"
-	//"unsafe"
 )
 
 func fDLL존재함() bool {
@@ -30,8 +29,8 @@ func fHWND() C.HWND {
 }
 
 func f자원_정리() {
-	// 인수 없으니 컴파일 경고가 발생함.
-	// 컴파일 경고를 없애기 위해서 불필요한 인수를 전달함.
+	// cgo의 버그로 인해서 인수가 없으면 '사용하지 않는 변수' 컴파일 경고 발생.
+	// 컴파일 경고를 없애기 위해서 사용하지 않는 인수를 추가함.
 	C.wmcaFreeResource(C.int(1))
 }
 

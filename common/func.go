@@ -24,7 +24,7 @@ import (
 	"time"
 )
 
-func F에러이면_패닉(에러 error) {
+func F에러_패닉(에러 error) {
 	if 에러 != nil {
 		panic(에러)
 	}
@@ -36,6 +36,15 @@ func F2문자열(값 interface{}) string {
 		return 값.(time.Time).Format(P시간_형식)
 	case float64:
 		return strconv.FormatFloat(값.(float64), 'f', -1, 64)
+	case []int8:
+		정수8_모음 := 값.([]int8)
+		바이트_모음 := make([]byte, len(정수8_모음))
+		
+		for i, v := range 정수8_모음 {
+			바이트_모음[i] = byte(v)
+		}
+		
+		return string(바이트_모음)
 	default:
 		return F포맷된_문자열("%v", 값)
 	}

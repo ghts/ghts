@@ -83,7 +83,7 @@ typedef struct {
 
 typedef struct {
     int       TrIndex;
-    LOGININFO *PLoginInfo;
+    LOGININFO *LoginInfo;
 } LOGINBLOCK;
 
 //----------------------------------------------------------------------//
@@ -100,12 +100,12 @@ typedef struct  {
 //----------------------------------------------------------------------//
 
 typedef struct {
-    char*	PBlockName;
-    char*	PData;
+    char*	BlockName;
+    char*	DataString;
     int	Length;
 } RECEIVED;
 
 typedef struct {
     int		  TrIndex;
-    RECEIVED* PData;
+    RECEIVED* DataStruct;
 } OUTDATABLOCK;

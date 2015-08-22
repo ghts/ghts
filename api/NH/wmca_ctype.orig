@@ -1,6 +1,8 @@
 package NH
 
 // #include "./wmca_type.h"
+// #include "./trio_inv.h"
+// #include "./trio_ord.h"
 import "C"
 
 //----------------------------------------------------------------------//
@@ -20,4 +22,10 @@ type MsgHeader C.MSGHEADER
 //----------------------------------------------------------------------//
 type Received C.RECEIVED
 type OutDataBlock C.OUTDATABLOCK
+
+//----------------------------------------------------------------------//
+// 주식 현재가 조회 관련 구조체
+//----------------------------------------------------------------------//
+type Tc1101OutBlock C.Tc1101OutBlock
+type Tc1101OutBlock2 C.Tc1101OutBlock2
 
