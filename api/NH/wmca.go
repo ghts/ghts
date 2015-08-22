@@ -24,7 +24,6 @@ const wmca_dll = "wmca.dll"
 const 실행_성공 = "completed successfully"
 
 func f접속하기(아이디, 암호, 공인인증서_암호 string) bool {
-
 	c아이디 := C.CString(아이디)
 	c암호 := C.CString(암호)
 	c공인인증서_암호 := C.CString(공인인증서_암호)
@@ -95,6 +94,6 @@ func f실시간_서비스_해제(타입 string, 코드_모음 string, 코드_길
 	return bool(반환값)
 }
 
-func f실시간_서비스_모두_취소() bool {
+func f실시간_서비스_모두_해제() bool {
 	return f호출("wmcaDetachAll")
 }

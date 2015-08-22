@@ -1,4 +1,4 @@
-﻿#include <windef.h>
+#include <windef.h>
 
 //const DWORD ERR_NONE=WM_USER+300;
 //const DWORD ERR_DLL_NOT_FOUND=WM_USER+301;

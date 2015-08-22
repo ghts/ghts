@@ -1,4 +1,4 @@
-﻿/* This file is part of GHTS.
+/* This file is part of GHTS.
 
 GHTS is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -64,34 +64,34 @@ typedef	BOOL (__stdcall *F_Window)(HWND hWnd);
 // WMCA_CONNECTED 로그인 구조체
 //----------------------------------------------------------------------//
 typedef	struct {
-	char 	AccountNo[11];		//계좌번호
-	char	AccountName[40];		//계좌명
+    char 	AccountNo[11];		//계좌번호
+    char	AccountName[40];		//계좌명
     char	act_pdt_cdz3[3];		//상품코드 ??
     char	amn_tab_cdz4[4];		//관리점코드 ??
     char	ExpirationDate8[8];		//위임만기일
-	char	Granted;				//일괄주문 허용계좌(G:허용)
+    char	Granted;				//일괄주문 허용계좌(G:허용)
     char	Filler[189];			//filler ??
-}ACCOUNTINFO;
+} ACCOUNTINFO;
 
 typedef struct {
-	char    Date[14];		// 접속시각
-	char	ServerName[15];	// 접속서버
-	char	UserID[8];		// 접속자ID
-	char    AccountCount[3];	// 계좌수
-	ACCOUNTINFO	Accountlist	[999];	// 계좌목록
-}LOGININFO;
+    char    Date[14];		// 접속시각
+    char	ServerName[15];	// 접속서버
+    char	UserID[8];		// 접속자ID
+    char    AccountCount[3];	// 계좌수
+    ACCOUNTINFO	Accountlist	[999];	// 계좌목록
+} LOGININFO;
 
-typedef struct{
-	int       TrIndex;
-	LOGININFO *PLoginInfo;
-}LOGINBLOCK;
+typedef struct {
+    int       TrIndex;
+    LOGININFO *PLoginInfo;
+} LOGINBLOCK;
 
 //----------------------------------------------------------------------//
 // WMCA 문자message 구조체
 //----------------------------------------------------------------------//
 typedef struct  {
-	char	MsgCode[5];	//00000:정상, 기타:비정상(해당 코드값을 이용하여 코딩하지 마세요. 코드값은 언제든지 변경될 수 있습니다.)
-	char	UsrMsg[80];
+    char	MsgCode[5];	//00000:정상, 기타:비정상(해당 코드값을 이용하여 코딩하지 마세요. 코드값은 언제든지 변경될 수 있습니다.)
+    char	UsrMsg[80];
 } MSGHEADER;
 
 
@@ -100,12 +100,12 @@ typedef struct  {
 //----------------------------------------------------------------------//
 
 typedef struct {
-	char*	PBlockName;
-	char*	PData;
-	int	Length;
+    char*	PBlockName;
+    char*	PData;
+    int	Length;
 } RECEIVED;
 
 typedef struct {
-	int		  TrIndex;
-	RECEIVED* PData;
+    int		  TrIndex;
+    RECEIVED* PData;
 } OUTDATABLOCK;
