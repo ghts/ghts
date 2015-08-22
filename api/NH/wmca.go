@@ -1,87 +1,100 @@
-package dev
+package NH
 
-// #cgo CFLAGS: -m32 -Wall
-// #include "./wmca.h"
-// #include "./wmca_const.h"
-// #include "./wmca_const_copied.h"
+// ghts의 bin디렉토리에 있는 sync_ctype.bat에서
+// go tool cgo -godefs 를 실행시켜서
+// wmca_type.h에 있는 C언어 구조체를 자동으로 Go언어 구조체로 변환시킴.
+// 생성된 결과물은 서로 직접 변환(cast)되어도 안전함.
+//
+//go:generate sync_ctype.bat
+
+// #cgo CFLAGS: -m32 -Wall -O1
+// #include <stdio.h>
+// #include <stdlib.h>
+// #include <windows.h>
+// #include "./wmca_func.h"
 import "C"
 
 import (
-	공용 "github.com/ghts/ghts/shared/common"
+	//공용 "github.com/ghts/ghts/common"
+
 	"unsafe"
 )
 
-/* 다음 명령어를 실행하면 C언어로 된 구조체를 Go언어로 변환하되,
-내부 메모리 형식까지 동일하게 만들어서, 
-C언어에서 넘겨받은 구조체를 통째로 Go언어로 cast 할 수 있게 됨.
-(혹은 그 반대도 가능해 짐.)
+const wmca_dll = "wmca.dll"
+const 실행_성공 = "completed successfully"
 
-> go tool cgo -godefs cgo_practice.go
-(모든 C언어 데이터 구조를 Go언어로 해석해서 화면에 출력함.)
- 
-'type ErrBool C.ErrBool'이라고 선언한 문장이
- 아래와 같은 완전한 Go언어 선언문으로 바뀌어서 출력됨. 
-화면에 출력된 결과를 소스코드에 복사해서 붙여넣으면 됨.
+func f접속하기(아이디, 암호, 공인인증서_암호 string) bool {
 
-위에서 나온 명령어를 파이프를 사용해서 별도의 파일에 저장하도록 하고,
-bat화일 형태로 매번 자동으로 동기화 되도록 추가 연구 및 개발 필요. */
-//참고자료 : Cast the entire C struct to Go, via intermediate pointers
-//http://grokbase.com/t/gg/golang-nuts/12cemmrhk5/go-nuts-cgo-cast-c-struct-to-go-struct
-type ErrBool struct {
-	Value           bool
-	Pad_cgo_0       [3]byte
-	ErrorCode       int32
+	c아이디 := C.CString(아이디)
+	c암호 := C.CString(암호)
+	c공인인증서_암호 := C.CString(공인인증서_암호)
+
+	defer func() {
+		C.free(unsafe.Pointer(c아이디))
+		C.free(unsafe.Pointer(c암호))
+		C.free(unsafe.Pointer(c공인인증서_암호))
+	}()
+
+	return bool(C.wmcaConnect(c아이디, c암호, c공인인증서_암호))
 }
 
-/* var ch_wmca로드가능 = make(chan ) 
-
-// C언어 모듈에서 HWND를 1개만 사용하면, 동시에 복수 호출되면 에러 발생함.
-// 1번에 1번씩만 호출되도록 하기 위하여, Go루틴을 사용함. 
-func F_NH_OpenAPI_Go루틴(초기화 chan bool) {
-	for {
-		select {
-		case 
-		}
-	}
-} */
-
-func f에러코드_변환(에러코드 int32) error {
-	switch 에러코드 {
-	case int32(C.ERR_NONE):
-		return nil
-	case int32(C.ERR_DLL_NOT_FOUND):
-		return 공용.F에러_생성("해당 DLL을 찾지 못했습니다.")
-	case int32(C.ERR_FUNC_NOT_FOUND):
-		return 공용.F에러_생성("해당 함수를 찾지 못했습니다.")
-	default:
-		return 공용.F에러_생성("에러코드 해석불가. %v", 에러코드)
-	}
+func f접속끊기() bool {
+	return f호출("wmcaDisconnect")
 }
 
-func Fwmca로드가능() (bool, error) {
-	errBool_C := C.wmcaIsDllLoadable()
-	errBool := (*ErrBool)(unsafe.Pointer(&errBool_C))
-	
-	return errBool.Value, f에러코드_변환(errBool.ErrorCode)
+func f접속됨() bool {
+	return f호출("wmcaIsConnected")
 }
 
-func Fwmca연결됨() (bool, error) {
-	errBool_C := C.wmcaIsConnected()
-	errBool := (*ErrBool)(unsafe.Pointer(&errBool_C))
-	
-	return errBool.Value, f에러코드_변환(errBool.ErrorCode)
+func f조회(TR구분번호 int, TR코드 string, 데이터_포인터 unsafe.Pointer, 길이 int, 계좌_인덱스 int) bool {
+	cTR구분번호 := C.int(TR구분번호)
+	cTR코드 := C.CString(TR코드)
+	c데이터 := (*C.char)(데이터_포인터)
+	c길이 := C.int(길이)
+	c계좌_인덱스 := C.int(계좌_인덱스)
+
+	defer func() {
+		C.free(unsafe.Pointer(cTR코드))
+		C.free(unsafe.Pointer(c데이터)) // C언어 구조체로 변환된 후에는 직접 free 해 줘야 하는 듯.
+	}()
+
+	반환값 := C.wmcaQuery(cTR구분번호, cTR코드, c데이터, c길이, c계좌_인덱스)
+
+	return bool(반환값)
 }
 
-func Fwmca연결끊기() (bool, error) {
-	errBool_C := C.wmcaDisconnect()
-	errBool := (*ErrBool)(unsafe.Pointer(&errBool_C))
-	
-	return errBool.Value, f에러코드_변환(errBool.ErrorCode)
+func f실시간_서비스_추가(타입 string, 코드_모음 string, 코드_길이 int, 전체_길이 int) bool {
+	c타입 := C.CString(타입)
+	c코드_모음 := C.CString(코드_모음)
+	c코드_길이 := C.int(코드_길이)
+	c전체_길이 := C.int(전체_길이)
+
+	defer func() {
+		C.free(unsafe.Pointer(c타입))
+		C.free(unsafe.Pointer(c코드_모음))
+	}()
+
+	반환값 := C.wmcaAttach(c타입, c코드_모음, c코드_길이, c전체_길이)
+
+	return bool(반환값)
 }
 
-func Fwmca모든_실시간_서비스_취소() (bool, error) {
-	errBool_C := C.wmcaDetachAll()
-	errBool := (*ErrBool)(unsafe.Pointer(&errBool_C))
-	
-	return errBool.Value, f에러코드_변환(errBool.ErrorCode)
+func f실시간_서비스_해제(타입 string, 코드_모음 string, 코드_길이 int, 전체_길이 int) bool {
+	c타입 := C.CString(타입)
+	c코드_모음 := C.CString(코드_모음)
+	c코드_길이 := C.int(코드_길이)
+	c전체_길이 := C.int(전체_길이)
+
+	defer func() {
+		C.free(unsafe.Pointer(c타입))
+		C.free(unsafe.Pointer(c코드_모음))
+	}()
+
+	반환값 := C.wmcaDetach(c타입, c코드_모음, c코드_길이, c전체_길이)
+
+	return bool(반환값)
+}
+
+func f실시간_서비스_모두_취소() bool {
+	return f호출("wmcaDetachAll")
 }
