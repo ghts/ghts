@@ -109,3 +109,223 @@ typedef struct {
     int		  TrIndex;
     RECEIVED* DataStruct;
 } OUTDATABLOCK;
+
+
+//----------------------------------------------------------------------//
+// ETF 현재가 조회 (c1151)
+//----------------------------------------------------------------------//
+
+typedef struct {
+	char Lang[1];			// 언어 구분 (한, 영). 기본값 'K'
+	char Code[6];			// 종목코드
+} Tc1151InBlock;
+
+// 종목 기본 자료
+typedef struct {
+	char Code[6];			// 종목코드
+	char Title[13];			// 종목이름
+	long MarketPrice;		// 현재가
+	char DiffSign[1];		// 등락 부호
+	long Diff;				// 등락폭
+	float ChgRate;			// 등락비율
+	long Offer;				// 매도호가
+	long Bid;				// 매수호가
+	long Volumn;			// 거래량
+	float VolRate;			// 거래비율
+	float FloatVolRate;	// 유동주 회전율
+	long TrAmount;			// 거래대금
+	long UpLmtPrice;		// 상한가
+	long High;				// 장중 고가
+	long Open;				// 시가
+	char VsOpenSign			// 시가 대비 부호
+	long VsOpenDiff			// 시가 대비 등락폭
+	long Low;				// 장중 저가
+	long LowLmtPrice;		// 하한가
+	char QuotTime[8];		// 호가 시간 ???
+	long OfferPrice1;		// 매도 최우선 호가
+	long OfferPrice2;		// 매도 차선 호가
+	long OfferPrice3;		// 매도 차차선 호가
+	long OfferPrice4;		// 매도 4차 호가
+	long OfferPrice5;		// 매도 5차 호가
+	long OfferPrice6;		// 매도 6차 호가
+	long OfferPrice7;		// 매도 7차 호가
+	long OfferPrice8;		// 매도 8차 호가
+	long OfferPrice9;		// 매도 9차 호가
+	long OfferPrice10;		// 매도 10차 호가
+	long BidPrice1;			// 매수 최우선 호가
+	long BidPrice2;			// 매수 차선 호가
+	long BidPrice3;			// 매수 차차선 호가
+	long BidPrice4;			// 매수 4차 호가
+	long BidPrice5;			// 매수 5차 호가
+	long BidPrice6;			// 매수 6차 호가
+	long BidPrice7;			// 매수 7차 호가
+	long BidPrice8;			// 매수 8차 호가
+	long BidPrice9;			// 매수 9차 호가
+	long BidPrice10;		// 매수 10차 호가
+	long OfferVolume1;		// 매도 최우선 잔량
+	long OfferVolume2;		// 매도 차선 잔량
+	long OfferVolume3;		// 매도 차차선 잔량
+	long OfferVolume4;		// 매도 4차 잔량
+	long OfferVolume5;		// 매도 5차 잔량
+	long OfferVolume6;		// 매도 6차 잔량
+	long OfferVolume7;		// 매도 7차 잔량
+	long OfferVolume8;		// 매도 8차 잔량
+	long OfferVolume9;		// 매도 9차 잔량
+	long OfferVolume10;		// 매도 10차 잔량
+	long BidVolume1;		// 매수 최우선 잔량
+	long BidVolume2;		// 매수 차선 잔량
+	long BidVolume3;		// 매수 차차선 잔량
+	long BidVolume4;		// 매수 4차 잔량
+	long BidVolume5;		// 매수 5차 잔량
+	long BidVolume6;		// 매수 6차 잔량
+	long BidVolume7;		// 매수 7차 잔량
+	long BidVolume8;		// 매수 8차 잔량
+	long BidVolume9;		// 매수 9차 잔량
+	long BidVolume10;		// 매수 10차 잔량
+	long OfferVolTot;		// 총매도잔량
+	long BidVolTot;			// 총매수잔량
+	long OfferVolAfter;		// 시간외 매도 잔량
+	long BidVolAfter;		// 시간외 매수 잔량
+	long PivotUp2;			// 피봇 2차 저항
+	long PivotUp1;			// 피봇 1차 저항
+	long PivotPrice;		// 피봇 가격
+	long PivonDown1;		// 피봇 1차 지지
+	long PivonDown2;		// 피봇 2차 지지
+	char Market[6];			// 코스피/코스닥 구분
+	char Sector[18];		// 업종명
+	char CapitalSize[6];	// 자본금 규모
+	char SettleMonth[16];	// 결산월
+	char MarketAction1[16];	// 시장 조치 1
+	char MarketAction2[16];	// 시장 조치 2
+	char MarketAction3[16];	// 시장 조치 3
+	char MarketAction4[16];	// 시장 조치 4
+	char MarketAction5[16];	// 시장 조치 5
+	char MarketAction6[16];	// 시장 조치 6
+	char ConvertBond[6];	// 전환사채 구분
+	long NominalPrice;		// 액면가
+	char PrevPriceTitle[12]; // 전일종가 타이틀
+	long PrevPrice;			// 전일종가
+	long MortgageValue;		// 대용가. 담보 가치.
+	long PublicOfferPrice;	// 공모가
+	long High5Day;			// 5일 고가
+	long Low5Day;			// 5일 저가
+	long High20Day;			// 20일 고가
+	long Low20Day;			// 20일 저가
+	long High1Year;			// 52주 최고가
+	long Low1Year;			// 52주 최저가
+	long Low1YearPeriod;	// 52주 최저가일
+	long FloatVolume;		// 유동 주식 수량
+	long ListVolBy1000;		// 상장 주식 수량 (1,000주)
+	long MarketCapital;		// 시가 총액
+	char Time[5];			// 시간
+	char Seller1[6];		// 매도 거래원 1
+	char Buyer1[6];			// 매수 거래원 1
+	long Seller1Volume;		// 매도 거래량 1
+	long Buyer1Volumn;		// 매수 거래량 1
+	char Seller2[6];		// 매도 거래원 2
+	char Buyer2[6];			// 매수 거래원 2
+	long Seller2Volume;		// 매도 거래량 2
+	long Buyer2Volumn;		// 매수 거래량 2
+	char Seller3[6];		// 매도 거래원 3
+	char Buyer3[6];			// 매수 거래원 3
+	long Seller3Volume;		// 매도 거래량 3
+	long Buyer3Volumn;		// 매수 거래량 3
+	char Seller4[6];		// 매도 거래원 4
+	char Buyer4[6];			// 매수 거래원 4
+	long Seller4Volume;		// 매도 거래량 4
+	long Buyer4Volumn;		// 매수 거래량 4
+	char Seller5[6];		// 매도 거래원 5
+	char Buyer5[6];			// 매수 거래원 5
+	long Seller5Volume;		// 매도 거래량 5
+	long Buyer5Volumn;		// 매수 거래량 5
+	long ForeignSellVolumn;	// 외국인 매도 거래량
+	long ForeignBuyVolumn;	// 외국인 매수 거래량
+	char ForeignTime[6];	// 외국인 시간
+	float ForeignOwnRate;	// 외국인 지분율
+	char SettleDate[4];		// 결제일
+	float DebtPercent; 		// 신용 융자 잔고 비율 퍼센트
+	char RightsIssueDate[4]; // 유상 증자 배정 기준일
+	char BonusIssueDate[4]; // 무상 증자 배정 기준일
+	float RightsIssueRate;	// 무상 증자 배정 비율
+	float BonusIssueRate;	// 유상 증자 배정 비율
+	char IPO_Data;			// 상장일
+	long ListedVolume;		// 상장 주식 수량
+	long SellTotalSum;		// 전체 거래원 매도 합계
+	long BuyTotalSum;		// 전체 거래원 매수 합계
+} Tc1151OutBlock;
+
+// 변동 거래량 자료
+typedef struct {
+	char Time[8];			// 시간
+	long MarketPrice;		// 현재가
+	char DiffSign[1];		// 등락 부호
+	long Diff;				// 등락폭
+	long OfferPrice;		// 매도 호가
+	long BidPrice;			// 매수 호가
+	long DiffVolume;		// 변동 거래량
+	long Volume;			// 거래량
+} Tc1151OutBlock2;
+
+// 예상 체결
+typedef struct {
+	char SyncBid[1];		// 동시호가 구분
+	long EstimatePrice;		// 예상 체결가
+	char EstimateSign;		// 예상 체결가 등락 부호
+	long EstimateDiff;		// 예상 체결가 등락폭
+	float EstimateRate;		// 예상 체결가 등락비율
+	long EstimateVolume;	// 예상 체결 수량
+} Tc1151OutBlock3;
+
+// ETF 자료
+typedef struct {
+	char ETF[1];			// ETF 구분
+	float NAV;				// 장중/최종 NAV
+	char DiffSign[1];		// NAV 등락 부호
+	float Diff;				// NAV 등락폭
+	float PrevNAV;			// 전일 NAV
+	float DivergeRate;		// 괴리율
+	char DivergeSign[1];	// 괴리율 부호
+	float DividendPerCU;	// CU(Creation Unit : 설정단위)별 현금배당액
+	long ConstituentNo;		// 구성종목 수량]
+	long NAVBy100Million;	// 순자산 총액 (억원)
+	float TrackingErrRate;	// 추적 오차율
+	long LP_OfferVolume1;	// LP 매도 최우선 잔량
+	long LP_OfferVolume2;	// LP 매도 차선 잔량
+	long LP_OfferVolumn3;	// LP 매도 차차선 잔량
+	long LP_OfferVolumn4;	// LP 매도 4차선 잔량
+	long LP_OfferVolumn5;	// LP 매도 5차선 잔량
+	long LP_OfferVolumn6;	// LP 매도 6차선 잔량
+	long LP_OfferVolumn7;	// LP 매도 7차선 잔량
+	long LP_OfferVolumn8;	// LP 매도 8차선 잔량
+	long LP_OfferVolumn9;	// LP 매도 9차선 잔량
+	long LP_OfferVolumn10;	// LP 매도 10차선 잔량
+	long LP_BidVolume1;		// LP 매수 최우선 잔량
+	long LP_BidVolume2;		// LP 매수 차선 잔량
+	long LP_BidVolumn3;		// LP 매수 차차선 잔량
+	long LP_BidVolumn4;		// LP 매수 4차선 잔량
+	long LP_BidVolumn5;		// LP 매수 5차선 잔량
+	long LP_BidVolumn6;		// LP 매수 6차선 잔량
+	long LP_BidVolumn7;		// LP 매수 7차선 잔량
+	long LP_BidVolumn8;		// LP 매수 8차선 잔량
+	long LP_BidVolumn9;		// LP 매수 9차선 잔량
+	long LP_BidVolumn10;	// LP 매수 10차선 잔량
+	char TrackingMethod[8];	// ETF 복제방법 구분 코드 (완전 복제, 표본 추출, ...)
+	char ETF_Type[6];		// ETF 유형코드
+} Tc1151OutBlock4;
+
+// 베이스 지수 자료
+typedef struct {
+	char IndexCode[2];		// 지수 코드
+	char SectorCode[4];		// 섹터 코드
+	char IndexName[20];		// 지수 이름
+	float IndexValue;		// 지수 값
+	char DiffSign[1];		// 등락 부호
+	float Diff;				// 등락폭
+	float BondIndex;		// 채권 지수
+	char BondSign[1];		// 채권 등락 부호
+	float BondDiff;			// 채권 등락폭
+	char ForeignIndexSymbol[12]; // 해외 지수 심볼
+	char EtcSectorCode[3];	// 기타 업종 코드
+	char BondIndexCode[6];	// 채권 지수 코드
+	char BondIndexDetailedCode[1]; // 채권 지수 세부 코드
+} Tc1151OutBlock5;
