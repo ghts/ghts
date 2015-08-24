@@ -7,7 +7,7 @@ package NH
 //
 //go:generate sync_ctype.bat
 
-// #cgo CFLAGS: -m32 -Wall -O1
+// #cgo CFLAGS: -m32 -Wall
 // #include <stdio.h>
 // #include <stdlib.h>
 // #include <windows.h>

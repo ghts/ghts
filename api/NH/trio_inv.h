@@ -1,1387 +1,1387 @@
 /************************************************************************************
-	ÁÖÀÇ
+	ï¿½ï¿½ï¿½ï¿½
 
-	ÀÌ ÀÚ·á´Â 2013³â 10¿ù 15ÀÏ ±âÁØ ÀÚ·áÀÌ¸ç ÇâÈÄ º¯°æµÉ °¡´É¼ºÀÌ ÀÖ½À´Ï´Ù.
-	ÀÚ·á ±¸Á¶°¡ ¸ÂÁö ¾ÊÀ» °æ¿ì ±¸Á¶Ã¼°¡ º¯°æµÇÁö ¾Ê¾Ò´ÂÁö È®ÀÎÇÏ½Ã±â ¹Ù¶ø´Ï´Ù.
+	ï¿½ï¿½ ï¿½Ú·ï¿½ï¿½ 2013ï¿½ï¿½ 10ï¿½ï¿½ 15ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ú·ï¿½ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½É¼ï¿½ï¿½ï¿½ ï¿½Ö½ï¿½ï¿½Ï´ï¿½.
+	ï¿½Ú·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Ò´ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½Ï½Ã±ï¿½ ï¿½Ù¶ï¿½ï¿½Ï´ï¿½.
 
-	ÃÖ½Å ÀÚ·á´Â À¥ÆäÀÌÁö¸¦ ÅëÇØ ¾È³»µÇ¸ç ÀÚµ¿ ¾È³»(OpenAPI Login½Ã)¸¦ ÇÏ°í ÀÖÀ¸´Ï 
-	°Ô½Ã¸¦ ²À È®ÀÎÇÏ½Ã±â ¹Ù¶ø´Ï´Ù.
+	ï¿½Ö½ï¿½ ï¿½Ú·ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½È³ï¿½ï¿½Ç¸ï¿½ ï¿½Úµï¿½ ï¿½È³ï¿½(OpenAPI Loginï¿½ï¿½)ï¿½ï¿½ ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
+	ï¿½Ô½Ã¸ï¿½ ï¿½ï¿½ È®ï¿½ï¿½ï¿½Ï½Ã±ï¿½ ï¿½Ù¶ï¿½ï¿½Ï´ï¿½.
 
 ************************************************************************************/
 
-typedef struct tagc1101InBlock    //±âº»ÀÔ·Â
+typedef struct tagc1101InBlock    //ï¿½âº»ï¿½Ô·ï¿½
 {
-	char formlang                         [  1];	char _formlang;                           //ÇÑ¿µ±¸ºÐ             
-	char code                             [  6];	char _code;                               //Á¾¸ñÄÚµå             
+	char formlang                         [  1];	char _formlang;                           //ï¿½Ñ¿ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char code                             [  6];	char _code;                               //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } Tc1101InBlock;
 
-typedef struct tagc1101OutBlock    //Á¾¸ñ¸¶½ºÅ¸±âº»ÀÚ·á
+typedef struct tagc1101OutBlock    //ï¿½ï¿½ï¿½ñ¸¶½ï¿½Å¸ï¿½âº»ï¿½Ú·ï¿½
 {
-	char code                             [  6];	char _code;                               //Á¾¸ñÄÚµå             
-	char hname                            [ 13];	char _hname;                              //Á¾¸ñ¸í               
-	char price                            [  7];	char _price;                              //ÇöÀç°¡               
-	char sign                             [  1];	char _sign;                               //µî¶ôºÎÈ£             
-	char change                           [  6];	char _change;                             //µî¶ôÆø               
-	char chrate                           [  5];	char _chrate;                             //µî¶ô·ü               
-	char offer                            [  7];	char _offer;                              //¸ÅµµÈ£°¡             
-	char bid                              [  7];	char _bid;                                //¸Å¼öÈ£°¡             
-	char volume                           [  9];	char _volume;                             //°Å·¡·®               
-	char volrate                          [  6];	char _volrate;                            //°Å·¡ºñÀ²             
-	char yurate                           [  5];	char _yurate;                             //À¯µ¿ÁÖÈ¸ÀüÀ²         
-	char value                            [  9];	char _value;                              //°Å·¡´ë±Ý             
-	char uplmtprice                       [  7];	char _uplmtprice;                         //»óÇÑ°¡               
-	char high                             [  7];	char _high;                               //ÀåÁß°í°¡             
-	char open                             [  7];	char _open;                               //½Ã°¡                 
-	char opensign                         [  1];	char _opensign;                           //½Ã°¡´ëºñºÎÈ£         
-	char openchange                       [  6];	char _openchange;                         //½Ã°¡´ëºñµî¶ôÆø       
-	char low                              [  7];	char _low;                                //ÀåÁßÀú°¡             
-	char dnlmtprice                       [  7];	char _dnlmtprice;                         //ÇÏÇÑ°¡               
-	char hotime                           [  8];	char _hotime;                             //È£°¡½Ã°£             
-	char offerho                          [  7];	char _offerho;                            //¸ÅµµÃÖ¿ì¼±È£°¡       
-	char P_offer                          [  7];	char _P_offer;                            //¸ÅµµÂ÷¼±È£°¡         
-	char S_offer                          [  7];	char _S_offer;                            //¸ÅµµÂ÷Â÷¼±È£°¡       
-	char S4_offer                         [  7];	char _S4_offer;                           //¸Åµµ4Â÷¼±È£°¡        
-	char S5_offer                         [  7];	char _S5_offer;                           //¸Åµµ5Â÷¼±È£°¡        
-	char S6_offer                         [  7];	char _S6_offer;                           //¸Åµµ6Â÷¼±È£°¡        
-	char S7_offer                         [  7];	char _S7_offer;                           //¸Åµµ7Â÷¼±È£°¡        
-	char S8_offer                         [  7];	char _S8_offer;                           //¸Åµµ8Â÷¼±È£°¡        
-	char S9_offer                         [  7];	char _S9_offer;                           //¸Åµµ9Â÷¼±È£°¡        
-	char S10_offer                        [  7];	char _S10_offer;                          //¸Åµµ10Â÷¼±È£°¡       
-	char bidho                            [  7];	char _bidho;                              //¸Å¼öÃÖ¿ì¼±È£°¡       
-	char P_bid                            [  7];	char _P_bid;                              //¸Å¼öÂ÷¼±È£°¡         
-	char S_bid                            [  7];	char _S_bid;                              //¸Å¼öÂ÷Â÷¼±È£°¡       
-	char S4_bid                           [  7];	char _S4_bid;                             //¸Å¼ö4Â÷¼±È£°¡        
-	char S5_bid                           [  7];	char _S5_bid;                             //¸Å¼ö5Â÷¼±È£°¡        
-	char S6_bid                           [  7];	char _S6_bid;                             //¸Å¼ö6Â÷¼±È£°¡        
-	char S7_bid                           [  7];	char _S7_bid;                             //¸Å¼ö7Â÷¼±È£°¡        
-	char S8_bid                           [  7];	char _S8_bid;                             //¸Å¼ö8Â÷¼±È£°¡        
-	char S9_bid                           [  7];	char _S9_bid;                             //¸Å¼ö9Â÷¼±È£°¡        
-	char S10_bid                          [  7];	char _S10_bid;                            //¸Å¼ö10Â÷¼±È£°¡       
-	char offerrem                         [  9];	char _offerrem;                           //¸ÅµµÃÖ¿ì¼±ÀÜ·®       
-	char P_offerrem                       [  9];	char _P_offerrem;                         //¸ÅµµÂ÷¼±ÀÜ·®         
-	char S_offerrem                       [  9];	char _S_offerrem;                         //¸ÅµµÂ÷Â÷¼±ÀÜ·®       
-	char S4_offerrem                      [  9];	char _S4_offerrem;                        //¸Åµµ4Â÷¼±ÀÜ·®        
-	char S5_offerrem                      [  9];	char _S5_offerrem;                        //¸Åµµ5Â÷¼±ÀÜ·®        
-	char S6_offerrem                      [  9];	char _S6_offerrem;                        //¸Åµµ6Â÷¼±ÀÜ·®        
-	char S7_offerrem                      [  9];	char _S7_offerrem;                        //¸Åµµ7Â÷¼±ÀÜ·®        
-	char S8_offerrem                      [  9];	char _S8_offerrem;                        //¸Åµµ8Â÷¼±ÀÜ·®        
-	char S9_offerrem                      [  9];	char _S9_offerrem;                        //¸Åµµ9Â÷¼±ÀÜ·®        
-	char S10_offerrem                     [  9];	char _S10_offerrem;                       //¸Åµµ10Â÷¼±ÀÜ·®       
-	char bidrem                           [  9];	char _bidrem;                             //¸Å¼öÃÖ¿ì¼±ÀÜ·®       
-	char P_bidrem                         [  9];	char _P_bidrem;                           //¸Å¼öÂ÷¼±ÀÜ·®         
-	char S_bidrem                         [  9];	char _S_bidrem;                           //¸Å¼öÂ÷Â÷¼±ÀÜ·®       
-	char S4_bidrem                        [  9];	char _S4_bidrem;                          //¸Å¼ö4Â÷¼±ÀÜ·®        
-	char S5_bidrem                        [  9];	char _S5_bidrem;                          //¸Å¼ö5Â÷¼±ÀÜ·®        
-	char S6_bidrem                        [  9];	char _S6_bidrem;                          //¸Å¼ö6Â÷¼±ÀÜ·®        
-	char S7_bidrem                        [  9];	char _S7_bidrem;                          //¸Å¼ö7Â÷¼±ÀÜ·®        
-	char S8_bidrem                        [  9];	char _S8_bidrem;                          //¸Å¼ö8Â÷¼±ÀÜ·®        
-	char S9_bidrem                        [  9];	char _S9_bidrem;                          //¸Å¼ö9Â÷¼±ÀÜ·®        
-	char S10_bidrem                       [  9];	char _S10_bidrem;                         //¸Å¼ö10Â÷¼±ÀÜ·®       
-	char T_offerrem                       [  9];	char _T_offerrem;                         //ÃÑ¸ÅµµÀÜ·®           
-	char T_bidrem                         [  9];	char _T_bidrem;                           //ÃÑ¸Å¼öÀÜ·®           
-	char O_offerrem                       [  9];	char _O_offerrem;                         //½Ã°£¿Ü¸ÅµµÀÜ·®       
-	char O_bidrem                         [  9];	char _O_bidrem;                           //½Ã°£¿Ü¸Å¼öÀÜ·®       
-	char pivot2upz7                       [  7];	char _pivot2upz7;                         //ÇÇº¿2Â÷ÀúÇ×          
-	char pivot1upz7                       [  7];	char _pivot1upz7;                         //ÇÇº¿1Â÷ÀúÇ×          
-	char pivotz7                          [  7];	char _pivotz7;                            //ÇÇº¿°¡               
-	char pivot1dnz7                       [  7];	char _pivot1dnz7;                         //ÇÇº¿1Â÷ÁöÁö          
-	char pivot2dnz7                       [  7];	char _pivot2dnz7;                         //ÇÇº¿2Â÷ÁöÁö          
-	char sosokz6                          [  6];	char _sosokz6;                            //ÄÚ½ºÇÇÄÚ½º´Ú±¸ºÐ     
-	char jisunamez18                      [ 18];	char _jisunamez18;                        //¾÷Á¾¸í               
-	char capsizez6                        [  6];	char _capsizez6;                          //ÀÚº»±Ý±Ô¸ð           
-	char output1z16                       [ 16];	char _output1z16;                         //°á»ê¿ù               
-	char marcket1z16                      [ 16];	char _marcket1z16;                        //½ÃÀåÁ¶Ä¡1            
-	char marcket2z16                      [ 16];	char _marcket2z16;                        //½ÃÀåÁ¶Ä¡2            
-	char marcket3z16                      [ 16];	char _marcket3z16;                        //½ÃÀåÁ¶Ä¡3            
-	char marcket4z16                      [ 16];	char _marcket4z16;                        //½ÃÀåÁ¶Ä¡4            
-	char marcket5z16                      [ 16];	char _marcket5z16;                        //½ÃÀåÁ¶Ä¡5            
-	char marcket6z16                      [ 16];	char _marcket6z16;                        //½ÃÀåÁ¶Ä¡6            
-	char cbtext                           [  6];	char _cbtext;                             //CB±¸ºÐ               
-	char parvalue                         [  7];	char _parvalue;                           //¾×¸é°¡               
-	char prepricetitlez12                 [ 12];	char _prepricetitlez12;                   //ÀüÀÏÁ¾°¡Å¸ÀÌÆ²       
-	char prepricez7                       [  7];	char _prepricez7;                         //ÀüÀÏÁ¾°¡             
-	char subprice                         [  7];	char _subprice;                           //´ë¿ë°¡               
-	char gongpricez7                      [  7];	char _gongpricez7;                        //°ø¸ð°¡               
-	char high5                            [  7];	char _high5;                              //5ÀÏ°í°¡              
-	char low5                             [  7];	char _low5;                               //5ÀÏÀú°¡              
-	char high20                           [  7];	char _high20;                             //20ÀÏ°í°¡             
-	char low20                            [  7];	char _low20;                              //20ÀÏÀú°¡             
-	char yhigh                            [  7];	char _yhigh;                              //52ÁÖÃÖ°í°¡           
-	char yhighdate                        [  4];	char _yhighdate;                          //52ÁÖÃÖ°í°¡ÀÏ         
-	char ylow                             [  7];	char _ylow;                               //52ÁÖÃÖÀú°¡           
-	char ylowdate                         [  4];	char _ylowdate;                           //52ÁÖÃÖÀú°¡ÀÏ         
-	char movlistingz8                     [  8];	char _movlistingz8;                       //À¯µ¿ÁÖ½Ä¼ö           
-	char listing                          [ 12];	char _listing;                            //»óÀåÁÖ½Ä¼ö           
-	char totpricez9                       [  9];	char _totpricez9;                         //½Ã°¡ÃÑ¾×             
-	char tratimez5                        [  5];	char _tratimez5;                          //½Ã°£                 
-	char off_tra1                         [  6];	char _off_tra1;                           //¸Åµµ°Å·¡¿ø1          
-	char bid_tra1                         [  6];	char _bid_tra1;                           //¸Å¼ö°Å·¡¿ø1          
-	char N_offvolume1                     [  9];	char _N_offvolume1;                       //¸Åµµ°Å·¡·®1          
-	char N_bidvolume1                     [  9];	char _N_bidvolume1;                       //¸Å¼ö°Å·¡·®1          
-	char off_tra2                         [  6];	char _off_tra2;                           //¸Åµµ°Å·¡¿ø2          
-	char bid_tra2                         [  6];	char _bid_tra2;                           //¸Å¼ö°Å·¡¿ø2          
-	char N_offvolume2                     [  9];	char _N_offvolume2;                       //¸Åµµ°Å·¡·®2          
-	char N_bidvolume2                     [  9];	char _N_bidvolume2;                       //¸Å¼ö°Å·¡·®2          
-	char off_tra3                         [  6];	char _off_tra3;                           //¸Åµµ°Å·¡¿ø3          
-	char bid_tra3                         [  6];	char _bid_tra3;                           //¸Å¼ö°Å·¡¿ø3          
-	char N_offvolume3                     [  9];	char _N_offvolume3;                       //¸Åµµ°Å·¡·®3          
-	char N_bidvolume3                     [  9];	char _N_bidvolume3;                       //¸Å¼ö°Å·¡·®3          
-	char off_tra4                         [  6];	char _off_tra4;                           //¸Åµµ°Å·¡¿ø4          
-	char bid_tra4                         [  6];	char _bid_tra4;                           //¸Å¼ö°Å·¡¿ø4          
-	char N_offvolume4                     [  9];	char _N_offvolume4;                       //¸Åµµ°Å·¡·®4          
-	char N_bidvolume4                     [  9];	char _N_bidvolume4;                       //¸Å¼ö°Å·¡·®4          
-	char off_tra5                         [  6];	char _off_tra5;                           //¸Åµµ°Å·¡¿ø5          
-	char bid_tra5                         [  6];	char _bid_tra5;                           //¸Å¼ö°Å·¡¿ø5          
-	char N_offvolume5                     [  9];	char _N_offvolume5;                       //¸Åµµ°Å·¡·®5          
-	char N_bidvolume5                     [  9];	char _N_bidvolume5;                       //¸Å¼ö°Å·¡·®5          
-	char N_offvolall                      [  9];	char _N_offvolall;                        //¸Åµµ¿Ü±¹ÀÎ°Å·¡·®     
-	char N_bidvolall                      [  9];	char _N_bidvolall;                        //¸Å¼ö¿Ü±¹ÀÎ°Å·¡·®     
-	char fortimez6                        [  6];	char _fortimez6;                          //¿Ü±¹ÀÎ½Ã°£           
-	char forratez5                        [  5];	char _forratez5;                          //¿Ü±¹ÀÎÁöºÐÀ²         
-	char settdatez4                       [  4];	char _settdatez4;                         //°áÁ¦ÀÏ               
-	char cratez5                          [  5];	char _cratez5;                            //ÀÜ°íºñÀ²(%)          
-	char yudatez4                         [  4];	char _yudatez4;                           //À¯»ó±âÁØÀÏ           
-	char mudatez4                         [  4];	char _mudatez4;                           //¹«»ó±âÁØÀÏ           
-	char yuratez5                         [  5];	char _yuratez5;                           //À¯»ó¹èÁ¤ºñÀ²         
-	char muratez5                         [  5];	char _muratez5;                           //¹«»ó¹èÁ¤ºñÀ²         
-	char formovolz10                      [ 10];	char _formovolz10;                        //¿Ü±¹ÀÎº¯µ¿ÁÖ¼ö       
-	char jasa                             [  1];	char _jasa;                               //ÀÚ»çÁÖ               
-	char listdatez8                       [  8];	char _listdatez8;                         //»óÀåÀÏ               
-	char daeratez5                        [  5];	char _daeratez5;                          //´ëÁÖÁÖÁöºÐÀ²         
-	char daedatez6                        [  6];	char _daedatez6;                          //´ëÁÖÁÖÁöºÐÀÏÀÚ       
-	char clovergb                         [  1];	char _clovergb;                           //³×ÀÙÅ¬·Î¹ö           
-	char depositgb                        [  1];	char _depositgb;                          //Áõ°Å±ÝÀ²             
-	char capital                          [  9];	char _capital;                            //ÀÚº»±Ý               
-	char N_alloffvol                      [  9];	char _N_alloffvol;                        //ÀüÃ¼°Å·¡¿ø¸ÅµµÇÕ     
-	char N_allbidvol                      [  9];	char _N_allbidvol;                        //ÀüÃ¼°Å·¡¿ø¸Å¼öÇÕ     
-	char hnamez21                         [ 21];	char _hnamez21;                           //Á¾¸ñ¸í2              
-	char detourgb                         [  1];	char _detourgb;                           //¿ìÈ¸»óÀå¿©ºÎ         
-	char yuratez6                         [  6];	char _yuratez6;                           //À¯µ¿ÁÖÈ¸ÀüÀ²2        
-	char sosokz6_1                        [  6];	char _sosokz6_1;                          //ÄÚ½ºÇÇ±¸ºÐ           
-	char maedatez4                        [  4];	char _maedatez4;                          //°ø¿©À²±âÁØÀÏ         
-	char lratez5                          [  5];	char _lratez5;                            //°ø¿©À²(%)            
+	char code                             [  6];	char _code;                               //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char hname                            [ 13];	char _hname;                              //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char price                            [  7];	char _price;                              //ï¿½ï¿½ï¿½ç°¡               
+	char sign                             [  1];	char _sign;                               //ï¿½ï¿½ï¿½ï¿½ï¿½È£             
+	char change                           [  6];	char _change;                             //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char chrate                           [  5];	char _chrate;                             //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char offer                            [  7];	char _offer;                              //ï¿½Åµï¿½È£ï¿½ï¿½             
+	char bid                              [  7];	char _bid;                                //ï¿½Å¼ï¿½È£ï¿½ï¿½             
+	char volume                           [  9];	char _volume;                             //ï¿½Å·ï¿½ï¿½ï¿½               
+	char volrate                          [  6];	char _volrate;                            //ï¿½Å·ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char yurate                           [  5];	char _yurate;                             //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¸ï¿½ï¿½ï¿½ï¿½         
+	char value                            [  9];	char _value;                              //ï¿½Å·ï¿½ï¿½ï¿½ï¿½             
+	char uplmtprice                       [  7];	char _uplmtprice;                         //ï¿½ï¿½ï¿½Ñ°ï¿½               
+	char high                             [  7];	char _high;                               //ï¿½ï¿½ï¿½ß°ï¿½             
+	char open                             [  7];	char _open;                               //ï¿½Ã°ï¿½                 
+	char opensign                         [  1];	char _opensign;                           //ï¿½Ã°ï¿½ï¿½ï¿½ï¿½ï¿½È£         
+	char openchange                       [  6];	char _openchange;                         //ï¿½Ã°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char low                              [  7];	char _low;                                //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char dnlmtprice                       [  7];	char _dnlmtprice;                         //ï¿½ï¿½ï¿½Ñ°ï¿½               
+	char hotime                           [  8];	char _hotime;                             //È£ï¿½ï¿½ï¿½Ã°ï¿½             
+	char offerho                          [  7];	char _offerho;                            //ï¿½Åµï¿½ï¿½Ö¿ì¼±È£ï¿½ï¿½       
+	char P_offer                          [  7];	char _P_offer;                            //ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½         
+	char S_offer                          [  7];	char _S_offer;                            //ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½       
+	char S4_offer                         [  7];	char _S4_offer;                           //ï¿½Åµï¿½4ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char S5_offer                         [  7];	char _S5_offer;                           //ï¿½Åµï¿½5ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char S6_offer                         [  7];	char _S6_offer;                           //ï¿½Åµï¿½6ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char S7_offer                         [  7];	char _S7_offer;                           //ï¿½Åµï¿½7ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char S8_offer                         [  7];	char _S8_offer;                           //ï¿½Åµï¿½8ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char S9_offer                         [  7];	char _S9_offer;                           //ï¿½Åµï¿½9ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char S10_offer                        [  7];	char _S10_offer;                          //ï¿½Åµï¿½10ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½       
+	char bidho                            [  7];	char _bidho;                              //ï¿½Å¼ï¿½ï¿½Ö¿ì¼±È£ï¿½ï¿½       
+	char P_bid                            [  7];	char _P_bid;                              //ï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½         
+	char S_bid                            [  7];	char _S_bid;                              //ï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½       
+	char S4_bid                           [  7];	char _S4_bid;                             //ï¿½Å¼ï¿½4ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char S5_bid                           [  7];	char _S5_bid;                             //ï¿½Å¼ï¿½5ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char S6_bid                           [  7];	char _S6_bid;                             //ï¿½Å¼ï¿½6ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char S7_bid                           [  7];	char _S7_bid;                             //ï¿½Å¼ï¿½7ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char S8_bid                           [  7];	char _S8_bid;                             //ï¿½Å¼ï¿½8ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char S9_bid                           [  7];	char _S9_bid;                             //ï¿½Å¼ï¿½9ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char S10_bid                          [  7];	char _S10_bid;                            //ï¿½Å¼ï¿½10ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½       
+	char offerrem                         [  9];	char _offerrem;                           //ï¿½Åµï¿½ï¿½Ö¿ì¼±ï¿½Ü·ï¿½       
+	char P_offerrem                       [  9];	char _P_offerrem;                         //ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½         
+	char S_offerrem                       [  9];	char _S_offerrem;                         //ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½       
+	char S4_offerrem                      [  9];	char _S4_offerrem;                        //ï¿½Åµï¿½4ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char S5_offerrem                      [  9];	char _S5_offerrem;                        //ï¿½Åµï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char S6_offerrem                      [  9];	char _S6_offerrem;                        //ï¿½Åµï¿½6ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char S7_offerrem                      [  9];	char _S7_offerrem;                        //ï¿½Åµï¿½7ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char S8_offerrem                      [  9];	char _S8_offerrem;                        //ï¿½Åµï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char S9_offerrem                      [  9];	char _S9_offerrem;                        //ï¿½Åµï¿½9ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char S10_offerrem                     [  9];	char _S10_offerrem;                       //ï¿½Åµï¿½10ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½       
+	char bidrem                           [  9];	char _bidrem;                             //ï¿½Å¼ï¿½ï¿½Ö¿ì¼±ï¿½Ü·ï¿½       
+	char P_bidrem                         [  9];	char _P_bidrem;                           //ï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½         
+	char S_bidrem                         [  9];	char _S_bidrem;                           //ï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½       
+	char S4_bidrem                        [  9];	char _S4_bidrem;                          //ï¿½Å¼ï¿½4ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char S5_bidrem                        [  9];	char _S5_bidrem;                          //ï¿½Å¼ï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char S6_bidrem                        [  9];	char _S6_bidrem;                          //ï¿½Å¼ï¿½6ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char S7_bidrem                        [  9];	char _S7_bidrem;                          //ï¿½Å¼ï¿½7ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char S8_bidrem                        [  9];	char _S8_bidrem;                          //ï¿½Å¼ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char S9_bidrem                        [  9];	char _S9_bidrem;                          //ï¿½Å¼ï¿½9ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char S10_bidrem                       [  9];	char _S10_bidrem;                         //ï¿½Å¼ï¿½10ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½       
+	char T_offerrem                       [  9];	char _T_offerrem;                         //ï¿½Ñ¸Åµï¿½ï¿½Ü·ï¿½           
+	char T_bidrem                         [  9];	char _T_bidrem;                           //ï¿½Ñ¸Å¼ï¿½ï¿½Ü·ï¿½           
+	char O_offerrem                       [  9];	char _O_offerrem;                         //ï¿½Ã°ï¿½ï¿½Ü¸Åµï¿½ï¿½Ü·ï¿½       
+	char O_bidrem                         [  9];	char _O_bidrem;                           //ï¿½Ã°ï¿½ï¿½Ü¸Å¼ï¿½ï¿½Ü·ï¿½       
+	char pivot2upz7                       [  7];	char _pivot2upz7;                         //ï¿½Çºï¿½2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½          
+	char pivot1upz7                       [  7];	char _pivot1upz7;                         //ï¿½Çºï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½          
+	char pivotz7                          [  7];	char _pivotz7;                            //ï¿½Çºï¿½ï¿½ï¿½               
+	char pivot1dnz7                       [  7];	char _pivot1dnz7;                         //ï¿½Çºï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½          
+	char pivot2dnz7                       [  7];	char _pivot2dnz7;                         //ï¿½Çºï¿½2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½          
+	char sosokz6                          [  6];	char _sosokz6;                            //ï¿½Ú½ï¿½ï¿½ï¿½ï¿½Ú½ï¿½ï¿½Ú±ï¿½ï¿½ï¿½     
+	char jisunamez18                      [ 18];	char _jisunamez18;                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char capsizez6                        [  6];	char _capsizez6;                          //ï¿½Úºï¿½ï¿½Ý±Ô¸ï¿½           
+	char output1z16                       [ 16];	char _output1z16;                         //ï¿½ï¿½ï¿½ï¿½               
+	char marcket1z16                      [ 16];	char _marcket1z16;                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¡1            
+	char marcket2z16                      [ 16];	char _marcket2z16;                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¡2            
+	char marcket3z16                      [ 16];	char _marcket3z16;                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¡3            
+	char marcket4z16                      [ 16];	char _marcket4z16;                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¡4            
+	char marcket5z16                      [ 16];	char _marcket5z16;                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¡5            
+	char marcket6z16                      [ 16];	char _marcket6z16;                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¡6            
+	char cbtext                           [  6];	char _cbtext;                             //CBï¿½ï¿½ï¿½ï¿½               
+	char parvalue                         [  7];	char _parvalue;                           //ï¿½×¸é°¡               
+	char prepricetitlez12                 [ 12];	char _prepricetitlez12;                   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¸ï¿½ï¿½Æ²       
+	char prepricez7                       [  7];	char _prepricez7;                         //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char subprice                         [  7];	char _subprice;                           //ï¿½ï¿½ë°¡               
+	char gongpricez7                      [  7];	char _gongpricez7;                        //ï¿½ï¿½ï¿½ï¿½               
+	char high5                            [  7];	char _high5;                              //5ï¿½Ï°ï¿½              
+	char low5                             [  7];	char _low5;                               //5ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½              
+	char high20                           [  7];	char _high20;                             //20ï¿½Ï°ï¿½             
+	char low20                            [  7];	char _low20;                              //20ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char yhigh                            [  7];	char _yhigh;                              //52ï¿½ï¿½ï¿½Ö°ï¿½           
+	char yhighdate                        [  4];	char _yhighdate;                          //52ï¿½ï¿½ï¿½Ö°ï¿½ï¿½ï¿½         
+	char ylow                             [  7];	char _ylow;                               //52ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½           
+	char ylowdate                         [  4];	char _ylowdate;                           //52ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char movlistingz8                     [  8];	char _movlistingz8;                       //ï¿½ï¿½ï¿½ï¿½ï¿½Ö½Ä¼ï¿½           
+	char listing                          [ 12];	char _listing;                            //ï¿½ï¿½ï¿½ï¿½ï¿½Ö½Ä¼ï¿½           
+	char totpricez9                       [  9];	char _totpricez9;                         //ï¿½Ã°ï¿½ï¿½Ñ¾ï¿½             
+	char tratimez5                        [  5];	char _tratimez5;                          //ï¿½Ã°ï¿½                 
+	char off_tra1                         [  6];	char _off_tra1;                           //ï¿½Åµï¿½ï¿½Å·ï¿½ï¿½ï¿½1          
+	char bid_tra1                         [  6];	char _bid_tra1;                           //ï¿½Å¼ï¿½ï¿½Å·ï¿½ï¿½ï¿½1          
+	char N_offvolume1                     [  9];	char _N_offvolume1;                       //ï¿½Åµï¿½ï¿½Å·ï¿½ï¿½ï¿½1          
+	char N_bidvolume1                     [  9];	char _N_bidvolume1;                       //ï¿½Å¼ï¿½ï¿½Å·ï¿½ï¿½ï¿½1          
+	char off_tra2                         [  6];	char _off_tra2;                           //ï¿½Åµï¿½ï¿½Å·ï¿½ï¿½ï¿½2          
+	char bid_tra2                         [  6];	char _bid_tra2;                           //ï¿½Å¼ï¿½ï¿½Å·ï¿½ï¿½ï¿½2          
+	char N_offvolume2                     [  9];	char _N_offvolume2;                       //ï¿½Åµï¿½ï¿½Å·ï¿½ï¿½ï¿½2          
+	char N_bidvolume2                     [  9];	char _N_bidvolume2;                       //ï¿½Å¼ï¿½ï¿½Å·ï¿½ï¿½ï¿½2          
+	char off_tra3                         [  6];	char _off_tra3;                           //ï¿½Åµï¿½ï¿½Å·ï¿½ï¿½ï¿½3          
+	char bid_tra3                         [  6];	char _bid_tra3;                           //ï¿½Å¼ï¿½ï¿½Å·ï¿½ï¿½ï¿½3          
+	char N_offvolume3                     [  9];	char _N_offvolume3;                       //ï¿½Åµï¿½ï¿½Å·ï¿½ï¿½ï¿½3          
+	char N_bidvolume3                     [  9];	char _N_bidvolume3;                       //ï¿½Å¼ï¿½ï¿½Å·ï¿½ï¿½ï¿½3          
+	char off_tra4                         [  6];	char _off_tra4;                           //ï¿½Åµï¿½ï¿½Å·ï¿½ï¿½ï¿½4          
+	char bid_tra4                         [  6];	char _bid_tra4;                           //ï¿½Å¼ï¿½ï¿½Å·ï¿½ï¿½ï¿½4          
+	char N_offvolume4                     [  9];	char _N_offvolume4;                       //ï¿½Åµï¿½ï¿½Å·ï¿½ï¿½ï¿½4          
+	char N_bidvolume4                     [  9];	char _N_bidvolume4;                       //ï¿½Å¼ï¿½ï¿½Å·ï¿½ï¿½ï¿½4          
+	char off_tra5                         [  6];	char _off_tra5;                           //ï¿½Åµï¿½ï¿½Å·ï¿½ï¿½ï¿½5          
+	char bid_tra5                         [  6];	char _bid_tra5;                           //ï¿½Å¼ï¿½ï¿½Å·ï¿½ï¿½ï¿½5          
+	char N_offvolume5                     [  9];	char _N_offvolume5;                       //ï¿½Åµï¿½ï¿½Å·ï¿½ï¿½ï¿½5          
+	char N_bidvolume5                     [  9];	char _N_bidvolume5;                       //ï¿½Å¼ï¿½ï¿½Å·ï¿½ï¿½ï¿½5          
+	char N_offvolall                      [  9];	char _N_offvolall;                        //ï¿½Åµï¿½ï¿½Ü±ï¿½ï¿½Î°Å·ï¿½ï¿½ï¿½     
+	char N_bidvolall                      [  9];	char _N_bidvolall;                        //ï¿½Å¼ï¿½ï¿½Ü±ï¿½ï¿½Î°Å·ï¿½ï¿½ï¿½     
+	char fortimez6                        [  6];	char _fortimez6;                          //ï¿½Ü±ï¿½ï¿½Î½Ã°ï¿½           
+	char forratez5                        [  5];	char _forratez5;                          //ï¿½Ü±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char settdatez4                       [  4];	char _settdatez4;                         //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char cratez5                          [  5];	char _cratez5;                            //ï¿½Ü°ï¿½ï¿½ï¿½ï¿½(%)          
+	char yudatez4                         [  4];	char _yudatez4;                           //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½           
+	char mudatez4                         [  4];	char _mudatez4;                           //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½           
+	char yuratez5                         [  5];	char _yuratez5;                           //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char muratez5                         [  5];	char _muratez5;                           //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char formovolz10                      [ 10];	char _formovolz10;                        //ï¿½Ü±ï¿½ï¿½Îºï¿½ï¿½ï¿½ï¿½Ö¼ï¿½       
+	char jasa                             [  1];	char _jasa;                               //ï¿½Ú»ï¿½ï¿½ï¿½               
+	char listdatez8                       [  8];	char _listdatez8;                         //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char daeratez5Tc1151OutBlock2;                        [  5];	char _daeratez5;                          //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	char daedatez6                        [  6];	char _daedatez6;                          //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char clovergb                         [  1];	char _clovergb;                           //ï¿½ï¿½ï¿½ï¿½Å¬ï¿½Î¹ï¿½           
+	char depositgb                        [  1];	char _depositgb;                          //ï¿½ï¿½ï¿½Å±ï¿½ï¿½ï¿½             
+	char capital                          [  9];	char _capital;                            //ï¿½Úºï¿½ï¿½ï¿½               
+	char N_alloffvol                      [  9];	char _N_alloffvol;                        //ï¿½ï¿½Ã¼ï¿½Å·ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½ï¿½     
+	char N_allbidvol                      [  9];	char _N_allbidvol;                        //ï¿½ï¿½Ã¼ï¿½Å·ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½ï¿½     
+	char hnamez21                         [ 21];	char _hnamez21;                           //ï¿½ï¿½ï¿½ï¿½ï¿½2              
+	char detourgb                         [  1];	char _detourgb;                           //ï¿½ï¿½È¸ï¿½ï¿½ï¿½å¿©ï¿½ï¿½         
+	char yuratez6                         [  6];	char _yuratez6;                           //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¸ï¿½ï¿½ï¿½ï¿½2        
+	char sosokz6_1                        [  6];	char _sosokz6_1;                          //ï¿½Ú½ï¿½ï¿½Ç±ï¿½ï¿½ï¿½           
+	char maedatez4                        [  4];	char _maedatez4;                          //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char lratez5                          [  5];	char _lratez5;                            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(%)            
 	char perz5                            [  5];	char _perz5;                              //PER                  
-	char handogb                          [  1];	char _handogb;                            //Á¾¸ñº°½Å¿ëÇÑµµ       
-	char avgprice                         [  7];	char _avgprice;                           //°¡Áß°¡               
-	char listing2                         [ 12];	char _listing2;                           //»óÀåÁÖ½Ä¼ö_ÁÖ        
-	char addlisting                       [ 12];	char _addlisting;                         //Ãß°¡»óÀåÁÖ¼ö         
-	char gicomment                        [100];	char _gicomment;                          //Á¾¸ñcomment          
-	char prevolume                        [  9];	char _prevolume;                          //ÀüÀÏ°Å·¡·®           
-	char presign                          [  1];	char _presign;                            //ÀüÀÏ´ëºñµî¶ôºÎÈ£     
-	char prechange                        [  6];	char _prechange;                          //ÀüÀÏ´ëºñµî¶ôÆø       
-	char yhigh2                           [  7];	char _yhigh2;                             //¿¬Á¾ÃÖ°í°¡           
-	char yhighdate2                       [  4];	char _yhighdate2;                         //¿¬ÁßÃÖ°í°¡ÀÏ         
-	char ylow2                            [  7];	char _ylow2;                              //¿¬ÁßÃÖÀú°¡           
-	char ylowdate2                        [  4];	char _ylowdate2;                          //¿¬ÁßÃÖÀú°¡ÀÏ         
-	char forstock                         [ 15];	char _forstock;                           //¿Ü±¹ÀÎº¸À¯ÁÖ½Ä¼ö     
-	char forlmtz5                         [  5];	char _forlmtz5;                           //¿Ü±¹ÀÎÇÑµµÀ²(%)      
-	char maeunit                          [  5];	char _maeunit;                            //¸Å¸Å¼ö·®´ÜÀ§         
-	char mass_opt                         [  1];	char _mass_opt;                           //°æÀï´ë·®¹æÇâ±¸ºÐ     
-	char largemgb                         [  1];	char _largemgb;                           //´ë·®¸Å¸Å±¸ºÐ         
+	char handogb                          [  1];	char _handogb;                            //ï¿½ï¿½ï¿½ñº°½Å¿ï¿½ï¿½Ñµï¿½       
+	char avgprice                         [  7];	char _avgprice;                           //ï¿½ï¿½ï¿½ß°ï¿½               
+	char listing2                         [ 12];	char _listing2;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Ö½Ä¼ï¿½_ï¿½ï¿½        
+	char addlisting                       [ 12];	char _addlisting;                         //ï¿½ß°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¼ï¿½         
+	char gicomment                        [100];	char _gicomment;                          //ï¿½ï¿½ï¿½ï¿½comment          
+	char prevolume                        [  9];	char _prevolume;                          //ï¿½ï¿½ï¿½Ï°Å·ï¿½ï¿½ï¿½           
+	char presign                          [  1];	char _presign;                            //ï¿½ï¿½ï¿½Ï´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£     
+	char prechange                        [  6];	char _prechange;                          //ï¿½ï¿½ï¿½Ï´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char yhigh2                           [  7];	char _yhigh2;                             //ï¿½ï¿½ï¿½ï¿½ï¿½Ö°ï¿½           
+	char yhighdate2                       [  4];	char _yhighdate2;                         //ï¿½ï¿½ï¿½ï¿½ï¿½Ö°ï¿½ï¿½ï¿½         
+	char ylow2                            [  7];	char _ylow2;                              //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½           
+	char ylowdate2                        [  4];	char _ylowdate2;                          //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char forstock                         [ 15];	char _forstock;                           //ï¿½Ü±ï¿½ï¿½Îºï¿½ï¿½ï¿½ï¿½Ö½Ä¼ï¿½     
+	char forlmtz5                         [  5];	char _forlmtz5;                           //ï¿½Ü±ï¿½ï¿½ï¿½ï¿½Ñµï¿½ï¿½ï¿½(%)      
+	char maeunit                          [  5];	char _maeunit;                            //ï¿½Å¸Å¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char mass_opt                         [  1];	char _mass_opt;                           //ï¿½ï¿½ï¿½ï¿½ë·®ï¿½ï¿½ï¿½â±¸ï¿½ï¿½     
+	char largemgb                         [  1];	char _largemgb;                           //ï¿½ë·®ï¿½Å¸Å±ï¿½ï¿½ï¿½         
 } Tc1101OutBlock;
 
-typedef struct tagc1101OutBlock2    //º¯µ¿°Å·¡·®ÀÚ·á, [¹Ýº¹]
+typedef struct tagc1101OutBlock2    //ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½ï¿½Ú·ï¿½, [ï¿½Ýºï¿½]
 {
-	char time                             [  8];	char _time;                               //½Ã°£                 
-	char price                            [  7];	char _price;                              //ÇöÀç°¡               
-	char sign                             [  1];	char _sign;                               //µî¶ôºÎÈ£             
-	char change                           [  6];	char _change;                             //µî¶ôÆø               
-	char offer                            [  7];	char _offer;                              //¸ÅµµÈ£°¡             
-	char bid                              [  7];	char _bid;                                //¸Å¼öÈ£°¡             
-	char movolume                         [  8];	char _movolume;                           //º¯µ¿°Å·¡·®           
-	char volume                           [  9];	char _volume;                             //°Å·¡·®               
+	char time                             [  8];	char _time;                               //ï¿½Ã°ï¿½                 
+	char price                            [  7];	char _price;                              //ï¿½ï¿½ï¿½ç°¡               
+	char sign                             [  1];	char _sign;                               //ï¿½ï¿½ï¿½ï¿½ï¿½È£             
+	char change                           [  6];	char _change;                             //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char offer                            [  7];	char _offer;                              //ï¿½Åµï¿½È£ï¿½ï¿½             
+	char bid                              [  7];	char _bid;                                //ï¿½Å¼ï¿½È£ï¿½ï¿½             
+	char movolume                         [  8];	char _movolume;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½           
+	char volume                           [  9];	char _volume;                             //ï¿½Å·ï¿½ï¿½ï¿½               
 } Tc1101OutBlock2;
 
-typedef struct tagc1101OutBlock3    //Á¾¸ñÁöÇ¥
+typedef struct tagc1101OutBlock3    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¥
 {
-	char dongsi                           [  1];	char _dongsi;                             //µ¿½ÃÈ£°¡±¸ºÐ         
-	char jeqprice                         [  7];	char _jeqprice;                           //¿¹»óÃ¼°á°¡           
-	char jeqsign                          [  1];	char _jeqsign;                            //¿¹»óÃ¼°áºÎÈ£         
-	char jeqchange                        [  6];	char _jeqchange;                          //¿¹»óÃ¼°áµî¶ôÆø       
-	char jeqchrate                        [  5];	char _jeqchrate;                          //¿¹»óÃ¼°áµî¶ô·ü       
-	char jeqvol                           [  9];	char _jeqvol;                             //¿¹»óÃ¼°á¼ö·®         
-	char chkdataz1                        [  1];	char _chkdataz1;                          //ECNÁ¤º¸À¯¹«±¸ºÐ      
-	char ecn_price                        [  9];	char _ecn_price;                          //ECNÀüÀÏÁ¾°¡          
-	char ecn_sign                         [  1];	char _ecn_sign;                           //ECNºÎÈ£              
-	char ecn_change                       [  9];	char _ecn_change;                         //ECNµî¶ôÆø            
-	char ecn_chrate                       [  5];	char _ecn_chrate;                         //ECNµî¶ô·ü            
-	char ecn_volume                       [ 10];	char _ecn_volume;                         //ECNÃ¼°á¼ö·®          
-	char ecn_jeqsign                      [  1];	char _ecn_jeqsign;                        //ECN´ëºñ¿¹»óÃ¼°áºÎÈ£  
-	char ecn_jeqchange                    [  6];	char _ecn_jeqchange;                      //ECN´ëºñ¿¹»óÃ¼°áµî¶ôÆø 
-	char ecn_jeqchrate                    [  5];	char _ecn_jeqchrate;                      //ECN´ëºñ¿¹»óÃ¼°áµî¶ô·ü 
+	char dongsi                           [  1];	char _dongsi;                             //ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char jeqprice                         [  7];	char _jeqprice;                           //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½á°¡           
+	char jeqsign                          [  1];	char _jeqsign;                            //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½È£         
+	char jeqchange                        [  6];	char _jeqchange;                          //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char jeqchrate                        [  5];	char _jeqchrate;                          //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char jeqvol                           [  9];	char _jeqvol;                             //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char chkdataz1                        [  1];	char _chkdataz1;                          //ECNï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½      
+	char ecn_price                        [  9];	char _ecn_price;                          //ECNï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½          
+	char ecn_sign                         [  1];	char _ecn_sign;                           //ECNï¿½ï¿½È£              
+	char ecn_change                       [  9];	char _ecn_change;                         //ECNï¿½ï¿½ï¿½ï¿½ï¿½            
+	char ecn_chrate                       [  5];	char _ecn_chrate;                         //ECNï¿½ï¿½ï¿½ï¿½ï¿½            
+	char ecn_volume                       [ 10];	char _ecn_volume;                         //ECNÃ¼ï¿½ï¿½ï¿½ï¿½ï¿½          
+	char ecn_jeqsign                      [  1];	char _ecn_jeqsign;                        //ECNï¿½ï¿½ñ¿¹»ï¿½Ã¼ï¿½ï¿½ï¿½È£  
+	char ecn_jeqchange                    [  6];	char _ecn_jeqchange;                      //ECNï¿½ï¿½ñ¿¹»ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
+	char ecn_jeqchrate                    [  5];	char _ecn_jeqchrate;                      //ECNï¿½ï¿½ñ¿¹»ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
 } Tc1101OutBlock3;
 
 typedef struct tagc1101
 {
-	Tc1101InBlock                     c1101inblock                          ;  //±âº»ÀÔ·Â 
-	Tc1101OutBlock                    c1101outblock                         ;  //Á¾¸ñ¸¶½ºÅ¸±âº»ÀÚ·á 
-	Tc1101OutBlock2                   c1101outblock2                   [ 20];  //º¯µ¿°Å·¡·®ÀÚ·á , [¹Ýº¹]
-	Tc1101OutBlock3                   c1101outblock3                        ;  //Á¾¸ñÁöÇ¥ 
+	Tc1101InBlock                     c1101inblock                          ;  //ï¿½âº»ï¿½Ô·ï¿½ 
+	Tc1101OutBlock                    c1101outblock                         ;  //ï¿½ï¿½ï¿½ñ¸¶½ï¿½Å¸ï¿½âº»ï¿½Ú·ï¿½ 
+	Tc1101OutBlock2                   c1101outblock2                   [ 20];  //ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½ï¿½Ú·ï¿½ , [ï¿½Ýºï¿½]
+	Tc1101OutBlock3                   c1101outblock3                        ;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¥ 
 } Tc1101;
 
-typedef struct tags4101InBlock    //±âº»ÀÔ·Â
+typedef struct tags4101InBlock    //ï¿½âº»ï¿½Ô·ï¿½
 {
-	char formlang                         [  1];	char _formlang;                           //ÇÑ¿µ±¸ºÐ             
-	char fuitemz9                         [  9];	char _fuitemz9;                           //Á¾¸ñÄÚµå             
+	char formlang                         [  1];	char _formlang;                           //ï¿½Ñ¿ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char fuitemz9                         [  9];	char _fuitemz9;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } Ts4101InBlock;
 
-typedef struct tags4101OutBlock    //Á¾¸ñ¸¶½ºÅ¸±âº»ÀÚ·á
+typedef struct tags4101OutBlock    //ï¿½ï¿½ï¿½ñ¸¶½ï¿½Å¸ï¿½âº»ï¿½Ú·ï¿½
 {
-	char fuitem                           [  4];	char _fuitem;                             //Á¾¸ñÄÚµå             
-	char fuhname                          [ 12];	char _fuhname;                            //Á¾¸ñ¸í               
-	char fucurr                           [  5];	char _fucurr;                             //ÇöÀç°¡               
-	char fusign                           [  1];	char _fusign;                             //µî¶ôºÎÈ£             
-	char fuchange                         [  5];	char _fuchange;                           //µî¶ôÆø               
-	char fuchrate                         [  5];	char _fuchrate;                           //µî¶ô·ü               
-	char fubasis                          [  5];	char _fubasis;                            //º£ÀÌ½Ã½º             
-	char futheoryprice                    [  5];	char _futheoryprice;                      //ÀÌ·Ð°¡               
-	char fugrate                          [  5];	char _fugrate;                            //±«¸®µµ               
-	char fugratio                         [  5];	char _fugratio;                           //±«¸®À²               
-	char fuvolall                         [  7];	char _fuvolall;                           //°Å·¡·®               
-	char fuvalall                         [ 12];	char _fuvalall;                           //´©Àû°Å·¡´ë±Ý(¹é¸¸)   
-	char fuopenyak                        [  7];	char _fuopenyak;                          //¹Ì°áÁ¦¾àÁ¤¼ö·®       
-	char fupreopenyak                     [  7];	char _fupreopenyak;                       //¹Ì°áÁ¦¾àÁ¤ÀüÀÏ       
-	char fuhprice                         [  5];	char _fuhprice;                           //»óÇÑ°¡               
-	char fuhigh                           [  5];	char _fuhigh;                             //°í°¡                 
-	char fuopen                           [  5];	char _fuopen;                             //½Ã°¡                 
-	char fuopensign                       [  1];	char _fuopensign;                         //½Ã°¡´ëºñºÎÈ£         
-	char fuopenchange                     [  5];	char _fuopenchange;                       //½Ã°¡´ëºñµî¶ô         
-	char fulow                            [  5];	char _fulow;                              //Àú°¡                 
-	char fulprice                         [  5];	char _fulprice;                           //ÇÏÇÑ°¡               
-	char fucbhprice                       [  5];	char _fucbhprice;                         //CB¹ßµ¿»óÇÑ           
-	char fucblprice                       [  5];	char _fucblprice;                         //CB¹ßµ¿ÇÏÇÑ           
-	char fudehprice                       [  5];	char _fudehprice;                         //DEMARKÀúÇ×           
-	char fudelprice                       [  5];	char _fudelprice;                         //DEMARKÁöÁö           
-	char fulisthprice                     [  5];	char _fulisthprice;                       //»óÀåÈÄÃÖ°í°¡         
-	char fulisthdate                      [  8];	char _fulisthdate;                        //»óÀåÈÄÃÖ°íÀÏ         
-	char fulistlprice                     [  5];	char _fulistlprice;                       //»óÀåÈÄÃÖÀú°¡         
-	char fulistldate                      [  8];	char _fulistldate;                        //»óÀåÈÄÃÖÀúÀÏ         
-	char fulastdate                       [  8];	char _fulastdate;                         //ÃÖÁ¾°Å·¡ÀÏ           
-	char fujandatecnt                     [  3];	char _fujandatecnt;                       //ÀÜÁ¸ÀÏ               
-	char fucdratio                        [  6];	char _fucdratio;                          //¹«À§ÇèÀÌÀÚÀ²         
-	char fuchetime                        [  8];	char _fuchetime;                          //È£°¡½Ã°£             
-	char fuoffer                          [  5];	char _fuoffer;                            //¸ÅµµÃÖ¿ì¼±È£°¡       
-	char fujoffer                         [  5];	char _fujoffer;                           //¸ÅµµÂ÷¼±È£°¡         
-	char fujjoffer                        [  5];	char _fujjoffer;                          //¸ÅµµÂ÷Â÷¼±È£°¡       
-	char fuj4offer                        [  5];	char _fuj4offer;                          //¸Åµµ4Â÷¼±È£°¡        
-	char fuj5offer                        [  5];	char _fuj5offer;                          //¸Åµµ5Â÷¼±È£°¡        
-	char fubid                            [  5];	char _fubid;                              //¸Å¼öÃÖ¿ì¼±È£°¡       
-	char fujbid                           [  5];	char _fujbid;                             //¸Å¼öÂ÷¼±È£°¡         
-	char fujjbid                          [  5];	char _fujjbid;                            //¸Å¼öÂ÷Â÷¼±È£°¡       
-	char fuj4bid                          [  5];	char _fuj4bid;                            //¸Å¼ö4Â÷¼±È£°¡        
-	char fuj5bid                          [  5];	char _fuj5bid;                            //¸Å¼ö5Â÷¼±È£°¡        
-	char fuofferjan                       [  6];	char _fuofferjan;                         //¸ÅµµÃÖ¿ì¼±ÀÜ·®       
-	char fujofferjan                      [  6];	char _fujofferjan;                        //¸ÅµµÂ÷¼±ÀÜ·®         
-	char fujjofferjan                     [  6];	char _fujjofferjan;                       //¸ÅµµÂ÷Â÷¼±ÀÜ·®       
-	char fuj4offerjan                     [  6];	char _fuj4offerjan;                       //¸Åµµ4Â÷¼±ÀÜ·®        
-	char fuj5offerjan                     [  6];	char _fuj5offerjan;                       //¸Åµµ5Â÷¼±ÀÜ·®        
-	char fubidjan                         [  6];	char _fubidjan;                           //¸Å¼öÃÖ¿ì¼±ÀÜ·®       
-	char fujbidjan                        [  6];	char _fujbidjan;                          //¸Å¼öÂ÷¼±ÀÜ·®         
-	char fujjbidjan                       [  6];	char _fujjbidjan;                         //¸Å¼öÂ÷Â÷¼±ÀÜ·®       
-	char fuj4bidjan                       [  6];	char _fuj4bidjan;                         //¸Å¼ö4Â÷¼±ÀÜ·®        
-	char fuj5bidjan                       [  6];	char _fuj5bidjan;                         //¸Å¼ö5Â÷¼±ÀÜ·®        
-	char futofferjan                      [  6];	char _futofferjan;                        //ÃÑ¸ÅµµÀÜ·®           
-	char futbidjan                        [  6];	char _futbidjan;                          //ÃÑ¸Å¼öÀÜ·®           
-	char fuoffersu                        [  4];	char _fuoffersu;                          //¸ÅµµÃÖ¿ì¼±°Ç¼ö       
-	char fujoffersu                       [  4];	char _fujoffersu;                         //¸ÅµµÂ÷¼±°Ç¼ö         
-	char fujjoffersu                      [  4];	char _fujjoffersu;                        //¸ÅµµÂ÷Â÷¼±°Ç¼ö       
-	char fuj4offersu                      [  4];	char _fuj4offersu;                        //¸Åµµ4Â÷¼±°Ç¼ö        
-	char fuj5offersu                      [  4];	char _fuj5offersu;                        //¸Åµµ5Â÷¼±°Ç¼ö        
-	char fubidsu                          [  4];	char _fubidsu;                            //¸Å¼öÃÖ¿ì¼±°Ç¼ö       
-	char fujbidsu                         [  4];	char _fujbidsu;                           //¸Å¼öÂ÷¼±°Ç¼ö         
-	char fujjbidsu                        [  4];	char _fujjbidsu;                          //¸Å¼öÂ÷Â÷¼±°Ç¼ö       
-	char fuj4bidsu                        [  4];	char _fuj4bidsu;                          //¸Å¼ö4Â÷¼±°Ç¼ö        
-	char fuj5bidsu                        [  4];	char _fuj5bidsu;                          //¸Å¼ö5Â÷¼±°Ç¼ö        
-	char futoffersu                       [  5];	char _futoffersu;                         //ÃÑ¸Åµµ°Ç¼ö           
-	char futbidsu                         [  5];	char _futbidsu;                           //ÃÑ¸Å¼ö°Ç¼ö           
-	char fupivot2upz5                     [  5];	char _fupivot2upz5;                       //ÇÇº¿2Â÷ÀúÇ×          
-	char fupivot1upz5                     [  5];	char _fupivot1upz5;                       //ÇÇº¿1Â÷ÀúÇ×          
-	char fupivotz5                        [  5];	char _fupivotz5;                          //ÇÇº¿°¡               
-	char fupivot1dnz5                     [  5];	char _fupivot1dnz5;                       //ÇÇº¿1Â÷ÁöÁö          
-	char fupivot2dnz5                     [  5];	char _fupivot2dnz5;                       //ÇÇº¿2Â÷ÁöÁö          
-	char fujgubun                         [  8];	char _fujgubun;                           //CB¹ßµ¿¿©ºÎ           
-	char fuspvolall                       [  7];	char _fuspvolall;                         //½ºÇÁ·¹µå°Å·¡·®       
-	char fudivideratio                    [  9];	char _fudivideratio;                      //¹è´ç¾×Áö¼ö           
-	char preclose                         [  5];	char _preclose;                           //ÀüÀÏÁ¾°¡             
-	char fudynhprice                      [  5];	char _fudynhprice;                        //½Ç½Ã°£»óÇÑ°¡         
-	char fudynlprice                      [  5];	char _fudynlprice;                        //½Ç½Ã°£ÇÏÇÑ°¡         
-	char fudynpriceflag                   [  1];	char _fudynpriceflag;                     //µ¿Àû°¡°ÝÁ¦ÇÑ¿©ºÎ     
-	char fubulkvol                        [  7];	char _fubulkvol;                          //ÇùÀÇ°Å·¡·®           
-	char exlmtgb                          [  1];	char _exlmtgb;                            //°¡°ÝÈ®´ë¿¹Á¤±¸ºÐ     
-	char uplmtgb                          [  1];	char _uplmtgb;                            //°¡°ÝÁ¦ÇÑÈ®´ë»óÇÑ´Ü°è 
-	char dnlmtgb                          [  1];	char _dnlmtgb;                            //°¡°ÝÁ¦ÇÑÈ®´ëÇÏÇÑ´Ü°è 
+	char fuitem                           [  4];	char _fuitem;                             //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char fuhname                          [ 12];	char _fuhname;                            //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char fucurr                           [  5];	char _fucurr;                             //ï¿½ï¿½ï¿½ç°¡               
+	char fusign                           [  1];	char _fusign;                             //ï¿½ï¿½ï¿½ï¿½ï¿½È£             
+	char fuchange                         [  5];	char _fuchange;                           //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char fuchrate                         [  5];	char _fuchrate;                           //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char fubasis                          [  5];	char _fubasis;                            //ï¿½ï¿½ï¿½Ì½Ã½ï¿½             
+	char futheoryprice                    [  5];	char _futheoryprice;                      //ï¿½Ì·Ð°ï¿½               
+	char fugrate                          [  5];	char _fugrate;                            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char fugratio                         [  5];	char _fugratio;                           //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char fuvolall                         [  7];	char _fuvolall;                           //ï¿½Å·ï¿½ï¿½ï¿½               
+	char fuvalall                         [ 12];	char _fuvalall;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½ï¿½(ï¿½é¸¸)   
+	char fuopenyak                        [  7];	char _fuopenyak;                          //ï¿½Ì°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char fupreopenyak                     [  7];	char _fupreopenyak;                       //ï¿½Ì°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char fuhprice                         [  5];	char _fuhprice;                           //ï¿½ï¿½ï¿½Ñ°ï¿½               
+	char fuhigh                           [  5];	char _fuhigh;                             //ï¿½ï¿½                 
+	char fuopen                           [  5];	char _fuopen;                             //ï¿½Ã°ï¿½                 
+	char fuopensign                       [  1];	char _fuopensign;                         //ï¿½Ã°ï¿½ï¿½ï¿½ï¿½ï¿½È£         
+	char fuopenchange                     [  5];	char _fuopenchange;                       //ï¿½Ã°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char fulow                            [  5];	char _fulow;                              //ï¿½ï¿½ï¿½ï¿½                 
+	char fulprice                         [  5];	char _fulprice;                           //ï¿½ï¿½ï¿½Ñ°ï¿½               
+	char fucbhprice                       [  5];	char _fucbhprice;                         //CBï¿½ßµï¿½ï¿½ï¿½ï¿½ï¿½           
+	char fucblprice                       [  5];	char _fucblprice;                         //CBï¿½ßµï¿½ï¿½ï¿½ï¿½ï¿½           
+	char fudehprice                       [  5];	char _fudehprice;                         //DEMARKï¿½ï¿½ï¿½ï¿½           
+	char fudelprice                       [  5];	char _fudelprice;                         //DEMARKï¿½ï¿½ï¿½ï¿½           
+	char fulisthprice                     [  5];	char _fulisthprice;                       //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö°ï¿½         
+	char fulisthdate                      [  8];	char _fulisthdate;                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö°ï¿½ï¿½ï¿½         
+	char fulistlprice                     [  5];	char _fulistlprice;                       //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char fulistldate                      [  8];	char _fulistldate;                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char fulastdate                       [  8];	char _fulastdate;                         //ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½           
+	char fujandatecnt                     [  3];	char _fujandatecnt;                       //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char fucdratio                        [  6];	char _fucdratio;                          //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char fuchetime                        [  8];	char _fuchetime;                          //È£ï¿½ï¿½ï¿½Ã°ï¿½             
+	char fuoffer                          [  5];	char _fuoffer;                            //ï¿½Åµï¿½ï¿½Ö¿ì¼±È£ï¿½ï¿½       
+	char fujoffer                         [  5];	char _fujoffer;                           //ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½         
+	char fujjoffer                        [  5];	char _fujjoffer;                          //ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½       
+	char fuj4offer                        [  5];	char _fuj4offer;                          //ï¿½Åµï¿½4ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char fuj5offer                        [  5];	char _fuj5offer;                          //ï¿½Åµï¿½5ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char fubid                            [  5];	char _fubid;                              //ï¿½Å¼ï¿½ï¿½Ö¿ì¼±È£ï¿½ï¿½       
+	char fujbid                           [  5];	char _fujbid;                             //ï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½         
+	char fujjbid                          [  5];	char _fujjbid;                            //ï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½       
+	char fuj4bid                          [  5];	char _fuj4bid;                            //ï¿½Å¼ï¿½4ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char fuj5bid                          [  5];	char _fuj5bid;                            //ï¿½Å¼ï¿½5ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char fuofferjan                       [  6];	char _fuofferjan;                         //ï¿½Åµï¿½ï¿½Ö¿ì¼±ï¿½Ü·ï¿½       
+	char fujofferjan                      [  6];	char _fujofferjan;                        //ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½         
+	char fujjofferjan                     [  6];	char _fujjofferjan;                       //ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½       
+	char fuj4offerjan                     [  6];	char _fuj4offerjan;                       //ï¿½Åµï¿½4ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char fuj5offerjan                     [  6];	char _fuj5offerjan;                       //ï¿½Åµï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char fubidjan                         [  6];	char _fubidjan;                           //ï¿½Å¼ï¿½ï¿½Ö¿ì¼±ï¿½Ü·ï¿½       
+	char fujbidjan                        [  6];	char _fujbidjan;                          //ï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½         
+	char fujjbidjan                       [  6];	char _fujjbidjan;                         //ï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½       
+	char fuj4bidjan                       [  6];	char _fuj4bidjan;                         //ï¿½Å¼ï¿½4ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char fuj5bidjan                       [  6];	char _fuj5bidjan;                         //ï¿½Å¼ï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char futofferjan                      [  6];	char _futofferjan;                        //ï¿½Ñ¸Åµï¿½ï¿½Ü·ï¿½           
+	char futbidjan                        [  6];	char _futbidjan;                          //ï¿½Ñ¸Å¼ï¿½ï¿½Ü·ï¿½           
+	char fuoffersu                        [  4];	char _fuoffersu;                          //ï¿½Åµï¿½ï¿½Ö¿ì¼±ï¿½Ç¼ï¿½       
+	char fujoffersu                       [  4];	char _fujoffersu;                         //ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½         
+	char fujjoffersu                      [  4];	char _fujjoffersu;                        //ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½       
+	char fuj4offersu                      [  4];	char _fuj4offersu;                        //ï¿½Åµï¿½4ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½        
+	char fuj5offersu                      [  4];	char _fuj5offersu;                        //ï¿½Åµï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½        
+	char fubidsu                          [  4];	char _fubidsu;                            //ï¿½Å¼ï¿½ï¿½Ö¿ì¼±ï¿½Ç¼ï¿½       
+	char fujbidsu                         [  4];	char _fujbidsu;                           //ï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½         
+	char fujjbidsu                        [  4];	char _fujjbidsu;                          //ï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½       
+	char fuj4bidsu                        [  4];	char _fuj4bidsu;                          //ï¿½Å¼ï¿½4ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½        
+	char fuj5bidsu                        [  4];	char _fuj5bidsu;                          //ï¿½Å¼ï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½        
+	char futoffersu                       [  5];	char _futoffersu;                         //ï¿½Ñ¸Åµï¿½ï¿½Ç¼ï¿½           
+	char futbidsu                         [  5];	char _futbidsu;                           //ï¿½Ñ¸Å¼ï¿½ï¿½Ç¼ï¿½           
+	char fupivot2upz5                     [  5];	char _fupivot2upz5;                       //ï¿½Çºï¿½2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½          
+	char fupivot1upz5                     [  5];	char _fupivot1upz5;                       //ï¿½Çºï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½          
+	char fupivotz5                        [  5];	char _fupivotz5;                          //ï¿½Çºï¿½ï¿½ï¿½               
+	char fupivot1dnz5                     [  5];	char _fupivot1dnz5;                       //ï¿½Çºï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½          
+	char fupivot2dnz5                     [  5];	char _fupivot2dnz5;                       //ï¿½Çºï¿½2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½          
+	char fujgubun                         [  8];	char _fujgubun;                           //CBï¿½ßµï¿½ï¿½ï¿½ï¿½ï¿½           
+	char fuspvolall                       [  7];	char _fuspvolall;                         //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½       
+	char fudivideratio                    [  9];	char _fudivideratio;                      //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½           
+	char preclose                         [  5];	char _preclose;                           //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char fudynhprice                      [  5];	char _fudynhprice;                        //ï¿½Ç½Ã°ï¿½ï¿½ï¿½ï¿½Ñ°ï¿½         
+	char fudynlprice                      [  5];	char _fudynlprice;                        //ï¿½Ç½Ã°ï¿½ï¿½ï¿½ï¿½Ñ°ï¿½         
+	char fudynpriceflag                   [  1];	char _fudynpriceflag;                     //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¿ï¿½ï¿½ï¿½     
+	char fubulkvol                        [  7];	char _fubulkvol;                          //ï¿½ï¿½ï¿½Ç°Å·ï¿½ï¿½ï¿½           
+	char exlmtgb                          [  1];	char _exlmtgb;                            //ï¿½ï¿½ï¿½ï¿½È®ï¿½ë¿¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½     
+	char uplmtgb                          [  1];	char _uplmtgb;                            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È®ï¿½ï¿½ï¿½ï¿½Ñ´Ü°ï¿½ 
+	char dnlmtgb                          [  1];	char _dnlmtgb;                            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È®ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´Ü°ï¿½ 
 } Ts4101OutBlock;
 
-typedef struct tags4101OutBlock1    //ÄÚ½ºÇÇ200Áö¼ö
+typedef struct tags4101OutBlock1    //ï¿½Ú½ï¿½ï¿½ï¿½200ï¿½ï¿½ï¿½ï¿½
 {
-	char fuitem                           [  4];	char _fuitem;                             //ÄÚ½ºÇÇ200ÄÚµå        
-	char fucurr                           [  5];	char _fucurr;                             //ÄÚ½ºÇÇ200Áö¼ö        
-	char fusign                           [  1];	char _fusign;                             //ÄÚ½ºÇÇ200µî¶ôºÎÈ£    
-	char fuchange                         [  5];	char _fuchange;                           //ÄÚ½ºÇÇ200µî¶ôÆø      
-	char fuchrate                         [  5];	char _fuchrate;                           //ÄÚ½ºÇÇ200µî¶ô·ü      
+	char fuitem                           [  4];	char _fuitem;                             //ï¿½Ú½ï¿½ï¿½ï¿½200ï¿½Úµï¿½        
+	char fucurr                           [  5];	char _fucurr;                             //ï¿½Ú½ï¿½ï¿½ï¿½200ï¿½ï¿½ï¿½ï¿½        
+	char fusign                           [  1];	char _fusign;                             //ï¿½Ú½ï¿½ï¿½ï¿½200ï¿½ï¿½ï¿½ï¿½ï¿½È£    
+	char fuchange                         [  5];	char _fuchange;                           //ï¿½Ú½ï¿½ï¿½ï¿½200ï¿½ï¿½ï¿½ï¿½ï¿½      
+	char fuchrate                         [  5];	char _fuchrate;                           //ï¿½Ú½ï¿½ï¿½ï¿½200ï¿½ï¿½ï¿½ï¿½ï¿½      
 } Ts4101OutBlock1;
 
-typedef struct tags4101OutBlock2    //º¯µ¿°Å·¡·®ÀÚ·á, [¹Ýº¹]
+typedef struct tags4101OutBlock2    //ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½ï¿½Ú·ï¿½, [ï¿½Ýºï¿½]
 {
-	char fuchetime                        [  8];	char _fuchetime;                          //½Ã°£                 
-	char fucurr                           [  5];	char _fucurr;                             //ÇöÀç°¡               
-	char fusign                           [  1];	char _fusign;                             //µî¶ôºÎÈ£             
-	char fuchange                         [  5];	char _fuchange;                           //µî¶ôÆø               
-	char fuoffer                          [  5];	char _fuoffer;                            //¸ÅµµÈ£°¡             
-	char fubid                            [  5];	char _fubid;                              //¸Å¼öÈ£°¡             
-	char fuvol                            [  6];	char _fuvol;                              //°Å·¡·®               
-	char fuvolall                         [  7];	char _fuvolall;                           //´©Àû°Å·¡·®           
-	char fuopenyak                        [  7];	char _fuopenyak;                          //¹Ì°áÁ¦¾àÁ¤           
+	char fuchetime                        [  8];	char _fuchetime;                          //ï¿½Ã°ï¿½                 
+	char fucurr                           [  5];	char _fucurr;                             //ï¿½ï¿½ï¿½ç°¡               
+	char fusign                           [  1];	char _fusign;                             //ï¿½ï¿½ï¿½ï¿½ï¿½È£             
+	char fuchange                         [  5];	char _fuchange;                           //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char fuoffer                          [  5];	char _fuoffer;                            //ï¿½Åµï¿½È£ï¿½ï¿½             
+	char fubid                            [  5];	char _fubid;                              //ï¿½Å¼ï¿½È£ï¿½ï¿½             
+	char fuvol                            [  6];	char _fuvol;                              //ï¿½Å·ï¿½ï¿½ï¿½               
+	char fuvolall                         [  7];	char _fuvolall;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½           
+	char fuopenyak                        [  7];	char _fuopenyak;                          //ï¿½Ì°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½           
 } Ts4101OutBlock2;
 
-typedef struct tags4101OutBlock3    //½Ã°£´ëº°ÅõÀÚÀÚÇöÈ²ÃÖ±Ù¸Þ¸ð¸®, [¹Ýº¹]
+typedef struct tags4101OutBlock3    //ï¿½Ã°ï¿½ï¿½ëº°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È²ï¿½Ö±Ù¸Þ¸ï¿½, [ï¿½Ýºï¿½]
 {
 	char titlez6                          [  6];	char _titlez6;                            //TITLE                
-	char amesuvalpure                     [  9];	char _amesuvalpure;                       //¼ø¸Å¼ö               
-	char cmesuvalpure                     [  9];	char _cmesuvalpure;                       //¸Åµµ                 
-	char imesuvalpure                     [  9];	char _imesuvalpure;                       //¸Å¼ö                 
+	char amesuvalpure                     [  9];	char _amesuvalpure;                       //ï¿½ï¿½ï¿½Å¼ï¿½               
+	char cmesuvalpure                     [  9];	char _cmesuvalpure;                       //ï¿½Åµï¿½                 
+	char imesuvalpure                     [  9];	char _imesuvalpure;                       //ï¿½Å¼ï¿½                 
 } Ts4101OutBlock3;
 
-typedef struct tags4101OutBlock4    //½Ã°£´ëº°ÅõÀÚÀÚÇöÈ²½Ã°£º°, [¹Ýº¹]
+typedef struct tags4101OutBlock4    //ï¿½Ã°ï¿½ï¿½ëº°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È²ï¿½Ã°ï¿½ï¿½ï¿½, [ï¿½Ýºï¿½]
 {
-	char timez8                           [  8];	char _timez8;                             //½Ã°£º°               
-	char amesuvalpure                     [  9];	char _amesuvalpure;                       //¿Ü±¹ÀÎ¼ø¸Å¼ö         
-	char cmesuvalpure                     [  9];	char _cmesuvalpure;                       //Áõ±Ç¼ø¸Å¼ö           
-	char imesuvalpure                     [  9];	char _imesuvalpure;                       //°³ÀÎ¼ø¸Å¼ö           
+	char timez8                           [  8];	char _timez8;                             //ï¿½Ã°ï¿½ï¿½ï¿½               
+	char amesuvalpure                     [  9];	char _amesuvalpure;                       //ï¿½Ü±ï¿½ï¿½Î¼ï¿½ï¿½Å¼ï¿½         
+	char cmesuvalpure                     [  9];	char _cmesuvalpure;                       //ï¿½ï¿½ï¿½Ç¼ï¿½ï¿½Å¼ï¿½           
+	char imesuvalpure                     [  9];	char _imesuvalpure;                       //ï¿½ï¿½ï¿½Î¼ï¿½ï¿½Å¼ï¿½           
 } Ts4101OutBlock4;
 
-typedef struct tags4101OutBlock5    //KOSPI200½Ã°¡ÃÑ¾×»óÀ§10Á¾¸ñ, [¹Ýº¹]
+typedef struct tags4101OutBlock5    //KOSPI200ï¿½Ã°ï¿½ï¿½Ñ¾×»ï¿½ï¿½ï¿½10ï¿½ï¿½ï¿½ï¿½, [ï¿½Ýºï¿½]
 {
-	char code                             [  6];	char _code;                               //Á¾¸ñÄÚµå             
-	char hname                            [ 13];	char _hname;                              //Á¾¸ñ¸í               
-	char parvalue                         [  7];	char _parvalue;                           //¾×¸é°¡               
-	char price                            [  7];	char _price;                              //ÇöÀç°¡               
-	char sign                             [  1];	char _sign;                               //µî¶ôºÎÈ£             
-	char change                           [  6];	char _change;                             //µî¶ôÆø               
-	char chrate                           [  5];	char _chrate;                             //µî¶ô·ü               
+	char code                             [  6];	char _code;                               //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char hname                            [ 13];	char _hname;                              //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char parvalue                         [  7];	char _parvalue;                           //ï¿½×¸é°¡               
+	char price                            [  7];	char _price;                              //ï¿½ï¿½ï¿½ç°¡               
+	char sign                             [  1];	char _sign;                               //ï¿½ï¿½ï¿½ï¿½ï¿½È£             
+	char change                           [  6];	char _change;                             //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char chrate                           [  5];	char _chrate;                             //ï¿½ï¿½ï¿½ï¿½ï¿½               
 } Ts4101OutBlock5;
 
-typedef struct tags4101OutBlock6    //¿¹»óÃ¼°á
+typedef struct tags4101OutBlock6    //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½
 {
-	char dongsi                           [  1];	char _dongsi;                             //µ¿½ÃÈ£°¡±¸ºÐ         
-	char jeqprice                         [  5];	char _jeqprice;                           //¿¹»óÃ¼°á°¡           
-	char jeqsign                          [  1];	char _jeqsign;                            //¿¹»óÃ¼°áºÎÈ£         
-	char jeqchange                        [  5];	char _jeqchange;                          //¿¹»óÃ¼°áµî¶ôÆø       
-	char jeqchrate                        [  5];	char _jeqchrate;                          //¿¹»óÃ¼°áµî¶ô·ü       
+	char dongsi                           [  1];	char _dongsi;                             //ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char jeqprice                         [  5];	char _jeqprice;                           //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½á°¡           
+	char jeqsign                          [  1];	char _jeqsign;                            //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½È£         
+	char jeqchange                        [  5];	char _jeqchange;                          //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char jeqchrate                        [  5];	char _jeqchrate;                          //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
 } Ts4101OutBlock6;
 
 typedef struct tags4101
 {
-	Ts4101InBlock                     s4101inblock                          ;  //±âº»ÀÔ·Â 
-	Ts4101OutBlock                    s4101outblock                         ;  //Á¾¸ñ¸¶½ºÅ¸±âº»ÀÚ·á 
-	Ts4101OutBlock1                   s4101outblock1                        ;  //ÄÚ½ºÇÇ200Áö¼ö 
-	Ts4101OutBlock2                   s4101outblock2                   [ 30];  //º¯µ¿°Å·¡·®ÀÚ·á , [¹Ýº¹]
-	Ts4101OutBlock3                   s4101outblock3                   [  3];  //½Ã°£´ëº°ÅõÀÚÀÚÇöÈ²ÃÖ±Ù¸Þ¸ð¸® , [¹Ýº¹]
-	Ts4101OutBlock4                   s4101outblock4                   [ 20];  //½Ã°£´ëº°ÅõÀÚÀÚÇöÈ²½Ã°£º° , [¹Ýº¹]
-	Ts4101OutBlock5                   s4101outblock5                   [ 10];  //KOSPI200½Ã°¡ÃÑ¾×»óÀ§10Á¾¸ñ , [¹Ýº¹]
-	Ts4101OutBlock6                   s4101outblock6                        ;  //¿¹»óÃ¼°á 
+	Ts4101InBlock                     s4101inblock                          ;  //ï¿½âº»ï¿½Ô·ï¿½ 
+	Ts4101OutBlock                    s4101outblock                         ;  //ï¿½ï¿½ï¿½ñ¸¶½ï¿½Å¸ï¿½âº»ï¿½Ú·ï¿½ 
+	Ts4101OutBlock1                   s4101outblock1                        ;  //ï¿½Ú½ï¿½ï¿½ï¿½200ï¿½ï¿½ï¿½ï¿½ 
+	Ts4101OutBlock2                   s4101outblock2                   [ 30];  //ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½ï¿½Ú·ï¿½ , [ï¿½Ýºï¿½]
+	Ts4101OutBlock3                   s4101outblock3                   [  3];  //ï¿½Ã°ï¿½ï¿½ëº°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È²ï¿½Ö±Ù¸Þ¸ï¿½ , [ï¿½Ýºï¿½]
+	Ts4101OutBlock4                   s4101outblock4                   [ 20];  //ï¿½Ã°ï¿½ï¿½ëº°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È²ï¿½Ã°ï¿½ï¿½ï¿½ , [ï¿½Ýºï¿½]
+	Ts4101OutBlock5                   s4101outblock5                   [ 10];  //KOSPI200ï¿½Ã°ï¿½ï¿½Ñ¾×»ï¿½ï¿½ï¿½10ï¿½ï¿½ï¿½ï¿½ , [ï¿½Ýºï¿½]
+	Ts4101OutBlock6                   s4101outblock6                        ;  //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ 
 } Ts4101;
 
 
-typedef struct tagc4113InBlock    //ÀÔ·Âµ¥ÀÌÅ¸
+typedef struct tagc4113InBlock    //ï¿½Ô·Âµï¿½ï¿½ï¿½Å¸
 {
-	char fuitemz9                         [  9];	char _fuitemz9;                           //ÀÔ·ÂÄÚµå             
+	char fuitemz9                         [  9];	char _fuitemz9;                           //ï¿½Ô·ï¿½ï¿½Úµï¿½             
 } Tc4113InBlock;
 
 typedef struct tagc4113OutKospi200    //c4113OutKospi200
 {
-	char fuitem                           [  4];	char _fuitem;                             //Á¾¸ñÄÚµå             
-	char fucurr                           [  5];	char _fucurr;                             //Çö¹°Áö¼ö             
-	char fusign                           [  1];	char _fusign;                             //ÀüÀÏºñºÎÈ£           
-	char fuchange                         [  5];	char _fuchange;                           //ÀüÀÏºñ               
-	char fuopen                           [  5];	char _fuopen;                             //½Ã°¡                 
-	char fuhigh                           [  5];	char _fuhigh;                             //°í°¡                 
-	char fulow                            [  5];	char _fulow;                              //Àú°¡                 
-	char fuvolall                         [  7];	char _fuvolall;                           //°Å·¡·®               
+	char fuitem                           [  4];	char _fuitem;                             //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char fucurr                           [  5];	char _fucurr;                             //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char fusign                           [  1];	char _fusign;                             //ï¿½ï¿½ï¿½Ïºï¿½ï¿½È£           
+	char fuchange                         [  5];	char _fuchange;                           //ï¿½ï¿½ï¿½Ïºï¿½               
+	char fuopen                           [  5];	char _fuopen;                             //ï¿½Ã°ï¿½                 
+	char fuhigh                           [  5];	char _fuhigh;                             //ï¿½ï¿½                 
+	char fulow                            [  5];	char _fulow;                              //ï¿½ï¿½ï¿½ï¿½                 
+	char fuvolall                         [  7];	char _fuvolall;                           //ï¿½Å·ï¿½ï¿½ï¿½               
 } Tc4113OutKospi200;
 
 typedef struct tagc4113OutSMaster    //c4113OutSMaster
 {
-	char fuitemz8                         [  8];	char _fuitemz8;                           //Á¾¸ñÄÚµå             
-	char fuspcurr                         [  6];	char _fuspcurr;                           //Áö¼ö                 
-	char fuspsign                         [  1];	char _fuspsign;                           //ÀüÀÏºñºÎÈ£           
-	char fuspchange                       [  5];	char _fuspchange;                         //ÀüÀÏºñ               
-	char fuspchrate                       [  5];	char _fuspchrate;                         //µî¶ô·ü               
-	char fuspopen                         [  6];	char _fuspopen;                           //½Ã°¡                 
-	char fusphigh                         [  6];	char _fusphigh;                           //°í°¡                 
-	char fusplow                          [  6];	char _fusplow;                            //Àú°¡                 
-	char fuspvolall                       [  7];	char _fuspvolall;                         //°Å·¡·®               
-	char fuspvalall                       [ 12];	char _fuspvalall;                         //´©Àû°Å·¡´ë±Ý(¹é¸¸¿ø) 
-	char fuspcurr1                        [  5];	char _fuspcurr1;                          //ÀÇÁ¦¾àÁ¤°¡(±Ù¿ù¹°)   
-	char fuspcurr2                        [  5];	char _fuspcurr2;                          //ÀÇÁ¦¾àÁ¤°¡(¿ø¿ù¹°)   
-	char fudynhprice                      [  6];	char _fudynhprice;                        //½Ç½Ã°£»óÇÑ°¡         
-	char fudynlprice                      [  6];	char _fudynlprice;                        //½Ç½Ã°£ÇÏÇÑ°¡         
-	char fudynpriceflag                   [  1];	char _fudynpriceflag;                     //µ¿Àû°¡°ÝÁ¦ÇÑ¿©ºÎ     
+	char fuitemz8                         [  8];	char _fuitemz8;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char fuspcurr                         [  6];	char _fuspcurr;                           //ï¿½ï¿½ï¿½ï¿½                 
+	char fuspsign                         [  1];	char _fuspsign;                           //ï¿½ï¿½ï¿½Ïºï¿½ï¿½È£           
+	char fuspchange                       [  5];	char _fuspchange;                         //ï¿½ï¿½ï¿½Ïºï¿½               
+	char fuspchrate                       [  5];	char _fuspchrate;                         //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char fuspopen                         [  6];	char _fuspopen;                           //ï¿½Ã°ï¿½                 
+	char fusphigh                         [  6];	char _fusphigh;                           //ï¿½ï¿½                 
+	char fusplow                          [  6];	char _fusplow;                            //ï¿½ï¿½ï¿½ï¿½                 
+	char fuspvolall                       [  7];	char _fuspvolall;                         //ï¿½Å·ï¿½ï¿½ï¿½               
+	char fuspvalall                       [ 12];	char _fuspvalall;                         //ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½ï¿½(ï¿½é¸¸ï¿½ï¿½) 
+	char fuspcurr1                        [  5];	char _fuspcurr1;                          //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½Ù¿ï¿½ï¿½ï¿½)   
+	char fuspcurr2                        [  5];	char _fuspcurr2;                          //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)   
+	char fudynhprice                      [  6];	char _fudynhprice;                        //ï¿½Ç½Ã°ï¿½ï¿½ï¿½ï¿½Ñ°ï¿½         
+	char fudynlprice                      [  6];	char _fudynlprice;                        //ï¿½Ç½Ã°ï¿½ï¿½ï¿½ï¿½Ñ°ï¿½         
+	char fudynpriceflag                   [  1];	char _fudynpriceflag;                     //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¿ï¿½ï¿½ï¿½     
 } Tc4113OutSMaster;
 
-typedef struct tagc4113OutBlock1    //ÄÚ½ºÇÇ¼±¹°Master1
+typedef struct tagc4113OutBlock1    //ï¿½Ú½ï¿½ï¿½Ç¼ï¿½ï¿½ï¿½Master1
 {
-	char fuitem                           [  4];	char _fuitem;                             //Á¾¸ñÄÚµå             
-	char fuchetime                        [  8];	char _fuchetime;                          //Ã¼°á½Ã°£             
-	char fuhname                          [ 12];	char _fuhname;                            //ÇÑ±Û¸í               
-	char fucurr                           [  5];	char _fucurr;                             //ÇöÀç°¡               
-	char fusign                           [  1];	char _fusign;                             //ÀüÀÏ´ëºñºÎÈ£         
-	char fuchange                         [  5];	char _fuchange;                           //ÀüÀÏ´ëºñ             
-	char fuchrate                         [  5];	char _fuchrate;                           //µî¶ô·ü               
-	char fubasis                          [  5];	char _fubasis;                            //º£ÀÌ½Ã½º             
-	char futheoryprice                    [  5];	char _futheoryprice;                      //ÀÌ·Ð°¡               
-	char fugrate                          [  5];	char _fugrate;                            //±«¸®µµ               
-	char fugratio                         [  5];	char _fugratio;                           //±«¸®À²               
-	char fuvolall                         [  7];	char _fuvolall;                           //´©ÀûÃ¼°á¼ö·®         
-	char fuvalall                         [ 12];	char _fuvalall;                           //´©Àû°Å·¡´ë±Ý(¹é¸¸¿ø) 
-	char fuopenyak                        [  7];	char _fuopenyak;                          //¹Ì°áÁ¦¾àÁ¤¼ö·®       
-	char fupreopenyak                     [  7];	char _fupreopenyak;                       //¹Ì°áÁ¦¾àÁ¤ÀüÀÏ       
-	char fujgubun                         [  8];	char _fujgubun;                           //Àå¿î¿ë               
-	char fuopen                           [  5];	char _fuopen;                             //½Ã°¡                 
-	char fuhigh                           [  5];	char _fuhigh;                             //°í°¡                 
-	char fulow                            [  5];	char _fulow;                              //Àú°¡                 
-	char fudynhprice                      [  5];	char _fudynhprice;                        //½Ç½Ã°£»óÇÑ°¡         
-	char fudynlprice                      [  5];	char _fudynlprice;                        //½Ç½Ã°£ÇÏÇÑ°¡         
-	char fudynpriceflag                   [  1];	char _fudynpriceflag;                     //µ¿Àû°¡°ÝÁ¦ÇÑ¿©ºÎ     
+	char fuitem                           [  4];	char _fuitem;                             //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char fuchetime                        [  8];	char _fuchetime;                          //Ã¼ï¿½ï¿½Ã°ï¿½             
+	char fuhname                          [ 12];	char _fuhname;                            //ï¿½Ñ±Û¸ï¿½               
+	char fucurr                           [  5];	char _fucurr;                             //ï¿½ï¿½ï¿½ç°¡               
+	char fusign                           [  1];	char _fusign;                             //ï¿½ï¿½ï¿½Ï´ï¿½ï¿½ï¿½È£         
+	char fuchange                         [  5];	char _fuchange;                           //ï¿½ï¿½ï¿½Ï´ï¿½ï¿½             
+	char fuchrate                         [  5];	char _fuchrate;                           //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char fubasis                          [  5];	char _fubasis;                            //ï¿½ï¿½ï¿½Ì½Ã½ï¿½             
+	char futheoryprice                    [  5];	char _futheoryprice;                      //ï¿½Ì·Ð°ï¿½               
+	char fugrate                          [  5];	char _fugrate;                            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char fugratio                         [  5];	char _fugratio;                           //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char fuvolall                         [  7];	char _fuvolall;                           //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char fuvalall                         [ 12];	char _fuvalall;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½ï¿½(ï¿½é¸¸ï¿½ï¿½) 
+	char fuopenyak                        [  7];	char _fuopenyak;                          //ï¿½Ì°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char fupreopenyak                     [  7];	char _fupreopenyak;                       //ï¿½Ì°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char fujgubun                         [  8];	char _fujgubun;                           //ï¿½ï¿½ï¿½ï¿½               
+	char fuopen                           [  5];	char _fuopen;                             //ï¿½Ã°ï¿½                 
+	char fuhigh                           [  5];	char _fuhigh;                             //ï¿½ï¿½                 
+	char fulow                            [  5];	char _fulow;                              //ï¿½ï¿½ï¿½ï¿½                 
+	char fudynhprice                      [  5];	char _fudynhprice;                        //ï¿½Ç½Ã°ï¿½ï¿½ï¿½ï¿½Ñ°ï¿½         
+	char fudynlprice                      [  5];	char _fudynlprice;                        //ï¿½Ç½Ã°ï¿½ï¿½ï¿½ï¿½Ñ°ï¿½         
+	char fudynpriceflag                   [  1];	char _fudynpriceflag;                     //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¿ï¿½ï¿½ï¿½     
 } Tc4113OutBlock1;
 
-typedef struct tagc4113OutBlock2    //ÄÚ½ºÇÇ¼±¹°Master2
+typedef struct tagc4113OutBlock2    //ï¿½Ú½ï¿½ï¿½Ç¼ï¿½ï¿½ï¿½Master2
 {
-	char fuitem                           [  4];	char _fuitem;                             //Á¾¸ñÄÚµå             
-	char fuchetime                        [  8];	char _fuchetime;                          //Ã¼°á½Ã°£             
-	char fuhname                          [ 12];	char _fuhname;                            //ÇÑ±Û¸í               
-	char fucurr                           [  5];	char _fucurr;                             //ÇöÀç°¡               
-	char fusign                           [  1];	char _fusign;                             //ÀüÀÏ´ëºñºÎÈ£         
-	char fuchange                         [  5];	char _fuchange;                           //ÀüÀÏ´ëºñ             
-	char fuchrate                         [  5];	char _fuchrate;                           //µî¶ô·ü               
-	char fubasis                          [  5];	char _fubasis;                            //º£ÀÌ½Ã½º             
-	char futheoryprice                    [  5];	char _futheoryprice;                      //ÀÌ·Ð°¡               
-	char fugrate                          [  5];	char _fugrate;                            //±«¸®µµ               
-	char fugratio                         [  5];	char _fugratio;                           //±«¸®À²               
-	char fuvolall                         [  7];	char _fuvolall;                           //´©ÀûÃ¼°á¼ö·®         
-	char fuvalall                         [ 12];	char _fuvalall;                           //´©Àû°Å·¡´ë±Ý(¹é¸¸¿ø) 
-	char fuopenyak                        [  7];	char _fuopenyak;                          //¹Ì°áÁ¦¾àÁ¤¼ö·®       
-	char fupreopenyak                     [  7];	char _fupreopenyak;                       //¹Ì°áÁ¦¾àÁ¤ÀüÀÏ       
-	char fujgubun                         [  8];	char _fujgubun;                           //Àå¿î¿ë               
-	char fuopen                           [  5];	char _fuopen;                             //½Ã°¡                 
-	char fuhigh                           [  5];	char _fuhigh;                             //°í°¡                 
-	char fulow                            [  5];	char _fulow;                              //Àú°¡                 
-	char fudynhprice                      [  5];	char _fudynhprice;                        //½Ç½Ã°£»óÇÑ°¡         
-	char fudynlprice                      [  5];	char _fudynlprice;                        //½Ç½Ã°£ÇÏÇÑ°¡         
-	char fudynpriceflag                   [  1];	char _fudynpriceflag;                     //µ¿Àû°¡°ÝÁ¦ÇÑ¿©ºÎ     
+	char fuitem                           [  4];	char _fuitem;                             //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char fuchetime                        [  8];	char _fuchetime;                          //Ã¼ï¿½ï¿½Ã°ï¿½             
+	char fuhname                          [ 12];	char _fuhname;                            //ï¿½Ñ±Û¸ï¿½               
+	char fucurr                           [  5];	char _fucurr;                             //ï¿½ï¿½ï¿½ç°¡               
+	char fusign                           [  1];	char _fusign;                             //ï¿½ï¿½ï¿½Ï´ï¿½ï¿½ï¿½È£         
+	char fuchange                         [  5];	char _fuchange;                           //ï¿½ï¿½ï¿½Ï´ï¿½ï¿½             
+	char fuchrate                         [  5];	char _fuchrate;                           //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char fubasis                          [  5];	char _fubasis;                            //ï¿½ï¿½ï¿½Ì½Ã½ï¿½             
+	char futheoryprice                    [  5];	char _futheoryprice;                      //ï¿½Ì·Ð°ï¿½               
+	char fugrate                          [  5];	char _fugrate;                            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char fugratio                         [  5];	char _fugratio;                           //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char fuvolall                         [  7];	char _fuvolall;                           //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char fuvalall                         [ 12];	char _fuvalall;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½ï¿½(ï¿½é¸¸ï¿½ï¿½) 
+	char fuopenyak                        [  7];	char _fuopenyak;                          //ï¿½Ì°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char fupreopenyak                     [  7];	char _fupreopenyak;                       //ï¿½Ì°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char fujgubun                         [  8];	char _fujgubun;                           //ï¿½ï¿½ï¿½ï¿½               
+	char fuopen                           [  5];	char _fuopen;                             //ï¿½Ã°ï¿½                 
+	char fuhigh                           [  5];	char _fuhigh;                             //ï¿½ï¿½                 
+	char fulow                            [  5];	char _fulow;                              //ï¿½ï¿½ï¿½ï¿½                 
+	char fudynhprice                      [  5];	char _fudynhprice;                        //ï¿½Ç½Ã°ï¿½ï¿½ï¿½ï¿½Ñ°ï¿½         
+	char fudynlprice                      [  5];	char _fudynlprice;                        //ï¿½Ç½Ã°ï¿½ï¿½ï¿½ï¿½Ñ°ï¿½         
+	char fudynpriceflag                   [  1];	char _fudynpriceflag;                     //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¿ï¿½ï¿½ï¿½     
 } Tc4113OutBlock2;
 
-typedef struct tagc4113OutHoga1    //ÄÚ½ºÇÇ¼±¹°È£°¡1
+typedef struct tagc4113OutHoga1    //ï¿½Ú½ï¿½ï¿½Ç¼ï¿½ï¿½ï¿½È£ï¿½ï¿½1
 {
-	char fuitem                           [  4];	char _fuitem;                             //Á¾¸ñÄÚµå             
-	char fuhotime                         [  8];	char _fuhotime;                           //È£°¡½Ã°£             
-	char fuoffer                          [  5];	char _fuoffer;                            //¸Åµµ¿ì¼±È£°¡         
-	char fujoffer                         [  5];	char _fujoffer;                           //Â÷¼±¸ÅµµÈ£°¡         
-	char fujjoffer                        [  5];	char _fujjoffer;                          //Â÷Â÷¼±¸ÅµµÈ£°¡       
-	char fuj4offer                        [  5];	char _fuj4offer;                          //4Â÷¼±¸ÅµµÈ£°¡        
-	char fuj5offer                        [  5];	char _fuj5offer;                          //5Â÷¼±¸ÅµµÈ£°¡        
-	char fuofferjan                       [  6];	char _fuofferjan;                         //¸ÅµµÀÜ·®             
-	char fujofferjan                      [  6];	char _fujofferjan;                        //Â÷¼±¸ÅµµÈ£°¡ÀÜ·®     
-	char fujjofferjan                     [  6];	char _fujjofferjan;                       //Â÷Â÷¼±¸ÅµµÈ£°¡ÀÜ·®   
-	char fuj4offerjan                     [  6];	char _fuj4offerjan;                       //4Â÷¼±¸ÅµµÈ£°¡ÀÜ·®    
-	char fuj5offerjan                     [  6];	char _fuj5offerjan;                       //5Â÷¼±¸ÅµµÈ£°¡ÀÜ·®    
-	char fubid                            [  5];	char _fubid;                              //¸Å¼ö¿ì¼±È£°¡         
-	char fujbid                           [  5];	char _fujbid;                             //Â÷¼±¸Å¼öÈ£°¡         
-	char fujjbid                          [  5];	char _fujjbid;                            //Â÷Â÷¼±¸Å¼öÈ£°¡       
-	char fuj4bid                          [  5];	char _fuj4bid;                            //4Â÷¼±¸Å¼öÈ£°¡        
-	char fuj5bid                          [  5];	char _fuj5bid;                            //5Â÷¼±¸Å¼öÈ£°¡        
-	char fubidjan                         [  6];	char _fubidjan;                           //¸Å¼öÀÜ·®             
-	char fujbidjan                        [  6];	char _fujbidjan;                          //Â÷¼±¸Å¼öÈ£°¡ÀÜ·®     
-	char fujjbidjan                       [  6];	char _fujjbidjan;                         //Â÷Â÷¼±¸Å¼öÈ£°¡ÀÜ·®   
-	char fuj4bidjan                       [  6];	char _fuj4bidjan;                         //4Â÷¼±¸Å¼öÈ£°¡ÀÜ·®    
-	char fuj5bidjan                       [  6];	char _fuj5bidjan;                         //5Â÷¼±¸Å¼öÈ£°¡ÀÜ·®    
-	char futofferjan                      [  6];	char _futofferjan;                        //ÃÑ¸ÅµµÀÜ·®           
-	char futbidjan                        [  6];	char _futbidjan;                          //ÃÑ¸Å¼öÀÜ·®           
-	char fuoffersu                        [  4];	char _fuoffersu;                          //¸ÅµµÃÖ¿ì¼±°Ç¼ö       
-	char fujoffersu                       [  4];	char _fujoffersu;                         //¸ÅµµÂ÷¼±°Ç¼ö         
-	char fujjoffersu                      [  4];	char _fujjoffersu;                        //¸ÅµµÂ÷Â÷¼±°Ç¼ö       
-	char fuj4offersu                      [  4];	char _fuj4offersu;                        //¸Åµµ4Â÷¼±°Ç¼ö        
-	char fuj5offersu                      [  4];	char _fuj5offersu;                        //¸Åµµ5Â÷¼±°Ç¼ö        
-	char fubidsu                          [  4];	char _fubidsu;                            //¸Å¼öÃÖ¿ì¼±°Ç¼ö       
-	char fujbidsu                         [  4];	char _fujbidsu;                           //¸Å¼öÂ÷¼±°Ç¼ö         
-	char fujjbidsu                        [  4];	char _fujjbidsu;                          //¸Å¼öÂ÷Â÷¼±°Ç¼ö       
-	char fuj4bidsu                        [  4];	char _fuj4bidsu;                          //¸Å¼ö4Â÷¼±°Ç¼ö        
-	char fuj5bidsu                        [  4];	char _fuj5bidsu;                          //¸Å¼ö5Â÷¼±°Ç¼ö        
-	char futoffersu                       [  5];	char _futoffersu;                         //ÃÑ¸Åµµ°Ç¼ö           
-	char futbidsu                         [  5];	char _futbidsu;                           //ÃÑ¸Å¼ö°Ç¼ö           
-	char fuhname                          [ 12];	char _fuhname;                            //ÇÑ±Û¸í               
+	char fuitem                           [  4];	char _fuitem;                             //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char fuhotime                         [  8];	char _fuhotime;                           //È£ï¿½ï¿½ï¿½Ã°ï¿½             
+	char fuoffer                          [  5];	char _fuoffer;                            //ï¿½Åµï¿½ï¿½ì¼±È£ï¿½ï¿½         
+	char fujoffer                         [  5];	char _fujoffer;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½         
+	char fujjoffer                        [  5];	char _fujjoffer;                          //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½       
+	char fuj4offer                        [  5];	char _fuj4offer;                          //4ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½        
+	char fuj5offer                        [  5];	char _fuj5offer;                          //5ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½        
+	char fuofferjan                       [  6];	char _fuofferjan;                         //ï¿½Åµï¿½ï¿½Ü·ï¿½             
+	char fujofferjan                      [  6];	char _fujofferjan;                        //ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½     
+	char fujjofferjan                     [  6];	char _fujjofferjan;                       //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½   
+	char fuj4offerjan                     [  6];	char _fuj4offerjan;                       //4ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½    
+	char fuj5offerjan                     [  6];	char _fuj5offerjan;                       //5ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½    
+	char fubid                            [  5];	char _fubid;                              //ï¿½Å¼ï¿½ï¿½ì¼±È£ï¿½ï¿½         
+	char fujbid                           [  5];	char _fujbid;                             //ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½         
+	char fujjbid                          [  5];	char _fujjbid;                            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½       
+	char fuj4bid                          [  5];	char _fuj4bid;                            //4ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½        
+	char fuj5bid                          [  5];	char _fuj5bid;                            //5ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½        
+	char fubidjan                         [  6];	char _fubidjan;                           //ï¿½Å¼ï¿½ï¿½Ü·ï¿½             
+	char fujbidjan                        [  6];	char _fujbidjan;                          //ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½     
+	char fujjbidjan                       [  6];	char _fujjbidjan;                         //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½   
+	char fuj4bidjan                       [  6];	char _fuj4bidjan;                         //4ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½    
+	char fuj5bidjan                       [  6];	char _fuj5bidjan;                         //5ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½    
+	char futofferjan                      [  6];	char _futofferjan;                        //ï¿½Ñ¸Åµï¿½ï¿½Ü·ï¿½           
+	char futbidjan                        [  6];	char _futbidjan;                          //ï¿½Ñ¸Å¼ï¿½ï¿½Ü·ï¿½           
+	char fuoffersu                        [  4];	char _fuoffersu;                          //ï¿½Åµï¿½ï¿½Ö¿ì¼±ï¿½Ç¼ï¿½       
+	char fujoffersu                       [  4];	char _fujoffersu;                         //ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½         
+	char fujjoffersu                      [  4];	char _fujjoffersu;                        //ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½       
+	char fuj4offersu                      [  4];	char _fuj4offersu;                        //ï¿½Åµï¿½4ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½        
+	char fuj5offersu                      [  4];	char _fuj5offersu;                        //ï¿½Åµï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½        
+	char fubidsu                          [  4];	char _fubidsu;                            //ï¿½Å¼ï¿½ï¿½Ö¿ì¼±ï¿½Ç¼ï¿½       
+	char fujbidsu                         [  4];	char _fujbidsu;                           //ï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½         
+	char fujjbidsu                        [  4];	char _fujjbidsu;                          //ï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½       
+	char fuj4bidsu                        [  4];	char _fuj4bidsu;                          //ï¿½Å¼ï¿½4ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½        
+	char fuj5bidsu                        [  4];	char _fuj5bidsu;                          //ï¿½Å¼ï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½        
+	char futoffersu                       [  5];	char _futoffersu;                         //ï¿½Ñ¸Åµï¿½ï¿½Ç¼ï¿½           
+	char futbidsu                         [  5];	char _futbidsu;                           //ï¿½Ñ¸Å¼ï¿½ï¿½Ç¼ï¿½           
+	char fuhname                          [ 12];	char _fuhname;                            //ï¿½Ñ±Û¸ï¿½               
 } Tc4113OutHoga1;
 
-typedef struct tagc4113OutHoga2    //ÄÚ½ºÇÇ¼±¹°È£°¡2
+typedef struct tagc4113OutHoga2    //ï¿½Ú½ï¿½ï¿½Ç¼ï¿½ï¿½ï¿½È£ï¿½ï¿½2
 {
-	char fuitem                           [  4];	char _fuitem;                             //Á¾¸ñÄÚµå             
-	char fuhotime                         [  8];	char _fuhotime;                           //È£°¡½Ã°£             
-	char fuoffer                          [  5];	char _fuoffer;                            //¸Åµµ¿ì¼±È£°¡         
-	char fujoffer                         [  5];	char _fujoffer;                           //Â÷¼±¸ÅµµÈ£°¡         
-	char fujjoffer                        [  5];	char _fujjoffer;                          //Â÷Â÷¼±¸ÅµµÈ£°¡       
-	char fuj4offer                        [  5];	char _fuj4offer;                          //4Â÷¼±¸ÅµµÈ£°¡        
-	char fuj5offer                        [  5];	char _fuj5offer;                          //5Â÷¼±¸ÅµµÈ£°¡        
-	char fuofferjan                       [  6];	char _fuofferjan;                         //¸ÅµµÀÜ·®             
-	char fujofferjan                      [  6];	char _fujofferjan;                        //Â÷¼±¸ÅµµÈ£°¡ÀÜ·®     
-	char fujjofferjan                     [  6];	char _fujjofferjan;                       //Â÷Â÷¼±¸ÅµµÈ£°¡ÀÜ·®   
-	char fuj4offerjan                     [  6];	char _fuj4offerjan;                       //4Â÷¼±¸ÅµµÈ£°¡ÀÜ·®    
-	char fuj5offerjan                     [  6];	char _fuj5offerjan;                       //5Â÷¼±¸ÅµµÈ£°¡ÀÜ·®    
-	char fubid                            [  5];	char _fubid;                              //¸Å¼ö¿ì¼±È£°¡         
-	char fujbid                           [  5];	char _fujbid;                             //Â÷¼±¸Å¼öÈ£°¡         
-	char fujjbid                          [  5];	char _fujjbid;                            //Â÷Â÷¼±¸Å¼öÈ£°¡       
-	char fuj4bid                          [  5];	char _fuj4bid;                            //4Â÷¼±¸Å¼öÈ£°¡        
-	char fuj5bid                          [  5];	char _fuj5bid;                            //5Â÷¼±¸Å¼öÈ£°¡        
-	char fubidjan                         [  6];	char _fubidjan;                           //¸Å¼öÀÜ·®             
-	char fujbidjan                        [  6];	char _fujbidjan;                          //Â÷¼±¸Å¼öÈ£°¡ÀÜ·®     
-	char fujjbidjan                       [  6];	char _fujjbidjan;                         //Â÷Â÷¼±¸Å¼öÈ£°¡ÀÜ·®   
-	char fuj4bidjan                       [  6];	char _fuj4bidjan;                         //4Â÷¼±¸Å¼öÈ£°¡ÀÜ·®    
-	char fuj5bidjan                       [  6];	char _fuj5bidjan;                         //5Â÷¼±¸Å¼öÈ£°¡ÀÜ·®    
-	char futofferjan                      [  6];	char _futofferjan;                        //ÃÑ¸ÅµµÀÜ·®           
-	char futbidjan                        [  6];	char _futbidjan;                          //ÃÑ¸Å¼öÀÜ·®           
-	char fuoffersu                        [  4];	char _fuoffersu;                          //¸ÅµµÃÖ¿ì¼±°Ç¼ö       
-	char fujoffersu                       [  4];	char _fujoffersu;                         //¸ÅµµÂ÷¼±°Ç¼ö         
-	char fujjoffersu                      [  4];	char _fujjoffersu;                        //¸ÅµµÂ÷Â÷¼±°Ç¼ö       
-	char fuj4offersu                      [  4];	char _fuj4offersu;                        //¸Åµµ4Â÷¼±°Ç¼ö        
-	char fuj5offersu                      [  4];	char _fuj5offersu;                        //¸Åµµ5Â÷¼±°Ç¼ö        
-	char fubidsu                          [  4];	char _fubidsu;                            //¸Å¼öÃÖ¿ì¼±°Ç¼ö       
-	char fujbidsu                         [  4];	char _fujbidsu;                           //¸Å¼öÂ÷¼±°Ç¼ö         
-	char fujjbidsu                        [  4];	char _fujjbidsu;                          //¸Å¼öÂ÷Â÷¼±°Ç¼ö       
-	char fuj4bidsu                        [  4];	char _fuj4bidsu;                          //¸Å¼ö4Â÷¼±°Ç¼ö        
-	char fuj5bidsu                        [  4];	char _fuj5bidsu;                          //¸Å¼ö5Â÷¼±°Ç¼ö        
-	char futoffersu                       [  5];	char _futoffersu;                         //ÃÑ¸Åµµ°Ç¼ö           
-	char futbidsu                         [  5];	char _futbidsu;                           //ÃÑ¸Å¼ö°Ç¼ö           
-	char fuhname                          [ 12];	char _fuhname;                            //ÇÑ±Û¸í               
+	char fuitem                           [  4];	char _fuitem;                             //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char fuhotime                         [  8];	char _fuhotime;                           //È£ï¿½ï¿½ï¿½Ã°ï¿½             
+	char fuoffer                          [  5];	char _fuoffer;                            //ï¿½Åµï¿½ï¿½ì¼±È£ï¿½ï¿½         
+	char fujoffer                         [  5];	char _fujoffer;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½         
+	char fujjoffer                        [  5];	char _fujjoffer;                          //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½       
+	char fuj4offer                        [  5];	char _fuj4offer;                          //4ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½        
+	char fuj5offer                        [  5];	char _fuj5offer;                          //5ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½        
+	char fuofferjan                       [  6];	char _fuofferjan;                         //ï¿½Åµï¿½ï¿½Ü·ï¿½             
+	char fujofferjan                      [  6];	char _fujofferjan;                        //ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½     
+	char fujjofferjan                     [  6];	char _fujjofferjan;                       //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½   
+	char fuj4offerjan                     [  6];	char _fuj4offerjan;                       //4ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½    
+	char fuj5offerjan                     [  6];	char _fuj5offerjan;                       //5ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½    
+	char fubid                            [  5];	char _fubid;                              //ï¿½Å¼ï¿½ï¿½ì¼±È£ï¿½ï¿½         
+	char fujbid                           [  5];	char _fujbid;                             //ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½         
+	char fujjbid                          [  5];	char _fujjbid;                            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½       
+	char fuj4bid                          [  5];	char _fuj4bid;                            //4ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½        
+	char fuj5bid                          [  5];	char _fuj5bid;                            //5ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½        
+	char fubidjan                         [  6];	char _fubidjan;                           //ï¿½Å¼ï¿½ï¿½Ü·ï¿½             
+	char fujbidjan                        [  6];	char _fujbidjan;                          //ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½     
+	char fujjbidjan                       [  6];	char _fujjbidjan;                         //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½   
+	char fuj4bidjan                       [  6];	char _fuj4bidjan;                         //4ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½    
+	char fuj5bidjan                       [  6];	char _fuj5bidjan;                         //5ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½    
+	char futofferjan                      [  6];	char _futofferjan;                        //ï¿½Ñ¸Åµï¿½ï¿½Ü·ï¿½           
+	char futbidjan                        [  6];	char _futbidjan;                          //ï¿½Ñ¸Å¼ï¿½ï¿½Ü·ï¿½           
+	char fuoffersu                        [  4];	char _fuoffersu;                          //ï¿½Åµï¿½ï¿½Ö¿ì¼±ï¿½Ç¼ï¿½       
+	char fujoffersu                       [  4];	char _fujoffersu;                         //ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½         
+	char fujjoffersu                      [  4];	char _fujjoffersu;                        //ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½       
+	char fuj4offersu                      [  4];	char _fuj4offersu;                        //ï¿½Åµï¿½4ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½        
+	char fuj5offersu                      [  4];	char _fuj5offersu;                        //ï¿½Åµï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½        
+	char fubidsu                          [  4];	char _fubidsu;                            //ï¿½Å¼ï¿½ï¿½Ö¿ì¼±ï¿½Ç¼ï¿½       
+	char fujbidsu                         [  4];	char _fujbidsu;                           //ï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½         
+	char fujjbidsu                        [  4];	char _fujjbidsu;                          //ï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½       
+	char fuj4bidsu                        [  4];	char _fuj4bidsu;                          //ï¿½Å¼ï¿½4ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½        
+	char fuj5bidsu                        [  4];	char _fuj5bidsu;                          //ï¿½Å¼ï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½        
+	char futoffersu                       [  5];	char _futoffersu;                         //ï¿½Ñ¸Åµï¿½ï¿½Ç¼ï¿½           
+	char futbidsu                         [  5];	char _futbidsu;                           //ï¿½Ñ¸Å¼ï¿½ï¿½Ç¼ï¿½           
+	char fuhname                          [ 12];	char _fuhname;                            //ï¿½Ñ±Û¸ï¿½               
 } Tc4113OutHoga2;
 
-typedef struct tagc4113OutHoga3    //ÄÚ½ºÇÇ¼±¹°½ºÇÁ·¹µåÈ£°¡3
+typedef struct tagc4113OutHoga3    //ï¿½Ú½ï¿½ï¿½Ç¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½3
 {
-	char fuspfuitem                       [  8];	char _fuspfuitem;                         //Á¾¸ñÄÚµå             
-	char fusphname                        [ 14];	char _fusphname;                          //ÇÑ±Û¸í               
-	char fusphotime                       [  8];	char _fusphotime;                         //È£°¡½Ã°£             
-	char fuspoffer                        [  6];	char _fuspoffer;                          //¸Åµµ¿ì¼±È£°¡         
-	char fuspjoffer                       [  6];	char _fuspjoffer;                         //Â÷¼±¸ÅµµÈ£°¡         
-	char fuspjjoffer                      [  6];	char _fuspjjoffer;                        //Â÷Â÷¼±¸ÅµµÈ£°¡       
-	char fuspj4offer                      [  6];	char _fuspj4offer;                        //4Â÷¼±¸ÅµµÈ£°¡        
-	char fuspj5offer                      [  6];	char _fuspj5offer;                        //5Â÷¼±¸ÅµµÈ£°¡        
-	char fuspofferjan                     [  6];	char _fuspofferjan;                       //¸ÅµµÀÜ·®             
-	char fuspjofferjan                    [  6];	char _fuspjofferjan;                      //Â÷¼±¸ÅµµÈ£°¡ÀÜ·®     
-	char fuspjjofferjan                   [  6];	char _fuspjjofferjan;                     //Â÷Â÷¼±¸ÅµµÈ£°¡ÀÜ·®   
-	char fuspj4offerjan                   [  6];	char _fuspj4offerjan;                     //4Â÷¼±¸ÅµµÈ£°¡ÀÜ·®    
-	char fuspj5offerjan                   [  6];	char _fuspj5offerjan;                     //5Â÷¼±¸ÅµµÈ£°¡ÀÜ·®    
-	char fuspbid                          [  6];	char _fuspbid;                            //¸Å¼ö¿ì¼±È£°¡         
-	char fuspjbid                         [  6];	char _fuspjbid;                           //Â÷¼±¸Å¼öÈ£°¡         
-	char fuspjjbid                        [  6];	char _fuspjjbid;                          //Â÷Â÷¼±¸Å¼öÈ£°¡       
-	char fuspj4bid                        [  6];	char _fuspj4bid;                          //4Â÷¼±¸Å¼öÈ£°¡        
-	char fuspj5bid                        [  6];	char _fuspj5bid;                          //5Â÷¼±¸Å¼öÈ£°¡        
-	char fuspbidjan                       [  6];	char _fuspbidjan;                         //¸Å¼öÀÜ·®             
-	char fuspjbidjan                      [  6];	char _fuspjbidjan;                        //Â÷¼±¸Å¼öÈ£°¡ÀÜ·®     
-	char fuspjjbidjan                     [  6];	char _fuspjjbidjan;                       //Â÷Â÷¼±¸Å¼öÈ£°¡ÀÜ·®   
-	char fuspj4bidjan                     [  6];	char _fuspj4bidjan;                       //4Â÷¼±¸Å¼öÈ£°¡ÀÜ·®    
-	char fuspj5bidjan                     [  6];	char _fuspj5bidjan;                       //5Â÷¼±¸Å¼öÈ£°¡ÀÜ·®    
-	char fusptofferjan                    [  6];	char _fusptofferjan;                      //ÃÑ¸ÅµµÀÜ·®           
-	char fusptbidjan                      [  6];	char _fusptbidjan;                        //ÃÑ¸Å¼öÀÜ·®           
-	char fuspoffersu                      [  4];	char _fuspoffersu;                        //¸ÅµµÃÖ¿ì¼±°Ç¼ö       
-	char fuspjoffersu                     [  4];	char _fuspjoffersu;                       //¸ÅµµÂ÷¼±°Ç¼ö         
-	char fuspjjoffersu                    [  4];	char _fuspjjoffersu;                      //¸ÅµµÂ÷Â÷¼±°Ç¼ö       
-	char fuspj4offersu                    [  4];	char _fuspj4offersu;                      //¸Åµµ4Â÷¼±°Ç¼ö        
-	char fuspj5offersu                    [  4];	char _fuspj5offersu;                      //¸Åµµ5Â÷¼±°Ç¼ö        
-	char fuspbidsu                        [  4];	char _fuspbidsu;                          //¸Å¼öÃÖ¿ì¼±°Ç¼ö       
-	char fuspjbidsu                       [  4];	char _fuspjbidsu;                         //¸Å¼öÂ÷¼±°Ç¼ö         
-	char fuspjjbidsu                      [  4];	char _fuspjjbidsu;                        //¸Å¼öÂ÷Â÷¼±°Ç¼ö       
-	char fuspj4bidsu                      [  4];	char _fuspj4bidsu;                        //¸Å¼ö4Â÷¼±°Ç¼ö        
-	char fuspj5bidsu                      [  4];	char _fuspj5bidsu;                        //¸Å¼ö5Â÷¼±°Ç¼ö        
-	char fusptoffersu                     [  5];	char _fusptoffersu;                       //ÃÑ¸Åµµ°Ç¼ö           
-	char fusptbidsu                       [  5];	char _fusptbidsu;                         //ÃÑ¸Å¼ö°Ç¼ö           
+	char fuspfuitem                       [  8];	char _fuspfuitem;                         //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char fusphname                        [ 14];	char _fusphname;                          //ï¿½Ñ±Û¸ï¿½               
+	char fusphotime                       [  8];	char _fusphotime;                         //È£ï¿½ï¿½ï¿½Ã°ï¿½             
+	char fuspoffer                        [  6];	char _fuspoffer;                          //ï¿½Åµï¿½ï¿½ì¼±È£ï¿½ï¿½         
+	char fuspjoffer                       [  6];	char _fuspjoffer;                         //ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½         
+	char fuspjjoffer                      [  6];	char _fuspjjoffer;                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½       
+	char fuspj4offer                      [  6];	char _fuspj4offer;                        //4ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½        
+	char fuspj5offer                      [  6];	char _fuspj5offer;                        //5ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½        
+	char fuspofferjan                     [  6];	char _fuspofferjan;                       //ï¿½Åµï¿½ï¿½Ü·ï¿½             
+	char fuspjofferjan                    [  6];	char _fuspjofferjan;                      //ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½     
+	char fuspjjofferjan                   [  6];	char _fuspjjofferjan;                     //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½   
+	char fuspj4offerjan                   [  6];	char _fuspj4offerjan;                     //4ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½    
+	char fuspj5offerjan                   [  6];	char _fuspj5offerjan;                     //5ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½    
+	char fuspbid                          [  6];	char _fuspbid;                            //ï¿½Å¼ï¿½ï¿½ì¼±È£ï¿½ï¿½         
+	char fuspjbid                         [  6];	char _fuspjbid;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½         
+	char fuspjjbid                        [  6];	char _fuspjjbid;                          //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½       
+	char fuspj4bid                        [  6];	char _fuspj4bid;                          //4ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½        
+	char fuspj5bid                        [  6];	char _fuspj5bid;                          //5ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½        
+	char fuspbidjan                       [  6];	char _fuspbidjan;                         //ï¿½Å¼ï¿½ï¿½Ü·ï¿½             
+	char fuspjbidjan                      [  6];	char _fuspjbidjan;                        //ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½     
+	char fuspjjbidjan                     [  6];	char _fuspjjbidjan;                       //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½   
+	char fuspj4bidjan                     [  6];	char _fuspj4bidjan;                       //4ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½    
+	char fuspj5bidjan                     [  6];	char _fuspj5bidjan;                       //5ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½    
+	char fusptofferjan                    [  6];	char _fusptofferjan;                      //ï¿½Ñ¸Åµï¿½ï¿½Ü·ï¿½           
+	char fusptbidjan                      [  6];	char _fusptbidjan;                        //ï¿½Ñ¸Å¼ï¿½ï¿½Ü·ï¿½           
+	char fuspoffersu                      [  4];	char _fuspoffersu;                        //ï¿½Åµï¿½ï¿½Ö¿ì¼±ï¿½Ç¼ï¿½       
+	char fuspjoffersu                     [  4];	char _fuspjoffersu;                       //ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½         
+	char fuspjjoffersu                    [  4];	char _fuspjjoffersu;                      //ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½       
+	char fuspj4offersu                    [  4];	char _fuspj4offersu;                      //ï¿½Åµï¿½4ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½        
+	char fuspj5offersu                    [  4];	char _fuspj5offersu;                      //ï¿½Åµï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½        
+	char fuspbidsu                        [  4];	char _fuspbidsu;                          //ï¿½Å¼ï¿½ï¿½Ö¿ì¼±ï¿½Ç¼ï¿½       
+	char fuspjbidsu                       [  4];	char _fuspjbidsu;                         //ï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½         
+	char fuspjjbidsu                      [  4];	char _fuspjjbidsu;                        //ï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½       
+	char fuspj4bidsu                      [  4];	char _fuspj4bidsu;                        //ï¿½Å¼ï¿½4ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½        
+	char fuspj5bidsu                      [  4];	char _fuspj5bidsu;                        //ï¿½Å¼ï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½        
+	char fusptoffersu                     [  5];	char _fusptoffersu;                       //ï¿½Ñ¸Åµï¿½ï¿½Ç¼ï¿½           
+	char fusptbidsu                       [  5];	char _fusptbidsu;                         //ï¿½Ñ¸Å¼ï¿½ï¿½Ç¼ï¿½           
 } Tc4113OutHoga3;
 
-typedef struct tagc4113OutFuteq1    //¼±¹°¿¹»óÃ¼°á1
+typedef struct tagc4113OutFuteq1    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½1
 {
-	char dongsi                           [  1];	char _dongsi;                             //µ¿½ÃÈ£°¡±¸ºÐ         
-	char jeqprice                         [  5];	char _jeqprice;                           //¿¹»óÃ¼°á°¡           
-	char jeqsign                          [  1];	char _jeqsign;                            //¿¹»óÃ¼°áºÎÈ£         
-	char jeqchange                        [  5];	char _jeqchange;                          //¿¹»óÃ¼°áµî¶ôÆø       
-	char jeqchrate                        [  5];	char _jeqchrate;                          //¿¹»óÃ¼°áµî¶ô·ü       
+	char dongsi                           [  1];	char _dongsi;                             //ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char jeqprice                         [  5];	char _jeqprice;                           //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½á°¡           
+	char jeqsign                          [  1];	char _jeqsign;                            //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½È£         
+	char jeqchange                        [  5];	char _jeqchange;                          //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char jeqchrate                        [  5];	char _jeqchrate;                          //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
 } Tc4113OutFuteq1;
 
-typedef struct tagc4113OutFuteq2    //¼±¹°¿¹»óÃ¼°á2
+typedef struct tagc4113OutFuteq2    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½2
 {
-	char dongsi                           [  1];	char _dongsi;                             //µ¿½ÃÈ£°¡±¸ºÐ         
-	char jeqprice                         [  5];	char _jeqprice;                           //¿¹»óÃ¼°á°¡           
-	char jeqsign                          [  1];	char _jeqsign;                            //¿¹»óÃ¼°áºÎÈ£         
-	char jeqchange                        [  5];	char _jeqchange;                          //¿¹»óÃ¼°áµî¶ôÆø       
-	char jeqchrate                        [  5];	char _jeqchrate;                          //¿¹»óÃ¼°áµî¶ô·ü       
+	char dongsi                           [  1];	char _dongsi;                             //ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char jeqprice                         [  5];	char _jeqprice;                           //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½á°¡           
+	char jeqsign                          [  1];	char _jeqsign;                            //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½È£         
+	char jeqchange                        [  5];	char _jeqchange;                          //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char jeqchrate                        [  5];	char _jeqchrate;                          //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
 } Tc4113OutFuteq2;
 
 typedef struct tagc4113
 {
-	Tc4113InBlock                     c4113inblock                          ;  //ÀÔ·Âµ¥ÀÌÅ¸ 
+	Tc4113InBlock                     c4113inblock                          ;  //ï¿½Ô·Âµï¿½ï¿½ï¿½Å¸ 
 	Tc4113OutKospi200                 c4113outkospi200                      ;  //c4113OutKospi200 
 	Tc4113OutSMaster                  c4113outsmaster                       ;  //c4113OutSMaster 
-	Tc4113OutBlock1                   c4113outblock1                        ;  //ÄÚ½ºÇÇ¼±¹°Master1 
-	Tc4113OutBlock2                   c4113outblock2                        ;  //ÄÚ½ºÇÇ¼±¹°Master2 
-	Tc4113OutHoga1                    c4113outhoga1                         ;  //ÄÚ½ºÇÇ¼±¹°È£°¡1 
-	Tc4113OutHoga2                    c4113outhoga2                         ;  //ÄÚ½ºÇÇ¼±¹°È£°¡2 
-	Tc4113OutHoga3                    c4113outhoga3                         ;  //ÄÚ½ºÇÇ¼±¹°½ºÇÁ·¹µåÈ£°¡3 
-	Tc4113OutFuteq1                   c4113outfuteq1                        ;  //¼±¹°¿¹»óÃ¼°á1 
-	Tc4113OutFuteq2                   c4113outfuteq2                        ;  //¼±¹°¿¹»óÃ¼°á2 
+	Tc4113OutBlock1                   c4113outblock1                        ;  //ï¿½Ú½ï¿½ï¿½Ç¼ï¿½ï¿½ï¿½Master1 
+	Tc4113OutBlock2                   c4113outblock2                        ;  //ï¿½Ú½ï¿½ï¿½Ç¼ï¿½ï¿½ï¿½Master2 
+	Tc4113OutHoga1                    c4113outhoga1                         ;  //ï¿½Ú½ï¿½ï¿½Ç¼ï¿½ï¿½ï¿½È£ï¿½ï¿½1 
+	Tc4113OutHoga2                    c4113outhoga2                         ;  //ï¿½Ú½ï¿½ï¿½Ç¼ï¿½ï¿½ï¿½È£ï¿½ï¿½2 
+	Tc4113OutHoga3                    c4113outhoga3                         ;  //ï¿½Ú½ï¿½ï¿½Ç¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½3 
+	Tc4113OutFuteq1                   c4113outfuteq1                        ;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½1 
+	Tc4113OutFuteq2                   c4113outfuteq2                        ;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½2 
 } Tc4113;
 
-typedef struct tags4201InBlock    //±âº»ÀÔ·Â
+typedef struct tags4201InBlock    //ï¿½âº»ï¿½Ô·ï¿½
 {
-	char formlang                         [  1];	char _formlang;                           //ÇÑ¿µ±¸ºÐ             
-	char opitemz9                         [  9];	char _opitemz9;                           //Á¾¸ñÄÚµå             
+	char formlang                         [  1];	char _formlang;                           //ï¿½Ñ¿ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char opitemz9                         [  9];	char _opitemz9;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } Ts4201InBlock;
 
-typedef struct tags4201OutBlock    //Á¾¸ñ¸¶½ºÅ¸±âº»ÀÚ·á
+typedef struct tags4201OutBlock    //ï¿½ï¿½ï¿½ñ¸¶½ï¿½Å¸ï¿½âº»ï¿½Ú·ï¿½
 {
-	char opitem                           [  8];	char _opitem;                             //Á¾¸ñÄÚµå             
-	char ophname                          [ 14];	char _ophname;                            //Á¾¸ñ¸í               
-	char opcurr                           [  5];	char _opcurr;                             //ÇöÀç°¡               
-	char opsign                           [  1];	char _opsign;                             //µî¶ôºÎÈ£             
-	char opchange                         [  5];	char _opchange;                           //µî¶ôÆø               
-	char opchrate                         [  5];	char _opchrate;                           //µî¶ô·ü               
-	char opopen                           [  5];	char _opopen;                             //½Ã°¡                 
-	char ophigh                           [  5];	char _ophigh;                             //°í°¡                 
-	char oplow                            [  5];	char _oplow;                              //Àú°¡                 
-	char optheoryprice                    [  5];	char _optheoryprice;                      //ÀÌ·Ð°¡               
-	char opvolallz8                       [  8];	char _opvolallz8;                         //°Å·¡·®               
-	char opvalall                         [ 12];	char _opvalall;                           //´©Àû°Å·¡´ë±Ý(¹é¸¸)   
-	char opopenyak                        [  7];	char _opopenyak;                          //¹Ì°áÁ¦¾àÁ¤¼ö·®       
-	char oppreopenyak                     [  7];	char _oppreopenyak;                       //¹Ì°áÁ¦¾àÁ¤ÀüÀÏ       
-	char oplisthdatez11                   [ 11];	char _oplisthdatez11;                     //»óÀåÈÄÃÖ°íÀÏ         
-	char oplistldatez11                   [ 11];	char _oplistldatez11;                     //»óÀåÈÄÃÖÀúÀÏ         
-	char oplistdate                       [  8];	char _oplistdate;                         //°Å·¡°³½ÃÀÏ           
-	char oplastdate                       [  8];	char _oplastdate;                         //ÃÖÁ¾°Å·¡ÀÏ           
-	char opjandatecnt                     [  4];	char _opjandatecnt;                       //ÀÜÁ¸ÀÏ               
-	char ophprice                         [  5];	char _ophprice;                           //»óÇÑ°¡               
-	char oplprice                         [  5];	char _oplprice;                           //ÇÏÇÑ°¡               
-	char opgrate                          [  5];	char _opgrate;                            //±«¸®µµ               
-	char opimpv                           [  5];	char _opimpv;                             //³»Àçº¯µ¿¼º           
-	char oppastv90                        [  5];	char _oppastv90;                          //°ú°Åº¯µ¿¼º90         
-	char opdelta                          [  8];	char _opdelta;                            //µ¨Å¸Áö¼ö             
-	char opgmma                           [  8];	char _opgmma;                             //°¨¸¶Áö¼ö             
-	char opvega                           [  8];	char _opvega;                             //º£°¡º¯µ¿¼º           
-	char optheta                          [  8];	char _optheta;                            //½êÅ¸½Ã°£             
-	char oprho                            [  8];	char _oprho;                              //·ÎÀÌÀÚÀ²             
-	char opcdratio                        [  6];	char _opcdratio;                          //ÀÌÀÚÀ²               
-	char opdivideratio                    [  9];	char _opdivideratio;                      //¹è´ç¾×Áö¼ö           
-	char opchetime                        [  8];	char _opchetime;                          //È£°¡½Ã°£             
-	char opoffer                          [  5];	char _opoffer;                            //¸ÅµµÃÖ¿ì¼±È£°¡       
-	char opjoffer                         [  5];	char _opjoffer;                           //¸ÅµµÂ÷¼±È£°¡         
-	char opjjoffer                        [  5];	char _opjjoffer;                          //¸ÅµµÂ÷Â÷¼±È£°¡       
-	char opj4offer                        [  5];	char _opj4offer;                          //¸Åµµ4Â÷¼±È£°¡        
-	char opj5offer                        [  5];	char _opj5offer;                          //¸Åµµ5Â÷¼±È£°¡        
-	char opbid                            [  5];	char _opbid;                              //¸Å¼öÃÖ¿ì¼±È£°¡       
-	char opjbid                           [  5];	char _opjbid;                             //¸Å¼öÂ÷¼±È£°¡         
-	char opjjbid                          [  5];	char _opjjbid;                            //¸Å¼öÂ÷Â÷¼±È£°¡       
-	char opj4bid                          [  5];	char _opj4bid;                            //¸Å¼ö4Â÷¼±È£°¡        
-	char opj5bid                          [  5];	char _opj5bid;                            //¸Å¼ö5Â÷¼±È£°¡        
-	char opofferjan                       [  7];	char _opofferjan;                         //¸ÅµµÃÖ¿ì¼±ÀÜ·®       
-	char opjofferjan                      [  7];	char _opjofferjan;                        //¸ÅµµÂ÷¼±ÀÜ·®         
-	char opjjofferjan                     [  7];	char _opjjofferjan;                       //¸ÅµµÂ÷Â÷¼±ÀÜ·®       
-	char opj4offerjan                     [  7];	char _opj4offerjan;                       //¸Åµµ4Â÷¼±ÀÜ·®        
-	char opj5offerjan                     [  7];	char _opj5offerjan;                       //¸Åµµ5Â÷¼±ÀÜ·®        
-	char opbidjan                         [  7];	char _opbidjan;                           //¸Å¼öÃÖ¿ì¼±ÀÜ·®       
-	char opjbidjan                        [  7];	char _opjbidjan;                          //¸Å¼öÂ÷¼±ÀÜ·®         
-	char opjjbidjan                       [  7];	char _opjjbidjan;                         //¸Å¼öÂ÷Â÷¼±ÀÜ·®       
-	char opj4bidjan                       [  7];	char _opj4bidjan;                         //¸Å¼ö4Â÷¼±ÀÜ·®        
-	char opj5bidjan                       [  7];	char _opj5bidjan;                         //¸Å¼ö5Â÷¼±ÀÜ·®        
-	char optofferjan                      [  7];	char _optofferjan;                        //ÃÑ¸ÅµµÀÜ·®           
-	char optbidjan                        [  7];	char _optbidjan;                          //ÃÑ¸Å¼öÀÜ·®           
-	char opoffersu                        [  4];	char _opoffersu;                          //¸ÅµµÃÖ¿ì¼±°Ç¼ö       
-	char opjoffersu                       [  4];	char _opjoffersu;                         //¸ÅµµÂ÷¼±°Ç¼ö         
-	char opjjoffersu                      [  4];	char _opjjoffersu;                        //¸ÅµµÂ÷Â÷¼±°Ç¼ö       
-	char opj4offersu                      [  4];	char _opj4offersu;                        //¸Åµµ4Â÷¼±°Ç¼ö        
-	char opj5offersu                      [  4];	char _opj5offersu;                        //¸Åµµ5Â÷¼±°Ç¼ö        
-	char opbidsu                          [  4];	char _opbidsu;                            //¸Å¼öÃÖ¿ì¼±°Ç¼ö       
-	char opjbidsu                         [  4];	char _opjbidsu;                           //¸Å¼öÂ÷¼±°Ç¼ö         
-	char opjjbidsu                        [  4];	char _opjjbidsu;                          //¸Å¼öÂ÷Â÷¼±°Ç¼ö       
-	char opj4bidsu                        [  4];	char _opj4bidsu;                          //¸Å¼ö4Â÷¼±°Ç¼ö        
-	char opj5bidsu                        [  4];	char _opj5bidsu;                          //¸Å¼ö5Â÷¼±°Ç¼ö        
-	char optoffersu                       [  5];	char _optoffersu;                         //ÃÑ¸Åµµ°Ç¼ö           
-	char optbidsu                         [  5];	char _optbidsu;                           //ÃÑ¸Å¼ö°Ç¼ö           
-	char opjgubun                         [  8];	char _opjgubun;                           //CB¹ßµ¿¿©ºÎ           
-	char opopensign                       [  1];	char _opopensign;                         //½Ã°¡´ëºñºÎÈ£         
-	char opopenchange                     [  5];	char _opopenchange;                       //½Ã°¡´ëºñµî¶ô         
-	char opgratio                         [  5];	char _opgratio;                           //±«¸®À²               
-	char preclose                         [  5];	char _preclose;                           //ÀüÀÏÁ¾°¡             
-	char fudynhprice                      [  5];	char _fudynhprice;                        //½Ç½Ã°£»óÇÑ°¡         
-	char fudynlprice                      [  5];	char _fudynlprice;                        //½Ç½Ã°£ÇÏÇÑ°¡         
-	char fudynpriceflag                   [  1];	char _fudynpriceflag;                     //µ¿Àû°¡°ÝÁ¦ÇÑ¿©ºÎ     
-	char opbulkvol                        [  8];	char _opbulkvol;                          //ÇùÀÇ°Å·¡·®           
-	char uplmtgb                          [  1];	char _uplmtgb;                            //°¡°ÝÁ¦ÇÑÈ®´ë»óÇÑ´Ü°è 
-	char dnlmtgb                          [  1];	char _dnlmtgb;                            //°¡°ÝÁ¦ÇÑÈ®´ëÇÏÇÑ´Ü°è 
+	char opitem                           [  8];	char _opitem;                             //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char ophname                          [ 14];	char _ophname;                            //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char opcurr                           [  5];	char _opcurr;                             //ï¿½ï¿½ï¿½ç°¡               
+	char opsign                           [  1];	char _opsign;                             //ï¿½ï¿½ï¿½ï¿½ï¿½È£             
+	char opchange                         [  5];	char _opchange;                           //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char opchrate                         [  5];	char _opchrate;                           //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char opopen                           [  5];	char _opopen;                             //ï¿½Ã°ï¿½                 
+	char ophigh                           [  5];	char _ophigh;                             //ï¿½ï¿½                 
+	char oplow                            [  5];	char _oplow;                              //ï¿½ï¿½ï¿½ï¿½                 
+	char optheoryprice                    [  5];	char _optheoryprice;                      //ï¿½Ì·Ð°ï¿½               
+	char opvolallz8                       [  8];	char _opvolallz8;                         //ï¿½Å·ï¿½ï¿½ï¿½               
+	char opvalall                         [ 12];	char _opvalall;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½ï¿½(ï¿½é¸¸)   
+	char opopenyak                        [  7];	char _opopenyak;                          //ï¿½Ì°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char oppreopenyak                     [  7];	char _oppreopenyak;                       //ï¿½Ì°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char oplisthdatez11                   [ 11];	char _oplisthdatez11;                     //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö°ï¿½ï¿½ï¿½         
+	char oplistldatez11                   [ 11];	char _oplistldatez11;                     //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char oplistdate                       [  8];	char _oplistdate;                         //ï¿½Å·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½           
+	char oplastdate                       [  8];	char _oplastdate;                         //ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½           
+	char opjandatecnt                     [  4];	char _opjandatecnt;                       //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char ophprice                         [  5];	char _ophprice;                           //ï¿½ï¿½ï¿½Ñ°ï¿½               
+	char oplprice                         [  5];	char _oplprice;                           //ï¿½ï¿½ï¿½Ñ°ï¿½               
+	char opgrate                          [  5];	char _opgrate;                            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char opimpv                           [  5];	char _opimpv;                             //ï¿½ï¿½ï¿½çº¯ï¿½ï¿½ï¿½ï¿½           
+	char oppastv90                        [  5];	char _oppastv90;                          //ï¿½ï¿½ï¿½Åºï¿½ï¿½ï¿½ï¿½ï¿½90         
+	char opdelta                          [  8];	char _opdelta;                            //ï¿½ï¿½Å¸ï¿½ï¿½ï¿½ï¿½             
+	char opgmma                           [  8];	char _opgmma;                             //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char opvega                           [  8];	char _opvega;                             //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½           
+	char optheta                          [  8];	char _optheta;                            //ï¿½ï¿½Å¸ï¿½Ã°ï¿½             
+	char oprho                            [  8];	char _oprho;                              //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char opcdratio                        [  6];	char _opcdratio;                          //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char opdivideratio                    [  9];	char _opdivideratio;                      //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½           
+	char opchetime                        [  8];	char _opchetime;                          //È£ï¿½ï¿½ï¿½Ã°ï¿½             
+	char opoffer                          [  5];	char _opoffer;                            //ï¿½Åµï¿½ï¿½Ö¿ì¼±È£ï¿½ï¿½       
+	char opjoffer                         [  5];	char _opjoffer;                           //ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½         
+	char opjjoffer                        [  5];	char _opjjoffer;                          //ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½       
+	char opj4offer                        [  5];	char _opj4offer;                          //ï¿½Åµï¿½4ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char opj5offer                        [  5];	char _opj5offer;                          //ï¿½Åµï¿½5ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char opbid                            [  5];	char _opbid;                              //ï¿½Å¼ï¿½ï¿½Ö¿ì¼±È£ï¿½ï¿½       
+	char opjbid                           [  5];	char _opjbid;                             //ï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½         
+	char opjjbid                          [  5];	char _opjjbid;                            //ï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½       
+	char opj4bid                          [  5];	char _opj4bid;                            //ï¿½Å¼ï¿½4ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char opj5bid                          [  5];	char _opj5bid;                            //ï¿½Å¼ï¿½5ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char opofferjan                       [  7];	char _opofferjan;                         //ï¿½Åµï¿½ï¿½Ö¿ì¼±ï¿½Ü·ï¿½       
+	char opjofferjan                      [  7];	char _opjofferjan;                        //ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½         
+	char opjjofferjan                     [  7];	char _opjjofferjan;                       //ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½       
+	char opj4offerjan                     [  7];	char _opj4offerjan;                       //ï¿½Åµï¿½4ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char opj5offerjan                     [  7];	char _opj5offerjan;                       //ï¿½Åµï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char opbidjan                         [  7];	char _opbidjan;                           //ï¿½Å¼ï¿½ï¿½Ö¿ì¼±ï¿½Ü·ï¿½       
+	char opjbidjan                        [  7];	char _opjbidjan;                          //ï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½         
+	char opjjbidjan                       [  7];	char _opjjbidjan;                         //ï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½       
+	char opj4bidjan                       [  7];	char _opj4bidjan;                         //ï¿½Å¼ï¿½4ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char opj5bidjan                       [  7];	char _opj5bidjan;                         //ï¿½Å¼ï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char optofferjan                      [  7];	char _optofferjan;                        //ï¿½Ñ¸Åµï¿½ï¿½Ü·ï¿½           
+	char optbidjan                        [  7];	char _optbidjan;                          //ï¿½Ñ¸Å¼ï¿½ï¿½Ü·ï¿½           
+	char opoffersu                        [  4];	char _opoffersu;                          //ï¿½Åµï¿½ï¿½Ö¿ì¼±ï¿½Ç¼ï¿½       
+	char opjoffersu                       [  4];	char _opjoffersu;                         //ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½         
+	char opjjoffersu                      [  4];	char _opjjoffersu;                        //ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½       
+	char opj4offersu                      [  4];	char _opj4offersu;                        //ï¿½Åµï¿½4ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½        
+	char opj5offersu                      [  4];	char _opj5offersu;                        //ï¿½Åµï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½        
+	char opbidsu                          [  4];	char _opbidsu;                            //ï¿½Å¼ï¿½ï¿½Ö¿ì¼±ï¿½Ç¼ï¿½       
+	char opjbidsu                         [  4];	char _opjbidsu;                           //ï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½         
+	char opjjbidsu                        [  4];	char _opjjbidsu;                          //ï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½       
+	char opj4bidsu                        [  4];	char _opj4bidsu;                          //ï¿½Å¼ï¿½4ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½        
+	char opj5bidsu                        [  4];	char _opj5bidsu;                          //ï¿½Å¼ï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½        
+	char optoffersu                       [  5];	char _optoffersu;                         //ï¿½Ñ¸Åµï¿½ï¿½Ç¼ï¿½           
+	char optbidsu                         [  5];	char _optbidsu;                           //ï¿½Ñ¸Å¼ï¿½ï¿½Ç¼ï¿½           
+	char opjgubun                         [  8];	char _opjgubun;                           //CBï¿½ßµï¿½ï¿½ï¿½ï¿½ï¿½           
+	char opopensign                       [  1];	char _opopensign;                         //ï¿½Ã°ï¿½ï¿½ï¿½ï¿½ï¿½È£         
+	char opopenchange                     [  5];	char _opopenchange;                       //ï¿½Ã°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char opgratio                         [  5];	char _opgratio;                           //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char preclose                         [  5];	char _preclose;                           //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char fudynhprice                      [  5];	char _fudynhprice;                        //ï¿½Ç½Ã°ï¿½ï¿½ï¿½ï¿½Ñ°ï¿½         
+	char fudynlprice                      [  5];	char _fudynlprice;                        //ï¿½Ç½Ã°ï¿½ï¿½ï¿½ï¿½Ñ°ï¿½         
+	char fudynpriceflag                   [  1];	char _fudynpriceflag;                     //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¿ï¿½ï¿½ï¿½     
+	char opbulkvol                        [  8];	char _opbulkvol;                          //ï¿½ï¿½ï¿½Ç°Å·ï¿½ï¿½ï¿½           
+	char uplmtgb                          [  1];	char _uplmtgb;                            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È®ï¿½ï¿½ï¿½ï¿½Ñ´Ü°ï¿½ 
+	char dnlmtgb                          [  1];	char _dnlmtgb;                            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È®ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´Ü°ï¿½ 
 } Ts4201OutBlock;
 
-typedef struct tags4201OutBlock1    //ÄÚ½ºÇÇ200Áö¼ö
+typedef struct tags4201OutBlock1    //ï¿½Ú½ï¿½ï¿½ï¿½200ï¿½ï¿½ï¿½ï¿½
 {
-	char fuitem                           [  4];	char _fuitem;                             //ÄÚ½ºÇÇ200ÄÚµå        
-	char fucurr                           [  5];	char _fucurr;                             //ÄÚ½ºÇÇ200Áö¼ö        
-	char fusign                           [  1];	char _fusign;                             //ÄÚ½ºÇÇ200µî¶ôºÎÈ£    
-	char fuchange                         [  5];	char _fuchange;                           //ÄÚ½ºÇÇ200µî¶ôÆø      
-	char fuchrate                         [  5];	char _fuchrate;                           //ÄÚ½ºÇÇ200µî¶ô·ü      
+	char fuitem                           [  4];	char _fuitem;                             //ï¿½Ú½ï¿½ï¿½ï¿½200ï¿½Úµï¿½        
+	char fucurr                           [  5];	char _fucurr;                             //ï¿½Ú½ï¿½ï¿½ï¿½200ï¿½ï¿½ï¿½ï¿½        
+	char fusign                           [  1];	char _fusign;                             //ï¿½Ú½ï¿½ï¿½ï¿½200ï¿½ï¿½ï¿½ï¿½ï¿½È£    
+	char fuchange                         [  5];	char _fuchange;                           //ï¿½Ú½ï¿½ï¿½ï¿½200ï¿½ï¿½ï¿½ï¿½ï¿½      
+	char fuchrate                         [  5];	char _fuchrate;                           //ï¿½Ú½ï¿½ï¿½ï¿½200ï¿½ï¿½ï¿½ï¿½ï¿½      
 } Ts4201OutBlock1;
 
-typedef struct tags4201OutBlock2    //¿É¼Çº¯µ¿°Å·¡·®ÀÚ·á, [¹Ýº¹]
+typedef struct tags4201OutBlock2    //ï¿½É¼Çºï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½ï¿½Ú·ï¿½, [ï¿½Ýºï¿½]
 {
-	char opchetime                        [  8];	char _opchetime;                          //½Ã°£                 
-	char opcurr                           [  5];	char _opcurr;                             //ÇöÀç°¡               
-	char opsign                           [  1];	char _opsign;                             //µî¶ôºÎÈ£             
-	char opchange                         [  5];	char _opchange;                           //µî¶ôÆø               
-	char opoffer                          [  5];	char _opoffer;                            //¸ÅµµÈ£°¡             
-	char opbid                            [  5];	char _opbid;                              //¸Å¼öÈ£°¡             
-	char opvol                            [  6];	char _opvol;                              //°Å·¡·®               
-	char opvolallz8                       [  8];	char _opvolallz8;                         //´©Àû°Å·¡·®           
-	char opopenyak                        [  7];	char _opopenyak;                          //¹Ì°áÁ¦¾àÁ¤           
+	char opchetime                        [  8];	char _opchetime;                          //ï¿½Ã°ï¿½                 
+	char opcurr                           [  5];	char _opcurr;                             //ï¿½ï¿½ï¿½ç°¡               
+	char opsign                           [  1];	char _opsign;                             //ï¿½ï¿½ï¿½ï¿½ï¿½È£             
+	char opchange                         [  5];	char _opchange;                           //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char opoffer                          [  5];	char _opoffer;                            //ï¿½Åµï¿½È£ï¿½ï¿½             
+	char opbid                            [  5];	char _opbid;                              //ï¿½Å¼ï¿½È£ï¿½ï¿½             
+	char opvol                            [  6];	char _opvol;                              //ï¿½Å·ï¿½ï¿½ï¿½               
+	char opvolallz8                       [  8];	char _opvolallz8;                         //ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½           
+	char opopenyak                        [  7];	char _opopenyak;                          //ï¿½Ì°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½           
 } Ts4201OutBlock2;
 
-typedef struct tags4201OutBlock3    //¼±¹°ÃÖ±Ù¿ù¹°
+typedef struct tags4201OutBlock3    //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½
 {
-	char fuitem                           [  4];	char _fuitem;                             //¼±¹°ÃÖ±Ù¿ù¹°ÄÚµå     
-	char fuitemz9                         [  9];	char _fuitemz9;                           //¼±¹°ÃÖ±Ù¿ù¹°È®ÀåÄÚµå 
-	char fuhname                          [ 12];	char _fuhname;                            //¼±¹°ÃÖ±Ù¿ù¹°¸í       
-	char fucurr                           [  5];	char _fucurr;                             //¼±¹°ÃÖ±Ù¿ù¹°Áö¼ö     
-	char fusign                           [  1];	char _fusign;                             //¼±¹°ÃÖ±Ù¿ù¹°µî¶ôºÎÈ£ 
-	char fuchange                         [  5];	char _fuchange;                           //¼±¹°ÃÖ±Ù¿ù¹°µî¶ôÆø   
-	char fuchrate                         [  5];	char _fuchrate;                           //¼±¹°ÃÖ±Ù¿ù¹°µî¶ô·ü   
-	char fuvolall                         [  7];	char _fuvolall;                           //¼±¹°ÃÖ±Ù¿ù¹°°Å·¡·®   
-	char fuvalall                         [ 12];	char _fuvalall;                           //¼±¹°ÃÖ±Ù¿ù¹°´©Àû°Å·¡´ë±Ý(¹é¸¸) 
-	char fuchetime                        [  8];	char _fuchetime;                          //¼±¹°ÃÖ±Ù¿ù¹°È£°¡½Ã°£ 
-	char fuoffer                          [  5];	char _fuoffer;                            //¼±¹°ÃÖ±Ù¿ù¹°¸ÅµµÃÖ¿ì¼±È£°¡ 
-	char fujoffer                         [  5];	char _fujoffer;                           //¼±¹°ÃÖ±Ù¿ù¹°¸ÅµµÂ÷¼±È£°¡ 
-	char fujjoffer                        [  5];	char _fujjoffer;                          //¼±¹°ÃÖ±Ù¿ù¹°¸ÅµµÂ÷Â÷¼±È£°¡ 
-	char fuj4offer                        [  5];	char _fuj4offer;                          //¼±¹°ÃÖ±Ù¿ù¹°¸Åµµ4Â÷¼±È£°¡ 
-	char fuj5offer                        [  5];	char _fuj5offer;                          //¼±¹°ÃÖ±Ù¿ù¹°¸Åµµ5Â÷¼±È£°¡ 
-	char fubid                            [  5];	char _fubid;                              //¼±¹°ÃÖ±Ù¿ù¹°¸Å¼öÃÖ¿ì¼±È£°¡ 
-	char fujbid                           [  5];	char _fujbid;                             //¼±¹°ÃÖ±Ù¿ù¹°¸Å¼öÂ÷¼±È£°¡ 
-	char fujjbid                          [  5];	char _fujjbid;                            //¼±¹°ÃÖ±Ù¿ù¹°¸Å¼öÂ÷Â÷¼±È£°¡ 
-	char fuj4bid                          [  5];	char _fuj4bid;                            //¼±¹°ÃÖ±Ù¿ù¹°¸Å¼ö4Â÷¼±È£°¡ 
-	char fuj5bid                          [  5];	char _fuj5bid;                            //¼±¹°ÃÖ±Ù¿ù¹°¸Å¼ö5Â÷¼±È£°¡ 
-	char fuofferjan                       [  6];	char _fuofferjan;                         //¼±¹°ÃÖ±Ù¿ù¹°¸ÅµµÃÖ¿ì¼±ÀÜ·® 
-	char fujofferjan                      [  6];	char _fujofferjan;                        //¼±¹°ÃÖ±Ù¿ù¹°¸ÅµµÂ÷¼±ÀÜ·® 
-	char fujjofferjan                     [  6];	char _fujjofferjan;                       //¼±¹°ÃÖ±Ù¿ù¹°¸ÅµµÂ÷Â÷¼±ÀÜ·® 
-	char fuj4offerjan                     [  6];	char _fuj4offerjan;                       //¼±¹°ÃÖ±Ù¿ù¹°¸Åµµ4Â÷¼±ÀÜ·® 
-	char fuj5offerjan                     [  6];	char _fuj5offerjan;                       //¼±¹°ÃÖ±Ù¿ù¹°¸Åµµ5Â÷¼±ÀÜ·® 
-	char fubidjan                         [  6];	char _fubidjan;                           //¼±¹°ÃÖ±Ù¿ù¹°¸Å¼öÃÖ¿ì¼±ÀÜ·® 
-	char fujbidjan                        [  6];	char _fujbidjan;                          //¼±¹°ÃÖ±Ù¿ù¹°¸Å¼öÂ÷¼±ÀÜ·® 
-	char fujjbidjan                       [  6];	char _fujjbidjan;                         //¼±¹°ÃÖ±Ù¿ù¹°¸Å¼öÂ÷Â÷¼±ÀÜ·® 
-	char fuj4bidjan                       [  6];	char _fuj4bidjan;                         //¼±¹°ÃÖ±Ù¿ù¹°¸Å¼ö4Â÷¼±ÀÜ·® 
-	char fuj5bidjan                       [  6];	char _fuj5bidjan;                         //¼±¹°ÃÖ±Ù¿ù¹°¸Å¼ö5Â÷¼±ÀÜ·® 
-	char futofferjan                      [  6];	char _futofferjan;                        //¼±¹°ÃÖ±Ù¿ù¹°ÃÑ¸ÅµµÀÜ·® 
-	char futbidjan                        [  6];	char _futbidjan;                          //¼±¹°ÃÖ±Ù¿ù¹°ÃÑ¸Å¼öÀÜ·® 
-	char fuoffersu                        [  4];	char _fuoffersu;                          //¼±¹°ÃÖ±Ù¿ù¹°¸ÅµµÃÖ¿ì¼±°Ç¼ö 
-	char fujoffersu                       [  4];	char _fujoffersu;                         //¼±¹°ÃÖ±Ù¿ù¹°¸ÅµµÂ÷¼±°Ç¼ö 
-	char fujjoffersu                      [  4];	char _fujjoffersu;                        //¼±¹°ÃÖ±Ù¿ù¹°¸ÅµµÂ÷Â÷¼±°Ç¼ö 
-	char fuj4offersu                      [  4];	char _fuj4offersu;                        //¼±¹°ÃÖ±Ù¿ù¹°¸Åµµ4Â÷¼±°Ç¼ö 
-	char fuj5offersu                      [  4];	char _fuj5offersu;                        //¼±¹°ÃÖ±Ù¿ù¹°¸Åµµ5Â÷¼±°Ç¼ö 
-	char fubidsu                          [  4];	char _fubidsu;                            //¼±¹°ÃÖ±Ù¿ù¹°¸Å¼öÃÖ¿ì¼±°Ç¼ö 
-	char fujbidsu                         [  4];	char _fujbidsu;                           //¼±¹°ÃÖ±Ù¿ù¹°¸Å¼öÂ÷¼±°Ç¼ö 
-	char fujjbidsu                        [  4];	char _fujjbidsu;                          //¼±¹°ÃÖ±Ù¿ù¹°¸Å¼öÂ÷Â÷¼±°Ç¼ö 
-	char fuj4bidsu                        [  4];	char _fuj4bidsu;                          //¼±¹°ÃÖ±Ù¿ù¹°¸Å¼ö4Â÷¼±°Ç¼ö 
-	char fuj5bidsu                        [  4];	char _fuj5bidsu;                          //¼±¹°ÃÖ±Ù¿ù¹°¸Å¼ö5Â÷¼±°Ç¼ö 
-	char futoffersu                       [  5];	char _futoffersu;                         //¼±¹°ÃÖ±Ù¿ù¹°ÃÑ¸Åµµ°Ç¼ö 
-	char futbidsu                         [  5];	char _futbidsu;                           //¼±¹°ÃÖ±Ù¿ù¹°ÃÑ¸Å¼ö°Ç¼ö 
-	char fuhprice                         [  5];	char _fuhprice;                           //»óÇÑ°¡               
-	char fuhigh                           [  5];	char _fuhigh;                             //°í°¡                 
-	char fuopen                           [  5];	char _fuopen;                             //½Ã°¡                 
-	char fuopensign                       [  1];	char _fuopensign;                         //½Ã°¡´ëºñºÎÈ£         
-	char fuopenchange                     [  5];	char _fuopenchange;                       //½Ã°¡´ëºñµî¶ô         
-	char fulow                            [  5];	char _fulow;                              //Àú°¡                 
-	char fulprice                         [  5];	char _fulprice;                           //ÇÏÇÑ°¡               
-	char fupivot2upz5                     [  5];	char _fupivot2upz5;                       //ÇÇº¿2Â÷ÀúÇ×          
-	char fupivot1upz5                     [  5];	char _fupivot1upz5;                       //ÇÇº¿1Â÷ÀúÇ×          
-	char fupivotz5                        [  5];	char _fupivotz5;                          //ÇÇº¿°¡               
-	char fupivot1dnz5                     [  5];	char _fupivot1dnz5;                       //ÇÇº¿1Â÷ÁöÁö          
-	char fupivot2dnz5                     [  5];	char _fupivot2dnz5;                       //ÇÇº¿2Â÷ÁöÁö          
-	char fudynhprice                      [  5];	char _fudynhprice;                        //½Ç½Ã°£»óÇÑ°¡         
-	char fudynlprice                      [  5];	char _fudynlprice;                        //½Ç½Ã°£ÇÏÇÑ°¡         
-	char fudynpriceflag                   [  1];	char _fudynpriceflag;                     //µ¿Àû°¡°ÝÁ¦ÇÑ¿©ºÎ     
+	char fuitem                           [  4];	char _fuitem;                             //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½Úµï¿½     
+	char fuitemz9                         [  9];	char _fuitemz9;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½È®ï¿½ï¿½ï¿½Úµï¿½ 
+	char fuhname                          [ 12];	char _fuhname;                            //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char fucurr                           [  5];	char _fucurr;                             //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½     
+	char fusign                           [  1];	char _fusign;                             //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£ 
+	char fuchange                         [  5];	char _fuchange;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½   
+	char fuchrate                         [  5];	char _fuchrate;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½   
+	char fuvolall                         [  7];	char _fuvolall;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½   
+	char fuvalall                         [ 12];	char _fuvalall;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½ï¿½(ï¿½é¸¸) 
+	char fuchetime                        [  8];	char _fuchetime;                          //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½È£ï¿½ï¿½ï¿½Ã°ï¿½ 
+	char fuoffer                          [  5];	char _fuoffer;                            //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ö¿ì¼±È£ï¿½ï¿½ 
+	char fujoffer                         [  5];	char _fujoffer;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½ 
+	char fujjoffer                        [  5];	char _fujjoffer;                          //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½ 
+	char fuj4offer                        [  5];	char _fuj4offer;                          //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½Åµï¿½4ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½ 
+	char fuj5offer                        [  5];	char _fuj5offer;                          //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½Åµï¿½5ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½ 
+	char fubid                            [  5];	char _fubid;                              //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ö¿ì¼±È£ï¿½ï¿½ 
+	char fujbid                           [  5];	char _fujbid;                             //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½ 
+	char fujjbid                          [  5];	char _fujjbid;                            //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½ 
+	char fuj4bid                          [  5];	char _fuj4bid;                            //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½Å¼ï¿½4ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½ 
+	char fuj5bid                          [  5];	char _fuj5bid;                            //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½Å¼ï¿½5ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½ 
+	char fuofferjan                       [  6];	char _fuofferjan;                         //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ö¿ì¼±ï¿½Ü·ï¿½ 
+	char fujofferjan                      [  6];	char _fujofferjan;                        //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½ 
+	char fujjofferjan                     [  6];	char _fujjofferjan;                       //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½ 
+	char fuj4offerjan                     [  6];	char _fuj4offerjan;                       //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½Åµï¿½4ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½ 
+	char fuj5offerjan                     [  6];	char _fuj5offerjan;                       //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½Åµï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½ 
+	char fubidjan                         [  6];	char _fubidjan;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ö¿ì¼±ï¿½Ü·ï¿½ 
+	char fujbidjan                        [  6];	char _fujbidjan;                          //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½ 
+	char fujjbidjan                       [  6];	char _fujjbidjan;                         //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½ 
+	char fuj4bidjan                       [  6];	char _fuj4bidjan;                         //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½Å¼ï¿½4ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½ 
+	char fuj5bidjan                       [  6];	char _fuj5bidjan;                         //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½Å¼ï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½ 
+	char futofferjan                      [  6];	char _futofferjan;                        //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½Ñ¸Åµï¿½ï¿½Ü·ï¿½ 
+	char futbidjan                        [  6];	char _futbidjan;                          //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½Ñ¸Å¼ï¿½ï¿½Ü·ï¿½ 
+	char fuoffersu                        [  4];	char _fuoffersu;                          //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ö¿ì¼±ï¿½Ç¼ï¿½ 
+	char fujoffersu                       [  4];	char _fujoffersu;                         //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½ 
+	char fujjoffersu                      [  4];	char _fujjoffersu;                        //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½ 
+	char fuj4offersu                      [  4];	char _fuj4offersu;                        //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½Åµï¿½4ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½ 
+	char fuj5offersu                      [  4];	char _fuj5offersu;                        //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½Åµï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½ 
+	char fubidsu                          [  4];	char _fubidsu;                            //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ö¿ì¼±ï¿½Ç¼ï¿½ 
+	char fujbidsu                         [  4];	char _fujbidsu;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½ 
+	char fujjbidsu                        [  4];	char _fujjbidsu;                          //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½ 
+	char fuj4bidsu                        [  4];	char _fuj4bidsu;                          //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½Å¼ï¿½4ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½ 
+	char fuj5bidsu                        [  4];	char _fuj5bidsu;                          //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½Å¼ï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½Ç¼ï¿½ 
+	char futoffersu                       [  5];	char _futoffersu;                         //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½Ñ¸Åµï¿½ï¿½Ç¼ï¿½ 
+	char futbidsu                         [  5];	char _futbidsu;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ï¿½Ñ¸Å¼ï¿½ï¿½Ç¼ï¿½ 
+	char fuhprice                         [  5];	char _fuhprice;                           //ï¿½ï¿½ï¿½Ñ°ï¿½               
+	char fuhigh                           [  5];	char _fuhigh;                             //ï¿½ï¿½                 
+	char fuopen                           [  5];	char _fuopen;                             //ï¿½Ã°ï¿½                 
+	char fuopensign                       [  1];	char _fuopensign;                         //ï¿½Ã°ï¿½ï¿½ï¿½ï¿½ï¿½È£         
+	char fuopenchange                     [  5];	char _fuopenchange;                       //ï¿½Ã°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char fulow                            [  5];	char _fulow;                              //ï¿½ï¿½ï¿½ï¿½                 
+	char fulprice                         [  5];	char _fulprice;                           //ï¿½ï¿½ï¿½Ñ°ï¿½               
+	char fupivot2upz5                     [  5];	char _fupivot2upz5;                       //ï¿½Çºï¿½2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½          
+	char fupivot1upz5                     [  5];	char _fupivot1upz5;                       //ï¿½Çºï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½          
+	char fupivotz5                        [  5];	char _fupivotz5;                          //ï¿½Çºï¿½ï¿½ï¿½               
+	char fupivot1dnz5                     [  5];	char _fupivot1dnz5;                       //ï¿½Çºï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½          
+	char fupivot2dnz5                     [  5];	char _fupivot2dnz5;                       //ï¿½Çºï¿½2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½          
+	char fudynhprice                      [  5];	char _fudynhprice;                        //ï¿½Ç½Ã°ï¿½ï¿½ï¿½ï¿½Ñ°ï¿½         
+	char fudynlprice                      [  5];	char _fudynlprice;                        //ï¿½Ç½Ã°ï¿½ï¿½ï¿½ï¿½Ñ°ï¿½         
+	char fudynpriceflag                   [  1];	char _fudynpriceflag;                     //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¿ï¿½ï¿½ï¿½     
 } Ts4201OutBlock3;
 
-typedef struct tags4201OutBlock4    //¼±¹°º¯µ¿°Å·¡·®ÀÚ·á, [¹Ýº¹]
+typedef struct tags4201OutBlock4    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½ï¿½Ú·ï¿½, [ï¿½Ýºï¿½]
 {
-	char fuchetime                        [  8];	char _fuchetime;                          //½Ã°£                 
-	char fucurr                           [  5];	char _fucurr;                             //ÇöÀç°¡               
-	char fusign                           [  1];	char _fusign;                             //µî¶ôºÎÈ£             
-	char fuchange                         [  5];	char _fuchange;                           //µî¶ôÆø               
-	char fuoffer                          [  5];	char _fuoffer;                            //¸ÅµµÈ£°¡             
-	char fubid                            [  5];	char _fubid;                              //¸Å¼öÈ£°¡             
-	char fuvol                            [  6];	char _fuvol;                              //°Å·¡·®               
-	char fuvolall                         [  7];	char _fuvolall;                           //´©Àû°Å·¡·®           
-	char fuopenyak                        [  7];	char _fuopenyak;                          //¹Ì°áÁ¦¾àÁ¤           
+	char fuchetime                        [  8];	char _fuchetime;                          //ï¿½Ã°ï¿½                 
+	char fucurr                           [  5];	char _fucurr;                             //ï¿½ï¿½ï¿½ç°¡               
+	char fusign                           [  1];	char _fusign;                             //ï¿½ï¿½ï¿½ï¿½ï¿½È£             
+	char fuchange                         [  5];	char _fuchange;                           //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char fuoffer                          [  5];	char _fuoffer;                            //ï¿½Åµï¿½È£ï¿½ï¿½             
+	char fubid                            [  5];	char _fubid;                              //ï¿½Å¼ï¿½È£ï¿½ï¿½             
+	char fuvol                            [  6];	char _fuvol;                              //ï¿½Å·ï¿½ï¿½ï¿½               
+	char fuvolall                         [  7];	char _fuvolall;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½           
+	char fuopenyak                        [  7];	char _fuopenyak;                          //ï¿½Ì°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½           
 } Ts4201OutBlock4;
 
-typedef struct tags4201OutBlock5    //¿É¼Ç¿¹»óÃ¼°á
+typedef struct tags4201OutBlock5    //ï¿½É¼Ç¿ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½
 {
-	char dongsi                           [  1];	char _dongsi;                             //µ¿½ÃÈ£°¡±¸ºÐ         
-	char jeqprice                         [  5];	char _jeqprice;                           //¿¹»óÃ¼°á°¡           
-	char jeqsign                          [  1];	char _jeqsign;                            //¿¹»óÃ¼°áºÎÈ£         
-	char jeqchange                        [  5];	char _jeqchange;                          //¿¹»óÃ¼°áµî¶ôÆø       
-	char jeqchrate                        [  5];	char _jeqchrate;                          //¿¹»óÃ¼°áµî¶ô·ü       
+	char dongsi                           [  1];	char _dongsi;                             //ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char jeqprice                         [  5];	char _jeqprice;                           //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½á°¡           
+	char jeqsign                          [  1];	char _jeqsign;                            //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½È£         
+	char jeqchange                        [  5];	char _jeqchange;                          //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char jeqchrate                        [  5];	char _jeqchrate;                          //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
 } Ts4201OutBlock5;
 
-typedef struct tags4201OutBlock6    //¼±¹°¿¹»óÃ¼°á
+typedef struct tags4201OutBlock6    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½
 {
-	char dongsi                           [  1];	char _dongsi;                             //µ¿½ÃÈ£°¡±¸ºÐ         
-	char jeqprice                         [  5];	char _jeqprice;                           //¿¹»óÃ¼°á°¡           
-	char jeqsign                          [  1];	char _jeqsign;                            //¿¹»óÃ¼°áºÎÈ£         
-	char jeqchange                        [  5];	char _jeqchange;                          //¿¹»óÃ¼°áµî¶ôÆø       
-	char jeqchrate                        [  5];	char _jeqchrate;                          //¿¹»óÃ¼°áµî¶ô·ü       
+	char dongsi                           [  1];	char _dongsi;                             //ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char jeqprice                         [  5];	char _jeqprice;                           //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½á°¡           
+	char jeqsign                          [  1];	char _jeqsign;                            //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½È£         
+	char jeqchange                        [  5];	char _jeqchange;                          //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char jeqchrate                        [  5];	char _jeqchrate;                          //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
 } Ts4201OutBlock6;
 
 typedef struct tags4201
 {
-	Ts4201InBlock                     s4201inblock                          ;  //±âº»ÀÔ·Â 
-	Ts4201OutBlock                    s4201outblock                         ;  //Á¾¸ñ¸¶½ºÅ¸±âº»ÀÚ·á 
-	Ts4201OutBlock1                   s4201outblock1                        ;  //ÄÚ½ºÇÇ200Áö¼ö 
-	Ts4201OutBlock2                   s4201outblock2                   [ 20];  //¿É¼Çº¯µ¿°Å·¡·®ÀÚ·á , [¹Ýº¹]
-	Ts4201OutBlock3                   s4201outblock3                        ;  //¼±¹°ÃÖ±Ù¿ù¹° 
-	Ts4201OutBlock4                   s4201outblock4                   [ 20];  //¼±¹°º¯µ¿°Å·¡·®ÀÚ·á , [¹Ýº¹]
-	Ts4201OutBlock5                   s4201outblock5                        ;  //¿É¼Ç¿¹»óÃ¼°á 
-	Ts4201OutBlock6                   s4201outblock6                        ;  //¼±¹°¿¹»óÃ¼°á 
+	Ts4201InBlock                     s4201inblock                          ;  //ï¿½âº»ï¿½Ô·ï¿½ 
+	Ts4201OutBlock                    s4201outblock                         ;  //ï¿½ï¿½ï¿½ñ¸¶½ï¿½Å¸ï¿½âº»ï¿½Ú·ï¿½ 
+	Ts4201OutBlock1                   s4201outblock1                        ;  //ï¿½Ú½ï¿½ï¿½ï¿½200ï¿½ï¿½ï¿½ï¿½ 
+	Ts4201OutBlock2                   s4201outblock2                   [ 20];  //ï¿½É¼Çºï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½ï¿½Ú·ï¿½ , [ï¿½Ýºï¿½]
+	Ts4201OutBlock3                   s4201outblock3                        ;  //ï¿½ï¿½ï¿½ï¿½ï¿½Ö±Ù¿ï¿½ï¿½ï¿½ 
+	Ts4201OutBlock4                   s4201outblock4                   [ 20];  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½ï¿½Ú·ï¿½ , [ï¿½Ýºï¿½]
+	Ts4201OutBlock5                   s4201outblock5                        ;  //ï¿½É¼Ç¿ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ 
+	Ts4201OutBlock6                   s4201outblock6                        ;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ 
 } Ts4201;
 
 
-typedef struct tagc4801InBlock    //±âº»ÀÔ·Â
+typedef struct tagc4801InBlock    //ï¿½âº»ï¿½Ô·ï¿½
 {
-	char formlang                         [  1];	char _formlang;                           //ÇÑ¿µ±¸ºÐ             
-	char fuitemz9                         [  9];	char _fuitemz9;                           //Á¾¸ñÄÚµå             
+	char formlang                         [  1];	char _formlang;                           //ï¿½Ñ¿ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char fuitemz9                         [  9];	char _fuitemz9;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } Tc4801InBlock;
 
-typedef struct tagc4801OutBlock    //ÁÖ½Ä¼±¹°MASTER±âº»ÀÚ·á
+typedef struct tagc4801OutBlock    //ï¿½Ö½Ä¼ï¿½ï¿½ï¿½MASTERï¿½âº»ï¿½Ú·ï¿½
 {
-	char expcode                          [  8];	char _expcode;                            //Á¾¸ñÄÚµå             
-	char hname                            [ 50];	char _hname;                              //ÇÑ±Û¸í               
-	char ename                            [ 50];	char _ename;                              //¿µ¹®¸í               
-	char sname                            [ 25];	char _sname;                              //´ÜÃà¸í               
-	char baseprice                        [  7];	char _baseprice;                          //±âÁØ°¡°Ý             
-	char hprice                           [  7];	char _hprice;                             //»óÇÑ°¡               
-	char lprice                           [  7];	char _lprice;                             //ÇÏÇÑ°¡               
-	char preclose                         [  7];	char _preclose;                           //ÀüÀÏÁ¾°¡             
-	char unit                             [ 16];	char _unit;                               //°Å·¡´ÜÀ§             
-	char openyak                          [  7];	char _openyak;                            //¹Ì°áÁ¦¾àÁ¤¼ö·®       
-	char fusign                           [  1];	char _fusign;                             //ÀüÀÏ´ëºñºÎÈ£         
-	char fuchange                         [  7];	char _fuchange;                           //ÀüÀÏ´ëºñ             
-	char fucurr                           [  7];	char _fucurr;                             //ÇöÀç°¡               
-	char fuopen                           [  7];	char _fuopen;                             //½Ã°¡                 
-	char fuhigh                           [  7];	char _fuhigh;                             //°í°¡                 
-	char fulow                            [  7];	char _fulow;                              //Àú°¡                 
-	char fuvolall                         [  7];	char _fuvolall;                           //´©ÀûÃ¼°á¼ö·®(°è¾à)   
-	char fuspvolall                       [  7];	char _fuspvolall;                         //½ºÇÁ·¹µåÃ¼°á¼ö·®     
-	char fuvalall                         [ 12];	char _fuvalall;                           //´©Àû°Å·¡´ë±Ý(Ãµ¿ø)   
-	char hotime                           [  8];	char _hotime;                             //È£°¡½Ã°£             
-	char offer                            [  7];	char _offer;                              //¸Åµµ¿ì¼±È£°¡         
-	char bid                              [  7];	char _bid;                                //¸Å¼ö¿ì¼±È£°¡         
-	char offerjan                         [  6];	char _offerjan;                           //¸ÅµµÀÜ·®             
-	char bidjan                           [  6];	char _bidjan;                             //¸Å¼öÀÜ·®             
-	char S2offer                          [  7];	char _S2offer;                            //¸Åµµ2Â÷È£°¡          
-	char S2bid                            [  7];	char _S2bid;                              //¸Å¼ö2Â÷È£°¡          
-	char S2offerjan                       [  6];	char _S2offerjan;                         //¸Åµµ2Â÷ÀÜ·®          
-	char S2bidjan                         [  6];	char _S2bidjan;                           //¸Å¼ö2Â÷ÀÜ·®          
-	char S3offer                          [  7];	char _S3offer;                            //¸Åµµ3Â÷È£°¡          
-	char S3bid                            [  7];	char _S3bid;                              //¸Å¼ö3Â÷È£°¡          
-	char S3offerjan                       [  6];	char _S3offerjan;                         //¸Åµµ3Â÷ÀÜ·®          
-	char S3bidjan                         [  6];	char _S3bidjan;                           //¸Å¼ö3Â÷ÀÜ·®          
-	char S4offer                          [  7];	char _S4offer;                            //¸Åµµ4Â÷È£°¡          
-	char S4bid                            [  7];	char _S4bid;                              //¸Å¼ö4Â÷È£°¡          
-	char S4offerjan                       [  6];	char _S4offerjan;                         //¸Åµµ4Â÷ÀÜ·®          
-	char S4bidjan                         [  6];	char _S4bidjan;                           //¸Å¼ö4Â÷ÀÜ·®          
-	char S5offer                          [  7];	char _S5offer;                            //¸Åµµ5Â÷È£°¡          
-	char S5bid                            [  7];	char _S5bid;                              //¸Å¼ö5Â÷È£°¡          
-	char S5offerjan                       [  6];	char _S5offerjan;                         //¸Åµµ5Â÷ÀÜ·®          
-	char S5bidjan                         [  6];	char _S5bidjan;                           //¸Å¼ö5Â÷ÀÜ·®          
-	char S6offer                          [  7];	char _S6offer;                            //¸Åµµ6Â÷È£°¡          
-	char S6bid                            [  7];	char _S6bid;                              //¸Å¼ö6Â÷È£°¡          
-	char S6offerjan                       [  6];	char _S6offerjan;                         //¸Åµµ6Â÷ÀÜ·®          
-	char S6bidjan                         [  6];	char _S6bidjan;                           //¸Å¼ö6Â÷ÀÜ·®          
-	char S7offer                          [  7];	char _S7offer;                            //¸Åµµ7Â÷È£°¡          
-	char S7bid                            [  7];	char _S7bid;                              //¸Å¼ö7Â÷È£°¡          
-	char S7offerjan                       [  6];	char _S7offerjan;                         //¸Åµµ7Â÷ÀÜ·®          
-	char S7bidjan                         [  6];	char _S7bidjan;                           //¸Å¼ö7Â÷ÀÜ·®          
-	char S8offer                          [  7];	char _S8offer;                            //¸Åµµ8Â÷È£°¡          
-	char S8bid                            [  7];	char _S8bid;                              //¸Å¼ö8Â÷È£°¡          
-	char S8offerjan                       [  6];	char _S8offerjan;                         //¸Åµµ8Â÷ÀÜ·®          
-	char S8bidjan                         [  6];	char _S8bidjan;                           //¸Å¼ö8Â÷ÀÜ·®          
-	char S9offer                          [  7];	char _S9offer;                            //¸Åµµ9Â÷È£°¡          
-	char S9bid                            [  7];	char _S9bid;                              //¸Å¼ö9Â÷È£°¡          
-	char S9offerjan                       [  6];	char _S9offerjan;                         //¸Åµµ9Â÷ÀÜ·®          
-	char S9bidjan                         [  6];	char _S9bidjan;                           //¸Å¼ö9Â÷ÀÜ·®          
-	char S0offer                          [  7];	char _S0offer;                            //¸Åµµ10Â÷È£°¡         
-	char S0bid                            [  7];	char _S0bid;                              //¸Å¼ö10Â÷È£°¡         
-	char S0offerjan                       [  6];	char _S0offerjan;                         //¸Åµµ10Â÷ÀÜ·®         
-	char S0bidjan                         [  6];	char _S0bidjan;                           //¸Å¼ö10Â÷ÀÜ·®         
-	char offersu                          [  4];	char _offersu;                            //¸Åµµ°Ç¼ö             
-	char bidsu                            [  4];	char _bidsu;                              //¸Å¼ö°Ç¼ö             
-	char S2offersu                        [  4];	char _S2offersu;                          //¸Åµµ2Â÷°Ç¼ö          
-	char S2bidsu                          [  4];	char _S2bidsu;                            //¸Å¼ö2Â÷°Ç¼ö          
-	char S3offersu                        [  4];	char _S3offersu;                          //¸Åµµ3Â÷°Ç¼ö          
-	char S3bidsu                          [  4];	char _S3bidsu;                            //¸Å¼ö3Â÷°Ç¼ö          
-	char S4offersu                        [  4];	char _S4offersu;                          //¸Åµµ4Â÷°Ç¼ö          
-	char S4bidsu                          [  4];	char _S4bidsu;                            //¸Å¼ö4Â÷°Ç¼ö          
-	char S5offersu                        [  4];	char _S5offersu;                          //¸Åµµ5Â÷°Ç¼ö          
-	char S5bidsu                          [  4];	char _S5bidsu;                            //¸Å¼ö5Â÷°Ç¼ö          
-	char S6offersu                        [  4];	char _S6offersu;                          //¸Åµµ6Â÷°Ç¼ö          
-	char S6bidsu                          [  4];	char _S6bidsu;                            //¸Å¼ö6Â÷°Ç¼ö          
-	char S7offersu                        [  4];	char _S7offersu;                          //¸Åµµ7Â÷°Ç¼ö          
-	char S7bidsu                          [  4];	char _S7bidsu;                            //¸Å¼ö7Â÷°Ç¼ö          
-	char S8offersu                        [  4];	char _S8offersu;                          //¸Åµµ8Â÷°Ç¼ö          
-	char S8bidsu                          [  4];	char _S8bidsu;                            //¸Å¼ö8Â÷°Ç¼ö          
-	char S9offersu                        [  4];	char _S9offersu;                          //¸Åµµ9Â÷°Ç¼ö          
-	char S9bidsu                          [  4];	char _S9bidsu;                            //¸Å¼ö9Â÷°Ç¼ö          
-	char S0offersu                        [  4];	char _S0offersu;                          //¸Åµµ10Â÷°Ç¼ö         
-	char S0bidsu                          [  4];	char _S0bidsu;                            //¸Å¼ö10Â÷°Ç¼ö         
-	char tofferjan                        [  6];	char _tofferjan;                          //ÃÑ¸ÅµµÀÜ·®           
-	char tobidjan                         [  6];	char _tobidjan;                           //ÃÑ¸Å¼öÀÜ·®           
-	char toffersu                         [  5];	char _toffersu;                           //ÃÑ¸Åµµ°Ç¼ö           
-	char tbidsu                           [  5];	char _tbidsu;                             //ÃÑ¸Å¼ö°Ç¼ö           
-	char theorytime                       [  6];	char _theorytime;                         //ÀÌ·Ð°¡½Ã°£           
-	char theoryprice                      [  7];	char _theoryprice;                        //ÀÌ·Ð°¡               
-	char fuchrate                         [  5];	char _fuchrate;                           //µî¶ô·ü               
-	char fupivot2upz7                     [  7];	char _fupivot2upz7;                       //ÇÇº¿2Â÷ÀúÇ×          
-	char fupivot1upz7                     [  7];	char _fupivot1upz7;                       //ÇÇº¿1Â÷ÀúÇ×          
-	char fupivotz7                        [  7];	char _fupivotz7;                          //ÇÇº¿°¡               
-	char fupivot1dnz7                     [  7];	char _fupivot1dnz7;                       //ÇÇº¿1Â÷ÁöÁö          
-	char fupivot2dnz7                     [  7];	char _fupivot2dnz7;                       //ÇÇº¿2Â÷ÁöÁö          
-	char fubasis                          [  7];	char _fubasis;                            //º£ÀÌ½Ã½º             
-	char fugrate                          [  7];	char _fugrate;                            //±«¸®µµ               
-	char fugratio                         [  6];	char _fugratio;                           //±«¸®À²               
-	char fupreopenyak                     [  7];	char _fupreopenyak;                       //¹Ì°áÁ¦¾àÁ¤ÀüÀÏ       
-	char fulisthprice                     [  7];	char _fulisthprice;                       //»óÀåÈÄÃÖ°í°¡         
-	char fulisthdate                      [  8];	char _fulisthdate;                        //»óÀåÈÄÃÖ°íÀÏ         
-	char fulistlprice                     [  7];	char _fulistlprice;                       //»óÀåÈÄÃÖÀú°¡         
-	char fulistldate                      [  8];	char _fulistldate;                        //»óÀåÈÄÃÖÀúÀÏ         
-	char fulastdate                       [  8];	char _fulastdate;                         //ÃÖÁ¾°Å·¡ÀÏ           
-	char fujandatecnt                     [  3];	char _fujandatecnt;                       //ÀÜÁ¸ÀÏ               
-	char fucdratio                        [  6];	char _fucdratio;                          //¹«À§ÇèÀÌÀÚÀ²         
-	char fuopenchange                     [  7];	char _fuopenchange;                       //½Ã°¡´ëºñµî¶ô         
-	char fudynhprice                      [  7];	char _fudynhprice;                        //½Ç½Ã°£»óÇÑ°¡         
-	char fudynlprice                      [  7];	char _fudynlprice;                        //½Ç½Ã°£ÇÏÇÑ°¡         
-	char fudynpriceflag                   [  1];	char _fudynpriceflag;                     //µ¿Àû°¡°ÝÁ¦ÇÑ¿©ºÎ     
-	char exlmtgb                          [  1];	char _exlmtgb;                            //°¡°ÝÈ®´ë¿¹Á¤±¸ºÐ     
-	char uplmtgb                          [  1];	char _uplmtgb;                            //°¡°ÝÁ¦ÇÑÈ®´ë»óÇÑ´Ü°è 
-	char dnlmtgb                          [  1];	char _dnlmtgb;                            //°¡°ÝÁ¦ÇÑÈ®´ëÇÏÇÑ´Ü°è 
+	char expcode                          [  8];	char _expcode;                            //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char hname                            [ 50];	char _hname;                              //ï¿½Ñ±Û¸ï¿½               
+	char ename                            [ 50];	char _ename;                              //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char sname                            [ 25];	char _sname;                              //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char baseprice                        [  7];	char _baseprice;                          //ï¿½ï¿½ï¿½Ø°ï¿½ï¿½ï¿½             
+	char hprice                           [  7];	char _hprice;                             //ï¿½ï¿½ï¿½Ñ°ï¿½               
+	char lprice                           [  7];	char _lprice;                             //ï¿½ï¿½ï¿½Ñ°ï¿½               
+	char preclose                         [  7];	char _preclose;                           //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char unit                             [ 16];	char _unit;                               //ï¿½Å·ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char openyak                          [  7];	char _openyak;                            //ï¿½Ì°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char fusign                           [  1];	char _fusign;                             //ï¿½ï¿½ï¿½Ï´ï¿½ï¿½ï¿½È£         
+	char fuchange                         [  7];	char _fuchange;                           //ï¿½ï¿½ï¿½Ï´ï¿½ï¿½             
+	char fucurr                           [  7];	char _fucurr;                             //ï¿½ï¿½ï¿½ç°¡               
+	char fuopen                           [  7];	char _fuopen;                             //ï¿½Ã°ï¿½                 
+	char fuhigh                           [  7];	char _fuhigh;                             //ï¿½ï¿½                 
+	char fulow                            [  7];	char _fulow;                              //ï¿½ï¿½ï¿½ï¿½                 
+	char fuvolall                         [  7];	char _fuvolall;                           //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½)   
+	char fuspvolall                       [  7];	char _fuspvolall;                         //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½     
+	char fuvalall                         [ 12];	char _fuvalall;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½ï¿½(Ãµï¿½ï¿½)   
+	char hotime                           [  8];	char _hotime;                             //È£ï¿½ï¿½ï¿½Ã°ï¿½             
+	char offer                            [  7];	char _offer;                              //ï¿½Åµï¿½ï¿½ì¼±È£ï¿½ï¿½         
+	char bid                              [  7];	char _bid;                                //ï¿½Å¼ï¿½ï¿½ì¼±È£ï¿½ï¿½         
+	char offerjan                         [  6];	char _offerjan;                           //ï¿½Åµï¿½ï¿½Ü·ï¿½             
+	char bidjan                           [  6];	char _bidjan;                             //ï¿½Å¼ï¿½ï¿½Ü·ï¿½             
+	char S2offer                          [  7];	char _S2offer;                            //ï¿½Åµï¿½2ï¿½ï¿½È£ï¿½ï¿½          
+	char S2bid                            [  7];	char _S2bid;                              //ï¿½Å¼ï¿½2ï¿½ï¿½È£ï¿½ï¿½          
+	char S2offerjan                       [  6];	char _S2offerjan;                         //ï¿½Åµï¿½2ï¿½ï¿½ï¿½Ü·ï¿½          
+	char S2bidjan                         [  6];	char _S2bidjan;                           //ï¿½Å¼ï¿½2ï¿½ï¿½ï¿½Ü·ï¿½          
+	char S3offer                          [  7];	char _S3offer;                            //ï¿½Åµï¿½3ï¿½ï¿½È£ï¿½ï¿½          
+	char S3bid                            [  7];	char _S3bid;                              //ï¿½Å¼ï¿½3ï¿½ï¿½È£ï¿½ï¿½          
+	char S3offerjan                       [  6];	char _S3offerjan;                         //ï¿½Åµï¿½3ï¿½ï¿½ï¿½Ü·ï¿½          
+	char S3bidjan                         [  6];	char _S3bidjan;                           //ï¿½Å¼ï¿½3ï¿½ï¿½ï¿½Ü·ï¿½          
+	char S4offer                          [  7];	char _S4offer;                            //ï¿½Åµï¿½4ï¿½ï¿½È£ï¿½ï¿½          
+	char S4bid                            [  7];	char _S4bid;                              //ï¿½Å¼ï¿½4ï¿½ï¿½È£ï¿½ï¿½          
+	char S4offerjan                       [  6];	char _S4offerjan;                         //ï¿½Åµï¿½4ï¿½ï¿½ï¿½Ü·ï¿½          
+	char S4bidjan                         [  6];	char _S4bidjan;                           //ï¿½Å¼ï¿½4ï¿½ï¿½ï¿½Ü·ï¿½          
+	char S5offer                          [  7];	char _S5offer;                            //ï¿½Åµï¿½5ï¿½ï¿½È£ï¿½ï¿½          
+	char S5bid                            [  7];	char _S5bid;                              //ï¿½Å¼ï¿½5ï¿½ï¿½È£ï¿½ï¿½          
+	char S5offerjan                       [  6];	char _S5offerjan;                         //ï¿½Åµï¿½5ï¿½ï¿½ï¿½Ü·ï¿½          
+	char S5bidjan                         [  6];	char _S5bidjan;                           //ï¿½Å¼ï¿½5ï¿½ï¿½ï¿½Ü·ï¿½          
+	char S6offer                          [  7];	char _S6offer;                            //ï¿½Åµï¿½6ï¿½ï¿½È£ï¿½ï¿½          
+	char S6bid                            [  7];	char _S6bid;                              //ï¿½Å¼ï¿½6ï¿½ï¿½È£ï¿½ï¿½          
+	char S6offerjan                       [  6];	char _S6offerjan;                         //ï¿½Åµï¿½6ï¿½ï¿½ï¿½Ü·ï¿½          
+	char S6bidjan                         [  6];	char _S6bidjan;                           //ï¿½Å¼ï¿½6ï¿½ï¿½ï¿½Ü·ï¿½          
+	char S7offer                          [  7];	char _S7offer;                            //ï¿½Åµï¿½7ï¿½ï¿½È£ï¿½ï¿½          
+	char S7bid                            [  7];	char _S7bid;                              //ï¿½Å¼ï¿½7ï¿½ï¿½È£ï¿½ï¿½          
+	char S7offerjan                       [  6];	char _S7offerjan;                         //ï¿½Åµï¿½7ï¿½ï¿½ï¿½Ü·ï¿½          
+	char S7bidjan                         [  6];	char _S7bidjan;                           //ï¿½Å¼ï¿½7ï¿½ï¿½ï¿½Ü·ï¿½          
+	char S8offer                          [  7];	char _S8offer;                            //ï¿½Åµï¿½8ï¿½ï¿½È£ï¿½ï¿½          
+	char S8bid                            [  7];	char _S8bid;                              //ï¿½Å¼ï¿½8ï¿½ï¿½È£ï¿½ï¿½          
+	char S8offerjan                       [  6];	char _S8offerjan;                         //ï¿½Åµï¿½8ï¿½ï¿½ï¿½Ü·ï¿½          
+	char S8bidjan                         [  6];	char _S8bidjan;                           //ï¿½Å¼ï¿½8ï¿½ï¿½ï¿½Ü·ï¿½          
+	char S9offer                          [  7];	char _S9offer;                            //ï¿½Åµï¿½9ï¿½ï¿½È£ï¿½ï¿½          
+	char S9bid                            [  7];	char _S9bid;                              //ï¿½Å¼ï¿½9ï¿½ï¿½È£ï¿½ï¿½          
+	char S9offerjan                       [  6];	char _S9offerjan;                         //ï¿½Åµï¿½9ï¿½ï¿½ï¿½Ü·ï¿½          
+	char S9bidjan                         [  6];	char _S9bidjan;                           //ï¿½Å¼ï¿½9ï¿½ï¿½ï¿½Ü·ï¿½          
+	char S0offer                          [  7];	char _S0offer;                            //ï¿½Åµï¿½10ï¿½ï¿½È£ï¿½ï¿½         
+	char S0bid                            [  7];	char _S0bid;                              //ï¿½Å¼ï¿½10ï¿½ï¿½È£ï¿½ï¿½         
+	char S0offerjan                       [  6];	char _S0offerjan;                         //ï¿½Åµï¿½10ï¿½ï¿½ï¿½Ü·ï¿½         
+	char S0bidjan                         [  6];	char _S0bidjan;                           //ï¿½Å¼ï¿½10ï¿½ï¿½ï¿½Ü·ï¿½         
+	char offersu                          [  4];	char _offersu;                            //ï¿½Åµï¿½ï¿½Ç¼ï¿½             
+	char bidsu                            [  4];	char _bidsu;                              //ï¿½Å¼ï¿½ï¿½Ç¼ï¿½             
+	char S2offersu                        [  4];	char _S2offersu;                          //ï¿½Åµï¿½2ï¿½ï¿½ï¿½Ç¼ï¿½          
+	char S2bidsu                          [  4];	char _S2bidsu;                            //ï¿½Å¼ï¿½2ï¿½ï¿½ï¿½Ç¼ï¿½          
+	char S3offersu                        [  4];	char _S3offersu;                          //ï¿½Åµï¿½3ï¿½ï¿½ï¿½Ç¼ï¿½          
+	char S3bidsu                          [  4];	char _S3bidsu;                            //ï¿½Å¼ï¿½3ï¿½ï¿½ï¿½Ç¼ï¿½          
+	char S4offersu                        [  4];	char _S4offersu;                          //ï¿½Åµï¿½4ï¿½ï¿½ï¿½Ç¼ï¿½          
+	char S4bidsu                          [  4];	char _S4bidsu;                            //ï¿½Å¼ï¿½4ï¿½ï¿½ï¿½Ç¼ï¿½          
+	char S5offersu                        [  4];	char _S5offersu;                          //ï¿½Åµï¿½5ï¿½ï¿½ï¿½Ç¼ï¿½          
+	char S5bidsu                          [  4];	char _S5bidsu;                            //ï¿½Å¼ï¿½5ï¿½ï¿½ï¿½Ç¼ï¿½          
+	char S6offersu                        [  4];	char _S6offersu;                          //ï¿½Åµï¿½6ï¿½ï¿½ï¿½Ç¼ï¿½          
+	char S6bidsu                          [  4];	char _S6bidsu;                            //ï¿½Å¼ï¿½6ï¿½ï¿½ï¿½Ç¼ï¿½          
+	char S7offersu                        [  4];	char _S7offersu;                          //ï¿½Åµï¿½7ï¿½ï¿½ï¿½Ç¼ï¿½          
+	char S7bidsu                          [  4];	char _S7bidsu;                            //ï¿½Å¼ï¿½7ï¿½ï¿½ï¿½Ç¼ï¿½          
+	char S8offersu                        [  4];	char _S8offersu;                          //ï¿½Åµï¿½8ï¿½ï¿½ï¿½Ç¼ï¿½          
+	char S8bidsu                          [  4];	char _S8bidsu;                            //ï¿½Å¼ï¿½8ï¿½ï¿½ï¿½Ç¼ï¿½          
+	char S9offersu                        [  4];	char _S9offersu;                          //ï¿½Åµï¿½9ï¿½ï¿½ï¿½Ç¼ï¿½          
+	char S9bidsu                          [  4];	char _S9bidsu;                            //ï¿½Å¼ï¿½9ï¿½ï¿½ï¿½Ç¼ï¿½          
+	char S0offersu                        [  4];	char _S0offersu;                          //ï¿½Åµï¿½10ï¿½ï¿½ï¿½Ç¼ï¿½         
+	char S0bidsu                          [  4];	char _S0bidsu;                            //ï¿½Å¼ï¿½10ï¿½ï¿½ï¿½Ç¼ï¿½         
+	char tofferjan                        [  6];	char _tofferjan;                          //ï¿½Ñ¸Åµï¿½ï¿½Ü·ï¿½           
+	char tobidjan                         [  6];	char _tobidjan;                           //ï¿½Ñ¸Å¼ï¿½ï¿½Ü·ï¿½           
+	char toffersu                         [  5];	char _toffersu;                           //ï¿½Ñ¸Åµï¿½ï¿½Ç¼ï¿½           
+	char tbidsu                           [  5];	char _tbidsu;                             //ï¿½Ñ¸Å¼ï¿½ï¿½Ç¼ï¿½           
+	char theorytime                       [  6];	char _theorytime;                         //ï¿½Ì·Ð°ï¿½ï¿½Ã°ï¿½           
+	char theoryprice                      [  7];	char _theoryprice;                        //ï¿½Ì·Ð°ï¿½               
+	char fuchrate                         [  5];	char _fuchrate;                           //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char fupivot2upz7                     [  7];	char _fupivot2upz7;                       //ï¿½Çºï¿½2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½          
+	char fupivot1upz7                     [  7];	char _fupivot1upz7;                       //ï¿½Çºï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½          
+	char fupivotz7                        [  7];	char _fupivotz7;                          //ï¿½Çºï¿½ï¿½ï¿½               
+	char fupivot1dnz7                     [  7];	char _fupivot1dnz7;                       //ï¿½Çºï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½          
+	char fupivot2dnz7                     [  7];	char _fupivot2dnz7;                       //ï¿½Çºï¿½2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½          
+	char fubasis                          [  7];	char _fubasis;                            //ï¿½ï¿½ï¿½Ì½Ã½ï¿½             
+	char fugrate                          [  7];	char _fugrate;                            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char fugratio                         [  6];	char _fugratio;                           //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char fupreopenyak                     [  7];	char _fupreopenyak;                       //ï¿½Ì°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char fulisthprice                     [  7];	char _fulisthprice;                       //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö°ï¿½         
+	char fulisthdate                      [  8];	char _fulisthdate;                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö°ï¿½ï¿½ï¿½         
+	char fulistlprice                     [  7];	char _fulistlprice;                       //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char fulistldate                      [  8];	char _fulistldate;                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char fulastdate                       [  8];	char _fulastdate;                         //ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½           
+	char fujandatecnt                     [  3];	char _fujandatecnt;                       //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char fucdratio                        [  6];	char _fucdratio;                          //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char fuopenchange                     [  7];	char _fuopenchange;                       //ï¿½Ã°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char fudynhprice                      [  7];	char _fudynhprice;                        //ï¿½Ç½Ã°ï¿½ï¿½ï¿½ï¿½Ñ°ï¿½         
+	char fudynlprice                      [  7];	char _fudynlprice;                        //ï¿½Ç½Ã°ï¿½ï¿½ï¿½ï¿½Ñ°ï¿½         
+	char fudynpriceflag                   [  1];	char _fudynpriceflag;                     //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¿ï¿½ï¿½ï¿½     
+	char exlmtgb                          [  1];	char _exlmtgb;                            //ï¿½ï¿½ï¿½ï¿½È®ï¿½ë¿¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½     
+	char uplmtgb                          [  1];	char _uplmtgb;                            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È®ï¿½ï¿½ï¿½ï¿½Ñ´Ü°ï¿½ 
+	char dnlmtgb                          [  1];	char _dnlmtgb;                            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È®ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´Ü°ï¿½ 
 } Tc4801OutBlock;
 
-typedef struct tagc4801OutBlock1    //±âÃÊÀÚ»ê
+typedef struct tagc4801OutBlock1    //ï¿½ï¿½ï¿½ï¿½ï¿½Ú»ï¿½
 {
-	char shcode                           [  6];	char _shcode;                             //Á¾¸ñÄÚµå             
-	char hname                            [ 20];	char _hname;                              //Á¾¸ñ¸í               
-	char price                            [  7];	char _price;                              //ÇöÀç°¡               
-	char sign                             [  1];	char _sign;                               //µî¶ôºÎÈ£             
-	char change                           [  6];	char _change;                             //µî¶ôÆø               
-	char market                           [ 16];	char _market;                             //¶ô±¸ºÐ               
-	char chrate                           [  5];	char _chrate;                             //µî¶ô·ü               
-	char offer                            [  7];	char _offer;                              //¸ÅµµÈ£°¡             
-	char bid                              [  7];	char _bid;                                //¸Å¼öÈ£°¡             
-	char volume                           [  9];	char _volume;                             //°Å·¡·®               
-	char volrate                          [  6];	char _volrate;                            //°Å·¡ºñÀ²             
-	char uplmtprice                       [  7];	char _uplmtprice;                         //»óÇÑ°¡               
-	char high                             [  7];	char _high;                               //°í°¡                 
-	char open                             [  7];	char _open;                               //½Ã°¡                 
-	char low                              [  7];	char _low;                                //Àú°¡                 
-	char dnlmtprice                       [  7];	char _dnlmtprice;                         //ÇÏÇÑ°¡               
+	char shcode                           [  6];	char _shcode;                             //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char hname                            [ 20];	char _hname;                              //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char price                            [  7];	char _price;                              //ï¿½ï¿½ï¿½ç°¡               
+	char sign                             [  1];	char _sign;                               //ï¿½ï¿½ï¿½ï¿½ï¿½È£             
+	char change                           [  6];	char _change;                             //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char market                           [ 16];	char _market;                             //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char chrate                           [  5];	char _chrate;                             //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char offer                            [  7];	char _offer;                              //ï¿½Åµï¿½È£ï¿½ï¿½             
+	char bid                              [  7];	char _bid;                                //ï¿½Å¼ï¿½È£ï¿½ï¿½             
+	char volume                           [  9];	char _volume;                             //ï¿½Å·ï¿½ï¿½ï¿½               
+	char volrate                          [  6];	char _volrate;                            //ï¿½Å·ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char uplmtprice                       [  7];	char _uplmtprice;                         //ï¿½ï¿½ï¿½Ñ°ï¿½               
+	char high                             [  7];	char _high;                               //ï¿½ï¿½                 
+	char open                             [  7];	char _open;                               //ï¿½Ã°ï¿½                 
+	char low                              [  7];	char _low;                                //ï¿½ï¿½ï¿½ï¿½                 
+	char dnlmtprice                       [  7];	char _dnlmtprice;                         //ï¿½ï¿½ï¿½Ñ°ï¿½               
 } Tc4801OutBlock1;
 
-typedef struct tagc4801OutBlock2    //ÁÖ½Ä¼±¹°¿¹»óÃ¼°á
+typedef struct tagc4801OutBlock2    //ï¿½Ö½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½
 {
-	char dongsi                           [  1];	char _dongsi;                             //µ¿½ÃÈ£°¡±¸ºÐ         
-	char jeqprice                         [  7];	char _jeqprice;                           //¿¹»óÃ¼°á°¡           
-	char jeqsign                          [  1];	char _jeqsign;                            //¿¹»óÃ¼°áºÎÈ£         
-	char jeqchange                        [  7];	char _jeqchange;                          //¿¹»óÃ¼°áµî¶ôÆø       
-	char jeqchrate                        [  5];	char _jeqchrate;                          //¿¹»óÃ¼°áµî¶ô·ü       
+	char dongsi                           [  1];	char _dongsi;                             //ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char jeqprice                         [  7];	char _jeqprice;                           //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½á°¡           
+	char jeqsign                          [  1];	char _jeqsign;                            //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½È£         
+	char jeqchange                        [  7];	char _jeqchange;                          //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char jeqchrate                        [  5];	char _jeqchrate;                          //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
 } Tc4801OutBlock2;
 
 typedef struct tagc4801
 {
-	Tc4801InBlock                     c4801inblock                          ;  //±âº»ÀÔ·Â 
-	Tc4801OutBlock                    c4801outblock                         ;  //ÁÖ½Ä¼±¹°MASTER±âº»ÀÚ·á 
-	Tc4801OutBlock1                   c4801outblock1                        ;  //±âÃÊÀÚ»ê 
-	Tc4801OutBlock2                   c4801outblock2                        ;  //ÁÖ½Ä¼±¹°¿¹»óÃ¼°á 
+	Tc4801InBlock                     c4801inblock                          ;  //ï¿½âº»ï¿½Ô·ï¿½ 
+	Tc4801OutBlock                    c4801outblock                         ;  //ï¿½Ö½Ä¼ï¿½ï¿½ï¿½MASTERï¿½âº»ï¿½Ú·ï¿½ 
+	Tc4801OutBlock1                   c4801outblock1                        ;  //ï¿½ï¿½ï¿½ï¿½ï¿½Ú»ï¿½ 
+	Tc4801OutBlock2                   c4801outblock2                        ;  //ï¿½Ö½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ 
 } Tc4801;
 
 
-typedef struct tagc4805InBlock    //ÀÔ·Âµ¥ÀÌÅ¸
+typedef struct tagc4805InBlock    //ï¿½Ô·Âµï¿½ï¿½ï¿½Å¸
 {
-	char fuitemz9                         [  9];	char _fuitemz9;                           //ÀÔ·ÂÄÚµå             
+	char fuitemz9                         [  9];	char _fuitemz9;                           //ï¿½Ô·ï¿½ï¿½Úµï¿½             
 } Tc4805InBlock;
 
 typedef struct tagc4805OutUnder    //c4805OutUnder
 {
-	char shcode                           [  6];	char _shcode;                             //Á¾¸ñÄÚµå             
-	char hname                            [ 20];	char _hname;                              //Á¾¸ñ¸í               
-	char price                            [  7];	char _price;                              //ÇöÀç°¡               
-	char sign                             [  1];	char _sign;                               //ÀüÀÏºñºÎÈ£           
-	char change                           [  6];	char _change;                             //ÀüÀÏºñ               
+	char shcode                           [  6];	char _shcode;                             //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char hname                            [ 20];	char _hname;                              //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char price                            [  7];	char _price;                              //ï¿½ï¿½ï¿½ç°¡               
+	char sign                             [  1];	char _sign;                               //ï¿½ï¿½ï¿½Ïºï¿½ï¿½È£           
+	char change                           [  6];	char _change;                             //ï¿½ï¿½ï¿½Ïºï¿½               
 } Tc4805OutUnder;
 
 typedef struct tagc4805OutSMaster    //c4805OutSMaster
 {
-	char fuitemz8                         [  8];	char _fuitemz8;                           //Á¾¸ñÄÚµå             
-	char fuspcurr                         [  8];	char _fuspcurr;                           //Áö¼ö                 
-	char fuspsign                         [  1];	char _fuspsign;                           //ÀüÀÏºñºÎÈ£           
-	char fuspchange                       [  7];	char _fuspchange;                         //ÀüÀÏºñ               
-	char fuspchrate                       [  5];	char _fuspchrate;                         //µî¶ô·ü               
-	char fuspopen                         [  7];	char _fuspopen;                           //½Ã°¡                 
-	char fusphigh                         [  7];	char _fusphigh;                           //°í°¡                 
-	char fusplow                          [  7];	char _fusplow;                            //Àú°¡                 
-	char fuspvolall                       [  7];	char _fuspvolall;                         //°Å·¡·®               
-	char fuspvalall                       [ 12];	char _fuspvalall;                         //´©Àû°Å·¡´ë±Ý(Ãµ¿ø)   
-	char fuspcurr1                        [  7];	char _fuspcurr1;                          //ÀÇÁ¦¾àÁ¤°¡(±Ù¿ù¹°)   
-	char fuspcurr2                        [  7];	char _fuspcurr2;                          //ÀÇÁ¦¾àÁ¤°¡(¿ø¿ù¹°)   
-	char fuitem1                          [  8];	char _fuitem1;                            //Á¾¸ñÄÚµå(±Ù¿ù¹°)     
-	char fuitem2                          [  8];	char _fuitem2;                            //Á¾¸ñÄÚµå(¿ø¿ù¹°)     
-	char fudynhprice                      [  7];	char _fudynhprice;                        //½Ç½Ã°£»óÇÑ°¡         
-	char fudynlprice                      [  7];	char _fudynlprice;                        //½Ç½Ã°£ÇÏÇÑ°¡         
-	char fudynpriceflag                   [  1];	char _fudynpriceflag;                     //µ¿Àû°¡°ÝÁ¦ÇÑ¿©ºÎ     
+	char fuitemz8                         [  8];	char _fuitemz8;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char fuspcurr                         [  8];	char _fuspcurr;                           //ï¿½ï¿½ï¿½ï¿½                 
+	char fuspsign                         [  1];	char _fuspsign;                           //ï¿½ï¿½ï¿½Ïºï¿½ï¿½È£           
+	char fuspchange                       [  7];	char _fuspchange;                         //ï¿½ï¿½ï¿½Ïºï¿½               
+	char fuspchrate                       [  5];	char _fuspchrate;                         //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char fuspopen                         [  7];	char _fuspopen;                           //ï¿½Ã°ï¿½                 
+	char fusphigh                         [  7];	char _fusphigh;                           //ï¿½ï¿½                 
+	char fusplow                          [  7];	char _fusplow;                            //ï¿½ï¿½ï¿½ï¿½                 
+	char fuspvolall                       [  7];	char _fuspvolall;                         //ï¿½Å·ï¿½ï¿½ï¿½               
+	char fuspvalall                       [ 12];	char _fuspvalall;                         //ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½ï¿½(Ãµï¿½ï¿½)   
+	char fuspcurr1                        [  7];	char _fuspcurr1;                          //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½Ù¿ï¿½ï¿½ï¿½)   
+	char fuspcurr2                        [  7];	char _fuspcurr2;                          //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)   
+	char fuitem1                          [  8];	char _fuitem1;                            //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½(ï¿½Ù¿ï¿½ï¿½ï¿½)     
+	char fuitem2                          [  8];	char _fuitem2;                            //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)     
+	char fudynhprice                      [  7];	char _fudynhprice;                        //ï¿½Ç½Ã°ï¿½ï¿½ï¿½ï¿½Ñ°ï¿½         
+	char fudynlprice                      [  7];	char _fudynlprice;                        //ï¿½Ç½Ã°ï¿½ï¿½ï¿½ï¿½Ñ°ï¿½         
+	char fudynpriceflag                   [  1];	char _fudynpriceflag;                     //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¿ï¿½ï¿½ï¿½     
 } Tc4805OutSMaster;
 
-typedef struct tagc4805OutHoga3    //ÁÖ½Ä¼±¹°È£°¡3
+typedef struct tagc4805OutHoga3    //ï¿½Ö½Ä¼ï¿½ï¿½ï¿½È£ï¿½ï¿½3
 {
-	char fuspfuitem                       [  8];	char _fuspfuitem;                         //Á¾¸ñÄÚµå             
-	char fusphname                        [ 50];	char _fusphname;                          //ÇÑ±Û¸í               
-	char fusphotime                       [  8];	char _fusphotime;                         //È£°¡½Ã°£             
-	char offer                            [  8];	char _offer;                              //¸Åµµ¿ì¼±È£°¡         
-	char bid                              [  8];	char _bid;                                //¸Å¼ö¿ì¼±È£°¡         
-	char offerjan                         [  6];	char _offerjan;                           //¸ÅµµÀÜ·®             
-	char bidjan                           [  6];	char _bidjan;                             //¸Å¼öÀÜ·®             
-	char S2offer                          [  8];	char _S2offer;                            //2Â÷¸ÅµµÈ£°¡          
-	char S2bid                            [  8];	char _S2bid;                              //2Â÷¸Å¼öÈ£°¡          
-	char S2offerjan                       [  6];	char _S2offerjan;                         //2Â÷¸ÅµµÀÜ·®          
-	char S2bidjan                         [  6];	char _S2bidjan;                           //2Â÷¸Å¼öÀÜ·®          
-	char S3offer                          [  8];	char _S3offer;                            //3Â÷¸ÅµµÈ£°¡          
-	char S3bid                            [  8];	char _S3bid;                              //3Â÷¸Å¼öÈ£°¡          
-	char S3offerjan                       [  6];	char _S3offerjan;                         //3Â÷¸ÅµµÀÜ·®          
-	char S3bidjan                         [  6];	char _S3bidjan;                           //3Â÷¸Å¼öÀÜ·®          
-	char S4offer                          [  8];	char _S4offer;                            //4Â÷¸ÅµµÈ£°¡          
-	char S4bid                            [  8];	char _S4bid;                              //4Â÷¸Å¼öÈ£°¡          
-	char S4offerjan                       [  6];	char _S4offerjan;                         //4Â÷¸ÅµµÀÜ·®          
-	char S4bidjan                         [  6];	char _S4bidjan;                           //4Â÷¸Å¼öÀÜ·®          
-	char S5offer                          [  8];	char _S5offer;                            //5Â÷¸ÅµµÈ£°¡          
-	char S5bid                            [  8];	char _S5bid;                              //5Â÷¸Å¼öÈ£°¡          
-	char S5offerjan                       [  6];	char _S5offerjan;                         //5Â÷¸ÅµµÀÜ·®          
-	char S5bidjan                         [  6];	char _S5bidjan;                           //5Â÷¸Å¼öÀÜ·®          
-	char S6offer                          [  8];	char _S6offer;                            //6Â÷¸ÅµµÈ£°¡          
-	char S6bid                            [  8];	char _S6bid;                              //6Â÷¸Å¼öÈ£°¡          
-	char S6offerjan                       [  6];	char _S6offerjan;                         //6Â÷¸ÅµµÀÜ·®          
-	char S6bidjan                         [  6];	char _S6bidjan;                           //6Â÷¸Å¼öÀÜ·®          
-	char S7offer                          [  8];	char _S7offer;                            //7Â÷¸ÅµµÈ£°¡          
-	char S7bid                            [  8];	char _S7bid;                              //7Â÷¸Å¼öÈ£°¡          
-	char S7offerjan                       [  6];	char _S7offerjan;                         //7Â÷¸ÅµµÀÜ·®          
-	char S7bidjan                         [  6];	char _S7bidjan;                           //7Â÷¸Å¼öÀÜ·®          
-	char S8offer                          [  8];	char _S8offer;                            //8Â÷¸ÅµµÈ£°¡          
-	char S8bid                            [  8];	char _S8bid;                              //8Â÷¸Å¼öÈ£°¡          
-	char S8offerjan                       [  6];	char _S8offerjan;                         //8Â÷¸ÅµµÀÜ·®          
-	char S8bidjan                         [  6];	char _S8bidjan;                           //8Â÷¸Å¼öÀÜ·®          
-	char S9offer                          [  8];	char _S9offer;                            //9Â÷¸ÅµµÈ£°¡          
-	char S9bid                            [  8];	char _S9bid;                              //9Â÷¸Å¼öÈ£°¡          
-	char S9offerjan                       [  6];	char _S9offerjan;                         //9Â÷¸ÅµµÀÜ·®          
-	char S9bidjan                         [  6];	char _S9bidjan;                           //9Â÷¸Å¼öÀÜ·®          
-	char S0offer                          [  8];	char _S0offer;                            //10Â÷¸ÅµµÈ£°¡         
-	char S0bid                            [  8];	char _S0bid;                              //10Â÷¸Å¼öÈ£°¡         
-	char S0offerjan                       [  6];	char _S0offerjan;                         //10Â÷¸ÅµµÀÜ·®         
-	char S0bidjan                         [  6];	char _S0bidjan;                           //10Â÷¸Å¼öÀÜ·®         
-	char offersu                          [  4];	char _offersu;                            //¸Åµµ°Ç¼ö             
-	char bidsu                            [  4];	char _bidsu;                              //¸Å¼ö°Ç¼ö             
-	char S2offersu                        [  4];	char _S2offersu;                          //2Â÷¸Åµµ°Ç¼ö          
-	char S2bidsu                          [  4];	char _S2bidsu;                            //2Â÷¸Å¼ö°Ç¼ö          
-	char S3offersu                        [  4];	char _S3offersu;                          //3Â÷¸Åµµ°Ç¼ö          
-	char S3bidsu                          [  4];	char _S3bidsu;                            //3Â÷¸Å¼ö°Ç¼ö          
-	char S4offersu                        [  4];	char _S4offersu;                          //4Â÷¸Åµµ°Ç¼ö          
-	char S4bidsu                          [  4];	char _S4bidsu;                            //4Â÷¸Å¼ö°Ç¼ö          
-	char S5offersu                        [  4];	char _S5offersu;                          //5Â÷¸Åµµ°Ç¼ö          
-	char S5bidsu                          [  4];	char _S5bidsu;                            //5Â÷¸Å¼ö°Ç¼ö          
-	char S6offersu                        [  4];	char _S6offersu;                          //6Â÷¸Åµµ°Ç¼ö          
-	char S6bidsu                          [  4];	char _S6bidsu;                            //6Â÷¸Å¼ö°Ç¼ö          
-	char S7offersu                        [  4];	char _S7offersu;                          //7Â÷¸Åµµ°Ç¼ö          
-	char S7bidsu                          [  4];	char _S7bidsu;                            //7Â÷¸Å¼ö°Ç¼ö          
-	char S8offersu                        [  4];	char _S8offersu;                          //8Â÷¸Åµµ°Ç¼ö          
-	char S8bidsu                          [  4];	char _S8bidsu;                            //8Â÷¸Å¼ö°Ç¼ö          
-	char S9offersu                        [  4];	char _S9offersu;                          //9Â÷¸Åµµ°Ç¼ö          
-	char S9bidsu                          [  4];	char _S9bidsu;                            //9Â÷¸Å¼ö°Ç¼ö          
-	char S0offersu                        [  4];	char _S0offersu;                          //10Â÷¸Åµµ°Ç¼ö         
-	char S0bidsu                          [  4];	char _S0bidsu;                            //10Â÷¸Å¼ö°Ç¼ö         
-	char tofferjan                        [  6];	char _tofferjan;                          //ÃÑ¸ÅµµÀÜ·®           
-	char tobidjan                         [  6];	char _tobidjan;                           //ÃÑ¸Å¼öÀÜ·®           
-	char toffersu                         [  5];	char _toffersu;                           //ÃÑ¸Åµµ°Ç¼ö           
-	char tbidsu                           [  5];	char _tbidsu;                             //ÃÑ¸Å¼ö°Ç¼ö           
-	char undershcode                      [  6];	char _undershcode;                        //±âÃÊÀÚ»êÁ¾¸ñÄÚµå     
-	char underhname                       [ 20];	char _underhname;                         //±âÃÊÀÚ»êÁ¾¸ñ¸í       
-	char eitem                            [  2];	char _eitem;                              //±âÃÊ´ë»óÁÖ½Ä         
+	char fuspfuitem                       [  8];	char _fuspfuitem;                         //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char fusphname                        [ 50];	char _fusphname;                          //ï¿½Ñ±Û¸ï¿½               
+	char fusphotime                       [  8];	char _fusphotime;                         //È£ï¿½ï¿½ï¿½Ã°ï¿½             
+	char offer                            [  8];	char _offer;                              //ï¿½Åµï¿½ï¿½ì¼±È£ï¿½ï¿½         
+	char bid                              [  8];	char _bid;                                //ï¿½Å¼ï¿½ï¿½ì¼±È£ï¿½ï¿½         
+	char offerjan                         [  6];	char _offerjan;                           //ï¿½Åµï¿½ï¿½Ü·ï¿½             
+	char bidjan                           [  6];	char _bidjan;                             //ï¿½Å¼ï¿½ï¿½Ü·ï¿½             
+	char S2offer                          [  8];	char _S2offer;                            //2ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S2bid                            [  8];	char _S2bid;                              //2ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S2offerjan                       [  6];	char _S2offerjan;                         //2ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½          
+	char S2bidjan                         [  6];	char _S2bidjan;                           //2ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½          
+	char S3offer                          [  8];	char _S3offer;                            //3ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S3bid                            [  8];	char _S3bid;                              //3ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S3offerjan                       [  6];	char _S3offerjan;                         //3ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½          
+	char S3bidjan                         [  6];	char _S3bidjan;                           //3ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½          
+	char S4offer                          [  8];	char _S4offer;                            //4ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S4bid                            [  8];	char _S4bid;                              //4ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S4offerjan                       [  6];	char _S4offerjan;                         //4ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½          
+	char S4bidjan                         [  6];	char _S4bidjan;                           //4ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½          
+	char S5offer                          [  8];	char _S5offer;                            //5ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S5bid                            [  8];	char _S5bid;                              //5ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S5offerjan                       [  6];	char _S5offerjan;                         //5ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½          
+	char S5bidjan                         [  6];	char _S5bidjan;                           //5ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½          
+	char S6offer                          [  8];	char _S6offer;                            //6ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S6bid                            [  8];	char _S6bid;                              //6ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S6offerjan                       [  6];	char _S6offerjan;                         //6ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½          
+	char S6bidjan                         [  6];	char _S6bidjan;                           //6ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½          
+	char S7offer                          [  8];	char _S7offer;                            //7ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S7bid                            [  8];	char _S7bid;                              //7ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S7offerjan                       [  6];	char _S7offerjan;                         //7ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½          
+	char S7bidjan                         [  6];	char _S7bidjan;                           //7ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½          
+	char S8offer                          [  8];	char _S8offer;                            //8ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S8bid                            [  8];	char _S8bid;                              //8ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S8offerjan                       [  6];	char _S8offerjan;                         //8ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½          
+	char S8bidjan                         [  6];	char _S8bidjan;                           //8ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½          
+	char S9offer                          [  8];	char _S9offer;                            //9ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S9bid                            [  8];	char _S9bid;                              //9ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S9offerjan                       [  6];	char _S9offerjan;                         //9ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½          
+	char S9bidjan                         [  6];	char _S9bidjan;                           //9ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½          
+	char S0offer                          [  8];	char _S0offer;                            //10ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½         
+	char S0bid                            [  8];	char _S0bid;                              //10ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½         
+	char S0offerjan                       [  6];	char _S0offerjan;                         //10ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½         
+	char S0bidjan                         [  6];	char _S0bidjan;                           //10ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½         
+	char offersu                          [  4];	char _offersu;                            //ï¿½Åµï¿½ï¿½Ç¼ï¿½             
+	char bidsu                            [  4];	char _bidsu;                              //ï¿½Å¼ï¿½ï¿½Ç¼ï¿½             
+	char S2offersu                        [  4];	char _S2offersu;                          //2ï¿½ï¿½ï¿½Åµï¿½ï¿½Ç¼ï¿½          
+	char S2bidsu                          [  4];	char _S2bidsu;                            //2ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ç¼ï¿½          
+	char S3offersu                        [  4];	char _S3offersu;                          //3ï¿½ï¿½ï¿½Åµï¿½ï¿½Ç¼ï¿½          
+	char S3bidsu                          [  4];	char _S3bidsu;                            //3ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ç¼ï¿½          
+	char S4offersu                        [  4];	char _S4offersu;                          //4ï¿½ï¿½ï¿½Åµï¿½ï¿½Ç¼ï¿½          
+	char S4bidsu                          [  4];	char _S4bidsu;                            //4ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ç¼ï¿½          
+	char S5offersu                        [  4];	char _S5offersu;                          //5ï¿½ï¿½ï¿½Åµï¿½ï¿½Ç¼ï¿½          
+	char S5bidsu                          [  4];	char _S5bidsu;                            //5ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ç¼ï¿½          
+	char S6offersu                        [  4];	char _S6offersu;                          //6ï¿½ï¿½ï¿½Åµï¿½ï¿½Ç¼ï¿½          
+	char S6bidsu                          [  4];	char _S6bidsu;                            //6ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ç¼ï¿½          
+	char S7offersu                        [  4];	char _S7offersu;                          //7ï¿½ï¿½ï¿½Åµï¿½ï¿½Ç¼ï¿½          
+	char S7bidsu                          [  4];	char _S7bidsu;                            //7ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ç¼ï¿½          
+	char S8offersu                        [  4];	char _S8offersu;                          //8ï¿½ï¿½ï¿½Åµï¿½ï¿½Ç¼ï¿½          
+	char S8bidsu                          [  4];	char _S8bidsu;                            //8ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ç¼ï¿½          
+	char S9offersu                        [  4];	char _S9offersu;                          //9ï¿½ï¿½ï¿½Åµï¿½ï¿½Ç¼ï¿½          
+	char S9bidsu                          [  4];	char _S9bidsu;                            //9ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ç¼ï¿½          
+	char S0offersu                        [  4];	char _S0offersu;                          //10ï¿½ï¿½ï¿½Åµï¿½ï¿½Ç¼ï¿½         
+	char S0bidsu                          [  4];	char _S0bidsu;                            //10ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ç¼ï¿½         
+	char tofferjan                        [  6];	char _tofferjan;                          //ï¿½Ñ¸Åµï¿½ï¿½Ü·ï¿½           
+	char tobidjan                         [  6];	char _tobidjan;                           //ï¿½Ñ¸Å¼ï¿½ï¿½Ü·ï¿½           
+	char toffersu                         [  5];	char _toffersu;                           //ï¿½Ñ¸Åµï¿½ï¿½Ç¼ï¿½           
+	char tbidsu                           [  5];	char _tbidsu;                             //ï¿½Ñ¸Å¼ï¿½ï¿½Ç¼ï¿½           
+	char undershcode                      [  6];	char _undershcode;                        //ï¿½ï¿½ï¿½ï¿½ï¿½Ú»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½     
+	char underhname                       [ 20];	char _underhname;                         //ï¿½ï¿½ï¿½ï¿½ï¿½Ú»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char eitem                            [  2];	char _eitem;                              //ï¿½ï¿½ï¿½Ê´ï¿½ï¿½ï¿½Ö½ï¿½         
 	char lgcode                           [  9];	char _lgcode;                             //lgcode               
-	char bp_jgubun                        [  1];	char _bp_jgubun;                          //BP¿ëÀå±¸ºÐ           
+	char bp_jgubun                        [  1];	char _bp_jgubun;                          //BPï¿½ï¿½ï¿½å±¸ï¿½ï¿½           
 } Tc4805OutHoga3;
 
-typedef struct tagc4805OutSpread    //¼±¹°SPREAD
+typedef struct tagc4805OutSpread    //ï¿½ï¿½ï¿½ï¿½SPREAD
 {
-	char thspread                         [  7];	char _thspread;                           //ÀÌ·Ð½ºÇÁ·¹µå         
-	char respread                         [  7];	char _respread;                           //½ÇÁ¦½ºÇÁ·¹µå         
-	char fugrate1                         [  7];	char _fugrate1;                           //±«¸®                 
+	char thspread                         [  7];	char _thspread;                           //ï¿½Ì·Ð½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char respread                         [  7];	char _respread;                           //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char fugrate1                         [  7];	char _fugrate1;                           //ï¿½ï¿½ï¿½ï¿½                 
 } Tc4805OutSpread;
 
 typedef struct tagc4805
 {
-	Tc4805InBlock                     c4805inblock                          ;  //ÀÔ·Âµ¥ÀÌÅ¸ 
+	Tc4805InBlock                     c4805inblock                          ;  //ï¿½Ô·Âµï¿½ï¿½ï¿½Å¸ 
 	Tc4805OutUnder                    c4805outunder                         ;  //c4805OutUnder 
 	Tc4805OutSMaster                  c4805outsmaster                       ;  //c4805OutSMaster 
-	Tc4805OutHoga3                    c4805outhoga3                         ;  //ÁÖ½Ä¼±¹°È£°¡3 
-	Tc4805OutSpread                   c4805outspread                        ;  //¼±¹°SPREAD 
+	Tc4805OutHoga3                    c4805outhoga3                         ;  //ï¿½Ö½Ä¼ï¿½ï¿½ï¿½È£ï¿½ï¿½3 
+	Tc4805OutSpread                   c4805outspread                        ;  //ï¿½ï¿½ï¿½ï¿½SPREAD 
 } Tc4805;
 
-typedef struct tags1701InBlock    //±âº»ÀÔ·Â
+typedef struct tags1701InBlock    //ï¿½âº»ï¿½Ô·ï¿½
 {
-	char code                             [  6];	char _code;                               //Á¾¸ñÄÚµå             
+	char code                             [  6];	char _code;                               //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } Ts1701InBlock;
 
-typedef struct tags1701OutBlock    //Á¾¸ñ¸¶½ºÅ¸±âº»ÀÚ·á
+typedef struct tags1701OutBlock    //ï¿½ï¿½ï¿½ñ¸¶½ï¿½Å¸ï¿½âº»ï¿½Ú·ï¿½
 {
-	char code                             [  6];	char _code;                               //Á¾¸ñÄÚµå             
-	char hname                            [ 40];	char _hname;                              //Á¾¸ñ¸í               
-	char price                            [  7];	char _price;                              //ÇöÀç°¡               
-	char sign                             [  1];	char _sign;                               //µî¶ôºÎÈ£             
-	char change                           [  6];	char _change;                             //µî¶ôÆø               
-	char chrate                           [  5];	char _chrate;                             //µî¶ô·ü               
-	char offer                            [  7];	char _offer;                              //¸ÅµµÈ£°¡             
-	char bid                              [  7];	char _bid;                                //¸Å¼öÈ£°¡             
-	char volume                           [  9];	char _volume;                             //°Å·¡·®               
-	char volrate                          [  6];	char _volrate;                            //°Å·¡ºñÀ²             
-	char value                            [  9];	char _value;                              //°Å·¡´ë±Ý             
-	char open                             [  7];	char _open;                               //½Ã°¡                 
-	char high                             [  7];	char _high;                               //°í°¡                 
-	char low                              [  7];	char _low;                                //Àú°¡                 
-	char sale                             [  7];	char _sale;                               //¹ßÇà°¡               
-	char dnlmtprice                       [  7];	char _dnlmtprice;                         //ÇÏÇÑ°¡               
-	char theoryprice                      [  7];	char _theoryprice;                        //ÀÌ·Ð°¡               
-	char grate                            [  7];	char _grate;                              //±«¸®µµ               
-	char actprice                         [ 10];	char _actprice;                           //Çà»ç°¡               
-	char listhprice                       [  7];	char _listhprice;                         //»óÀåÈÄÃÖ°í°¡         
-	char listhdate                        [  4];	char _listhdate;                          //»óÀåÈÄÃÖ°í°¡ÀÏ       
-	char listlprice                       [  7];	char _listlprice;                         //»óÀåÈÄÃÖÀú°¡         
-	char listldate                        [  4];	char _listldate;                          //»óÀåÈÄÃÖÀú°¡ÀÏ       
-	char preprice                         [  7];	char _preprice;                           //ÀüÀÏÁ¾°¡             
-	char hotime                           [  8];	char _hotime;                             //È£°¡½Ã°£             
-	char offho1                           [  7];	char _offho1;                             //¸ÅµµÃÖ¿ì¼±È£°¡       
-	char offho2                           [  7];	char _offho2;                             //¸ÅµµÂ÷¼±È£°¡         
-	char offho3                           [  7];	char _offho3;                             //¸ÅµµÂ÷Â÷¼±È£°¡       
-	char offho4                           [  7];	char _offho4;                             //¸Åµµ4Â÷¼±È£°¡        
-	char offho5                           [  7];	char _offho5;                             //¸Åµµ5Â÷¼±È£°¡        
-	char offho6                           [  7];	char _offho6;                             //¸Åµµ6Â÷¼±È£°¡        
-	char offho7                           [  7];	char _offho7;                             //¸Åµµ7Â÷¼±È£°¡        
-	char offho8                           [  7];	char _offho8;                             //¸Åµµ8Â÷¼±È£°¡        
-	char offho9                           [  7];	char _offho9;                             //¸Åµµ9Â÷¼±È£°¡        
-	char offho10                          [  7];	char _offho10;                            //¸Åµµ10Â÷¼±È£°¡       
-	char bidho1                           [  7];	char _bidho1;                             //¸Å¼öÃÖ¿ì¼±È£°¡       
-	char bidho2                           [  7];	char _bidho2;                             //¸Å¼öÂ÷¼±È£°¡         
-	char bidho3                           [  7];	char _bidho3;                             //¸Å¼öÂ÷Â÷¼±È£°¡       
-	char bidho4                           [  7];	char _bidho4;                             //¸Å¼ö4Â÷¼±È£°¡        
-	char bidho5                           [  7];	char _bidho5;                             //¸Å¼ö5Â÷¼±È£°¡        
-	char bidho6                           [  7];	char _bidho6;                             //¸Å¼ö6Â÷¼±È£°¡        
-	char bidho7                           [  7];	char _bidho7;                             //¸Å¼ö7Â÷¼±È£°¡        
-	char bidho8                           [  7];	char _bidho8;                             //¸Å¼ö8Â÷¼±È£°¡        
-	char bidho9                           [  7];	char _bidho9;                             //¸Å¼ö9Â÷¼±È£°¡        
-	char bidho10                          [  7];	char _bidho10;                            //¸Å¼ö10Â÷¼±È£°¡       
-	char offremain1                       [  9];	char _offremain1;                         //¸ÅµµÃÖ¿ì¼±ÀÜ·®       
-	char offremain2                       [  9];	char _offremain2;                         //¸ÅµµÂ÷¼±ÀÜ·®         
-	char offremain3                       [  9];	char _offremain3;                         //¸ÅµµÂ÷Â÷¼±ÀÜ·®       
-	char offremain4                       [  9];	char _offremain4;                         //¸Åµµ4Â÷¼±ÀÜ·®        
-	char offremain5                       [  9];	char _offremain5;                         //¸Åµµ5Â÷¼±ÀÜ·®        
-	char offremain6                       [  9];	char _offremain6;                         //¸Åµµ6Â÷¼±ÀÜ·®        
-	char offremain7                       [  9];	char _offremain7;                         //¸Åµµ7Â÷¼±ÀÜ·®        
-	char offremain8                       [  9];	char _offremain8;                         //¸Åµµ8Â÷¼±ÀÜ·®        
-	char offremain9                       [  9];	char _offremain9;                         //¸Åµµ9Â÷¼±ÀÜ·®        
-	char offremain10                      [  9];	char _offremain10;                        //¸Åµµ10Â÷¼±ÀÜ·®       
-	char bidremain1                       [  9];	char _bidremain1;                         //¸Å¼öÃÖ¿ì¼±ÀÜ·®       
-	char bidremain2                       [  9];	char _bidremain2;                         //¸Å¼öÂ÷¼±ÀÜ·®         
-	char bidremain3                       [  9];	char _bidremain3;                         //¸Å¼öÂ÷Â÷¼±ÀÜ·®       
-	char bidremain4                       [  9];	char _bidremain4;                         //¸Å¼ö4Â÷¼±ÀÜ·®        
-	char bidremain5                       [  9];	char _bidremain5;                         //¸Å¼ö5Â÷¼±ÀÜ·®        
-	char bidremain6                       [  9];	char _bidremain6;                         //¸Å¼ö6Â÷¼±ÀÜ·®        
-	char bidremain7                       [  9];	char _bidremain7;                         //¸Å¼ö7Â÷¼±ÀÜ·®        
-	char bidremain8                       [  9];	char _bidremain8;                         //¸Å¼ö8Â÷¼±ÀÜ·®        
-	char bidremain9                       [  9];	char _bidremain9;                         //¸Å¼ö9Â÷¼±ÀÜ·®        
-	char bidremain10                      [  9];	char _bidremain10;                        //¸Å¼ö10Â÷¼±ÀÜ·®       
-	char lpoffremain1                     [  9];	char _lpoffremain1;                       //LP¸ÅµµÃÖ¿ì¼±ÀÜ·®     
-	char lpoffremain2                     [  9];	char _lpoffremain2;                       //LP¸ÅµµÂ÷¼±ÀÜ·®       
-	char lpoffremain3                     [  9];	char _lpoffremain3;                       //LP¸ÅµµÂ÷Â÷¼±ÀÜ·®     
-	char lpoffremain4                     [  9];	char _lpoffremain4;                       //LP¸Åµµ4Â÷¼±ÀÜ·®      
-	char lpoffremain5                     [  9];	char _lpoffremain5;                       //LP¸Åµµ5Â÷¼±ÀÜ·®      
-	char lpoffremain6                     [  9];	char _lpoffremain6;                       //LP¸Åµµ6Â÷¼±ÀÜ·®      
-	char lpoffremain7                     [  9];	char _lpoffremain7;                       //LP¸Åµµ7Â÷¼±ÀÜ·®      
-	char lpoffremain8                     [  9];	char _lpoffremain8;                       //LP¸Åµµ8Â÷¼±ÀÜ·®      
-	char lpoffremain9                     [  9];	char _lpoffremain9;                       //LP¸Åµµ9Â÷¼±ÀÜ·®      
-	char lpoffremain10                    [  9];	char _lpoffremain10;                      //LP¸Åµµ10Â÷¼±ÀÜ·®     
-	char lpbidremain1                     [  9];	char _lpbidremain1;                       //LP¸Å¼öÃÖ¿ì¼±ÀÜ·®     
-	char lpbidremain2                     [  9];	char _lpbidremain2;                       //LP¸Å¼öÂ÷¼±ÀÜ·®       
-	char lpbidremain3                     [  9];	char _lpbidremain3;                       //LP¸Å¼öÂ÷Â÷¼±ÀÜ·®     
-	char lpbidremain4                     [  9];	char _lpbidremain4;                       //LP¸Å¼ö4Â÷¼±ÀÜ·®      
-	char lpbidremain5                     [  9];	char _lpbidremain5;                       //LP¸Å¼ö5Â÷¼±ÀÜ·®      
-	char lpbidremain6                     [  9];	char _lpbidremain6;                       //LP¸Å¼ö6Â÷¼±ÀÜ·®      
-	char lpbidremain7                     [  9];	char _lpbidremain7;                       //LP¸Å¼ö7Â÷¼±ÀÜ·®      
-	char lpbidremain8                     [  9];	char _lpbidremain8;                       //LP¸Å¼ö8Â÷¼±ÀÜ·®      
-	char lpbidremain9                     [  9];	char _lpbidremain9;                       //LP¸Å¼ö9Â÷¼±ÀÜ·®      
-	char lpbidremain10                    [  9];	char _lpbidremain10;                      //LP¸Å¼ö10Â÷¼±ÀÜ·®     
-	char offtot                           [  9];	char _offtot;                             //ÃÑ¸ÅµµÀÜ·®           
-	char bidtot                           [  9];	char _bidtot;                             //ÃÑ¸Å¼öÀÜ·®           
-	char impv                             [ 10];	char _impv;                               //³»Àçº¯µ¿¼º           
-	char delta                            [  9];	char _delta;                              //µ¨Å¸Áö¼ö             
-	char gamma                            [  9];	char _gamma;                              //°¨¸¶Áö¼ö             
-	char vega                             [  9];	char _vega;                               //º£°¡º¯µ¿¼º           
-	char theta                            [  9];	char _theta;                              //½êÅ¸½Ã°£             
-	char rho                              [  9];	char _rho;                                //·ÎÀÌÀÚÀ²             
-	char cdratio                          [  6];	char _cdratio;                            //ÀÌÀÚÀ²               
-	char divideratio                      [  9];	char _divideratio;                        //¹è´ç¾×Áö¼ö           
-	char jandatecnt                       [  4];	char _jandatecnt;                         //ÀÜÁ¸ÀÏ               
-	char elwsdate                         [  8];	char _elwsdate;                           //Çà»ç±â°£°³½ÃÀÏ       
-	char elwedate                         [  8];	char _elwedate;                           //Çà»ç±â°£Á¾·áÀÏ       
-	char lastdate                         [  8];	char _lastdate;                           //ÃÖÁ¾°Å·¡ÀÏ           
-	char balname                          [ 18];	char _balname;                            //¹ßÇà±â°ü             
-	char listing                          [  9];	char _listing;                            //¹ßÇà¼ö·®             
-	char rightgb                          [  4];	char _rightgb;                            //±Ç¸®À¯Çü             /*ÄÝ,Ç²,±âÅ¸*/
-	char righttype                        [  6];	char _righttype;                          //±Ç¸®Çà»ç¹æ½Ä         /*À¯·´Çü,¹Ì±¹Çü,±âÅ¸*/
-	char settletype                       [  9];	char _settletype;                         //°áÁ¦¹æ¹ý             /*Çö±Ý,½Ç¹°,Çö±Ý+½Ç¹°*/
-	char changerate                       [  8];	char _changerate;                         //ÀüÈ¯ºñÀ²             
-	char rewardrate                       [  5];	char _rewardrate;                         //ÃÖ¼ÒÁö±ÞÀ²           
-	char uppartrate                       [  5];	char _uppartrate;                         //°¡°Ý»ó½ÂÂü¿©À²       
-	char paydate                          [  8];	char _paydate;                            //ÃÖÁ¾Áö±ÞÀÏ           
-	char lpjumun                          [  4];	char _lpjumun;                            //LPÁÖ¹®°¡´É¿©ºÎ       //ºÒ°¡,°¡´É
-	char parity                           [  8];	char _parity;                             //ÆÐ¸®Æ¼               
-	char gearingrate                      [  8];	char _gearingrate;                        //±â¾î¸µºñÀ²           
-	char profitrate                       [  8];	char _profitrate;                         //¼ÕÀÍºÐ±âÀ²           
-	char basepoint                        [  8];	char _basepoint;                          //ÀÚº»ÁöÁöÁ¡           
-	char lp_name1                         [  6];	char _lp_name1;                           //LPÈ¸¿ø»ç1            
-	char lp_name2                         [  6];	char _lp_name2;                           //LPÈ¸¿ø»ç2            
-	char lp_name3                         [  6];	char _lp_name3;                           //LPÈ¸¿ø»ç3            
-	char lp_name4                         [  6];	char _lp_name4;                           //LPÈ¸¿ø»ç4            
-	char lp_name5                         [  6];	char _lp_name5;                           //LPÈ¸¿ø»ç5            
-	char dongsi                           [  1];	char _dongsi;                             //µ¿½ÃÈ£°¡±¸ºÐ         
-	char eqprice                          [  7];	char _eqprice;                            //¿¹»óÃ¼°á°¡           
-	char eqsign                           [  1];	char _eqsign;                             //¿¹»óÃ¼°áºÎÈ£         
-	char eqchange                         [  6];	char _eqchange;                           //¿¹»óÃ¼°áµî¶ôÆø       
-	char eqchrate                         [  5];	char _eqchrate;                           //¿¹»óÃ¼°áµî¶ô·ü       
-	char eqvol                            [  9];	char _eqvol;                              //¿¹»óÃ¼°á¼ö·®         
-	char lphold                           [ 10];	char _lphold;                             //LPº¸À¯¼ö·®           
-	char lprate                           [  5];	char _lprate;                             //LPº¸À¯À²             
-	char egearing                         [  8];	char _egearing;                           //E±â¾î¸µ              
-	char fixpay                           [  8];	char _fixpay;                             //È®Á¤Áö±Þ¾×           
-	char listdate                         [  8];	char _listdate;                           //»óÀåÀÏ               
-	char listhdatez8                      [  8];	char _listhdatez8;                        //»óÀåÈÄÃÖ°í°¡ÀÏ       
-	char listldatez8                      [  8];	char _listldatez8;                        //»óÀåÈÄÃÖÀú°¡ÀÏ       
-	char intval                           [ 10];	char _intval;                             //³»Àç°¡Ä¡             
-	char leverage                         [  8];	char _leverage;                           //·¹¹ö¸®Áö             
-	char timeval                          [ 10];	char _timeval;                            //½Ã°£°¡Ä¡             
-	char gratio                           [  6];	char _gratio;                             //±«¸®À²               
-	char profitpt                         [  8];	char _profitpt;                           //¼ÕÀÍºÐ±âÁ¡(Á¤¼ö)     
-	char payproxy                         [ 20];	char _payproxy;                           //Áö±Þ´ë¸®ÀÎ           
-	char standardopt                      [  2];	char _standardopt;                        //Á¾¸ñ±¸ºÐ             /**01:Ç¥ÁØ,03:Á¶±âÁ¾·á**/
-	char koprice                          [  6];	char _koprice;                            //Á¶±âÁ¾·á°¡           
-	char koappr                           [  5];	char _koappr;                             //KOÁ¢±Ùµµ             
-	char expcode                          [ 12];	char _expcode;                            //È®ÀåÄÚµå             
-	char minpayment                       [  8];	char _minpayment;                         //ÃÖ¼ÒÁö±Þ¾×           
-	char stop                             [  1];	char _stop;                               //°Å·¡Á¤Áö±¸ºÐ         
-	char gratio2                          [  8];	char _gratio2;                            //±«¸®À²2              
-	char lpstop                           [  8];	char _lpstop;                             //LPÁ¾·áÀÏ             
-	char gonggb                           [  1];	char _gonggb;                             //Ãß°¡»óÀå°ø½Ã         
-	char lp_impv                          [  5];	char _lp_impv;                            //LP³»Àçº¯µ¿¼º         
-	char r_intval                         [  8];	char _r_intval;                           //½Ç½Ã°£¿ë³»Àç°¡Ä¡     
-	char jandatecnt2                      [  4];	char _jandatecnt2;                        //ÀÜÁ¸ÀÏ(¿µ¾÷ÀÏ)       
-	char profitpt2                        [ 10];	char _profitpt2;                          //¼ÕÀÍºÐ±âÁ¡(¼Ò¼öÁ¡)   
-	char alertgb                          [  1];	char _alertgb;                            //ÅõÀÚÁÖÀÇ±¸ºÐ         
+	char code                             [  6];	char _code;                               //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char hname                            [ 40];	char _hname;                              //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char price                            [  7];	char _price;                              //ï¿½ï¿½ï¿½ç°¡               
+	char sign                             [  1];	char _sign;                               //ï¿½ï¿½ï¿½ï¿½ï¿½È£             
+	char change                           [  6];	char _change;                             //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char chrate                           [  5];	char _chrate;                             //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char offer                            [  7];	char _offer;                              //ï¿½Åµï¿½È£ï¿½ï¿½             
+	char bid                              [  7];	char _bid;                                //ï¿½Å¼ï¿½È£ï¿½ï¿½             
+	char volume                           [  9];	char _volume;                             //ï¿½Å·ï¿½ï¿½ï¿½               
+	char volrate                          [  6];	char _volrate;                            //ï¿½Å·ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char value                            [  9];	char _value;                              //ï¿½Å·ï¿½ï¿½ï¿½ï¿½             
+	char open                             [  7];	char _open;                               //ï¿½Ã°ï¿½                 
+	char high                             [  7];	char _high;                               //ï¿½ï¿½                 
+	char low                              [  7];	char _low;                                //ï¿½ï¿½ï¿½ï¿½                 
+	char sale                             [  7];	char _sale;                               //ï¿½ï¿½ï¿½à°¡               
+	char dnlmtprice                       [  7];	char _dnlmtprice;                         //ï¿½ï¿½ï¿½Ñ°ï¿½               
+	char theoryprice                      [  7];	char _theoryprice;                        //ï¿½Ì·Ð°ï¿½               
+	char grate                            [  7];	char _grate;                              //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char actprice                         [ 10];	char _actprice;                           //ï¿½ï¿½ç°¡               
+	char listhprice                       [  7];	char _listhprice;                         //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö°ï¿½         
+	char listhdate                        [  4];	char _listhdate;                          //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö°ï¿½ï¿½ï¿½       
+	char listlprice                       [  7];	char _listlprice;                         //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char listldate                        [  4];	char _listldate;                          //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char preprice                         [  7];	char _preprice;                           //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char hotime                           [  8];	char _hotime;                             //È£ï¿½ï¿½ï¿½Ã°ï¿½             
+	char offho1                           [  7];	char _offho1;                             //ï¿½Åµï¿½ï¿½Ö¿ì¼±È£ï¿½ï¿½       
+	char offho2                           [  7];	char _offho2;                             //ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½         
+	char offho3                           [  7];	char _offho3;                             //ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½       
+	char offho4                           [  7];	char _offho4;                             //ï¿½Åµï¿½4ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char offho5                           [  7];	char _offho5;                             //ï¿½Åµï¿½5ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char offho6                           [  7];	char _offho6;                             //ï¿½Åµï¿½6ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char offho7                           [  7];	char _offho7;                             //ï¿½Åµï¿½7ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char offho8                           [  7];	char _offho8;                             //ï¿½Åµï¿½8ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char offho9                           [  7];	char _offho9;                             //ï¿½Åµï¿½9ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char offho10                          [  7];	char _offho10;                            //ï¿½Åµï¿½10ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½       
+	char bidho1                           [  7];	char _bidho1;                             //ï¿½Å¼ï¿½ï¿½Ö¿ì¼±È£ï¿½ï¿½       
+	char bidho2                           [  7];	char _bidho2;                             //ï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½         
+	char bidho3                           [  7];	char _bidho3;                             //ï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½       
+	char bidho4                           [  7];	char _bidho4;                             //ï¿½Å¼ï¿½4ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char bidho5                           [  7];	char _bidho5;                             //ï¿½Å¼ï¿½5ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char bidho6                           [  7];	char _bidho6;                             //ï¿½Å¼ï¿½6ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char bidho7                           [  7];	char _bidho7;                             //ï¿½Å¼ï¿½7ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char bidho8                           [  7];	char _bidho8;                             //ï¿½Å¼ï¿½8ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char bidho9                           [  7];	char _bidho9;                             //ï¿½Å¼ï¿½9ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char bidho10                          [  7];	char _bidho10;                            //ï¿½Å¼ï¿½10ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½       
+	char offremain1                       [  9];	char _offremain1;                         //ï¿½Åµï¿½ï¿½Ö¿ì¼±ï¿½Ü·ï¿½       
+	char offremain2                       [  9];	char _offremain2;                         //ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½         
+	char offremain3                       [  9];	char _offremain3;                         //ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½       
+	char offremain4                       [  9];	char _offremain4;                         //ï¿½Åµï¿½4ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char offremain5                       [  9];	char _offremain5;                         //ï¿½Åµï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char offremain6                       [  9];	char _offremain6;                         //ï¿½Åµï¿½6ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char offremain7                       [  9];	char _offremain7;                         //ï¿½Åµï¿½7ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char offremain8                       [  9];	char _offremain8;                         //ï¿½Åµï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char offremain9                       [  9];	char _offremain9;                         //ï¿½Åµï¿½9ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char offremain10                      [  9];	char _offremain10;                        //ï¿½Åµï¿½10ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½       
+	char bidremain1                       [  9];	char _bidremain1;                         //ï¿½Å¼ï¿½ï¿½Ö¿ì¼±ï¿½Ü·ï¿½       
+	char bidremain2                       [  9];	char _bidremain2;                         //ï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½         
+	char bidremain3                       [  9];	char _bidremain3;                         //ï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½       
+	char bidremain4                       [  9];	char _bidremain4;                         //ï¿½Å¼ï¿½4ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char bidremain5                       [  9];	char _bidremain5;                         //ï¿½Å¼ï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char bidremain6                       [  9];	char _bidremain6;                         //ï¿½Å¼ï¿½6ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char bidremain7                       [  9];	char _bidremain7;                         //ï¿½Å¼ï¿½7ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char bidremain8                       [  9];	char _bidremain8;                         //ï¿½Å¼ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char bidremain9                       [  9];	char _bidremain9;                         //ï¿½Å¼ï¿½9ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char bidremain10                      [  9];	char _bidremain10;                        //ï¿½Å¼ï¿½10ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½       
+	char lpoffremain1                     [  9];	char _lpoffremain1;                       //LPï¿½Åµï¿½ï¿½Ö¿ì¼±ï¿½Ü·ï¿½     
+	char lpoffremain2                     [  9];	char _lpoffremain2;                       //LPï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½       
+	char lpoffremain3                     [  9];	char _lpoffremain3;                       //LPï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½     
+	char lpoffremain4                     [  9];	char _lpoffremain4;                       //LPï¿½Åµï¿½4ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½      
+	char lpoffremain5                     [  9];	char _lpoffremain5;                       //LPï¿½Åµï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½      
+	char lpoffremain6                     [  9];	char _lpoffremain6;                       //LPï¿½Åµï¿½6ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½      
+	char lpoffremain7                     [  9];	char _lpoffremain7;                       //LPï¿½Åµï¿½7ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½      
+	char lpoffremain8                     [  9];	char _lpoffremain8;                       //LPï¿½Åµï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½      
+	char lpoffremain9                     [  9];	char _lpoffremain9;                       //LPï¿½Åµï¿½9ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½      
+	char lpoffremain10                    [  9];	char _lpoffremain10;                      //LPï¿½Åµï¿½10ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½     
+	char lpbidremain1                     [  9];	char _lpbidremain1;                       //LPï¿½Å¼ï¿½ï¿½Ö¿ì¼±ï¿½Ü·ï¿½     
+	char lpbidremain2                     [  9];	char _lpbidremain2;                       //LPï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½       
+	char lpbidremain3                     [  9];	char _lpbidremain3;                       //LPï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½     
+	char lpbidremain4                     [  9];	char _lpbidremain4;                       //LPï¿½Å¼ï¿½4ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½      
+	char lpbidremain5                     [  9];	char _lpbidremain5;                       //LPï¿½Å¼ï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½      
+	char lpbidremain6                     [  9];	char _lpbidremain6;                       //LPï¿½Å¼ï¿½6ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½      
+	char lpbidremain7                     [  9];	char _lpbidremain7;                       //LPï¿½Å¼ï¿½7ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½      
+	char lpbidremain8                     [  9];	char _lpbidremain8;                       //LPï¿½Å¼ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½      
+	char lpbidremain9                     [  9];	char _lpbidremain9;                       //LPï¿½Å¼ï¿½9ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½      
+	char lpbidremain10                    [  9];	char _lpbidremain10;                      //LPï¿½Å¼ï¿½10ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½     
+	char offtot                           [  9];	char _offtot;                             //ï¿½Ñ¸Åµï¿½ï¿½Ü·ï¿½           
+	char bidtot                           [  9];	char _bidtot;                             //ï¿½Ñ¸Å¼ï¿½ï¿½Ü·ï¿½           
+	char impv                             [ 10];	char _impv;                               //ï¿½ï¿½ï¿½çº¯ï¿½ï¿½ï¿½ï¿½           
+	char delta                            [  9];	char _delta;                              //ï¿½ï¿½Å¸ï¿½ï¿½ï¿½ï¿½             
+	char gamma                            [  9];	char _gamma;                              //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char vega                             [  9];	char _vega;                               //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½           
+	char theta                            [  9];	char _theta;                              //ï¿½ï¿½Å¸ï¿½Ã°ï¿½             
+	char rho                              [  9];	char _rho;                                //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char cdratio                          [  6];	char _cdratio;                            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char divideratio                      [  9];	char _divideratio;                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½           
+	char jandatecnt                       [  4];	char _jandatecnt;                         //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char elwsdate                         [  8];	char _elwsdate;                           //ï¿½ï¿½ï¿½â°£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char elwedate                         [  8];	char _elwedate;                           //ï¿½ï¿½ï¿½â°£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char lastdate                         [  8];	char _lastdate;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½           
+	char balname                          [ 18];	char _balname;                            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char listing                          [  9];	char _listing;                            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char rightgb                          [  4];	char _rightgb;                            //ï¿½Ç¸ï¿½ï¿½ï¿½ï¿½ï¿½             /*ï¿½ï¿½,Ç²,ï¿½ï¿½Å¸*/
+	char righttype                        [  6];	char _righttype;                          //ï¿½Ç¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         /*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½Ì±ï¿½ï¿½ï¿½,ï¿½ï¿½Å¸*/
+	char settletype                       [  9];	char _settletype;                         //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½             /*ï¿½ï¿½ï¿½ï¿½,ï¿½Ç¹ï¿½,ï¿½ï¿½ï¿½ï¿½+ï¿½Ç¹ï¿½*/
+	char changerate                       [  8];	char _changerate;                         //ï¿½ï¿½È¯ï¿½ï¿½ï¿½ï¿½             
+	char rewardrate                       [  5];	char _rewardrate;                         //ï¿½Ö¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½           
+	char uppartrate                       [  5];	char _uppartrate;                         //ï¿½ï¿½ï¿½Ý»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char paydate                          [  8];	char _paydate;                            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½           
+	char lpjumun                          [  4];	char _lpjumun;                            //LPï¿½Ö¹ï¿½ï¿½ï¿½ï¿½É¿ï¿½ï¿½ï¿½       //ï¿½Ò°ï¿½,ï¿½ï¿½ï¿½ï¿½
+	char parity                           [  8];	char _parity;                             //ï¿½Ð¸ï¿½Æ¼               
+	char gearingrate                      [  8];	char _gearingrate;                        //ï¿½ï¿½î¸µï¿½ï¿½ï¿½ï¿½           
+	char profitrate                       [  8];	char _profitrate;                         //ï¿½ï¿½ï¿½ÍºÐ±ï¿½ï¿½ï¿½           
+	char basepoint                        [  8];	char _basepoint;                          //ï¿½Úºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½           
+	char lp_name1                         [  6];	char _lp_name1;                           //LPÈ¸ï¿½ï¿½ï¿½ï¿½1            
+	char lp_name2                         [  6];	char _lp_name2;                           //LPÈ¸ï¿½ï¿½ï¿½ï¿½2            
+	char lp_name3                         [  6];	char _lp_name3;                           //LPÈ¸ï¿½ï¿½ï¿½ï¿½3            
+	char lp_name4                         [  6];	char _lp_name4;                           //LPÈ¸ï¿½ï¿½ï¿½ï¿½4            
+	char lp_name5                         [  6];	char _lp_name5;                           //LPÈ¸ï¿½ï¿½ï¿½ï¿½5            
+	char dongsi                           [  1];	char _dongsi;                             //ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char eqprice                          [  7];	char _eqprice;                            //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½á°¡           
+	char eqsign                           [  1];	char _eqsign;                             //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½È£         
+	char eqchange                         [  6];	char _eqchange;                           //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char eqchrate                         [  5];	char _eqchrate;                           //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char eqvol                            [  9];	char _eqvol;                              //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char lphold                           [ 10];	char _lphold;                             //LPï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½           
+	char lprate                           [  5];	char _lprate;                             //LPï¿½ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char egearing                         [  8];	char _egearing;                           //Eï¿½ï¿½î¸µ              
+	char fixpay                           [  8];	char _fixpay;                             //È®ï¿½ï¿½ï¿½ï¿½ï¿½Þ¾ï¿½           
+	char listdate                         [  8];	char _listdate;                           //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char listhdatez8                      [  8];	char _listhdatez8;                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö°ï¿½ï¿½ï¿½       
+	char listldatez8                      [  8];	char _listldatez8;                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char intval                           [ 10];	char _intval;                             //ï¿½ï¿½ï¿½ç°¡Ä¡             
+	char leverage                         [  8];	char _leverage;                           //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char timeval                          [ 10];	char _timeval;                            //ï¿½Ã°ï¿½ï¿½ï¿½Ä¡             
+	char gratio                           [  6];	char _gratio;                             //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char profitpt                         [  8];	char _profitpt;                           //ï¿½ï¿½ï¿½ÍºÐ±ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½)     
+	char payproxy                         [ 20];	char _payproxy;                           //ï¿½ï¿½ï¿½Þ´ë¸®ï¿½ï¿½           
+	char standardopt                      [  2];	char _standardopt;                        //ï¿½ï¿½ï¿½ñ±¸ºï¿½             /**01:Ç¥ï¿½ï¿½,03:ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½**/
+	char koprice                          [  6];	char _koprice;                            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½á°¡           
+	char koappr                           [  5];	char _koappr;                             //KOï¿½ï¿½ï¿½Ùµï¿½             
+	char expcode                          [ 12];	char _expcode;                            //È®ï¿½ï¿½ï¿½Úµï¿½             
+	char minpayment                       [  8];	char _minpayment;                         //ï¿½Ö¼ï¿½ï¿½ï¿½ï¿½Þ¾ï¿½           
+	char stop                             [  1];	char _stop;                               //ï¿½Å·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char gratio2                          [  8];	char _gratio2;                            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½2              
+	char lpstop                           [  8];	char _lpstop;                             //LPï¿½ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char gonggb                           [  1];	char _gonggb;                             //ï¿½ß°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char lp_impv                          [  5];	char _lp_impv;                            //LPï¿½ï¿½ï¿½çº¯ï¿½ï¿½ï¿½ï¿½         
+	char r_intval                         [  8];	char _r_intval;                           //ï¿½Ç½Ã°ï¿½ï¿½ë³»ï¿½ç°¡Ä¡     
+	char jandatecnt2                      [  4];	char _jandatecnt2;                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)       
+	char profitpt2                        [ 10];	char _profitpt2;                          //ï¿½ï¿½ï¿½ÍºÐ±ï¿½ï¿½ï¿½(ï¿½Ò¼ï¿½ï¿½ï¿½)   
+	char alertgb                          [  1];	char _alertgb;                            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç±ï¿½ï¿½ï¿½         
 } Ts1701OutBlock;
 
-typedef struct tags1701OutBlock1    //±âÃÊÀÚ»êÁ¤º¸, [¹Ýº¹]
+typedef struct tags1701OutBlock1    //ï¿½ï¿½ï¿½ï¿½ï¿½Ú»ï¿½ï¿½ï¿½ï¿½ï¿½, [ï¿½Ýºï¿½]
 {
-	char code1                            [  6];	char _code1;                              //±âÃÊÀÚ»êÄÚµå1        
-	char hname1                           [ 20];	char _hname1;                             //±âÃÊÀÚ»ê¸í1          
-	char price1                           [  7];	char _price1;                             //ÇöÀç°¡1              
-	char sign1                            [  1];	char _sign1;                              //µî¶ôºÎÈ£1            
-	char change1                          [  6];	char _change1;                            //µî¶ôÆø1              
-	char chrate1                          [  5];	char _chrate1;                            //µî¶ô·ü1              
-	char comrate1                         [  5];	char _comrate1;                           //±¸¼ººñ1              
-	char pastv1                           [  5];	char _pastv1;                             //°ú°Åº¯µ¿¼º1          
-	char basegubun                        [  1];	char _basegubun;                          //±âÃÊÀÚ»ê½ÃÀå±¸ºÐ     /*1:ÄÚ½ºÇÇ,2:ÄÚ½º´Ú*/
+	char code1                            [  6];	char _code1;                              //ï¿½ï¿½ï¿½ï¿½ï¿½Ú»ï¿½ï¿½Úµï¿½1        
+	char hname1                           [ 20];	char _hname1;                             //ï¿½ï¿½ï¿½ï¿½ï¿½Ú»ï¿½ï¿½1          
+	char price1                           [  7];	char _price1;                             //ï¿½ï¿½ï¿½ç°¡1              
+	char sign1                            [  1];	char _sign1;                              //ï¿½ï¿½ï¿½ï¿½ï¿½È£1            
+	char change1                          [  6];	char _change1;                            //ï¿½ï¿½ï¿½ï¿½ï¿½1              
+	char chrate1                          [  5];	char _chrate1;                            //ï¿½ï¿½ï¿½ï¿½ï¿½1              
+	char comrate1                         [  5];	char _comrate1;                           //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1              
+	char pastv1                           [  5];	char _pastv1;                             //ï¿½ï¿½ï¿½Åºï¿½ï¿½ï¿½ï¿½ï¿½1          
+	char basegubun                        [  1];	char _basegubun;                          //ï¿½ï¿½ï¿½ï¿½ï¿½Ú»ï¿½ï¿½ï¿½å±¸ï¿½ï¿½     /*1:ï¿½Ú½ï¿½ï¿½ï¿½,2:ï¿½Ú½ï¿½ï¿½ï¿½*/
 } Ts1701OutBlock1;
 
-typedef struct tags1701OutBlock2    //°Å·¡¿øÁ¤º¸
+typedef struct tags1701OutBlock2    //ï¿½Å·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 {
-	char tratimez5                        [  5];	char _tratimez5;                          //½Ã°£                 
-	char off_tra1                         [  6];	char _off_tra1;                           //¸Åµµ°Å·¡¿ø1          
-	char bid_tra1                         [  6];	char _bid_tra1;                           //¸Å¼ö°Å·¡¿ø1          
-	char offvolume1                       [  9];	char _offvolume1;                         //¸Åµµ°Å·¡·®1          
-	char bidvolume1                       [  9];	char _bidvolume1;                         //¸Å¼ö°Å·¡·®1          
-	char off_tra2                         [  6];	char _off_tra2;                           //¸Åµµ°Å·¡¿ø2          
-	char bid_tra2                         [  6];	char _bid_tra2;                           //¸Å¼ö°Å·¡¿ø2          
-	char offvolume2                       [  9];	char _offvolume2;                         //¸Åµµ°Å·¡·®2          
-	char bidvolume2                       [  9];	char _bidvolume2;                         //¸Å¼ö°Å·¡·®2          
-	char off_tra3                         [  6];	char _off_tra3;                           //¸Åµµ°Å·¡¿ø3          
-	char bid_tra3                         [  6];	char _bid_tra3;                           //¸Å¼ö°Å·¡¿ø3          
-	char offvolume3                       [  9];	char _offvolume3;                         //¸Åµµ°Å·¡·®3          
-	char bidvolume3                       [  9];	char _bidvolume3;                         //¸Å¼ö°Å·¡·®3          
-	char off_tra4                         [  6];	char _off_tra4;                           //¸Åµµ°Å·¡¿ø4          
-	char bid_tra4                         [  6];	char _bid_tra4;                           //¸Å¼ö°Å·¡¿ø4          
-	char offvolume4                       [  9];	char _offvolume4;                         //¸Åµµ°Å·¡·®4          
-	char bidvolume4                       [  9];	char _bidvolume4;                         //¸Å¼ö°Å·¡·®4          
-	char off_tra5                         [  6];	char _off_tra5;                           //¸Åµµ°Å·¡¿ø5          
-	char bid_tra5                         [  6];	char _bid_tra5;                           //¸Å¼ö°Å·¡¿ø5          
-	char offvolume5                       [  9];	char _offvolume5;                         //¸Åµµ°Å·¡·®5          
-	char bidvolume5                       [  9];	char _bidvolume5;                         //¸Å¼ö°Å·¡·®5          
-	char offvolall                        [  9];	char _offvolall;                          //¸Åµµ¿Ü±¹ÀÎ°Å·¡·®     
-	char bidvolall                        [  9];	char _bidvolall;                          //¸Å¼ö¿Ü±¹ÀÎ°Å·¡·®     
-	char alloffvol                        [  9];	char _alloffvol;                          //ÀüÃ¼°Å·¡¿ø¸ÅµµÇÕ     
-	char allbidvol                        [  9];	char _allbidvol;                          //ÀüÃ¼°Å·¡¿ø¸Å¼öÇÕ     
+	char tratimez5                        [  5];	char _tratimez5;                          //ï¿½Ã°ï¿½                 
+	char off_tra1                         [  6];	char _off_tra1;                           //ï¿½Åµï¿½ï¿½Å·ï¿½ï¿½ï¿½1          
+	char bid_tra1                         [  6];	char _bid_tra1;                           //ï¿½Å¼ï¿½ï¿½Å·ï¿½ï¿½ï¿½1          
+	char offvolume1                       [  9];	char _offvolume1;                         //ï¿½Åµï¿½ï¿½Å·ï¿½ï¿½ï¿½1          
+	char bidvolume1                       [  9];	char _bidvolume1;                         //ï¿½Å¼ï¿½ï¿½Å·ï¿½ï¿½ï¿½1          
+	char off_tra2                         [  6];	char _off_tra2;                           //ï¿½Åµï¿½ï¿½Å·ï¿½ï¿½ï¿½2          
+	char bid_tra2                         [  6];	char _bid_tra2;                           //ï¿½Å¼ï¿½ï¿½Å·ï¿½ï¿½ï¿½2          
+	char offvolume2                       [  9];	char _offvolume2;                         //ï¿½Åµï¿½ï¿½Å·ï¿½ï¿½ï¿½2          
+	char bidvolume2                       [  9];	char _bidvolume2;                         //ï¿½Å¼ï¿½ï¿½Å·ï¿½ï¿½ï¿½2          
+	char off_tra3                         [  6];	char _off_tra3;                           //ï¿½Åµï¿½ï¿½Å·ï¿½ï¿½ï¿½3          
+	char bid_tra3                         [  6];	char _bid_tra3;                           //ï¿½Å¼ï¿½ï¿½Å·ï¿½ï¿½ï¿½3          
+	char offvolume3                       [  9];	char _offvolume3;                         //ï¿½Åµï¿½ï¿½Å·ï¿½ï¿½ï¿½3          
+	char bidvolume3                       [  9];	char _bidvolume3;                         //ï¿½Å¼ï¿½ï¿½Å·ï¿½ï¿½ï¿½3          
+	char off_tra4                         [  6];	char _off_tra4;                           //ï¿½Åµï¿½ï¿½Å·ï¿½ï¿½ï¿½4          
+	char bid_tra4                         [  6];	char _bid_tra4;                           //ï¿½Å¼ï¿½ï¿½Å·ï¿½ï¿½ï¿½4          
+	char offvolume4                       [  9];	char _offvolume4;                         //ï¿½Åµï¿½ï¿½Å·ï¿½ï¿½ï¿½4          
+	char bidvolume4                       [  9];	char _bidvolume4;                         //ï¿½Å¼ï¿½ï¿½Å·ï¿½ï¿½ï¿½4          
+	char off_tra5                         [  6];	char _off_tra5;                           //ï¿½Åµï¿½ï¿½Å·ï¿½ï¿½ï¿½5          
+	char bid_tra5                         [  6];	char _bid_tra5;                           //ï¿½Å¼ï¿½ï¿½Å·ï¿½ï¿½ï¿½5          
+	char offvolume5                       [  9];	char _offvolume5;                         //ï¿½Åµï¿½ï¿½Å·ï¿½ï¿½ï¿½5          
+	char bidvolume5                       [  9];	char _bidvolume5;                         //ï¿½Å¼ï¿½ï¿½Å·ï¿½ï¿½ï¿½5          
+	char offvolall                        [  9];	char _offvolall;                          //ï¿½Åµï¿½ï¿½Ü±ï¿½ï¿½Î°Å·ï¿½ï¿½ï¿½     
+	char bidvolall                        [  9];	char _bidvolall;                          //ï¿½Å¼ï¿½ï¿½Ü±ï¿½ï¿½Î°Å·ï¿½ï¿½ï¿½     
+	char alloffvol                        [  9];	char _alloffvol;                          //ï¿½ï¿½Ã¼ï¿½Å·ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½ï¿½     
+	char allbidvol                        [  9];	char _allbidvol;                          //ï¿½ï¿½Ã¼ï¿½Å·ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½ï¿½     
 } Ts1701OutBlock2;
 
-typedef struct tags1701OutBlock3    //ELWº¯µ¿°Å·¡·®ÀÚ·á, [¹Ýº¹]
+typedef struct tags1701OutBlock3    //ELWï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½ï¿½Ú·ï¿½, [ï¿½Ýºï¿½]
 {
-	char chetime                          [  8];	char _chetime;                            //½Ã°£                 
-	char price                            [  7];	char _price;                              //ÇöÀç°¡               
-	char sign                             [  1];	char _sign;                               //µî¶ôºÎÈ£             
-	char change                           [  6];	char _change;                             //µî¶ôÆø               
-	char offer                            [  7];	char _offer;                              //¸ÅµµÈ£°¡             
-	char bid                              [  7];	char _bid;                                //¸Å¼öÈ£°¡             
-	char volume                           [  9];	char _volume;                             //°Å·¡·®               
-	char movvol                           [  9];	char _movvol;                             //º¯µ¿·®               
+	char chetime                          [  8];	char _chetime;                            //ï¿½Ã°ï¿½                 
+	char price                            [  7];	char _price;                              //ï¿½ï¿½ï¿½ç°¡               
+	char sign                             [  1];	char _sign;                               //ï¿½ï¿½ï¿½ï¿½ï¿½È£             
+	char change                           [  6];	char _change;                             //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char offer                            [  7];	char _offer;                              //ï¿½Åµï¿½È£ï¿½ï¿½             
+	char bid                              [  7];	char _bid;                                //ï¿½Å¼ï¿½È£ï¿½ï¿½             
+	char volume                           [  9];	char _volume;                             //ï¿½Å·ï¿½ï¿½ï¿½               
+	char movvol                           [  9];	char _movvol;                             //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
 } Ts1701OutBlock3;
 
-typedef struct tags1701OutBlock4    //K200±âÃÊÀÚ»êÁ¤º¸
+typedef struct tags1701OutBlock4    //K200ï¿½ï¿½ï¿½ï¿½ï¿½Ú»ï¿½ï¿½ï¿½ï¿½ï¿½
 {
-	char code6                            [  2];	char _code6;                              //±âÃÊÀÚ»êÄÚµå6        
-	char hname6                           [ 20];	char _hname6;                             //±âÃÊÀÚ»ê¸í6          
-	char price6                           [  7];	char _price6;                             //ÇöÀç°¡6              
-	char sign6                            [  1];	char _sign6;                              //µî¶ôºÎÈ£6            
-	char change6                          [  6];	char _change6;                            //µî¶ôÆø6              
-	char chrate6                          [  5];	char _chrate6;                            //µî¶ô·ü6              
-	char comrate6                         [  5];	char _comrate6;                           //±¸¼ººñ6              
-	char pastv6                           [  5];	char _pastv6;                             //°ú°Åº¯µ¿¼º6          
+	char code6                            [  2];	char _code6;                              //ï¿½ï¿½ï¿½ï¿½ï¿½Ú»ï¿½ï¿½Úµï¿½6        
+	char hname6                           [ 20];	char _hname6;                             //ï¿½ï¿½ï¿½ï¿½ï¿½Ú»ï¿½ï¿½6          
+	char price6                           [  7];	char _price6;                             //ï¿½ï¿½ï¿½ç°¡6              
+	char sign6                            [  1];	char _sign6;                              //ï¿½ï¿½ï¿½ï¿½ï¿½È£6            
+	char change6                          [  6];	char _change6;                            //ï¿½ï¿½ï¿½ï¿½ï¿½6              
+	char chrate6                          [  5];	char _chrate6;                            //ï¿½ï¿½ï¿½ï¿½ï¿½6              
+	char comrate6                         [  5];	char _comrate6;                           //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½6              
+	char pastv6                           [  5];	char _pastv6;                             //ï¿½ï¿½ï¿½Åºï¿½ï¿½ï¿½ï¿½ï¿½6          
 } Ts1701OutBlock4;
 
-typedef struct tags1701OutBlock5    //ÇØ¿ÜÁö¼ö±âÃÊÀÚ»êÁ¤º¸
+typedef struct tags1701OutBlock5    //ï¿½Ø¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú»ï¿½ï¿½ï¿½ï¿½ï¿½
 {
-	char code7                            [  6];	char _code7;                              //±âÃÊÀÚ»êÄÚµå7        
-	char hname7                           [ 16];	char _hname7;                             //±âÃÊÀÚ»ê¸í7          
-	char price7                           [  9];	char _price7;                             //ÇöÀç°¡7              
-	char sign7                            [  1];	char _sign7;                              //µî¶ôºÎÈ£7            
-	char change7                          [  9];	char _change7;                            //µî¶ôÆø7              
-	char chrate7                          [  5];	char _chrate7;                            //µî¶ô·ü7              
-	char time7                            [  4];	char _time7;                              //µ¥ÀÌÅ¸½Ã°£           
+	char code7                            [  6];	char _code7;                              //ï¿½ï¿½ï¿½ï¿½ï¿½Ú»ï¿½ï¿½Úµï¿½7        
+	char hname7                           [ 16];	char _hname7;                             //ï¿½ï¿½ï¿½ï¿½ï¿½Ú»ï¿½ï¿½7          
+	char price7                           [  9];	char _price7;                             //ï¿½ï¿½ï¿½ç°¡7              
+	char sign7                            [  1];	char _sign7;                              //ï¿½ï¿½ï¿½ï¿½ï¿½È£7            
+	char change7                          [  9];	char _change7;                            //ï¿½ï¿½ï¿½ï¿½ï¿½7              
+	char chrate7                          [  5];	char _chrate7;                            //ï¿½ï¿½ï¿½ï¿½ï¿½7              
+	char time7                            [  4];	char _time7;                              //ï¿½ï¿½ï¿½ï¿½Å¸ï¿½Ã°ï¿½           
 } Ts1701OutBlock5;
 
 typedef struct tags1701
 {
-	Ts1701InBlock                     s1701inblock                          ;  //±âº»ÀÔ·Â 
-	Ts1701OutBlock                    s1701outblock                         ;  //Á¾¸ñ¸¶½ºÅ¸±âº»ÀÚ·á 
-	Ts1701OutBlock1                   s1701outblock1                   [ 20];  //±âÃÊÀÚ»êÁ¤º¸ , [¹Ýº¹]
-	Ts1701OutBlock2                   s1701outblock2                        ;  //°Å·¡¿øÁ¤º¸ 
-	Ts1701OutBlock3                   s1701outblock3                   [ 20];  //ELWº¯µ¿°Å·¡·®ÀÚ·á , [¹Ýº¹]
-	Ts1701OutBlock4                   s1701outblock4                        ;  //K200±âÃÊÀÚ»êÁ¤º¸ 
-	Ts1701OutBlock5                   s1701outblock5                        ;  //ÇØ¿ÜÁö¼ö±âÃÊÀÚ»êÁ¤º¸ 
+	Ts1701InBlock                     s1701inblock                          ;  //ï¿½âº»ï¿½Ô·ï¿½ 
+	Ts1701OutBlock                    s1701outblock                         ;  //ï¿½ï¿½ï¿½ñ¸¶½ï¿½Å¸ï¿½âº»ï¿½Ú·ï¿½ 
+	Ts1701OutBlock1                   s1701outblock1                   [ 20];  //ï¿½ï¿½ï¿½ï¿½ï¿½Ú»ï¿½ï¿½ï¿½ï¿½ï¿½ , [ï¿½Ýºï¿½]
+	Ts1701OutBlock2                   s1701outblock2                        ;  //ï¿½Å·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
+	Ts1701OutBlock3                   s1701outblock3                   [ 20];  //ELWï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½ï¿½Ú·ï¿½ , [ï¿½Ýºï¿½]
+	Ts1701OutBlock4                   s1701outblock4                        ;  //K200ï¿½ï¿½ï¿½ï¿½ï¿½Ú»ï¿½ï¿½ï¿½ï¿½ï¿½ 
+	Ts1701OutBlock5                   s1701outblock5                        ;  //ï¿½Ø¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú»ï¿½ï¿½ï¿½ï¿½ï¿½ 
 } Ts1701;
 
-typedef struct tagp1003InBlock    //ÀÔ·ÂData
+typedef struct tagp1003InBlock    //ï¿½Ô·ï¿½Data
 {
-	char formlang                         [  1];	char _formlang;                           //ÇÑ¿µ±¸ºÐ             
-	char gubun                            [  1];	char _gubun;                              //¼±¿É±¸ºÐ             /*f:KRX¼±¹°,o:KRX¿É¼Ç,u:³»ºÎ¼±¹°,p:³»ºÎ¿É¼Ç*/
+	char formlang                         [  1];	char _formlang;                           //ï¿½Ñ¿ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char gubun                            [  1];	char _gubun;                              //ï¿½ï¿½ï¿½É±ï¿½ï¿½ï¿½             /*f:KRXï¿½ï¿½ï¿½ï¿½,o:KRXï¿½É¼ï¿½,u:ï¿½ï¿½ï¿½Î¼ï¿½ï¿½ï¿½,p:ï¿½ï¿½ï¿½Î¿É¼ï¿½*/
 } Tp1003InBlock;
 
-typedef struct tagp1003OutBlock    //ÄÚµåÃâ·ÂData, [¹Ýº¹]
+typedef struct tagp1003OutBlock    //ï¿½Úµï¿½ï¿½ï¿½ï¿½Data, [ï¿½Ýºï¿½]
 {
 	char codez8                           [  8];	char _codez8;                             //code                 
 	char namez30                          [ 30];	char _namez30;                            //name                 
@@ -1389,1739 +1389,1739 @@ typedef struct tagp1003OutBlock    //ÄÚµåÃâ·ÂData, [¹Ýº¹]
 
 typedef struct tagp1003
 {
-	Tp1003InBlock                     p1003inblock                          ;  //ÀÔ·ÂData 
-	Tp1003OutBlock                    p1003outblock                    [ 20];  //ÄÚµåÃâ·ÂData , [¹Ýº¹]
+	Tp1003InBlock                     p1003inblock                          ;  //ï¿½Ô·ï¿½Data 
+	Tp1003OutBlock                    p1003outblock                    [ 20];  //ï¿½Úµï¿½ï¿½ï¿½ï¿½Data , [ï¿½Ýºï¿½]
 } Tp1003;
 
-typedef struct tagc1151InBlock    //±âº»ÀÔ·Â
+typedef struct tagc1151InBlock    //ï¿½âº»ï¿½Ô·ï¿½
 {
-	char formlang                         [  1];	char _formlang;                           //ÇÑ¿µ±¸ºÐ             
-	char code                             [  6];	char _code;                               //Á¾¸ñÄÚµå             
+	char formlang                         [  1];	char _formlang;                           //ï¿½Ñ¿ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char code                             [  6];	char _code;                               //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } Tc1151InBlock;
 
-typedef struct tagc1151OutBlock    //Á¾¸ñ¸¶½ºÅ¸±âº»ÀÚ·á
+typedef struct tagc1151OutBlock    //ï¿½ï¿½ï¿½ñ¸¶½ï¿½Å¸ï¿½âº»ï¿½Ú·ï¿½
 {
-	char code                             [  6];	char _code;                               //Á¾¸ñÄÚµå             
-	char hname                            [ 13];	char _hname;                              //Á¾¸ñ¸í               
-	char price                            [  7];	char _price;                              //ÇöÀç°¡               
-	char sign                             [  1];	char _sign;                               //µî¶ôºÎÈ£             
-	char change                           [  6];	char _change;                             //µî¶ôÆø               
-	char chrate                           [  5];	char _chrate;                             //µî¶ô·ü               
-	char offer                            [  7];	char _offer;                              //¸ÅµµÈ£°¡             
-	char bid                              [  7];	char _bid;                                //¸Å¼öÈ£°¡             
-	char volume                           [  9];	char _volume;                             //°Å·¡·®               
-	char volrate                          [  6];	char _volrate;                            //°Å·¡ºñÀ²             
-	char yurate                           [  5];	char _yurate;                             //À¯µ¿ÁÖÈ¸ÀüÀ²         
-	char value                            [  9];	char _value;                              //°Å·¡´ë±Ý             
-	char uplmtprice                       [  7];	char _uplmtprice;                         //»óÇÑ°¡               
-	char high                             [  7];	char _high;                               //ÀåÁß°í°¡             
-	char open                             [  7];	char _open;                               //½Ã°¡                 
-	char opensign                         [  1];	char _opensign;                           //½Ã°¡´ëºñºÎÈ£         
-	char openchange                       [  6];	char _openchange;                         //½Ã°¡´ëºñµî¶ôÆø       
-	char low                              [  7];	char _low;                                //ÀåÁßÀú°¡             
-	char dnlmtprice                       [  7];	char _dnlmtprice;                         //ÇÏÇÑ°¡               
-	char hotime                           [  8];	char _hotime;                             //È£°¡½Ã°£             
-	char offerho                          [  7];	char _offerho;                            //¸ÅµµÃÖ¿ì¼±È£°¡       
-	char P_offer                          [  7];	char _P_offer;                            //¸ÅµµÂ÷¼±È£°¡         
-	char S_offer                          [  7];	char _S_offer;                            //¸ÅµµÂ÷Â÷¼±È£°¡       
-	char S4_offer                         [  7];	char _S4_offer;                           //¸Åµµ4Â÷¼±È£°¡        
-	char S5_offer                         [  7];	char _S5_offer;                           //¸Åµµ5Â÷¼±È£°¡        
-	char S6_offer                         [  7];	char _S6_offer;                           //¸Åµµ6Â÷¼±È£°¡        
-	char S7_offer                         [  7];	char _S7_offer;                           //¸Åµµ7Â÷¼±È£°¡        
-	char S8_offer                         [  7];	char _S8_offer;                           //¸Åµµ8Â÷¼±È£°¡        
-	char S9_offer                         [  7];	char _S9_offer;                           //¸Åµµ9Â÷¼±È£°¡        
-	char S10_offer                        [  7];	char _S10_offer;                          //¸Åµµ10Â÷¼±È£°¡       
-	char bidho                            [  7];	char _bidho;                              //¸Å¼öÃÖ¿ì¼±È£°¡       
-	char P_bid                            [  7];	char _P_bid;                              //¸Å¼öÂ÷¼±È£°¡         
-	char S_bid                            [  7];	char _S_bid;                              //¸Å¼öÂ÷Â÷¼±È£°¡       
-	char S4_bid                           [  7];	char _S4_bid;                             //¸Å¼ö4Â÷¼±È£°¡        
-	char S5_bid                           [  7];	char _S5_bid;                             //¸Å¼ö5Â÷¼±È£°¡        
-	char S6_bid                           [  7];	char _S6_bid;                             //¸Å¼ö6Â÷¼±È£°¡        
-	char S7_bid                           [  7];	char _S7_bid;                             //¸Å¼ö7Â÷¼±È£°¡        
-	char S8_bid                           [  7];	char _S8_bid;                             //¸Å¼ö8Â÷¼±È£°¡        
-	char S9_bid                           [  7];	char _S9_bid;                             //¸Å¼ö9Â÷¼±È£°¡        
-	char S10_bid                          [  7];	char _S10_bid;                            //¸Å¼ö10Â÷¼±È£°¡       
-	char offerrem                         [  9];	char _offerrem;                           //¸ÅµµÃÖ¿ì¼±ÀÜ·®       
-	char P_offerrem                       [  9];	char _P_offerrem;                         //¸ÅµµÂ÷¼±ÀÜ·®         
-	char S_offerrem                       [  9];	char _S_offerrem;                         //¸ÅµµÂ÷Â÷¼±ÀÜ·®       
-	char S4_offerrem                      [  9];	char _S4_offerrem;                        //¸Åµµ4Â÷¼±ÀÜ·®        
-	char S5_offerrem                      [  9];	char _S5_offerrem;                        //¸Åµµ5Â÷¼±ÀÜ·®        
-	char S6_offerrem                      [  9];	char _S6_offerrem;                        //¸Åµµ6Â÷¼±ÀÜ·®        
-	char S7_offerrem                      [  9];	char _S7_offerrem;                        //¸Åµµ7Â÷¼±ÀÜ·®        
-	char S8_offerrem                      [  9];	char _S8_offerrem;                        //¸Åµµ8Â÷¼±ÀÜ·®        
-	char S9_offerrem                      [  9];	char _S9_offerrem;                        //¸Åµµ9Â÷¼±ÀÜ·®        
-	char S10_offerrem                     [  9];	char _S10_offerrem;                       //¸Åµµ10Â÷¼±ÀÜ·®       
-	char bidrem                           [  9];	char _bidrem;                             //¸Å¼öÃÖ¿ì¼±ÀÜ·®       
-	char P_bidrem                         [  9];	char _P_bidrem;                           //¸Å¼öÂ÷¼±ÀÜ·®         
-	char S_bidrem                         [  9];	char _S_bidrem;                           //¸Å¼öÂ÷Â÷¼±ÀÜ·®       
-	char S4_bidrem                        [  9];	char _S4_bidrem;                          //¸Å¼ö4Â÷¼±ÀÜ·®        
-	char S5_bidrem                        [  9];	char _S5_bidrem;                          //¸Å¼ö5Â÷¼±ÀÜ·®        
-	char S6_bidrem                        [  9];	char _S6_bidrem;                          //¸Å¼ö6Â÷¼±ÀÜ·®        
-	char S7_bidrem                        [  9];	char _S7_bidrem;                          //¸Å¼ö7Â÷¼±ÀÜ·®        
-	char S8_bidrem                        [  9];	char _S8_bidrem;                          //¸Å¼ö8Â÷¼±ÀÜ·®        
-	char S9_bidrem                        [  9];	char _S9_bidrem;                          //¸Å¼ö9Â÷¼±ÀÜ·®        
-	char S10_bidrem                       [  9];	char _S10_bidrem;                         //¸Å¼ö10Â÷¼±ÀÜ·®       
-	char T_offerrem                       [  9];	char _T_offerrem;                         //ÃÑ¸ÅµµÀÜ·®           
-	char T_bidrem                         [  9];	char _T_bidrem;                           //ÃÑ¸Å¼öÀÜ·®           
-	char O_offerrem                       [  9];	char _O_offerrem;                         //½Ã°£¿Ü¸ÅµµÀÜ·®       
-	char O_bidrem                         [  9];	char _O_bidrem;                           //½Ã°£¿Ü¸Å¼öÀÜ·®       
-	char pivot2upz7                       [  7];	char _pivot2upz7;                         //ÇÇº¿2Â÷ÀúÇ×          
-	char pivot1upz7                       [  7];	char _pivot1upz7;                         //ÇÇº¿1Â÷ÀúÇ×          
-	char pivotz7                          [  7];	char _pivotz7;                            //ÇÇº¿°¡               
-	char pivot1dnz7                       [  7];	char _pivot1dnz7;                         //ÇÇº¿1Â÷ÁöÁö          
-	char pivot2dnz7                       [  7];	char _pivot2dnz7;                         //ÇÇº¿2Â÷ÁöÁö          
-	char sosokz6                          [  6];	char _sosokz6;                            //ÄÚ½ºÇÇÄÚ½º´Ú±¸ºÐ     
-	char jisunamez18                      [ 18];	char _jisunamez18;                        //¾÷Á¾¸í               
-	char capsizez6                        [  6];	char _capsizez6;                          //ÀÚº»±Ý±Ô¸ð           
-	char output1z16                       [ 16];	char _output1z16;                         //°á»ê¿ù               
-	char marcket1z16                      [ 16];	char _marcket1z16;                        //½ÃÀåÁ¶Ä¡1            
-	char marcket2z16                      [ 16];	char _marcket2z16;                        //½ÃÀåÁ¶Ä¡2            
-	char marcket3z16                      [ 16];	char _marcket3z16;                        //½ÃÀåÁ¶Ä¡3            
-	char marcket4z16                      [ 16];	char _marcket4z16;                        //½ÃÀåÁ¶Ä¡4            
-	char marcket5z16                      [ 16];	char _marcket5z16;                        //½ÃÀåÁ¶Ä¡5            
-	char marcket6z16                      [ 16];	char _marcket6z16;                        //½ÃÀåÁ¶Ä¡6            
-	char cbtext                           [  6];	char _cbtext;                             //CB±¸ºÐ               
-	char parvalue                         [  7];	char _parvalue;                           //¾×¸é°¡               
-	char prepricetitlez12                 [ 12];	char _prepricetitlez12;                   //ÀüÀÏÁ¾°¡Å¸ÀÌÆ²       
-	char prepricez7                       [  7];	char _prepricez7;                         //ÀüÀÏÁ¾°¡             
-	char subprice                         [  7];	char _subprice;                           //´ë¿ë°¡               
-	char gongpricez7                      [  7];	char _gongpricez7;                        //°ø¸ð°¡               
-	char high5                            [  7];	char _high5;                              //5ÀÏ°í°¡              
-	char low5                             [  7];	char _low5;                               //5ÀÏÀú°¡              
-	char high20                           [  7];	char _high20;                             //20ÀÏ°í°¡             
-	char low20                            [  7];	char _low20;                              //20ÀÏÀú°¡             
-	char yhigh                            [  7];	char _yhigh;                              //52ÁÖÃÖ°í°¡           
-	char yhighdate                        [  4];	char _yhighdate;                          //52ÁÖÃÖ°í°¡ÀÏ         
-	char ylow                             [  7];	char _ylow;                               //52ÁÖÃÖÀú°¡           
-	char ylowdate                         [  4];	char _ylowdate;                           //52ÁÖÃÖÀú°¡ÀÏ         
-	char movlistingz8                     [  8];	char _movlistingz8;                       //À¯µ¿ÁÖ½Ä¼ö           
-	char listing                          [ 12];	char _listing;                            //»óÀåÁÖ½Ä¼ö_ÃµÁÖ      
-	char totpricez9                       [  9];	char _totpricez9;                         //½Ã°¡ÃÑ¾×             
-	char tratimez5                        [  5];	char _tratimez5;                          //½Ã°£                 
-	char off_tra1                         [  6];	char _off_tra1;                           //¸Åµµ°Å·¡¿ø1          
-	char bid_tra1                         [  6];	char _bid_tra1;                           //¸Å¼ö°Å·¡¿ø1          
-	char N_offvolume1                     [  9];	char _N_offvolume1;                       //¸Åµµ°Å·¡·®1          
-	char N_bidvolume1                     [  9];	char _N_bidvolume1;                       //¸Å¼ö°Å·¡·®1          
-	char off_tra2                         [  6];	char _off_tra2;                           //¸Åµµ°Å·¡¿ø2          
-	char bid_tra2                         [  6];	char _bid_tra2;                           //¸Å¼ö°Å·¡¿ø2          
-	char N_offvolume2                     [  9];	char _N_offvolume2;                       //¸Åµµ°Å·¡·®2          
-	char N_bidvolume2                     [  9];	char _N_bidvolume2;                       //¸Å¼ö°Å·¡·®2          
-	char off_tra3                         [  6];	char _off_tra3;                           //¸Åµµ°Å·¡¿ø3          
-	char bid_tra3                         [  6];	char _bid_tra3;                           //¸Å¼ö°Å·¡¿ø3          
-	char N_offvolume3                     [  9];	char _N_offvolume3;                       //¸Åµµ°Å·¡·®3          
-	char N_bidvolume3                     [  9];	char _N_bidvolume3;                       //¸Å¼ö°Å·¡·®3          
-	char off_tra4                         [  6];	char _off_tra4;                           //¸Åµµ°Å·¡¿ø4          
-	char bid_tra4                         [  6];	char _bid_tra4;                           //¸Å¼ö°Å·¡¿ø4          
-	char N_offvolume4                     [  9];	char _N_offvolume4;                       //¸Åµµ°Å·¡·®4          
-	char N_bidvolume4                     [  9];	char _N_bidvolume4;                       //¸Å¼ö°Å·¡·®4          
-	char off_tra5                         [  6];	char _off_tra5;                           //¸Åµµ°Å·¡¿ø5          
-	char bid_tra5                         [  6];	char _bid_tra5;                           //¸Å¼ö°Å·¡¿ø5          
-	char N_offvolume5                     [  9];	char _N_offvolume5;                       //¸Åµµ°Å·¡·®5          
-	char N_bidvolume5                     [  9];	char _N_bidvolume5;                       //¸Å¼ö°Å·¡·®5          
-	char N_offvolall                      [  9];	char _N_offvolall;                        //¸Åµµ¿Ü±¹ÀÎ°Å·¡·®     
-	char N_bidvolall                      [  9];	char _N_bidvolall;                        //¸Å¼ö¿Ü±¹ÀÎ°Å·¡·®     
-	char fortimez6                        [  6];	char _fortimez6;                          //¿Ü±¹ÀÎ½Ã°£           
-	char forratez5                        [  5];	char _forratez5;                          //¿Ü±¹ÀÎÁöºÐÀ²         
-	char settdatez4                       [  4];	char _settdatez4;                         //°áÁ¦ÀÏ               
-	char cratez5                          [  5];	char _cratez5;                            //ÀÜ°íºñÀ²(%)          
-	char yudatez4                         [  4];	char _yudatez4;                           //À¯»ó±âÁØÀÏ           
-	char mudatez4                         [  4];	char _mudatez4;                           //¹«»ó±âÁØÀÏ           
-	char yuratez5                         [  5];	char _yuratez5;                           //À¯»ó¹èÁ¤ºñÀ²         
-	char muratez5                         [  5];	char _muratez5;                           //¹«»ó¹èÁ¤ºñÀ²         
-	char listdatez8                       [  8];	char _listdatez8;                         //»óÀåÀÏ               
-	char listing2                         [ 12];	char _listing2;                           //»óÀåÁÖ½Ä¼ö_ÁÖ        
-	char N_alloffvol                      [  9];	char _N_alloffvol;                        //ÀüÃ¼°Å·¡¿ø¸ÅµµÇÕ     
-	char N_allbidvol                      [  9];	char _N_allbidvol;                        //ÀüÃ¼°Å·¡¿ø¸Å¼öÇÕ     
+	char code                             [  6];	char _code;                               //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char hname                            [ 13];	char _hname;                              //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char price                            [  7];	char _price;                              //ï¿½ï¿½ï¿½ç°¡               
+	char sign                             [  1];	char _sign;                               //ï¿½ï¿½ï¿½ï¿½ï¿½È£             
+	char change                           [  6];	char _change;                             //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char chrate                           [  5];	char _chrate;                             //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char offer                            [  7];	char _offer;                              //ï¿½Åµï¿½È£ï¿½ï¿½             
+	char bid                              [  7];	char _bid;                                //ï¿½Å¼ï¿½È£ï¿½ï¿½             
+	char volume                           [  9];	char _volume;                             //ï¿½Å·ï¿½ï¿½ï¿½               
+	char volrate                          [  6];	char _volrate;                            //ï¿½Å·ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char yurate                           [  5];	char _yurate;                             //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¸ï¿½ï¿½ï¿½ï¿½         
+	char value                            [  9];	char _value;                              //ï¿½Å·ï¿½ï¿½ï¿½ï¿½             
+	char uplmtprice                       [  7];	char _uplmtprice;                         //ï¿½ï¿½ï¿½Ñ°ï¿½               
+	char high                             [  7];	char _high;                               //ï¿½ï¿½ï¿½ß°ï¿½             
+	char open                             [  7];	char _open;                               //ï¿½Ã°ï¿½                 
+	char opensign                         [  1];	char _opensign;                           //ï¿½Ã°ï¿½ï¿½ï¿½ï¿½ï¿½È£         
+	char openchange                       [  6];	char _openchange;                         //ï¿½Ã°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char low                              [  7];	char _low;                                //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char dnlmtprice                       [  7];	char _dnlmtprice;                         //ï¿½ï¿½ï¿½Ñ°ï¿½               
+	char hotime                           [  8];	char _hotime;                             //È£ï¿½ï¿½ï¿½Ã°ï¿½             
+	char offerho                          [  7];	char _offerho;                            //ï¿½Åµï¿½ï¿½Ö¿ì¼±È£ï¿½ï¿½       
+	char P_offer                          [  7];	char _P_offer;                            //ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½         
+	char S_offer                          [  7];	char _S_offer;                            //ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½       
+	char S4_offer                         [  7];	char _S4_offer;                           //ï¿½Åµï¿½4ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char S5_offer                         [  7];	char _S5_offer;                           //ï¿½Åµï¿½5ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char S6_offer                         [  7];	char _S6_offer;                           //ï¿½Åµï¿½6ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char S7_offer                         [  7];	char _S7_offer;                           //ï¿½Åµï¿½7ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char S8_offer                         [  7];	char _S8_offer;                           //ï¿½Åµï¿½8ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char S9_offer                         [  7];	char _S9_offer;                           //ï¿½Åµï¿½9ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char S10_offer                        [  7];	char _S10_offer;                          //ï¿½Åµï¿½10ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½       
+	char bidho                            [  7];	char _bidho;                              //ï¿½Å¼ï¿½ï¿½Ö¿ì¼±È£ï¿½ï¿½       
+	char P_bid                            [  7];	char _P_bid;                              //ï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½         
+	char S_bid                            [  7];	char _S_bid;                              //ï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½       
+	char S4_bid                           [  7];	char _S4_bid;                             //ï¿½Å¼ï¿½4ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char S5_bid                           [  7];	char _S5_bid;                             //ï¿½Å¼ï¿½5ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char S6_bid                           [  7];	char _S6_bid;                             //ï¿½Å¼ï¿½6ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char S7_bid                           [  7];	char _S7_bid;                             //ï¿½Å¼ï¿½7ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char S8_bid                           [  7];	char _S8_bid;                             //ï¿½Å¼ï¿½8ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char S9_bid                           [  7];	char _S9_bid;                             //ï¿½Å¼ï¿½9ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½        
+	char S10_bid                          [  7];	char _S10_bid;                            //ï¿½Å¼ï¿½10ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½       
+	char offerrem                         [  9];	char _offerrem;                           //ï¿½Åµï¿½ï¿½Ö¿ì¼±ï¿½Ü·ï¿½       
+	char P_offerrem                       [  9];	char _P_offerrem;                         //ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½         
+	char S_offerrem                       [  9];	char _S_offerrem;                         //ï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½       
+	char S4_offerrem                      [  9];	char _S4_offerrem;                        //ï¿½Åµï¿½4ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char S5_offerrem                      [  9];	char _S5_offerrem;                        //ï¿½Åµï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char S6_offerrem                      [  9];	char _S6_offerrem;                        //ï¿½Åµï¿½6ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char S7_offerrem                      [  9];	char _S7_offerrem;                        //ï¿½Åµï¿½7ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char S8_offerrem                      [  9];	char _S8_offerrem;                        //ï¿½Åµï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char S9_offerrem                      [  9];	char _S9_offerrem;                        //ï¿½Åµï¿½9ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char S10_offerrem                     [  9];	char _S10_offerrem;                       //ï¿½Åµï¿½10ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½       
+	char bidrem                           [  9];	char _bidrem;                             //ï¿½Å¼ï¿½ï¿½Ö¿ì¼±ï¿½Ü·ï¿½       
+	char P_bidrem                         [  9];	char _P_bidrem;                           //ï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½         
+	char S_bidrem                         [  9];	char _S_bidrem;                           //ï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½       
+	char S4_bidrem                        [  9];	char _S4_bidrem;                          //ï¿½Å¼ï¿½4ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char S5_bidrem                        [  9];	char _S5_bidrem;                          //ï¿½Å¼ï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char S6_bidrem                        [  9];	char _S6_bidrem;                          //ï¿½Å¼ï¿½6ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char S7_bidrem                        [  9];	char _S7_bidrem;                          //ï¿½Å¼ï¿½7ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char S8_bidrem                        [  9];	char _S8_bidrem;                          //ï¿½Å¼ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char S9_bidrem                        [  9];	char _S9_bidrem;                          //ï¿½Å¼ï¿½9ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½        
+	char S10_bidrem                       [  9];	char _S10_bidrem;                         //ï¿½Å¼ï¿½10ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½       
+	char T_offerrem                       [  9];	char _T_offerrem;                         //ï¿½Ñ¸Åµï¿½ï¿½Ü·ï¿½           
+	char T_bidrem                         [  9];	char _T_bidrem;                           //ï¿½Ñ¸Å¼ï¿½ï¿½Ü·ï¿½           
+	char O_offerrem                       [  9];	char _O_offerrem;                         //ï¿½Ã°ï¿½ï¿½Ü¸Åµï¿½ï¿½Ü·ï¿½       
+	char O_bidrem                         [  9];	char _O_bidrem;                           //ï¿½Ã°ï¿½ï¿½Ü¸Å¼ï¿½ï¿½Ü·ï¿½       
+	char pivot2upz7                       [  7];	char _pivot2upz7;                         //ï¿½Çºï¿½2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½          
+	char pivot1upz7                       [  7];	char _pivot1upz7;                         //ï¿½Çºï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½          
+	char pivotz7                          [  7];	char _pivotz7;                            //ï¿½Çºï¿½ï¿½ï¿½               
+	char pivot1dnz7                       [  7];	char _pivot1dnz7;                         //ï¿½Çºï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½          
+	char pivot2dnz7                       [  7];	char _pivot2dnz7;                         //ï¿½Çºï¿½2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½          
+	char sosokz6                          [  6];	char _sosokz6;                            //ï¿½Ú½ï¿½ï¿½ï¿½ï¿½Ú½ï¿½ï¿½Ú±ï¿½ï¿½ï¿½     
+	char jisunamez18                      [ 18];	char _jisunamez18;                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char capsizez6                        [  6];	char _capsizez6;                          //ï¿½Úºï¿½ï¿½Ý±Ô¸ï¿½           
+	char output1z16                       [ 16];	char _output1z16;                         //ï¿½ï¿½ï¿½ï¿½               
+	char marcket1z16                      [ 16];	char _marcket1z16;                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¡1            
+	char marcket2z16                      [ 16];	char _marcket2z16;                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¡2            
+	char marcket3z16                      [ 16];	char _marcket3z16;                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¡3            
+	char marcket4z16                      [ 16];	char _marcket4z16;                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¡4            
+	char marcket5z16                      [ 16];	char _marcket5z16;                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¡5            
+	char marcket6z16                      [ 16];	char _marcket6z16;                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¡6            
+	char cbtext                           [  6];	char _cbtext;                             //CBï¿½ï¿½ï¿½ï¿½               
+	char parvalue                         [  7];	char _parvalue;                           //ï¿½×¸é°¡               
+	char prepricetitlez12                 [ 12];	char _prepricetitlez12;                   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¸ï¿½ï¿½Æ²       
+	char prepricez7                       [  7];	char _prepricez7;                         //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char subprice                         [  7];	char _subprice;                           //ï¿½ï¿½ë°¡               
+	char gongpricez7                      [  7];	char _gongpricez7;                        //ï¿½ï¿½ï¿½ï¿½               
+	char high5                            [  7];	char _high5;                              //5ï¿½Ï°ï¿½              
+	char low5                             [  7];	char _low5;                               //5ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½              
+	char high20                           [  7];	char _high20;                             //20ï¿½Ï°ï¿½             
+	char low20                            [  7];	char _low20;                              //20ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char yhigh                            [  7];	char _yhigh;                              //52ï¿½ï¿½ï¿½Ö°ï¿½           
+	char yhighdate                        [  4];	char _yhighdate;                          //52ï¿½ï¿½ï¿½Ö°ï¿½ï¿½ï¿½         
+	char ylow                             [  7];	char _ylow;                               //52ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½           
+	char ylowdate                         [  4];	char _ylowdate;                           //52ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char movlistingz8                     [  8];	char _movlistingz8;                       //ï¿½ï¿½ï¿½ï¿½ï¿½Ö½Ä¼ï¿½           
+	char listing                          [ 12];	char _listing;                            //ï¿½ï¿½ï¿½ï¿½ï¿½Ö½Ä¼ï¿½_Ãµï¿½ï¿½      
+	char totpricez9                       [  9];	char _totpricez9;                         //ï¿½Ã°ï¿½ï¿½Ñ¾ï¿½             
+	char tratimez5                        [  5];	char _tratimez5;                          //ï¿½Ã°ï¿½                 
+	char off_tra1                         [  6];	char _off_tra1;                           //ï¿½Åµï¿½ï¿½Å·ï¿½ï¿½ï¿½1          
+	char bid_tra1                         [  6];	char _bid_tra1;                           //ï¿½Å¼ï¿½ï¿½Å·ï¿½ï¿½ï¿½1          
+	char N_offvolume1                     [  9];	char _N_offvolume1;                       //ï¿½Åµï¿½ï¿½Å·ï¿½ï¿½ï¿½1          
+	char N_bidvolume1                     [  9];	char _N_bidvolume1;                       //ï¿½Å¼ï¿½ï¿½Å·ï¿½ï¿½ï¿½1          
+	char off_tra2                         [  6];	char _off_tra2;                           //ï¿½Åµï¿½ï¿½Å·ï¿½ï¿½ï¿½2          
+	char bid_tra2                         [  6];	char _bid_tra2;                           //ï¿½Å¼ï¿½ï¿½Å·ï¿½ï¿½ï¿½2          
+	char N_offvolume2                     [  9];	char _N_offvolume2;                       //ï¿½Åµï¿½ï¿½Å·ï¿½ï¿½ï¿½2          
+	char N_bidvolume2                     [  9];	char _N_bidvolume2;                       //ï¿½Å¼ï¿½ï¿½Å·ï¿½ï¿½ï¿½2          
+	char off_tra3                         [  6];	char _off_tra3;                           //ï¿½Åµï¿½ï¿½Å·ï¿½ï¿½ï¿½3          
+	char bid_tra3                         [  6];	char _bid_tra3;                           //ï¿½Å¼ï¿½ï¿½Å·ï¿½ï¿½ï¿½3          
+	char N_offvolume3                     [  9];	char _N_offvolume3;                       //ï¿½Åµï¿½ï¿½Å·ï¿½ï¿½ï¿½3          
+	char N_bidvolume3                     [  9];	char _N_bidvolume3;                       //ï¿½Å¼ï¿½ï¿½Å·ï¿½ï¿½ï¿½3          
+	char off_tra4                         [  6];	char _off_tra4;                           //ï¿½Åµï¿½ï¿½Å·ï¿½ï¿½ï¿½4          
+	char bid_tra4                         [  6];	char _bid_tra4;                           //ï¿½Å¼ï¿½ï¿½Å·ï¿½ï¿½ï¿½4          
+	char N_offvolume4                     [  9];	char _N_offvolume4;                       //ï¿½Åµï¿½ï¿½Å·ï¿½ï¿½ï¿½4          
+	char N_bidvolume4                     [  9];	char _N_bidvolume4;                       //ï¿½Å¼ï¿½ï¿½Å·ï¿½ï¿½ï¿½4          
+	char off_tra5                         [  6];	char _off_tra5;                           //ï¿½Åµï¿½ï¿½Å·ï¿½ï¿½ï¿½5          
+	char bid_tra5                         [  6];	char _bid_tra5;                           //ï¿½Å¼ï¿½ï¿½Å·ï¿½ï¿½ï¿½5          
+	char N_offvolume5                     [  9];	char _N_offvolume5;                       //ï¿½Åµï¿½ï¿½Å·ï¿½ï¿½ï¿½5          
+	char N_bidvolume5                     [  9];	char _N_bidvolume5;                       //ï¿½Å¼ï¿½ï¿½Å·ï¿½ï¿½ï¿½5          
+	char N_offvolall                      [  9];	char _N_offvolall;                        //ï¿½Åµï¿½ï¿½Ü±ï¿½ï¿½Î°Å·ï¿½ï¿½ï¿½     
+	char N_bidvolall                      [  9];	char _N_bidvolall;                        //ï¿½Å¼ï¿½ï¿½Ü±ï¿½ï¿½Î°Å·ï¿½ï¿½ï¿½     
+	char fortimez6                        [  6];	char _fortimez6;                          //ï¿½Ü±ï¿½ï¿½Î½Ã°ï¿½           
+	char forratez5                        [  5];	char _forratez5;                          //ï¿½Ü±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char settdatez4                       [  4];	char _settdatez4;                         //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char cratez5                          [  5];	char _cratez5;                            //ï¿½Ü°ï¿½ï¿½ï¿½ï¿½(%)          
+	char yudatez4                         [  4];	char _yudatez4;                           //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½           
+	char mudatez4                         [  4];	char _mudatez4;                           //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½           
+	char yuratez5                         [  5];	char _yuratez5;                           //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char muratez5                         [  5];	char _muratez5;                           //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char listdatez8                       [  8];	char _listdatez8;                         //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char listing2                         [ 12];	char _listing2;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Ö½Ä¼ï¿½_ï¿½ï¿½        
+	char N_alloffvol                      [  9];	char _N_alloffvol;                        //ï¿½ï¿½Ã¼ï¿½Å·ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½ï¿½     
+	char N_allbidvol                      [  9];	char _N_allbidvol;                        //ï¿½ï¿½Ã¼ï¿½Å·ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½ï¿½     
 } Tc1151OutBlock;
 
-typedef struct tagc1151OutBlock2    //º¯µ¿°Å·¡·®ÀÚ·á
+typedef struct tagc1151OutBlock2    //ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½ï¿½Ú·ï¿½
 {
-	char time                             [  8];	char _time;                               //½Ã°£                 
-	char price                            [  7];	char _price;                              //ÇöÀç°¡               
-	char sign                             [  1];	char _sign;                               //µî¶ôºÎÈ£             
-	char change                           [  6];	char _change;                             //µî¶ôÆø               
-	char offer                            [  7];	char _offer;                              //¸ÅµµÈ£°¡             
-	char bid                              [  7];	char _bid;                                //¸Å¼öÈ£°¡             
-	char movolume                         [  8];	char _movolume;                           //º¯µ¿°Å·¡·®           
-	char volume                           [  9];	char _volume;                             //°Å·¡·®               
+	char time                             [  8];	char _time;                               //ï¿½Ã°ï¿½                 
+	char price                            [  7];	char _price;                              //ï¿½ï¿½ï¿½ç°¡               
+	char sign                             [  1];	char _sign;                               //ï¿½ï¿½ï¿½ï¿½ï¿½È£             
+	char change                           [  6];	char _change;                             //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char offer                            [  7];	char _offer;                              //ï¿½Åµï¿½È£ï¿½ï¿½             
+	char bid                              [  7];	char _bid;                                //ï¿½Å¼ï¿½È£ï¿½ï¿½             
+	char movolume                         [  8];	char _movolume;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½           
+	char volume                           [  9];	char _volume;                             //ï¿½Å·ï¿½ï¿½ï¿½               
 } Tc1151OutBlock2;
 
-typedef struct tagc1151OutBlock3    //¿¹»óÃ¼°á
+typedef struct tagc1151OutBlock3    //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½
 {
-	char dongsi                           [  1];	char _dongsi;                             //µ¿½ÃÈ£°¡±¸ºÐ         
-	char jeqprice                         [  7];	char _jeqprice;                           //¿¹»óÃ¼°á°¡           
-	char jeqsign                          [  1];	char _jeqsign;                            //¿¹»óÃ¼°áºÎÈ£         
-	char jeqchange                        [  6];	char _jeqchange;                          //¿¹»óÃ¼°áµî¶ôÆø       
-	char jeqchrate                        [  5];	char _jeqchrate;                          //¿¹»óÃ¼°áµî¶ô·ü       
-	char jeqvol                           [  9];	char _jeqvol;                             //¿¹»óÃ¼°á¼ö·®         
+	char dongsi                           [  1];	char _dongsi;                             //ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char jeqprice                         [  7];	char _jeqprice;                           //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½á°¡           
+	char jeqsign                          [  1];	char _jeqsign;                            //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½È£         
+	char jeqchange                        [  6];	char _jeqchange;                          //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char jeqchrate                        [  5];	char _jeqchrate;                          //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char jeqvol                           [  9];	char _jeqvol;                             //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½         
 } Tc1151OutBlock3;
 
-typedef struct tagc1151OutBlock4    //ETFÀÚ·á
+typedef struct tagc1151OutBlock4    //ETFï¿½Ú·ï¿½
 {
-	char bu12                             [  1];	char _bu12;                               //ETF±¸ºÐ              
-	char nav                              [  9];	char _nav;                                //ÀåÁß/ÃÖÁ¾NAV         
-	char nsign                            [  1];	char _nsign;                              //NAVµî¶ôºÎÈ£          
-	char nchange                          [  9];	char _nchange;                            //NAVµî¶ôÆø            
-	char prenav                           [  9];	char _prenav;                             //ÀüÀÏNAVV             
-	char grate                            [  9];	char _grate;                              //±«¸®À²               
-	char gsign                            [  1];	char _gsign;                              //±«¸®À²ºÎÈ£           
-	char icuz18                           [ 18];	char _icuz18;                             //CU´çÇö±Ý¹è´ç¾×(¿ø)   
-	char totjo                            [  4];	char _totjo;                              //±¸¼ºÁ¾¸ñ¼ö           
-	char totvalue                         [  7];	char _totvalue;                           //¼øÀÚ»êÃÑ¾×(¾ï¿ø)     
-	char terror                           [  9];	char _terror;                             //ÃßÀû¿ÀÂ÷À²           
-	char lpoffremain1                     [  9];	char _lpoffremain1;                       //LP¸ÅµµÃÖ¿ì¼±ÀÜ·®     
-	char lpoffremain2                     [  9];	char _lpoffremain2;                       //LP¸ÅµµÂ÷¼±ÀÜ·®       
-	char lpoffremain3                     [  9];	char _lpoffremain3;                       //LP¸ÅµµÂ÷Â÷¼±ÀÜ·®     
-	char lpoffremain4                     [  9];	char _lpoffremain4;                       //LP¸Åµµ4Â÷¼±ÀÜ·®      
-	char lpoffremain5                     [  9];	char _lpoffremain5;                       //LP¸Åµµ5Â÷¼±ÀÜ·®      
-	char lpoffremain6                     [  9];	char _lpoffremain6;                       //LP¸Åµµ6Â÷¼±ÀÜ·®      
-	char lpoffremain7                     [  9];	char _lpoffremain7;                       //LP¸Åµµ7Â÷¼±ÀÜ·®      
-	char lpoffremain8                     [  9];	char _lpoffremain8;                       //LP¸Åµµ8Â÷¼±ÀÜ·®      
-	char lpoffremain9                     [  9];	char _lpoffremain9;                       //LP¸Åµµ9Â÷¼±ÀÜ·®      
-	char lpoffremain10                    [  9];	char _lpoffremain10;                      //LP¸Åµµ10Â÷¼±ÀÜ·®     
-	char lpbidremain1                     [  9];	char _lpbidremain1;                       //LP¸Å¼öÃÖ¿ì¼±ÀÜ·®     
-	char lpbidremain2                     [  9];	char _lpbidremain2;                       //LP¸Å¼öÂ÷¼±ÀÜ·®       
-	char lpbidremain3                     [  9];	char _lpbidremain3;                       //LP¸Å¼öÂ÷Â÷¼±ÀÜ·®     
-	char lpbidremain4                     [  9];	char _lpbidremain4;                       //LP¸Å¼ö4Â÷¼±ÀÜ·®      
-	char lpbidremain5                     [  9];	char _lpbidremain5;                       //LP¸Å¼ö5Â÷¼±ÀÜ·®      
-	char lpbidremain6                     [  9];	char _lpbidremain6;                       //LP¸Å¼ö6Â÷¼±ÀÜ·®      
-	char lpbidremain7                     [  9];	char _lpbidremain7;                       //LP¸Å¼ö7Â÷¼±ÀÜ·®      
-	char lpbidremain8                     [  9];	char _lpbidremain8;                       //LP¸Å¼ö8Â÷¼±ÀÜ·®      
-	char lpbidremain9                     [  9];	char _lpbidremain9;                       //LP¸Å¼ö9Â÷¼±ÀÜ·®      
-	char lpbidremain10                    [  9];	char _lpbidremain10;                      //LP¸Å¼ö10Â÷¼±ÀÜ·®     
-	char etf_copy_cd                      [  8];	char _etf_copy_cd;                        //ETFº¹Á¦¹æ¹ý±¸ºÐÄÚµå  
-	char etf_prod_cd                      [  6];	char _etf_prod_cd;                        //ETF»óÇ°À¯ÇüÄÚµå      
+	char bu12                             [  1];	char _bu12;                               //ETFï¿½ï¿½ï¿½ï¿½              
+	char nav                              [  9];	char _nav;                                //ï¿½ï¿½ï¿½ï¿½/ï¿½ï¿½ï¿½ï¿½NAV         
+	char nsign                            [  1];	char _nsign;                              //NAVï¿½ï¿½ï¿½ï¿½ï¿½È£          
+	char nchange                          [  9];	char _nchange;                            //NAVï¿½ï¿½ï¿½ï¿½ï¿½            
+	char prenav                           [  9];	char _prenav;                             //ï¿½ï¿½ï¿½ï¿½NAVV             
+	char grate                            [  9];	char _grate;                              //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char gsign                            [  1];	char _gsign;                              //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£           
+	char icuz18                           [ 18];	char _icuz18;                             //CUï¿½ï¿½ï¿½ï¿½ï¿½Ý¹ï¿½ï¿½ï¿½(ï¿½ï¿½)   
+	char totjo                            [  4];	char _totjo;                              //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½           
+	char totvalue                         [  7];	char _totvalue;                           //ï¿½ï¿½ï¿½Ú»ï¿½ï¿½Ñ¾ï¿½(ï¿½ï¿½ï¿½)     
+	char terror                           [  9];	char _terror;                             //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½           
+	char lpoffremain1                     [  9];	char _lpoffremain1;                       //LPï¿½Åµï¿½ï¿½Ö¿ì¼±ï¿½Ü·ï¿½     
+	char lpoffremain2                     [  9];	char _lpoffremain2;                       //LPï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½       
+	char lpoffremain3                     [  9];	char _lpoffremain3;                       //LPï¿½Åµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½     
+	char lpoffremain4                     [  9];	char _lpoffremain4;                       //LPï¿½Åµï¿½4ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½      
+	char lpoffremain5                     [  9];	char _lpoffremain5;                       //LPï¿½Åµï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½      
+	char lpoffremain6                     [  9];	char _lpoffremain6;                       //LPï¿½Åµï¿½6ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½      
+	char lpoffremain7                     [  9];	char _lpoffremain7;                       //LPï¿½Åµï¿½7ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½      
+	char lpoffremain8                     [  9];	char _lpoffremain8;                       //LPï¿½Åµï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½      
+	char lpoffremain9                     [  9];	char _lpoffremain9;                       //LPï¿½Åµï¿½9ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½      
+	char lpoffremain10                    [  9];	char _lpoffremain10;                      //LPï¿½Åµï¿½10ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½     
+	char lpbidremain1                     [  9];	char _lpbidremain1;                       //LPï¿½Å¼ï¿½ï¿½Ö¿ì¼±ï¿½Ü·ï¿½     
+	char lpbidremain2                     [  9];	char _lpbidremain2;                       //LPï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½       
+	char lpbidremain3                     [  9];	char _lpbidremain3;                       //LPï¿½Å¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½     
+	char lpbidremain4                     [  9];	char _lpbidremain4;                       //LPï¿½Å¼ï¿½4ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½      
+	char lpbidremain5                     [  9];	char _lpbidremain5;                       //LPï¿½Å¼ï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½      
+	char lpbidremain6                     [  9];	char _lpbidremain6;                       //LPï¿½Å¼ï¿½6ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½      
+	char lpbidremain7                     [  9];	char _lpbidremain7;                       //LPï¿½Å¼ï¿½7ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½      
+	char lpbidremain8                     [  9];	char _lpbidremain8;                       //LPï¿½Å¼ï¿½8ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½      
+	char lpbidremain9                     [  9];	char _lpbidremain9;                       //LPï¿½Å¼ï¿½9ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½      
+	char lpbidremain10                    [  9];	char _lpbidremain10;                      //LPï¿½Å¼ï¿½10ï¿½ï¿½ï¿½ï¿½ï¿½Ü·ï¿½     
+	char etf_copy_cd                      [  8];	char _etf_copy_cd;                        //ETFï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½  
+	char etf_prod_cd                      [  6];	char _etf_prod_cd;                        //ETFï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½      
 } Tc1151OutBlock4;
 
-typedef struct tagc1151OutBlock5    //º£ÀÌ½ºÁö¼öÀÚ·á
+typedef struct tagc1151OutBlock5    //ï¿½ï¿½ï¿½Ì½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú·ï¿½
 {
-	char jisucode                         [  2];	char _jisucode;                           //Áö¼öÄÚµå             
-	char sectorcode                       [  4];	char _sectorcode;                         //¼½ÅÍÄÚµå             
-	char jisuhnamez20                     [ 20];	char _jisuhnamez20;                       //Áö¼ö¸í               
-	char kp200jisu                        [  8];	char _kp200jisu;                          //Áö¼ö                 
-	char kp200sign                        [  1];	char _kp200sign;                          //µî¶ôºÎÈ£             
-	char kp200change                      [  8];	char _kp200change;                        //µî¶ôÆø               
-	char ubjisu                           [ 10];	char _ubjisu;                             //Ã¤±ÇÁö¼ö             
-	char ubsign                           [  1];	char _ubsign;                             //Ã¤±Çµî¶ôºÎÈ£         
-	char ubchange                         [ 10];	char _ubchange;                           //Ã¤±Çµî¶ôÆø           
-	char symbol                           [ 12];	char _symbol;                             //ÇØ¿ÜÁö¼ö½Éº¼         
-	char eupcode                          [  3];	char _eupcode;                            //±âÅ¸¾÷Á¾ÄÚµå         
-	char ubjiid                           [  6];	char _ubjiid;                             //Ã¤±ÇÁö¼öÄÚµå         
-	char ubjiid2                          [  1];	char _ubjiid2;                            //Ã¤±ÇÁö¼ö¼¼ºÎÄÚµå     
+	char jisucode                         [  2];	char _jisucode;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char sectorcode                       [  4];	char _sectorcode;                         //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char jisuhnamez20                     [ 20];	char _jisuhnamez20;                       //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char kp200jisu                        [  8];	char _kp200jisu;                          //ï¿½ï¿½ï¿½ï¿½                 
+	char kp200sign                        [  1];	char _kp200sign;                          //ï¿½ï¿½ï¿½ï¿½ï¿½È£             
+	char kp200change                      [  8];	char _kp200change;                        //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char ubjisu                           [ 10];	char _ubjisu;                             //Ã¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char ubsign                           [  1];	char _ubsign;                             //Ã¤ï¿½Çµï¿½ï¿½ï¿½ï¿½È£         
+	char ubchange                         [ 10];	char _ubchange;                           //Ã¤ï¿½Çµï¿½ï¿½ï¿½ï¿½           
+	char symbol                           [ 12];	char _symbol;                             //ï¿½Ø¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Éºï¿½         
+	char eupcode                          [  3];	char _eupcode;                            //ï¿½ï¿½Å¸ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½         
+	char ubjiid                           [  6];	char _ubjiid;                             //Ã¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½         
+	char ubjiid2                          [  1];	char _ubjiid2;                            //Ã¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½     
 } Tc1151OutBlock5;
 
 typedef struct tagc1151
 {
-	Tc1151InBlock                     c1151inblock                          ;  //±âº»ÀÔ·Â 
-	Tc1151OutBlock                    c1151outblock                         ;  //Á¾¸ñ¸¶½ºÅ¸±âº»ÀÚ·á 
-	Tc1151OutBlock2                   c1151outblock2                        ;  //º¯µ¿°Å·¡·®ÀÚ·á 
-	Tc1151OutBlock3                   c1151outblock3                        ;  //¿¹»óÃ¼°á 
-	Tc1151OutBlock4                   c1151outblock4                        ;  //ETFÀÚ·á 
-	Tc1151OutBlock5                   c1151outblock5                        ;  //º£ÀÌ½ºÁö¼öÀÚ·á 
+	Tc1151InBlock                     c1151inblock                          ;  //ï¿½âº»ï¿½Ô·ï¿½ 
+	Tc1151OutBlock                    c1151outblock                         ;  //ï¿½ï¿½ï¿½ñ¸¶½ï¿½Å¸ï¿½âº»ï¿½Ú·ï¿½ 
+	Tc1151OutBlock2                   c1151outblock2                        ;  //ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½ï¿½Ú·ï¿½ 
+	Tc1151OutBlock3                   c1151outblock3                        ;  //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ 
+	Tc1151OutBlock4                   c1151outblock4                        ;  //ETFï¿½Ú·ï¿½ 
+	Tc1151OutBlock5                   c1151outblock5                        ;  //ï¿½ï¿½ï¿½Ì½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú·ï¿½ 
 } Tc1151;
 
 
 
-typedef struct tagh1InBlock    //ÀÔ·Â
+typedef struct tagh1InBlock    //ï¿½Ô·ï¿½
 {
-	char code                             [  6];   //Á¾¸ñÄÚµå             
+	char code                             [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } Th1InBlock;
 
-typedef struct tagh1OutBlock    //Ãâ·Â
+typedef struct tagh1OutBlock    //ï¿½ï¿½ï¿½
 {
-	char code                             [  6];   //Á¾¸ñÄÚµå             
-	char hotime                           [  8];   //½Ã°£                 
-	char offer                            [  7];   //¸ÅµµÈ£°¡             
-	char bid                              [  7];   //¸Å¼öÈ£°¡             
-	char offerrem                         [  9];   //¸ÅµµÈ£°¡ÀÜ·®         
-	char bidrem                           [  9];   //¸Å¼öÈ£°¡ÀÜ·®         
-	char P_offer                          [  7];   //Â÷¸ÅµµÈ£°¡           
-	char P_bid                            [  7];   //Â÷¸Å¼öÈ£°¡           
-	char P_offerrem                       [  9];   //Â÷¸ÅµµÈ£°¡ÀÜ·®       
-	char P_bidrem                         [  9];   //Â÷¸Å¼öÈ£°¡ÀÜ·®       
-	char S_offer                          [  7];   //Â÷Â÷¸ÅµµÈ£°¡         
-	char S_bid                            [  7];   //Â÷Â÷¸Å¼öÈ£°¡         
-	char S_offerrem                       [  9];   //Â÷Â÷¸ÅµµÈ£°¡ÀÜ·®     
-	char S_bidrem                         [  9];   //Â÷Â÷¸Å¼öÈ£°¡ÀÜ·®     
-	char S4_offer                         [  7];   //4Â÷¸ÅµµÈ£°¡          
-	char S4_bid                           [  7];   //4Â÷¸Å¼öÈ£°¡          
-	char S4_offerrem                      [  9];   //4Â÷¸ÅµµÈ£°¡ÀÜ·®      
-	char S4_bidrem                        [  9];   //4Â÷¸Å¼öÈ£°¡ÀÜ·®      
-	char S5_offer                         [  7];   //5Â÷¸ÅµµÈ£°¡          
-	char S5_bid                           [  7];   //5Â÷¸Å¼öÈ£°¡          
-	char S5_offerrem                      [  9];   //5Â÷¸ÅµµÈ£°¡ÀÜ·®      
-	char S5_bidrem                        [  9];   //5Â÷¸Å¼öÈ£°¡ÀÜ·®      
-	char T_offerrem                       [  9];   //ÃÑ¸ÅµµÈ£°¡ÀÜ·®       
-	char T_bidrem                         [  9];   //ÃÑ¸Å¼öÈ£°¡ÀÜ·®       
-	char S6_offer                         [  7];   //6Â÷¸ÅµµÈ£°¡          
-	char S6_bid                           [  7];   //6Â÷¸Å¼öÈ£°¡          
-	char S6_offerrem                      [  9];   //6Â÷¸ÅµµÈ£°¡ÀÜ·®      
-	char S6_bidrem                        [  9];   //6Â÷¸Å¼öÈ£°¡ÀÜ·®      
-	char S7_offer                         [  7];   //7Â÷¸ÅµµÈ£°¡          
-	char S7_bid                           [  7];   //7Â÷¸Å¼öÈ£°¡          
-	char S7_offerrem                      [  9];   //7Â÷¸ÅµµÈ£°¡ÀÜ·®      
-	char S7_bidrem                        [  9];   //7Â÷¸Å¼öÈ£°¡ÀÜ·®      
-	char S8_offer                         [  7];   //8Â÷¸ÅµµÈ£°¡          
-	char S8_bid                           [  7];   //8Â÷¸Å¼öÈ£°¡          
-	char S8_offerrem                      [  9];   //8Â÷¸ÅµµÈ£°¡ÀÜ·®      
-	char S8_bidrem                        [  9];   //8Â÷¸Å¼öÈ£°¡ÀÜ·®      
-	char S9_offer                         [  7];   //9Â÷¸ÅµµÈ£°¡          
-	char S9_bid                           [  7];   //9Â÷¸Å¼öÈ£°¡          
-	char S9_offerrem                      [  9];   //9Â÷¸ÅµµÈ£°¡ÀÜ·®      
-	char S9_bidrem                        [  9];   //9Â÷¸Å¼öÈ£°¡ÀÜ·®      
-	char S10_offer                        [  7];   //10Â÷¸ÅµµÈ£°¡         
-	char S10_bid                          [  7];   //10Â÷¸Å¼öÈ£°¡         
-	char S10_offerrem                     [  9];   //10Â÷¸ÅµµÈ£°¡ÀÜ·®     
-	char S10_bidrem                       [  9];   //10Â÷¸Å¼öÈ£°¡ÀÜ·®     
-	char volume                           [  9];   //´©Àû°Å·¡·®           
+	char code                             [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char hotime                           [  8];   //ï¿½Ã°ï¿½                 
+	char offer                            [  7];   //ï¿½Åµï¿½È£ï¿½ï¿½             
+	char bid                              [  7];   //ï¿½Å¼ï¿½È£ï¿½ï¿½             
+	char offerrem                         [  9];   //ï¿½Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½         
+	char bidrem                           [  9];   //ï¿½Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½         
+	char P_offer                          [  7];   //ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½           
+	char P_bid                            [  7];   //ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½           
+	char P_offerrem                       [  9];   //ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½       
+	char P_bidrem                         [  9];   //ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½       
+	char S_offer                          [  7];   //ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½         
+	char S_bid                            [  7];   //ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½         
+	char S_offerrem                       [  9];   //ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½     
+	char S_bidrem                         [  9];   //ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½     
+	char S4_offer                         [  7];   //4ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S4_bid                           [  7];   //4ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S4_offerrem                      [  9];   //4ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½      
+	char S4_bidrem                        [  9];   //4ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½      
+	char S5_offer                         [  7];   //5ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S5_bid                           [  7];   //5ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S5_offerrem                      [  9];   //5ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½      
+	char S5_bidrem                        [  9];   //5ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½      
+	char T_offerrem                       [  9];   //ï¿½Ñ¸Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½       
+	char T_bidrem                         [  9];   //ï¿½Ñ¸Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½       
+	char S6_offer                         [  7];   //6ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S6_bid                           [  7];   //6ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S6_offerrem                      [  9];   //6ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½      
+	char S6_bidrem                        [  9];   //6ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½      
+	char S7_offer                         [  7];   //7ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S7_bid                           [  7];   //7ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S7_offerrem                      [  9];   //7ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½      
+	char S7_bidrem                        [  9];   //7ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½      
+	char S8_offer                         [  7];   //8ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S8_bid                           [  7];   //8ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S8_offerrem                      [  9];   //8ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½      
+	char S8_bidrem                        [  9];   //8ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½      
+	char S9_offer                         [  7];   //9ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S9_bid                           [  7];   //9ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S9_offerrem                      [  9];   //9ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½      
+	char S9_bidrem                        [  9];   //9ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½      
+	char S10_offer                        [  7];   //10ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½         
+	char S10_bid                          [  7];   //10ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½         
+	char S10_offerrem                     [  9];   //10ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½     
+	char S10_bidrem                       [  9];   //10ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½     
+	char volume                           [  9];   //ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½           
 } Th1OutBlock;
 
 typedef struct tagh1
 {
-	Th1InBlock                        h1inblock                             ;  //ÀÔ·Â 
-	Th1OutBlock                       h1outblock                            ;  //Ãâ·Â 
+	Th1InBlock                        h1inblock                             ;  //ï¿½Ô·ï¿½ 
+	Th1OutBlock                       h1outblock                            ;  //ï¿½ï¿½ï¿½ 
 } Th1;
 
-typedef struct tagk3InBlock    //ÀÔ·Â
+typedef struct tagk3InBlock    //ï¿½Ô·ï¿½
 {
-	char code                             [  6];   //Á¾¸ñÄÚµå             
+	char code                             [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } Tk3InBlock;
 
-typedef struct tagk3OutBlock    //Ãâ·Â
+typedef struct tagk3OutBlock    //ï¿½ï¿½ï¿½
 {
-	char code                             [  6];   //Á¾¸ñÄÚµå             
-	char time                             [  8];   //½Ã°£                 
-	char offer                            [  7];   //¸ÅµµÈ£°¡             
-	char bid                              [  7];   //¸Å¼öÈ£°¡             
-	char offerrem                         [  9];   //¸ÅµµÈ£°¡ÀÜ·®         
-	char bidrem                           [  9];   //¸Å¼öÈ£°¡ÀÜ·®         
-	char P_offer                          [  7];   //Â÷¸ÅµµÈ£°¡           
-	char P_bid                            [  7];   //Â÷¸Å¼öÈ£°¡           
-	char P_offerrem                       [  9];   //Â÷¸ÅµµÈ£°¡ÀÜ·®       
-	char P_bidrem                         [  9];   //Â÷¸Å¼öÈ£°¡ÀÜ·®       
-	char S_offer                          [  7];   //Â÷Â÷¸ÅµµÈ£°¡         
-	char S_bid                            [  7];   //Â÷Â÷¸Å¼öÈ£°¡         
-	char S_offerrem                       [  9];   //Â÷Â÷¸ÅµµÈ£°¡ÀÜ·®     
-	char S_bidrem                         [  9];   //Â÷Â÷¸Å¼öÈ£°¡ÀÜ·®     
-	char S4_offer                         [  7];   //4Â÷¸ÅµµÈ£°¡          
-	char S4_bid                           [  7];   //4Â÷¸Å¼öÈ£°¡          
-	char S4_offerrem                      [  9];   //4Â÷¸ÅµµÈ£°¡ÀÜ·®      
-	char S4_bidrem                        [  9];   //4Â÷¸Å¼öÈ£°¡ÀÜ·®      
-	char S5_offer                         [  7];   //5Â÷¸ÅµµÈ£°¡          
-	char S5_bid                           [  7];   //5Â÷¸Å¼öÈ£°¡          
-	char S5_offerrem                      [  9];   //5Â÷¸ÅµµÈ£°¡ÀÜ·®      
-	char S5_bidrem                        [  9];   //5Â÷¸Å¼öÈ£°¡ÀÜ·®      
-	char T_offerrem                       [  9];   //ÃÑ¸ÅµµÈ£°¡ÀÜ·®       
-	char T_bidrem                         [  9];   //ÃÑ¸Å¼öÈ£°¡ÀÜ·®       
-	char S6_offer                         [  7];   //6Â÷¸ÅµµÈ£°¡          
-	char S6_bid                           [  7];   //6Â÷¸Å¼öÈ£°¡          
-	char S6_offerrem                      [  9];   //6Â÷¸ÅµµÈ£°¡ÀÜ·®      
-	char S6_bidrem                        [  9];   //6Â÷¸Å¼öÈ£°¡ÀÜ·®      
-	char S7_offer                         [  7];   //7Â÷¸ÅµµÈ£°¡          
-	char S7_bid                           [  7];   //7Â÷¸Å¼öÈ£°¡          
-	char S7_offerrem                      [  9];   //7Â÷¸ÅµµÈ£°¡ÀÜ·®      
-	char S7_bidrem                        [  9];   //7Â÷¸Å¼öÈ£°¡ÀÜ·®      
-	char S8_offer                         [  7];   //8Â÷¸ÅµµÈ£°¡          
-	char S8_bid                           [  7];   //8Â÷¸Å¼öÈ£°¡          
-	char S8_offerrem                      [  9];   //8Â÷¸ÅµµÈ£°¡ÀÜ·®      
-	char S8_bidrem                        [  9];   //8Â÷¸Å¼öÈ£°¡ÀÜ·®      
-	char S9_offer                         [  7];   //9Â÷¸ÅµµÈ£°¡          
-	char S9_bid                           [  7];   //9Â÷¸Å¼öÈ£°¡          
-	char S9_offerrem                      [  9];   //9Â÷¸ÅµµÈ£°¡ÀÜ·®      
-	char S9_bidrem                        [  9];   //9Â÷¸Å¼öÈ£°¡ÀÜ·®      
-	char S10_offer                        [  7];   //10Â÷¸ÅµµÈ£°¡         
-	char S10_bid                          [  7];   //10Â÷¸Å¼öÈ£°¡         
-	char S10_offerrem                     [  9];   //10Â÷¸ÅµµÈ£°¡ÀÜ·®     
-	char S10_bidrem                       [  9];   //10Â÷¸Å¼öÈ£°¡ÀÜ·®     
-	char volume                           [  9];   //°Å·¡·®               
+	char code                             [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char time                             [  8];   //ï¿½Ã°ï¿½                 
+	char offer                            [  7];   //ï¿½Åµï¿½È£ï¿½ï¿½             
+	char bid                              [  7];   //ï¿½Å¼ï¿½È£ï¿½ï¿½             
+	char offerrem                         [  9];   //ï¿½Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½         
+	char bidrem                           [  9];   //ï¿½Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½         
+	char P_offer                          [  7];   //ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½           
+	char P_bid                            [  7];   //ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½           
+	char P_offerrem                       [  9];   //ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½       
+	char P_bidrem                         [  9];   //ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½       
+	char S_offer                          [  7];   //ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½         
+	char S_bid                            [  7];   //ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½         
+	char S_offerrem                       [  9];   //ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½     
+	char S_bidrem                         [  9];   //ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½     
+	char S4_offer                         [  7];   //4ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S4_bid                           [  7];   //4ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S4_offerrem                      [  9];   //4ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½      
+	char S4_bidrem                        [  9];   //4ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½      
+	char S5_offer                         [  7];   //5ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S5_bid                           [  7];   //5ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S5_offerrem                      [  9];   //5ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½      
+	char S5_bidrem                        [  9];   //5ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½      
+	char T_offerrem                       [  9];   //ï¿½Ñ¸Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½       
+	char T_bidrem                         [  9];   //ï¿½Ñ¸Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½       
+	char S6_offer                         [  7];   //6ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S6_bid                           [  7];   //6ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S6_offerrem                      [  9];   //6ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½      
+	char S6_bidrem                        [  9];   //6ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½      
+	char S7_offer                         [  7];   //7ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S7_bid                           [  7];   //7ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S7_offerrem                      [  9];   //7ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½      
+	char S7_bidrem                        [  9];   //7ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½      
+	char S8_offer                         [  7];   //8ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S8_bid                           [  7];   //8ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S8_offerrem                      [  9];   //8ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½      
+	char S8_bidrem                        [  9];   //8ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½      
+	char S9_offer                         [  7];   //9ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S9_bid                           [  7];   //9ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S9_offerrem                      [  9];   //9ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½      
+	char S9_bidrem                        [  9];   //9ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½      
+	char S10_offer                        [  7];   //10ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½         
+	char S10_bid                          [  7];   //10ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½         
+	char S10_offerrem                     [  9];   //10ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½     
+	char S10_bidrem                       [  9];   //10ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½     
+	char volume                           [  9];   //ï¿½Å·ï¿½ï¿½ï¿½               
 } Tk3OutBlock;
 
 typedef struct tagk3
 {
-	Tk3InBlock                        k3inblock                             ;  //ÀÔ·Â 
-	Tk3OutBlock                       k3outblock                            ;  //Ãâ·Â 
+	Tk3InBlock                        k3inblock                             ;  //ï¿½Ô·ï¿½ 
+	Tk3OutBlock                       k3outblock                            ;  //ï¿½ï¿½ï¿½ 
 } Tk3;
 
-typedef struct tagh2InBlock    //ÀÔ·Â
+typedef struct tagh2InBlock    //ï¿½Ô·ï¿½
 {
-	char code                             [  6];   //Á¾¸ñÄÚµå             
+	char code                             [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } Th2InBlock;
 
-typedef struct tagh2OutBlock    //Ãâ·Â
+typedef struct tagh2OutBlock    //ï¿½ï¿½ï¿½
 {
-	char code                             [  6];   //Á¾¸ñÄÚµå             
-	char hotime                           [  8];   //½Ã°£                 
-	char O_offerrem                       [  9];   //ÃÑ¸ÅµµÈ£°¡ÀÜ·®       
-	char O_bidrem                         [  9];   //ÃÑ¸Å¼öÈ£°¡ÀÜ·®       
+	char code                             [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char hotime                           [  8];   //ï¿½Ã°ï¿½                 
+	char O_offerrem                       [  9];   //ï¿½Ñ¸Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½       
+	char O_bidrem                         [  9];   //ï¿½Ñ¸Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½       
 } Th2OutBlock;
 
 typedef struct tagh2
 {
-	Th2InBlock                        h2inblock                             ;  //ÀÔ·Â 
-	Th2OutBlock                       h2outblock                            ;  //Ãâ·Â 
+	Th2InBlock                        h2inblock                             ;  //ï¿½Ô·ï¿½ 
+	Th2OutBlock                       h2outblock                            ;  //ï¿½ï¿½ï¿½ 
 } Th2;
 
-typedef struct tagk4InBlock    //ÀÔ·Â
+typedef struct tagk4InBlock    //ï¿½Ô·ï¿½
 {
-	char code                             [  6];   //Á¾¸ñÄÚµå             
+	char code                             [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } Tk4InBlock;
 
-typedef struct tagk4OutBlock    //Ãâ·Â
+typedef struct tagk4OutBlock    //ï¿½ï¿½ï¿½
 {
-	char code                             [  6];   //Á¾¸ñÄÚµå             
-	char hotime                           [  8];   //½Ã°£                 
-	char O_offerrem                       [  9];   //ÃÑ¸ÅµµÈ£°¡ÀÜ·®       
-	char O_bidrem                         [  9];   //ÃÑ¸Å¼öÈ£°¡ÀÜ·®       
+	char code                             [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char hotime                           [  8];   //ï¿½Ã°ï¿½                 
+	char O_offerrem                       [  9];   //ï¿½Ñ¸Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½       
+	char O_bidrem                         [  9];   //ï¿½Ñ¸Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½       
 } Tk4OutBlock;
 
 typedef struct tagk4
 {
-	Tk4InBlock                        k4inblock                             ;  //ÀÔ·Â 
-	Tk4OutBlock                       k4outblock                            ;  //Ãâ·Â 
+	Tk4InBlock                        k4inblock                             ;  //ï¿½Ô·ï¿½ 
+	Tk4OutBlock                       k4outblock                            ;  //ï¿½ï¿½ï¿½ 
 } Tk4;
 
-typedef struct tagh3InBlock    //ÀÔ·Â
+typedef struct tagh3InBlock    //ï¿½Ô·ï¿½
 {
-	char code                             [  6];   //Á¾¸ñÄÚµå             
+	char code                             [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } Th3InBlock;
 
-typedef struct tagh3OutBlock    //Ãâ·Â
+typedef struct tagh3OutBlock    //ï¿½ï¿½ï¿½
 {
-	char code                             [  6];   //Á¾¸ñÄÚµå             
-	char hotime                           [  8];   //½Ã°£                 
-	char dongsi                           [  1];   //µ¿½Ã±¸ºÐ             
-	char jeqprice                         [  7];   //¿¹»óÃ¼°á°¡           
-	char jeqsign                          [  1];   //¿¹»óµî¶ôºÎÈ£         
-	char jeqchange                        [  6];   //¿¹»óµî¶ôÆø           
-	char jeqchrate                        [  5];   //¿¹»óµî¶ô·ü           
-	char jeqvol                           [  9];   //¿¹»óÃ¼°á¼ö·®         
-	char offer                            [  7];   //¸ÅµµÈ£°¡             
-	char bid                              [  7];   //¸Å¼öÈ£°¡             
-	char offerrem                         [  9];   //¸ÅµµÈ£°¡ÀÜ·®         
-	char bidrem                           [  9];   //¸Å¼öÈ£°¡ÀÜ·®         
+	char code                             [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char hotime                           [  8];   //ï¿½Ã°ï¿½                 
+	char dongsi                           [  1];   //ï¿½ï¿½ï¿½Ã±ï¿½ï¿½ï¿½             
+	char jeqprice                         [  7];   //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½á°¡           
+	char jeqsign                          [  1];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£         
+	char jeqchange                        [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½           
+	char jeqchrate                        [  5];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½           
+	char jeqvol                           [  9];   //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char offer                            [  7];   //ï¿½Åµï¿½È£ï¿½ï¿½             
+	char bid                              [  7];   //ï¿½Å¼ï¿½È£ï¿½ï¿½             
+	char offerrem                         [  9];   //ï¿½Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½         
+	char bidrem                           [  9];   //ï¿½Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½         
 } Th3OutBlock;
 
 typedef struct tagh3
 {
-	Th3InBlock                        h3inblock                             ;  //ÀÔ·Â 
-	Th3OutBlock                       h3outblock                            ;  //Ãâ·Â 
+	Th3InBlock                        h3inblock                             ;  //ï¿½Ô·ï¿½ 
+	Th3OutBlock                       h3outblock                            ;  //ï¿½ï¿½ï¿½ 
 } Th3;
 
-typedef struct tagk5InBlock    //ÀÔ·Â
+typedef struct tagk5InBlock    //ï¿½Ô·ï¿½
 {
-	char code                             [  6];   //Á¾¸ñÄÚµå             
+	char code                             [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } Tk5InBlock;
 
-typedef struct tagk5OutBlock    //Ãâ·Â
+typedef struct tagk5OutBlock    //ï¿½ï¿½ï¿½
 {
-	char code                             [  6];   //Á¾¸ñÄÚµå             
-	char hotime                           [  8];   //½Ã°£                 
-	char dongsi                           [  1];   //µ¿½Ã±¸ºÐ             
-	char jeqprice                         [  7];   //¿¹»óÃ¼°á°¡           
-	char jeqsign                          [  1];   //¿¹»óµî¶ôºÎÈ£         
-	char jeqchange                        [  6];   //¿¹»óµî¶ôÆø           
-	char jeqchrate                        [  5];   //¿¹»óµî¶ô·ü           
-	char jeqvol                           [  9];   //¿¹»óÃ¼°á¼ö·®         
-	char offer                            [  7];   //¸ÅµµÈ£°¡             
-	char bid                              [  7];   //¸Å¼öÈ£°¡             
-	char offerrem                         [  9];   //¸ÅµµÈ£°¡ÀÜ·®         
-	char bidrem                           [  9];   //¸Å¼öÈ£°¡ÀÜ·®         
+	char code                             [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char hotime                           [  8];   //ï¿½Ã°ï¿½                 
+	char dongsi                           [  1];   //ï¿½ï¿½ï¿½Ã±ï¿½ï¿½ï¿½             
+	char jeqprice                         [  7];   //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½á°¡           
+	char jeqsign                          [  1];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£         
+	char jeqchange                        [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½           
+	char jeqchrate                        [  5];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½           
+	char jeqvol                           [  9];   //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char offer                            [  7];   //ï¿½Åµï¿½È£ï¿½ï¿½             
+	char bid                              [  7];   //ï¿½Å¼ï¿½È£ï¿½ï¿½             
+	char offerrem                         [  9];   //ï¿½Åµï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½         
+	char bidrem                           [  9];   //ï¿½Å¼ï¿½È£ï¿½ï¿½ï¿½Ü·ï¿½         
 } Tk5OutBlock;
 
 typedef struct tagk5
 {
-	Tk5InBlock                        k5inblock                             ;  //ÀÔ·Â 
-	Tk5OutBlock                       k5outblock                            ;  //Ãâ·Â 
+	Tk5InBlock                        k5inblock                             ;  //ï¿½Ô·ï¿½ 
+	Tk5OutBlock                       k5outblock                            ;  //ï¿½ï¿½ï¿½ 
 } Tk5;
 
-typedef struct tagj8InBlock    //ÀÔ·Â
+typedef struct tagj8InBlock    //ï¿½Ô·ï¿½
 {
-	char code                             [  6];	char _code;                               //Á¾¸ñÄÚµå             
+	char code                             [  6];	char _code;                               //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } Tj8InBlock;
 
-typedef struct tagj8OutBlock    //Ãâ·Â
+typedef struct tagj8OutBlock    //ï¿½ï¿½ï¿½
 {
-	char code                             [  6];	char _code;                               //Á¾¸ñÄÚµå             
-	char time                             [  8];	char _time;                               //½Ã°£                 
-	char sign                             [  1];	char _sign;                               //µî¶ôºÎÈ£             
-	char change                           [  6];	char _change;                             //µî¶ôÆø               
-	char price                            [  7];	char _price;                              //ÇöÀç°¡               
-	char chrate                           [  5];	char _chrate;                             //µî¶ô·ü               
-	char high                             [  7];	char _high;                               //°í°¡                 
-	char low                              [  7];	char _low;                                //Àú°¡                 
-	char offer                            [  7];	char _offer;                              //¸ÅµµÈ£°¡             
-	char bid                              [  7];	char _bid;                                //¸Å¼öÈ£°¡             
-	char volume                           [  9];	char _volume;                             //°Å·¡·®               
-	char volrate                          [  6];	char _volrate;                            //°Å·¡·®ÀüÀÏºñ         
-	char movolume                         [  8];	char _movolume;                           //º¯µ¿°Å·¡·®           
-	char value                            [  9];	char _value;                              //°Å·¡´ë±Ý             
-	char open                             [  7];	char _open;                               //½Ã°¡                 
-	char avgprice                         [  7];	char _avgprice;                           //°¡ÁßÆò±Õ°¡           
-	char janggubun                        [  1];	char _janggubun;                          //Àå±¸ºÐ               
+	char code                             [  6];	char _code;                               //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char time                             [  8];	char _time;                               //ï¿½Ã°ï¿½                 
+	char sign                             [  1];	char _sign;                               //ï¿½ï¿½ï¿½ï¿½ï¿½È£             
+	char change                           [  6];	char _change;                             //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char price                            [  7];	char _price;                              //ï¿½ï¿½ï¿½ç°¡               
+	char chrate                           [  5];	char _chrate;                             //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char high                             [  7];	char _high;                               //ï¿½ï¿½                 
+	char low                              [  7];	char _low;                                //ï¿½ï¿½ï¿½ï¿½                 
+	char offer                            [  7];	char _offer;                              //ï¿½Åµï¿½È£ï¿½ï¿½             
+	char bid                              [  7];	char _bid;                                //ï¿½Å¼ï¿½È£ï¿½ï¿½             
+	char volume                           [  9];	char _volume;                             //ï¿½Å·ï¿½ï¿½ï¿½               
+	char volrate                          [  6];	char _volrate;                            //ï¿½Å·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ïºï¿½         
+	char movolume                         [  8];	char _movolume;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½           
+	char value                            [  9];	char _value;                              //ï¿½Å·ï¿½ï¿½ï¿½ï¿½             
+	char open                             [  7];	char _open;                               //ï¿½Ã°ï¿½                 
+	char avgprice                         [  7];	char _avgprice;                           //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ°ï¿½           
+	char janggubun                        [  1];	char _janggubun;                          //ï¿½å±¸ï¿½ï¿½               
 } Tj8OutBlock;
 
 typedef struct tagj8
 {
-	Tj8InBlock                        j8inblock                             ;  //ÀÔ·Â 
-	Tj8OutBlock                       j8outblock                            ;  //Ãâ·Â 
+	Tj8InBlock                        j8inblock                             ;  //ï¿½Ô·ï¿½ 
+	Tj8OutBlock                       j8outblock                            ;  //ï¿½ï¿½ï¿½ 
 } Tj8;
 
-typedef struct tagk8InBlock    //ÀÔ·Â
+typedef struct tagk8InBlock    //ï¿½Ô·ï¿½
 {
-	char code                             [  6];	char _code;                               //Á¾¸ñÄÚµå             
+	char code                             [  6];	char _code;                               //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } Tk8InBlock;
 
-typedef struct tagk8OutBlock    //Ãâ·Â
+typedef struct tagk8OutBlock    //ï¿½ï¿½ï¿½
 {
-	char code                             [  6];	char _code;                               //Á¾¸ñÄÚµå             
-	char time                             [  8];	char _time;                               //½Ã°£                 
-	char price                            [  7];	char _price;                              //ÇöÀç°¡               
-	char sign                             [  1];	char _sign;                               //µî¶ôºÎÈ£             
-	char change                           [  6];	char _change;                             //µî¶ôÆø               
-	char chrate                           [  5];	char _chrate;                             //µî¶ô·ü               
-	char high                             [  7];	char _high;                               //°í°¡                 
-	char low                              [  7];	char _low;                                //Àú°¡                 
-	char offer                            [  7];	char _offer;                              //¸ÅµµÈ£°¡             
-	char bid                              [  7];	char _bid;                                //¸Å¼öÈ£°¡             
-	char volume                           [  9];	char _volume;                             //°Å·¡·®               
-	char volrate                          [  6];	char _volrate;                            //°Å·¡·®ÀüÀÏºñ         
-	char movolume                         [  8];	char _movolume;                           //º¯µ¿°Å·¡·®           
-	char value                            [  9];	char _value;                              //°Å·¡´ë±Ý             
-	char open                             [  7];	char _open;                               //½Ã°¡                 
-	char avgprice                         [  7];	char _avgprice;                           //°¡ÁßÆò±Õ°¡           
-	char janggubun                        [  1];	char _janggubun;                          //Àå±¸ºÐ               
+	char code                             [  6];	char _code;                               //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char time                             [  8];	char _time;                               //ï¿½Ã°ï¿½                 
+	char price                            [  7];	char _price;                              //ï¿½ï¿½ï¿½ç°¡               
+	char sign                             [  1];	char _sign;                               //ï¿½ï¿½ï¿½ï¿½ï¿½È£             
+	char change                           [  6];	char _change;                             //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char chrate                           [  5];	char _chrate;                             //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char high                             [  7];	char _high;                               //ï¿½ï¿½                 
+	char low                              [  7];	char _low;                                //ï¿½ï¿½ï¿½ï¿½                 
+	char offer                            [  7];	char _offer;                              //ï¿½Åµï¿½È£ï¿½ï¿½             
+	char bid                              [  7];	char _bid;                                //ï¿½Å¼ï¿½È£ï¿½ï¿½             
+	char volume                           [  9];	char _volume;                             //ï¿½Å·ï¿½ï¿½ï¿½               
+	char volrate                          [  6];	char _volrate;                            //ï¿½Å·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ïºï¿½         
+	char movolume                         [  8];	char _movolume;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½           
+	char value                            [  9];	char _value;                              //ï¿½Å·ï¿½ï¿½ï¿½ï¿½             
+	char open                             [  7];	char _open;                               //ï¿½Ã°ï¿½                 
+	char avgprice                         [  7];	char _avgprice;                           //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ°ï¿½           
+	char janggubun                        [  1];	char _janggubun;                          //ï¿½å±¸ï¿½ï¿½               
 } Tk8OutBlock;
 
 typedef struct tagk8
 {
-	Tk8InBlock                        k8inblock                             ;  //ÀÔ·Â 
-	Tk8OutBlock                       k8outblock                            ;  //Ãâ·Â 
+	Tk8InBlock                        k8inblock                             ;  //ï¿½Ô·ï¿½ 
+	Tk8OutBlock                       k8outblock                            ;  //ï¿½ï¿½ï¿½ 
 } Tk8;
 
-typedef struct tagf1InBlock    //ÀÔ·Â
+typedef struct tagf1InBlock    //ï¿½Ô·ï¿½
 {
-	char fuitem                           [  4];   //Á¾¸ñÄÚµå             
+	char fuitem                           [  4];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } Tf1InBlock;
 
-typedef struct tagf1OutBlock    //Ãâ·Â
+typedef struct tagf1OutBlock    //ï¿½ï¿½ï¿½
 {
-	char fuitem                           [  4];   //Á¾¸ñÄÚµå             
-	char fuhotime                         [  8];   //½Ã°£                 
-	char fuoffer                          [  5];   //¸Åµµ¿ì¼±È£°¡         
-	char fubid                            [  5];   //¸Å¼ö¿ì¼±È£°¡         
-	char fuofferjan                       [  6];   //¸Åµµ¿ì¼±ÀÜ·®         
-	char fubidjan                         [  6];   //¸Å¼ö¿ì¼±ÀÜ·®         
-	char fujoffer                         [  5];   //Â÷¼±¸ÅµµÈ£°¡         
-	char fujbid                           [  5];   //Â÷¼±¸Å¼öÈ£°¡         
-	char fujofferjan                      [  6];   //Â÷¼±¸ÅµµÀÜ·®         
-	char fujbidjan                        [  6];   //Â÷¼±¸Å¼öÀÜ·®         
-	char fujjoffer                        [  5];   //Â÷Â÷¼±¸ÅµµÈ£°¡       
-	char fujjbid                          [  5];   //Â÷Â÷¼±¸Å¼öÈ£°¡       
-	char fujjofferjan                     [  6];   //Â÷Â÷¼±¸ÅµµÀÜ·®       
-	char fujjbidjan                       [  6];   //Â÷Â÷¼±¸Å¼öÀÜ·®       
-	char futofferjan                      [  6];   //ÃÑ¸ÅµµÀÜ·®           
-	char futbidjan                        [  6];   //ÃÑ¸Å¼öÀÜ·®           
-	char fuj4offer                        [  5];   //4Â÷¼±¸ÅµµÈ£°¡        
-	char fuj4bid                          [  5];   //4Â÷¼±¸Å¼öÈ£°¡        
-	char fuj4offerjan                     [  6];   //4Â÷¼±¸ÅµµÀÜ·®        
-	char fuj4bidjan                       [  6];   //4Â÷¼±¸Å¼öÀÜ·®        
-	char fuj5offer                        [  5];   //5Â÷¼±¸ÅµµÈ£°¡        
-	char fuj5bid                          [  5];   //5Â÷¼±¸Å¼öÈ£°¡        
-	char fuj5offerjan                     [  6];   //5Â÷¼±¸ÅµµÀÜ·®        
-	char fuj5bidjan                       [  6];   //5Â÷¼±¸Å¼öÀÜ·®        
-	char fuoffersu                        [  4];   //¿ì¼±¸Åµµ°Ç¼ö         
-	char fujoffersu                       [  4];   //Â÷¼±¸Åµµ°Ç¼ö         
-	char fujjoffersu                      [  4];   //Â÷Â÷¼±¸Åµµ°Ç¼ö       
-	char fuj4offersu                      [  4];   //4Â÷¼±¸Åµµ°Ç¼ö        
-	char fuj5offersu                      [  4];   //5Â÷¼±¸Åµµ°Ç¼ö        
-	char futoffersu                       [  5];   //ÃÑ¸Åµµ°Ç¼ö           
-	char fubidsu                          [  4];   //¿ì¼±¸Å¼ö°Ç¼ö         
-	char fujbidsu                         [  4];   //Â÷¼±¸Å¼ö°Ç¼ö         
-	char fujjbidsu                        [  4];   //Â÷Â÷¼±¸Å¼ö°Ç¼ö       
-	char fuj4bidsu                        [  4];   //4Â÷¼±¸Å¼ö°Ç¼ö        
-	char fuj5bidsu                        [  4];   //5Â÷¼±¸Å¼ö°Ç¼ö        
-	char futbidsu                         [  5];   //ÃÑ¸Å¼ö°Ç¼ö           
+	char fuitem                           [  4];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char fuhotime                         [  8];   //ï¿½Ã°ï¿½                 
+	char fuoffer                          [  5];   //ï¿½Åµï¿½ï¿½ì¼±È£ï¿½ï¿½         
+	char fubid                            [  5];   //ï¿½Å¼ï¿½ï¿½ì¼±È£ï¿½ï¿½         
+	char fuofferjan                       [  6];   //ï¿½Åµï¿½ï¿½ì¼±ï¿½Ü·ï¿½         
+	char fubidjan                         [  6];   //ï¿½Å¼ï¿½ï¿½ì¼±ï¿½Ü·ï¿½         
+	char fujoffer                         [  5];   //ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½         
+	char fujbid                           [  5];   //ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½         
+	char fujofferjan                      [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½         
+	char fujbidjan                        [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½         
+	char fujjoffer                        [  5];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½       
+	char fujjbid                          [  5];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½       
+	char fujjofferjan                     [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½       
+	char fujjbidjan                       [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½       
+	char futofferjan                      [  6];   //ï¿½Ñ¸Åµï¿½ï¿½Ü·ï¿½           
+	char futbidjan                        [  6];   //ï¿½Ñ¸Å¼ï¿½ï¿½Ü·ï¿½           
+	char fuj4offer                        [  5];   //4ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½        
+	char fuj4bid                          [  5];   //4ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½        
+	char fuj4offerjan                     [  6];   //4ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½        
+	char fuj4bidjan                       [  6];   //4ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½        
+	char fuj5offer                        [  5];   //5ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½        
+	char fuj5bid                          [  5];   //5ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½        
+	char fuj5offerjan                     [  6];   //5ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½        
+	char fuj5bidjan                       [  6];   //5ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½        
+	char fuoffersu                        [  4];   //ï¿½ì¼±ï¿½Åµï¿½ï¿½Ç¼ï¿½         
+	char fujoffersu                       [  4];   //ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ç¼ï¿½         
+	char fujjoffersu                      [  4];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ç¼ï¿½       
+	char fuj4offersu                      [  4];   //4ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ç¼ï¿½        
+	char fuj5offersu                      [  4];   //5ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ç¼ï¿½        
+	char futoffersu                       [  5];   //ï¿½Ñ¸Åµï¿½ï¿½Ç¼ï¿½           
+	char fubidsu                          [  4];   //ï¿½ì¼±ï¿½Å¼ï¿½ï¿½Ç¼ï¿½         
+	char fujbidsu                         [  4];   //ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ç¼ï¿½         
+	char fujjbidsu                        [  4];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ç¼ï¿½       
+	char fuj4bidsu                        [  4];   //4ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ç¼ï¿½        
+	char fuj5bidsu                        [  4];   //5ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ç¼ï¿½        
+	char futbidsu                         [  5];   //ï¿½Ñ¸Å¼ï¿½ï¿½Ç¼ï¿½           
 } Tf1OutBlock;
 
 typedef struct tagf1
 {
-	Tf1InBlock                        f1inblock                             ;  //ÀÔ·Â 
-	Tf1OutBlock                       f1outblock                            ;  //Ãâ·Â 
+	Tf1InBlock                        f1inblock                             ;  //ï¿½Ô·ï¿½ 
+	Tf1OutBlock                       f1outblock                            ;  //ï¿½ï¿½ï¿½ 
 } Tf1;
 
-typedef struct tagf3InBlock    //ÀÔ·Â
+typedef struct tagf3InBlock    //ï¿½Ô·ï¿½
 {
-	char fuitem                           [  4];   //Á¾¸ñÄÚµå             
+	char fuitem                           [  4];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } Tf3InBlock;
 
-typedef struct tagf3OutBlock    //Ãâ·Â
+typedef struct tagf3OutBlock    //ï¿½ï¿½ï¿½
 {
-	char fuitem                           [  4];   //Á¾¸ñÄÚµå             
-	char futheoryprice                    [  5];   //¼±¹°ÀÌ·Ð°¡           
-	char futheorytime                     [  8];   //ÀÌ·Ð°¡½Ã°£           
-	char fugrate                          [  5];   //±«¸®µµ               
-	char fugratio                         [  5];   //±«¸®À²               
+	char fuitem                           [  4];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char futheoryprice                    [  5];   //ï¿½ï¿½ï¿½ï¿½ï¿½Ì·Ð°ï¿½           
+	char futheorytime                     [  8];   //ï¿½Ì·Ð°ï¿½ï¿½Ã°ï¿½           
+	char fugrate                          [  5];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char fugratio                         [  5];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
 } Tf3OutBlock;
 
 typedef struct tagf3
 {
-	Tf3InBlock                        f3inblock                             ;  //ÀÔ·Â 
-	Tf3OutBlock                       f3outblock                            ;  //Ãâ·Â 
+	Tf3InBlock                        f3inblock                             ;  //ï¿½Ô·ï¿½ 
+	Tf3OutBlock                       f3outblock                            ;  //ï¿½ï¿½ï¿½ 
 } Tf3;
 
-typedef struct tagf4InBlock    //ÀÔ·Â
+typedef struct tagf4InBlock    //ï¿½Ô·ï¿½
 {
-	char fuitem                           [  4];   //Á¾¸ñÄÚµå             
+	char fuitem                           [  4];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } Tf4InBlock;
 
-typedef struct tagf4OutBlock    //Ãâ·Â
+typedef struct tagf4OutBlock    //ï¿½ï¿½ï¿½
 {
-	char fuitem                           [  4];   //Á¾¸ñÄÚµå             
-	char fuchetime                        [  8];   //Ã¼°á½Ã°£             
-	char fuopenyak                        [  7];   //¹Ì°áÁ¦¾àÁ¤¼ö·®       
-	char fupreopenyak                     [  7];   //ÀüÀÏ¹Ì°áÁ¦¾àÁ¤¼ö·®   
+	char fuitem                           [  4];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char fuchetime                        [  8];   //Ã¼ï¿½ï¿½Ã°ï¿½             
+	char fuopenyak                        [  7];   //ï¿½Ì°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char fupreopenyak                     [  7];   //ï¿½ï¿½ï¿½Ï¹Ì°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½   
 } Tf4OutBlock;
 
 typedef struct tagf4
 {
-	Tf4InBlock                        f4inblock                             ;  //ÀÔ·Â 
-	Tf4OutBlock                       f4outblock                            ;  //Ãâ·Â 
+	Tf4InBlock                        f4inblock                             ;  //ï¿½Ô·ï¿½ 
+	Tf4OutBlock                       f4outblock                            ;  //ï¿½ï¿½ï¿½ 
 } Tf4;
 
-typedef struct tagf8InBlock    //ÀÔ·Â
+typedef struct tagf8InBlock    //ï¿½Ô·ï¿½
 {
-	char fuitem                           [  4];	char _fuitem;                             //Á¾¸ñÄÚµå             
+	char fuitem                           [  4];	char _fuitem;                             //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } Tf8InBlock;
 
-typedef struct tagf8OutBlock    //Ãâ·Â
+typedef struct tagf8OutBlock    //ï¿½ï¿½ï¿½
 {
-	char fuitem                           [  4];	char _fuitem;                             //Á¾¸ñÄÚµå             
-	char fuchetime                        [  8];	char _fuchetime;                          //½Ã°£                 
-	char fusign                           [  1];	char _fusign;                             //µî¶ôºÎÈ£             
-	char fuchange                         [  5];	char _fuchange;                           //µî¶ôÆø               
-	char fucurr                           [  5];	char _fucurr;                             //ÇöÀç°¡               
-	char fuhigh                           [  5];	char _fuhigh;                             //°í°¡                 
-	char fulow                            [  5];	char _fulow;                              //Àú°¡                 
-	char fuvol                            [  6];	char _fuvol;                              //Ã¼°á¼ö·®             
-	char fuvolall                         [  7];	char _fuvolall;                           //´©ÀûÃ¼°á¼ö·®         
-	char fuvalall                         [ 12];	char _fuvalall;                           //´©Àû°Å·¡´ë±Ý         
-	char fuopenyak                        [  7];	char _fuopenyak;                          //¹Ì°áÁ¦¾àÁ¤¼ö·®       
-	char fuoffer                          [  5];	char _fuoffer;                            //¿ì¼±¸ÅµµÈ£°¡         
-	char fubid                            [  5];	char _fubid;                              //¿ì¼±¸Å¼öÈ£°¡         
-	char fuofferjan                       [  6];	char _fuofferjan;                         //¿ì¼±¸ÅµµÀÜ·®         
-	char fubidjan                         [  6];	char _fubidjan;                           //¿ì¼±¸Å¼öÀÜ·®         
-	char futofferjan                      [  6];	char _futofferjan;                        //ÃÑ¸ÅµµÀÜ·®           
-	char futbidjan                        [  6];	char _futbidjan;                          //ÃÑ¸Å¼öÀÜ·®           
-	char fuoffersu                        [  4];	char _fuoffersu;                          //¿ì¼±¸Åµµ°Ç¼ö         
-	char fubidsu                          [  4];	char _fubidsu;                            //¿ì¼±¸Å¼ö°Ç¼ö         
-	char futoffersu                       [  5];	char _futoffersu;                         //ÃÑ¸Åµµ°Ç¼ö           
-	char futbidsu                         [  5];	char _futbidsu;                           //ÃÑ¸Å¼ö°Ç¼ö           
-	char fuchrate                         [  5];	char _fuchrate;                           //µî¶ô·ü               
-	char fubasis                          [  5];	char _fubasis;                            //º£ÀÌ½Ã½º             
-	char fugrate                          [  5];	char _fugrate;                            //±«¸®µµ               
-	char fugratio                         [  5];	char _fugratio;                           //±«¸®À²               
-	char fupreopenyak                     [  7];	char _fupreopenyak;                       //¹Ì°áÁ¦¾àÁ¤ÀüÀÏ       
-	char fuspvolall                       [  7];	char _fuspvolall;                         //½ºÇÁ·¹µå¼ö·®         
-	char fuopen                           [  5];	char _fuopen;                             //½Ã°¡                 
-	char bulkvol                          [  7];	char _bulkvol;                            //ÇùÀÇ´ë·®´©ÀûÃ¼°á¼ö·® 
+	char fuitem                           [  4];	char _fuitem;                             //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char fuchetime                        [  8];	char _fuchetime;                          //ï¿½Ã°ï¿½                 
+	char fusign                           [  1];	char _fusign;                             //ï¿½ï¿½ï¿½ï¿½ï¿½È£             
+	char fuchange                         [  5];	char _fuchange;                           //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char fucurr                           [  5];	char _fucurr;                             //ï¿½ï¿½ï¿½ç°¡               
+	char fuhigh                           [  5];	char _fuhigh;                             //ï¿½ï¿½                 
+	char fulow                            [  5];	char _fulow;                              //ï¿½ï¿½ï¿½ï¿½                 
+	char fuvol                            [  6];	char _fuvol;                              //Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char fuvolall                         [  7];	char _fuvolall;                           //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char fuvalall                         [ 12];	char _fuvalall;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½ï¿½         
+	char fuopenyak                        [  7];	char _fuopenyak;                          //ï¿½Ì°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char fuoffer                          [  5];	char _fuoffer;                            //ï¿½ì¼±ï¿½Åµï¿½È£ï¿½ï¿½         
+	char fubid                            [  5];	char _fubid;                              //ï¿½ì¼±ï¿½Å¼ï¿½È£ï¿½ï¿½         
+	char fuofferjan                       [  6];	char _fuofferjan;                         //ï¿½ì¼±ï¿½Åµï¿½ï¿½Ü·ï¿½         
+	char fubidjan                         [  6];	char _fubidjan;                           //ï¿½ì¼±ï¿½Å¼ï¿½ï¿½Ü·ï¿½         
+	char futofferjan                      [  6];	char _futofferjan;                        //ï¿½Ñ¸Åµï¿½ï¿½Ü·ï¿½           
+	char futbidjan                        [  6];	char _futbidjan;                          //ï¿½Ñ¸Å¼ï¿½ï¿½Ü·ï¿½           
+	char fuoffersu                        [  4];	char _fuoffersu;                          //ï¿½ì¼±ï¿½Åµï¿½ï¿½Ç¼ï¿½         
+	char fubidsu                          [  4];	char _fubidsu;                            //ï¿½ì¼±ï¿½Å¼ï¿½ï¿½Ç¼ï¿½         
+	char futoffersu                       [  5];	char _futoffersu;                         //ï¿½Ñ¸Åµï¿½ï¿½Ç¼ï¿½           
+	char futbidsu                         [  5];	char _futbidsu;                           //ï¿½Ñ¸Å¼ï¿½ï¿½Ç¼ï¿½           
+	char fuchrate                         [  5];	char _fuchrate;                           //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char fubasis                          [  5];	char _fubasis;                            //ï¿½ï¿½ï¿½Ì½Ã½ï¿½             
+	char fugrate                          [  5];	char _fugrate;                            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char fugratio                         [  5];	char _fugratio;                           //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char fupreopenyak                     [  7];	char _fupreopenyak;                       //ï¿½Ì°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char fuspvolall                       [  7];	char _fuspvolall;                         //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char fuopen                           [  5];	char _fuopen;                             //ï¿½Ã°ï¿½                 
+	char bulkvol                          [  7];	char _bulkvol;                            //ï¿½ï¿½ï¿½Ç´ë·®ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½ 
 } Tf8OutBlock;
 
 typedef struct tagf8
 {
-	Tf8InBlock                        f8inblock                             ;  //ÀÔ·Â 
-	Tf8OutBlock                       f8outblock                            ;  //Ãâ·Â 
+	Tf8InBlock                        f8inblock                             ;  //ï¿½Ô·ï¿½ 
+	Tf8OutBlock                       f8outblock                            ;  //ï¿½ï¿½ï¿½ 
 } Tf8;
 
-typedef struct tagq1InBlock    //ÀÔ·Â
+typedef struct tagq1InBlock    //ï¿½Ô·ï¿½
 {
-	char fuspcode                         [  8];   //Á¾¸ñÄÚµå             
+	char fuspcode                         [  8];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } Tq1InBlock;
 
-typedef struct tagq1OutBlock    //Ãâ·Â
+typedef struct tagq1OutBlock    //ï¿½ï¿½ï¿½
 {
-	char fuspcode                         [  8];   //Á¾¸ñÄÚµå             
-	char fusphotime                       [  8];   //½Ã°£                 
-	char fuspoffer                        [  6];   //¿ì¼±¸ÅµµÈ£°¡         
-	char fuspbid                          [  6];   //¿ì¼±¸Å¼öÈ£°¡         
-	char fuspofferjan                     [  6];   //¿ì¼±¸ÅµµÀÜ·®         
-	char fuspbidjan                       [  6];   //¿ì¼±¸Å¼öÀÜ·®         
-	char fuspjoffer                       [  6];   //Â÷¼±¸ÅµµÈ£°¡         
-	char fuspjbid                         [  6];   //Â÷¼±¸Å¼öÈ£°¡         
-	char fuspjofferjan                    [  6];   //Â÷¼±¸ÅµµÀÜ·®         
-	char fuspjbidjan                      [  6];   //Â÷¼±¸Å¼öÀÜ·®         
-	char fuspjjoffer                      [  6];   //Â÷Â÷¼±¸ÅµµÈ£°¡       
-	char fuspjjbid                        [  6];   //Â÷Â÷¼±¸Å¼öÈ£°¡       
-	char fuspjjofferjan                   [  6];   //Â÷Â÷¼±¸ÅµµÀÜ·®       
-	char fuspjjbidjan                     [  6];   //Â÷Â÷¼±¸Å¼öÀÜ·®       
-	char fuspj4offer                      [  6];   //4Â÷¼±¸ÅµµÈ£°¡        
-	char fuspj4bid                        [  6];   //4Â÷¼±¸Å¼öÈ£°¡        
-	char fuspj4offerjan                   [  6];   //4Â÷¼±¸ÅµµÀÜ·®        
-	char fuspj4bidjan                     [  6];   //4Â÷¼±¸Å¼öÀÜ·®        
-	char fuspj5offer                      [  6];   //5Â÷¼±¸ÅµµÈ£°¡        
-	char fuspj5bid                        [  6];   //5Â÷¼±¸Å¼öÈ£°¡        
-	char fuspj5offerjan                   [  6];   //5Â÷¼±¸ÅµµÀÜ·®        
-	char fuspj5bidjan                     [  6];   //5Â÷¼±¸Å¼öÀÜ·®        
-	char fusptofferjan                    [  6];   //ÃÑ¸ÅµµÀÜ·®           
-	char fusptbidjan                      [  6];   //ÃÑ¸Å¼öÀÜ·®           
-	char fuspoffersu                      [  4];   //¿ì¼±¸Åµµ°Ç¼ö         
-	char fuspjoffersu                     [  4];   //Â÷¼±¸Åµµ°Ç¼ö         
-	char fuspjjoffersu                    [  4];   //Â÷Â÷¼±¸Åµµ°Ç¼ö       
-	char fuspj4offersu                    [  4];   //4Â÷¼±¸Åµµ°Ç¼ö        
-	char fuspj5offersu                    [  4];   //5Â÷¼±¸Åµµ°Ç¼ö        
-	char fusptoffersu                     [  5];   //ÃÑ¸Åµµ°Ç¼ö           
-	char fuspbidsu                        [  4];   //¿ì¼±¸Å¼ö°Ç¼ö         
-	char fuspjbidsu                       [  4];   //Â÷¼±¸Å¼ö°Ç¼ö         
-	char fuspjjbidsu                      [  4];   //Â÷Â÷¼±¸Å¼ö°Ç¼ö       
-	char fuspj4bidsu                      [  4];   //4Â÷¼±¸Å¼ö°Ç¼ö        
-	char fuspj5bidsu                      [  4];   //5Â÷¼±¸Å¼ö°Ç¼ö        
-	char fusptbidsu                       [  5];   //ÃÑ¸Å¼ö°Ç¼ö           
+	char fuspcode                         [  8];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char fusphotime                       [  8];   //ï¿½Ã°ï¿½                 
+	char fuspoffer                        [  6];   //ï¿½ì¼±ï¿½Åµï¿½È£ï¿½ï¿½         
+	char fuspbid                          [  6];   //ï¿½ì¼±ï¿½Å¼ï¿½È£ï¿½ï¿½         
+	char fuspofferjan                     [  6];   //ï¿½ì¼±ï¿½Åµï¿½ï¿½Ü·ï¿½         
+	char fuspbidjan                       [  6];   //ï¿½ì¼±ï¿½Å¼ï¿½ï¿½Ü·ï¿½         
+	char fuspjoffer                       [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½         
+	char fuspjbid                         [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½         
+	char fuspjofferjan                    [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½         
+	char fuspjbidjan                      [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½         
+	char fuspjjoffer                      [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½       
+	char fuspjjbid                        [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½       
+	char fuspjjofferjan                   [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½       
+	char fuspjjbidjan                     [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½       
+	char fuspj4offer                      [  6];   //4ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½        
+	char fuspj4bid                        [  6];   //4ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½        
+	char fuspj4offerjan                   [  6];   //4ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½        
+	char fuspj4bidjan                     [  6];   //4ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½        
+	char fuspj5offer                      [  6];   //5ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½        
+	char fuspj5bid                        [  6];   //5ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½        
+	char fuspj5offerjan                   [  6];   //5ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½        
+	char fuspj5bidjan                     [  6];   //5ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½        
+	char fusptofferjan                    [  6];   //ï¿½Ñ¸Åµï¿½ï¿½Ü·ï¿½           
+	char fusptbidjan                      [  6];   //ï¿½Ñ¸Å¼ï¿½ï¿½Ü·ï¿½           
+	char fuspoffersu                      [  4];   //ï¿½ì¼±ï¿½Åµï¿½ï¿½Ç¼ï¿½         
+	char fuspjoffersu                     [  4];   //ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ç¼ï¿½         
+	char fuspjjoffersu                    [  4];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ç¼ï¿½       
+	char fuspj4offersu                    [  4];   //4ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ç¼ï¿½        
+	char fuspj5offersu                    [  4];   //5ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ç¼ï¿½        
+	char fusptoffersu                     [  5];   //ï¿½Ñ¸Åµï¿½ï¿½Ç¼ï¿½           
+	char fuspbidsu                        [  4];   //ï¿½ì¼±ï¿½Å¼ï¿½ï¿½Ç¼ï¿½         
+	char fuspjbidsu                       [  4];   //ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ç¼ï¿½         
+	char fuspjjbidsu                      [  4];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ç¼ï¿½       
+	char fuspj4bidsu                      [  4];   //4ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ç¼ï¿½        
+	char fuspj5bidsu                      [  4];   //5ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ç¼ï¿½        
+	char fusptbidsu                       [  5];   //ï¿½Ñ¸Å¼ï¿½ï¿½Ç¼ï¿½           
 } Tq1OutBlock;
 
 typedef struct tagq1
 {
-	Tq1InBlock                        q1inblock                             ;  //ÀÔ·Â 
-	Tq1OutBlock                       q1outblock                            ;  //Ãâ·Â 
+	Tq1InBlock                        q1inblock                             ;  //ï¿½Ô·ï¿½ 
+	Tq1OutBlock                       q1outblock                            ;  //ï¿½ï¿½ï¿½ 
 } Tq1;
 
-typedef struct tagq2InBlock    //ÀÔ·Â
+typedef struct tagq2InBlock    //ï¿½Ô·ï¿½
 {
-	char fuspcode                         [  8];	char _fuspcode;                           //Á¾¸ñÄÚµå             
+	char fuspcode                         [  8];	char _fuspcode;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } Tq2InBlock;
 
-typedef struct tagq2OutBlock    //Ãâ·Â
+typedef struct tagq2OutBlock    //ï¿½ï¿½ï¿½
 {
-	char fuspcode                         [  8];	char _fuspcode;                           //Á¾¸ñÄÚµå             
-	char fusphotime                       [  8];	char _fusphotime;                         //½Ã°£                 
-	char fuspjgubun                       [  8];	char _fuspjgubun;                         //Àå¿î¿ë               
-	char fuspsign                         [  1];	char _fuspsign;                           //ÀüÀÏºÎÈ£             
-	char fuspchange                       [  5];	char _fuspchange;                         //ÀüÀÏ´ëºñ             
-	char fuspcurr                         [  6];	char _fuspcurr;                           //ÇöÀç°¡               
-	char fuspcurr1                        [  5];	char _fuspcurr1;                          //ÀÇÁ¦¾àÁ¤°¡(±Ù¿ù)     
-	char fuspcurr2                        [  5];	char _fuspcurr2;                          //ÀÇÁ¦¾àÁ¤°¡(¿ø¿ù)     
-	char fuspopen                         [  6];	char _fuspopen;                           //½Ã°¡                 
-	char fusphigh                         [  6];	char _fusphigh;                           //°í°¡                 
-	char fusplow                          [  6];	char _fusplow;                            //Àú°¡                 
-	char fuspvol                          [  6];	char _fuspvol;                            //Ã¼°á¼ö·®             
-	char fuspvolall                       [  7];	char _fuspvolall;                         //´©ÀûÃ¼°á¼ö·®         
-	char fuspvalall                       [ 12];	char _fuspvalall;                         //´©Àû°Å·¡´ë±Ý         
-	char fuspchrate                       [  5];	char _fuspchrate;                         //µî¶ôÀ²               
-	char fuspbp_jgubun                    [  1];	char _fuspbp_jgubun;                      //BP¿ëÀå±¸ºÐ           
-	char fuspoffer                        [  6];	char _fuspoffer;                          //¿ì¼±¸ÅµµÈ£°¡         
-	char fuspbid                          [  6];	char _fuspbid;                            //¿ì¼±¸Å¼öÈ£°¡         
+	char fuspcode                         [  8];	char _fuspcode;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char fusphotime                       [  8];	char _fusphotime;                         //ï¿½Ã°ï¿½                 
+	char fuspjgubun                       [  8];	char _fuspjgubun;                         //ï¿½ï¿½ï¿½ï¿½               
+	char fuspsign                         [  1];	char _fuspsign;                           //ï¿½ï¿½ï¿½Ïºï¿½È£             
+	char fuspchange                       [  5];	char _fuspchange;                         //ï¿½ï¿½ï¿½Ï´ï¿½ï¿½             
+	char fuspcurr                         [  6];	char _fuspcurr;                           //ï¿½ï¿½ï¿½ç°¡               
+	char fuspcurr1                        [  5];	char _fuspcurr1;                          //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½Ù¿ï¿½)     
+	char fuspcurr2                        [  5];	char _fuspcurr2;                          //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½)     
+	char fuspopen                         [  6];	char _fuspopen;                           //ï¿½Ã°ï¿½                 
+	char fusphigh                         [  6];	char _fusphigh;                           //ï¿½ï¿½                 
+	char fusplow                          [  6];	char _fusplow;                            //ï¿½ï¿½ï¿½ï¿½                 
+	char fuspvol                          [  6];	char _fuspvol;                            //Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char fuspvolall                       [  7];	char _fuspvolall;                         //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char fuspvalall                       [ 12];	char _fuspvalall;                         //ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½ï¿½         
+	char fuspchrate                       [  5];	char _fuspchrate;                         //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char fuspbp_jgubun                    [  1];	char _fuspbp_jgubun;                      //BPï¿½ï¿½ï¿½å±¸ï¿½ï¿½           
+	char fuspoffer                        [  6];	char _fuspoffer;                          //ï¿½ì¼±ï¿½Åµï¿½È£ï¿½ï¿½         
+	char fuspbid                          [  6];	char _fuspbid;                            //ï¿½ì¼±ï¿½Å¼ï¿½È£ï¿½ï¿½         
 } Tq2OutBlock;
 
 typedef struct tagq2
 {
-	Tq2InBlock                        q2inblock                             ;  //ÀÔ·Â 
-	Tq2OutBlock                       q2outblock                            ;  //Ãâ·Â 
+	Tq2InBlock                        q2inblock                             ;  //ï¿½Ô·ï¿½ 
+	Tq2OutBlock                       q2outblock                            ;  //ï¿½ï¿½ï¿½ 
 } Tq2;
 
-typedef struct tago1InBlock    //ÀÔ·Â
+typedef struct tago1InBlock    //ï¿½Ô·ï¿½
 {
-	char opitem                           [  8];   //ÄÚµå                 
+	char opitem                           [  8];   //ï¿½Úµï¿½                 
 } To1InBlock;
 
-typedef struct tago1OutBlock    //Ãâ·Â
+typedef struct tago1OutBlock    //ï¿½ï¿½ï¿½
 {
-	char opitem                           [  8];   //ÄÚµå                 
-	char ophotime                         [  8];   //½Ã°£                 
-	char opoffer                          [  5];   //¸Åµµ¿ì¼±È£°¡         
-	char opbid                            [  5];   //¸Å¼ö¿ì¼±È£°¡         
-	char opofferjan                       [  7];   //¸Åµµ¿ì¼±ÀÜ·®         
-	char opbidjan                         [  7];   //¸Å¼ö¿ì¼±ÀÜ·®         
-	char opjoffer                         [  5];   //Â÷¼±¸ÅµµÈ£°¡         
-	char opjbid                           [  5];   //Â÷¼±¸Å¼öÈ£°¡         
-	char opjofferjan                      [  7];   //Â÷¼±¸ÅµµÀÜ·®         
-	char opjbidjan                        [  7];   //Â÷¼±¸Å¼öÀÜ·®         
-	char opjjoffer                        [  5];   //Â÷Â÷¼±¸ÅµµÈ£°¡       
-	char opjjbid                          [  5];   //Â÷Â÷¼±¸Å¼öÈ£°¡       
-	char opjjofferjan                     [  7];   //Â÷Â÷¼±¸ÅµµÀÜ·®       
-	char opjjbidjan                       [  7];   //Â÷Â÷¼±¸Å¼öÀÜ·®       
-	char optofferjan                      [  7];   //ÃÑ¸ÅµµÀÜ·®           
-	char optbidjan                        [  7];   //ÃÑ¸Å¼öÀÜ·®           
-	char opj4offer                        [  5];   //4Â÷¼±¸ÅµµÈ£°¡        
-	char opj4bid                          [  5];   //4Â÷¼±¸Å¼öÈ£°¡        
-	char opj4offerjan                     [  7];   //4Â÷¼±¸ÅµµÀÜ·®        
-	char opj4bidjan                       [  7];   //4Â÷¼±¸Å¼öÀÜ·®        
-	char opj5offer                        [  5];   //5Â÷¼±¸ÅµµÈ£°¡        
-	char opj5bid                          [  5];   //5Â÷¼±¸Å¼öÈ£°¡        
-	char opj5offerjan                     [  7];   //5Â÷¼±¸ÅµµÀÜ·®        
-	char opj5bidjan                       [  7];   //5Â÷¼±¸Å¼öÀÜ·®        
-	char opoffersu                        [  4];   //¿ì¼±¸Åµµ°Ç¼ö         
-	char opjoffersu                       [  4];   //Â÷¼±¸Åµµ°Ç¼ö         
-	char opjjoffersu                      [  4];   //Â÷Â÷¼±¸Åµµ°Ç¼ö       
-	char opj4offersu                      [  4];   //4Â÷¼±¸Åµµ°Ç¼ö        
-	char opj5offersu                      [  4];   //5Â÷¼±¸Åµµ°Ç¼ö        
-	char optoffersu                       [  5];   //ÃÑ¸Åµµ°Ç¼ö           
-	char opbidsu                          [  4];   //¿ì¼±¸Å¼ö°Ç¼ö         
-	char opjbidsu                         [  4];   //Â÷¼±¸Å¼ö°Ç¼ö         
-	char opjjbidsu                        [  4];   //Â÷Â÷¼±¸Å¼ö°Ç¼ö       
-	char opj4bidsu                        [  4];   //4Â÷¼±¸Å¼ö°Ç¼ö        
-	char opj5bidsu                        [  4];   //5Â÷¼±¸Å¼ö°Ç¼ö        
-	char optbidsu                         [  5];   //ÃÑ¸Å¼ö°Ç¼ö           
+	char opitem                           [  8];   //ï¿½Úµï¿½                 
+	char ophotime                         [  8];   //ï¿½Ã°ï¿½                 
+	char opoffer                          [  5];   //ï¿½Åµï¿½ï¿½ì¼±È£ï¿½ï¿½         
+	char opbid                            [  5];   //ï¿½Å¼ï¿½ï¿½ì¼±È£ï¿½ï¿½         
+	char opofferjan                       [  7];   //ï¿½Åµï¿½ï¿½ì¼±ï¿½Ü·ï¿½         
+	char opbidjan                         [  7];   //ï¿½Å¼ï¿½ï¿½ì¼±ï¿½Ü·ï¿½         
+	char opjoffer                         [  5];   //ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½         
+	char opjbid                           [  5];   //ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½         
+	char opjofferjan                      [  7];   //ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½         
+	char opjbidjan                        [  7];   //ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½         
+	char opjjoffer                        [  5];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½       
+	char opjjbid                          [  5];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½       
+	char opjjofferjan                     [  7];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½       
+	char opjjbidjan                       [  7];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½       
+	char optofferjan                      [  7];   //ï¿½Ñ¸Åµï¿½ï¿½Ü·ï¿½           
+	char optbidjan                        [  7];   //ï¿½Ñ¸Å¼ï¿½ï¿½Ü·ï¿½           
+	char opj4offer                        [  5];   //4ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½        
+	char opj4bid                          [  5];   //4ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½        
+	char opj4offerjan                     [  7];   //4ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½        
+	char opj4bidjan                       [  7];   //4ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½        
+	char opj5offer                        [  5];   //5ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½        
+	char opj5bid                          [  5];   //5ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½        
+	char opj5offerjan                     [  7];   //5ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½        
+	char opj5bidjan                       [  7];   //5ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½        
+	char opoffersu                        [  4];   //ï¿½ì¼±ï¿½Åµï¿½ï¿½Ç¼ï¿½         
+	char opjoffersu                       [  4];   //ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ç¼ï¿½         
+	char opjjoffersu                      [  4];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ç¼ï¿½       
+	char opj4offersu                      [  4];   //4ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ç¼ï¿½        
+	char opj5offersu                      [  4];   //5ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ç¼ï¿½        
+	char optoffersu                       [  5];   //ï¿½Ñ¸Åµï¿½ï¿½Ç¼ï¿½           
+	char opbidsu                          [  4];   //ï¿½ì¼±ï¿½Å¼ï¿½ï¿½Ç¼ï¿½         
+	char opjbidsu                         [  4];   //ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ç¼ï¿½         
+	char opjjbidsu                        [  4];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ç¼ï¿½       
+	char opj4bidsu                        [  4];   //4ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ç¼ï¿½        
+	char opj5bidsu                        [  4];   //5ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ç¼ï¿½        
+	char optbidsu                         [  5];   //ï¿½Ñ¸Å¼ï¿½ï¿½Ç¼ï¿½           
 } To1OutBlock;
 
 typedef struct tago1
 {
-	To1InBlock                        o1inblock                             ;  //ÀÔ·Â 
-	To1OutBlock                       o1outblock                            ;  //Ãâ·Â 
+	To1InBlock                        o1inblock                             ;  //ï¿½Ô·ï¿½ 
+	To1OutBlock                       o1outblock                            ;  //ï¿½ï¿½ï¿½ 
 } To1;
 
-typedef struct tago2InBlock    //ÀÔ·Â
+typedef struct tago2InBlock    //ï¿½Ô·ï¿½
 {
-	char opitem                           [  8];	char _opitem;                             //Á¾¸ñÄÚµå             
+	char opitem                           [  8];	char _opitem;                             //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } To2InBlock;
 
-typedef struct tago2OutBlock    //Ãâ·Â
+typedef struct tago2OutBlock    //ï¿½ï¿½ï¿½
 {
-	char opitem                           [  8];	char _opitem;                             //Á¾¸ñÄÚµå             
-	char opchetime                        [  8];	char _opchetime;                          //½Ã°£                 
-	char opjgubun                         [  8];	char _opjgubun;                           //Àå¿î¿ë               
-	char opsign                           [  1];	char _opsign;                             //µî¶ôºÎÈ£             
-	char opchange                         [  5];	char _opchange;                           //µî¶ôÆø               
-	char opcurr                           [  5];	char _opcurr;                             //ÇöÀç°¡               
-	char opopen                           [  5];	char _opopen;                             //½Ã°¡                 
-	char ophigh                           [  5];	char _ophigh;                             //°í°¡                 
-	char oplow                            [  5];	char _oplow;                              //Àú°¡                 
-	char opvol                            [  6];	char _opvol;                              //Ã¼°á¼ö·®             
-	char opvolallz8                       [  8];	char _opvolallz8;                         //´©ÀûÃ¼°á¼ö·®         
-	char opvalall                         [ 12];	char _opvalall;                           //´©Àû°Å·¡´ë±Ý         
-	char opopenyak                        [  7];	char _opopenyak;                          //¹Ì°áÁ¦¾àÁ¤¼ö·®       
-	char opoffer                          [  5];	char _opoffer;                            //¿ì¼±¸ÅµµÈ£°¡         
-	char opbid                            [  5];	char _opbid;                              //¿ì¼±¸Å¼öÈ£°¡         
-	char opofferjan                       [  7];	char _opofferjan;                         //¿ì¼±¸ÅµµÀÜ·®         
-	char opbidjan                         [  7];	char _opbidjan;                           //¿ì¼±¸Å¼öÀÜ·®         
-	char opjoffer                         [  5];	char _opjoffer;                           //Â÷¼±¸ÅµµÈ£°¡         
-	char opjbid                           [  5];	char _opjbid;                             //Â÷¼±¸Å¼öÈ£°¡         
-	char opjofferjan                      [  7];	char _opjofferjan;                        //Â÷¼±¸ÅµµÀÜ·®         
-	char opjbidjan                        [  7];	char _opjbidjan;                          //Â÷¼±¸Å¼öÀÜ·®         
-	char opjjoffer                        [  5];	char _opjjoffer;                          //Â÷Â÷¼±¸ÅµµÈ£°¡       
-	char opjjbid                          [  5];	char _opjjbid;                            //Â÷Â÷¼±¸Å¼öÈ£°¡       
-	char opjjofferjan                     [  7];	char _opjjofferjan;                       //Â÷Â÷¼±¸ÅµµÀÜ·®       
-	char opjjbidjan                       [  7];	char _opjjbidjan;                         //Â÷Â÷¼±¸Å¼öÀÜ·®       
-	char optofferjan                      [  7];	char _optofferjan;                        //ÃÑ¸ÅµµÀÜ·®           
-	char optbidjan                        [  7];	char _optbidjan;                          //ÃÑ¸Å¼öÀÜ·®           
-	char opj4offer                        [  5];	char _opj4offer;                          //4Â÷¼±¸ÅµµÈ£°¡        
-	char opj4bid                          [  5];	char _opj4bid;                            //4Â÷¼±¸Å¼öÈ£°¡        
-	char opj4offerjan                     [  7];	char _opj4offerjan;                       //4Â÷¼±¸ÅµµÀÜ·®        
-	char opj4bidjan                       [  7];	char _opj4bidjan;                         //4Â÷¼±¸Å¼öÀÜ·®        
-	char opj5offer                        [  5];	char _opj5offer;                          //5Â÷¼±¸ÅµµÈ£°¡        
-	char opj5bid                          [  5];	char _opj5bid;                            //5Â÷¼±¸Å¼öÈ£°¡        
-	char opj5offerjan                     [  7];	char _opj5offerjan;                       //5Â÷¼±¸ÅµµÀÜ·®        
-	char opj5bidjan                       [  7];	char _opj5bidjan;                         //5Â÷¼±¸Å¼öÀÜ·®        
-	char opoffersu                        [  4];	char _opoffersu;                          //¿ì¼±¸Åµµ°Ç¼ö         
-	char opjoffersu                       [  4];	char _opjoffersu;                         //Â÷¼±¸Åµµ°Ç¼ö         
-	char opjjoffersu                      [  4];	char _opjjoffersu;                        //Â÷Â÷¼±¸Åµµ°Ç¼ö       
-	char opj4offersu                      [  4];	char _opj4offersu;                        //4Â÷¼±¸Åµµ°Ç¼ö        
-	char opj5offersu                      [  4];	char _opj5offersu;                        //5Â÷¼±¸Åµµ°Ç¼ö        
-	char optoffersu                       [  5];	char _optoffersu;                         //ÃÑ¸Åµµ°Ç¼ö           
-	char opbidsu                          [  4];	char _opbidsu;                            //¿ì¼±¸Å¼ö°Ç¼ö         
-	char opjbidsu                         [  4];	char _opjbidsu;                           //Â÷¼±¸Å¼ö°Ç¼ö         
-	char opjjbidsu                        [  4];	char _opjjbidsu;                          //Â÷Â÷¼±¸Å¼ö°Ç¼ö       
-	char opj4bidsu                        [  4];	char _opj4bidsu;                          //4Â÷¼±¸Å¼ö°Ç¼ö        
-	char opj5bidsu                        [  4];	char _opj5bidsu;                          //5Â÷¼±¸Å¼ö°Ç¼ö        
-	char optbidsu                         [  5];	char _optbidsu;                           //ÃÑ¸Å¼ö°Ç¼ö           
-	char opchrate                         [  5];	char _opchrate;                           //µî¶ô·ü               
-	char opgrate                          [  5];	char _opgrate;                            //±«¸®µµ               
-	char opgratio                         [  5];	char _opgratio;                           //±«¸®À²               
-	char oppreopenyak                     [  7];	char _oppreopenyak;                       //¹Ì°áÁ¦¾àÁ¤ÀüÀÏ       
-	char opbp_jgubun                      [  1];	char _opbp_jgubun;                        //BP¿ëÀå±¸ºÐ           
-	char bulkvolz8                        [  8];	char _bulkvolz8;                          //ÇøÀÇ´ë·®´©ÀûÃ¼°á¼ö·® 
+	char opitem                           [  8];	char _opitem;                             //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char opchetime                        [  8];	char _opchetime;                          //ï¿½Ã°ï¿½                 
+	char opjgubun                         [  8];	char _opjgubun;                           //ï¿½ï¿½ï¿½ï¿½               
+	char opsign                           [  1];	char _opsign;                             //ï¿½ï¿½ï¿½ï¿½ï¿½È£             
+	char opchange                         [  5];	char _opchange;                           //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char opcurr                           [  5];	char _opcurr;                             //ï¿½ï¿½ï¿½ç°¡               
+	char opopen                           [  5];	char _opopen;                             //ï¿½Ã°ï¿½                 
+	char ophigh                           [  5];	char _ophigh;                             //ï¿½ï¿½                 
+	char oplow                            [  5];	char _oplow;                              //ï¿½ï¿½ï¿½ï¿½                 
+	char opvol                            [  6];	char _opvol;                              //Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char opvolallz8                       [  8];	char _opvolallz8;                         //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char opvalall                         [ 12];	char _opvalall;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½ï¿½         
+	char opopenyak                        [  7];	char _opopenyak;                          //ï¿½Ì°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char opoffer                          [  5];	char _opoffer;                            //ï¿½ì¼±ï¿½Åµï¿½È£ï¿½ï¿½         
+	char opbid                            [  5];	char _opbid;                              //ï¿½ì¼±ï¿½Å¼ï¿½È£ï¿½ï¿½         
+	char opofferjan                       [  7];	char _opofferjan;                         //ï¿½ì¼±ï¿½Åµï¿½ï¿½Ü·ï¿½         
+	char opbidjan                         [  7];	char _opbidjan;                           //ï¿½ì¼±ï¿½Å¼ï¿½ï¿½Ü·ï¿½         
+	char opjoffer                         [  5];	char _opjoffer;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½         
+	char opjbid                           [  5];	char _opjbid;                             //ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½         
+	char opjofferjan                      [  7];	char _opjofferjan;                        //ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½         
+	char opjbidjan                        [  7];	char _opjbidjan;                          //ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½         
+	char opjjoffer                        [  5];	char _opjjoffer;                          //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½       
+	char opjjbid                          [  5];	char _opjjbid;                            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½       
+	char opjjofferjan                     [  7];	char _opjjofferjan;                       //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½       
+	char opjjbidjan                       [  7];	char _opjjbidjan;                         //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½       
+	char optofferjan                      [  7];	char _optofferjan;                        //ï¿½Ñ¸Åµï¿½ï¿½Ü·ï¿½           
+	char optbidjan                        [  7];	char _optbidjan;                          //ï¿½Ñ¸Å¼ï¿½ï¿½Ü·ï¿½           
+	char opj4offer                        [  5];	char _opj4offer;                          //4ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½        
+	char opj4bid                          [  5];	char _opj4bid;                            //4ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½        
+	char opj4offerjan                     [  7];	char _opj4offerjan;                       //4ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½        
+	char opj4bidjan                       [  7];	char _opj4bidjan;                         //4ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½        
+	char opj5offer                        [  5];	char _opj5offer;                          //5ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½        
+	char opj5bid                          [  5];	char _opj5bid;                            //5ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½        
+	char opj5offerjan                     [  7];	char _opj5offerjan;                       //5ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½        
+	char opj5bidjan                       [  7];	char _opj5bidjan;                         //5ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½        
+	char opoffersu                        [  4];	char _opoffersu;                          //ï¿½ì¼±ï¿½Åµï¿½ï¿½Ç¼ï¿½         
+	char opjoffersu                       [  4];	char _opjoffersu;                         //ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ç¼ï¿½         
+	char opjjoffersu                      [  4];	char _opjjoffersu;                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ç¼ï¿½       
+	char opj4offersu                      [  4];	char _opj4offersu;                        //4ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ç¼ï¿½        
+	char opj5offersu                      [  4];	char _opj5offersu;                        //5ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ç¼ï¿½        
+	char optoffersu                       [  5];	char _optoffersu;                         //ï¿½Ñ¸Åµï¿½ï¿½Ç¼ï¿½           
+	char opbidsu                          [  4];	char _opbidsu;                            //ï¿½ì¼±ï¿½Å¼ï¿½ï¿½Ç¼ï¿½         
+	char opjbidsu                         [  4];	char _opjbidsu;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ç¼ï¿½         
+	char opjjbidsu                        [  4];	char _opjjbidsu;                          //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ç¼ï¿½       
+	char opj4bidsu                        [  4];	char _opj4bidsu;                          //4ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ç¼ï¿½        
+	char opj5bidsu                        [  4];	char _opj5bidsu;                          //5ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ç¼ï¿½        
+	char optbidsu                         [  5];	char _optbidsu;                           //ï¿½Ñ¸Å¼ï¿½ï¿½Ç¼ï¿½           
+	char opchrate                         [  5];	char _opchrate;                           //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char opgrate                          [  5];	char _opgrate;                            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char opgratio                         [  5];	char _opgratio;                           //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char oppreopenyak                     [  7];	char _oppreopenyak;                       //ï¿½Ì°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char opbp_jgubun                      [  1];	char _opbp_jgubun;                        //BPï¿½ï¿½ï¿½å±¸ï¿½ï¿½           
+	char bulkvolz8                        [  8];	char _bulkvolz8;                          //ï¿½ï¿½ï¿½Ç´ë·®ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½ 
 } To2OutBlock;
 
 typedef struct tago2
 {
-	To2InBlock                        o2inblock                             ;  //ÀÔ·Â 
-	To2OutBlock                       o2outblock                            ;  //Ãâ·Â 
+	To2InBlock                        o2inblock                             ;  //ï¿½Ô·ï¿½ 
+	To2OutBlock                       o2outblock                            ;  //ï¿½ï¿½ï¿½ 
 } To2;
 
-typedef struct tago3InBlock    //ÀÔ·Â
+typedef struct tago3InBlock    //ï¿½Ô·ï¿½
 {
-	char opitem                           [  8];   //Á¾¸ñÄÚµå             
+	char opitem                           [  8];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } To3InBlock;
 
-typedef struct tago3OutBlock    //Ãâ·Â
+typedef struct tago3OutBlock    //ï¿½ï¿½ï¿½
 {
-	char opitem                           [  8];   //Á¾¸ñÄÚµå             
-	char optheorytime                     [  8];   //ÀÌ·Ð°¡½Ã°£           
-	char optheoryprice                    [  5];   //¿É¼ÇÀÌ·Ð°¡           
-	char opimpv                           [  5];   //³»Àçº¯µ¿¼º           
-	char opdelta                          [  8];   //ºÎÈ£+µ¨Å¸            
-	char opgmma                           [  8];   //ºÎÈ£+°¨¸¶            
-	char opvega                           [  8];   //ºÎÈ£+º£°¡            
-	char optheta                          [  8];   //ºÎÈ£+¼¼Å¸            
-	char oprho                            [  8];   //ºÎÈ£+·Î              
-	char opgrate                          [  5];   //±«¸®µµ               
-	char opgratio                         [  5];   //±«¸®À²               
+	char opitem                           [  8];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char optheorytime                     [  8];   //ï¿½Ì·Ð°ï¿½ï¿½Ã°ï¿½           
+	char optheoryprice                    [  5];   //ï¿½É¼ï¿½ï¿½Ì·Ð°ï¿½           
+	char opimpv                           [  5];   //ï¿½ï¿½ï¿½çº¯ï¿½ï¿½ï¿½ï¿½           
+	char opdelta                          [  8];   //ï¿½ï¿½È£+ï¿½ï¿½Å¸            
+	char opgmma                           [  8];   //ï¿½ï¿½È£+ï¿½ï¿½ï¿½ï¿½            
+	char opvega                           [  8];   //ï¿½ï¿½È£+ï¿½ï¿½ï¿½ï¿½            
+	char optheta                          [  8];   //ï¿½ï¿½È£+ï¿½ï¿½Å¸            
+	char oprho                            [  8];   //ï¿½ï¿½È£+ï¿½ï¿½              
+	char opgrate                          [  5];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char opgratio                         [  5];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
 } To3OutBlock;
 
 typedef struct tago3
 {
-	To3InBlock                        o3inblock                             ;  //ÀÔ·Â 
-	To3OutBlock                       o3outblock                            ;  //Ãâ·Â 
+	To3InBlock                        o3inblock                             ;  //ï¿½Ô·ï¿½ 
+	To3OutBlock                       o3outblock                            ;  //ï¿½ï¿½ï¿½ 
 } To3;
 
-typedef struct tago4InBlock    //ÀÔ·Â
+typedef struct tago4InBlock    //ï¿½Ô·ï¿½
 {
-	char opitem                           [  8];   //Á¾¸ñÄÚµå             
+	char opitem                           [  8];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } To4InBlock;
 
-typedef struct tago4OutBlock    //Ãâ·Â
+typedef struct tago4OutBlock    //ï¿½ï¿½ï¿½
 {
-	char opitem                           [  8];   //Á¾¸ñÄÚµå             
-	char opchetime                        [  8];   //Ã¼°á½Ã°£             
-	char opopenyak                        [  7];   //¹Ì°áÁ¦¾àÁ¤¼ö·®       
-	char oppreopenyak                     [  7];   //ÀüÀÏ¹Ì°áÁ¦¾àÁ¤¼ö·®   
+	char opitem                           [  8];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char opchetime                        [  8];   //Ã¼ï¿½ï¿½Ã°ï¿½             
+	char opopenyak                        [  7];   //ï¿½Ì°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char oppreopenyak                     [  7];   //ï¿½ï¿½ï¿½Ï¹Ì°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½   
 } To4OutBlock;
 
 typedef struct tago4
 {
-	To4InBlock                        o4inblock                             ;  //ÀÔ·Â 
-	To4OutBlock                       o4outblock                            ;  //Ãâ·Â 
+	To4InBlock                        o4inblock                             ;  //ï¿½Ô·ï¿½ 
+	To4OutBlock                       o4outblock                            ;  //ï¿½ï¿½ï¿½ 
 } To4;
 
-typedef struct tagvHInBlock    //ÀÔ·Â
+typedef struct tagvHInBlock    //ï¿½Ô·ï¿½
 {
-	char fuitem                           [  8];   //Á¾¸ñÄÚµå             
+	char fuitem                           [  8];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } TvHInBlock;
 
-typedef struct tagvHOutBlock    //Ãâ·Â
+typedef struct tagvHOutBlock    //ï¿½ï¿½ï¿½
 {
-	char fuitem                           [  8];   //Á¾¸ñÄÚµå             
-	char futime                           [  8];   //½Ã°£ HH:MM:SS        
-	char offer                            [  7];   //¸ÅµµÈ£°¡             
-	char bid                              [  7];   //¸Å¼öÈ£°¡             
-	char offerjan                         [  6];   //¸ÅµµÀÜ·®             
-	char bidjan                           [  6];   //¸Å¼öÀÜ·®             
-	char S2offer                          [  7];   //Â÷¸ÅµµÈ£°¡           
-	char S2bid                            [  7];   //Â÷¸Å¼öÈ£°¡           
-	char S2offerjan                       [  6];   //Â÷¸ÅµµÀÜ·®           
-	char S2bidjan                         [  6];   //Â÷¸Å¼öÀÜ·®           
-	char S3offer                          [  7];   //Â÷Â÷¸ÅµµÈ£°¡         
-	char S3bid                            [  7];   //Â÷Â÷¸Å¼öÈ£°¡         
-	char S3offerjan                       [  6];   //Â÷Â÷¸ÅµµÀÜ·®         
-	char S3bidjan                         [  6];   //Â÷Â÷¸Å¼öÀÜ·®         
-	char S4offer                          [  7];   //4Â÷¸ÅµµÈ£°¡          
-	char S4bid                            [  7];   //4Â÷¸Å¼öÈ£°¡          
-	char S4offerjan                       [  6];   //4Â÷¸ÅµµÀÜ·®          
-	char S4bidjan                         [  6];   //4Â÷¸Å¼öÀÜ·®          
-	char S5offer                          [  7];   //5Â÷¸ÅµµÈ£°¡          
-	char S5bid                            [  7];   //5Â÷¸Å¼öÈ£°¡          
-	char S5offerjan                       [  6];   //5Â÷¸ÅµµÀÜ·®          
-	char S5bidjan                         [  6];   //5Â÷¸Å¼öÀÜ·®          
-	char S6offer                          [  7];   //6Â÷¸ÅµµÈ£°¡          
-	char S6bid                            [  7];   //6Â÷¸Å¼öÈ£°¡          
-	char S6offerjan                       [  6];   //6Â÷¸ÅµµÀÜ·®          
-	char S6bidjan                         [  6];   //6Â÷¸Å¼öÀÜ·®          
-	char S7offer                          [  7];   //7Â÷¸ÅµµÈ£°¡          
-	char S7bid                            [  7];   //7Â÷¸Å¼öÈ£°¡          
-	char S7offerjan                       [  6];   //7Â÷¸ÅµµÀÜ·®          
-	char S7bidjan                         [  6];   //7Â÷¸Å¼öÀÜ·®          
-	char S8offer                          [  7];   //8Â÷¸ÅµµÈ£°¡          
-	char S8bid                            [  7];   //8Â÷¸Å¼öÈ£°¡          
-	char S8offerjan                       [  6];   //8Â÷¸ÅµµÀÜ·®          
-	char S8bidjan                         [  6];   //8Â÷¸Å¼öÀÜ·®          
-	char S9offer                          [  7];   //9Â÷¸ÅµµÈ£°¡          
-	char S9bid                            [  7];   //9Â÷¸Å¼öÈ£°¡          
-	char S9offerjan                       [  6];   //9Â÷¸ÅµµÀÜ·®          
-	char S9bidjan                         [  6];   //9Â÷¸Å¼öÀÜ·®          
-	char S0offer                          [  7];   //10Â÷¸ÅµµÈ£°¡         
-	char S0bid                            [  7];   //10Â÷¸Å¼öÈ£°¡         
-	char S0offerjan                       [  6];   //10Â÷¸ÅµµÀÜ·®         
-	char S0bidjan                         [  6];   //10Â÷¸Å¼öÀÜ·®         
-	char offersu                          [  4];   //¿ì ¼± ¸Åµµ °Ç¼ö              
-	char bidsu                            [  4];   //¿ì ¼± ¸Å¼ö °Ç¼ö      
-	char S2offersu                        [  4];   //Â÷ ¼± ¸Åµµ °Ç¼ö      
-	char S2bidsu                          [  4];   //Â÷ ¼± ¸Å¼ö °Ç¼ö      
-	char S3offersu                        [  4];   //3Â÷¼± ¸Åµµ °Ç¼ö      
-	char S3bidsu                          [  4];   //3Â÷¼± ¸Å¼ö °Ç¼ö      
-	char S4offersu                        [  4];   //4Â÷¼± ¸Åµµ °Ç¼ö      
-	char S4bidsu                          [  4];   //4Â÷¼± ¸Å¼ö °Ç¼ö      
-	char S5offersu                        [  4];   //5Â÷¼± ¸Åµµ °Ç¼ö      
-	char S5bidsu                          [  4];   //5Â÷¼± ¸Å¼ö °Ç¼ö      
-	char S6offersu                        [  4];   //6Â÷¼± ¸Åµµ °Ç¼ö      
-	char S6bidsu                          [  4];   //6Â÷¼± ¸Å¼ö °Ç¼ö      
-	char S7offersu                        [  4];   //7Â÷¼± ¸Åµµ °Ç¼ö      
-	char S7bidsu                          [  4];   //7Â÷¼± ¸Å¼ö °Ç¼ö      
-	char S8offersu                        [  4];   //8Â÷¼± ¸Åµµ °Ç¼ö      
-	char S8bidsu                          [  4];   //8Â÷¼± ¸Å¼ö °Ç¼ö      
-	char S9offersu                        [  4];   //9Â÷¼± ¸Åµµ °Ç¼ö      
-	char S9bidsu                          [  4];   //9Â÷¼± ¸Å¼ö °Ç¼ö      
-	char S0offersu                        [  4];   //10Â÷¼± ¸Åµµ °Ç¼ö     
-	char S0bidsu                          [  4];   //10Â÷¼± ¸Å¼ö °Ç¼ö     
-	char tofferjan                        [  6];   //ÃÑ¸ÅµµÈ£°¡ ÀÜ·®      
-	char tobidjan                         [  6];   //ÃÑ¸Å¼ö È£°¡ ÀÜ·®     
-	char toffersu                         [  5];   //ÃÑ ¸Åµµ °Ç¼ö         
-	char tbidsu                           [  5];   //ÃÑ ¸Å¼ö °Ç¼ö         
+	char fuitem                           [  8];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char futime                           [  8];   //ï¿½Ã°ï¿½ HH:MM:SS        
+	char offer                            [  7];   //ï¿½Åµï¿½È£ï¿½ï¿½             
+	char bid                              [  7];   //ï¿½Å¼ï¿½È£ï¿½ï¿½             
+	char offerjan                         [  6];   //ï¿½Åµï¿½ï¿½Ü·ï¿½             
+	char bidjan                           [  6];   //ï¿½Å¼ï¿½ï¿½Ü·ï¿½             
+	char S2offer                          [  7];   //ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½           
+	char S2bid                            [  7];   //ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½           
+	char S2offerjan                       [  6];   //ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½           
+	char S2bidjan                         [  6];   //ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½           
+	char S3offer                          [  7];   //ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½         
+	char S3bid                            [  7];   //ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½         
+	char S3offerjan                       [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½         
+	char S3bidjan                         [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½         
+	char S4offer                          [  7];   //4ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S4bid                            [  7];   //4ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S4offerjan                       [  6];   //4ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½          
+	char S4bidjan                         [  6];   //4ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½          
+	char S5offer                          [  7];   //5ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S5bid                            [  7];   //5ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S5offerjan                       [  6];   //5ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½          
+	char S5bidjan                         [  6];   //5ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½          
+	char S6offer                          [  7];   //6ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S6bid                            [  7];   //6ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S6offerjan                       [  6];   //6ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½          
+	char S6bidjan                         [  6];   //6ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½          
+	char S7offer                          [  7];   //7ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S7bid                            [  7];   //7ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S7offerjan                       [  6];   //7ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½          
+	char S7bidjan                         [  6];   //7ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½          
+	char S8offer                          [  7];   //8ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S8bid                            [  7];   //8ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S8offerjan                       [  6];   //8ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½          
+	char S8bidjan                         [  6];   //8ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½          
+	char S9offer                          [  7];   //9ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S9bid                            [  7];   //9ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S9offerjan                       [  6];   //9ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½          
+	char S9bidjan                         [  6];   //9ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½          
+	char S0offer                          [  7];   //10ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½         
+	char S0bid                            [  7];   //10ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½         
+	char S0offerjan                       [  6];   //10ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½         
+	char S0bidjan                         [  6];   //10ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½         
+	char offersu                          [  4];   //ï¿½ï¿½ ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½              
+	char bidsu                            [  4];   //ï¿½ï¿½ ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½      
+	char S2offersu                        [  4];   //ï¿½ï¿½ ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½      
+	char S2bidsu                          [  4];   //ï¿½ï¿½ ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½      
+	char S3offersu                        [  4];   //3ï¿½ï¿½ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½      
+	char S3bidsu                          [  4];   //3ï¿½ï¿½ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½      
+	char S4offersu                        [  4];   //4ï¿½ï¿½ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½      
+	char S4bidsu                          [  4];   //4ï¿½ï¿½ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½      
+	char S5offersu                        [  4];   //5ï¿½ï¿½ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½      
+	char S5bidsu                          [  4];   //5ï¿½ï¿½ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½      
+	char S6offersu                        [  4];   //6ï¿½ï¿½ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½      
+	char S6bidsu                          [  4];   //6ï¿½ï¿½ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½      
+	char S7offersu                        [  4];   //7ï¿½ï¿½ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½      
+	char S7bidsu                          [  4];   //7ï¿½ï¿½ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½      
+	char S8offersu                        [  4];   //8ï¿½ï¿½ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½      
+	char S8bidsu                          [  4];   //8ï¿½ï¿½ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½      
+	char S9offersu                        [  4];   //9ï¿½ï¿½ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½      
+	char S9bidsu                          [  4];   //9ï¿½ï¿½ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½      
+	char S0offersu                        [  4];   //10ï¿½ï¿½ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½     
+	char S0bidsu                          [  4];   //10ï¿½ï¿½ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½     
+	char tofferjan                        [  6];   //ï¿½Ñ¸Åµï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½      
+	char tobidjan                         [  6];   //ï¿½Ñ¸Å¼ï¿½ È£ï¿½ï¿½ ï¿½Ü·ï¿½     
+	char toffersu                         [  5];   //ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½         
+	char tbidsu                           [  5];   //ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½         
 } TvHOutBlock;
 
 typedef struct tagvH
 {
-	TvHInBlock                        vhinblock                             ;  //ÀÔ·Â 
-	TvHOutBlock                       vhoutblock                            ;  //Ãâ·Â 
+	TvHInBlock                        vhinblock                             ;  //ï¿½Ô·ï¿½ 
+	TvHOutBlock                       vhoutblock                            ;  //ï¿½ï¿½ï¿½ 
 } TvH;
 
-typedef struct tagvCInBlock    //ÀÔ·Â
+typedef struct tagvCInBlock    //ï¿½Ô·ï¿½
 {
-	char fuitem                           [  8];	char _fuitem;                             //Á¾¸ñÄÚµå             
+	char fuitem                           [  8];	char _fuitem;                             //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } TvCInBlock;
 
-typedef struct tagvCOutBlock    //Ãâ·Â
+typedef struct tagvCOutBlock    //ï¿½ï¿½ï¿½
 {
-	char fuitem                           [  8];	char _fuitem;                             //Á¾¸ñÄÚµå             
-	char futime                           [  8];	char _futime;                             //½Ã°£ HH:MM:SS        
-	char jgubun                           [  8];	char _jgubun;                             //Àå¿î¿ë               
-	char fusign                           [  1];	char _fusign;                             //ÀüÀÏ´ëºñ ºÎÈ£        
-	char fuchange                         [  7];	char _fuchange;                           //ÀüÀÏ´ëºñ             
-	char fucurr                           [  7];	char _fucurr;                             //ÇöÀç°¡               
-	char fuopen                           [  7];	char _fuopen;                             //½Ã°¡                 
-	char fuhigh                           [  7];	char _fuhigh;                             //°í°¡                 
-	char fulow                            [  7];	char _fulow;                              //Àú°¡                 
-	char fuvol                            [  6];	char _fuvol;                              //Ã¼°á¼ö·®             
-	char fuvolall                         [  7];	char _fuvolall;                           //´©Àû Ã¼°á¼ö·®        
-	char fuvalall                         [ 12];	char _fuvalall;                           //´©Àû°Å·¡´ë±Ý         
-	char openyak                          [  7];	char _openyak;                            //¹Ì°áÁ¦¾àÁ¤¼ö·®       
-	char jandatecnt                       [  3];	char _jandatecnt;                         //ÀÜÁ¸ÀÏ¼ö             
-	char offer                            [  7];	char _offer;                              //¸ÅµµÈ£°¡             
-	char bid                              [  7];	char _bid;                                //¸Å¼öÈ£°¡             
-	char offerjan                         [  6];	char _offerjan;                           //¸ÅµµÀÜ·®             
-	char bidjan                           [  6];	char _bidjan;                             //¸Å¼öÀÜ·®             
-	char S2offer                          [  7];	char _S2offer;                            //Â÷¸ÅµµÈ£°¡           
-	char S2bid                            [  7];	char _S2bid;                              //Â÷¸Å¼öÈ£°¡           
-	char S2offerjan                       [  6];	char _S2offerjan;                         //Â÷¸ÅµµÀÜ·®           
-	char S2bidjan                         [  6];	char _S2bidjan;                           //Â÷¸Å¼öÀÜ·®           
-	char S3offer                          [  7];	char _S3offer;                            //Â÷Â÷¸ÅµµÈ£°¡         
-	char S3bid                            [  7];	char _S3bid;                              //Â÷Â÷¸Å¼öÈ£°¡         
-	char S3offerjan                       [  6];	char _S3offerjan;                         //Â÷Â÷¸ÅµµÀÜ·®         
-	char S3bidjan                         [  6];	char _S3bidjan;                           //Â÷Â÷¸Å¼öÀÜ·®         
-	char S4offer                          [  7];	char _S4offer;                            //4Â÷¸ÅµµÈ£°¡          
-	char S4bid                            [  7];	char _S4bid;                              //4Â÷¸Å¼öÈ£°¡          
-	char S4offerjan                       [  6];	char _S4offerjan;                         //4Â÷¸ÅµµÀÜ·®          
-	char S4bidjan                         [  6];	char _S4bidjan;                           //4Â÷¸Å¼öÀÜ·®          
-	char S5offer                          [  7];	char _S5offer;                            //5Â÷¸ÅµµÈ£°¡          
-	char S5bid                            [  7];	char _S5bid;                              //5Â÷¸Å¼öÈ£°¡          
-	char S5offerjan                       [  6];	char _S5offerjan;                         //5Â÷¸ÅµµÀÜ·®          
-	char S5bidjan                         [  6];	char _S5bidjan;                           //5Â÷¸Å¼öÀÜ·®          
-	char S6offer                          [  7];	char _S6offer;                            //6Â÷¸ÅµµÈ£°¡          
-	char S6bid                            [  7];	char _S6bid;                              //6Â÷¸Å¼öÈ£°¡          
-	char S6offerjan                       [  6];	char _S6offerjan;                         //6Â÷¸ÅµµÀÜ·®          
-	char S6bidjan                         [  6];	char _S6bidjan;                           //6Â÷¸Å¼öÀÜ·®          
-	char S7offer                          [  7];	char _S7offer;                            //7Â÷¸ÅµµÈ£°¡          
-	char S7bid                            [  7];	char _S7bid;                              //7Â÷¸Å¼öÈ£°¡          
-	char S7offerjan                       [  6];	char _S7offerjan;                         //7Â÷¸ÅµµÀÜ·®          
-	char S7bidjan                         [  6];	char _S7bidjan;                           //7Â÷¸Å¼öÀÜ·®          
-	char S8offer                          [  7];	char _S8offer;                            //8Â÷¸ÅµµÈ£°¡          
-	char S8bid                            [  7];	char _S8bid;                              //8Â÷¸Å¼öÈ£°¡          
-	char S8offerjan                       [  6];	char _S8offerjan;                         //8Â÷¸ÅµµÀÜ·®          
-	char S8bidjan                         [  6];	char _S8bidjan;                           //8Â÷¸Å¼öÀÜ·®          
-	char S9offer                          [  7];	char _S9offer;                            //9Â÷¸ÅµµÈ£°¡          
-	char S9bid                            [  7];	char _S9bid;                              //9Â÷¸Å¼öÈ£°¡          
-	char S9offerjan                       [  6];	char _S9offerjan;                         //9Â÷¸ÅµµÀÜ·®          
-	char S9bidjan                         [  6];	char _S9bidjan;                           //9Â÷¸Å¼öÀÜ·®          
-	char S0offer                          [  7];	char _S0offer;                            //10Â÷¸ÅµµÈ£°¡         
-	char S0bid                            [  7];	char _S0bid;                              //10Â÷¸Å¼öÈ£°¡         
-	char S0offerjan                       [  6];	char _S0offerjan;                         //10Â÷¸ÅµµÀÜ·®         
-	char S0bidjan                         [  6];	char _S0bidjan;                           //10Â÷¸Å¼öÀÜ·®         
-	char offersu                          [  4];	char _offersu;                            //¿ì ¼± ¸Åµµ °Ç¼ö      
-	char bidsu                            [  4];	char _bidsu;                              //¿ì ¼± ¸Å¼ö °Ç¼ö      
-	char S2offersu                        [  4];	char _S2offersu;                          //Â÷ ¼± ¸Åµµ °Ç¼ö      
-	char S2bidsu                          [  4];	char _S2bidsu;                            //Â÷ ¼± ¸Å¼ö °Ç¼ö      
-	char S3offersu                        [  4];	char _S3offersu;                          //3Â÷¼± ¸Åµµ °Ç¼ö      
-	char S3bidsu                          [  4];	char _S3bidsu;                            //3Â÷¼± ¸Å¼ö °Ç¼ö      
-	char S4offersu                        [  4];	char _S4offersu;                          //4Â÷¼± ¸Åµµ °Ç¼ö      
-	char S4bidsu                          [  4];	char _S4bidsu;                            //4Â÷¼± ¸Å¼ö °Ç¼ö      
-	char S5offersu                        [  4];	char _S5offersu;                          //5Â÷¼± ¸Åµµ °Ç¼ö      
-	char S5bidsu                          [  4];	char _S5bidsu;                            //5Â÷¼± ¸Å¼ö °Ç¼ö      
-	char S6offersu                        [  4];	char _S6offersu;                          //6Â÷¼± ¸Åµµ °Ç¼ö      
-	char S6bidsu                          [  4];	char _S6bidsu;                            //6Â÷¼± ¸Å¼ö °Ç¼ö      
-	char S7offersu                        [  4];	char _S7offersu;                          //7Â÷¼± ¸Åµµ °Ç¼ö      
-	char S7bidsu                          [  4];	char _S7bidsu;                            //7Â÷¼± ¸Å¼ö °Ç¼ö      
-	char S8offersu                        [  4];	char _S8offersu;                          //8Â÷¼± ¸Åµµ °Ç¼ö      
-	char S8bidsu                          [  4];	char _S8bidsu;                            //8Â÷¼± ¸Å¼ö °Ç¼ö      
-	char S9offersu                        [  4];	char _S9offersu;                          //9Â÷¼± ¸Åµµ °Ç¼ö      
-	char S9bidsu                          [  4];	char _S9bidsu;                            //9Â÷¼± ¸Å¼ö °Ç¼ö      
-	char S0offersu                        [  4];	char _S0offersu;                          //10Â÷¼± ¸Åµµ °Ç¼ö     
-	char S0bidsu                          [  4];	char _S0bidsu;                            //10Â÷¼± ¸Å¼ö °Ç¼ö     
-	char tofferjan                        [  6];	char _tofferjan;                          //ÃÑ¸ÅµµÈ£°¡ ÀÜ·®      
-	char tobidjan                         [  6];	char _tobidjan;                           //ÃÑ¸Å¼ö È£°¡ ÀÜ·®     
-	char toffersu                         [  5];	char _toffersu;                           //ÃÑ ¸Åµµ °Ç¼ö         
-	char tbidsu                           [  5];	char _tbidsu;                             //ÃÑ ¸Å¼ö °Ç¼ö         
-	char chrate                           [  5];	char _chrate;                             //µî¶ô·ü               
-	char basis                            [  7];	char _basis;                              //º£ÀÌ½Ã½º             
-	char grate                            [  7];	char _grate;                              //±«¸®µµ               
-	char gratio                           [  6];	char _gratio;                             //±«¸®À²               
-	char preopenyak                       [  7];	char _preopenyak;                         //¹Ì°áÁ¦¾àÁ¤ÀüÀÏºñ     
-	char bp_jgubun                        [  1];	char _bp_jgubun;                          //BP¿ë Àå±¸ºÐ          
-	char fspvolall                        [  7];	char _fspvolall;                          //½ºÇÁ·¹µå Ã¼°á¼ö·®    
+	char fuitem                           [  8];	char _fuitem;                             //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char futime                           [  8];	char _futime;                             //ï¿½Ã°ï¿½ HH:MM:SS        
+	char jgubun                           [  8];	char _jgubun;                             //ï¿½ï¿½ï¿½ï¿½               
+	char fusign                           [  1];	char _fusign;                             //ï¿½ï¿½ï¿½Ï´ï¿½ï¿½ ï¿½ï¿½È£        
+	char fuchange                         [  7];	char _fuchange;                           //ï¿½ï¿½ï¿½Ï´ï¿½ï¿½             
+	char fucurr                           [  7];	char _fucurr;                             //ï¿½ï¿½ï¿½ç°¡               
+	char fuopen                           [  7];	char _fuopen;                             //ï¿½Ã°ï¿½                 
+	char fuhigh                           [  7];	char _fuhigh;                             //ï¿½ï¿½                 
+	char fulow                            [  7];	char _fulow;                              //ï¿½ï¿½ï¿½ï¿½                 
+	char fuvol                            [  6];	char _fuvol;                              //Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char fuvolall                         [  7];	char _fuvolall;                           //ï¿½ï¿½ï¿½ï¿½ Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½        
+	char fuvalall                         [ 12];	char _fuvalall;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½ï¿½         
+	char openyak                          [  7];	char _openyak;                            //ï¿½Ì°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char jandatecnt                       [  3];	char _jandatecnt;                         //ï¿½ï¿½ï¿½ï¿½ï¿½Ï¼ï¿½             
+	char offer                            [  7];	char _offer;                              //ï¿½Åµï¿½È£ï¿½ï¿½             
+	char bid                              [  7];	char _bid;                                //ï¿½Å¼ï¿½È£ï¿½ï¿½             
+	char offerjan                         [  6];	char _offerjan;                           //ï¿½Åµï¿½ï¿½Ü·ï¿½             
+	char bidjan                           [  6];	char _bidjan;                             //ï¿½Å¼ï¿½ï¿½Ü·ï¿½             
+	char S2offer                          [  7];	char _S2offer;                            //ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½           
+	char S2bid                            [  7];	char _S2bid;                              //ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½           
+	char S2offerjan                       [  6];	char _S2offerjan;                         //ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½           
+	char S2bidjan                         [  6];	char _S2bidjan;                           //ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½           
+	char S3offer                          [  7];	char _S3offer;                            //ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½         
+	char S3bid                            [  7];	char _S3bid;                              //ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½         
+	char S3offerjan                       [  6];	char _S3offerjan;                         //ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½         
+	char S3bidjan                         [  6];	char _S3bidjan;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½         
+	char S4offer                          [  7];	char _S4offer;                            //4ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S4bid                            [  7];	char _S4bid;                              //4ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S4offerjan                       [  6];	char _S4offerjan;                         //4ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½          
+	char S4bidjan                         [  6];	char _S4bidjan;                           //4ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½          
+	char S5offer                          [  7];	char _S5offer;                            //5ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S5bid                            [  7];	char _S5bid;                              //5ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S5offerjan                       [  6];	char _S5offerjan;                         //5ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½          
+	char S5bidjan                         [  6];	char _S5bidjan;                           //5ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½          
+	char S6offer                          [  7];	char _S6offer;                            //6ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S6bid                            [  7];	char _S6bid;                              //6ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S6offerjan                       [  6];	char _S6offerjan;                         //6ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½          
+	char S6bidjan                         [  6];	char _S6bidjan;                           //6ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½          
+	char S7offer                          [  7];	char _S7offer;                            //7ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S7bid                            [  7];	char _S7bid;                              //7ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S7offerjan                       [  6];	char _S7offerjan;                         //7ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½          
+	char S7bidjan                         [  6];	char _S7bidjan;                           //7ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½          
+	char S8offer                          [  7];	char _S8offer;                            //8ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S8bid                            [  7];	char _S8bid;                              //8ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S8offerjan                       [  6];	char _S8offerjan;                         //8ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½          
+	char S8bidjan                         [  6];	char _S8bidjan;                           //8ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½          
+	char S9offer                          [  7];	char _S9offer;                            //9ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S9bid                            [  7];	char _S9bid;                              //9ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S9offerjan                       [  6];	char _S9offerjan;                         //9ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½          
+	char S9bidjan                         [  6];	char _S9bidjan;                           //9ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½          
+	char S0offer                          [  7];	char _S0offer;                            //10ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½         
+	char S0bid                            [  7];	char _S0bid;                              //10ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½         
+	char S0offerjan                       [  6];	char _S0offerjan;                         //10ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½         
+	char S0bidjan                         [  6];	char _S0bidjan;                           //10ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½         
+	char offersu                          [  4];	char _offersu;                            //ï¿½ï¿½ ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½      
+	char bidsu                            [  4];	char _bidsu;                              //ï¿½ï¿½ ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½      
+	char S2offersu                        [  4];	char _S2offersu;                          //ï¿½ï¿½ ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½      
+	char S2bidsu                          [  4];	char _S2bidsu;                            //ï¿½ï¿½ ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½      
+	char S3offersu                        [  4];	char _S3offersu;                          //3ï¿½ï¿½ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½      
+	char S3bidsu                          [  4];	char _S3bidsu;                            //3ï¿½ï¿½ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½      
+	char S4offersu                        [  4];	char _S4offersu;                          //4ï¿½ï¿½ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½      
+	char S4bidsu                          [  4];	char _S4bidsu;                            //4ï¿½ï¿½ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½      
+	char S5offersu                        [  4];	char _S5offersu;                          //5ï¿½ï¿½ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½      
+	char S5bidsu                          [  4];	char _S5bidsu;                            //5ï¿½ï¿½ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½      
+	char S6offersu                        [  4];	char _S6offersu;                          //6ï¿½ï¿½ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½      
+	char S6bidsu                          [  4];	char _S6bidsu;                            //6ï¿½ï¿½ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½      
+	char S7offersu                        [  4];	char _S7offersu;                          //7ï¿½ï¿½ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½      
+	char S7bidsu                          [  4];	char _S7bidsu;                            //7ï¿½ï¿½ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½      
+	char S8offersu                        [  4];	char _S8offersu;                          //8ï¿½ï¿½ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½      
+	char S8bidsu                          [  4];	char _S8bidsu;                            //8ï¿½ï¿½ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½      
+	char S9offersu                        [  4];	char _S9offersu;                          //9ï¿½ï¿½ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½      
+	char S9bidsu                          [  4];	char _S9bidsu;                            //9ï¿½ï¿½ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½      
+	char S0offersu                        [  4];	char _S0offersu;                          //10ï¿½ï¿½ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½     
+	char S0bidsu                          [  4];	char _S0bidsu;                            //10ï¿½ï¿½ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½     
+	char tofferjan                        [  6];	char _tofferjan;                          //ï¿½Ñ¸Åµï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½      
+	char tobidjan                         [  6];	char _tobidjan;                           //ï¿½Ñ¸Å¼ï¿½ È£ï¿½ï¿½ ï¿½Ü·ï¿½     
+	char toffersu                         [  5];	char _toffersu;                           //ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½         
+	char tbidsu                           [  5];	char _tbidsu;                             //ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½         
+	char chrate                           [  5];	char _chrate;                             //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char basis                            [  7];	char _basis;                              //ï¿½ï¿½ï¿½Ì½Ã½ï¿½             
+	char grate                            [  7];	char _grate;                              //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char gratio                           [  6];	char _gratio;                             //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char preopenyak                       [  7];	char _preopenyak;                         //ï¿½Ì°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ïºï¿½     
+	char bp_jgubun                        [  1];	char _bp_jgubun;                          //BPï¿½ï¿½ ï¿½å±¸ï¿½ï¿½          
+	char fspvolall                        [  7];	char _fspvolall;                          //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½    
 } TvCOutBlock;
 
 typedef struct tagvC
 {
-	TvCInBlock                        vcinblock                             ;  //ÀÔ·Â 
-	TvCOutBlock                       vcoutblock                            ;  //Ãâ·Â 
+	TvCInBlock                        vcinblock                             ;  //ï¿½Ô·ï¿½ 
+	TvCOutBlock                       vcoutblock                            ;  //ï¿½ï¿½ï¿½ 
 } TvC;
 
-typedef struct tagvVInBlock    //ÀÔ·Â
+typedef struct tagvVInBlock    //ï¿½Ô·ï¿½
 {
-	char fuitem                           [  8];   //Á¾¸ñÄÚµå             
+	char fuitem                           [  8];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } TvVInBlock;
 
-typedef struct tagvVOutBlock    //Ãâ·Â
+typedef struct tagvVOutBlock    //ï¿½ï¿½ï¿½
 {
-	char fuitem                           [  8];   //Á¾¸ñÄÚµå             
-	char theoryprice                      [  7];   //¼±¹° ÀÌ·Ð°¡          
-	char theorytime                       [  8];   //ÀÌ·Ð°¡ ½Ã°£          
-	char grate                            [  7];   //±«¸®µµ               
-	char gratio                           [  6];   //±«¸®À²               
+	char fuitem                           [  8];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char theoryprice                      [  7];   //ï¿½ï¿½ï¿½ï¿½ ï¿½Ì·Ð°ï¿½          
+	char theorytime                       [  8];   //ï¿½Ì·Ð°ï¿½ ï¿½Ã°ï¿½          
+	char grate                            [  7];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char gratio                           [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
 } TvVOutBlock;
 
 typedef struct tagvV
 {
-	TvVInBlock                        vvinblock                             ;  //ÀÔ·Â 
-	TvVOutBlock                       vvoutblock                            ;  //Ãâ·Â 
+	TvVInBlock                        vvinblock                             ;  //ï¿½Ô·ï¿½ 
+	TvVOutBlock                       vvoutblock                            ;  //ï¿½ï¿½ï¿½ 
 } TvV;
 
-typedef struct tagvMInBlock    //ÀÔ·Â
+typedef struct tagvMInBlock    //ï¿½Ô·ï¿½
 {
-	char fuitem                           [  8];   //Á¾¸ñÄÚµå             
+	char fuitem                           [  8];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } TvMInBlock;
 
-typedef struct tagvMOutBlock    //Ãâ·Â
+typedef struct tagvMOutBlock    //ï¿½ï¿½ï¿½
 {
-	char fuitem                           [  8];   //Á¾¸ñÄÚµå             
-	char chetime                          [  8];   //Ã¼°á½Ã°£             
-	char openyak                          [  7];   //¹Ì°áÁ¦¾àÁ¤¼ö·®       
-	char preopenyak                       [  7];   //ÀüÀÏ¹Ì°áÁ¦¾àÁ¤¼ö·®   
+	char fuitem                           [  8];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char chetime                          [  8];   //Ã¼ï¿½ï¿½Ã°ï¿½             
+	char openyak                          [  7];   //ï¿½Ì°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½       
+	char preopenyak                       [  7];   //ï¿½ï¿½ï¿½Ï¹Ì°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½   
 } TvMOutBlock;
 
 typedef struct tagvM
 {
-	TvMInBlock                        vminblock                             ;  //ÀÔ·Â 
-	TvMOutBlock                       vmoutblock                            ;  //Ãâ·Â 
+	TvMInBlock                        vminblock                             ;  //ï¿½Ô·ï¿½ 
+	TvMOutBlock                       vmoutblock                            ;  //ï¿½ï¿½ï¿½ 
 } TvM;
 
-typedef struct tagv7InBlock    //ÀÔ·Â
+typedef struct tagv7InBlock    //ï¿½Ô·ï¿½
 {
-	char fspitem                          [  8];   //½ºÇÁ·¹µåÁ¾¸ñÄÚµå     
+	char fspitem                          [  8];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½     
 } Tv7InBlock;
 
-typedef struct tagv7OutBlock    //Ãâ·Â
+typedef struct tagv7OutBlock    //ï¿½ï¿½ï¿½
 {
-	char fspitem                          [  8];   //½ºÇÁ·¹µåÁ¾¸ñÄÚµå     
-	char fsptime                          [  8];   //½Ã°£ HH:MM:SS        
-	char offer                            [  8];   //¸ÅµµÈ£°¡             
-	char bid                              [  8];   //¸Å¼öÈ£°¡             
-	char offerjan                         [  6];   //¸ÅµµÀÜ·®             
-	char bidjan                           [  6];   //¸Å¼öÀÜ·®             
-	char S2offer                          [  8];   //Â÷¸ÅµµÈ£°¡           
-	char S2bid                            [  8];   //Â÷¸Å¼öÈ£°¡           
-	char S2offerjan                       [  6];   //Â÷¸ÅµµÀÜ·®           
-	char S2bidjan                         [  6];   //Â÷¸Å¼öÀÜ·®           
-	char S3offer                          [  8];   //Â÷Â÷¸ÅµµÈ£°¡         
-	char S3bid                            [  8];   //Â÷Â÷¸Å¼öÈ£°¡         
-	char S3offerjan                       [  6];   //Â÷Â÷¸ÅµµÀÜ·®         
-	char S3bidjan                         [  6];   //Â÷Â÷¸Å¼öÀÜ·®         
-	char S4offer                          [  8];   //4Â÷¸ÅµµÈ£°¡          
-	char S4bid                            [  8];   //4Â÷¸Å¼öÈ£°¡          
-	char S4offerjan                       [  6];   //4Â÷¸ÅµµÀÜ·®          
-	char S4bidjan                         [  6];   //4Â÷¸Å¼öÀÜ·®          
-	char S5offer                          [  8];   //5Â÷¸ÅµµÈ£°¡          
-	char S5bid                            [  8];   //5Â÷¸Å¼öÈ£°¡          
-	char S5offerjan                       [  6];   //5Â÷¸ÅµµÀÜ·®          
-	char S5bidjan                         [  6];   //5Â÷¸Å¼öÀÜ·®          
-	char S6offer                          [  8];   //6Â÷¸ÅµµÈ£°¡          
-	char S6bid                            [  8];   //6Â÷¸Å¼öÈ£°¡          
-	char S6offerjan                       [  6];   //6Â÷¸ÅµµÀÜ·®          
-	char S6bidjan                         [  6];   //6Â÷¸Å¼öÀÜ·®          
-	char S7offer                          [  8];   //7Â÷¸ÅµµÈ£°¡          
-	char S7bid                            [  8];   //7Â÷¸Å¼öÈ£°¡          
-	char S7offerjan                       [  6];   //7Â÷¸ÅµµÀÜ·®          
-	char S7bidjan                         [  6];   //7Â÷¸Å¼öÀÜ·®          
-	char S8offer                          [  8];   //8Â÷¸ÅµµÈ£°¡          
-	char S8bid                            [  8];   //8Â÷¸Å¼öÈ£°¡          
-	char S8offerjan                       [  6];   //8Â÷¸ÅµµÀÜ·®          
-	char S8bidjan                         [  6];   //8Â÷¸Å¼öÀÜ·®          
-	char S9offer                          [  8];   //9Â÷¸ÅµµÈ£°¡          
-	char S9bid                            [  8];   //9Â÷¸Å¼öÈ£°¡          
-	char S9offerjan                       [  6];   //9Â÷¸ÅµµÀÜ·®          
-	char S9bidjan                         [  6];   //9Â÷¸Å¼öÀÜ·®          
-	char S0offer                          [  8];   //10Â÷¸ÅµµÈ£°¡         
-	char S0bid                            [  8];   //10Â÷¸Å¼öÈ£°¡         
-	char S0offerjan                       [  6];   //10Â÷¸ÅµµÀÜ·®         
-	char S0bidjan                         [  6];   //10Â÷¸Å¼öÀÜ·®         
-	char offersu                          [  4];   //¿ì ¼± ¸Åµµ °Ç¼ö      
-	char bidsu                            [  4];   //¿ì ¼± ¸Å¼ö °Ç¼ö      
-	char S2offersu                        [  4];   //Â÷ ¼± ¸Åµµ °Ç¼ö      
-	char S2bidsu                          [  4];   //Â÷ ¼± ¸Å¼ö °Ç¼ö      
-	char S3offersu                        [  4];   //3Â÷¼± ¸Åµµ °Ç¼ö      
-	char S3bidsu                          [  4];   //3Â÷¼± ¸Å¼ö °Ç¼ö      
-	char S4offersu                        [  4];   //4Â÷¼± ¸Åµµ °Ç¼ö      
-	char S4bidsu                          [  4];   //4Â÷¼± ¸Å¼ö °Ç¼ö      
-	char S5offersu                        [  4];   //5Â÷¼± ¸Åµµ °Ç¼ö      
-	char S5bidsu                          [  4];   //5Â÷¼± ¸Å¼ö °Ç¼ö      
-	char S6offersu                        [  4];   //6Â÷¼± ¸Åµµ °Ç¼ö      
-	char S6bidsu                          [  4];   //6Â÷¼± ¸Å¼ö °Ç¼ö      
-	char S7offersu                        [  4];   //7Â÷¼± ¸Åµµ °Ç¼ö      
-	char S7bidsu                          [  4];   //7Â÷¼± ¸Å¼ö °Ç¼ö      
-	char S8offersu                        [  4];   //8Â÷¼± ¸Åµµ °Ç¼ö      
-	char S8bidsu                          [  4];   //8Â÷¼± ¸Å¼ö °Ç¼ö      
-	char S9offersu                        [  4];   //9Â÷¼± ¸Åµµ °Ç¼ö      
-	char S9bidsu                          [  4];   //9Â÷¼± ¸Å¼ö °Ç¼ö      
-	char S0offersu                        [  4];   //10Â÷¼± ¸Åµµ °Ç¼ö     
-	char S0bidsu                          [  4];   //10Â÷¼± ¸Å¼ö °Ç¼ö     
-	char tofferjan                        [  6];   //ÃÑ¸ÅµµÈ£°¡ ÀÜ·®      
-	char tobidjan                         [  6];   //ÃÑ¸Å¼ö È£°¡ ÀÜ·®     
-	char toffersu                         [  5];   //ÃÑ ¸Åµµ °Ç¼ö         
-	char tbidsu                           [  5];   //ÃÑ ¸Å¼ö °Ç¼ö         
+	char fspitem                          [  8];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½     
+	char fsptime                          [  8];   //ï¿½Ã°ï¿½ HH:MM:SS        
+	char offer                            [  8];   //ï¿½Åµï¿½È£ï¿½ï¿½             
+	char bid                              [  8];   //ï¿½Å¼ï¿½È£ï¿½ï¿½             
+	char offerjan                         [  6];   //ï¿½Åµï¿½ï¿½Ü·ï¿½             
+	char bidjan                           [  6];   //ï¿½Å¼ï¿½ï¿½Ü·ï¿½             
+	char S2offer                          [  8];   //ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½           
+	char S2bid                            [  8];   //ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½           
+	char S2offerjan                       [  6];   //ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½           
+	char S2bidjan                         [  6];   //ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½           
+	char S3offer                          [  8];   //ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½         
+	char S3bid                            [  8];   //ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½         
+	char S3offerjan                       [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½         
+	char S3bidjan                         [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½         
+	char S4offer                          [  8];   //4ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S4bid                            [  8];   //4ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S4offerjan                       [  6];   //4ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½          
+	char S4bidjan                         [  6];   //4ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½          
+	char S5offer                          [  8];   //5ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S5bid                            [  8];   //5ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S5offerjan                       [  6];   //5ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½          
+	char S5bidjan                         [  6];   //5ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½          
+	char S6offer                          [  8];   //6ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S6bid                            [  8];   //6ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S6offerjan                       [  6];   //6ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½          
+	char S6bidjan                         [  6];   //6ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½          
+	char S7offer                          [  8];   //7ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S7bid                            [  8];   //7ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S7offerjan                       [  6];   //7ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½          
+	char S7bidjan                         [  6];   //7ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½          
+	char S8offer                          [  8];   //8ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S8bid                            [  8];   //8ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S8offerjan                       [  6];   //8ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½          
+	char S8bidjan                         [  6];   //8ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½          
+	char S9offer                          [  8];   //9ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S9bid                            [  8];   //9ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S9offerjan                       [  6];   //9ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½          
+	char S9bidjan                         [  6];   //9ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½          
+	char S0offer                          [  8];   //10ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½         
+	char S0bid                            [  8];   //10ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½         
+	char S0offerjan                       [  6];   //10ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½         
+	char S0bidjan                         [  6];   //10ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½         
+	char offersu                          [  4];   //ï¿½ï¿½ ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½      
+	char bidsu                            [  4];   //ï¿½ï¿½ ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½      
+	char S2offersu                        [  4];   //ï¿½ï¿½ ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½      
+	char S2bidsu                          [  4];   //ï¿½ï¿½ ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½      
+	char S3offersu                        [  4];   //3ï¿½ï¿½ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½      
+	char S3bidsu                          [  4];   //3ï¿½ï¿½ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½      
+	char S4offersu                        [  4];   //4ï¿½ï¿½ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½      
+	char S4bidsu                          [  4];   //4ï¿½ï¿½ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½      
+	char S5offersu                        [  4];   //5ï¿½ï¿½ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½      
+	char S5bidsu                          [  4];   //5ï¿½ï¿½ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½      
+	char S6offersu                        [  4];   //6ï¿½ï¿½ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½      
+	char S6bidsu                          [  4];   //6ï¿½ï¿½ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½      
+	char S7offersu                        [  4];   //7ï¿½ï¿½ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½      
+	char S7bidsu                          [  4];   //7ï¿½ï¿½ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½      
+	char S8offersu                        [  4];   //8ï¿½ï¿½ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½      
+	char S8bidsu                          [  4];   //8ï¿½ï¿½ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½      
+	char S9offersu                        [  4];   //9ï¿½ï¿½ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½      
+	char S9bidsu                          [  4];   //9ï¿½ï¿½ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½      
+	char S0offersu                        [  4];   //10ï¿½ï¿½ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½     
+	char S0bidsu                          [  4];   //10ï¿½ï¿½ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½     
+	char tofferjan                        [  6];   //ï¿½Ñ¸Åµï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½      
+	char tobidjan                         [  6];   //ï¿½Ñ¸Å¼ï¿½ È£ï¿½ï¿½ ï¿½Ü·ï¿½     
+	char toffersu                         [  5];   //ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½         
+	char tbidsu                           [  5];   //ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½         
 } Tv7OutBlock;
 
 typedef struct tagv7
 {
-	Tv7InBlock                        v7inblock                             ;  //ÀÔ·Â 
-	Tv7OutBlock                       v7outblock                            ;  //Ãâ·Â 
+	Tv7InBlock                        v7inblock                             ;  //ï¿½Ô·ï¿½ 
+	Tv7OutBlock                       v7outblock                            ;  //ï¿½ï¿½ï¿½ 
 } Tv7;
 
-typedef struct tagv8InBlock    //ÀÔ·Â
+typedef struct tagv8InBlock    //ï¿½Ô·ï¿½
 {
-	char fspitem                          [  8];	char _fspitem;                            //½ºÇÁ·¹µåÁ¾¸ñÄÚµå     
+	char fspitem                          [  8];	char _fspitem;                            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½     
 } Tv8InBlock;
 
-typedef struct tagv8OutBlock    //Ãâ·Â
+typedef struct tagv8OutBlock    //ï¿½ï¿½ï¿½
 {
-	char fspitem                          [  8];	char _fspitem;                            //½ºÇÁ·¹µåÁ¾¸ñÄÚµå     
-	char fsptime                          [  8];	char _fsptime;                            //½Ã°£ HH:MM:SS        
-	char jgubun                           [  8];	char _jgubun;                             //Àå¿î¿ë               
-	char fspsign                          [  1];	char _fspsign;                            //ÀüÀÏ´ëºñ ºÎÈ£        
-	char fspchange                        [  7];	char _fspchange;                          //ÀüÀÏ´ëºñ             
-	char fspcurr                          [  8];	char _fspcurr;                            //ÇöÀç°¡               
-	char fspcurr1                         [  7];	char _fspcurr1;                           //ÀÇÁ¦¾àÁ¤°¡-±Ù¿ù¹°    
-	char fspcurr2                         [  7];	char _fspcurr2;                           //ÀÇÁ¦¾àÁ¤°¡-¿ø¿ù¹°    
-	char fspopen                          [  8];	char _fspopen;                            //½Ã°¡                 
-	char fsphigh                          [  8];	char _fsphigh;                            //°í°¡                 
-	char fsplow                           [  8];	char _fsplow;                             //Àú°¡                 
-	char fspvol                           [  6];	char _fspvol;                             //Ã¼°á¼ö·®             
-	char fspvolall                        [  7];	char _fspvolall;                          //´©Àû Ã¼°á¼ö·®        
-	char fspvalall                        [ 12];	char _fspvalall;                          //´©Àû°Å·¡´ë±Ý         
-	char offer                            [  8];	char _offer;                              //¸ÅµµÈ£°¡             
-	char bid                              [  8];	char _bid;                                //¸Å¼öÈ£°¡             
-	char offerjan                         [  6];	char _offerjan;                           //¸ÅµµÀÜ·®             
-	char bidjan                           [  6];	char _bidjan;                             //¸Å¼öÀÜ·®             
-	char S2offer                          [  8];	char _S2offer;                            //Â÷¸ÅµµÈ£°¡           
-	char S2bid                            [  8];	char _S2bid;                              //Â÷¸Å¼öÈ£°¡           
-	char S2offerjan                       [  6];	char _S2offerjan;                         //Â÷¸ÅµµÀÜ·®           
-	char S2bidjan                         [  6];	char _S2bidjan;                           //Â÷¸Å¼öÀÜ·®           
-	char S3offer                          [  8];	char _S3offer;                            //Â÷Â÷¸ÅµµÈ£°¡         
-	char S3bid                            [  8];	char _S3bid;                              //Â÷Â÷¸Å¼öÈ£°¡         
-	char S3offerjan                       [  6];	char _S3offerjan;                         //Â÷Â÷¸ÅµµÀÜ·®         
-	char S3bidjan                         [  6];	char _S3bidjan;                           //Â÷Â÷¸Å¼öÀÜ·®         
-	char S4offer                          [  8];	char _S4offer;                            //4Â÷¸ÅµµÈ£°¡          
-	char S4bid                            [  8];	char _S4bid;                              //4Â÷¸Å¼öÈ£°¡          
-	char S4offerjan                       [  6];	char _S4offerjan;                         //4Â÷¸ÅµµÀÜ·®          
-	char S4bidjan                         [  6];	char _S4bidjan;                           //4Â÷¸Å¼öÀÜ·®          
-	char S5offer                          [  8];	char _S5offer;                            //5Â÷¸ÅµµÈ£°¡          
-	char S5bid                            [  8];	char _S5bid;                              //5Â÷¸Å¼öÈ£°¡          
-	char S5offerjan                       [  6];	char _S5offerjan;                         //5Â÷¸ÅµµÀÜ·®          
-	char S5bidjan                         [  6];	char _S5bidjan;                           //5Â÷¸Å¼öÀÜ·®          
-	char S6offer                          [  8];	char _S6offer;                            //6Â÷¸ÅµµÈ£°¡          
-	char S6bid                            [  8];	char _S6bid;                              //6Â÷¸Å¼öÈ£°¡          
-	char S6offerjan                       [  6];	char _S6offerjan;                         //6Â÷¸ÅµµÀÜ·®          
-	char S6bidjan                         [  6];	char _S6bidjan;                           //6Â÷¸Å¼öÀÜ·®          
-	char S7offer                          [  8];	char _S7offer;                            //7Â÷¸ÅµµÈ£°¡          
-	char S7bid                            [  8];	char _S7bid;                              //7Â÷¸Å¼öÈ£°¡          
-	char S7offerjan                       [  6];	char _S7offerjan;                         //7Â÷¸ÅµµÀÜ·®          
-	char S7bidjan                         [  6];	char _S7bidjan;                           //7Â÷¸Å¼öÀÜ·®          
-	char S8offer                          [  8];	char _S8offer;                            //8Â÷¸ÅµµÈ£°¡          
-	char S8bid                            [  8];	char _S8bid;                              //8Â÷¸Å¼öÈ£°¡          
-	char S8offerjan                       [  6];	char _S8offerjan;                         //8Â÷¸ÅµµÀÜ·®          
-	char S8bidjan                         [  6];	char _S8bidjan;                           //8Â÷¸Å¼öÀÜ·®          
-	char S9offer                          [  8];	char _S9offer;                            //9Â÷¸ÅµµÈ£°¡          
-	char S9bid                            [  8];	char _S9bid;                              //9Â÷¸Å¼öÈ£°¡          
-	char S9offerjan                       [  6];	char _S9offerjan;                         //9Â÷¸ÅµµÀÜ·®          
-	char S9bidjan                         [  6];	char _S9bidjan;                           //9Â÷¸Å¼öÀÜ·®          
-	char S0offer                          [  8];	char _S0offer;                            //10Â÷¸ÅµµÈ£°¡         
-	char S0bid                            [  8];	char _S0bid;                              //10Â÷¸Å¼öÈ£°¡         
-	char S0offerjan                       [  6];	char _S0offerjan;                         //10Â÷¸ÅµµÀÜ·®         
-	char S0bidjan                         [  6];	char _S0bidjan;                           //10Â÷¸Å¼öÀÜ·®         
-	char offersu                          [  4];	char _offersu;                            //¿ì ¼± ¸Åµµ °Ç¼ö      
-	char bidsu                            [  4];	char _bidsu;                              //¿ì ¼± ¸Å¼ö °Ç¼ö      
-	char S2offersu                        [  4];	char _S2offersu;                          //Â÷ ¼± ¸Åµµ °Ç¼ö      
-	char S2bidsu                          [  4];	char _S2bidsu;                            //Â÷ ¼± ¸Å¼ö °Ç¼ö      
-	char S3offersu                        [  4];	char _S3offersu;                          //3Â÷¼± ¸Åµµ °Ç¼ö      
-	char S3bidsu                          [  4];	char _S3bidsu;                            //3Â÷¼± ¸Å¼ö °Ç¼ö      
-	char S4offersu                        [  4];	char _S4offersu;                          //4Â÷¼± ¸Åµµ °Ç¼ö      
-	char S4bidsu                          [  4];	char _S4bidsu;                            //4Â÷¼± ¸Å¼ö °Ç¼ö      
-	char S5offersu                        [  4];	char _S5offersu;                          //5Â÷¼± ¸Åµµ °Ç¼ö      
-	char S5bidsu                          [  4];	char _S5bidsu;                            //5Â÷¼± ¸Å¼ö °Ç¼ö      
-	char S6offersu                        [  4];	char _S6offersu;                          //6Â÷¼± ¸Åµµ °Ç¼ö      
-	char S6bidsu                          [  4];	char _S6bidsu;                            //6Â÷¼± ¸Å¼ö °Ç¼ö      
-	char S7offersu                        [  4];	char _S7offersu;                          //7Â÷¼± ¸Åµµ °Ç¼ö      
-	char S7bidsu                          [  4];	char _S7bidsu;                            //7Â÷¼± ¸Å¼ö °Ç¼ö      
-	char S8offersu                        [  4];	char _S8offersu;                          //8Â÷¼± ¸Åµµ °Ç¼ö      
-	char S8bidsu                          [  4];	char _S8bidsu;                            //8Â÷¼± ¸Å¼ö °Ç¼ö      
-	char S9offersu                        [  4];	char _S9offersu;                          //9Â÷¼± ¸Åµµ °Ç¼ö      
-	char S9bidsu                          [  4];	char _S9bidsu;                            //9Â÷¼± ¸Å¼ö °Ç¼ö      
-	char S0offersu                        [  4];	char _S0offersu;                          //10Â÷¼± ¸Åµµ °Ç¼ö     
-	char S0bidsu                          [  4];	char _S0bidsu;                            //10Â÷¼± ¸Å¼ö °Ç¼ö     
-	char tofferjan                        [  6];	char _tofferjan;                          //ÃÑ¸ÅµµÈ£°¡ ÀÜ·®      
-	char tobidjan                         [  6];	char _tobidjan;                           //ÃÑ¸Å¼ö È£°¡ ÀÜ·®     
-	char toffersu                         [  5];	char _toffersu;                           //ÃÑ ¸Åµµ °Ç¼ö         
-	char tbidsu                           [  5];	char _tbidsu;                             //ÃÑ ¸Å¼ö °Ç¼ö         
-	char chrate                           [  5];	char _chrate;                             //µî¶ô·ü               
-	char bp_jgubun                        [  1];	char _bp_jgubun;                          //BP¿ë Àå±¸ºÐ          
+	char fspitem                          [  8];	char _fspitem;                            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½     
+	char fsptime                          [  8];	char _fsptime;                            //ï¿½Ã°ï¿½ HH:MM:SS        
+	char jgubun                           [  8];	char _jgubun;                             //ï¿½ï¿½ï¿½ï¿½               
+	char fspsign                          [  1];	char _fspsign;                            //ï¿½ï¿½ï¿½Ï´ï¿½ï¿½ ï¿½ï¿½È£        
+	char fspchange                        [  7];	char _fspchange;                          //ï¿½ï¿½ï¿½Ï´ï¿½ï¿½             
+	char fspcurr                          [  8];	char _fspcurr;                            //ï¿½ï¿½ï¿½ç°¡               
+	char fspcurr1                         [  7];	char _fspcurr1;                           //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-ï¿½Ù¿ï¿½ï¿½ï¿½    
+	char fspcurr2                         [  7];	char _fspcurr2;                           //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½-ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½    
+	char fspopen                          [  8];	char _fspopen;                            //ï¿½Ã°ï¿½                 
+	char fsphigh                          [  8];	char _fsphigh;                            //ï¿½ï¿½                 
+	char fsplow                           [  8];	char _fsplow;                             //ï¿½ï¿½ï¿½ï¿½                 
+	char fspvol                           [  6];	char _fspvol;                             //Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char fspvolall                        [  7];	char _fspvolall;                          //ï¿½ï¿½ï¿½ï¿½ Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½        
+	char fspvalall                        [ 12];	char _fspvalall;                          //ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½ï¿½         
+	char offer                            [  8];	char _offer;                              //ï¿½Åµï¿½È£ï¿½ï¿½             
+	char bid                              [  8];	char _bid;                                //ï¿½Å¼ï¿½È£ï¿½ï¿½             
+	char offerjan                         [  6];	char _offerjan;                           //ï¿½Åµï¿½ï¿½Ü·ï¿½             
+	char bidjan                           [  6];	char _bidjan;                             //ï¿½Å¼ï¿½ï¿½Ü·ï¿½             
+	char S2offer                          [  8];	char _S2offer;                            //ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½           
+	char S2bid                            [  8];	char _S2bid;                              //ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½           
+	char S2offerjan                       [  6];	char _S2offerjan;                         //ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½           
+	char S2bidjan                         [  6];	char _S2bidjan;                           //ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½           
+	char S3offer                          [  8];	char _S3offer;                            //ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½         
+	char S3bid                            [  8];	char _S3bid;                              //ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½         
+	char S3offerjan                       [  6];	char _S3offerjan;                         //ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½         
+	char S3bidjan                         [  6];	char _S3bidjan;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½         
+	char S4offer                          [  8];	char _S4offer;                            //4ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S4bid                            [  8];	char _S4bid;                              //4ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S4offerjan                       [  6];	char _S4offerjan;                         //4ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½          
+	char S4bidjan                         [  6];	char _S4bidjan;                           //4ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½          
+	char S5offer                          [  8];	char _S5offer;                            //5ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S5bid                            [  8];	char _S5bid;                              //5ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S5offerjan                       [  6];	char _S5offerjan;                         //5ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½          
+	char S5bidjan                         [  6];	char _S5bidjan;                           //5ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½          
+	char S6offer                          [  8];	char _S6offer;                            //6ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S6bid                            [  8];	char _S6bid;                              //6ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S6offerjan                       [  6];	char _S6offerjan;                         //6ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½          
+	char S6bidjan                         [  6];	char _S6bidjan;                           //6ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½          
+	char S7offer                          [  8];	char _S7offer;                            //7ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S7bid                            [  8];	char _S7bid;                              //7ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S7offerjan                       [  6];	char _S7offerjan;                         //7ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½          
+	char S7bidjan                         [  6];	char _S7bidjan;                           //7ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½          
+	char S8offer                          [  8];	char _S8offer;                            //8ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S8bid                            [  8];	char _S8bid;                              //8ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S8offerjan                       [  6];	char _S8offerjan;                         //8ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½          
+	char S8bidjan                         [  6];	char _S8bidjan;                           //8ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½          
+	char S9offer                          [  8];	char _S9offer;                            //9ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S9bid                            [  8];	char _S9bid;                              //9ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S9offerjan                       [  6];	char _S9offerjan;                         //9ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½          
+	char S9bidjan                         [  6];	char _S9bidjan;                           //9ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½          
+	char S0offer                          [  8];	char _S0offer;                            //10ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½         
+	char S0bid                            [  8];	char _S0bid;                              //10ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½         
+	char S0offerjan                       [  6];	char _S0offerjan;                         //10ï¿½ï¿½ï¿½Åµï¿½ï¿½Ü·ï¿½         
+	char S0bidjan                         [  6];	char _S0bidjan;                           //10ï¿½ï¿½ï¿½Å¼ï¿½ï¿½Ü·ï¿½         
+	char offersu                          [  4];	char _offersu;                            //ï¿½ï¿½ ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½      
+	char bidsu                            [  4];	char _bidsu;                              //ï¿½ï¿½ ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½      
+	char S2offersu                        [  4];	char _S2offersu;                          //ï¿½ï¿½ ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½      
+	char S2bidsu                          [  4];	char _S2bidsu;                            //ï¿½ï¿½ ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½      
+	char S3offersu                        [  4];	char _S3offersu;                          //3ï¿½ï¿½ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½      
+	char S3bidsu                          [  4];	char _S3bidsu;                            //3ï¿½ï¿½ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½      
+	char S4offersu                        [  4];	char _S4offersu;                          //4ï¿½ï¿½ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½      
+	char S4bidsu                          [  4];	char _S4bidsu;                            //4ï¿½ï¿½ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½      
+	char S5offersu                        [  4];	char _S5offersu;                          //5ï¿½ï¿½ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½      
+	char S5bidsu                          [  4];	char _S5bidsu;                            //5ï¿½ï¿½ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½      
+	char S6offersu                        [  4];	char _S6offersu;                          //6ï¿½ï¿½ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½      
+	char S6bidsu                          [  4];	char _S6bidsu;                            //6ï¿½ï¿½ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½      
+	char S7offersu                        [  4];	char _S7offersu;                          //7ï¿½ï¿½ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½      
+	char S7bidsu                          [  4];	char _S7bidsu;                            //7ï¿½ï¿½ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½      
+	char S8offersu                        [  4];	char _S8offersu;                          //8ï¿½ï¿½ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½      
+	char S8bidsu                          [  4];	char _S8bidsu;                            //8ï¿½ï¿½ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½      
+	char S9offersu                        [  4];	char _S9offersu;                          //9ï¿½ï¿½ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½      
+	char S9bidsu                          [  4];	char _S9bidsu;                            //9ï¿½ï¿½ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½      
+	char S0offersu                        [  4];	char _S0offersu;                          //10ï¿½ï¿½ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½     
+	char S0bidsu                          [  4];	char _S0bidsu;                            //10ï¿½ï¿½ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½     
+	char tofferjan                        [  6];	char _tofferjan;                          //ï¿½Ñ¸Åµï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½      
+	char tobidjan                         [  6];	char _tobidjan;                           //ï¿½Ñ¸Å¼ï¿½ È£ï¿½ï¿½ ï¿½Ü·ï¿½     
+	char toffersu                         [  5];	char _toffersu;                           //ï¿½ï¿½ ï¿½Åµï¿½ ï¿½Ç¼ï¿½         
+	char tbidsu                           [  5];	char _tbidsu;                             //ï¿½ï¿½ ï¿½Å¼ï¿½ ï¿½Ç¼ï¿½         
+	char chrate                           [  5];	char _chrate;                             //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char bp_jgubun                        [  1];	char _bp_jgubun;                          //BPï¿½ï¿½ ï¿½å±¸ï¿½ï¿½          
 } Tv8OutBlock;
 
 typedef struct tagv8
 {
-	Tv8InBlock                        v8inblock                             ;  //ÀÔ·Â 
-	Tv8OutBlock                       v8outblock                            ;  //Ãâ·Â 
+	Tv8InBlock                        v8inblock                             ;  //ï¿½Ô·ï¿½ 
+	Tv8OutBlock                       v8outblock                            ;  //ï¿½ï¿½ï¿½ 
 } Tv8;
 
-typedef struct tageCInBlock    //ÀÔ·Â
+typedef struct tageCInBlock    //ï¿½Ô·ï¿½
 {
-	char code                             [  6];	char _code;                               //Á¾¸ñÄÚµå             
+	char code                             [  6];	char _code;                               //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } TeCInBlock;
 
-typedef struct tageCOutBlock    //Ãâ·Â
+typedef struct tageCOutBlock    //ï¿½ï¿½ï¿½
 {
-	char code                             [  6];	char _code;                               //´ÜÃàÁ¾¸ñÄÚµå         
-	char time                             [  8];	char _time;                               //½Ã°£(HH:MM:SS)       
-	char price                            [  7];	char _price;                              //ÇöÀç°¡               
-	char sign                             [  1];	char _sign;                               //µî¶ôºÎÈ£             
-	char change                           [  6];	char _change;                             //µî¶ôÆø               
-	char chrate                           [  5];	char _chrate;                             //µî¶ô·ü               
-	char open                             [  7];	char _open;                               //½Ã°¡                 
-	char high                             [  7];	char _high;                               //°í°¡                 
-	char low                              [  7];	char _low;                                //Àú°¡                 
-	char offer                            [  7];	char _offer;                              //¸ÅµµÈ£°¡             
-	char bid                              [  7];	char _bid;                                //¸Å¼öÈ£°¡             
-	char volume                           [  9];	char _volume;                             //´©Àû°Å·¡·®           
-	char volrate                          [  6];	char _volrate;                            //°Å·¡·® ÀüÀÏºñ        
-	char movolume                         [  8];	char _movolume;                           //º¯µ¿°Å·¡·®           
-	char value                            [  9];	char _value;                              //°Å·¡´ë±Ý ¹é¸¸¿ø      
-	char janggubun                        [  1];	char _janggubun;                          //Àå±¸ºÐ               
-	char cbgubun                          [  1];	char _cbgubun;                            //CB±¸ºÐ               
+	char code                             [  6];	char _code;                               //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½         
+	char time                             [  8];	char _time;                               //ï¿½Ã°ï¿½(HH:MM:SS)       
+	char price                            [  7];	char _price;                              //ï¿½ï¿½ï¿½ç°¡               
+	char sign                             [  1];	char _sign;                               //ï¿½ï¿½ï¿½ï¿½ï¿½È£             
+	char change                           [  6];	char _change;                             //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char chrate                           [  5];	char _chrate;                             //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char open                             [  7];	char _open;                               //ï¿½Ã°ï¿½                 
+	char high                             [  7];	char _high;                               //ï¿½ï¿½                 
+	char low                              [  7];	char _low;                                //ï¿½ï¿½ï¿½ï¿½                 
+	char offer                            [  7];	char _offer;                              //ï¿½Åµï¿½È£ï¿½ï¿½             
+	char bid                              [  7];	char _bid;                                //ï¿½Å¼ï¿½È£ï¿½ï¿½             
+	char volume                           [  9];	char _volume;                             //ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½           
+	char volrate                          [  6];	char _volrate;                            //ï¿½Å·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ïºï¿½        
+	char movolume                         [  8];	char _movolume;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Å·ï¿½ï¿½ï¿½           
+	char value                            [  9];	char _value;                              //ï¿½Å·ï¿½ï¿½ï¿½ï¿½ ï¿½é¸¸ï¿½ï¿½      
+	char janggubun                        [  1];	char _janggubun;                          //ï¿½å±¸ï¿½ï¿½               
+	char cbgubun                          [  1];	char _cbgubun;                            //CBï¿½ï¿½ï¿½ï¿½               
 	char stop                             [  1];	char _stop;                               //STOP                 
-	char grate                            [  6];	char _grate;                              //±«¸®µµ 9(6)          
-	char gratio                           [  8];	char _gratio;                             //±«¸®À²S9(5)V9(2)     
-	char lphold                           [  9];	char _lphold;                             //LPº¸À¯¼ö·®           
-	char lprate                           [  5];	char _lprate;                             //LPº¸À¯·ü             
+	char grate                            [  6];	char _grate;                              //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 9(6)          
+	char gratio                           [  8];	char _gratio;                             //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½S9(5)V9(2)     
+	char lphold                           [  9];	char _lphold;                             //LPï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½           
+	char lprate                           [  5];	char _lprate;                             //LPï¿½ï¿½ï¿½ï¿½ï¿½ï¿½             
 } TeCOutBlock;
 
 typedef struct tageC
 {
-	TeCInBlock                        ecinblock                             ;  //ÀÔ·Â 
-	TeCOutBlock                       ecoutblock                            ;  //Ãâ·Â 
+	TeCInBlock                        ecinblock                             ;  //ï¿½Ô·ï¿½ 
+	TeCOutBlock                       ecoutblock                            ;  //ï¿½ï¿½ï¿½ 
 } TeC;
 
-typedef struct tageHInBlock    //ÀÔ·Â
+typedef struct tageHInBlock    //ï¿½Ô·ï¿½
 {
-	char code                             [  6];   //Á¾¸ñÄÚµå             
+	char code                             [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } TeHInBlock;
 
-typedef struct tageHOutBlock    //Ãâ·Â
+typedef struct tageHOutBlock    //ï¿½ï¿½ï¿½
 {
-	char code                             [  6];   //´ÜÃàÄÚµå             
-	char time                             [  8];   //½Ã°£                 
-	char S1_off                           [  7];   //¸ÅµµÈ£°¡             
-	char S1_bid                           [  7];   //¸Å¼öÈ£°¡             
-	char S1_offrem                        [  9];   //¸ÅµµÈ£°¡ ÀÜ·®        
-	char S1_bidrem                        [  9];   //¸Å¼öÈ£°¡ ÀÜ·®        
-	char S2_off                           [  7];   //2Â÷¸ÅµµÈ£°¡          
-	char S2_bid                           [  7];   //2Â÷¸Å¼öÈ£°¡          
-	char S2_offrem                        [  9];   //2Â÷¸ÅµµÈ£°¡ ÀÜ·®     
-	char S2_bidrem                        [  9];   //2Â÷¸Å¼öÈ£°¡ ÀÜ·®     
-	char S3_off                           [  7];   //3Â÷¸ÅµµÈ£°¡          
-	char S3_bid                           [  7];   //3Â÷¸Å¼öÈ£°¡          
-	char S3_offrem                        [  9];   //3Â÷¸ÅµµÈ£°¡ ÀÜ·®     
-	char S3_bidrem                        [  9];   //3Â÷¸Å¼öÈ£°¡ ÀÜ·®     
-	char S4_off                           [  7];   //4Â÷¸ÅµµÈ£°¡          
-	char S4_bid                           [  7];   //4Â÷¸Å¼öÈ£°¡          
-	char S4_offrem                        [  9];   //4Â÷¸ÅµµÈ£°¡ ÀÜ·®     
-	char S4_bidrem                        [  9];   //4Â÷¸Å¼öÈ£°¡ ÀÜ·®     
-	char S5_off                           [  7];   //5Â÷¸ÅµµÈ£°¡          
-	char S5_bid                           [  7];   //5Â÷¸Å¼öÈ£°¡          
-	char S5_offrem                        [  9];   //5Â÷¸ÅµµÈ£°¡ ÀÜ·®     
-	char S5_bidrem                        [  9];   //5Â÷¸Å¼öÈ£°¡ ÀÜ·®     
-	char S6_off                           [  7];   //6Â÷¸ÅµµÈ£°¡          
-	char S6_bid                           [  7];   //6Â÷¸Å¼öÈ£°¡          
-	char S6_offrem                        [  9];   //6Â÷¸ÅµµÈ£°¡ ÀÜ·®     
-	char S6_bidrem                        [  9];   //6Â÷¸Å¼öÈ£°¡ ÀÜ·®     
-	char S7_off                           [  7];   //7Â÷¸ÅµµÈ£°¡          
-	char S7_bid                           [  7];   //7Â÷¸Å¼öÈ£°¡          
-	char S7_offrem                        [  9];   //7Â÷¸ÅµµÈ£°¡ ÀÜ·®     
-	char S7_bidrem                        [  9];   //7Â÷¸Å¼öÈ£°¡ ÀÜ·®     
-	char S8_off                           [  7];   //8Â÷¸ÅµµÈ£°¡          
-	char S8_bid                           [  7];   //8Â÷¸Å¼öÈ£°¡          
-	char S8_offrem                        [  9];   //8Â÷¸ÅµµÈ£°¡ ÀÜ·®     
-	char S8_bidrem                        [  9];   //8Â÷¸Å¼öÈ£°¡ ÀÜ·®     
-	char S9_off                           [  7];   //9Â÷¸ÅµµÈ£°¡          
-	char S9_bid                           [  7];   //9Â÷¸Å¼öÈ£°¡          
-	char S9_offrem                        [  9];   //9Â÷¸ÅµµÈ£°¡ ÀÜ·®     
-	char S9_bidrem                        [  9];   //9Â÷¸Å¼öÈ£°¡ ÀÜ·®     
-	char S10_off                          [  7];   //10Â÷¸ÅµµÈ£°¡         
-	char S10_bid                          [  7];   //10Â÷¸Å¼öÈ£°¡         
-	char S10_offrem                       [  9];   //10Â÷¸ÅµµÈ£°¡ ÀÜ·®    
-	char S10_bidrem                       [  9];   //10Â÷¸Å¼öÈ£°¡ ÀÜ·®    
-	char T_offrem                         [  9];   //ÃÑ¸ÅµµÈ£°¡ ÀÜ·®      
-	char T_bidrem                         [  9];   //ÃÑ¸Å¼öÈ£°¡ ÀÜ·®      
-	char dongsi                           [  1];   //µ¿½Ã±¸ºÐ             
-	char eqprice                          [  7];   //µ¿½ÃÈ£°¡½Ã¿¹»óÃ¼°á°¡ 
-	char sign                             [  1];   //µî¶ôºÎÈ£             
-	char change                           [  6];   //µî¶ôÆø               
-	char chrate                           [  5];   //µî¶ô·ü               
-	char eqvol                            [  9];   //µ¿½ÃÈ£°¡½Ã¿¹»óÃ¼°á¼ö·® 
-	char S1_lpoffrem                      [  9];   //1Â÷LP¸ÅµµÈ£°¡ ÀÜ·®   
-	char S1_lpbidrem                      [  9];   //1Â÷LP¸Å¼öÈ£°¡ ÀÜ·®   
-	char S2_lpoffrem                      [  9];   //2Â÷LP¸ÅµµÈ£°¡ ÀÜ·®   
-	char S2_lpbidrem                      [  9];   //2Â÷LP¸Å¼öÈ£°¡ ÀÜ·®   
-	char S3_lpoffrem                      [  9];   //3Â÷LP¸ÅµµÈ£°¡ ÀÜ·®   
-	char S3_lpbidrem                      [  9];   //3Â÷LP¸Å¼öÈ£°¡ ÀÜ·®   
-	char S4_lpoffrem                      [  9];   //4Â÷LP¸ÅµµÈ£°¡ ÀÜ·®   
-	char S4_lpbidrem                      [  9];   //4Â÷LP¸Å¼öÈ£°¡ ÀÜ·®   
-	char S5_lpoffrem                      [  9];   //5Â÷LP¸ÅµµÈ£°¡ ÀÜ·®   
-	char S5_lpbidrem                      [  9];   //5Â÷LP¸Å¼öÈ£°¡ ÀÜ·®   
-	char S6_lpoffrem                      [  9];   //6Â÷LP¸ÅµµÈ£°¡ ÀÜ·®   
-	char S6_lpbidrem                      [  9];   //6Â÷LP¸Å¼öÈ£°¡ ÀÜ·®   
-	char S7_lpoffrem                      [  9];   //7Â÷LP¸ÅµµÈ£°¡ ÀÜ·®   
-	char S7_lpbidrem                      [  9];   //7Â÷LP¸Å¼öÈ£°¡ ÀÜ·®   
-	char S8_lpoffrem                      [  9];   //8Â÷LP¸ÅµµÈ£°¡ ÀÜ·®   
-	char S8_lpbidrem                      [  9];   //8Â÷LP¸Å¼öÈ£°¡ ÀÜ·®   
-	char S9_lpoffrem                      [  9];   //9Â÷LP¸ÅµµÈ£°¡ ÀÜ·®   
-	char S9_lpbidrem                      [  9];   //9Â÷LP¸Å¼öÈ£°¡ ÀÜ·®   
-	char S10_lpoffrem                     [  9];   //10Â÷LP¸ÅµµÈ£°¡ ÀÜ·®  
-	char S10_lpbidrem                     [  9];   //10Â÷LP¸Å¼öÈ£°¡ ÀÜ·®  
+	char code                             [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char time                             [  8];   //ï¿½Ã°ï¿½                 
+	char S1_off                           [  7];   //ï¿½Åµï¿½È£ï¿½ï¿½             
+	char S1_bid                           [  7];   //ï¿½Å¼ï¿½È£ï¿½ï¿½             
+	char S1_offrem                        [  9];   //ï¿½Åµï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½        
+	char S1_bidrem                        [  9];   //ï¿½Å¼ï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½        
+	char S2_off                           [  7];   //2ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S2_bid                           [  7];   //2ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S2_offrem                        [  9];   //2ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½     
+	char S2_bidrem                        [  9];   //2ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½     
+	char S3_off                           [  7];   //3ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S3_bid                           [  7];   //3ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S3_offrem                        [  9];   //3ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½     
+	char S3_bidrem                        [  9];   //3ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½     
+	char S4_off                           [  7];   //4ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S4_bid                           [  7];   //4ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S4_offrem                        [  9];   //4ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½     
+	char S4_bidrem                        [  9];   //4ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½     
+	char S5_off                           [  7];   //5ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S5_bid                           [  7];   //5ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S5_offrem                        [  9];   //5ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½     
+	char S5_bidrem                        [  9];   //5ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½     
+	char S6_off                           [  7];   //6ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S6_bid                           [  7];   //6ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S6_offrem                        [  9];   //6ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½     
+	char S6_bidrem                        [  9];   //6ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½     
+	char S7_off                           [  7];   //7ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S7_bid                           [  7];   //7ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S7_offrem                        [  9];   //7ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½     
+	char S7_bidrem                        [  9];   //7ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½     
+	char S8_off                           [  7];   //8ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S8_bid                           [  7];   //8ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S8_offrem                        [  9];   //8ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½     
+	char S8_bidrem                        [  9];   //8ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½     
+	char S9_off                           [  7];   //9ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½          
+	char S9_bid                           [  7];   //9ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½          
+	char S9_offrem                        [  9];   //9ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½     
+	char S9_bidrem                        [  9];   //9ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½     
+	char S10_off                          [  7];   //10ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½         
+	char S10_bid                          [  7];   //10ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½         
+	char S10_offrem                       [  9];   //10ï¿½ï¿½ï¿½Åµï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½    
+	char S10_bidrem                       [  9];   //10ï¿½ï¿½ï¿½Å¼ï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½    
+	char T_offrem                         [  9];   //ï¿½Ñ¸Åµï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½      
+	char T_bidrem                         [  9];   //ï¿½Ñ¸Å¼ï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½      
+	char dongsi                           [  1];   //ï¿½ï¿½ï¿½Ã±ï¿½ï¿½ï¿½             
+	char eqprice                          [  7];   //ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½ï¿½Ã¼ï¿½á°¡ 
+	char sign                             [  1];   //ï¿½ï¿½ï¿½ï¿½ï¿½È£             
+	char change                           [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char chrate                           [  5];   //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char eqvol                            [  9];   //ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½ 
+	char S1_lpoffrem                      [  9];   //1ï¿½ï¿½LPï¿½Åµï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½   
+	char S1_lpbidrem                      [  9];   //1ï¿½ï¿½LPï¿½Å¼ï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½   
+	char S2_lpoffrem                      [  9];   //2ï¿½ï¿½LPï¿½Åµï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½   
+	char S2_lpbidrem                      [  9];   //2ï¿½ï¿½LPï¿½Å¼ï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½   
+	char S3_lpoffrem                      [  9];   //3ï¿½ï¿½LPï¿½Åµï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½   
+	char S3_lpbidrem                      [  9];   //3ï¿½ï¿½LPï¿½Å¼ï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½   
+	char S4_lpoffrem                      [  9];   //4ï¿½ï¿½LPï¿½Åµï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½   
+	char S4_lpbidrem                      [  9];   //4ï¿½ï¿½LPï¿½Å¼ï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½   
+	char S5_lpoffrem                      [  9];   //5ï¿½ï¿½LPï¿½Åµï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½   
+	char S5_lpbidrem                      [  9];   //5ï¿½ï¿½LPï¿½Å¼ï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½   
+	char S6_lpoffrem                      [  9];   //6ï¿½ï¿½LPï¿½Åµï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½   
+	char S6_lpbidrem                      [  9];   //6ï¿½ï¿½LPï¿½Å¼ï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½   
+	char S7_lpoffrem                      [  9];   //7ï¿½ï¿½LPï¿½Åµï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½   
+	char S7_lpbidrem                      [  9];   //7ï¿½ï¿½LPï¿½Å¼ï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½   
+	char S8_lpoffrem                      [  9];   //8ï¿½ï¿½LPï¿½Åµï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½   
+	char S8_lpbidrem                      [  9];   //8ï¿½ï¿½LPï¿½Å¼ï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½   
+	char S9_lpoffrem                      [  9];   //9ï¿½ï¿½LPï¿½Åµï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½   
+	char S9_lpbidrem                      [  9];   //9ï¿½ï¿½LPï¿½Å¼ï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½   
+	char S10_lpoffrem                     [  9];   //10ï¿½ï¿½LPï¿½Åµï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½  
+	char S10_lpbidrem                     [  9];   //10ï¿½ï¿½LPï¿½Å¼ï¿½È£ï¿½ï¿½ ï¿½Ü·ï¿½  
 } TeHOutBlock;
 
 typedef struct tageH
 {
-	TeHInBlock                        ehinblock                             ;  //ÀÔ·Â 
-	TeHOutBlock                       ehoutblock                            ;  //Ãâ·Â 
+	TeHInBlock                        ehinblock                             ;  //ï¿½Ô·ï¿½ 
+	TeHOutBlock                       ehoutblock                            ;  //ï¿½ï¿½ï¿½ 
 } TeH;
 
-typedef struct tageVInBlock    //ÀÔ·Â
+typedef struct tageVInBlock    //ï¿½Ô·ï¿½
 {
-	char code                             [  6];   //Á¾¸ñÄÚµå             
+	char code                             [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } TeVInBlock;
 
-typedef struct tageVOutBlock    //Ãâ·Â
+typedef struct tageVOutBlock    //ï¿½ï¿½ï¿½
 {
-	char code                             [  6];   //Á¾¸ñÄÚµå             
-	char theorytime                       [  8];   //ÀÌ·Ð°¡½Ã°£           
-	char theoryprice                      [  7];   //ÀÌ·Ð°¡               
-	char impv                             [ 10];   //³»Àçº¯µ¿¼º           
-	char delta                            [  9];   //ºÎÈ£+µ¨Å¸            
-	char gmma                             [  9];   //ºÎÈ£+°¨¸¶            
-	char vega                             [  9];   //ºÎÈ£+º£°¡            
-	char theta                            [  9];   //ºÎÈ£+¼¼Å¸            
-	char rho                              [  9];   //ºÎÈ£+·Î              
-	char grate                            [  6];   //±«¸®µµ               
-	char gratio                           [  8];   //±«¸®À²               
+	char code                             [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char theorytime                       [  8];   //ï¿½Ì·Ð°ï¿½ï¿½Ã°ï¿½           
+	char theoryprice                      [  7];   //ï¿½Ì·Ð°ï¿½               
+	char impv                             [ 10];   //ï¿½ï¿½ï¿½çº¯ï¿½ï¿½ï¿½ï¿½           
+	char delta                            [  9];   //ï¿½ï¿½È£+ï¿½ï¿½Å¸            
+	char gmma                             [  9];   //ï¿½ï¿½È£+ï¿½ï¿½ï¿½ï¿½            
+	char vega                             [  9];   //ï¿½ï¿½È£+ï¿½ï¿½ï¿½ï¿½            
+	char theta                            [  9];   //ï¿½ï¿½È£+ï¿½ï¿½Å¸            
+	char rho                              [  9];   //ï¿½ï¿½È£+ï¿½ï¿½              
+	char grate                            [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char gratio                           [  8];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½               
 } TeVOutBlock;
 
 typedef struct tageV
 {
-	TeVInBlock                        evinblock                             ;  //ÀÔ·Â 
-	TeVOutBlock                       evoutblock                            ;  //Ãâ·Â 
+	TeVInBlock                        evinblock                             ;  //ï¿½Ô·ï¿½ 
+	TeVOutBlock                       evoutblock                            ;  //ï¿½ï¿½ï¿½ 
 } TeV;
 
-typedef struct tageLInBlock    //ÀÔ·Â
+typedef struct tageLInBlock    //ï¿½Ô·ï¿½
 {
-	char code                             [  6];   //Á¾¸ñÄÚµå             
+	char code                             [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } TeLInBlock;
 
-typedef struct tageLOutBlock    //Ãâ·Â
+typedef struct tageLOutBlock    //ï¿½ï¿½ï¿½
 {
-	char code                             [  6];   //Á¾¸ñÄÚµå             
-	char jipyotime                        [  8];   //ÅõÀÚÁöÇ¥½Ã°£         
-	char parity                           [  8];   //ÆÐ¸®Æ¼               
-	char egearing                         [  8];   //E±â¾î¸µ              
-	char gearingrate                      [  8];   //±â¾î¸µºñÀ²           
-	char profitrate                       [  8];   //¼ÕÀÍºÐ±âÀ²           
-	char basepoint                        [  8];   //ÀÚº»ÁöÁöÁ¡           
+	char code                             [  6];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char jipyotime                        [  8];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¥ï¿½Ã°ï¿½         
+	char parity                           [  8];   //ï¿½Ð¸ï¿½Æ¼               
+	char egearing                         [  8];   //Eï¿½ï¿½î¸µ              
+	char gearingrate                      [  8];   //ï¿½ï¿½î¸µï¿½ï¿½ï¿½ï¿½           
+	char profitrate                       [  8];   //ï¿½ï¿½ï¿½ÍºÐ±ï¿½ï¿½ï¿½           
+	char basepoint                        [  8];   //ï¿½Úºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½           
 	char filler                           [  6];   //FILLER               
 } TeLOutBlock;
 
 typedef struct tageL
 {
-	TeLInBlock                        elinblock                             ;  //ÀÔ·Â 
-	TeLOutBlock                       eloutblock                            ;  //Ãâ·Â 
+	TeLInBlock                        elinblock                             ;  //ï¿½Ô·ï¿½ 
+	TeLOutBlock                       eloutblock                            ;  //ï¿½ï¿½ï¿½ 
 } TeL;
 
-typedef struct tageTInBlock    //ÀÔ·Â
+typedef struct tageTInBlock    //ï¿½Ô·ï¿½
 {
-	char code                             [  6];	char _code;                               //Á¾¸ñÄÚµå             
+	char code                             [  6];	char _code;                               //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } TeTInBlock;
 
-typedef struct tageTOutBlock    //Ãâ·Â
+typedef struct tageTOutBlock    //ï¿½ï¿½ï¿½
 {
-	char code                             [  6];	char _code;                               //Á¾¸ñÄÚµå             
-	char time                             [  8];	char _time;                               //½Ã°£                 
-	char off_trano1                       [  4];	char _off_trano1;                         //¸ÅµµÈ¸¿ø»çÄÚµå1      
-	char off_tra1                         [  6];	char _off_tra1;                           //¸ÅµµÈ¸¿ø»ç´ÜÀÌ¸§1    
-	char N_off_tra1                       [ 20];	char _N_off_tra1;                         //¸ÅµµÈ¸¿ø»çÀåÀÌ¸§1    
-	char N_otraflag1                      [  1];	char _N_otraflag1;                        //¸ÅµµÈ¸¿ø»ç¿Ü±¸ºÐ1    
-	char N_offvolume1                     [  9];	char _N_offvolume1;                       //¸Åµµ°Å·¡·®1          
-	char N_offvolcha1                     [  9];	char _N_offvolcha1;                       //Á÷Àü¸ÅµµÂ÷1          	
-	char bid_trano1                       [  4];	char _bid_trano1;                         //¸Å¼öÈ¸¿ø»çÄÚµå1      
-	char bid_tra1                         [  6];	char _bid_tra1;                           //¸Å¼öÈ¸¿ø»ç´ÜÀÌ¸§1    
-	char N_bid_tra1                       [ 20];	char _N_bid_tra1;                         //¸Å¼öÈ¸¿ø»çÀåÀÌ¸§1    
-	char N_btraflag1                      [  1];	char _N_btraflag1;                        //¸Å¼öÈ¸¿ø»ç¿Ü±¸ºÐ1    
-	char N_bidvolume1                     [  9];	char _N_bidvolume1;                       //¸Å¼ö°Å·¡·®1          
-	char N_bidvolcha1                     [  9];	char _N_bidvolcha1;                       //Á÷Àü¸Å¼öÂ÷1          
-	char off_trano2                       [  4];	char _off_trano2;                         //¸ÅµµÈ¸¿ø»çÄÚµå2      
-	char off_tra2                         [  6];	char _off_tra2;                           //¸ÅµµÈ¸¿ø»ç´ÜÀÌ¸§2    
-	char N_off_tra2                       [ 20];	char _N_off_tra2;                         //¸ÅµµÈ¸¿ø»çÀåÀÌ¸§2    
-	char N_otraflag2                      [  1];	char _N_otraflag2;                        //¸ÅµµÈ¸¿ø»ç¿Ü±¸ºÐ2    
-	char N_offvolume2                     [  9];	char _N_offvolume2;                       //¸Åµµ°Å·¡·®2          
-	char N_offvolcha2                     [  9];	char _N_offvolcha2;                       //Á÷Àü¸ÅµµÂ÷2          
-	char bid_trano2                       [  4];	char _bid_trano2;                         //¸Å¼öÈ¸¿ø»çÄÚµå2      
-	char bid_tra2                         [  6];	char _bid_tra2;                           //¸Å¼öÈ¸¿ø»ç´ÜÀÌ¸§2    
-	char N_bid_tra2                       [ 20];	char _N_bid_tra2;                         //¸Å¼öÈ¸¿ø»çÀåÀÌ¸§2    
-	char N_btraflag2                      [  1];	char _N_btraflag2;                        //¸Å¼öÈ¸¿ø»ç¿Ü±¸ºÐ2    
-	char N_bidvolume2                     [  9];	char _N_bidvolume2;                       //¸Å¼ö°Å·¡·®2          
-	char N_bidvolcha2                     [  9];	char _N_bidvolcha2;                       //Á÷Àü¸Å¼öÂ÷2          
-	char off_trano3                       [  4];	char _off_trano3;                         //¸ÅµµÈ¸¿ø»çÄÚµå3      
-	char off_tra3                         [  6];	char _off_tra3;                           //¸ÅµµÈ¸¿ø»ç´ÜÀÌ¸§3    
-	char N_off_tra3                       [ 20];	char _N_off_tra3;                         //¸ÅµµÈ¸¿ø»çÀåÀÌ¸§3    
-	char N_otraflag3                      [  1];	char _N_otraflag3;                        //¸ÅµµÈ¸¿ø»ç¿Ü±¸ºÐ3    
-	char N_offvolume3                     [  9];	char _N_offvolume3;                       //¸Åµµ°Å·¡·®3          
-	char N_offvolcha3                     [  9];	char _N_offvolcha3;                       //Á÷Àü¸ÅµµÂ÷3          
-	char bid_trano3                       [  4];	char _bid_trano3;                         //¸Å¼öÈ¸¿ø»çÄÚµå3      
-	char bid_tra3                         [  6];	char _bid_tra3;                           //¸Å¼öÈ¸¿ø»ç´ÜÀÌ¸§3    
-	char N_bid_tra3                       [ 20];	char _N_bid_tra3;                         //¸Å¼öÈ¸¿ø»çÀåÀÌ¸§3    
-	char N_btraflag3                      [  1];	char _N_btraflag3;                        //¸Å¼öÈ¸¿ø»ç¿Ü±¸ºÐ3    
-	char N_bidvolume3                     [  9];	char _N_bidvolume3;                       //¸Å¼ö°Å·¡·®3          
-	char N_bidvolcha3                     [  9];	char _N_bidvolcha3;                       //Á÷Àü¸Å¼öÂ÷3          
-	char off_trano4                       [  4];	char _off_trano4;                         //¸ÅµµÈ¸¿ø»çÄÚµå4      
-	char off_tra4                         [  6];	char _off_tra4;                           //¸ÅµµÈ¸¿ø»ç´ÜÀÌ¸§4    
-	char N_off_tra4                       [ 20];	char _N_off_tra4;                         //¸ÅµµÈ¸¿ø»çÀåÀÌ¸§4    
-	char N_otraflag4                      [  1];	char _N_otraflag4;                        //¸ÅµµÈ¸¿ø»ç¿Ü±¸ºÐ4    
-	char N_offvolume4                     [  9];	char _N_offvolume4;                       //¸Åµµ°Å·¡·®4          
-	char N_offvolcha4                     [  9];	char _N_offvolcha4;                       //Á÷Àü¸ÅµµÂ÷4          
-	char bid_trano4                       [  4];	char _bid_trano4;                         //¸Å¼öÈ¸¿ø»çÄÚµå4      
-	char bid_tra4                         [  6];	char _bid_tra4;                           //¸Å¼öÈ¸¿ø»ç´ÜÀÌ¸§4    
-	char N_bid_tra4                       [ 20];	char _N_bid_tra4;                         //¸Å¼öÈ¸¿ø»çÀåÀÌ¸§4    
-	char N_btraflag4                      [  1];	char _N_btraflag4;                        //¸Å¼öÈ¸¿ø»ç¿Ü±¸ºÐ4    
-	char N_bidvolume4                     [  9];	char _N_bidvolume4;                       //¸Å¼ö°Å·¡·®4          
-	char N_bidvolcha4                     [  9];	char _N_bidvolcha4;                       //Á÷Àü¸Å¼öÂ÷4          
-	char off_trano5                       [  4];	char _off_trano5;                         //¸ÅµµÈ¸¿ø»çÄÚµå5      
-	char off_tra5                         [  6];	char _off_tra5;                           //¸ÅµµÈ¸¿ø»ç´ÜÀÌ¸§5    
-	char N_off_tra5                       [ 20];	char _N_off_tra5;                         //¸ÅµµÈ¸¿ø»çÀåÀÌ¸§5    
-	char N_otraflag5                      [  1];	char _N_otraflag5;                        //¸ÅµµÈ¸¿ø»ç¿Ü±¸ºÐ5    
-	char N_offvolume5                     [  9];	char _N_offvolume5;                       //¸Åµµ°Å·¡·®5          
-	char N_offvolcha5                     [  9];	char _N_offvolcha5;                       //Á÷Àü¸ÅµµÂ÷5          
-	char bid_trano5                       [  4];	char _bid_trano5;                         //¸Å¼öÈ¸¿ø»çÄÚµå5      
-	char bid_tra5                         [  6];	char _bid_tra5;                           //¸Å¼öÈ¸¿ø»ç´ÜÀÌ¸§5    
-	char N_bid_tra5                       [ 20];	char _N_bid_tra5;                         //¸Å¼öÈ¸¿ø»çÀåÀÌ¸§5    
-	char N_btraflag5                      [  1];	char _N_btraflag5;                        //¸Å¼öÈ¸¿ø»ç¿Ü±¸ºÐ5    
-	char N_bidvolume5                     [  9];	char _N_bidvolume5;                       //¸Å¼ö°Å·¡·®5          
-	char N_bidvolcha5                     [  9];	char _N_bidvolcha5;                       //Á÷Àü¸Å¼öÂ÷5          
-	char N_offvolall                      [  9];	char _N_offvolall;                        //¿Ü±¹°èÈ¸¿ø»ç¸ÅµµÇÕ   
-	char N_offvolcha                      [  9];	char _N_offvolcha;                        //¿Ü±¹°èÁ÷Àü¸ÅµµÂ÷     
-	char N_bidvolall                      [  9];	char _N_bidvolall;                        //¿Ü±¹°èÈ¸¿ø»ç¸Å¼öÇÕ   
-	char N_bidvolcha                      [  9];	char _N_bidvolcha;                        //¿Ü±¹°èÁ÷Àü¸Å¼öÂ÷     
-	char N_soonmaesu                      [  9];	char _N_soonmaesu;                        //¿Ü±¹°èÈ¸¿ø¼ø¸Å¼ö     
-	char N_soonmaecha                     [  9];	char _N_soonmaecha;                       //¿Ü±¹°èÁ÷Àü¼ø¸Å¼öÂ÷   
-	char N_alloffvol                      [  9];	char _N_alloffvol;                        //¸ÅµµÀüÃ¼ÇÕ           
-	char N_allbidvol                      [  9];	char _N_allbidvol;                        //¸Å¼öÀüÃ¼ÇÕ           
-	char hname                            [ 13];	char _hname;                              //Á¾¸ñ¸í               
-	char kpgubun                          [  1];	char _kpgubun;                            //½ÃÀå±¸ºÐ             
+	char code                             [  6];	char _code;                               //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char time                             [  8];	char _time;                               //ï¿½Ã°ï¿½                 
+	char off_trano1                       [  4];	char _off_trano1;                         //ï¿½Åµï¿½È¸ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½1      
+	char off_tra1                         [  6];	char _off_tra1;                           //ï¿½Åµï¿½È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½1    
+	char N_off_tra1                       [ 20];	char _N_off_tra1;                         //ï¿½Åµï¿½È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½1    
+	char N_otraflag1                      [  1];	char _N_otraflag1;                        //ï¿½Åµï¿½È¸ï¿½ï¿½ï¿½ï¿½Ü±ï¿½ï¿½ï¿½1    
+	char N_offvolume1                     [  9];	char _N_offvolume1;                       //ï¿½Åµï¿½ï¿½Å·ï¿½ï¿½ï¿½1          
+	char N_offvolcha1                     [  9];	char _N_offvolcha1;                       //ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½ï¿½1          	
+	char bid_trano1                       [  4];	char _bid_trano1;                         //ï¿½Å¼ï¿½È¸ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½1      
+	char bid_tra1                         [  6];	char _bid_tra1;                           //ï¿½Å¼ï¿½È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½1    
+	char N_bid_tra1                       [ 20];	char _N_bid_tra1;                         //ï¿½Å¼ï¿½È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½1    
+	char N_btraflag1                      [  1];	char _N_btraflag1;                        //ï¿½Å¼ï¿½È¸ï¿½ï¿½ï¿½ï¿½Ü±ï¿½ï¿½ï¿½1    
+	char N_bidvolume1                     [  9];	char _N_bidvolume1;                       //ï¿½Å¼ï¿½ï¿½Å·ï¿½ï¿½ï¿½1          
+	char N_bidvolcha1                     [  9];	char _N_bidvolcha1;                       //ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½ï¿½1          
+	char off_trano2                       [  4];	char _off_trano2;                         //ï¿½Åµï¿½È¸ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½2      
+	char off_tra2                         [  6];	char _off_tra2;                           //ï¿½Åµï¿½È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½2    
+	char N_off_tra2                       [ 20];	char _N_off_tra2;                         //ï¿½Åµï¿½È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½2    
+	char N_otraflag2                      [  1];	char _N_otraflag2;                        //ï¿½Åµï¿½È¸ï¿½ï¿½ï¿½ï¿½Ü±ï¿½ï¿½ï¿½2    
+	char N_offvolume2                     [  9];	char _N_offvolume2;                       //ï¿½Åµï¿½ï¿½Å·ï¿½ï¿½ï¿½2          
+	char N_offvolcha2                     [  9];	char _N_offvolcha2;                       //ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½ï¿½2          
+	char bid_trano2                       [  4];	char _bid_trano2;                         //ï¿½Å¼ï¿½È¸ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½2      
+	char bid_tra2                         [  6];	char _bid_tra2;                           //ï¿½Å¼ï¿½È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½2    
+	char N_bid_tra2                       [ 20];	char _N_bid_tra2;                         //ï¿½Å¼ï¿½È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½2    
+	char N_btraflag2                      [  1];	char _N_btraflag2;                        //ï¿½Å¼ï¿½È¸ï¿½ï¿½ï¿½ï¿½Ü±ï¿½ï¿½ï¿½2    
+	char N_bidvolume2                     [  9];	char _N_bidvolume2;                       //ï¿½Å¼ï¿½ï¿½Å·ï¿½ï¿½ï¿½2          
+	char N_bidvolcha2                     [  9];	char _N_bidvolcha2;                       //ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½ï¿½2          
+	char off_trano3                       [  4];	char _off_trano3;                         //ï¿½Åµï¿½È¸ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½3      
+	char off_tra3                         [  6];	char _off_tra3;                           //ï¿½Åµï¿½È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½3    
+	char N_off_tra3                       [ 20];	char _N_off_tra3;                         //ï¿½Åµï¿½È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½3    
+	char N_otraflag3                      [  1];	char _N_otraflag3;                        //ï¿½Åµï¿½È¸ï¿½ï¿½ï¿½ï¿½Ü±ï¿½ï¿½ï¿½3    
+	char N_offvolume3                     [  9];	char _N_offvolume3;                       //ï¿½Åµï¿½ï¿½Å·ï¿½ï¿½ï¿½3          
+	char N_offvolcha3                     [  9];	char _N_offvolcha3;                       //ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½ï¿½3          
+	char bid_trano3                       [  4];	char _bid_trano3;                         //ï¿½Å¼ï¿½È¸ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½3      
+	char bid_tra3                         [  6];	char _bid_tra3;                           //ï¿½Å¼ï¿½È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½3    
+	char N_bid_tra3                       [ 20];	char _N_bid_tra3;                         //ï¿½Å¼ï¿½È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½3    
+	char N_btraflag3                      [  1];	char _N_btraflag3;                        //ï¿½Å¼ï¿½È¸ï¿½ï¿½ï¿½ï¿½Ü±ï¿½ï¿½ï¿½3    
+	char N_bidvolume3                     [  9];	char _N_bidvolume3;                       //ï¿½Å¼ï¿½ï¿½Å·ï¿½ï¿½ï¿½3          
+	char N_bidvolcha3                     [  9];	char _N_bidvolcha3;                       //ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½ï¿½3          
+	char off_trano4                       [  4];	char _off_trano4;                         //ï¿½Åµï¿½È¸ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½4      
+	char off_tra4                         [  6];	char _off_tra4;                           //ï¿½Åµï¿½È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½4    
+	char N_off_tra4                       [ 20];	char _N_off_tra4;                         //ï¿½Åµï¿½È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½4    
+	char N_otraflag4                      [  1];	char _N_otraflag4;                        //ï¿½Åµï¿½È¸ï¿½ï¿½ï¿½ï¿½Ü±ï¿½ï¿½ï¿½4    
+	char N_offvolume4                     [  9];	char _N_offvolume4;                       //ï¿½Åµï¿½ï¿½Å·ï¿½ï¿½ï¿½4          
+	char N_offvolcha4                     [  9];	char _N_offvolcha4;                       //ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½ï¿½4          
+	char bid_trano4                       [  4];	char _bid_trano4;                         //ï¿½Å¼ï¿½È¸ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½4      
+	char bid_tra4                         [  6];	char _bid_tra4;                           //ï¿½Å¼ï¿½È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½4    
+	char N_bid_tra4                       [ 20];	char _N_bid_tra4;                         //ï¿½Å¼ï¿½È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½4    
+	char N_btraflag4                      [  1];	char _N_btraflag4;                        //ï¿½Å¼ï¿½È¸ï¿½ï¿½ï¿½ï¿½Ü±ï¿½ï¿½ï¿½4    
+	char N_bidvolume4                     [  9];	char _N_bidvolume4;                       //ï¿½Å¼ï¿½ï¿½Å·ï¿½ï¿½ï¿½4          
+	char N_bidvolcha4                     [  9];	char _N_bidvolcha4;                       //ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½ï¿½4          
+	char off_trano5                       [  4];	char _off_trano5;                         //ï¿½Åµï¿½È¸ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½5      
+	char off_tra5                         [  6];	char _off_tra5;                           //ï¿½Åµï¿½È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½5    
+	char N_off_tra5                       [ 20];	char _N_off_tra5;                         //ï¿½Åµï¿½È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½5    
+	char N_otraflag5                      [  1];	char _N_otraflag5;                        //ï¿½Åµï¿½È¸ï¿½ï¿½ï¿½ï¿½Ü±ï¿½ï¿½ï¿½5    
+	char N_offvolume5                     [  9];	char _N_offvolume5;                       //ï¿½Åµï¿½ï¿½Å·ï¿½ï¿½ï¿½5          
+	char N_offvolcha5                     [  9];	char _N_offvolcha5;                       //ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½ï¿½5          
+	char bid_trano5                       [  4];	char _bid_trano5;                         //ï¿½Å¼ï¿½È¸ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½5      
+	char bid_tra5                         [  6];	char _bid_tra5;                           //ï¿½Å¼ï¿½È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½5    
+	char N_bid_tra5                       [ 20];	char _N_bid_tra5;                         //ï¿½Å¼ï¿½È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½5    
+	char N_btraflag5                      [  1];	char _N_btraflag5;                        //ï¿½Å¼ï¿½È¸ï¿½ï¿½ï¿½ï¿½Ü±ï¿½ï¿½ï¿½5    
+	char N_bidvolume5                     [  9];	char _N_bidvolume5;                       //ï¿½Å¼ï¿½ï¿½Å·ï¿½ï¿½ï¿½5          
+	char N_bidvolcha5                     [  9];	char _N_bidvolcha5;                       //ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½ï¿½5          
+	char N_offvolall                      [  9];	char _N_offvolall;                        //ï¿½Ü±ï¿½ï¿½ï¿½È¸ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½ï¿½   
+	char N_offvolcha                      [  9];	char _N_offvolcha;                        //ï¿½Ü±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åµï¿½ï¿½ï¿½     
+	char N_bidvolall                      [  9];	char _N_bidvolall;                        //ï¿½Ü±ï¿½ï¿½ï¿½È¸ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½ï¿½   
+	char N_bidvolcha                      [  9];	char _N_bidvolcha;                        //ï¿½Ü±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½ï¿½     
+	char N_soonmaesu                      [  9];	char _N_soonmaesu;                        //ï¿½Ü±ï¿½ï¿½ï¿½È¸ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½     
+	char N_soonmaecha                     [  9];	char _N_soonmaecha;                       //ï¿½Ü±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å¼ï¿½ï¿½ï¿½   
+	char N_alloffvol                      [  9];	char _N_alloffvol;                        //ï¿½Åµï¿½ï¿½ï¿½Ã¼ï¿½ï¿½           
+	char N_allbidvol                      [  9];	char _N_allbidvol;                        //ï¿½Å¼ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½           
+	char hname                            [ 13];	char _hname;                              //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char kpgubun                          [  1];	char _kpgubun;                            //ï¿½ï¿½ï¿½å±¸ï¿½ï¿½             
 } TeTOutBlock;
 
 typedef struct tageT
 {
-	TeTInBlock                        etinblock                             ;  //ÀÔ·Â 
-	TeTOutBlock                       etoutblock                            ;  //Ãâ·Â 
+	TeTInBlock                        etinblock                             ;  //ï¿½Ô·ï¿½ 
+	TeTOutBlock                       etoutblock                            ;  //ï¿½ï¿½ï¿½ 
 } TeT;
 
-typedef struct tagfEInBlock    //ÀÔ·Â
+typedef struct tagfEInBlock    //ï¿½Ô·ï¿½
 {
-	char fuitem                           [  4];   //Á¾¸ñÄÚµå             
+	char fuitem                           [  4];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } TfEInBlock;
 
-typedef struct tagfEOutBlock    //Ãâ·Â
+typedef struct tagfEOutBlock    //ï¿½ï¿½ï¿½
 {
-	char fuitem                           [  4];   //Á¾¸ñÄÚµå             
-	char time                             [  8];   //½Ã°£                 
-	char dongsi                           [  1];   //µ¿½ÃÈ£°¡±¸ºÐ         
-	char eqsign                           [  1];   //¿¹»óµî¶ôºÎÈ£         
-	char eqprice                          [  5];   //¿¹»óÃ¼°á°¡           
-	char eqchange                         [  5];   //¿¹»óµî¶ôÆø           
-	char eqchrate                         [  5];   //¿¹»óµî¶ô·ü           
+	char fuitem                           [  4];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char time                             [  8];   //ï¿½Ã°ï¿½                 
+	char dongsi                           [  1];   //ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char eqsign                           [  1];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£         
+	char eqprice                          [  5];   //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½á°¡           
+	char eqchange                         [  5];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½           
+	char eqchrate                         [  5];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½           
 } TfEOutBlock;
 
 typedef struct tagfE
 {
-	TfEInBlock                        feinblock                             ;  //ÀÔ·Â 
-	TfEOutBlock                       feoutblock                            ;  //Ãâ·Â 
+	TfEInBlock                        feinblock                             ;  //ï¿½Ô·ï¿½ 
+	TfEOutBlock                       feoutblock                            ;  //ï¿½ï¿½ï¿½ 
 } TfE;
 
-typedef struct tagoEInBlock    //ÀÔ·Â
+typedef struct tagoEInBlock    //ï¿½Ô·ï¿½
 {
-	char opitem                           [  8];   //Á¾¸ñÄÚµå             
+	char opitem                           [  8];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } ToEInBlock;
 
-typedef struct tagoEOutBlock    //Ãâ·Â
+typedef struct tagoEOutBlock    //ï¿½ï¿½ï¿½
 {
-	char opitem                           [  8];   //Á¾¸ñÄÚµå             
-	char time                             [  8];   //½Ã°£                 
-	char dongsi                           [  1];   //µ¿½ÃÈ£°¡±¸ºÐ         
-	char eqsign                           [  1];   //¿¹»óµî¶ôºÎÈ£         
-	char eqprice                          [  5];   //¿¹»óÃ¼°á°¡           
-	char eqchange                         [  5];   //¿¹»óµî¶ôÆø           
-	char eqchrate                         [  5];   //¿¹»óµî¶ô·ü           
+	char opitem                           [  8];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char time                             [  8];   //ï¿½Ã°ï¿½                 
+	char dongsi                           [  1];   //ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char eqsign                           [  1];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£         
+	char eqprice                          [  5];   //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½á°¡           
+	char eqchange                         [  5];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½           
+	char eqchrate                         [  5];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½           
 } ToEOutBlock;
 
 typedef struct tagoE
 {
-	ToEInBlock                        oeinblock                             ;  //ÀÔ·Â 
-	ToEOutBlock                       oeoutblock                            ;  //Ãâ·Â 
+	ToEInBlock                        oeinblock                             ;  //ï¿½Ô·ï¿½ 
+	ToEOutBlock                       oeoutblock                            ;  //ï¿½ï¿½ï¿½ 
 } ToE;
 
-typedef struct tagvEInBlock    //ÀÔ·Â
+typedef struct tagvEInBlock    //ï¿½Ô·ï¿½
 {
-	char expcode                          [  8];   //Á¾¸ñÄÚµå             
+	char expcode                          [  8];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } TvEInBlock;
 
-typedef struct tagvEOutBlock    //Ãâ·Â
+typedef struct tagvEOutBlock    //ï¿½ï¿½ï¿½
 {
-	char expcode                          [  8];   //Á¾¸ñÄÚµå             
-	char time                             [  8];   //½Ã°£                 
-	char dongsi                           [  1];   //µ¿½ÃÈ£°¡±¸ºÐ         
-	char eqsign                           [  1];   //¿¹»óµî¶ôºÎÈ£         
-	char eqprice                          [  7];   //¿¹»óÃ¼°á°¡           
-	char eqchange                         [  7];   //¿¹»óµî¶ôÆø           
-	char eqchrate                         [  5];   //¿¹»óµî¶ô·ü           
+	char expcode                          [  8];   //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char time                             [  8];   //ï¿½Ã°ï¿½                 
+	char dongsi                           [  1];   //ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½         
+	char eqsign                           [  1];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È£         
+	char eqprice                          [  7];   //ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½á°¡           
+	char eqchange                         [  7];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½           
+	char eqchrate                         [  5];   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½           
 } TvEOutBlock;
 
 typedef struct tagvE
 {
-	TvEInBlock                        veinblock                             ;  //ÀÔ·Â 
-	TvEOutBlock                       veoutblock                            ;  //Ãâ·Â 
+	TvEInBlock                        veinblock                             ;  //ï¿½Ô·ï¿½ 
+	TvEOutBlock                       veoutblock                            ;  //ï¿½ï¿½ï¿½ 
 } TvE;
 
-typedef struct tagf7InBlock    //ÀÔ·Â
+typedef struct tagf7InBlock    //ï¿½Ô·ï¿½
 {
-	char fuitem                           [  4];	char _fuitem;                             //Á¾¸ñÄÚµå             
+	char fuitem                           [  4];	char _fuitem;                             //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } Tf7InBlock;
 
-typedef struct tagf7OutBlock    //Ãâ·Â
+typedef struct tagf7OutBlock    //ï¿½ï¿½ï¿½
 {
-	char fuitem                           [  4];	char _fuitem;                             //Á¾¸ñÄÚµå             
-	char futime                           [  8];	char _futime;                             //½Ã°£                 
-	char exlmtstep                        [  1];	char _exlmtstep;                          //°¡°ÝÈ®´ë¿¹Á¤´Ü°è     
-	char exlmtgb                          [  1];	char _exlmtgb;                            //°¡°ÝÈ®´ë¿¹Á¤ ±¸ºÐ    
-	char uplmtgb                          [  1];	char _uplmtgb;                            //°¡°ÝÁ¦ÇÑÈ®´ë»óÇÑ´Ü°è 
-	char dnlmtgb                          [  1];	char _dnlmtgb;                            //°¡°ÝÁ¦ÇÑÈ®´ëÇÏÇÑ´Ü°è 
-	char uplmtprice                       [  5];	char _uplmtprice;                         //Àû¿ëµÈ ´Ü°è »óÇÑ°¡   
-	char dnlmtprice                       [  5];	char _dnlmtprice;                         //Àû¿ëµÈ ´Ü°è ÇÏÇÑ°¡   
+	char fuitem                           [  4];	char _fuitem;                             //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char futime                           [  8];	char _futime;                             //ï¿½Ã°ï¿½                 
+	char exlmtstep                        [  1];	char _exlmtstep;                          //ï¿½ï¿½ï¿½ï¿½È®ï¿½ë¿¹ï¿½ï¿½ï¿½Ü°ï¿½     
+	char exlmtgb                          [  1];	char _exlmtgb;                            //ï¿½ï¿½ï¿½ï¿½È®ï¿½ë¿¹ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½    
+	char uplmtgb                          [  1];	char _uplmtgb;                            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È®ï¿½ï¿½ï¿½ï¿½Ñ´Ü°ï¿½ 
+	char dnlmtgb                          [  1];	char _dnlmtgb;                            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È®ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´Ü°ï¿½ 
+	char uplmtprice                       [  5];	char _uplmtprice;                         //ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ü°ï¿½ ï¿½ï¿½ï¿½Ñ°ï¿½   
+	char dnlmtprice                       [  5];	char _dnlmtprice;                         //ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ü°ï¿½ ï¿½ï¿½ï¿½Ñ°ï¿½   
 } Tf7OutBlock;
 
 typedef struct tagf7
 {
-	Tf7InBlock                        f7inblock                             ;  //ÀÔ·Â 
-	Tf7OutBlock                       f7outblock                            ;  //Ãâ·Â 
+	Tf7InBlock                        f7inblock                             ;  //ï¿½Ô·ï¿½ 
+	Tf7OutBlock                       f7outblock                            ;  //ï¿½ï¿½ï¿½ 
 } Tf7;
 
-typedef struct tago7InBlock    //ÀÔ·Â
+typedef struct tago7InBlock    //ï¿½Ô·ï¿½
 {
-	char opitem                           [  8];	char _opitem;                             //Á¾¸ñÄÚµå             
+	char opitem                           [  8];	char _opitem;                             //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } To7InBlock;
 
-typedef struct tago7OutBlock    //Ãâ·Â
+typedef struct tago7OutBlock    //ï¿½ï¿½ï¿½
 {
-	char opitem                           [  8];	char _opitem;                             //Á¾¸ñÄÚµå             
-	char optime                           [  8];	char _optime;                             //½Ã°£                 
-	char uplmtgb                          [  1];	char _uplmtgb;                            //°¡°ÝÁ¦ÇÑÈ®´ë»óÇÑ´Ü°è 
-	char dnlmtgb                          [  1];	char _dnlmtgb;                            //°¡°ÝÁ¦ÇÑÈ®´ëÇÏÇÑ´Ü°è 
-	char uplmtprice                       [  5];	char _uplmtprice;                         //Àû¿ëµÈ ´Ü°è »óÇÑ°¡   
-	char dnlmtprice                       [  5];	char _dnlmtprice;                         //Àû¿ëµÈ ´Ü°è ÇÏÇÑ°¡   
+	char opitem                           [  8];	char _opitem;                             //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char optime                           [  8];	char _optime;                             //ï¿½Ã°ï¿½                 
+	char uplmtgb                          [  1];	char _uplmtgb;                            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È®ï¿½ï¿½ï¿½ï¿½Ñ´Ü°ï¿½ 
+	char dnlmtgb                          [  1];	char _dnlmtgb;                            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È®ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´Ü°ï¿½ 
+	char uplmtprice                       [  5];	char _uplmtprice;                         //ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ü°ï¿½ ï¿½ï¿½ï¿½Ñ°ï¿½   
+	char dnlmtprice                       [  5];	char _dnlmtprice;                         //ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ü°ï¿½ ï¿½ï¿½ï¿½Ñ°ï¿½   
 } To7OutBlock;
 
 typedef struct tago7
 {
-	To7InBlock                        o7inblock                             ;  //ÀÔ·Â 
-	To7OutBlock                       o7outblock                            ;  //Ãâ·Â 
+	To7InBlock                        o7inblock                             ;  //ï¿½Ô·ï¿½ 
+	To7OutBlock                       o7outblock                            ;  //ï¿½ï¿½ï¿½ 
 } To7;
 
-typedef struct tagvIInBlock    //ÀÔ·Â
+typedef struct tagvIInBlock    //ï¿½Ô·ï¿½
 {
-	char fuitem                           [  8];	char _fuitem;                             //Á¾¸ñÄÚµå             
+	char fuitem                           [  8];	char _fuitem;                             //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } TvIInBlock;
 
-typedef struct tagvIOutBlock    //Ãâ·Â
+typedef struct tagvIOutBlock    //ï¿½ï¿½ï¿½
 {
-	char fuitem                           [  8];	char _fuitem;                             //Á¾¸ñÄÚµå             
-	char futime                           [  8];	char _futime;                             //½Ã°£                 
-	char exlmtstep                        [  1];	char _exlmtstep;                          //°¡°ÝÈ®´ë¿¹Á¤´Ü°è     
-	char exlmtgb                          [  1];	char _exlmtgb;                            //°¡°ÝÈ®´ë¿¹Á¤ ±¸ºÐ    
-	char uplmtgb                          [  1];	char _uplmtgb;                            //°¡°ÝÁ¦ÇÑÈ®´ë»óÇÑ´Ü°è 
-	char dnlmtgb                          [  1];	char _dnlmtgb;                            //°¡°ÝÁ¦ÇÑÈ®´ëÇÏÇÑ´Ü°è 
-	char uplmtprice                       [  7];	char _uplmtprice;                         //Àû¿ëµÈ ´Ü°è »óÇÑ°¡   
-	char dnlmtprice                       [  7];	char _dnlmtprice;                         //Àû¿ëµÈ ´Ü°è ÇÏÇÑ°¡   
+	char fuitem                           [  8];	char _fuitem;                             //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char futime                           [  8];	char _futime;                             //ï¿½Ã°ï¿½                 
+	char exlmtstep                        [  1];	char _exlmtstep;                          //ï¿½ï¿½ï¿½ï¿½È®ï¿½ë¿¹ï¿½ï¿½ï¿½Ü°ï¿½     
+	char exlmtgb                          [  1];	char _exlmtgb;                            //ï¿½ï¿½ï¿½ï¿½È®ï¿½ë¿¹ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½    
+	char uplmtgb                          [  1];	char _uplmtgb;                            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È®ï¿½ï¿½ï¿½ï¿½Ñ´Ü°ï¿½ 
+	char dnlmtgb                          [  1];	char _dnlmtgb;                            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È®ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´Ü°ï¿½ 
+	char uplmtprice                       [  7];	char _uplmtprice;                         //ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ü°ï¿½ ï¿½ï¿½ï¿½Ñ°ï¿½   
+	char dnlmtprice                       [  7];	char _dnlmtprice;                         //ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ü°ï¿½ ï¿½ï¿½ï¿½Ñ°ï¿½   
 } TvIOutBlock;
 
 typedef struct tagvI
 {
-	TvIInBlock                        viinblock                             ;  //ÀÔ·Â 
-	TvIOutBlock                       vioutblock                            ;  //Ãâ·Â 
+	TvIInBlock                        viinblock                             ;  //ï¿½Ô·ï¿½ 
+	TvIOutBlock                       vioutblock                            ;  //ï¿½ï¿½ï¿½ 
 } TvI;
 
-typedef struct tagu1InBlock    //ÀÔ·Â
+typedef struct tagu1InBlock    //ï¿½Ô·ï¿½
 {
-	char jisucode                         [  2];	char _jisucode;                           //¾÷Á¾ÄÚµå             
+	char jisucode                         [  2];	char _jisucode;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } Tu1InBlock;
 
-typedef struct tagu1OutBlock    //Ãâ·Â
+typedef struct tagu1OutBlock    //ï¿½ï¿½ï¿½
 {
-	char jisucode                         [  2];	char _jisucode;                           //¾÷Á¾ÄÚµå             
-	char jisutime                         [  8];	char _jisutime;                           //½Ã°£                 
-	char jisu                             [  8];	char _jisu;                               //Áö¼ö                 
-	char jisusign                         [  1];	char _jisusign;                           //µî¶ôºÎÈ£             
-	char jisuchange                       [  8];	char _jisuchange;                         //µî¶ôÆø               
-	char jisuvolume                       [  8];	char _jisuvolume;                         //°Å·¡·®               
-	char jisuvalue                        [  8];	char _jisuvalue;                          //°Å·¡´ë±Ý             
-	char jisuopen                         [  8];	char _jisuopen;                           //½Ã°¡Áö¼ö             
-	char jisuhigh                         [  8];	char _jisuhigh;                           //°í°¡Áö¼ö             
-	char jisuhightime                     [  8];	char _jisuhightime;                       //°í°¡½Ã°£             
-	char jisulow                          [  8];	char _jisulow;                            //Àú°¡Áö¼ö             
-	char jisulowtime                      [  8];	char _jisulowtime;                        //Àú°¡½Ã°£             
-	char jisuchrate                       [  5];	char _jisuchrate;                         //Áö¼öµî¶ô·ü           
-	char jisubrkvol                       [  5];	char _jisubrkvol;                         //°Å·¡ºñÁß             
+	char jisucode                         [  2];	char _jisucode;                           //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char jisutime                         [  8];	char _jisutime;                           //ï¿½Ã°ï¿½                 
+	char jisu                             [  8];	char _jisu;                               //ï¿½ï¿½ï¿½ï¿½                 
+	char jisusign                         [  1];	char _jisusign;                           //ï¿½ï¿½ï¿½ï¿½ï¿½È£             
+	char jisuchange                       [  8];	char _jisuchange;                         //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char jisuvolume                       [  8];	char _jisuvolume;                         //ï¿½Å·ï¿½ï¿½ï¿½               
+	char jisuvalue                        [  8];	char _jisuvalue;                          //ï¿½Å·ï¿½ï¿½ï¿½ï¿½             
+	char jisuopen                         [  8];	char _jisuopen;                           //ï¿½Ã°ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char jisuhigh                         [  8];	char _jisuhigh;                           //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char jisuhightime                     [  8];	char _jisuhightime;                       //ï¿½ï¿½ï¿½Ã°ï¿½             
+	char jisulow                          [  8];	char _jisulow;                            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char jisulowtime                      [  8];	char _jisulowtime;                        //ï¿½ï¿½ï¿½ï¿½ï¿½Ã°ï¿½             
+	char jisuchrate                       [  5];	char _jisuchrate;                         //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½           
+	char jisubrkvol                       [  5];	char _jisubrkvol;                         //ï¿½Å·ï¿½ï¿½ï¿½ï¿½ï¿½             
 } Tu1OutBlock;
 
 typedef struct tagu1
 {
-	Tu1InBlock                        u1inblock                             ;  //ÀÔ·Â 
-	Tu1OutBlock                       u1outblock                            ;  //Ãâ·Â 
+	Tu1InBlock                        u1inblock                             ;  //ï¿½Ô·ï¿½ 
+	Tu1OutBlock                       u1outblock                            ;  //ï¿½ï¿½ï¿½ 
 } Tu1;
 
-typedef struct tagk1InBlock    //ÀÔ·Â
+typedef struct tagk1InBlock    //ï¿½Ô·ï¿½
 {
-	char jisukcode                        [  2];	char _jisukcode;                          //¾÷Á¾ÄÚµå             
+	char jisukcode                        [  2];	char _jisukcode;                          //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
 } Tk1InBlock;
 
-typedef struct tagk1OutBlock    //Ãâ·Â
+typedef struct tagk1OutBlock    //ï¿½ï¿½ï¿½
 {
-	char jisukcode                        [  2];	char _jisukcode;                          //¾÷Á¾ÄÚµå             
-	char jisuktime                        [  8];	char _jisuktime;                          //½Ã°£                 
-	char jisuk                            [  8];	char _jisuk;                              //Áö¼ö                 
-	char jisuksign                        [  1];	char _jisuksign;                          //µî¶ôºÎÈ£             
-	char jisukchange                      [  8];	char _jisukchange;                        //µî¶ôÆø               
-	char jisukvolume                      [  8];	char _jisukvolume;                        //°Å·¡·®               
-	char jisukvalue                       [  8];	char _jisukvalue;                         //°Å·¡´ë±Ý             
-	char jisukopen                        [  8];	char _jisukopen;                          //½Ã°¡Áö¼ö             
-	char jisukhigh                        [  8];	char _jisukhigh;                          //°í°¡Áö¼ö             
-	char jisukhightime                    [  8];	char _jisukhightime;                      //°í°¡½Ã°£             
-	char jisuklow                         [  8];	char _jisuklow;                           //Àú°¡Áö¼ö             
-	char jisuklowtime                     [  8];	char _jisuklowtime;                       //Àú°¡½Ã°£             
-	char jisukchrate                      [  5];	char _jisukchrate;                        //Áö¼öµî¶ô·ü           
-	char jisukbrkvol                      [  5];	char _jisukbrkvol;                        //°Å·¡ºñÁß             
+	char jisukcode                        [  2];	char _jisukcode;                          //ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½             
+	char jisuktime                        [  8];	char _jisuktime;                          //ï¿½Ã°ï¿½                 
+	char jisuk                            [  8];	char _jisuk;                              //ï¿½ï¿½ï¿½ï¿½                 
+	char jisuksign                        [  1];	char _jisuksign;                          //ï¿½ï¿½ï¿½ï¿½ï¿½È£             
+	char jisukchange                      [  8];	char _jisukchange;                        //ï¿½ï¿½ï¿½ï¿½ï¿½               
+	char jisukvolume                      [  8];	char _jisukvolume;                        //ï¿½Å·ï¿½ï¿½ï¿½               
+	char jisukvalue                       [  8];	char _jisukvalue;                         //ï¿½Å·ï¿½ï¿½ï¿½ï¿½             
+	char jisukopen                        [  8];	char _jisukopen;                          //ï¿½Ã°ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char jisukhigh                        [  8];	char _jisukhigh;                          //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char jisukhightime                    [  8];	char _jisukhightime;                      //ï¿½ï¿½ï¿½Ã°ï¿½             
+	char jisuklow                         [  8];	char _jisuklow;                           //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½             
+	char jisuklowtime                     [  8];	char _jisuklowtime;                       //ï¿½ï¿½ï¿½ï¿½ï¿½Ã°ï¿½             
+	char jisukchrate                      [  5];	char _jisukchrate;                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½           
+	char jisukbrkvol                      [  5];	char _jisukbrkvol;                        //ï¿½Å·ï¿½ï¿½ï¿½ï¿½ï¿½             
 } Tk1OutBlock;
 
 typedef struct tagk1
 {
-	Tk1InBlock                        k1inblock                             ;  //ÀÔ·Â 
-	Tk1OutBlock                       k1outblock                            ;  //Ãâ·Â 
+	Tk1InBlock                        k1inblock                             ;  //ï¿½Ô·ï¿½ 
+	Tk1OutBlock                       k1outblock                            ;  //ï¿½ï¿½ï¿½ 
 } Tk1;
 

@@ -11,9 +11,67 @@ import "C"
 import (
 	공용 "github.com/ghts/ghts/common"
 
+	"reflect"
 	//"time"
 	"unsafe"
 )
+
+
+//export OnTrData_Go
+func OnTrData_Go(c데이터 *C.OUTDATABLOCK) {
+	defer C.free(unsafe.Pointer(c데이터))
+	
+	데이터 := (*OutDataBlock)(unsafe.Pointer(c데이터))
+	
+	TR구분번호 := 데이터.TrIndex
+    공용.F문자열_출력("TR회신 데이터 수신. %v", TR구분번호)
+    
+    switch TR구분번호 {
+	case 1:	// TRID_c1101: 주식 현재가 조회. 임시로 1로 정함.	
+		블록_이름 := C.GoString((*C.char)(데이터.DataStruct.BlockName))
+
+		if 블록_이름 == "c1101OutBlock" { // 단순출력 처리 방식
+			블록 := (*Tc1101OutBlock)(unsafe.Pointer(데이터.DataStruct.DataString))
+			공용.F문자열_출력(">>  주식현재가조회 - 현재가")
+			공용.F문자열_출력(공용.F2문자열(블록.Hotime))
+			공용.F문자열_출력(공용.F2문자열(블록.Code))
+			공용.F문자열_출력(공용.F2문자열(블록.Hname))
+			공용.F문자열_출력(공용.F2문자열(블록.Price))
+			공용.F문자열_출력(공용.F2문자열(블록.Volume))
+		} else if 블록_이름 == "c1101OutBlock2" {	//반복가능한 출력 처리 방식
+			// C배열을 Go슬라이스로 전환
+			길이 := int(데이터.DataStruct.Length / int32(unsafe.Sizeof(Tc1101OutBlock2{})))
+			슬라이스_헤더 := reflect.SliceHeader{
+				Data: uintptr(unsafe.Pointer(데이터.DataStruct.DataString)),
+				Len: 길이,
+				Cap: 길이,
+			}
+			
+			슬라이스 := *(*[]C.Tc1101OutBlock2)(unsafe.Pointer(&슬라이스_헤더))
+			
+			공용.F문자열_출력(">>  주식현재가조회 - 변동거래량")
+			
+			for i:=0 ; i < 길이 ; i++ {
+				c개별_데이터 := 슬라이스[i]
+				개별_데이터 := *((*Tc1101OutBlock2)(unsafe.Pointer(&c개별_데이터)))
+				공용.F문자열_출력(공용.F2문자열(개별_데이터.Time))
+				공용.F문자열_출력(공용.F2문자열(개별_데이터.Price))
+				공용.F문자열_출력(공용.F2문자열(개별_데이터.Change))
+				공용.F문자열_출력(공용.F2문자열(개별_데이터.Offer))
+				공용.F문자열_출력(공용.F2문자열(개별_데이터.Bid))
+				공용.F문자열_출력(공용.F2문자열(개별_데이터.Movolume))
+				공용.F문자열_출력(공용.F2문자열(개별_데이터.Volume))
+			}
+		}
+	case 2:	// TRID_c1151: ETF 현재가 조회
+	}	    
+}
+
+//export OnRealTimeData_Go
+func OnRealTimeData_Go(c데이터 *C.OUTDATABLOCK) {
+    공용.F문자열_출력("Realtime Data Go.");
+}
+
 
 //export OnConnected_Go
 func OnConnected_Go(c데이터 *C.LOGINBLOCK) {
@@ -48,51 +106,6 @@ func OnConnected_Go(c데이터 *C.LOGINBLOCK) {
 		// 계좌번호 인덱스는 1부터 시작하는 데, 저장되는 슬라이스의 인덱스는 0부터 시작하니 주의.
 		계좌번호_모음[i] = 공용.F2문자열(계좌_정보.AccountNo)
 	}
-}
-
-//export OnTrData_Go
-func OnTrData_Go(c데이터 *C.OUTDATABLOCK) {
-	defer C.free(unsafe.Pointer(c데이터))
-	
-	데이터 := (*OutDataBlock)(unsafe.Pointer(c데이터))
-	
-	TR구분번호 := 데이터.TrIndex
-    공용.F문자열_출력("TR회신 데이터 수신. %v", TR구분번호)
-    
-    switch TR구분번호 {
-	case 1:	// TRID_c1101: 주식 현재가 조회. 임시로 1로 정함.	
-		블록_이름 := C.GoString((*C.char)(데이터.DataStruct.BlockName))
-
-		if 블록_이름 == "c1101OutBlock" { // 단순출력 처리 방식
-			블록 := (*Tc1101OutBlock)(unsafe.Pointer(데이터.DataStruct.DataString))
-			공용.F문자열_출력(">>  주식현재가조회 - 현재가")
-			공용.F문자열_출력(공용.F2문자열(블록.Hotime))
-			공용.F문자열_출력(공용.F2문자열(블록.Code))
-			공용.F문자열_출력(공용.F2문자열(블록.Hname))
-			공용.F문자열_출력(공용.F2문자열(블록.Price))
-			공용.F문자열_출력(공용.F2문자열(블록.Volume))
-		} else if 블록_이름 == "c1101OutBlock2" {	//반복가능한 출력 처리 방식
-			블록 := (*Tc1101OutBlock2)(unsafe.Pointer(데이터.DataStruct.DataString))
-			공용.F문자열_출력(">>  주식현재가조회 - 변동거래량")
-			
-			//실제 데이터에 따라 수신 데이터 행의 수가 가변적이므로
-			//수신자료 크기를 구조체 크기로 나누어 몇 번 반복되는지 계산함
-			//반복 회수를 구함
-			// sizeof를 어떻게 구하지?
-			데이터_수량 := 데이터.DataStruct.Length / C.sizeof(C_struct_Tc1101OutBlock2)
-			
-			for i:=0 ; i < 데이터_수량 ; i++ {
-				여기까지	
-			}
-		}
-	case 2:	// TRID_c8201: 잔고 및 보유종목. 임시로 2로 정함.
-	}	
-    
-}
-
-//export OnRealTimeData_Go
-func OnRealTimeData_Go(c데이터 *C.OUTDATABLOCK) {
-    공용.F문자열_출력("Realtime Data Go.");
 }
 
 //export OnMessage_Go
