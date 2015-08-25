@@ -26,19 +26,22 @@ func OnTrData_Go(c데이터 *C.OUTDATABLOCK) {
 	TR구분번호 := 데이터.TrIndex
     공용.F문자열_출력("TR회신 데이터 수신. %v", TR구분번호)
     
+    공용.F메모("TR구분번호를 TR코드로 변경하는 기능이 필요함.")
+    
     switch TR구분번호 {
 	case 1:	// TRID_c1101: 주식 현재가 조회. 임시로 1로 정함.	
 		블록_이름 := C.GoString((*C.char)(데이터.DataStruct.BlockName))
 
-		if 블록_이름 == "c1101OutBlock" { // 단순출력 처리 방식
+		switch 블록_이름 {
+		case "c1101OutBlock":	// 단순출력 처리 방식
 			블록 := (*Tc1101OutBlock)(unsafe.Pointer(데이터.DataStruct.DataString))
 			공용.F문자열_출력(">>  주식현재가조회 - 현재가")
-			공용.F문자열_출력(공용.F2문자열(블록.Hotime))
+			공용.F문자열_출력(공용.F2문자열(블록.QuoteTime))
 			공용.F문자열_출력(공용.F2문자열(블록.Code))
-			공용.F문자열_출력(공용.F2문자열(블록.Hname))
-			공용.F문자열_출력(공용.F2문자열(블록.Price))
+			공용.F문자열_출력(공용.F2문자열(블록.Title))
+			공용.F문자열_출력(공용.F2문자열(블록.MarketPrice))
 			공용.F문자열_출력(공용.F2문자열(블록.Volume))
-		} else if 블록_이름 == "c1101OutBlock2" {	//반복가능한 출력 처리 방식
+		case "c1101OutBlock2":	// 반복가능한 출력 처리 방식
 			// C배열을 Go슬라이스로 전환
 			길이 := int(데이터.DataStruct.Length / int32(unsafe.Sizeof(Tc1101OutBlock2{})))
 			슬라이스_헤더 := reflect.SliceHeader{
@@ -49,22 +52,45 @@ func OnTrData_Go(c데이터 *C.OUTDATABLOCK) {
 			
 			슬라이스 := *(*[]C.Tc1101OutBlock2)(unsafe.Pointer(&슬라이스_헤더))
 			
-			공용.F문자열_출력(">>  주식현재가조회 - 변동거래량")
+			공용.F문자열_출력(">>  주식 현재가 조회 - 변동거래량")
 			
 			for i:=0 ; i < 길이 ; i++ {
 				c개별_데이터 := 슬라이스[i]
 				개별_데이터 := *((*Tc1101OutBlock2)(unsafe.Pointer(&c개별_데이터)))
 				공용.F문자열_출력(공용.F2문자열(개별_데이터.Time))
-				공용.F문자열_출력(공용.F2문자열(개별_데이터.Price))
-				공용.F문자열_출력(공용.F2문자열(개별_데이터.Change))
-				공용.F문자열_출력(공용.F2문자열(개별_데이터.Offer))
-				공용.F문자열_출력(공용.F2문자열(개별_데이터.Bid))
-				공용.F문자열_출력(공용.F2문자열(개별_데이터.Movolume))
+				공용.F문자열_출력(공용.F2문자열(개별_데이터.MarketPrice))
+				공용.F문자열_출력(공용.F2문자열(개별_데이터.Diff))
+				공용.F문자열_출력(공용.F2문자열(개별_데이터.OfferPrice))
+				공용.F문자열_출력(공용.F2문자열(개별_데이터.BidPrice))
+				공용.F문자열_출력(공용.F2문자열(개별_데이터.DiffVolume))
 				공용.F문자열_출력(공용.F2문자열(개별_데이터.Volume))
 			}
+		case "c1101OutBlock3":	// 동시 호가
+			// TODO
+		default:
+			에러 := 공용.F에러_생성("예상치 못한 구조체 이름. %v", 블록_이름)
+			panic(에러)
 		}
 	case 2:	// TRID_c1151: ETF 현재가 조회
-	}	    
+		블록_이름 := C.GoString((*C.char)(데이터.DataStruct.BlockName))
+		
+		
+		switch 블록_이름 {
+		case "c1151OutBlock":
+			// TODO
+		case "c1151OutBlock2":
+			// TODO
+		case "c1151OutBlock3":
+			// TODO
+		case "c1151OutBlock4":
+			// TODO
+		case "c1151OutBlock5":
+			// TODO
+		default:
+			에러 := 공용.F에러_생성("예상치 못한 구조체 이름. %v", 블록_이름)
+			panic(에러)
+		}
+	}
 }
 
 //export OnRealTimeData_Go
