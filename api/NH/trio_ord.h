@@ -1,335 +1,335 @@
 /************************************************************************************
-	ÁÖÀÇ
+	ì£¼ì˜
 
-	ÀÌ ÀÚ·á´Â 2013³â 10¿ù 15ÀÏ ±âÁØ ÀÚ·áÀÌ¸ç ÇâÈÄ º¯°æµÉ °¡´É¼ºÀÌ ÀÖ½À´Ï´Ù.
-	ÀÚ·á ±¸Á¶°¡ ¸ÂÁö ¾ÊÀ» °æ¿ì ±¸Á¶Ã¼°¡ º¯°æµÇÁö ¾Ê¾Ò´ÂÁö È®ÀÎÇÏ½Ã±â ¹Ù¶ø´Ï´Ù.
+	ì´ ìë£ŒëŠ” 2013ë…„ 10ì›” 15ì¼ ê¸°ì¤€ ìë£Œì´ë©° í–¥í›„ ë³€ê²½ë  ê°€ëŠ¥ì„±ì´ ìˆìŠµë‹ˆë‹¤.
+	ìë£Œ êµ¬ì¡°ê°€ ë§ì§€ ì•Šì„ ê²½ìš° êµ¬ì¡°ì²´ê°€ ë³€ê²½ë˜ì§€ ì•Šì•˜ëŠ”ì§€ í™•ì¸í•˜ì‹œê¸° ë°”ëë‹ˆë‹¤.
 
-	ÃÖ½Å ÀÚ·á´Â À¥ÆäÀÌÁö¸¦ ÅëÇØ ¾È³»µÇ¸ç ÀÚµ¿ ¾È³»(OpenAPI Login½Ã)¸¦ ÇÏ°í ÀÖÀ¸´Ï 
-	°Ô½Ã¸¦ ²À È®ÀÎÇÏ½Ã±â ¹Ù¶ø´Ï´Ù.
+	ìµœì‹  ìë£ŒëŠ” ì›¹í˜ì´ì§€ë¥¼ í†µí•´ ì•ˆë‚´ë˜ë©° ìë™ ì•ˆë‚´(OpenAPI Loginì‹œ)ë¥¼ í•˜ê³  ìˆìœ¼ë‹ˆ
+	ê²Œì‹œë¥¼ ê¼­ í™•ì¸í•˜ì‹œê¸° ë°”ëë‹ˆë‹¤.
 
 ************************************************************************************/
 
 ////////////////////////////////////////
-//	ÁÖ½Ä ELW
+//	ì£¼ì‹ ELW
 ////////////////////////////////////////
 
-typedef struct tagc8101InBlock    //±âº»ÀÔ·Â
+typedef struct tagc8101InBlock    //ê¸°ë³¸ì…ë ¥
 {
-	char pswd_noz8                        [ 44];	char _pswd_noz8;                          //ºñ¹Ğ¹øÈ£             
-	char issue_codez6                     [  6];	char _issue_codez6;                       //Á¾¸ñ¹øÈ£             
-	char order_qtyz12                     [ 12];	char _order_qtyz12;                       //ÁÖ¹®¼ö·®             
-	char order_unit_pricez10              [ 10];	char _order_unit_pricez10;                //ÁÖ¹®´Ü°¡             
-	char trade_typez2                     [  2];	char _trade_typez2;                       //¸Å¸ÅÀ¯Çü             
-	char shsll_pos_flagz1                 [  1];	char _shsll_pos_flagz1;                   //°ø¸Åµµ°¡´É¿©ºÎ       
-	char trad_pswd_no_1z8                 [ 44];	char _trad_pswd_no_1z8;                   //°Å·¡ºñ¹Ğ¹øÈ£1        
-	char trad_pswd_no_2z8                 [ 44];	char _trad_pswd_no_2z8;                   //°Å·¡ºñ¹Ğ¹øÈ£2        
+	char pswd_noz8                        [ 44];	char _pswd_noz8;                          //ë¹„ë°€ë²ˆí˜¸
+	char issue_codez6                     [  6];	char _issue_codez6;                       //ì¢…ëª©ë²ˆí˜¸
+	char order_qtyz12                     [ 12];	char _order_qtyz12;                       //ì£¼ë¬¸ìˆ˜ëŸ‰
+	char order_unit_pricez10              [ 10];	char _order_unit_pricez10;                //ì£¼ë¬¸ë‹¨ê°€
+	char trade_typez2                     [  2];	char _trade_typez2;                       //ë§¤ë§¤ìœ í˜•
+	char shsll_pos_flagz1                 [  1];	char _shsll_pos_flagz1;                   //ê³µë§¤ë„ê°€ëŠ¥ì—¬ë¶€
+	char trad_pswd_no_1z8                 [ 44];	char _trad_pswd_no_1z8;                   //ê±°ë˜ë¹„ë°€ë²ˆí˜¸1
+	char trad_pswd_no_2z8                 [ 44];	char _trad_pswd_no_2z8;                   //ê±°ë˜ë¹„ë°€ë²ˆí˜¸2
 } Tc8101InBlock;
 
-typedef struct tagc8101OutBlock    //È­¸éÃâ·Â
+typedef struct tagc8101OutBlock    //í™”ë©´ì¶œë ¥
 {
-	char order_noz10                      [ 10];	char _order_noz10;                        //ÁÖ¹®¹øÈ£             
-	char order_qtyz12                     [ 12];	char _order_qtyz12;                       //ÁÖ¹®¼ö·®             
-	char order_unit_pricez10              [ 10];	char _order_unit_pricez10;                //ÁÖ¹®´Ü°¡             
+	char order_noz10                      [ 10];	char _order_noz10;                        //ì£¼ë¬¸ë²ˆí˜¸
+	char order_qtyz12                     [ 12];	char _order_qtyz12;                       //ì£¼ë¬¸ìˆ˜ëŸ‰
+	char order_unit_pricez10              [ 10];	char _order_unit_pricez10;                //ì£¼ë¬¸ë‹¨ê°€
 } Tc8101OutBlock;
 
 typedef struct tagc8101
 {
-	Tc8101InBlock                     c8101inblock                          ;  //±âº»ÀÔ·Â 
-	Tc8101OutBlock                    c8101outblock                         ;  //È­¸éÃâ·Â 
+	Tc8101InBlock                     c8101inblock                          ;  //ê¸°ë³¸ì…ë ¥
+	Tc8101OutBlock                    c8101outblock                         ;  //í™”ë©´ì¶œë ¥
 } Tc8101;
 
-typedef struct tagc8102InBlock    //±âº»ÀÔ·Â
+typedef struct tagc8102InBlock    //ê¸°ë³¸ì…ë ¥
 {
-	char pswd_noz8                        [ 44];	char _pswd_noz8;                          //ºñ¹Ğ¹øÈ£             
-	char issue_codez6                     [  6];	char _issue_codez6;                       //Á¾¸ñ¹øÈ£             
-	char order_qtyz12                     [ 12];	char _order_qtyz12;                       //ÁÖ¹®¼ö·®             
-	char order_unit_pricez10              [ 10];	char _order_unit_pricez10;                //ÁÖ¹®´Ü°¡             
-	char trade_typez2                     [  2];	char _trade_typez2;                       //¸Å¸ÅÀ¯Çü             
-	char trad_pswd_no_1z8                 [ 44];	char _trad_pswd_no_1z8;                   //°Å·¡ºñ¹Ğ¹øÈ£1        
-	char trad_pswd_no_2z8                 [ 44];	char _trad_pswd_no_2z8;                   //°Å·¡ºñ¹Ğ¹øÈ£2        
+	char pswd_noz8                        [ 44];	char _pswd_noz8;                          //ë¹„ë°€ë²ˆí˜¸
+	char issue_codez6                     [  6];	char _issue_codez6;                       //ì¢…ëª©ë²ˆí˜¸
+	char order_qtyz12                     [ 12];	char _order_qtyz12;                       //ì£¼ë¬¸ìˆ˜ëŸ‰
+	char order_unit_pricez10              [ 10];	char _order_unit_pricez10;                //ì£¼ë¬¸ë‹¨ê°€
+	char trade_typez2                     [  2];	char _trade_typez2;                       //ë§¤ë§¤ìœ í˜•
+	char trad_pswd_no_1z8                 [ 44];	char _trad_pswd_no_1z8;                   //ê±°ë˜ë¹„ë°€ë²ˆí˜¸1
+	char trad_pswd_no_2z8                 [ 44];	char _trad_pswd_no_2z8;                   //ê±°ë˜ë¹„ë°€ë²ˆí˜¸2
 } Tc8102InBlock;
 
-typedef struct tagc8102OutBlock    //È­¸éÃâ·Â
+typedef struct tagc8102OutBlock    //í™”ë©´ì¶œë ¥
 {
-	char order_noz10                      [ 10];	char _order_noz10;                        //ÁÖ¹®¹øÈ£             
-	char order_qtyz12                     [ 12];	char _order_qtyz12;                       //ÁÖ¹®¼ö·®             
-	char order_unit_pricez10              [ 10];	char _order_unit_pricez10;                //ÁÖ¹®´Ü°¡             
+	char order_noz10                      [ 10];	char _order_noz10;                        //ì£¼ë¬¸ë²ˆí˜¸
+	char order_qtyz12                     [ 12];	char _order_qtyz12;                       //ì£¼ë¬¸ìˆ˜ëŸ‰
+	char order_unit_pricez10              [ 10];	char _order_unit_pricez10;                //ì£¼ë¬¸ë‹¨ê°€
 } Tc8102OutBlock;
 
 typedef struct tagc8102
 {
-	Tc8102InBlock                     c8102inblock                          ;  //±âº»ÀÔ·Â 
-	Tc8102OutBlock                    c8102outblock                         ;  //È­¸éÃâ·Â 
+	Tc8102InBlock                     c8102inblock                          ;  //ê¸°ë³¸ì…ë ¥
+	Tc8102OutBlock                    c8102outblock                         ;  //í™”ë©´ì¶œë ¥
 } Tc8102;
 
-typedef struct tagc8103InBlock    //±âº»ÀÔ·Â
+typedef struct tagc8103InBlock    //ê¸°ë³¸ì…ë ¥
 {
-	char pswd_noz8                        [ 44];	char _pswd_noz8;                          //ºñ¹Ğ¹øÈ£             
-	char issue_codez6                     [  6];	char _issue_codez6;                       //Á¾¸ñ¹øÈ£             
-	char crctn_qtyz12                     [ 12];	char _crctn_qtyz12;                       //Á¤Á¤¼ö·®             
-	char crctn_pricez10                   [ 10];	char _crctn_pricez10;                     //Á¤Á¤´Ü°¡             
-	char orgnl_order_noz10                [ 10];	char _orgnl_order_noz10;                  //¿øÁÖ¹®¹øÈ£           
-	char all_part_typez1                  [  1];	char _all_part_typez1;                    //Á¤Á¤±¸ºĞ             
-	char trad_pswd_no_1z8                 [ 44];	char _trad_pswd_no_1z8;                   //°Å·¡ºñ¹Ğ1            
-	char trad_pswd_no_2z8                 [ 44];	char _trad_pswd_no_2z8;                   //°Å·¡ºñ¹Ğ2            
+	char pswd_noz8                        [ 44];	char _pswd_noz8;                          //ë¹„ë°€ë²ˆí˜¸
+	char issue_codez6                     [  6];	char _issue_codez6;                       //ì¢…ëª©ë²ˆí˜¸
+	char crctn_qtyz12                     [ 12];	char _crctn_qtyz12;                       //ì •ì •ìˆ˜ëŸ‰
+	char crctn_pricez10                   [ 10];	char _crctn_pricez10;                     //ì •ì •ë‹¨ê°€
+	char orgnl_order_noz10                [ 10];	char _orgnl_order_noz10;                  //ì›ì£¼ë¬¸ë²ˆí˜¸
+	char all_part_typez1                  [  1];	char _all_part_typez1;                    //ì •ì •êµ¬ë¶„
+	char trad_pswd_no_1z8                 [ 44];	char _trad_pswd_no_1z8;                   //ê±°ë˜ë¹„ë°€1
+	char trad_pswd_no_2z8                 [ 44];	char _trad_pswd_no_2z8;                   //ê±°ë˜ë¹„ë°€2
 } Tc8103InBlock;
 
-typedef struct tagc8103OutBlock    //È­¸éÃâ·Â
+typedef struct tagc8103OutBlock    //í™”ë©´ì¶œë ¥
 {
-	char orgnl_order_noz10                [ 10];	char _orgnl_order_noz10;                  //¿øÁÖ¹®¹øÈ£           
-	char order_noz10                      [ 10];	char _order_noz10;                        //ÁÖ¹®¹øÈ£             
-	char mom_order_noz10                  [ 10];	char _mom_order_noz10;                    //¸ğÁÖ¹®¹øÈ£           
-	char issue_codez6                     [  6];	char _issue_codez6;                       //ÈÄÁ¾¸ñ¹øÈ£           
-	char crctn_qtyz12                     [ 12];	char _crctn_qtyz12;                       //Á¤Á¤¼ö·®             
-	char crctn_pricez10                   [ 10];	char _crctn_pricez10;                     //Á¤Á¤´Ü°¡             
+	char orgnl_order_noz10                [ 10];	char _orgnl_order_noz10;                  //ì›ì£¼ë¬¸ë²ˆí˜¸
+	char order_noz10                      [ 10];	char _order_noz10;                        //ì£¼ë¬¸ë²ˆí˜¸
+	char mom_order_noz10                  [ 10];	char _mom_order_noz10;                    //ëª¨ì£¼ë¬¸ë²ˆí˜¸
+	char issue_codez6                     [  6];	char _issue_codez6;                       //í›„ì¢…ëª©ë²ˆí˜¸
+	char crctn_qtyz12                     [ 12];	char _crctn_qtyz12;                       //ì •ì •ìˆ˜ëŸ‰
+	char crctn_pricez10                   [ 10];	char _crctn_pricez10;                     //ì •ì •ë‹¨ê°€
 } Tc8103OutBlock;
 
 typedef struct tagc8103
 {
-	Tc8103InBlock                     c8103inblock                          ;  //±âº»ÀÔ·Â 
-	Tc8103OutBlock                    c8103outblock                         ;  //È­¸éÃâ·Â 
+	Tc8103InBlock                     c8103inblock                          ;  //ê¸°ë³¸ì…ë ¥
+	Tc8103OutBlock                    c8103outblock                         ;  //í™”ë©´ì¶œë ¥
 } Tc8103;
 
-typedef struct tagc8104InBlock    //±âº»ÀÔ·Â
+typedef struct tagc8104InBlock    //ê¸°ë³¸ì…ë ¥
 {
-	char pswd_noz8                        [ 44];	char _pswd_noz8;                          //ºñ¹Ğ¹øÈ£             
-	char issue_codez6                     [  6];	char _issue_codez6;                       //Á¾¸ñ¹øÈ£             
-	char canc_qtyz12                      [ 12];	char _canc_qtyz12;                        //Ãë¼Ò¼ö·®             
-	char orgnl_order_noz10                [ 10];	char _orgnl_order_noz10;                  //¿øÁÖ¹®¹øÈ£           
-	char all_part_typez1                  [  1];	char _all_part_typez1;                    //Ãë¼Ò±¸ºĞ             
-	char trad_pswd_no_1z8                 [ 44];	char _trad_pswd_no_1z8;                   //°Å·¡ºñ¹Ğ¹øÈ£1        
-	char trad_pswd_no_2z8                 [ 44];	char _trad_pswd_no_2z8;                   //°Å·¡ºñ¹Ğ¹øÈ£2        
+	char pswd_noz8                        [ 44];	char _pswd_noz8;                          //ë¹„ë°€ë²ˆí˜¸
+	char issue_codez6                     [  6];	char _issue_codez6;                       //ì¢…ëª©ë²ˆí˜¸
+	char canc_qtyz12                      [ 12];	char _canc_qtyz12;                        //ì·¨ì†Œìˆ˜ëŸ‰
+	char orgnl_order_noz10                [ 10];	char _orgnl_order_noz10;                  //ì›ì£¼ë¬¸ë²ˆí˜¸
+	char all_part_typez1                  [  1];	char _all_part_typez1;                    //ì·¨ì†Œêµ¬ë¶„
+	char trad_pswd_no_1z8                 [ 44];	char _trad_pswd_no_1z8;                   //ê±°ë˜ë¹„ë°€ë²ˆí˜¸1
+	char trad_pswd_no_2z8                 [ 44];	char _trad_pswd_no_2z8;                   //ê±°ë˜ë¹„ë°€ë²ˆí˜¸2
 } Tc8104InBlock;
 
-typedef struct tagc8104OutBlock    //È­¸éÃâ·Â
+typedef struct tagc8104OutBlock    //í™”ë©´ì¶œë ¥
 {
-	char orgnl_order_noz10                [ 10];	char _orgnl_order_noz10;                  //¿øÁÖ¹®¹øÈ£           
-	char order_noz10                      [ 10];	char _order_noz10;                        //ÁÖ¹®¹øÈ£             
-	char mom_order_noz10                  [ 10];	char _mom_order_noz10;                    //¸ğÁÖ¹®¹øÈ£           
-	char issue_codez6                     [  6];	char _issue_codez6;                       //ÈÄÁ¾¸ñ¹øÈ£           
-	char canc_qtyz12                      [ 12];	char _canc_qtyz12;                        //Ãë¼Ò¼ö·®             
+	char orgnl_order_noz10                [ 10];	char _orgnl_order_noz10;                  //ì›ì£¼ë¬¸ë²ˆí˜¸
+	char order_noz10                      [ 10];	char _order_noz10;                        //ì£¼ë¬¸ë²ˆí˜¸
+	char mom_order_noz10                  [ 10];	char _mom_order_noz10;                    //ëª¨ì£¼ë¬¸ë²ˆí˜¸
+	char issue_codez6                     [  6];	char _issue_codez6;                       //í›„ì¢…ëª©ë²ˆí˜¸
+	char canc_qtyz12                      [ 12];	char _canc_qtyz12;                        //ì·¨ì†Œìˆ˜ëŸ‰
 } Tc8104OutBlock;
 
 typedef struct tagc8104
 {
-	Tc8104InBlock                     c8104inblock                          ;  //±âº»ÀÔ·Â 
-	Tc8104OutBlock                    c8104outblock                         ;  //È­¸éÃâ·Â 
+	Tc8104InBlock                     c8104inblock                          ;  //ê¸°ë³¸ì…ë ¥
+	Tc8104OutBlock                    c8104outblock                         ;  //í™”ë©´ì¶œë ¥
 } Tc8104;
 
-typedef struct tagc8141InBlock    //±âº»ÀÔ·Â
+typedef struct tagc8141InBlock    //ê¸°ë³¸ì…ë ¥
 {
-	char pswd_noz8                        [ 44];	char _pswd_noz8;                          //ºñ¹Ğ¹øÈ£             
-	char issue_codez12                    [ 12];	char _issue_codez12;                      //Á¾¸ñ¹øÈ£             
-	char buy_datez8                       [  8];	char _buy_datez8;                         //¸Å¼öÀÏÀÚ             
-	char order_qtyz12                     [ 12];	char _order_qtyz12;                       //ÁÖ¹®¼ö·®             
-	char order_unit_pricez10              [ 10];	char _order_unit_pricez10;                //ÁÖ¹®´Ü°¡             
-	char trade_typez2                     [  2];	char _trade_typez2;                       //¸Å¸ÅÀ¯Çü             
-	char order_condz1                     [  1];	char _order_condz1;                       //ÁÖ¹®Á¶°Ç             
-	char shsll_pos_flagz1                 [  1];	char _shsll_pos_flagz1;                   //°ø¸Åµµ°¡´É¿©ºÎ       
-	char trad_pswd_no_1z8                 [ 44];	char _trad_pswd_no_1z8;                   //°Å·¡ºñ¹Ğ¹øÈ£1        
-	char trad_pswd_no_2z8                 [ 44];	char _trad_pswd_no_2z8;                   //°Å·¡ºñ¹Ğ¹øÈ£2        
+	char pswd_noz8                        [ 44];	char _pswd_noz8;                          //ë¹„ë°€ë²ˆí˜¸
+	char issue_codez12                    [ 12];	char _issue_codez12;                      //ì¢…ëª©ë²ˆí˜¸
+	char buy_datez8                       [  8];	char _buy_datez8;                         //ë§¤ìˆ˜ì¼ì
+	char order_qtyz12                     [ 12];	char _order_qtyz12;                       //ì£¼ë¬¸ìˆ˜ëŸ‰
+	char order_unit_pricez10              [ 10];	char _order_unit_pricez10;                //ì£¼ë¬¸ë‹¨ê°€
+	char trade_typez2                     [  2];	char _trade_typez2;                       //ë§¤ë§¤ìœ í˜•
+	char order_condz1                     [  1];	char _order_condz1;                       //ì£¼ë¬¸ì¡°ê±´
+	char shsll_pos_flagz1                 [  1];	char _shsll_pos_flagz1;                   //ê³µë§¤ë„ê°€ëŠ¥ì—¬ë¶€
+	char trad_pswd_no_1z8                 [ 44];	char _trad_pswd_no_1z8;                   //ê±°ë˜ë¹„ë°€ë²ˆí˜¸1
+	char trad_pswd_no_2z8                 [ 44];	char _trad_pswd_no_2z8;                   //ê±°ë˜ë¹„ë°€ë²ˆí˜¸2
 } Tc8141InBlock;
 
-typedef struct tagc8141OutBlock    //È­¸éÃâ·Â
+typedef struct tagc8141OutBlock    //í™”ë©´ì¶œë ¥
 {
-	char order_noz10                      [ 10];	char _order_noz10;                        //ÁÖ¹®¹øÈ£             
-	char order_qtyz12                     [ 12];	char _order_qtyz12;                       //ÁÖ¹®¼ö·®             
-	char order_unit_pricez10              [ 10];	char _order_unit_pricez10;                //ÁÖ¹®´Ü°¡             
+	char order_noz10                      [ 10];	char _order_noz10;                        //ì£¼ë¬¸ë²ˆí˜¸
+	char order_qtyz12                     [ 12];	char _order_qtyz12;                       //ì£¼ë¬¸ìˆ˜ëŸ‰
+	char order_unit_pricez10              [ 10];	char _order_unit_pricez10;                //ì£¼ë¬¸ë‹¨ê°€
 } Tc8141OutBlock;
 
 typedef struct tagc8141
 {
-	Tc8141InBlock                     c8141inblock                          ;  //±âº»ÀÔ·Â 
-	Tc8141OutBlock                    c8141outblock                         ;  //È­¸éÃâ·Â 
+	Tc8141InBlock                     c8141inblock                          ;  //ê¸°ë³¸ì…ë ¥
+	Tc8141OutBlock                    c8141outblock                         ;  //í™”ë©´ì¶œë ¥
 } Tc8141;
 
-typedef struct tagc8142InBlock    //±âº»ÀÔ·Â
+typedef struct tagc8142InBlock    //ê¸°ë³¸ì…ë ¥
 {
-	char password_noz8                    [ 44];	char _password_noz8;                      //ºñ¹Ğ¹øÈ£             
-	char issue_codez12                    [ 12];	char _issue_codez12;                      //Á¾¸ñ¹øÈ£             
-	char order_qtyz12                     [ 12];	char _order_qtyz12;                       //ÁÖ¹®¼ö·®             
-	char order_unit_pricez10              [ 10];	char _order_unit_pricez10;                //ÁÖ¹®´Ü°¡             
-	char trade_typez2                     [  2];	char _trade_typez2;                       //¸Å¸ÅÀ¯Çü             
-	char order_condz1                     [  1];	char _order_condz1;                       //ÁÖ¹®Á¶°Ç             
-	char trad_pswd_no_1z8                 [ 44];	char _trad_pswd_no_1z8;                   //°Å·¡ºñ¹Ğ¹øÈ£1        
-	char trad_pswd_no_2z8                 [ 44];	char _trad_pswd_no_2z8;                   //°Å·¡ºñ¹Ğ¹øÈ£2        
+	char password_noz8                    [ 44];	char _password_noz8;                      //ë¹„ë°€ë²ˆí˜¸
+	char issue_codez12                    [ 12];	char _issue_codez12;                      //ì¢…ëª©ë²ˆí˜¸
+	char order_qtyz12                     [ 12];	char _order_qtyz12;                       //ì£¼ë¬¸ìˆ˜ëŸ‰
+	char order_unit_pricez10              [ 10];	char _order_unit_pricez10;                //ì£¼ë¬¸ë‹¨ê°€
+	char trade_typez2                     [  2];	char _trade_typez2;                       //ë§¤ë§¤ìœ í˜•
+	char order_condz1                     [  1];	char _order_condz1;                       //ì£¼ë¬¸ì¡°ê±´
+	char trad_pswd_no_1z8                 [ 44];	char _trad_pswd_no_1z8;                   //ê±°ë˜ë¹„ë°€ë²ˆí˜¸1
+	char trad_pswd_no_2z8                 [ 44];	char _trad_pswd_no_2z8;                   //ê±°ë˜ë¹„ë°€ë²ˆí˜¸2
 } Tc8142InBlock;
 
-typedef struct tagc8142OutBlock    //È­¸éÃâ·Â
+typedef struct tagc8142OutBlock    //í™”ë©´ì¶œë ¥
 {
-	char order_noz10                      [ 10];	char _order_noz10;                        //ÁÖ¹®¹øÈ£             
-	char order_qtyz12                     [ 12];	char _order_qtyz12;                       //ÁÖ¹®¼ö·®             
-	char order_unit_pricez10              [ 10];	char _order_unit_pricez10;                //ÁÖ¹®´Ü°¡             
+	char order_noz10                      [ 10];	char _order_noz10;                        //ì£¼ë¬¸ë²ˆí˜¸
+	char order_qtyz12                     [ 12];	char _order_qtyz12;                       //ì£¼ë¬¸ìˆ˜ëŸ‰
+	char order_unit_pricez10              [ 10];	char _order_unit_pricez10;                //ì£¼ë¬¸ë‹¨ê°€
 } Tc8142OutBlock;
 
 typedef struct tagc8142
 {
-	Tc8142InBlock                     c8142inblock                          ;  //±âº»ÀÔ·Â 
-	Tc8142OutBlock                    c8142outblock                         ;  //È­¸éÃâ·Â 
+	Tc8142InBlock                     c8142inblock                          ;  //ê¸°ë³¸ì…ë ¥
+	Tc8142OutBlock                    c8142outblock                         ;  //í™”ë©´ì¶œë ¥
 } Tc8142;
 
-typedef struct tagc8143InBlock    //±âº»ÀÔ·Â
+typedef struct tagc8143InBlock    //ê¸°ë³¸ì…ë ¥
 {
-	char pswd_noz8                        [ 44];	char _pswd_noz8;                          //ºñ¹Ğ¹øÈ£             
-	char issue_codez12                    [ 12];	char _issue_codez12;                      //Á¾¸ñ¹øÈ£             
-	char crctn_qtyz12                     [ 12];	char _crctn_qtyz12;                       //Á¤Á¤¼ö·®             
-	char crctn_pricez10                   [ 10];	char _crctn_pricez10;                     //Á¤Á¤´Ü°¡             
-	char orgnl_order_noz10                [ 10];	char _orgnl_order_noz10;                  //¿øÁÖ¹®¹øÈ£           
-	char all_part_typez1                  [  1];	char _all_part_typez1;                    //Á¤Á¤±¸ºĞ             
-	char order_condz1                     [  1];	char _order_condz1;                       //ÁÖ¹®Á¶°Ç             
-	char trad_pswd_no_1z8                 [ 44];	char _trad_pswd_no_1z8;                   //°Å·¡ºñ¹Ğ¹øÈ£1        
-	char trad_pswd_no_2z8                 [ 44];	char _trad_pswd_no_2z8;                   //°Å·¡ºñ¹Ğ¹øÈ£2        
+	char pswd_noz8                        [ 44];	char _pswd_noz8;                          //ë¹„ë°€ë²ˆí˜¸
+	char issue_codez12                    [ 12];	char _issue_codez12;                      //ì¢…ëª©ë²ˆí˜¸
+	char crctn_qtyz12                     [ 12];	char _crctn_qtyz12;                       //ì •ì •ìˆ˜ëŸ‰
+	char crctn_pricez10                   [ 10];	char _crctn_pricez10;                     //ì •ì •ë‹¨ê°€
+	char orgnl_order_noz10                [ 10];	char _orgnl_order_noz10;                  //ì›ì£¼ë¬¸ë²ˆí˜¸
+	char all_part_typez1                  [  1];	char _all_part_typez1;                    //ì •ì •êµ¬ë¶„
+	char order_condz1                     [  1];	char _order_condz1;                       //ì£¼ë¬¸ì¡°ê±´
+	char trad_pswd_no_1z8                 [ 44];	char _trad_pswd_no_1z8;                   //ê±°ë˜ë¹„ë°€ë²ˆí˜¸1
+	char trad_pswd_no_2z8                 [ 44];	char _trad_pswd_no_2z8;                   //ê±°ë˜ë¹„ë°€ë²ˆí˜¸2
 } Tc8143InBlock;
 
-typedef struct tagc8143OutBlock    //È­¸éÃâ·Â
+typedef struct tagc8143OutBlock    //í™”ë©´ì¶œë ¥
 {
-	char orgnl_order_noz10                [ 10];	char _orgnl_order_noz10;                  //¿øÁÖ¹®¹øÈ£           
-	char order_noz10                      [ 10];	char _order_noz10;                        //ÁÖ¹®¹øÈ£             
-	char mom_order_noz10                  [ 10];	char _mom_order_noz10;                    //¸ğÁÖ¹®¹øÈ£           
-	char af_issue_codez12                 [ 12];	char _af_issue_codez12;                   //ÈÄÁ¾¸ñ¹øÈ£           
-	char crctn_qtyz12                     [ 12];	char _crctn_qtyz12;                       //Á¤Á¤¼ö·®             
-	char crctn_pricez10                   [ 10];	char _crctn_pricez10;                     //Á¤Á¤´Ü°¡             
+	char orgnl_order_noz10                [ 10];	char _orgnl_order_noz10;                  //ì›ì£¼ë¬¸ë²ˆí˜¸
+	char order_noz10                      [ 10];	char _order_noz10;                        //ì£¼ë¬¸ë²ˆí˜¸
+	char mom_order_noz10                  [ 10];	char _mom_order_noz10;                    //ëª¨ì£¼ë¬¸ë²ˆí˜¸
+	char af_issue_codez12                 [ 12];	char _af_issue_codez12;                   //í›„ì¢…ëª©ë²ˆí˜¸
+	char crctn_qtyz12                     [ 12];	char _crctn_qtyz12;                       //ì •ì •ìˆ˜ëŸ‰
+	char crctn_pricez10                   [ 10];	char _crctn_pricez10;                     //ì •ì •ë‹¨ê°€
 } Tc8143OutBlock;
 
 typedef struct tagc8143
 {
-	Tc8143InBlock                     c8143inblock                          ;  //±âº»ÀÔ·Â 
-	Tc8143OutBlock                    c8143outblock                         ;  //È­¸éÃâ·Â 
+	Tc8143InBlock                     c8143inblock                          ;  //ê¸°ë³¸ì…ë ¥
+	Tc8143OutBlock                    c8143outblock                         ;  //í™”ë©´ì¶œë ¥
 } Tc8143;
 
-typedef struct tagc8201InBlock    //±âº»ÀÔ·Â
+typedef struct tagc8201InBlock    //ê¸°ë³¸ì…ë ¥
 {
-	char pswd_noz44                       [ 44];	char _pswd_noz44;                         //ºñ¹Ğ¹øÈ£             
-	char bnc_bse_cdz1                     [  1];	char _bnc_bse_cdz1;                       //ÀÜ°í±¸ºĞ             
+	char pswd_noz44                       [ 44];	char _pswd_noz44;                         //ë¹„ë°€ë²ˆí˜¸
+	char bnc_bse_cdz1                     [  1];	char _bnc_bse_cdz1;                       //ì”ê³ êµ¬ë¶„
 } Tc8201InBlock;
 
-typedef struct tagc8201OutBlock    //È­¸éÃâ·Â
+typedef struct tagc8201OutBlock    //í™”ë©´ì¶œë ¥
 {
-	char dpsit_amtz16                     [ 16];	char _dpsit_amtz16;                       //¿¹¼ö±İ               
-	char mrgn_amtz16                      [ 16];	char _mrgn_amtz16;                        //½Å¿ëÀ¶ÀÚ±İ           
-	char mgint_npaid_amtz16               [ 16];	char _mgint_npaid_amtz16;                 //ÀÌÀÚ¹Ì³³±İ           
-	char chgm_pos_amtz16                  [ 16];	char _chgm_pos_amtz16;                    //Ãâ±İ°¡´É±İ¾×         
-	char cash_mrgn_amtz16                 [ 16];	char _cash_mrgn_amtz16;                   //Çö±İÁõ°Å±İ           
-	char subst_mgamt_amtz16               [ 16];	char _subst_mgamt_amtz16;                 //´ë¿ëÁõ°Å±İ           
-	char coltr_ratez6                     [  6];	char _coltr_ratez6;                       //´ãº¸ºñÀ²             
-	char rcble_amtz16                     [ 16];	char _rcble_amtz16;                       //Çö±İ¹Ì¼ö±İ           
-	char order_pos_csamtz16               [ 16];	char _order_pos_csamtz16;                 //ÁÖ¹®°¡´É¾×           
-	char ecn_pos_csamtz16                 [ 16];	char _ecn_pos_csamtz16;                   //ECNÁÖ¹®°¡´É¾×        
-	char nordm_loan_amtz16                [ 16];	char _nordm_loan_amtz16;                  //¹Ì»óÈ¯±İ             
-	char etc_lend_amtz16                  [ 16];	char _etc_lend_amtz16;                    //±âÅ¸´ë¿©±İ           
-	char subst_amtz16                     [ 16];	char _subst_amtz16;                       //´ë¿ë±İ¾×             
-	char sln_sale_amtz16                  [ 16];	char _sln_sale_amtz16;                    //´ëÁÖ´ãº¸±İ           
-	char bal_buy_ttamtz16                 [ 16];	char _bal_buy_ttamtz16;                   //¸ÅÀÔ¿ø°¡(°èÁÂÇÕ»ê)   
-	char bal_ass_ttamtz16                 [ 16];	char _bal_ass_ttamtz16;                   //Æò°¡±İ¾×(°èÁÂÇÕ»ê)   
-	char asset_tot_amtz16                 [ 16];	char _asset_tot_amtz16;                   //¼øÀÚ»ê¾×(°èÁÂÇÕ»ê)   
-	char actvt_type10                     [ 10];	char _actvt_type10;                       //È°µ¿À¯Çü             
-	char lend_amtz16                      [ 16];	char _lend_amtz16;                        //´ëÃâ±İ               
-	char accnt_mgamt_ratez6               [  6];	char _accnt_mgamt_ratez6;                 //°èÁÂÁõ°Å±İÀ²         
-	char sl_mrgn_amtz16                   [ 16];	char _sl_mrgn_amtz16;                     //¸ÅµµÁõ°Å±İ           
-	char pos_csamt1z16                    [ 16];	char _pos_csamt1z16;                      //20%ÁÖ¹®°¡´É±İ¾×      
-	char pos_csamt2z16                    [ 16];	char _pos_csamt2z16;                      //30%ÁÖ¹®°¡´É±İ¾×      
-	char pos_csamt3z16                    [ 16];	char _pos_csamt3z16;                      //40%ÁÖ¹®°¡´É±İ¾×      
-	char pos_csamt4z16                    [ 16];	char _pos_csamt4z16;                      //100%ÁÖ¹®°¡´É±İ¾×     
-	char dpsit_amtz_d1_16                 [ 16];	char _dpsit_amtz_d1_16;                   //D1¿¹¼ö±İ             
-	char dpsit_amtz_d2_16                 [ 16];	char _dpsit_amtz_d2_16;                   //D2¿¹¼ö±İ             
-	char noticez30                        [ 30];	char _noticez30;                          //°øÁö»çÇ×             /*To-be¿¡¾øÀ½*/
-	char tot_eal_plsz18                   [ 18];	char _tot_eal_plsz18;                     //ÃÑÆò°¡¼ÕÀÍ           
-	char pft_rtz15                        [ 15];	char _pft_rtz15;                          //¼öÀÍÀ²               
+	char dpsit_amtz16                     [ 16];	char _dpsit_amtz16;                       //ì˜ˆìˆ˜ê¸ˆ
+	char mrgn_amtz16                      [ 16];	char _mrgn_amtz16;                        //ì‹ ìš©ìœµìê¸ˆ
+	char mgint_npaid_amtz16               [ 16];	char _mgint_npaid_amtz16;                 //ì´ìë¯¸ë‚©ê¸ˆ
+	char chgm_pos_amtz16                  [ 16];	char _chgm_pos_amtz16;                    //ì¶œê¸ˆê°€ëŠ¥ê¸ˆì•¡
+	char cash_mrgn_amtz16                 [ 16];	char _cash_mrgn_amtz16;                   //í˜„ê¸ˆì¦ê±°ê¸ˆ
+	char subst_mgamt_amtz16               [ 16];	char _subst_mgamt_amtz16;                 //ëŒ€ìš©ì¦ê±°ê¸ˆ
+	char coltr_ratez6                     [  6];	char _coltr_ratez6;                       //ë‹´ë³´ë¹„ìœ¨
+	char rcble_amtz16                     [ 16];	char _rcble_amtz16;                       //í˜„ê¸ˆë¯¸ìˆ˜ê¸ˆ
+	char order_pos_csamtz16               [ 16];	char _order_pos_csamtz16;                 //ì£¼ë¬¸ê°€ëŠ¥ì•¡
+	char ecn_pos_csamtz16                 [ 16];	char _ecn_pos_csamtz16;                   //ECNì£¼ë¬¸ê°€ëŠ¥ì•¡
+	char nordm_loan_amtz16                [ 16];	char _nordm_loan_amtz16;                  //ë¯¸ìƒí™˜ê¸ˆ
+	char etc_lend_amtz16                  [ 16];	char _etc_lend_amtz16;                    //ê¸°íƒ€ëŒ€ì—¬ê¸ˆ
+	char subst_amtz16                     [ 16];	char _subst_amtz16;                       //ëŒ€ìš©ê¸ˆì•¡
+	char sln_sale_amtz16                  [ 16];	char _sln_sale_amtz16;                    //ëŒ€ì£¼ë‹´ë³´ê¸ˆ
+	char bal_buy_ttamtz16                 [ 16];	char _bal_buy_ttamtz16;                   //ë§¤ì…ì›ê°€(ê³„ì¢Œí•©ì‚°)
+	char bal_ass_ttamtz16                 [ 16];	char _bal_ass_ttamtz16;                   //í‰ê°€ê¸ˆì•¡(ê³„ì¢Œí•©ì‚°)
+	char asset_tot_amtz16                 [ 16];	char _asset_tot_amtz16;                   //ìˆœìì‚°ì•¡(ê³„ì¢Œí•©ì‚°)
+	char actvt_type10                     [ 10];	char _actvt_type10;                       //í™œë™ìœ í˜•
+	char lend_amtz16                      [ 16];	char _lend_amtz16;                        //ëŒ€ì¶œê¸ˆ
+	char accnt_mgamt_ratez6               [  6];	char _accnt_mgamt_ratez6;                 //ê³„ì¢Œì¦ê±°ê¸ˆìœ¨
+	char sl_mrgn_amtz16                   [ 16];	char _sl_mrgn_amtz16;                     //ë§¤ë„ì¦ê±°ê¸ˆ
+	char pos_csamt1z16                    [ 16];	char _pos_csamt1z16;                      //20%ì£¼ë¬¸ê°€ëŠ¥ê¸ˆì•¡
+	char pos_csamt2z16                    [ 16];	char _pos_csamt2z16;                      //30%ì£¼ë¬¸ê°€ëŠ¥ê¸ˆì•¡
+	char pos_csamt3z16                    [ 16];	char _pos_csamt3z16;                      //40%ì£¼ë¬¸ê°€ëŠ¥ê¸ˆì•¡
+	char pos_csamt4z16                    [ 16];	char _pos_csamt4z16;                      //100%ì£¼ë¬¸ê°€ëŠ¥ê¸ˆì•¡
+	char dpsit_amtz_d1_16                 [ 16];	char _dpsit_amtz_d1_16;                   //D1ì˜ˆìˆ˜ê¸ˆ
+	char dpsit_amtz_d2_16                 [ 16];	char _dpsit_amtz_d2_16;                   //D2ì˜ˆìˆ˜ê¸ˆ
+	char noticez30                        [ 30];	char _noticez30;                          //ê³µì§€ì‚¬í•­             /*To-beì—ì—†ìŒ*/
+	char tot_eal_plsz18                   [ 18];	char _tot_eal_plsz18;                     //ì´í‰ê°€ì†ìµ
+	char pft_rtz15                        [ 15];	char _pft_rtz15;                          //ìˆ˜ìµìœ¨
 } Tc8201OutBlock;
 
-typedef struct tagc8201OutBlock1    //È­¸éÃâ·Â, [¹İº¹]
+typedef struct tagc8201OutBlock1    //í™”ë©´ì¶œë ¥, [ë°˜ë³µ]
 {
-	char issue_codez6                     [  6];	char _issue_codez6;                       //Á¾¸ñ¹øÈ£             
-	char issue_namez40                    [ 40];	char _issue_namez40;                      //Á¾¸ñ¸í               
-	char bal_typez6                       [  6];	char _bal_typez6;                         //ÀÜ°íÀ¯Çü             
-	char loan_datez10                     [ 10];	char _loan_datez10;                       //´ëÃâÀÏ               
-	char bal_qtyz16                       [ 16];	char _bal_qtyz16;                         //ÀÜ°í¼ö·®             
-	char unstl_qtyz16                     [ 16];	char _unstl_qtyz16;                       //¹Ì°áÁ¦·®             
-	char slby_amtz16                      [ 16];	char _slby_amtz16;                        //Æò±Õ¸ÅÀÔ°¡           
-	char prsnt_pricez16                   [ 16];	char _prsnt_pricez16;                     //ÇöÀç°¡               
-	char lsnpf_amtz16                     [ 16];	char _lsnpf_amtz16;                       //¼ÕÀÍ(Ãµ¿ø)           
-	char earn_ratez9                      [  9];	char _earn_ratez9;                        //¼ÕÀÍÀ²               
-	char mrgn_codez4                      [  4];	char _mrgn_codez4;                        //½Å¿ëÀ¯Çü             
-	char jan_qtyz16                       [ 16];	char _jan_qtyz16;                         //ÀÜ·®                 
-	char expr_datez10                     [ 10];	char _expr_datez10;                       //¸¸±âÀÏ               
-	char ass_amtz16                       [ 16];	char _ass_amtz16;                         //Æò°¡±İ¾×             
-	char issue_mgamt_ratez6               [  6];	char _issue_mgamt_ratez6;                 //Á¾¸ñÁõ°Å±İÀ²         /*float->char*/
-	char medo_slby_amtz16                 [ 16];	char _medo_slby_amtz16;                   //Æò±Õ¸Åµµ°¡           
-	char post_lsnpf_amtz16                [ 16];	char _post_lsnpf_amtz16;                  //¸Åµµ¼ÕÀÍ             
+	char issue_codez6                     [  6];	char _issue_codez6;                       //ì¢…ëª©ë²ˆí˜¸
+	char issue_namez40                    [ 40];	char _issue_namez40;                      //ì¢…ëª©ëª…
+	char bal_typez6                       [  6];	char _bal_typez6;                         //ì”ê³ ìœ í˜•
+	char loan_datez10                     [ 10];	char _loan_datez10;                       //ëŒ€ì¶œì¼
+	char bal_qtyz16                       [ 16];	char _bal_qtyz16;                         //ì”ê³ ìˆ˜ëŸ‰
+	char unstl_qtyz16                     [ 16];	char _unstl_qtyz16;                       //ë¯¸ê²°ì œëŸ‰
+	char slby_amtz16                      [ 16];	char _slby_amtz16;                        //í‰ê· ë§¤ì…ê°€
+	char prsnt_pricez16                   [ 16];	char _prsnt_pricez16;                     //í˜„ì¬ê°€
+	char lsnpf_amtz16                     [ 16];	char _lsnpf_amtz16;                       //ì†ìµ(ì²œì›)
+	char earn_ratez9                      [  9];	char _earn_ratez9;                        //ì†ìµìœ¨
+	char mrgn_codez4                      [  4];	char _mrgn_codez4;                        //ì‹ ìš©ìœ í˜•
+	char jan_qtyz16                       [ 16];	char _jan_qtyz16;                         //ì”ëŸ‰
+	char expr_datez10                     [ 10];	char _expr_datez10;                       //ë§Œê¸°ì¼
+	char ass_amtz16                       [ 16];	char _ass_amtz16;                         //í‰ê°€ê¸ˆì•¡
+	char issue_mgamt_ratez6               [  6];	char _issue_mgamt_ratez6;                 //ì¢…ëª©ì¦ê±°ê¸ˆìœ¨         /*float->char*/
+	char medo_slby_amtz16                 [ 16];	char _medo_slby_amtz16;                   //í‰ê· ë§¤ë„ê°€
+	char post_lsnpf_amtz16                [ 16];	char _post_lsnpf_amtz16;                  //ë§¤ë„ì†ìµ
 } Tc8201OutBlock1;
 
 typedef struct tagc8201
 {
-	Tc8201InBlock                     c8201inblock                          ;  //±âº»ÀÔ·Â 
-	Tc8201OutBlock                    c8201outblock                         ;  //È­¸éÃâ·Â 
-	Tc8201OutBlock1                   c8201outblock1                   [ 20];  //È­¸éÃâ·Â , [¹İº¹]
+	Tc8201InBlock                     c8201inblock                          ;  //ê¸°ë³¸ì…ë ¥
+	Tc8201OutBlock                    c8201outblock                         ;  //í™”ë©´ì¶œë ¥
+	Tc8201OutBlock1                   c8201outblock1                   [ 20];  //í™”ë©´ì¶œë ¥ , [ë°˜ë³µ]
 } Tc8201;
 
-typedef struct tags8120InBlock    //±âº»ÀÔ·Â
+typedef struct tags8120InBlock    //ê¸°ë³¸ì…ë ¥
 {
-	char inq_gubunz1                      [  1];	char _inq_gubunz1;                        //Á¶È¸ÁÖÃ¼±¸ºĞ         
-	char pswd_noz8                        [ 44];	char _pswd_noz8;                          //ºñ¹Ğ¹øÈ£             
-	char group_noz4                       [  4];	char _group_noz4;                         //±×·ì¹øÈ£             
-	char mkt_slctz1                       [  1];	char _mkt_slctz1;                         //½ÃÀå±¸ºĞ             
-	char order_datez8                     [  8];	char _order_datez8;                       //ÁÖ¹®ÀÏÀÚ             
-	char issue_codez12                    [ 12];	char _issue_codez12;                      //Á¾¸ñ¹øÈ£             
-	char comm_order_typez2                [  2];	char _comm_order_typez2;                  //¸ÅÃ¼±¸ºĞ             
-	char conc_gubunz1                     [  1];	char _conc_gubunz1;                       //Ã¼°á±¸ºĞ             
-	char inq_seq_gubunz1                  [  1];	char _inq_seq_gubunz1;                    //Á¶È¸¼ø¼­             
-	char sort_gubunz1                     [  1];	char _sort_gubunz1;                       //Á¤·Ä±¸ºĞ             
-	char sell_buy_typez1                  [  1];	char _sell_buy_typez1;                    //¸Å¼öµµ±¸ºĞ           
-	char mrgn_typez1                      [  1];	char _mrgn_typez1;                        //½Å¿ë±¸ºĞ             
-	char accnt_admin_typez1               [  1];	char _accnt_admin_typez1;                 //°èÁÂ±¸ºĞ             
-	char order_noz10                      [ 10];	char _order_noz10;                        //ÁÖ¹®¹øÈ£             
+	char inq_gubunz1                      [  1];	char _inq_gubunz1;                        //ì¡°íšŒì£¼ì²´êµ¬ë¶„
+	char pswd_noz8                        [ 44];	char _pswd_noz8;                          //ë¹„ë°€ë²ˆí˜¸
+	char group_noz4                       [  4];	char _group_noz4;                         //ê·¸ë£¹ë²ˆí˜¸
+	char mkt_slctz1                       [  1];	char _mkt_slctz1;                         //ì‹œì¥êµ¬ë¶„
+	char order_datez8                     [  8];	char _order_datez8;                       //ì£¼ë¬¸ì¼ì
+	char issue_codez12                    [ 12];	char _issue_codez12;                      //ì¢…ëª©ë²ˆí˜¸
+	char comm_order_typez2                [  2];	char _comm_order_typez2;                  //ë§¤ì²´êµ¬ë¶„
+	char conc_gubunz1                     [  1];	char _conc_gubunz1;                       //ì²´ê²°êµ¬ë¶„
+	char inq_seq_gubunz1                  [  1];	char _inq_seq_gubunz1;                    //ì¡°íšŒìˆœì„œ
+	char sort_gubunz1                     [  1];	char _sort_gubunz1;                       //ì •ë ¬êµ¬ë¶„
+	char sell_buy_typez1                  [  1];	char _sell_buy_typez1;                    //ë§¤ìˆ˜ë„êµ¬ë¶„
+	char mrgn_typez1                      [  1];	char _mrgn_typez1;                        //ì‹ ìš©êµ¬ë¶„
+	char accnt_admin_typez1               [  1];	char _accnt_admin_typez1;                 //ê³„ì¢Œêµ¬ë¶„
+	char order_noz10                      [ 10];	char _order_noz10;                        //ì£¼ë¬¸ë²ˆí˜¸
 	char ctsz56                           [ 56];	char _ctsz56;                             //CTS                  
-	char trad_pswd1z8                     [ 44];	char _trad_pswd1z8;                       //°Å·¡ºñ¹Ğ¹øÈ£1        
-	char trad_pswd2z8                     [ 44];	char _trad_pswd2z8;                       //°Å·¡ºñ¹Ğ¹øÈ£2        
+	char trad_pswd1z8                     [ 44];	char _trad_pswd1z8;                       //ê±°ë˜ë¹„ë°€ë²ˆí˜¸1
+	char trad_pswd2z8                     [ 44];	char _trad_pswd2z8;                       //ê±°ë˜ë¹„ë°€ë²ˆí˜¸2
 	char IsPageUp                         [  1];	char _IsPageUp;                           //ISPAGEUP             
 } Ts8120InBlock;
 
-typedef struct tags8120OutBlock    //È­¸éÃâ·Â
+typedef struct tags8120OutBlock    //í™”ë©´ì¶œë ¥
 {
-	char emp_kor_namez20                  [ 20];	char _emp_kor_namez20;                    //ÇÑ±Û»ç¿ø¼º¸í         
-	char brch_namez30                     [ 30];	char _brch_namez30;                       //ÇÑ±ÛÁöÁ¡¸í           
-	char buy_conc_qtyz14                  [ 14];	char _buy_conc_qtyz14;                    //¸Å¼öÃ¼°á¼ö·®         
-	char buy_conc_amtz19                  [ 19];	char _buy_conc_amtz19;                    //¸Å¼öÃ¼°á±İ¾×         
-	char sell_conc_qtyz14                 [ 14];	char _sell_conc_qtyz14;                   //¸ÅµµÃ¼°á¼ö·®         
-	char sell_conc_amtz19                 [ 19];	char _sell_conc_amtz19;                   //¸ÅµµÃ¼°á±İ¾×         
+	char emp_kor_namez20                  [ 20];	char _emp_kor_namez20;                    //í•œê¸€ì‚¬ì›ì„±ëª…
+	char brch_namez30                     [ 30];	char _brch_namez30;                       //í•œê¸€ì§€ì ëª…
+	char buy_conc_qtyz14                  [ 14];	char _buy_conc_qtyz14;                    //ë§¤ìˆ˜ì²´ê²°ìˆ˜ëŸ‰
+	char buy_conc_amtz19                  [ 19];	char _buy_conc_amtz19;                    //ë§¤ìˆ˜ì²´ê²°ê¸ˆì•¡
+	char sell_conc_qtyz14                 [ 14];	char _sell_conc_qtyz14;                   //ë§¤ë„ì²´ê²°ìˆ˜ëŸ‰
+	char sell_conc_amtz19                 [ 19];	char _sell_conc_amtz19;                   //ë§¤ë„ì²´ê²°ê¸ˆì•¡
 } Ts8120OutBlock;
 
-typedef struct tags8120OutBlock1    //È­¸éÃâ·Â1, [¹İº¹]
+typedef struct tags8120OutBlock1    //í™”ë©´ì¶œë ¥1, [ë°˜ë³µ]
 {
-	char order_datez8                     [  8];	char _order_datez8;                       //ÁÖ¹®ÀÏÀÚ             
-	char order_noz10                      [ 10];	char _order_noz10;                        //ÁÖ¹®¹øÈ£             
-	char orgnl_order_noz10                [ 10];	char _orgnl_order_noz10;                  //¿øÁÖ¹®¹øÈ£           
-	char accnt_noz11                      [ 11];	char _accnt_noz11;                        //°èÁÂ¹øÈ£             
-	char accnt_namez20                    [ 20];	char _accnt_namez20;                      //°èÁÂ¸í               
-	char order_kindz20                    [ 20];	char _order_kindz20;                      //ÁÖ¹®±¸ºĞ             
-	char trd_gubun_noz1                   [  1];	char _trd_gubun_noz1;                     //¸Å¸Å±¸ºĞ¹øÈ£         
-	char trd_gubunz20                     [ 20];	char _trd_gubunz20;                       //¸Å¸Å±¸ºĞ             
-	char trade_type_noz1                  [  1];	char _trade_type_noz1;                    //°Å·¡±¸ºĞ¹øÈ£         
-	char trade_type1z20                   [ 20];	char _trade_type1z20;                     //°Å·¡±¸ºĞ             
-	char issue_codez12                    [ 12];	char _issue_codez12;                      //Á¾¸ñ¹øÈ£             
-	char issue_namez40                    [ 40];	char _issue_namez40;                      //Á¾¸ñ¸í               
-	char order_qtyz10                     [ 10];	char _order_qtyz10;                       //ÁÖ¹®¼ö·®             
-	char conc_qtyz10                      [ 10];	char _conc_qtyz10;                        //Ã¼°á¼ö·®             
-	char order_unit_pricez12              [ 12];	char _order_unit_pricez12;                //ÁÖ¹®´Ü°¡             
-	char conc_unit_pricez12               [ 12];	char _conc_unit_pricez12;                 //Ã¼°áÆò±Õ´Ü°¡         
-	char crctn_canc_qtyz10                [ 10];	char _crctn_canc_qtyz10;                  //Á¤Á¤Ãë¼Ò¼ö·®         
-	char cfirm_qtyz10                     [ 10];	char _cfirm_qtyz10;                       //È®ÀÎ¼ö·®             
-	char media_namez12                    [ 12];	char _media_namez12;                      //¸ÅÃ¼±¸ºĞ             
-	char proc_emp_noz5                    [  5];	char _proc_emp_noz5;                      //Ã³¸®»ç¹ø             
-	char proc_timez8                      [  8];	char _proc_timez8;                        //Ã³¸®½Ã°£             
-	char proc_termz8                      [  8];	char _proc_termz8;                        //Ã³¸®´Ü¸»             
-	char proc_typez12                     [ 12];	char _proc_typez12;                       //Ã³¸®±¸ºĞ             
-	char rejec_codez5                     [  5];	char _rejec_codez5;                       //°ÅºÎÄÚµå             
-	char avail_qtyz10                     [ 10];	char _avail_qtyz10;                       //Á¤Ãë°¡´É¼ö·®         
-	char mkt_typez1                       [  1];	char _mkt_typez1;                         //½ÃÀå±¸ºĞ             
-	char shsll_typez20                    [ 20];	char _shsll_typez20;                      //°ø¸Åµµ±¸ºĞ           
-	char passwd_noz8                      [  8];	char _passwd_noz8;                        //ºñ¹Ğ¹øÈ£             
+	char order_datez8                     [  8];	char _order_datez8;                       //ì£¼ë¬¸ì¼ì
+	char order_noz10                      [ 10];	char _order_noz10;                        //ì£¼ë¬¸ë²ˆí˜¸
+	char orgnl_order_noz10                [ 10];	char _orgnl_order_noz10;                  //ì›ì£¼ë¬¸ë²ˆí˜¸
+	char accnt_noz11                      [ 11];	char _accnt_noz11;                        //ê³„ì¢Œë²ˆí˜¸
+	char accnt_namez20                    [ 20];	char _accnt_namez20;                      //ê³„ì¢Œëª…
+	char order_kindz20                    [ 20];	char _order_kindz20;                      //ì£¼ë¬¸êµ¬ë¶„
+	char trd_gubun_noz1                   [  1];	char _trd_gubun_noz1;                     //ë§¤ë§¤êµ¬ë¶„ë²ˆí˜¸
+	char trd_gubunz20                     [ 20];	char _trd_gubunz20;                       //ë§¤ë§¤êµ¬ë¶„
+	char trade_type_noz1                  [  1];	char _trade_type_noz1;                    //ê±°ë˜êµ¬ë¶„ë²ˆí˜¸
+	char trade_type1z20                   [ 20];	char _trade_type1z20;                     //ê±°ë˜êµ¬ë¶„
+	char issue_codez12                    [ 12];	char _issue_codez12;                      //ì¢…ëª©ë²ˆí˜¸
+	char issue_namez40                    [ 40];	char _issue_namez40;                      //ì¢…ëª©ëª…
+	char order_qtyz10                     [ 10];	char _order_qtyz10;                       //ì£¼ë¬¸ìˆ˜ëŸ‰
+	char conc_qtyz10                      [ 10];	char _conc_qtyz10;                        //ì²´ê²°ìˆ˜ëŸ‰
+	char order_unit_pricez12              [ 12];	char _order_unit_pricez12;                //ì£¼ë¬¸ë‹¨ê°€
+	char conc_unit_pricez12               [ 12];	char _conc_unit_pricez12;                 //ì²´ê²°í‰ê· ë‹¨ê°€
+	char crctn_canc_qtyz10                [ 10];	char _crctn_canc_qtyz10;                  //ì •ì •ì·¨ì†Œìˆ˜ëŸ‰
+	char cfirm_qtyz10                     [ 10];	char _cfirm_qtyz10;                       //í™•ì¸ìˆ˜ëŸ‰
+	char media_namez12                    [ 12];	char _media_namez12;                      //ë§¤ì²´êµ¬ë¶„
+	char proc_emp_noz5                    [  5];	char _proc_emp_noz5;                      //ì²˜ë¦¬ì‚¬ë²ˆ
+	char proc_timez8                      [  8];	char _proc_timez8;                        //ì²˜ë¦¬ì‹œê°„
+	char proc_termz8                      [  8];	char _proc_termz8;                        //ì²˜ë¦¬ë‹¨ë§
+	char proc_typez12                     [ 12];	char _proc_typez12;                       //ì²˜ë¦¬êµ¬ë¶„
+	char rejec_codez5                     [  5];	char _rejec_codez5;                       //ê±°ë¶€ì½”ë“œ
+	char avail_qtyz10                     [ 10];	char _avail_qtyz10;                       //ì •ì·¨ê°€ëŠ¥ìˆ˜ëŸ‰
+	char mkt_typez1                       [  1];	char _mkt_typez1;                         //ì‹œì¥êµ¬ë¶„
+	char shsll_typez20                    [ 20];	char _shsll_typez20;                      //ê³µë§¤ë„êµ¬ë¶„
+	char passwd_noz8                      [  8];	char _passwd_noz8;                        //ë¹„ë°€ë²ˆí˜¸
 } Ts8120OutBlock1;
 
-typedef struct tags8120OutBlock_IN    //ButtonÁ¤º¸
+typedef struct tags8120OutBlock_IN    //Buttonì •ë³´
 {
 	char ctsz56                           [ 56];	char _ctsz56;                             //CTS                  
 	char nextbutton                       [  1];	char _nextbutton;                         //NEXTBUTTON           
@@ -337,107 +337,107 @@ typedef struct tags8120OutBlock_IN    //ButtonÁ¤º¸
 
 typedef struct tags8120
 {
-	Ts8120InBlock                     s8120inblock                          ;  //±âº»ÀÔ·Â 
-	Ts8120OutBlock                    s8120outblock                         ;  //È­¸éÃâ·Â 
-	Ts8120OutBlock1                   s8120outblock1                   [ 20];  //È­¸éÃâ·Â1 , [¹İº¹]
-	Ts8120OutBlock_IN                 s8120outblock_in                      ;  //ButtonÁ¤º¸ 
+	Ts8120InBlock                     s8120inblock                          ;  //ê¸°ë³¸ì…ë ¥
+	Ts8120OutBlock                    s8120outblock                         ;  //í™”ë©´ì¶œë ¥
+	Ts8120OutBlock1                   s8120outblock1                   [ 20];  //í™”ë©´ì¶œë ¥1 , [ë°˜ë³µ]
+	Ts8120OutBlock_IN                 s8120outblock_in                      ;  //Buttonì •ë³´
 } Ts8120;
 
-typedef struct tagp8101InBlock    //ÀÔ·Â
+typedef struct tagp8101InBlock    //ì…ë ¥
 {
-	char pswd_noz8                        [ 44];	char _pswd_noz8;                          //ºñ¹Ğ¹øÈ£             
-	char gubunz1                          [  1];	char _gubunz1;                            //±¸ºĞ                 
+	char pswd_noz8                        [ 44];	char _pswd_noz8;                          //ë¹„ë°€ë²ˆí˜¸
+	char gubunz1                          [  1];	char _gubunz1;                            //êµ¬ë¶„
 } Tp8101InBlock;
 
-typedef struct tagp8101OutBlock    //È­¸éÃâ·Â
+typedef struct tagp8101OutBlock    //í™”ë©´ì¶œë ¥
 {
-	char accnt_namez30                    [ 30];	char _accnt_namez30;                      //°èÁÂ¸í               /*½ÅOBM¿¡Á¸ÀçÇÏÁö¾Ê´ÂÇ×¸ñ*/
+	char accnt_namez30                    [ 30];	char _accnt_namez30;                      //ê³„ì¢Œëª…               /*ì‹ OBMì—ì¡´ì¬í•˜ì§€ì•ŠëŠ”í•­ëª©*/
 } Tp8101OutBlock;
 
-typedef struct tagp8101OutBlock1    //GRID, [¹İº¹]
+typedef struct tagp8101OutBlock1    //GRID, [ë°˜ë³µ]
 {
-	char gubunz1                          [  1];	char _gubunz1;                            //±¸ºĞ                 1:Çö±İ2:À¶ÀÚ3:Ã¤±Ç4:´ëÁÖ5:ECNÇö±İ
-	char gubun_namez6                     [  6];	char _gubun_namez6;                       //±¸ºĞ¸í               
-	char issue_codez12                    [ 12];	char _issue_codez12;                      //Á¾¸ñÄÚµå             
-	char issue_namez30                    [ 30];	char _issue_namez30;                      //Á¾¸ñ¸í               
-	char mrgn_typez10                     [ 10];	char _mrgn_typez10;                       //½Å¿ë±¸ºĞ             
-	char lend_datez10                     [ 10];	char _lend_datez10;                       //´ëÃâÀÏÀÚ             
-	char taxtn_typez10                    [ 10];	char _taxtn_typez10;                      //°ú¼¼À¯Çü             
-	char bal_qtyz12                       [ 12];	char _bal_qtyz12;                         //ÀÜ°í¼ö·®             
-	char sell_rcble_qtyz12                [ 12];	char _sell_rcble_qtyz12;                  //¸Åµµ¹Ì°áÁ¦           
-	char buy_rcble_qtyz12                 [ 12];	char _buy_rcble_qtyz12;                   //¸Å¼ö¹Ì°áÁ¦           
-	char sell_psqtyz12                    [ 12];	char _sell_psqtyz12;                      //¸Åµµ°¡´É¼ö·®         
-	char today_sell_rcble_qz12            [ 12];	char _today_sell_rcble_qz12;              //´çÀÏ¸Åµµ¹ÌÃ¼°á¼ö·®   
-	char avrg_purch_uprc                  [ 10];	char _avrg_purch_uprc;                    //¸ÅÀÔ´Ü°¡             
+	char gubunz1                          [  1];	char _gubunz1;                            //êµ¬ë¶„                 1:í˜„ê¸ˆ2:ìœµì3:ì±„ê¶Œ4:ëŒ€ì£¼5:ECNí˜„ê¸ˆ
+	char gubun_namez6                     [  6];	char _gubun_namez6;                       //êµ¬ë¶„ëª…
+	char issue_codez12                    [ 12];	char _issue_codez12;                      //ì¢…ëª©ì½”ë“œ
+	char issue_namez30                    [ 30];	char _issue_namez30;                      //ì¢…ëª©ëª…
+	char mrgn_typez10                     [ 10];	char _mrgn_typez10;                       //ì‹ ìš©êµ¬ë¶„
+	char lend_datez10                     [ 10];	char _lend_datez10;                       //ëŒ€ì¶œì¼ì
+	char taxtn_typez10                    [ 10];	char _taxtn_typez10;                      //ê³¼ì„¸ìœ í˜•
+	char bal_qtyz12                       [ 12];	char _bal_qtyz12;                         //ì”ê³ ìˆ˜ëŸ‰
+	char sell_rcble_qtyz12                [ 12];	char _sell_rcble_qtyz12;                  //ë§¤ë„ë¯¸ê²°ì œ
+	char buy_rcble_qtyz12                 [ 12];	char _buy_rcble_qtyz12;                   //ë§¤ìˆ˜ë¯¸ê²°ì œ
+	char sell_psqtyz12                    [ 12];	char _sell_psqtyz12;                      //ë§¤ë„ê°€ëŠ¥ìˆ˜ëŸ‰
+	char today_sell_rcble_qz12            [ 12];	char _today_sell_rcble_qz12;              //ë‹¹ì¼ë§¤ë„ë¯¸ì²´ê²°ìˆ˜ëŸ‰
+	char avrg_purch_uprc                  [ 10];	char _avrg_purch_uprc;                    //ë§¤ì…ë‹¨ê°€
 } Tp8101OutBlock1;
 
 typedef struct tagp8101
 {
-	Tp8101InBlock                     p8101inblock                          ;  //ÀÔ·Â 
-	Tp8101OutBlock                    p8101outblock                         ;  //È­¸éÃâ·Â 
-	Tp8101OutBlock1                   p8101outblock1                   [ 17];  //GRID , [¹İº¹]
+	Tp8101InBlock                     p8101inblock                          ;  //ì…ë ¥
+	Tp8101OutBlock                    p8101outblock                         ;  //í™”ë©´ì¶œë ¥
+	Tp8101OutBlock1                   p8101outblock1                   [ 17];  //GRID , [ë°˜ë³µ]
 } Tp8101;
 
-typedef struct tagp8105InBlock    //ÀÔ·Â
+typedef struct tagp8105InBlock    //ì…ë ¥
 {
-	char pwdz8                            [ 44];	char _pwdz8;                              //ºñ¹Ğ¹øÈ£             
-	char ost_dit_cdz1                     [  1];	char _ost_dit_cdz1;                       //±¸ºĞÄÚµå             /*1Çö±İ2:½Å¿ë3:¸ÅÀÔÀÚ±İ´ëÃâ*/
-	char sby_dit_cdz1                     [  1];	char _sby_dit_cdz1;                       //¸Å¸Å±¸ºĞÄÚµå         /*1:¸Åµµ»óÈ¯2:¸Å¼ö½Å±Ô*/
-	char iem_gbz1                         [  1];	char _iem_gbz1;                           //Á¾¸ñ±¸ºĞ             /*1:ÁÖ½Ä2:ELW3:½ÅÁÖÀÎ¼ö4:±âÅ¸*/
-	char iem_cdz12                        [ 12];	char _iem_cdz12;                          //Á¾¸ñÄÚµå             
-	char nmn_pr_tp_gbz1                   [  1];	char _nmn_pr_tp_gbz1;                     //È£°¡À¯Çü±¸ºĞ         /*1:±¸È£°¡±¸ºĞ-1ÀÚ¸®2:½Å½Ã½ºÅÛÈ£°¡±¸ºĞ-2ÀÚ¸®*/
-	char nmn_pr_tp_cdz2                   [  2];	char _nmn_pr_tp_cdz2;                     //È£°¡À¯ÇüÄÚµå         /*01:º¸Åë05:½ÃÀå°¡06:Á¶°ÇºÎ10:S-OPTIONÀÚ±â11:±İÀü½ÅÅ¹12:ÃÖÀ¯¸®13:ÃÖ¿ì¼±61:ÀåÀü½Ã°£71:ÀåÈÄ½Ã°£81:½Å°£¿Ü´ÜÀÏ*/
-	char orr_prz18                        [ 18];	char _orr_prz18;                          //ÁÖ¹®°¡°İ             
-	char mdi_tp_cdz1                      [  1];	char _mdi_tp_cdz1;                        //¸ÅÃ¼À¯ÇüÄÚµå         /*1:ÁöÁ¡2:HTS3:¸ğ¹ÙÀÏARS4:°í°´Áö¿ø¼¾ÅÍ5:TXflat6:TXLever7:TXLever´ëÃâ½Å¿ë8:TXWin9:TXWinSMIT0:TX¹Ù·Î*/
-	char cfd_lon_cdz2                     [  2];	char _cfd_lon_cdz2;                       //½Å¿ë´ëÃâÄÚµå         /*01:À¯À¶02:ÀÚÀ¶03:À¯´ë04:ÀÚ´ë*/
-	char lon_dtz8                         [  8];	char _lon_dtz8;                           //´ëÃâÀÏÀÚ             
+	char pwdz8                            [ 44];	char _pwdz8;                              //ë¹„ë°€ë²ˆí˜¸
+	char ost_dit_cdz1                     [  1];	char _ost_dit_cdz1;                       //êµ¬ë¶„ì½”ë“œ             /*1í˜„ê¸ˆ2:ì‹ ìš©3:ë§¤ì…ìê¸ˆëŒ€ì¶œ*/
+	char sby_dit_cdz1                     [  1];	char _sby_dit_cdz1;                       //ë§¤ë§¤êµ¬ë¶„ì½”ë“œ         /*1:ë§¤ë„ìƒí™˜2:ë§¤ìˆ˜ì‹ ê·œ*/
+	char iem_gbz1                         [  1];	char _iem_gbz1;                           //ì¢…ëª©êµ¬ë¶„             /*1:ì£¼ì‹2:ELW3:ì‹ ì£¼ì¸ìˆ˜4:ê¸°íƒ€*/
+	char iem_cdz12                        [ 12];	char _iem_cdz12;                          //ì¢…ëª©ì½”ë“œ
+	char nmn_pr_tp_gbz1                   [  1];	char _nmn_pr_tp_gbz1;                     //í˜¸ê°€ìœ í˜•êµ¬ë¶„         /*1:êµ¬í˜¸ê°€êµ¬ë¶„-1ìë¦¬2:ì‹ ì‹œìŠ¤í…œí˜¸ê°€êµ¬ë¶„-2ìë¦¬*/
+	char nmn_pr_tp_cdz2                   [  2];	char _nmn_pr_tp_cdz2;                     //í˜¸ê°€ìœ í˜•ì½”ë“œ         /*01:ë³´í†µ05:ì‹œì¥ê°€06:ì¡°ê±´ë¶€10:S-OPTIONìê¸°11:ê¸ˆì „ì‹ íƒ12:ìµœìœ ë¦¬13:ìµœìš°ì„ 61:ì¥ì „ì‹œê°„71:ì¥í›„ì‹œê°„81:ì‹ ê°„ì™¸ë‹¨ì¼*/
+	char orr_prz18                        [ 18];	char _orr_prz18;                          //ì£¼ë¬¸ê°€ê²©
+	char mdi_tp_cdz1                      [  1];	char _mdi_tp_cdz1;                        //ë§¤ì²´ìœ í˜•ì½”ë“œ         /*1:ì§€ì 2:HTS3:ëª¨ë°”ì¼ARS4:ê³ ê°ì§€ì›ì„¼í„°5:TXflat6:TXLever7:TXLeverëŒ€ì¶œì‹ ìš©8:TXWin9:TXWinSMIT0:TXë°”ë¡œ*/
+	char cfd_lon_cdz2                     [  2];	char _cfd_lon_cdz2;                       //ì‹ ìš©ëŒ€ì¶œì½”ë“œ         /*01:ìœ ìœµ02:ììœµ03:ìœ ëŒ€04:ìëŒ€*/
+	char lon_dtz8                         [  8];	char _lon_dtz8;                           //ëŒ€ì¶œì¼ì
 } Tp8105InBlock;
 
-typedef struct tagp8105OutBlock    //È­¸éÃâ·Â
+typedef struct tagp8105OutBlock    //í™”ë©´ì¶œë ¥
 {
-	char dcaz18                           [ 18];	char _dcaz18;                             //¿¹¼ö±İ               /*±İÀÏ¿¹¼ö±İ*/
-	char nxt_dd_dcaz18                    [ 18];	char _nxt_dd_dcaz18;                      //ÀÍÀÏ¿¹¼ö±İ           /*D+1¿¹¼ö±İ*/
-	char nxt2_dd_dcaz18                   [ 18];	char _nxt2_dd_dcaz18;                     //ÀÍÀÍÀÏ¿¹¼ö±İ         /*D+2¿¹¼ö±İ*/
-	char max_pbl_amtz18                   [ 18];	char _max_pbl_amtz18;                     //ÃÖ´ë°¡´É±İ¾×         /*¹Ì¼ö°¡´É±İ¾×*/
-	char max_pbl_qtyz18                   [ 18];	char _max_pbl_qtyz18;                     //ÃÖ´ë°¡´É¼ö·®         /*¹Ì¼ö°¡´É¼ö·®*/
-	char rvb_orn_max_pbl_feez18           [ 18];	char _rvb_orn_max_pbl_feez18;             //¹Ì¼ö¹ß»ıÃÖ´ë°¡´É¼ö¼ö·á /*¹Ì¼ö¼ö¼ö·á*/
-	char csh_orr_pbl_amtz18               [ 18];	char _csh_orr_pbl_amtz18;                 //Çö±İÁÖ¹®°¡´É±İ¾×     /*Çö±İ°¡´É±İ¾×*/
-	char csh_orr_pbl_qtyz18               [ 18];	char _csh_orr_pbl_qtyz18;                 //Çö±İÁÖ¹®°¡´É¼ö·®     /*Çö±İ°¡´É¼ö·®*/
-	char ost_fee1z18                      [ 18];	char _ost_fee1z18;                        //Çö±İ¼ö¼ö·á           /*Çö±İ¼ö¼ö·á*/
-	char cfd_rvb_orr_pbl_amtz18           [ 18];	char _cfd_rvb_orr_pbl_amtz18;             //½Å¿ë¹Ì¼öÁÖ¹®°¡´É±İ¾× /*½Å¿ë¹Ì¼ö°¡´É±İ¾×*/
-	char cfd_rvb_orr_pbl_qtyz18           [ 18];	char _cfd_rvb_orr_pbl_qtyz18;             //½Å¿ë¹Ì¼öÁÖ¹®°¡´É¼ö·® /*½Å¿ë¹Ì¼ö°¡´É¼ö·®*/
-	char cfd_max_pbl_feez18               [ 18];	char _cfd_max_pbl_feez18;                 //½Å¿ëÃÖ´ë°¡´É¼ö¼ö·á   /*½Å¿ë¹Ì¼ö¼ö¼ö·á*/
-	char cfd_orr_pbl_amtz18               [ 18];	char _cfd_orr_pbl_amtz18;                 //½Å¿ëÁÖ¹®°¡´É±İ¾×     /*½Å¿ë¹Ì¹ß»ı°¡´É±İ¾×*/
-	char cfd_orr_pbl_qtyz18               [ 18];	char _cfd_orr_pbl_qtyz18;                 //½Å¿ëÁÖ¹®°¡´É¼ö·®     /*½Å¿ë¹Ì¹ß»ı°¡´É¼ö·®*/
-	char ost_fee2z18                      [ 18];	char _ost_fee2z18;                        //¼ö¼ö·á2              /*½Å¿ë¹Ì¹ß»ı¼ö¼ö·á*/
-	char sdr_xps1z18                      [ 18];	char _sdr_xps1z18;                        //Á¦ºñ¿ë1              
-	char sdr_xpsz18                       [ 18];	char _sdr_xpsz18;                         //Á¦ºñ¿ë               
+	char dcaz18                           [ 18];	char _dcaz18;                             //ì˜ˆìˆ˜ê¸ˆ               /*ê¸ˆì¼ì˜ˆìˆ˜ê¸ˆ*/
+	char nxt_dd_dcaz18                    [ 18];	char _nxt_dd_dcaz18;                      //ìµì¼ì˜ˆìˆ˜ê¸ˆ           /*D+1ì˜ˆìˆ˜ê¸ˆ*/
+	char nxt2_dd_dcaz18                   [ 18];	char _nxt2_dd_dcaz18;                     //ìµìµì¼ì˜ˆìˆ˜ê¸ˆ         /*D+2ì˜ˆìˆ˜ê¸ˆ*/
+	char max_pbl_amtz18                   [ 18];	char _max_pbl_amtz18;                     //ìµœëŒ€ê°€ëŠ¥ê¸ˆì•¡         /*ë¯¸ìˆ˜ê°€ëŠ¥ê¸ˆì•¡*/
+	char max_pbl_qtyz18                   [ 18];	char _max_pbl_qtyz18;                     //ìµœëŒ€ê°€ëŠ¥ìˆ˜ëŸ‰         /*ë¯¸ìˆ˜ê°€ëŠ¥ìˆ˜ëŸ‰*/
+	char rvb_orn_max_pbl_feez18           [ 18];	char _rvb_orn_max_pbl_feez18;             //ë¯¸ìˆ˜ë°œìƒìµœëŒ€ê°€ëŠ¥ìˆ˜ìˆ˜ë£Œ /*ë¯¸ìˆ˜ìˆ˜ìˆ˜ë£Œ*/
+	char csh_orr_pbl_amtz18               [ 18];	char _csh_orr_pbl_amtz18;                 //í˜„ê¸ˆì£¼ë¬¸ê°€ëŠ¥ê¸ˆì•¡     /*í˜„ê¸ˆê°€ëŠ¥ê¸ˆì•¡*/
+	char csh_orr_pbl_qtyz18               [ 18];	char _csh_orr_pbl_qtyz18;                 //í˜„ê¸ˆì£¼ë¬¸ê°€ëŠ¥ìˆ˜ëŸ‰     /*í˜„ê¸ˆê°€ëŠ¥ìˆ˜ëŸ‰*/
+	char ost_fee1z18                      [ 18];	char _ost_fee1z18;                        //í˜„ê¸ˆìˆ˜ìˆ˜ë£Œ           /*í˜„ê¸ˆìˆ˜ìˆ˜ë£Œ*/
+	char cfd_rvb_orr_pbl_amtz18           [ 18];	char _cfd_rvb_orr_pbl_amtz18;             //ì‹ ìš©ë¯¸ìˆ˜ì£¼ë¬¸ê°€ëŠ¥ê¸ˆì•¡ /*ì‹ ìš©ë¯¸ìˆ˜ê°€ëŠ¥ê¸ˆì•¡*/
+	char cfd_rvb_orr_pbl_qtyz18           [ 18];	char _cfd_rvb_orr_pbl_qtyz18;             //ì‹ ìš©ë¯¸ìˆ˜ì£¼ë¬¸ê°€ëŠ¥ìˆ˜ëŸ‰ /*ì‹ ìš©ë¯¸ìˆ˜ê°€ëŠ¥ìˆ˜ëŸ‰*/
+	char cfd_max_pbl_feez18               [ 18];	char _cfd_max_pbl_feez18;                 //ì‹ ìš©ìµœëŒ€ê°€ëŠ¥ìˆ˜ìˆ˜ë£Œ   /*ì‹ ìš©ë¯¸ìˆ˜ìˆ˜ìˆ˜ë£Œ*/
+	char cfd_orr_pbl_amtz18               [ 18];	char _cfd_orr_pbl_amtz18;                 //ì‹ ìš©ì£¼ë¬¸ê°€ëŠ¥ê¸ˆì•¡     /*ì‹ ìš©ë¯¸ë°œìƒê°€ëŠ¥ê¸ˆì•¡*/
+	char cfd_orr_pbl_qtyz18               [ 18];	char _cfd_orr_pbl_qtyz18;                 //ì‹ ìš©ì£¼ë¬¸ê°€ëŠ¥ìˆ˜ëŸ‰     /*ì‹ ìš©ë¯¸ë°œìƒê°€ëŠ¥ìˆ˜ëŸ‰*/
+	char ost_fee2z18                      [ 18];	char _ost_fee2z18;                        //ìˆ˜ìˆ˜ë£Œ2              /*ì‹ ìš©ë¯¸ë°œìƒìˆ˜ìˆ˜ë£Œ*/
+	char sdr_xps1z18                      [ 18];	char _sdr_xps1z18;                        //ì œë¹„ìš©1
+	char sdr_xpsz18                       [ 18];	char _sdr_xpsz18;                         //ì œë¹„ìš©
 } Tp8105OutBlock;
 
 typedef struct tagp8105
 {
-	Tp8105InBlock                     p8105inblock                          ;  //ÀÔ·Â 
-	Tp8105OutBlock                    p8105outblock                         ;  //È­¸éÃâ·Â 
+	Tp8105InBlock                     p8105inblock                          ;  //ì…ë ¥
+	Tp8105OutBlock                    p8105outblock                         ;  //í™”ë©´ì¶œë ¥
 } Tp8105;
 
-typedef struct tagp8104InBlock    //±âº»ÀÔ·Â
+typedef struct tagp8104InBlock    //ê¸°ë³¸ì…ë ¥
 {
-	char pswd_noz8                        [ 44];	char _pswd_noz8;                          //ºñ¹Ğ¹øÈ£             
-	char issue_codez6                     [  6];	char _issue_codez6;                       //Á¾¸ñÄÚµå             
-	char gubunz1                          [  1];	char _gubunz1;                            //±¸ºĞ                 
-	char the_datez8                       [  8];	char _the_datez8;                         //´ëÃâÀÏ               /*½ÅOBM¿¡Á¸ÀçÇÏÁö¾Ê´ÂÇ×¸ñ*/
+	char pswd_noz8                        [ 44];	char _pswd_noz8;                          //ë¹„ë°€ë²ˆí˜¸
+	char issue_codez6                     [  6];	char _issue_codez6;                       //ì¢…ëª©ì½”ë“œ
+	char gubunz1                          [  1];	char _gubunz1;                            //êµ¬ë¶„
+	char the_datez8                       [  8];	char _the_datez8;                         //ëŒ€ì¶œì¼               /*ì‹ OBMì—ì¡´ì¬í•˜ì§€ì•ŠëŠ”í•­ëª©*/
 } Tp8104InBlock;
 
-typedef struct tagp8104OutBlock    //È­¸éÃâ·Â
+typedef struct tagp8104OutBlock    //í™”ë©´ì¶œë ¥
 {
-	char issue_codez6                     [  6];	char _issue_codez6;                       //Á¾¸ñÄÚµå             
-	char order_qtyz12                     [ 12];	char _order_qtyz12;                       //¸Åµµ°¡´É¼ö·®         
+	char issue_codez6                     [  6];	char _issue_codez6;                       //ì¢…ëª©ì½”ë“œ
+	char order_qtyz12                     [ 12];	char _order_qtyz12;                       //ë§¤ë„ê°€ëŠ¥ìˆ˜ëŸ‰
 } Tp8104OutBlock;
 
 typedef struct tagp8104
 {
-	Tp8104InBlock                     p8104inblock                          ;  //±âº»ÀÔ·Â 
-	Tp8104OutBlock                    p8104outblock                         ;  //È­¸éÃâ·Â 
+	Tp8104InBlock                     p8104inblock                          ;  //ê¸°ë³¸ì…ë ¥
+	Tp8104OutBlock                    p8104outblock                         ;  //í™”ë©´ì¶œë ¥
 } Tp8104;
 
 
@@ -448,175 +448,175 @@ typedef struct tagp8104
 
 
 ////////////////////////////////////////
-//	¼±¹°¿É¼Ç
+//	ì„ ë¬¼ì˜µì…˜
 ////////////////////////////////////////
 
-typedef struct tags8301InBlock    //±âº»ÀÔ·Â
+typedef struct tags8301InBlock    //ê¸°ë³¸ì…ë ¥
 {
-	char slbuy_typez1                     [  1];	char _slbuy_typez1;                       //¸Å¼ö¸ÅµµÀ¯Çü         
-	char passwd_noz8                      [ 44];	char _passwd_noz8;                        //ºñ¹Ğ¹øÈ£             
-	char issue_codez9                     [  9];	char _issue_codez9;                       //Á¾¸ñÄÚµå             
-	char ord_typez1                       [  1];	char _ord_typez1;                         //ÁÖ¹®À¯Çü             
-	char trade_typez1                     [  1];	char _trade_typez1;                       //°Å·¡À¯Çü             
-	char order_qtyz8                      [  8];	char _order_qtyz8;                        //ÁÖ¹®¼ö·®             
-	char order_pricez12                   [ 12];	char _order_pricez12;                     //ÁÖ¹®°¡°İ             
-	char trad_pswd_no_1z8                 [ 44];	char _trad_pswd_no_1z8;                   //°Å·¡ºñ¹Ğ¹øÈ£1        
-	char trad_pswd_no_2z8                 [ 44];	char _trad_pswd_no_2z8;                   //°Å·¡ºñ¹Ğ¹øÈ£2        
+	char slbuy_typez1                     [  1];	char _slbuy_typez1;                       //ë§¤ìˆ˜ë§¤ë„ìœ í˜•
+	char passwd_noz8                      [ 44];	char _passwd_noz8;                        //ë¹„ë°€ë²ˆí˜¸
+	char issue_codez9                     [  9];	char _issue_codez9;                       //ì¢…ëª©ì½”ë“œ
+	char ord_typez1                       [  1];	char _ord_typez1;                         //ì£¼ë¬¸ìœ í˜•
+	char trade_typez1                     [  1];	char _trade_typez1;                       //ê±°ë˜ìœ í˜•
+	char order_qtyz8                      [  8];	char _order_qtyz8;                        //ì£¼ë¬¸ìˆ˜ëŸ‰
+	char order_pricez12                   [ 12];	char _order_pricez12;                     //ì£¼ë¬¸ê°€ê²©
+	char trad_pswd_no_1z8                 [ 44];	char _trad_pswd_no_1z8;                   //ê±°ë˜ë¹„ë°€ë²ˆí˜¸1
+	char trad_pswd_no_2z8                 [ 44];	char _trad_pswd_no_2z8;                   //ê±°ë˜ë¹„ë°€ë²ˆí˜¸2
 } Ts8301InBlock;
 
-typedef struct tags8301OutBlock    //È­¸éÃâ·Â
+typedef struct tags8301OutBlock    //í™”ë©´ì¶œë ¥
 {
-	char order_qtyz8                      [  8];	char _order_qtyz8;                        //ÁÖ¹®¼ö·®             
-	char order_pricez12                   [ 12];	char _order_pricez12;                     //ÁÖ¹®°¡°İ             
-	char order_noz10                      [ 10];	char _order_noz10;                        //ÁÖ¹®¹øÈ£             
-	char ord_pos_csamtz16                 [ 16];	char _ord_pos_csamtz16;                   //ÁÖ¹®°¡´ÉÇö±İ         
-	char ord_pos_ttamtz16                 [ 16];	char _ord_pos_ttamtz16;                   //ÁÖ¹®°¡´ÉÃÑ¾×         
-	char ord_insuf_csamtz16               [ 16];	char _ord_insuf_csamtz16;                 //ÁÖ¹®ºÎÁ·Çö±İ         
-	char ord_insuf_ttamtz16               [ 16];	char _ord_insuf_ttamtz16;                 //ÁÖ¹®ºÎÁ·ÃÑ¾×         
-	char ord_pos_qtyz16                   [ 16];	char _ord_pos_qtyz16;                     //ÁÖ¹®°¡´É¼ö·®         
+	char order_qtyz8                      [  8];	char _order_qtyz8;                        //ì£¼ë¬¸ìˆ˜ëŸ‰
+	char order_pricez12                   [ 12];	char _order_pricez12;                     //ì£¼ë¬¸ê°€ê²©
+	char order_noz10                      [ 10];	char _order_noz10;                        //ì£¼ë¬¸ë²ˆí˜¸
+	char ord_pos_csamtz16                 [ 16];	char _ord_pos_csamtz16;                   //ì£¼ë¬¸ê°€ëŠ¥í˜„ê¸ˆ
+	char ord_pos_ttamtz16                 [ 16];	char _ord_pos_ttamtz16;                   //ì£¼ë¬¸ê°€ëŠ¥ì´ì•¡
+	char ord_insuf_csamtz16               [ 16];	char _ord_insuf_csamtz16;                 //ì£¼ë¬¸ë¶€ì¡±í˜„ê¸ˆ
+	char ord_insuf_ttamtz16               [ 16];	char _ord_insuf_ttamtz16;                 //ì£¼ë¬¸ë¶€ì¡±ì´ì•¡
+	char ord_pos_qtyz16                   [ 16];	char _ord_pos_qtyz16;                     //ì£¼ë¬¸ê°€ëŠ¥ìˆ˜ëŸ‰
 } Ts8301OutBlock;
 
 typedef struct tags8301
 {
-	Ts8301InBlock                     s8301inblock                          ;  //±âº»ÀÔ·Â 
-	Ts8301OutBlock                    s8301outblock                         ;  //È­¸éÃâ·Â 
+	Ts8301InBlock                     s8301inblock                          ;  //ê¸°ë³¸ì…ë ¥
+	Ts8301OutBlock                    s8301outblock                         ;  //í™”ë©´ì¶œë ¥
 } Ts8301;
 
 
-typedef struct tags8302InBlock    //±âº»ÀÔ·Â
+typedef struct tags8302InBlock    //ê¸°ë³¸ì…ë ¥
 {
-	char gubunz1                          [  1];	char _gubunz1;                            //Á¤Á¤/Ãë¼Ò±¸ºĞ        
-	char slbuy_typez1                     [  1];	char _slbuy_typez1;                       //¸Å¼ö¸ÅµµÀ¯Çü         
-	char pswd_noz8                        [ 44];	char _pswd_noz8;                          //ºñ¹Ğ¹øÈ£             
-	char orgnl_order_noz10                [ 10];	char _orgnl_order_noz10;                  //¿øÁÖ¹®¹øÈ£           
-	char issue_codez9                     [  9];	char _issue_codez9;                       //Á¾¸ñÄÚµå             
-	char orgnl_ord_typez1                 [  1];	char _orgnl_ord_typez1;                   //¿øÁÖ¹®À¯Çü           
-	char crctn_ord_typez1                 [  1];	char _crctn_ord_typez1;                   //Á¤Á¤ÁÖ¹®À¯Çü         
-	char order_qtyz8                      [  8];	char _order_qtyz8;                        //ÁÖ¹®¼ö·®             
-	char order_pricez12                   [ 12];	char _order_pricez12;                     //ÁÖ¹®°¡°İ             
-	char trad_pswd_no_1z8                 [ 44];	char _trad_pswd_no_1z8;                   //°Å·¡ºñ¹Ğ¹øÈ£1        
-	char trad_pswd_no_2z8                 [ 44];	char _trad_pswd_no_2z8;                   //°Å·¡ºñ¹Ğ¹øÈ£2        
+	char gubunz1                          [  1];	char _gubunz1;                            //ì •ì •/ì·¨ì†Œêµ¬ë¶„
+	char slbuy_typez1                     [  1];	char _slbuy_typez1;                       //ë§¤ìˆ˜ë§¤ë„ìœ í˜•
+	char pswd_noz8                        [ 44];	char _pswd_noz8;                          //ë¹„ë°€ë²ˆí˜¸
+	char orgnl_order_noz10                [ 10];	char _orgnl_order_noz10;                  //ì›ì£¼ë¬¸ë²ˆí˜¸
+	char issue_codez9                     [  9];	char _issue_codez9;                       //ì¢…ëª©ì½”ë“œ
+	char orgnl_ord_typez1                 [  1];	char _orgnl_ord_typez1;                   //ì›ì£¼ë¬¸ìœ í˜•
+	char crctn_ord_typez1                 [  1];	char _crctn_ord_typez1;                   //ì •ì •ì£¼ë¬¸ìœ í˜•
+	char order_qtyz8                      [  8];	char _order_qtyz8;                        //ì£¼ë¬¸ìˆ˜ëŸ‰
+	char order_pricez12                   [ 12];	char _order_pricez12;                     //ì£¼ë¬¸ê°€ê²©
+	char trad_pswd_no_1z8                 [ 44];	char _trad_pswd_no_1z8;                   //ê±°ë˜ë¹„ë°€ë²ˆí˜¸1
+	char trad_pswd_no_2z8                 [ 44];	char _trad_pswd_no_2z8;                   //ê±°ë˜ë¹„ë°€ë²ˆí˜¸2
 } Ts8302InBlock;
 
-typedef struct tags8302OutBlock    //È­¸éÃâ·Â
+typedef struct tags8302OutBlock    //í™”ë©´ì¶œë ¥
 {
-	char order_noz10                      [ 10];	char _order_noz10;                        //ÁÖ¹®¹øÈ£             
-	char ord_pos_csamtz16                 [ 16];	char _ord_pos_csamtz16;                   //ÁÖ¹®°¡´ÉÇö±İ         
-	char ord_pos_ttamtz16                 [ 16];	char _ord_pos_ttamtz16;                   //ÁÖ¹®°¡´ÉÃÑ¾×         
-	char ord_insuf_csamtz16               [ 16];	char _ord_insuf_csamtz16;                 //ÁÖ¹®ºÎÁ·Çö±İ         
-	char ord_insuf_ttamtz16               [ 16];	char _ord_insuf_ttamtz16;                 //ÁÖ¹®ºÎÁ·ÃÑ¾×         
-	char ord_pos_qtyz16                   [ 16];	char _ord_pos_qtyz16;                     //ÁÖ¹®°¡´É¼ö·®         
-	char order_qtyz8                      [  8];	char _order_qtyz8;                        //ÁÖ¹®¼ö·®             
-	char order_pricez12                   [ 12];	char _order_pricez12;                     //ÁÖ¹®°¡°İ             
+	char order_noz10                      [ 10];	char _order_noz10;                        //ì£¼ë¬¸ë²ˆí˜¸
+	char ord_pos_csamtz16                 [ 16];	char _ord_pos_csamtz16;                   //ì£¼ë¬¸ê°€ëŠ¥í˜„ê¸ˆ
+	char ord_pos_ttamtz16                 [ 16];	char _ord_pos_ttamtz16;                   //ì£¼ë¬¸ê°€ëŠ¥ì´ì•¡
+	char ord_insuf_csamtz16               [ 16];	char _ord_insuf_csamtz16;                 //ì£¼ë¬¸ë¶€ì¡±í˜„ê¸ˆ
+	char ord_insuf_ttamtz16               [ 16];	char _ord_insuf_ttamtz16;                 //ì£¼ë¬¸ë¶€ì¡±ì´ì•¡
+	char ord_pos_qtyz16                   [ 16];	char _ord_pos_qtyz16;                     //ì£¼ë¬¸ê°€ëŠ¥ìˆ˜ëŸ‰
+	char order_qtyz8                      [  8];	char _order_qtyz8;                        //ì£¼ë¬¸ìˆ˜ëŸ‰
+	char order_pricez12                   [ 12];	char _order_pricez12;                     //ì£¼ë¬¸ê°€ê²©
 } Ts8302OutBlock;
 
 typedef struct tags8302
 {
-	Ts8302InBlock                     s8302inblock                          ;  //±âº»ÀÔ·Â 
-	Ts8302OutBlock                    s8302outblock                         ;  //È­¸éÃâ·Â 
+	Ts8302InBlock                     s8302inblock                          ;  //ê¸°ë³¸ì…ë ¥
+	Ts8302OutBlock                    s8302outblock                         ;  //í™”ë©´ì¶œë ¥
 } Ts8302;
 
-typedef struct tagc8311InBlock    //ÀÔ·Â
+typedef struct tagc8311InBlock    //ì…ë ¥
 {
-	char in_pswdz8                        [ 44];	char _in_pswdz8;                          //ºñ¹Ğ¹øÈ£             
-	char job_gubunz1                      [  1];	char _job_gubunz1;                        //±¸ºĞ                 
-	char trobj_stock_codez12              [ 12];	char _trobj_stock_codez12;                //´ë»óÀÚ»êÄÚµå         /*»ç¿ë¾ÈÇÔ*/
+	char in_pswdz8                        [ 44];	char _in_pswdz8;                          //ë¹„ë°€ë²ˆí˜¸
+	char job_gubunz1                      [  1];	char _job_gubunz1;                        //êµ¬ë¶„
+	char trobj_stock_codez12              [ 12];	char _trobj_stock_codez12;                //ëŒ€ìƒìì‚°ì½”ë“œ         /*ì‚¬ìš©ì•ˆí•¨*/
 } Tc8311InBlock;
 
-typedef struct tagc8311OutBlock    //È­¸éÃâ·Â
+typedef struct tagc8311OutBlock    //í™”ë©´ì¶œë ¥
 {
-	char out_acnamez30                    [ 30];	char _out_acnamez30;                      //°èÁÂ¸í               
-	char out_ttamtz14                     [ 14];	char _out_ttamtz14;                       //¿¹Å¹ÃÑ¾×             
-	char out_cashz14                      [ 14];	char _out_cashz14;                        //¿¹Å¹Çö±İ             
-	char out_mrgn_ttamtz14                [ 14];	char _out_mrgn_ttamtz14;                  //Áõ°Å±İÃÑ¾×           
-	char out_mrgn_cashz14                 [ 14];	char _out_mrgn_cashz14;                   //Áõ°Å±İÇö±İ           
-	char out_order_ttamtz14               [ 14];	char _out_order_ttamtz14;                 //ÁÖ¹®°¡´ÉÃÑ¾×         
-	char out_order_cashz14                [ 14];	char _out_order_cashz14;                  //ÁÖ¹®°¡´ÉÇö±İ         
-	char out_tot_ttamtz14                 [ 14];	char _out_tot_ttamtz14;                   //ÃÑÆò°¡ÃÑ¾×           
-	char out_tot_cashz14                  [ 14];	char _out_tot_cashz14;                    //ÃÑÆò°¡Çö±İ           
-	char out_substz14                     [ 14];	char _out_substz14;                       //´ë¿ë±İ¾×             
-	char out_renewz14                     [ 14];	char _out_renewz14;                       //Á¤»êÂ÷±İ             
-	char out_stlmtz14                     [ 14];	char _out_stlmtz14;                       //ÃÖÁ¾Â÷±İ             
-	char out_opt_sellz14                  [ 14];	char _out_opt_sellz14;                    //¿É¼Ç¸Åµµ´ë±İ         
-	char out_opt_buyz14                   [ 14];	char _out_opt_buyz14;                     //¿É¼Ç¸Å¼ö´ë±İ         
-	char out_opt_valuez14                 [ 14];	char _out_opt_valuez14;                   //¿É¼ÇÆò°¡±İ¾×         
-	char out_pred_substz14                [ 14];	char _out_pred_substz14;                  //ÀüÀÏ´ë¿ë¸Åµµ         
-	char out_thday_substz14               [ 14];	char _out_thday_substz14;                 //´çÀÏ´ë¿ë¸Åµµ         
-	char out_pred_amtz14                  [ 14];	char _out_pred_amtz14;                    //ÀüÀÏ°¡ÀÔ±İ           
-	char out_opt_hangz14                  [ 14];	char _out_opt_hangz14;                    //¿É¼ÇÇà»ç±İ¾×         
-	char out_opt_baiz14                   [ 14];	char _out_opt_baiz14;                     //¿É¼Ç¹èÁ¤±İ¾×         
-	char out_thday_amtz14                 [ 14];	char _out_thday_amtz14;                   //´çÀÏ°¡ÀÔ±İ           
-	char out_rcblez14                     [ 14];	char _out_rcblez14;                       //¹Ì¼ö±İ               
-	char out_ovamtz14                     [ 14];	char _out_ovamtz14;                       //¿¬Ã¼·á               
-	char out_ftr_cmsnz14                  [ 14];	char _out_ftr_cmsnz14;                    //¼±¹°¼ö¼ö·á           
-	char out_opt_cmsnz14                  [ 14];	char _out_opt_cmsnz14;                    //¿É¼Ç¼ö¼ö·á           
-	char out_afterz14                     [ 14];	char _out_afterz14;                       //¼¼ÈÄÀÌ¿ë·á           
-	char out_asset_ttamtz14               [ 14];	char _out_asset_ttamtz14;                 //¼øÀÚ»êÃÑ¾×           
-	char out_asset_ttcashz14              [ 14];	char _out_asset_ttcashz14;                //¼øÀÚ»êÇö±İ           
+	char out_acnamez30                    [ 30];	char _out_acnamez30;                      //ê³„ì¢Œëª…
+	char out_ttamtz14                     [ 14];	char _out_ttamtz14;                       //ì˜ˆíƒì´ì•¡
+	char out_cashz14                      [ 14];	char _out_cashz14;                        //ì˜ˆíƒí˜„ê¸ˆ
+	char out_mrgn_ttamtz14                [ 14];	char _out_mrgn_ttamtz14;                  //ì¦ê±°ê¸ˆì´ì•¡
+	char out_mrgn_cashz14                 [ 14];	char _out_mrgn_cashz14;                   //ì¦ê±°ê¸ˆí˜„ê¸ˆ
+	char out_order_ttamtz14               [ 14];	char _out_order_ttamtz14;                 //ì£¼ë¬¸ê°€ëŠ¥ì´ì•¡
+	char out_order_cashz14                [ 14];	char _out_order_cashz14;                  //ì£¼ë¬¸ê°€ëŠ¥í˜„ê¸ˆ
+	char out_tot_ttamtz14                 [ 14];	char _out_tot_ttamtz14;                   //ì´í‰ê°€ì´ì•¡
+	char out_tot_cashz14                  [ 14];	char _out_tot_cashz14;                    //ì´í‰ê°€í˜„ê¸ˆ
+	char out_substz14                     [ 14];	char _out_substz14;                       //ëŒ€ìš©ê¸ˆì•¡
+	char out_renewz14                     [ 14];	char _out_renewz14;                       //ì •ì‚°ì°¨ê¸ˆ
+	char out_stlmtz14                     [ 14];	char _out_stlmtz14;                       //ìµœì¢…ì°¨ê¸ˆ
+	char out_opt_sellz14                  [ 14];	char _out_opt_sellz14;                    //ì˜µì…˜ë§¤ë„ëŒ€ê¸ˆ
+	char out_opt_buyz14                   [ 14];	char _out_opt_buyz14;                     //ì˜µì…˜ë§¤ìˆ˜ëŒ€ê¸ˆ
+	char out_opt_valuez14                 [ 14];	char _out_opt_valuez14;                   //ì˜µì…˜í‰ê°€ê¸ˆì•¡
+	char out_pred_substz14                [ 14];	char _out_pred_substz14;                  //ì „ì¼ëŒ€ìš©ë§¤ë„
+	char out_thday_substz14               [ 14];	char _out_thday_substz14;                 //ë‹¹ì¼ëŒ€ìš©ë§¤ë„
+	char out_pred_amtz14                  [ 14];	char _out_pred_amtz14;                    //ì „ì¼ê°€ì…ê¸ˆ
+	char out_opt_hangz14                  [ 14];	char _out_opt_hangz14;                    //ì˜µì…˜í–‰ì‚¬ê¸ˆì•¡
+	char out_opt_baiz14                   [ 14];	char _out_opt_baiz14;                     //ì˜µì…˜ë°°ì •ê¸ˆì•¡
+	char out_thday_amtz14                 [ 14];	char _out_thday_amtz14;                   //ë‹¹ì¼ê°€ì…ê¸ˆ
+	char out_rcblez14                     [ 14];	char _out_rcblez14;                       //ë¯¸ìˆ˜ê¸ˆ
+	char out_ovamtz14                     [ 14];	char _out_ovamtz14;                       //ì—°ì²´ë£Œ
+	char out_ftr_cmsnz14                  [ 14];	char _out_ftr_cmsnz14;                    //ì„ ë¬¼ìˆ˜ìˆ˜ë£Œ
+	char out_opt_cmsnz14                  [ 14];	char _out_opt_cmsnz14;                    //ì˜µì…˜ìˆ˜ìˆ˜ë£Œ
+	char out_afterz14                     [ 14];	char _out_afterz14;                       //ì„¸í›„ì´ìš©ë£Œ
+	char out_asset_ttamtz14               [ 14];	char _out_asset_ttamtz14;                 //ìˆœìì‚°ì´ì•¡
+	char out_asset_ttcashz14              [ 14];	char _out_asset_ttcashz14;                //ìˆœìì‚°í˜„ê¸ˆ
 } Tc8311OutBlock;
 
-typedef struct tagc8311OutBlock1    //Ãâ·Â, [¹İº¹]
+typedef struct tagc8311OutBlock1    //ì¶œë ¥, [ë°˜ë³µ]
 {
-	char out_issuez9                      [  9];	char _out_issuez9;                        //Á¾¸ñÄÚµå             
-	char out_isnamez30                    [ 30];	char _out_isnamez30;                      //Á¾¸ñ¸í               
-	char out_slbyz6                       [  6];	char _out_slbyz6;                         //¸Å¸Å±¸ºĞ             
-	char out_qtyz14                       [ 14];	char _out_qtyz14;                         //¼ö·®                 
-	char out_averz12                      [ 12];	char _out_averz12;                        //Æò±Õ°¡               
-	char out_pricez12                     [ 12];	char _out_pricez12;                       //ÇöÀç°¡               
-	char out_lsnpfz14                     [ 14];	char _out_lsnpfz14;                       //Æò°¡¼ÕÀÍ             
-	char today_revs_odqtyz12              [ 12];	char _today_revs_odqtyz12;                //ÁÖ¹®¼ö·®             
-	char sell_posbl_qtyz12                [ 12];	char _sell_posbl_qtyz12;                  //Ã»»ê°¡´É¼ö·®         
+	char out_issuez9                      [  9];	char _out_issuez9;                        //ì¢…ëª©ì½”ë“œ
+	char out_isnamez30                    [ 30];	char _out_isnamez30;                      //ì¢…ëª©ëª…
+	char out_slbyz6                       [  6];	char _out_slbyz6;                         //ë§¤ë§¤êµ¬ë¶„
+	char out_qtyz14                       [ 14];	char _out_qtyz14;                         //ìˆ˜ëŸ‰
+	char out_averz12                      [ 12];	char _out_averz12;                        //í‰ê· ê°€
+	char out_pricez12                     [ 12];	char _out_pricez12;                       //í˜„ì¬ê°€
+	char out_lsnpfz14                     [ 14];	char _out_lsnpfz14;                       //í‰ê°€ì†ìµ
+	char today_revs_odqtyz12              [ 12];	char _today_revs_odqtyz12;                //ì£¼ë¬¸ìˆ˜ëŸ‰
+	char sell_posbl_qtyz12                [ 12];	char _sell_posbl_qtyz12;                  //ì²­ì‚°ê°€ëŠ¥ìˆ˜ëŸ‰
 } Tc8311OutBlock1;
 
 typedef struct tagc8311
 {
-	Tc8311InBlock                     c8311inblock                          ;  //ÀÔ·Â 
-	Tc8311OutBlock                    c8311outblock                         ;  //È­¸éÃâ·Â 
-	Tc8311OutBlock1                   c8311outblock1                   [ 10];  //Ãâ·Â , [¹İº¹]
+	Tc8311InBlock                     c8311inblock                          ;  //ì…ë ¥
+	Tc8311OutBlock                    c8311outblock                         ;  //í™”ë©´ì¶œë ¥
+	Tc8311OutBlock1                   c8311outblock1                   [ 10];  //ì¶œë ¥ , [ë°˜ë³µ]
 } Tc8311;
 
-typedef struct tagc8322InBlock    //±âº»ÀÔ·Â
+typedef struct tagc8322InBlock    //ê¸°ë³¸ì…ë ¥
 {
-	char pswd_noz8                        [ 44];	char _pswd_noz8;                          //ºñ¹Ğ¹øÈ£             
-	char order_datez8                     [  8];	char _order_datez8;                       //ÁÖ¹®ÀÏÀÚ             
-	char issue_codez9                     [  9];	char _issue_codez9;                       //Á¾¸ñ¹øÈ£             
-	char conc_gubunz1                     [  1];	char _conc_gubunz1;                       //Ã¼°á±¸ºĞ             0:ÀüÃ¼1:¹ÌÃ¼°á2:Ã¼°á
-	char sort_gubunz1                     [  1];	char _sort_gubunz1;                       //Á¤·Ä±¸ºĞ             0:ÁÖ¹®¹øÈ£¼ø1:ÁÖ¹®¹øÈ£¿ª¼ø
-	char sl_buy_typez1                    [  1];	char _sl_buy_typez1;                      //¸Å¼öµµ±¸ºĞ           0:ÀüÃ¼1:¸Åµµ2:¸Å¼ö
-	char issue_gubunz1                    [  1];	char _issue_gubunz1;                      //Á¾¸ñ±¸ºĞ             0:ÀüÃ¼1:¼±¹°2:¿É¼Ç
-	char disp_gubunz1                     [  1];	char _disp_gubunz1;                       //Á¶È¸±¸ºĞ             1:ÁÖ¹®½Ã°£¼ø2:Ã¼°á½Ã°£¼ø
+	char pswd_noz8                        [ 44];	char _pswd_noz8;                          //ë¹„ë°€ë²ˆí˜¸
+	char order_datez8                     [  8];	char _order_datez8;                       //ì£¼ë¬¸ì¼ì
+	char issue_codez9                     [  9];	char _issue_codez9;                       //ì¢…ëª©ë²ˆí˜¸
+	char conc_gubunz1                     [  1];	char _conc_gubunz1;                       //ì²´ê²°êµ¬ë¶„             0:ì „ì²´1:ë¯¸ì²´ê²°2:ì²´ê²°
+	char sort_gubunz1                     [  1];	char _sort_gubunz1;                       //ì •ë ¬êµ¬ë¶„             0:ì£¼ë¬¸ë²ˆí˜¸ìˆœ1:ì£¼ë¬¸ë²ˆí˜¸ì—­ìˆœ
+	char sl_buy_typez1                    [  1];	char _sl_buy_typez1;                      //ë§¤ìˆ˜ë„êµ¬ë¶„           0:ì „ì²´1:ë§¤ë„2:ë§¤ìˆ˜
+	char issue_gubunz1                    [  1];	char _issue_gubunz1;                      //ì¢…ëª©êµ¬ë¶„             0:ì „ì²´1:ì„ ë¬¼2:ì˜µì…˜
+	char disp_gubunz1                     [  1];	char _disp_gubunz1;                       //ì¡°íšŒêµ¬ë¶„             1:ì£¼ë¬¸ì‹œê°„ìˆœ2:ì²´ê²°ì‹œê°„ìˆœ
 	char cts_areaz67                      [ 67];	char _cts_areaz67;                        //CTS                  
-	char trad_pswd1z8                     [ 44];	char _trad_pswd1z8;                       //°Å·¡ºñ¹Ğ¹øÈ£1        
-	char trad_pswd2z8                     [ 44];	char _trad_pswd2z8;                       //°Å·¡ºñ¹Ğ¹øÈ£2        
+	char trad_pswd1z8                     [ 44];	char _trad_pswd1z8;                       //ê±°ë˜ë¹„ë°€ë²ˆí˜¸1
+	char trad_pswd2z8                     [ 44];	char _trad_pswd2z8;                       //ê±°ë˜ë¹„ë°€ë²ˆí˜¸2
 	char IsPageUp                         [  1];	char _IsPageUp;                           //ISPAGEUP             
 } Tc8322InBlock;
 
-typedef struct tagc8322OutBlock    //È­¸éÃâ·Â
+typedef struct tagc8322OutBlock    //í™”ë©´ì¶œë ¥
 {
-	char order_datez8                     [  8];	char _order_datez8;                       //ÁÖ¹®ÀÏÀÚ             
-	char accnt_namez40                    [ 40];	char _accnt_namez40;                      //°èÁÂ¸í               
+	char order_datez8                     [  8];	char _order_datez8;                       //ì£¼ë¬¸ì¼ì
+	char accnt_namez40                    [ 40];	char _accnt_namez40;                      //ê³„ì¢Œëª…
 } Tc8322OutBlock;
 
-typedef struct tagc8322OutBlock1    //È­¸éÃâ·Â1, [¹İº¹]
+typedef struct tagc8322OutBlock1    //í™”ë©´ì¶œë ¥1, [ë°˜ë³µ]
 {
-	char order_noz10                      [ 10];	char _order_noz10;                        //ÁÖ¹®¹øÈ£             
-	char orgnl_order_noz10                [ 10];	char _orgnl_order_noz10;                  //¿øÁÖ¹®¹øÈ£           
-	char conc_noz6                        [  6];	char _conc_noz6;                          //Ã¼°á¹øÈ£             
-	char order_datez8                     [  8];	char _order_datez8;                       //ÁÖ¹®ÀÏÀÚ             
-	char slbuy_typez10                    [ 10];	char _slbuy_typez10;                      //ÁÖ¹®±¸ºĞ             
-	char slby_typez15                     [ 15];	char _slby_typez15;                       //¸Å¸Å±¸ºĞ             
-	char issue_codez9                     [  9];	char _issue_codez9;                       //Á¾¸ñ¹øÈ£             
-	char issue_namez40                    [ 40];	char _issue_namez40;                      //Á¾¸ñ¸í               
-	char order_qtyz12                     [ 12];	char _order_qtyz12;                       //ÁÖ¹®¼ö·®             
-	char order_pricez12                   [ 12];	char _order_pricez12;                     //ÁÖ¹®´Ü°¡             
-	char conc_qtyz12                      [ 12];	char _conc_qtyz12;                        //Ã¼°á¼ö·®             
-	char index_conc_pricez12              [ 12];	char _index_conc_pricez12;                //Ã¼°áÆò±Õ´Ü°¡         
-	char unconc_qtyz12                    [ 12];	char _unconc_qtyz12;                      //¹ÌÃ¼°á¼ö·®           
-	char rqst_typez6                      [  6];	char _rqst_typez6;                        //Ã³¸®±¸ºĞ             
-	char rqst_timez8                      [  8];	char _rqst_timez8;                        //Ã³¸®½Ã°£             
+	char order_noz10                      [ 10];	char _order_noz10;                        //ì£¼ë¬¸ë²ˆí˜¸
+	char orgnl_order_noz10                [ 10];	char _orgnl_order_noz10;                  //ì›ì£¼ë¬¸ë²ˆí˜¸
+	char conc_noz6                        [  6];	char _conc_noz6;                          //ì²´ê²°ë²ˆí˜¸
+	char order_datez8                     [  8];	char _order_datez8;                       //ì£¼ë¬¸ì¼ì
+	char slbuy_typez10                    [ 10];	char _slbuy_typez10;                      //ì£¼ë¬¸êµ¬ë¶„
+	char slby_typez15                     [ 15];	char _slby_typez15;                       //ë§¤ë§¤êµ¬ë¶„
+	char issue_codez9                     [  9];	char _issue_codez9;                       //ì¢…ëª©ë²ˆí˜¸
+	char issue_namez40                    [ 40];	char _issue_namez40;                      //ì¢…ëª©ëª…
+	char order_qtyz12                     [ 12];	char _order_qtyz12;                       //ì£¼ë¬¸ìˆ˜ëŸ‰
+	char order_pricez12                   [ 12];	char _order_pricez12;                     //ì£¼ë¬¸ë‹¨ê°€
+	char conc_qtyz12                      [ 12];	char _conc_qtyz12;                        //ì²´ê²°ìˆ˜ëŸ‰
+	char index_conc_pricez12              [ 12];	char _index_conc_pricez12;                //ì²´ê²°í‰ê· ë‹¨ê°€
+	char unconc_qtyz12                    [ 12];	char _unconc_qtyz12;                      //ë¯¸ì²´ê²°ìˆ˜ëŸ‰
+	char rqst_typez6                      [  6];	char _rqst_typez6;                        //ì²˜ë¦¬êµ¬ë¶„
+	char rqst_timez8                      [  8];	char _rqst_timez8;                        //ì²˜ë¦¬ì‹œê°„
 } Tc8322OutBlock1;
 
-typedef struct tagc8322OutBlock_IN    //ButtonÁ¤º¸
+typedef struct tagc8322OutBlock_IN    //Buttonì •ë³´
 {
 	char cts_areaz67                      [ 67];	char _cts_areaz67;                        //CTS                  
 	char nextbutton                       [  1];	char _nextbutton;                         //NEXTBUTTON           
@@ -624,76 +624,76 @@ typedef struct tagc8322OutBlock_IN    //ButtonÁ¤º¸
 
 typedef struct tagc8322
 {
-	Tc8322InBlock                     c8322inblock                          ;  //±âº»ÀÔ·Â 
-	Tc8322OutBlock                    c8322outblock                         ;  //È­¸éÃâ·Â 
-	Tc8322OutBlock1                   c8322outblock1                   [ 20];  //È­¸éÃâ·Â1 , [¹İº¹]
-	Tc8322OutBlock_IN                 c8322outblock_in                      ;  //ButtonÁ¤º¸ 
+	Tc8322InBlock                     c8322inblock                          ;  //ê¸°ë³¸ì…ë ¥
+	Tc8322OutBlock                    c8322outblock                         ;  //í™”ë©´ì¶œë ¥
+	Tc8322OutBlock1                   c8322outblock1                   [ 20];  //í™”ë©´ì¶œë ¥1 , [ë°˜ë³µ]
+	Tc8322OutBlock_IN                 c8322outblock_in                      ;  //Buttonì •ë³´
 } Tc8322;
 
-typedef struct tagp8301InBlock    //ÀÔ·Â
+typedef struct tagp8301InBlock    //ì…ë ¥
 {
-	char issue_codez9                     [  9];	char _issue_codez9;                       //Á¾¸ñÄÚµå             
-	char slbuy_typez1                     [  1];	char _slbuy_typez1;                       //¸Å¸Å±¸ºĞ             
-	char ord_typez1                       [  1];	char _ord_typez1;                         //ÁÖ¹®À¯Çü             
-	char order_pricez12                   [ 12];	char _order_pricez12;                     //ÁÖ¹®´Ü°¡             
-	char passwd_noz8                      [ 44];	char _passwd_noz8;                        //ºñ¹Ğ¹øÈ£             
+	char issue_codez9                     [  9];	char _issue_codez9;                       //ì¢…ëª©ì½”ë“œ
+	char slbuy_typez1                     [  1];	char _slbuy_typez1;                       //ë§¤ë§¤êµ¬ë¶„
+	char ord_typez1                       [  1];	char _ord_typez1;                         //ì£¼ë¬¸ìœ í˜•
+	char order_pricez12                   [ 12];	char _order_pricez12;                     //ì£¼ë¬¸ë‹¨ê°€
+	char passwd_noz8                      [ 44];	char _passwd_noz8;                        //ë¹„ë°€ë²ˆí˜¸
 } Tp8301InBlock;
 
-typedef struct tagp8301OutBlock    //È­¸éÃâ·Â
+typedef struct tagp8301OutBlock    //í™”ë©´ì¶œë ¥
 {
-	char accnt_namez20                    [ 20];	char _accnt_namez20;                      //°èÁÂ¸í               
-	char kor_issue_namez40                [ 40];	char _kor_issue_namez40;                  //Á¾¸ñ¸í               
-	char be_dpsit_ttamtz14                [ 14];	char _be_dpsit_ttamtz14;                  //ÁÖ¹®Àü               
-	char be_dpsit_cash_amtz14             [ 14];	char _be_dpsit_cash_amtz14;               //ÁÖ¹®Àü               
-	char be_brkrg_mrgn_ttamz14            [ 14];	char _be_brkrg_mrgn_ttamz14;              //ÁÖ¹®Àü               
-	char be_brkrg_cash_mgamz14            [ 14];	char _be_brkrg_cash_mgamz14;              //ÁÖ¹®Àü               
-	char be_order_pos_ttamtz14            [ 14];	char _be_order_pos_ttamtz14;              //ÁÖ¹®Àü               
-	char be_order_pos_csamtz14            [ 14];	char _be_order_pos_csamtz14;              //ÁÖ¹®Àü               
-	char af_dpsit_ttamtz14                [ 14];	char _af_dpsit_ttamtz14;                  //ÁÖ¹®ÈÄ               
-	char af_dpsit_cash_amtz14             [ 14];	char _af_dpsit_cash_amtz14;               //ÁÖ¹®ÈÄ               
-	char af_brkrg_mrgn_ttamz14            [ 14];	char _af_brkrg_mrgn_ttamz14;              //ÁÖ¹®ÈÄ               
-	char af_brkrg_cash_mgamz14            [ 14];	char _af_brkrg_cash_mgamz14;              //ÁÖ¹®ÈÄ               
-	char af_order_pos_ttamtz14            [ 14];	char _af_order_pos_ttamtz14;              //ÁÖ¹®ÈÄ               
-	char af_order_pos_csamtz14            [ 14];	char _af_order_pos_csamtz14;              //ÁÖ¹®ÈÄ               
-	char new_pos_qtyz14                   [ 14];	char _new_pos_qtyz14;                     //½Å±ÔÁÖ¹®             
-	char bal_pos_qtyz14                   [ 14];	char _bal_pos_qtyz14;                     //ÀÜ°íÁÖ¹®             
+	char accnt_namez20                    [ 20];	char _accnt_namez20;                      //ê³„ì¢Œëª…
+	char kor_issue_namez40                [ 40];	char _kor_issue_namez40;                  //ì¢…ëª©ëª…
+	char be_dpsit_ttamtz14                [ 14];	char _be_dpsit_ttamtz14;                  //ì£¼ë¬¸ì „
+	char be_dpsit_cash_amtz14             [ 14];	char _be_dpsit_cash_amtz14;               //ì£¼ë¬¸ì „
+	char be_brkrg_mrgn_ttamz14            [ 14];	char _be_brkrg_mrgn_ttamz14;              //ì£¼ë¬¸ì „
+	char be_brkrg_cash_mgamz14            [ 14];	char _be_brkrg_cash_mgamz14;              //ì£¼ë¬¸ì „
+	char be_order_pos_ttamtz14            [ 14];	char _be_order_pos_ttamtz14;              //ì£¼ë¬¸ì „
+	char be_order_pos_csamtz14            [ 14];	char _be_order_pos_csamtz14;              //ì£¼ë¬¸ì „
+	char af_dpsit_ttamtz14                [ 14];	char _af_dpsit_ttamtz14;                  //ì£¼ë¬¸í›„
+	char af_dpsit_cash_amtz14             [ 14];	char _af_dpsit_cash_amtz14;               //ì£¼ë¬¸í›„
+	char af_brkrg_mrgn_ttamz14            [ 14];	char _af_brkrg_mrgn_ttamz14;              //ì£¼ë¬¸í›„
+	char af_brkrg_cash_mgamz14            [ 14];	char _af_brkrg_cash_mgamz14;              //ì£¼ë¬¸í›„
+	char af_order_pos_ttamtz14            [ 14];	char _af_order_pos_ttamtz14;              //ì£¼ë¬¸í›„
+	char af_order_pos_csamtz14            [ 14];	char _af_order_pos_csamtz14;              //ì£¼ë¬¸í›„
+	char new_pos_qtyz14                   [ 14];	char _new_pos_qtyz14;                     //ì‹ ê·œì£¼ë¬¸
+	char bal_pos_qtyz14                   [ 14];	char _bal_pos_qtyz14;                     //ì”ê³ ì£¼ë¬¸
 	char tot_pos_qtyz14                   [ 14];	char _tot_pos_qtyz14;                     //TOTAL                
 } Tp8301OutBlock;
 
 typedef struct tagp8301
 {
-	Tp8301InBlock                     p8301inblock                          ;  //ÀÔ·Â 
-	Tp8301OutBlock                    p8301outblock                         ;  //È­¸éÃâ·Â 
+	Tp8301InBlock                     p8301inblock                          ;  //ì…ë ¥
+	Tp8301OutBlock                    p8301outblock                         ;  //í™”ë©´ì¶œë ¥
 } Tp8301;
 
-typedef struct tagp8302InBlock    //ÀÔ·Â
+typedef struct tagp8302InBlock    //ì…ë ¥
 {
-	char proc_gubunz1                     [  1];	char _proc_gubunz1;                       //Ã³¸®±¸ºĞ             
-	char trobj_stock_codez12              [ 12];	char _trobj_stock_codez12;                //´ë»óÀÚ»êÄÚµå         
+	char proc_gubunz1                     [  1];	char _proc_gubunz1;                       //ì²˜ë¦¬êµ¬ë¶„
+	char trobj_stock_codez12              [ 12];	char _trobj_stock_codez12;                //ëŒ€ìƒìì‚°ì½”ë“œ
 } Tp8302InBlock;
 
-typedef struct tagp8302OutBlock    //È­¸éÃâ·Â
+typedef struct tagp8302OutBlock    //í™”ë©´ì¶œë ¥
 {
-	char o_accnt_namez40                  [ 40];	char _o_accnt_namez40;                    //°èÁÂ¸í               
+	char o_accnt_namez40                  [ 40];	char _o_accnt_namez40;                    //ê³„ì¢Œëª…
 } Tp8302OutBlock;
 
-typedef struct tagp8302OutBlock1    //°èÁÂ¸í, [¹İº¹]
+typedef struct tagp8302OutBlock1    //ê³„ì¢Œëª…, [ë°˜ë³µ]
 {
-	char index_issue_codez9               [  9];	char _index_issue_codez9;                 //Á¾¸ñ                 
-	char index_issue_namez30              [ 30];	char _index_issue_namez30;                //Á¾¸ñ¸í               
-	char index_slbuy_typez2               [  2];	char _index_slbuy_typez2;                 //¸Å¸Å±¸ºĞ             
-	char index_slbuy_namez6               [  6];	char _index_slbuy_namez6;                 //¸Å¸Å±¸ºĞ¸í           
-	char bal_qtyz12                       [ 12];	char _bal_qtyz12;                         //ÀÜ°í¼ö·®             
-	char today_revs_odqtyz12              [ 12];	char _today_revs_odqtyz12;                //ÁÖ¹®¼ö·®             
-	char sell_posbl_qtyz12                [ 12];	char _sell_posbl_qtyz12;                  //Ã»»ê°¡´É¼ö·®         
-	char avrgez14                         [ 14];	char _avrgez14;                           //Æò±Õ°¡               
+	char index_issue_codez9               [  9];	char _index_issue_codez9;                 //ì¢…ëª©
+	char index_issue_namez30              [ 30];	char _index_issue_namez30;                //ì¢…ëª©ëª…
+	char index_slbuy_typez2               [  2];	char _index_slbuy_typez2;                 //ë§¤ë§¤êµ¬ë¶„
+	char index_slbuy_namez6               [  6];	char _index_slbuy_namez6;                 //ë§¤ë§¤êµ¬ë¶„ëª…
+	char bal_qtyz12                       [ 12];	char _bal_qtyz12;                         //ì”ê³ ìˆ˜ëŸ‰
+	char today_revs_odqtyz12              [ 12];	char _today_revs_odqtyz12;                //ì£¼ë¬¸ìˆ˜ëŸ‰
+	char sell_posbl_qtyz12                [ 12];	char _sell_posbl_qtyz12;                  //ì²­ì‚°ê°€ëŠ¥ìˆ˜ëŸ‰
+	char avrgez14                         [ 14];	char _avrgez14;                           //í‰ê· ê°€
 } Tp8302OutBlock1;
 
 typedef struct tagp8302
 {
-	Tp8302InBlock                     p8302inblock                          ;  //ÀÔ·Â 
-	Tp8302OutBlock                    p8302outblock                         ;  //È­¸éÃâ·Â 
-	Tp8302OutBlock1                   p8302outblock1                   [ 20];  //°èÁÂ¸í , [¹İº¹]
+	Tp8302InBlock                     p8302inblock                          ;  //ì…ë ¥
+	Tp8302OutBlock                    p8302outblock                         ;  //í™”ë©´ì¶œë ¥
+	Tp8302OutBlock1                   p8302outblock1                   [ 20];  //ê³„ì¢Œëª… , [ë°˜ë³µ]
 } Tp8302;
 
 
@@ -704,48 +704,48 @@ typedef struct tagp8302
 
 
 ////////////////////////////////////////
-//	½Ç½Ã°£ ÆĞÅ¶
+//	ì‹¤ì‹œê°„ íŒ¨í‚·
 ////////////////////////////////////////
 
-typedef struct tagd2OutBlock    //Ãâ·Â
+typedef struct tagd2OutBlock    //ì¶œë ¥
 {
-	char userid                           [  8];   //»ç¿ëÀÚID             
-	char itemgb                           [  1];   //ITEM±¸ºĞ             
-	char accountno                        [ 11];   //°èÁÂ¹øÈ£             
-	char orderno                          [ 10];   //ÁÖ¹®¹øÈ£             
-	char issuecd                          [ 15];   //Á¾¸ñÄÚµå             
-	char slbygb                           [  1];   //¸Åµµ¼ö±¸ºĞ           
-	char concgty                          [ 10];   //Ã¼°á¼ö·®             
-	char concprc                          [ 11];   //Ã¼°á°¡°İ             
-	char conctime                         [  6];   //Ã¼°á½Ã°£             
-	char ucgb                             [  1];   //Á¤Á¤Ãë¼Ò±¸ºĞ         
-	char rejgb                            [  1];   //°ÅºÎ±¸ºĞ             
-	char fundcode                         [  3];   //ÆİµåÄÚµå             
-	char sin_gb                           [  2];   //½Å¿ë±¸ºĞ             
-	char loan_date                        [  8];   //´ëÃâÀÏÀÚ             
-	char ato_ord_tpe_chg                  [  1];   //¼±¹°¿É¼ÇÁÖ¹®À¯Çüº¯°æ¿©ºÎ             
+	char userid                           [  8];   //ì‚¬ìš©ìID
+	char itemgb                           [  1];   //ITEMêµ¬ë¶„
+	char accountno                        [ 11];   //ê³„ì¢Œë²ˆí˜¸
+	char orderno                          [ 10];   //ì£¼ë¬¸ë²ˆí˜¸
+	char issuecd                          [ 15];   //ì¢…ëª©ì½”ë“œ
+	char slbygb                           [  1];   //ë§¤ë„ìˆ˜êµ¬ë¶„
+	char concgty                          [ 10];   //ì²´ê²°ìˆ˜ëŸ‰
+	char concprc                          [ 11];   //ì²´ê²°ê°€ê²©
+	char conctime                         [  6];   //ì²´ê²°ì‹œê°„
+	char ucgb                             [  1];   //ì •ì •ì·¨ì†Œêµ¬ë¶„
+	char rejgb                            [  1];   //ê±°ë¶€êµ¬ë¶„
+	char fundcode                         [  3];   //í€ë“œì½”ë“œ
+	char sin_gb                           [  2];   //ì‹ ìš©êµ¬ë¶„
+	char loan_date                        [  8];   //ëŒ€ì¶œì¼ì
+	char ato_ord_tpe_chg                  [  1];   //ì„ ë¬¼ì˜µì…˜ì£¼ë¬¸ìœ í˜•ë³€ê²½ì—¬ë¶€
 	char filler                           [ 34];   //filler           
 } Td2OutBlock;
 
-typedef struct tagd3OutBlock    //Ãâ·Â
+typedef struct tagd3OutBlock    //ì¶œë ¥
 {
 	char userid                           [  8];   //USERID               
-	char itemgb                           [  1];   //ITEM±¸ºĞ             
-	char accountno                        [ 11];   //°èÁÂ¹øÈ£             
-	char orderno                          [ 10];   //ÁÖ¹®¹øÈ£             
-	char orgordno                         [ 10];   //¿øÁÖ¹®¹øÈ£           
-	char ordercd                          [  2];   //ÁÖ¹®±¸ºĞ             
-	char issuecd                          [ 15];   //Á¾¸ñÄÚµå             
-	char issuename                        [ 20];   //Á¾¸ñ¸í               
-	char slbygb                           [  1];   //¸Å¸Å±¸ºĞ             
-	char order_type                       [  2];   //ÁÖ¹®À¯Çü             
-	char ordergty                         [ 10];   //ÁÖ¹®¼ö·®             
-	char orderprc                         [ 11];   //ÁÖ¹®´Ü°¡             
-	char procnm                           [  2];   //Ã³¸®±¸ºĞ             
-	char commcd                           [  2];   //¸ÅÃ¼±¸ºĞ             
-	char order_cond                       [  1];   //ÁÖ¹®Á¶°Ç1            
-	char fundcode                         [  3];   //ÆİµåÄÚµå             
-	char sin_gb                           [  2];   //½Å¿ë±¸ºĞ             
-	char order_time                       [  6];   //ÁÖ¹®½Ã°£             
-	char loan_date                        [  8];   //´ëÃâÀÏÀÚ             
+	char itemgb                           [  1];   //ITEMêµ¬ë¶„
+	char accountno                        [ 11];   //ê³„ì¢Œë²ˆí˜¸
+	char orderno                          [ 10];   //ì£¼ë¬¸ë²ˆí˜¸
+	char orgordno                         [ 10];   //ì›ì£¼ë¬¸ë²ˆí˜¸
+	char ordercd                          [  2];   //ì£¼ë¬¸êµ¬ë¶„
+	char issuecd                          [ 15];   //ì¢…ëª©ì½”ë“œ
+	char issuename                        [ 20];   //ì¢…ëª©ëª…
+	char slbygb                           [  1];   //ë§¤ë§¤êµ¬ë¶„
+	char order_type                       [  2];   //ì£¼ë¬¸ìœ í˜•
+	char ordergty                         [ 10];   //ì£¼ë¬¸ìˆ˜ëŸ‰
+	char orderprc                         [ 11];   //ì£¼ë¬¸ë‹¨ê°€
+	char procnm                           [  2];   //ì²˜ë¦¬êµ¬ë¶„
+	char commcd                           [  2];   //ë§¤ì²´êµ¬ë¶„
+	char order_cond                       [  1];   //ì£¼ë¬¸ì¡°ê±´1
+	char fundcode                         [  3];   //í€ë“œì½”ë“œ
+	char sin_gb                           [  2];   //ì‹ ìš©êµ¬ë¶„
+	char order_time                       [  6];   //ì£¼ë¬¸ì‹œê°„
+	char loan_date                        [  8];   //ëŒ€ì¶œì¼ì
 } Td3OutBlock;
