@@ -1547,7 +1547,7 @@ typedef struct tagc1151OutBlock2// 변동거래량자료
 	char Time[8];	char _Time;							// 시간
 	char MarketPrice[7];	char _MarketPrice;			// 현재가
 	char DiffSign[1];	char _DiffSign;					// 등락부호
-	char Diffe[6];	char _Diff;							// 등락폭
+	char Diff[6];	char _Diff;							// 등락폭
 	char OfferPrice[7];	char _OfferPrice;				// 매도 호가
 	char BidPrice[7];	char _BidPrice;					// 매수 호가
 	char DiffVolume[8];	char _DiffVolumn;				// 변동거래량
