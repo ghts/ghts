@@ -18,6 +18,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 package common
 
 import (
+	//"bytes"
 	"reflect"
 	"runtime"
 	"strconv"
@@ -36,15 +37,13 @@ func F2문자열(값 interface{}) string {
 		return 값.(time.Time).Format(P시간_형식)
 	case float64:
 		return strconv.FormatFloat(값.(float64), 'f', -1, 64)
-	case []int8:
-		정수8_모음 := 값.([]int8)
-		바이트_모음 := make([]byte, len(정수8_모음))
+	case []byte:
+		바이트_모음 := 값.([]byte)	
 		
-		for i, v := range 정수8_모음 {
-			바이트_모음[i] = byte(v)
-		}
+		return string(바이트_모음[:])
 		
-		return string(바이트_모음)
+		//n := bytes.IndexByte(바이트_모음, 0)
+		//return string(바이트_모음[:n])
 	default:
 		return F포맷된_문자열("%v", 값)
 	}
