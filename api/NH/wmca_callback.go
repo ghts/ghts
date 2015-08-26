@@ -30,7 +30,7 @@ func OnTrData_Go(c데이터 *C.OUTDATABLOCK) {
     
     switch TR구분번호 {
 	case 1:	// TRID_c1101: 주식 현재가 조회. 임시로 1로 정함.	
-		블록_이름 := C.GoString((*C.char)(데이터.DataStruct.BlockName))
+		블록_이름 := 공용.F2문자열(데이터.DataStruct.BlockName)
 
 		switch 블록_이름 {
 		case "c1101OutBlock":	// 단순출력 처리 방식
@@ -72,8 +72,7 @@ func OnTrData_Go(c데이터 *C.OUTDATABLOCK) {
 			panic(에러)
 		}
 	case 2:	// TRID_c1151: ETF 현재가 조회
-		블록_이름 := C.GoString((*C.char)(데이터.DataStruct.BlockName))
-		
+		블록_이름 := 공용.F2문자열(데이터.DataStruct.BlockName)
 		
 		switch 블록_이름 {
 		case "c1151OutBlock":
@@ -180,7 +179,7 @@ func OnError_Go(c데이터 *C.OUTDATABLOCK) {
     
     //데이터_구조체 := (*Received)(데이터.DataStruct)
     //에러_내역 := C.GoString((*C.char)(데이터_구조체.DataString))    
-    에러_내역 := C.GoString((*C.char)(데이터.DataStruct.DataString))
+    에러_내역 := 공용.F2문자열(데이터.DataStruct.DataString)
     
     공용.F에러_출력(공용.F에러_생성(에러_내역))
 }
