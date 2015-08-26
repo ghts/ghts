@@ -13,7 +13,9 @@ SET PATH=%GHTS_PATH%\bin;%GHTS_PATH%\3rd_party\NH_OpenAPI;%GCC%\bin;%GCC%\mingw\
 
 cls
 copy %GHTS_PATH%\api\NH\wmca_ctype.orig %GHTS_PATH%\api\NH\wmca_ctype_orig.go
-go tool cgo -godefs %GHTS_PATH%\api\NH\wmca_ctype_orig.go > %GHTS_PATH%\api\NH\wmca_ctype.go
+go tool cgo -godefs %GHTS_PATH%\api\NH\wmca_ctype_orig.go > %GHTS_PATH%\api\NH\wmca_ctype_pre.go
+sed -e 's/int8/byte/g' %GHTS_PATH%\api\NH\wmca_ctype_pre.go > %GHTS_PATH%\api\NH\wmca_ctype.go
 del %GHTS_PATH%\api\NH\wmca_ctype_orig.go
+del %GHTS_PATH%\api\NH\wmca_ctype_pre.go
 
 SET PATH=%OLDPATH%
