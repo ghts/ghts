@@ -9,219 +9,6 @@
 
 ************************************************************************************/
 
-//----------------------------------------------------------------------//
-// 주식 현재가 조회 (c1101)
-//----------------------------------------------------------------------//
-
-typedef struct tagc1101InBlock							// 기본입력
-{
-	char Lang[1];	char _Lang;							// 한영구분
-	char Code[6];	char _Code;							// 종목코드
-} Tc1101InBlock;
-
-typedef struct tagc1101OutBlock	// 종목마스타기본자료
-{
-	char Code[6];	char _Code;							// 종목코드
-	char Title[13];	char _Title;						// 종목명. 첫자리는 kospi200은 ‘*’, 스타지수종목은 ‘#’. 실제 종목명은 12 byte임
-	char MarketPrice[7];	char _MarketPrice;			// 현재가
-	char DiffSign[1];	char _DiffSign;					// 등락부호. 0x18 :상한, 0x1E :상승, 0x20 :보함, 0x19 :하한, 0x1F :하락. 등락부호는 시장과 관계없이 동일한 코드체계 사용
-	char Diff[6];	char _Diff;							// 등락폭
-	char DiffRate[5];	char _DiffRate;					// 등락률
-	char OfferPrice[7];	char _OfferPrice;				// 매도 호가
-	char BidPrice[7];	char _BidPrice;					// 매수 호가
-	char Volume[9];	char _Volume;						// 거래량
-	char TrVolRate[6];	char _TrVolRate;				// 거래비율
-	char FloatRate[5];	char _FloatRate;				// 유동주회전율
-	char TrAmount[9];	char _TrAmount;					// 거래대금
-	char UpLmtPrice[7];	char _UpLmtPrice;				// 상한가
-	char High[7];	char _High;							// 장중고가
-	char Open[7];	char _Open;							// 시가
-	char VsOpenSign[1];	char _VsOpenSign;				// 시가대비부호
-	char VsOpenDiff[6];	char _VsOpenDiff;				// 시가대비등락폭
-	char Low[7];	char _Low;							// 장중저가
-	char LowLmtPrice[7];	char _LowLmtPrice;			// 하한가
-	char QuoteTime[8];	char _QuoteTime;				// 호가시간
-	char OfferPrice1[7];	char _OfferPrice1;			// 매도 최우선호가
-	char OfferPrice2[7];	char _OfferPrice2;			// 매도 차선 호가
-	char OfferPrice3[7];	char _OfferPrice3;			// 매도 차차선 호가
-	char OfferPrice4[7];	char _OfferPrice4;			// 매도 4차선 호가
-	char OfferPrice5[7];	char _OfferPrice5;			// 매도 5차선 호가
-	char OfferPrice6[7];	char _OfferPrice6;			// 매도 6차선 호가
-	char OfferPrice7[7];	char _OfferPrice7;			// 매도 7차선 호가
-	char OfferPrice8[7];	char _OfferPrice8;			// 매도 8차선 호가
-	char OfferPrice9[7];	char _OfferPrice9;			// 매도 9차선 호가
-	char OfferPrice10[7];	char _OfferPrice10;			// 매도 10차선 호가
-	char BidPrice1[7];	char _BidPrice1;				// 매수 최우선 호가
-	char BidPrice2[7];	char _BidPrice2;				// 매수 차선 호가
-	char BidPrice3[7];	char _BidPrice3;				// 매수 차차선 호가
-	char BidPrice4[7];	char _BidPrice4;				// 매수 4차선 호가
-	char BidPrice5[7];	char _BidPrice5;				// 매수 5차선 호가
-	char BidPrice6[7];	char _BidPrice6;				// 매수 6차선 호가
-	char BidPrice7[7];	char _BidPrice7;				// 매수 7차선 호가
-	char BidPrice8[7];	char _BidPrice8;				// 매수 8차선 호가
-	char BidPrice9[7];	char _BidPrice9;				// 매수 9차선 호가
-	char BidPrice10[7];	char _BidPrice10;				// 매수 10차선 호가
-	char OfferVolume1[9];	char _OfferVolume1;			// 매도 최우선 잔량
-	char OfferVolume2[9];	char _OfferVolume2;			// 매도 차선 잔량
-	char OfferVolume3[9];	char _OfferVolume3;			// 매도 차차선 잔량
-	char OfferVolume4[9];	char _OfferVolume4;			// 매도 4차선 잔량
-	char OfferVolume5[9];	char _OfferVolume5;			// 매도 5차선 잔량
-	char OfferVolume6[9];	char _OfferVolume6;			// 매도 6차선 잔량
-	char OfferVolume7[9];	char _OfferVolume7;			// 매도 7차선 잔량
-	char OfferVolume8[9];	char _OfferVolume8;			// 매도 8차선 잔량
-	char OfferVolume9[9];	char _OfferVolume9;			// 매도 9차선 잔량
-	char OfferVolume10[9];	char _OfferVolume10;		// 매도 10차선 잔량
-	char BidVolume1[9];	char _BidVolume1;				// 매도 최우선 잔량
-	char BidVolume2[9];	char _BidVolume2;				// 매수 차선 잔량
-	char BidVolume3[9];	char _BidVolume3;				// 매수 차차선 잔량
-	char BidVolume4[9];	char _BidVolume4;				// 매수 4차선 잔량
-	char BidVolume5[9];	char _BidVolume5;				// 매수 5차선 잔량
-	char BidVolume6[9];	char _BidVolume6;				// 매수 6차선 잔량
-	char BidVolume7[9];	char _BidVolume7;				// 매수 7차선 잔량
-	char BidVolume8[9];	char _BidVolume8;				// 매수 8차선 잔량
-	char BidVolume9[9];	char _BidVolume9;				// 매수 9차선 잔량
-	char BidVolume10[9];	char _BidVolume10;			// 매수 10차선 잔량
-	char OfferVolTot[9];	char _OfferVolTot;			// 총 매도 잔량
-	char BidVolTot[9];	char _BidVolTot;				// 총 매수 잔량
-	char OfferVolAfterHour[9];	char _OfferVolAfterHour; // 시간외 매도 잔량
-	char BidVolAfterHour[9];	char _BidVolAfterHour;	// 시간외 매수 잔량
-	char PivotUp2[7];	char _PivotUp2;					// 피봇 2차 저항 : 피봇가 + 전일 고가 – 전일 저가
-	char PivotUp1[7];	char _PivotUp1;					// 피봇 1차 저항 : (피봇가 * 2) – 전일 저가
-	char PivotPrice[7];	char _PivotPrice;				// 피봇가 : (전일 고가 + 전일 저가 + 전일 종가) / 3
-	char PivotDown1[7];	char _PivotDown1;				// 피봇 1차 지지 : (피봇가 * 2) – 전일 고가
-	char PivotDown2[7];	char _PivotDown2;				// 피봇 2차 지지 : 피봇가 – 전일고가 + 전일 저가
-	char Market[6];	char _Market;						// 코스피/코스닥 구분 : ‘코스피’ , ‘코스닥’
-	char Sector[18];	char _Sector;					// 업종명
-	char CapSize[6];	char _CapSize;					// 자본금규모
-	char SettleMonth[16];	char _SettleMonth;			// 결산월
-	char MarketAction1[16];	char _MarketAction1;		// 시장조치1
-	char MarketAction2[16];	char _MarketAction2;		// 시장조치2
-	char MarketAction3[16];	char _MarketAction3;		// 시장조치3
-	char MarketAction4[16];	char _MarketAction4;		// 시장조치4
-	char MarketAction5[16];	char _MarketAction5;		// 시장조치5
-	char MarketAction6[16];	char _MarketAction6;		// 시장조치6
-	char ConvertBond[6];	char _ConvertBond;			// CB구분
-	char NominalPrice[7];	char _NominalPrice;			// 액면가
-	char PrevPriceTitle[12];	char _PrevPriceTitle;	// 전일 종가 타이틀 (평가가격, 기준가, 전일종가)
-	char PrevPrice[7];	char _PrevPrice;				// 전일종가
-	char MortgageValue[7];	char _MortgageValue;		// 대용가
-	char PublicOfferPrice[7];	char _PublicOfferPrice;	// 공모가
-	char High5Day[7];	char _High5Day;					// 5일고가
-	char Low5Day[7];	char _Low5Day;					// 5일저가
-	char High20Day[7];	char _High20Day;				// 20일고가
-	char Low20Day[7];	char _Low20Day;					// 20일저가
-	char High1Year[7];	char _High1Year;				// 52주최고가
-	char High1YearDate[4];	char _High1YearDate;		// 52주최고가일
-	char Low1Year[7];	char _Low1Year;					// 52주최저가
-	char Low1YearDate[4];	char _Low1YearDate;			// 52주최저가일
-	char FloatVolume[8];	char _FloatVolume;			// 유동주식수
-	char ListVolBy1000[12];	char _ListVolBy1000;		// 상장주식수. 1000주 단위?
-	char MarketCapital[9];	char _MarketCapital;		// 시가총액
-	char TraderInfoTime[5];	char _TraderInfoTime;		// 거래원 정보 최종 수신 시간
-	char Seller1[6];	char _Seller1;					// 매도 거래원1
-	char Buyer1[6];	char _Buyer1;						// 매수 거래원1
-	char Seller1Volumn[9];	char _Seller1Volume;		// 매도 거래량1
-	char Buyer1Volume[9];	char _Buyer1Volume;			// 매수 거래량1
-	char Seller2[6];	char _Seller2;					// 매도 거래원2
-	char Buyer2[6];	char _Buyer2;						// 매수 거래원2
-	char Seller2Volumn[9];	char _Seller2Volume;		// 매도 거래량2
-	char Buyer2Volume[9];	char _Buyer2Volume;			// 매수 거래량2
-	char Seller3[6];	char _Seller3;					// 매도 거래원3
-	char Buyer3[6];	char _Buyer3;						// 매수 거래원3
-	char Seller3Volumn[9];	char _Seller3Volume;		// 매도 거래량3
-	char Buyer3Volume[9];	char _Buyer3Volume;			// 매수 거래량3
-	char Seller4[6];	char _Seller4;					// 매도 거래원4
-	char Buyer4[6];	char _Buyer4;						// 매수 거래원4
-	char Seller4Volumn[9];	char _Seller4Volume;		// 매도 거래량4
-	char Buyer4Volume[9];	char _Buyer4Volume;			// 매수 거래량4
-	char Seller5[6];	char _Seller5;					// 매도 거래원5
-	char Buyer5[6];	char _Buyer5;						// 매수 거래원5
-	char Seller5Volumn[9];	char _Seller5Volume;		// 매도 거래량5
-	char Buyer5Volume[9];	char _Buyer5Volume;			// 매수 거래량5
-	char ForeignSellVolume[9];	char _ForeignSellVolume; // 외국인 매도 거래량
-	char ForeignBuyVolume[9];	char _ForeignBuyVolume;	// 외국인 매수 거래량
-	char ForeignTime[6];	char _ForeignTime;			// 외국인 시간 ???
-	char ForeignHoldingRate[5];	char _ForeignHoldingRate; // 외국인 지분율
-	char SettleDate[4];	char _SettleDate;				// 결제일
-	char DebtPercent[5];	char _DebtPercent;			// 잔고 비율(%)
-	char RightsIssueDate[4];	char _RightsIssueDate;	// 유상 기준일
-	char BonusIssueDate[4];	char _BonusIssueDate;		// 무상 기준일
-	char RightsIssueRate[5];	char _RightsIssueRate;	// 유상 배정비율
-	char ForeignFloatVol[10];	char _ForeignFloatVol;	// 외국인 변동주 수
-	char BonusIssueRate[5];	char _BonusIssueRate;		// 무상 배정비율
-	char TreasuryStock[1];	char _TreasuryStock;		// 당일 자사주 신청 여부  1: 자사주 신청
-	char IPO_Date[8];	char _IPO_Date;					// 상장일
-	char MajorHoldRate[5];	char _MajorHoldRate;		// 대주주지분율
-	char MajorHoldInfoDate[6];	char _MajorHoldInfoDate; // 대주주지분일자
-	char FourLeafClover[1];	char _FourLeafClover;		// 네잎클로버 종목 여부 1: 네잎클로버 종목
-	char MarginRate[1];	char _MarginRate;				// 증거금율
-	char Capital[9];	char _Capital;					// 자본금
-	char SellTotalSum[9];	char _SellTotalSum;			// 전체 거래원 매도 합계
-	char BuyTotalSum[9];	char _BuyTotalSum;			// 전체 거래원 매수 합계
-	char Title2[21];	char _Title2;					// 종목명2. 앞에 한자리를 제외하고 18byte가 종목명
-	char BackdoorListing[1];	char _BackdoorListing;	// 우회상장여부
-	char FloatRate2[6];	char _FloatRate2;				// 유동주회전율2
-	char Market2[6];	char _Market2;					// 코스피 구분 ?? 앞에 나왔는 데...
-	char DebtTrDate[4];	char _DebtTrDate;				// 공여율기준일
-	char DebtTrPercent[5];	char _DebtTrPercent;		// 공여율(%)
-	char PER[5];	char _PER;							// PER
-	char DebtLimit[1];	char _DebtLimit;				// 종목별신용한도
-	char WeightAvgPrice[7];	char _WeightAvgPrice;		// 가중가
-	char ListedVolume[12];	char _ListedVolume;			// 상장주식 수  _주
-	char AddListing[12];	char _AddListing;			// 추가상장 주식 수
-	char Comment[100];	char _Comment;					// 종목 comment
-	char PrevVolume[9];	char _PrevVolume;				// 전일 거래량
-	char VsPrevSign[1];	char _VsPrevSign;				// 전일대비 등락부호
-	char VsPrevDiff[6];	char _VsPrevDiff;				// 전일대비 등락폭
-	char High1Year2[7];	char _High1Year2;				// 연중 최고가 (52주 최고가와 중복 아닌가?
-	char High1YearDate2[4];	char _High1YearDate2;		// 연중 최고가일
-	char Low1Year2[7];	char _Low1Year2;				// 연중 최저가
-	char Low1YearDate2[4];	char _Low1YearDate2;		// 연중 최저가일
-	char ForeignHoldNo[15];	char _ForeignHoldNo;		// 외국인 보유 주식수
-	char ForeignLmtPercent[5];	char _ForeignLmtPercent; // 외국인 한도율(%)
-	char TrUnitVolume[5];	char _TrUnitVolume;			// 매매 수량 단위
-	char BlackPoolOfferBid[1];	char _BlackPoolOfferBid; // 경쟁대량방향구분. 0: 해당없음, 1: 매도, 2: 매수
-	char BlackPoolExist[1];	char _BlackPoolExist;		// 대량매매구분. 1: 대량매매有, 0:대량매매無
-} Tc1101OutBlock;
-
-typedef struct tagc1101OutBlock2// 변동거래량자료,[반복]
-{
-	char Time[8];	char _Time;							// 시간
-	char MarketPrice[7];	char _MarketPrice;			// 현재가
-	char DiffSign[1];	char _DiffSign;					// 등락부호
-	char Diff[6];	char _Diff;							// 등락폭
-	char OfferPrice[7];	char _OfferPrice;				// 매도 호가
-	char BidPrice[7];	char _BidPrice;					// 매수 호가
-	char DiffVolume[8];	char _DiffVolume;				// 변동거래량
-	char Volume[9];	char _Volume;						// 거래량
-} Tc1101OutBlock2;
-
-typedef struct tagc1101OutBlock3// 종목지표
-{
-	char SyncOfferBid[1];	char _SyncOfferBid;			// 동시호가 구분.  0:동시호가 아님, 1:동시호가, 2:동시호가연장, 3:시가범위연장, 4:종가범위연장, 5:배분개시, 6:변동성 완화장치 발동
-	char EstmPrice[7];	char _EstmPrice;		// 예상체결가
-	char EstmSign[1];	char _EstmSign;			// 예상체결 부호
-	char EstmDiff[6];	char _EstmDiff;			// 예상체결 등락폭
-	char EstmDiffRate[5];	char _EstmDiffRate;	// 예상체결 등락률
-	char EstmVol[9];	char _EstmVol;			// 예상체결수량
-	char ECN_InfoExist[1];	char _ECN_InfoExist;		// ECN정보 유무 구분 (우리나라에는 ECN이 아직 없을텐데...)
-	char ECN_PrevPrice[9];	char _ECN_PrevPrice;		// ECN 전일종가
-	char ECN_DiffSign[1];	char _ECN_DiffSign;			// ECN 부호
-	char ECN_Diff[9];	char _ECN_Diff;					// ECN 등락폭
-	char ECN_DiffRate[5];	char _ECN_DiffRate;			// ECN 등락률
-	char ECN_Volume[10];	char _ECN_Volume;			// ECN 체결수량
-	char VsECN_EstmSign[1];	char _VsECN_EstmSign; 		// ECN대비 예상 체결 부호
-	char VsECN_EstmDiff[6];	char _VsECN_EstmDiff;		// ECN대비 예상 체결 등락폭
-	char VsECN_EstmDiffRate[5];	char _ECN_EstmDiffRate;	// ECN대비 예상 체결 등락률
-} Tc1101OutBlock3;
-
-typedef struct tagc1101
-{
-	Tc1101InBlock c1101inblock;							// 기본입력
-	Tc1101OutBlock c1101outblock;						// 종목마스타기본자료
-	Tc1101OutBlock2 c1101outblock2[20];					// 변동거래량자료 ,[반복]
-	Tc1101OutBlock3 c1101outblock3;						// 종목지표
-} Tc1101;
 
 typedef struct tags4101InBlock// 기본입력
 {
@@ -376,14 +163,14 @@ typedef struct tags4101OutBlock6// 예상체결
 
 typedef struct tags4101
 {
-	Ts4101InBlock                     s4101inblock                          ;		// 기본입력
-	Ts4101OutBlock                    s4101outblock                         ;		// 종목마스타기본자료
-	Ts4101OutBlock1                   s4101outblock1                        ;		// 코스피200지수
-	Ts4101OutBlock2                   s4101outblock2[30];		// 변동거래량자료 ,[반복]
-	Ts4101OutBlock3                   s4101outblock3[3];		// 시간대별투자자현황최근메모리 ,[반복]
-	Ts4101OutBlock4                   s4101outblock4[20];		// 시간대별투자자현황시간별 ,[반복]
-	Ts4101OutBlock5                   s4101outblock5[10];		// KOSPI200시가총액상위10종목 ,[반복]
-	Ts4101OutBlock6                   s4101outblock6                        ;		// 예상체결
+	Ts4101InBlock                     s4101InBlock                          ;		// 기본입력
+	Ts4101OutBlock                    s4101OutBlock                         ;		// 종목마스타기본자료
+	Ts4101OutBlock1                   s4101OutBlock1                        ;		// 코스피200지수
+	Ts4101OutBlock2                   s4101OutBlock2[30];		// 변동거래량자료 ,[반복]
+	Ts4101OutBlock3                   s4101OutBlock3[3];		// 시간대별투자자현황최근메모리 ,[반복]
+	Ts4101OutBlock4                   s4101OutBlock4[20];		// 시간대별투자자현황시간별 ,[반복]
+	Ts4101OutBlock5                   s4101OutBlock5[10];		// KOSPI200시가총액상위10종목 ,[반복]
+	Ts4101OutBlock6                   s4101OutBlock6                        ;		// 예상체결
 } Ts4101;
 
 
@@ -618,11 +405,11 @@ typedef struct tagc4113OutFuteq2// 선물예상체결2
 
 typedef struct tagc4113
 {
-	Tc4113InBlock                     c4113inblock                          ;		// 입력데이타
+	Tc4113InBlock                     c4113InBlock                          ;		// 입력데이타
 	Tc4113OutKospi200                 c4113outkospi200                      ;		// c4113OutKospi200
 	Tc4113OutSMaster                  c4113outsmaster                       ;		// c4113OutSMaster
-	Tc4113OutBlock1                   c4113outblock1                        ;		// 코스피선물Master1
-	Tc4113OutBlock2                   c4113outblock2                        ;		// 코스피선물Master2
+	Tc4113OutBlock1                   c4113OutBlock1                        ;		// 코스피선물Master1
+	Tc4113OutBlock2                   c4113OutBlock2                        ;		// 코스피선물Master2
 	Tc4113OutHoga1                    c4113outhoga1                         ;		// 코스피선물호가1
 	Tc4113OutHoga2                    c4113outhoga2                         ;		// 코스피선물호가2
 	Tc4113OutHoga3                    c4113outhoga3                         ;		// 코스피선물스프레드호가3
@@ -835,14 +622,14 @@ typedef struct tags4201OutBlock6// 선물예상체결
 
 typedef struct tags4201
 {
-	Ts4201InBlock                     s4201inblock                          ;		// 기본입력
-	Ts4201OutBlock                    s4201outblock                         ;		// 종목마스타기본자료
-	Ts4201OutBlock1                   s4201outblock1                        ;		// 코스피200지수
-	Ts4201OutBlock2                   s4201outblock2[20];		// 옵션변동거래량자료 ,[반복]
-	Ts4201OutBlock3                   s4201outblock3                        ;		// 선물최근월물
-	Ts4201OutBlock4                   s4201outblock4[20];		// 선물변동거래량자료 ,[반복]
-	Ts4201OutBlock5                   s4201outblock5                        ;		// 옵션예상체결
-	Ts4201OutBlock6                   s4201outblock6                        ;		// 선물예상체결
+	Ts4201InBlock                     s4201InBlock                          ;		// 기본입력
+	Ts4201OutBlock                    s4201OutBlock                         ;		// 종목마스타기본자료
+	Ts4201OutBlock1                   s4201OutBlock1                        ;		// 코스피200지수
+	Ts4201OutBlock2                   s4201OutBlock2[20];		// 옵션변동거래량자료 ,[반복]
+	Ts4201OutBlock3                   s4201OutBlock3                        ;		// 선물최근월물
+	Ts4201OutBlock4                   s4201OutBlock4[20];		// 선물변동거래량자료 ,[반복]
+	Ts4201OutBlock5                   s4201OutBlock5                        ;		// 옵션예상체결
+	Ts4201OutBlock6                   s4201OutBlock6                        ;		// 선물예상체결
 } Ts4201;
 
 
@@ -874,8 +661,8 @@ typedef struct tagc4801OutBlock// 주식선물MASTER기본자료
 	char fuspvolall[7];	char _fuspvolall;		// 스프레드체결수량
 	char fuvalall[12];	char _fuvalall;		// 누적거래대금(천원)
 	char hotime[8];	char _hotime;		// 호가시간
-	char offer[7];	char _offer;		// 매도 우선호가
-	char bid[7];	char _bid;		// 매수 우선호가
+	char OfferPrice[7];	char _OfferPrice;		// 매도 우선호가
+	char BidPrice[7];	char _BidPrice;		// 매수 우선호가
 	char offerjan[6];	char _offerjan;		// 매도 잔량
 	char bidjan[6];	char _bidjan;		// 매수 잔량
 	char S2offer[7];	char _S2offer;		// 매도 2차호가
@@ -975,14 +762,14 @@ typedef struct tagc4801OutBlock1// 기초자산
 	char change[6];	char _change;		// 등락폭
 	char market[16];	char _market;		// 락구분
 	char chrate[5];	char _chrate;		// 등락률
-	char offer[7];	char _offer;		// 매도 호가
-	char bid[7];	char _bid;		// 매수 호가
-	char volume[9];	char _volume;		// 거래량
+	char OfferPrice[7];	char _OfferPrice;		// 매도 호가
+	char BidPrice[7];	char _BidPrice;		// 매수 호가
+	char Volume[9];	char _Volume;		// 거래량
 	char volrate[6];	char _volrate;		// 거래비율
 	char uplmtprice[7];	char _uplmtprice;		// 상한가
-	char high[7];	char _high;		// 고가
-	char open[7];	char _open;		// 시가
-	char low[7];	char _low;		// 저가
+	char High[7];	char _High;		// 고가
+	char Open[7];	char _Open;		// 시가
+	char Low[7];	char _Low;		// 저가
 	char dnlmtprice[7];	char _dnlmtprice;		// 하한가
 } Tc4801OutBlock1;
 
@@ -997,10 +784,10 @@ typedef struct tagc4801OutBlock2// 주식선물예상체결
 
 typedef struct tagc4801
 {
-	Tc4801InBlock                     c4801inblock                          ;		// 기본입력
-	Tc4801OutBlock                    c4801outblock                         ;		// 주식선물MASTER기본자료
-	Tc4801OutBlock1                   c4801outblock1                        ;		// 기초자산
-	Tc4801OutBlock2                   c4801outblock2                        ;		// 주식선물예상체결
+	Tc4801InBlock                     c4801InBlock                          ;		// 기본입력
+	Tc4801OutBlock                    c4801OutBlock                         ;		// 주식선물MASTER기본자료
+	Tc4801OutBlock1                   c4801OutBlock1                        ;		// 기초자산
+	Tc4801OutBlock2                   c4801OutBlock2                        ;		// 주식선물예상체결
 } Tc4801;
 
 
@@ -1044,8 +831,8 @@ typedef struct tagc4805OutHoga3// 주식선물호가3
 	char fuspfuitem[8];	char _fuspfuitem;		// 종목코드
 	char fusphname[50];	char _fusphname;		// 한글명
 	char fusphotime[8];	char _fusphotime;		// 호가시간
-	char offer[8];	char _offer;		// 매도 우선호가
-	char bid[8];	char _bid;		// 매수 우선호가
+	char OfferPrice[8];	char _OfferPrice;		// 매도 우선호가
+	char BidPrice[8];	char _BidPrice;		// 매수 우선호가
 	char offerjan[6];	char _offerjan;		// 매도 잔량
 	char bidjan[6];	char _bidjan;		// 매수 잔량
 	char S2offer[8];	char _S2offer;		// 2차 매도 호가
@@ -1124,7 +911,7 @@ typedef struct tagc4805OutSpread// 선물SPREAD
 
 typedef struct tagc4805
 {
-	Tc4805InBlock                     c4805inblock                          ;		// 입력데이타
+	Tc4805InBlock                     c4805InBlock                          ;		// 입력데이타
 	Tc4805OutUnder                    c4805outunder                         ;		// c4805OutUnder
 	Tc4805OutSMaster                  c4805outsmaster                       ;		// c4805OutSMaster
 	Tc4805OutHoga3                    c4805outhoga3                         ;		// 주식선물호가3
@@ -1144,14 +931,14 @@ typedef struct tags1701OutBlock// 종목마스타기본자료
 	char sign[1];	char _sign;		// 등락부호
 	char change[6];	char _change;		// 등락폭
 	char chrate[5];	char _chrate;		// 등락률
-	char offer[7];	char _offer;		// 매도 호가
-	char bid[7];	char _bid;		// 매수 호가
-	char volume[9];	char _volume;		// 거래량
+	char OfferPrice[7];	char _OfferPrice;		// 매도 호가
+	char BidPrice[7];	char _BidPrice;		// 매수 호가
+	char Volume[9];	char _Volume;		// 거래량
 	char volrate[6];	char _volrate;		// 거래비율
 	char value[9];	char _value;		// 거래대금
-	char open[7];	char _open;		// 시가
-	char high[7];	char _high;		// 고가
-	char low[7];	char _low;		// 저가
+	char Open[7];	char _Open;		// 시가
+	char High[7];	char _High;		// 고가
+	char Low[7];	char _Low;		// 저가
 	char sale[7];	char _sale;		// 발행가
 	char dnlmtprice[7];	char _dnlmtprice;		// 하한가
 	char theoryprice[7];	char _theoryprice;		// 이론가
@@ -1339,9 +1126,9 @@ typedef struct tags1701OutBlock3// ELW변동거래량자료,[반복]
 	char price[7];	char _price;		// 현재가
 	char sign[1];	char _sign;		// 등락부호
 	char change[6];	char _change;		// 등락폭
-	char offer[7];	char _offer;		// 매도 호가
-	char bid[7];	char _bid;		// 매수 호가
-	char volume[9];	char _volume;		// 거래량
+	char OfferPrice[7];	char _OfferPrice;		// 매도 호가
+	char BidPrice[7];	char _BidPrice;		// 매수 호가
+	char Volume[9];	char _Volume;		// 거래량
 	char movvol[9];	char _movvol;		// 변동량
 } Ts1701OutBlock3;
 
@@ -1370,13 +1157,13 @@ typedef struct tags1701OutBlock5// 해외지수기초자산정보
 
 typedef struct tags1701
 {
-	Ts1701InBlock                     s1701inblock                          ;		// 기본입력
-	Ts1701OutBlock                    s1701outblock                         ;		// 종목마스타기본자료
-	Ts1701OutBlock1                   s1701outblock1[20];		// 기초자산정보 ,[반복]
-	Ts1701OutBlock2                   s1701outblock2                        ;		// 거래원정보
-	Ts1701OutBlock3                   s1701outblock3[20];		// ELW변동거래량자료 ,[반복]
-	Ts1701OutBlock4                   s1701outblock4                        ;		// K200기초자산정보
-	Ts1701OutBlock5                   s1701outblock5                        ;		// 해외지수기초자산정보
+	Ts1701InBlock                     s1701InBlock                          ;		// 기본입력
+	Ts1701OutBlock                    s1701OutBlock                         ;		// 종목마스타기본자료
+	Ts1701OutBlock1                   s1701OutBlock1[20];		// 기초자산정보 ,[반복]
+	Ts1701OutBlock2                   s1701OutBlock2                        ;		// 거래원정보
+	Ts1701OutBlock3                   s1701OutBlock3[20];		// ELW변동거래량자료 ,[반복]
+	Ts1701OutBlock4                   s1701OutBlock4                        ;		// K200기초자산정보
+	Ts1701OutBlock5                   s1701OutBlock5                        ;		// 해외지수기초자산정보
 } Ts1701;
 
 typedef struct tagp1003InBlock// 입력Data
@@ -1393,517 +1180,10 @@ typedef struct tagp1003OutBlock// 코드출력Data,[반복]
 
 typedef struct tagp1003
 {
-	Tp1003InBlock                     p1003inblock                          ;		// 입력Data
-	Tp1003OutBlock                    p1003outblock[20];		// 코드출력Data ,[반복]
+	Tp1003InBlock                     p1003InBlock                          ;		// 입력Data
+	Tp1003OutBlock                    p1003OutBlock[20];		// 코드출력Data ,[반복]
 } Tp1003;
 
-//----------------------------------------------------------------------//
-// ETF 현재가 조회 (c1151)
-//----------------------------------------------------------------------//
-
-typedef struct tagc1151InBlock// 기본입력
-{
-	char Lang[1];	char _Lang;							// 한영구분. 기본값 'K'
-	char Code[6];	char _Code;							// 종목코드
-} Tc1151InBlock;
-
-typedef struct tagc1151OutBlock// 종목마스타기본자료
-{
-	char Code[6];	char _Code;							// 종목코드
-	char Title[13];	char _Title;						// 종목명
-	char MarketPrice[7];	char _MarketPrice;			// 현재가
-	char DiffSign[1];	char _DiffSign;					// 등락부호
-	char Diff[6];	char _Diff;							// 등락폭
-	char DiffRate[5];	char _DiffRate;					// 등락률
-	char OfferPrice[7];	char _OfferPrice;				// 매도 호가
-	char BidPrice[7];	char _BidPrice;					// 매수 호가
-	char Volume[9];	char _Volume;						// 거래량
-	char TrVolRate[6];	char _TrVolRate;				// 거래비율
-	char FloatVolRate[5];	char _FloatVolRate;			// 유동주회전율
-	char TrAmount[9];	char _TrAmount;					// 거래대금
-	char UpLmtPrice[7];	char _UpLmtPrice;				// 상한가
-	char High[7];	char _High;							// 장중고가
-	char Open[7];	char _Open;							// 시가
-	char VsOpenSign[1];	char _VsOpenSign;				// 시가대비부호
-	char VsOpenDiff[6];	char _VsOpenDiff;				// 시가대비등락폭
-	char Low[7];	char _Low;							// 장중저가
-	char LowLmtPrice[7];	char _LowLmtPrice;			// 하한가
-	char QuoteTime[8];	char _QuoteTime;				// 호가시간
-	char OfferPrice1[7];	char _OfferPrice1;			// 매도 최우선 호가
-	char OfferPrice2[7];	char _OfferPrice2;			// 매도 차선 호가
-	char OfferPrice3[7];	char _OfferPrice3;			// 매도 차차선 호가
-	char OfferPrice4[7];	char _OfferPrice4;			// 매도 4차선 호가
-	char OfferPrice5[7];	char _OfferPrice5;			// 매도 5차선 호가
-	char OfferPrice6[7];	char _OfferPrice6;			// 매도 6차선 호가
-	char OfferPrice7[7];	char _OfferPrice7;			// 매도 7차선 호가
-	char OfferPrice8[7];	char _OfferPrice8;			// 매도 8차선 호가
-	char OfferPrice9[7];	char _OfferPrice9;			// 매도 9차선 호가
-	char OfferPrice10[7];	char _OfferPrice10;			// 매도 10차선 호가
-	char BidPrice1[7];	char _BidPrice1;				// 매수 최우선 호가
-	char BidPrice2[7];	char _BidPrice2;				// 매수 차선 호가
-	char BidPrice3[7];	char _BidPrice3;				// 매수 차차선 호가
-	char BidPrice4[7];	char _BidPrice4;				// 매수 4차선 호가
-	char BidPrice5[7];	char _BidPrice5;				// 매수 5차선 호가
-	char BidPrice6[7];	char _BidPrice6;				// 매수 6차선 호가
-	char BidPrice7[7];	char _BidPrice7;				// 매수 7차선 호가
-	char BidPrice8[7];	char _BidPrice8;				// 매수 8차선 호가
-	char BidPrice9[7];	char _BidPrice9;				// 매수 9차선 호가
-	char BidPrice10[7];	char _BidPrice10;				// 매수 10차선 호가
-	char OfferVolume1[9];	char _OfferVolume1;			// 매도 최우선 잔량
-	char OfferVolume2[9];	char _OfferVolume2;			// 매도 차선 잔량
-	char OfferVolume3[9];	char _OfferVolume3;			// 매도 차차선 잔량
-	char OfferVolume4[9];	char _OfferVolume4;			// 매도 4차선 잔량
-	char OfferVolume5[9];	char _OfferVolume5;			// 매도 5차선 잔량
-	char OfferVolume6[9];	char _OfferVolume6;			// 매도 6차선 잔량
-	char OfferVolume7[9];	char _OfferVolume7;			// 매도 7차선 잔량
-	char OfferVolume8[9];	char _OfferVolume8;			// 매도 8차선 잔량
-	char OfferVolume9[9];	char _OfferVolume9;			// 매도 9차선 잔량
-	char OfferVolume10[9];	char _OfferVolume10;		// 매도 10차선 잔량
-	char BidVolume1[9];	char _BidVolume1;				// 매수 최우선 잔량
-	char BidVolume2[9];	char _BidVolume2;				// 매수 차선 잔량
-	char BidVolume3[9];	char _BidVolume3;				// 매수 차차선 잔량
-	char BidVolume4[9];	char _BidVolume4;				// 매수 4차선 잔량
-	char BidVolume5[9];	char _BidVolume5;				// 매수 5차선 잔량
-	char BidVolume6[9];	char _BidVolume6;				// 매수 6차선 잔량
-	char BidVolume7[9];	char _BidVolume7;				// 매수 7차선 잔량
-	char BidVolume8[9];	char _BidVolume8;				// 매수 8차선 잔량
-	char BidVolume9[9];	char _BidVolume9;				// 매수 9차선 잔량
-	char BidVolume10[9];	char _BidVolume10;			// 매수 10차선 잔량
-	char OfferVolTot[9];	char _OfferVolTot;			// 총 매도 잔량
-	char BidVolTot[9];	char _BidVolTot;				// 총 매수 잔량
-	char OfferVolAfterHour[9];	char _OfferVolAfterHour; // 시간외 매도 잔량
-	char BidVolAfterHour[9];	char _BidVolAfterHour;	// 시간외 매수 잔량
-	char PivotUp2[7];	char _PivotUp2;					// 피봇 2차 저항
-	char PivotUp1[7];	char _PivotUp1;					// 피봇 1차 저항
-	char PivotPrice[7];	char _PivotPrice;				// 피봇가
-	char PivotDown1[7];	char _PivotDown1;				// 피봇 1차 지지
-	char PivotDown2[7];	char _PivotDown2;				// 피봇 2차 지지
-	char Market[6];	char _Market;						// 코스피/코스닥 구분
-	char Sector[18];	char _Sector;					// 업종명
-	char CapSize[6];	char _CapSize;					// 자본금규모
-	char SettleMonth[16];	char _SettleMonth;			// 결산월
-	char MarketAction1[16];	char _MarketAction1;		// 시장조치1
-	char MarketAction2[16];	char _MarketAction2;		// 시장조치2
-	char MarketAction3[16];	char _MarketAction3;		// 시장조치3
-	char MarketAction4[16];	char _MarketAction4;		// 시장조치4
-	char MarketAction5[16];	char _MarketAction5;		// 시장조치5
-	char MarketAction6[16];	char _MarketAction6;		// 시장조치6
-	char ConvertBond[6];	char _ConvertBond;			// CB구분
-	char NominalPrice[7];	char _NominalPrice;			// 액면가
-	char PrevPriceTitle[12];	char _PrevPriceTitle;	// 전일 종가 타이틀
-	char PrevPrice[7];	char _PrevPrice;				// 전일종가
-	char MortgageValue[7];	char _MortgageValue;		// 대용가
-	char PublicOfferPrice[7];	char _PublicOfferPrice;	// 공모가
-	char High5Day[7];	char _High5Day;					// 5일고가
-	char Low5Day[7];	char _Low5Day;					// 5일저가
-	char High20Day[7];	char _High20Day;				// 20일고가
-	char Low20Day[7];	char _Low20Day;					// 20일저가
-	char High1Year[7];	char _High1Year;				// 52주최고가
-	char High1YearDate[4];	char _High1YearDate;		// 52주최고가일
-	char Low1Year[7];	char _Low1Year;					// 52주최저가
-	char Low1YearDate[4];	char _Low1YearDate;			// 52주최저가일
-	char FloatVolume[8];	char _FloatVolume;			// 유동주식수
-	char ListVolBy1000[12];	char _ListVolBy1000;		// 상장주식수_천주
-	char MarketCapital[9];	char _MarketCapital;		// 시가총액
-	char TraderInfoTime[5];	char _TraderInfoTime;		// 거래원 정보 최종 수신 시간
-	char Seller1[6];	char _Seller1;					// 매도 거래원1
-	char Buyer1[6];	char _Buyer1;						// 매수 거래원1
-	char Seller1Volumn[9];	char _Seller1Volume;		// 매도 거래량1
-	char Buyer1Volume[9];	char _Buyer1Volume;			// 매수 거래량1
-	char Seller2[6];	char _Seller2;					// 매도 거래원2
-	char Buyer2[6];	char _Buyer2;						// 매수 거래원2
-	char Seller2Volumn[9];	char _Seller2Volume;		// 매도 거래량2
-	char Buyer2Volume[9];	char _Buyer2Volume;			// 매수 거래량2
-	char Seller3[6];	char _Seller3;					// 매도 거래원3
-	char Buyer3[6];	char _Buyer3;						// 매수 거래원3
-	char Seller3Volumn[9];	char _Seller3Volume;		// 매도 거래량3
-	char Buyer3Volume[9];	char _Buyer3Volume;			// 매수 거래량3
-	char Seller4[6];	char _Seller4;					// 매도 거래원4
-	char Buyer4[6];	char _Buyer4;						// 매수 거래원4
-	char Seller4Volumn[9];	char _Seller4Volume;		// 매도 거래량4
-	char Buyer4Volume[9];	char _Buyer4Volume;			// 매수 거래량4
-	char Seller5[6];	char _Seller5;					// 매도 거래원5
-	char Buyer5[6];	char _Buyer5;						// 매수 거래원5
-	char Seller5Volumn[9];	char _Seller5Volume;		// 매도 거래량5
-	char Buyer5Volume[9];	char _Buyer5Volume;			// 매수 거래량5
-	char ForeignSellVolume[9];	char _ForeignSellVolume; // 외국인 매도 거래량
-	char ForeignBuyVolume[9];	char _ForeignBuyVolume;	// 외국인 매수 거래량
-	char ForeignTime[6];	char _ForeignTime;			// 외국인 시간 ???
-	char ForeignHoldingRate[5];	char _ForeignHoldingRate; // 외국인 지분율
-	char SettleDate[4];	char _SettleDate;				// 결제일
-	char DebtPercent[5];	char _DebtPercent;			// 잔고비율(%)
-	char RightsIssueDate[4];	char _RightsIssueDate;	// 유상기준일
-	char BonusIssueDate[4];	char _BonusIssueDate;		// 무상기준일
-	char RightsIssueRate[5];	char _RightsIssueRate;	// 유상배정비율
-	char BonusIssueRate[5];	char _BonusIssueRate;		// 무상배정비율
-	char IPO_Date[8];	char _IPO_Date;					// 상장일
-	char ListedVolume[12];	char _ListedVolume;			// 상장주식수_주
-	char SellTotalSum[9];	char _SellTotalSum;			// 전체 거래원 매도 합계
-	char BuyTotalSum[9];	char _BuyTotalSum;			// 전체 거래원 매수 합계
-} Tc1151OutBlock;
-
-typedef struct tagc1151OutBlock2// 변동거래량자료
-{
-	char Time[8];	char _Time;							// 시간
-	char MarketPrice[7];	char _MarketPrice;			// 현재가
-	char DiffSign[1];	char _DiffSign;					// 등락부호
-	char Diff[6];	char _Diff;							// 등락폭
-	char OfferPrice[7];	char _OfferPrice;				// 매도 호가
-	char BidPrice[7];	char _BidPrice;					// 매수 호가
-	char DiffVolume[8];	char _DiffVolumn;				// 변동거래량
-	char Volume[9];	char _Volume;						// 거래량
-} Tc1151OutBlock2;
-
-typedef struct tagc1151OutBlock3// 예상체결
-{
-	char SyncOfferBid[1];	char _SyncOfferBid;			// 동시 호가 구분
-	char EstmPrice[7];	char _EstmPrice;		// 예상 체결가
-	char EstmSign[1];	char _EstmSign;			// 예상 체결 부호
-	char EstmDiff[6];	char _EstmDiff;			// 예상 체결 등락폭
-	char EstmDiffRate[5];	char _EstmDiffRate;	// 예상 체결 등락률
-	char EstmVolume[9];	char _EstmVolume;		// 예상체결 수량
-} Tc1151OutBlock3;
-
-typedef struct tagc1151OutBlock4// ETF자료
-{
-	char ETF[1];	char _ETF;							// ETF 구분
-	char NAV[9];	char _NAV;							// 장중/최종 NAV
-	char DiffSign[1];	char _DiffSign;					// NAV 등락 부호
-	char Diff[9];	char _Diff;							// NAV 등락폭
-	char PrevNAV[9];	char _PrevNAV;					// 전일 NAV
-	char DivergeRate[9];	char _DivergeRate;			// 괴리율
-	char DivergeSign[1];	char _DivergeSign;			// 괴리율 부호
-	char DividendPerCU[18];	char _DividendPerCU;		// CU(Creation Unit : 설정단위)당 현금 배당액(원)
-	char ConstituentNo[4];	char _ConstituentNo;		// 구성 종목수
-	char NAVBy100Million[7];	char _NAVBy100Million;	// 순자산총액(억원)
-	char TrackingErrRate[9];	char _TrackingErrRate;	// 추적오차율
-	char LP_OfferVolume1[9];	char _LP_OfferVolume1;	// LP 매도 최우선 잔량
-	char LP_OfferVolume2[9];	char _LP_OfferVolume2;	// LP 매도 차선 잔량
-	char LP_OfferVolume3[9];	char _LP_OfferVolume3;	// LP 매도 차차선 잔량
-	char LP_OfferVolume4[9];	char _LP_OfferVolume4;	// LP 매도 4차선 잔량
-	char LP_OfferVolume5[9];	char _LP_OfferVolume5;	// LP 매도 5차선 잔량
-	char LP_OfferVolume6[9];	char _LP_OfferVolume6;	// LP 매도 6차선 잔량
-	char LP_OfferVolume7[9];	char _LP_OfferVolume7;	// LP 매도 7차선 잔량
-	char LP_OfferVolume8[9];	char _LP_OfferVolume8;	// LP 매도 8차선 잔량
-	char LP_OfferVolume9[9];	char _LP_OfferVolume9;	// LP 매도 9차선 잔량
-	char LP_OfferVolume10[9];	char _LP_OfferVolume10;	// LP 매도 10차선 잔량
-	char LP_BidVolume1[9];	char _LP_BidVolume1;		// LP 매수 최우선 잔량
-	char LP_BidVolume2[9];	char _LP_BidVolume2;		// LP 매수 차선 잔량
-	char LP_BidVolume3[9];	char _LP_BidVolume3;		// LP 매수 차차선 잔량
-	char LP_BidVolume4[9];	char _LP_BidVolume4;		// LP 매수 4차선 잔량
-	char LP_BidVolume5[9];	char _LP_BidVolume5;		// LP 매수 5차선 잔량
-	char LP_BidVolume6[9];	char _LP_BidVolume6;		// LP 매수 6차선 잔량
-	char LP_BidVolume7[9];	char _LP_BidVolume7;		// LP 매수 7차선 잔량
-	char LP_BidVolume8[9];	char _LP_BidVolume8;		// LP 매수 8차선 잔량
-	char LP_BidVolume9[9];	char _LP_BidVolume9;		// LP 매수 9차선 잔량
-	char LP_BidVolume10[9];	char _LP_BidVolume10;		// LP 매수 10차선 잔량
-	char TrackingMethod[8];	char _TrackingMethod;		// ETF 복제 방법 구분 코드
-	char ETF_Type[6];	char _ETF_Type;					// ETF 상품 유형 코드
-} Tc1151OutBlock4;
-
-typedef struct tagc1151OutBlock5// 베이스지수자료
-{
-	char IndexCode[2];	char _IndexCode;				// 지수코드
-	char SectorCode[4];	char _SectorCode;				// 섹터코드
-	char IndexName[20];	char _IndexName;				// 지수명
-	char KP200Index[8];	char _KP200Index;				// 지수
-	char KP200Sign[1];	char _KP200Sign;				// 등락부호
-	char KP200Diff[8];	char _KP200Diff;				// 등락폭
-	char BondIndex[10];	char _BondIndex;				// 채권지수
-	char BondSign[1];	char _BondSign;					// 채권등락부호
-	char BondDiff[10];	char _BondDiff;					// 채권등락폭
-	char ForeignIndexSymbol[12];	char _ForeignIndexSymbol; // 해외지수심볼
-	char EtcSectorCode[3];	char _EtcSectorCode;		// 기타업종코드
-	char BondIndexCode[6];	char _BondIndexCode;		// 채권지수코드
-	char BondDetailCode[1];	char _BondDetailCode;		// 채권지수세부코드
-} Tc1151OutBlock5;
-
-typedef struct tagc1151
-{
-	Tc1151InBlock c1151inblock;							// 기본입력
-	Tc1151OutBlock c1151outblock;						// 종목마스타기본자료
-	Tc1151OutBlock2 c1151outblock2;						// 변동거래량자료
-	Tc1151OutBlock3 c1151outblock3;						// 예상체결
-	Tc1151OutBlock4 c1151outblock4;						// ETF자료
-	Tc1151OutBlock5 c1151outblock5;						// 베이스지수자료
-} Tc1151;
-
-
-typedef struct tagh1InBlock// 입력
-{
-	char Code[6];		// 종목코드
-} Th1InBlock;
-
-typedef struct tagh1OutBlock// 출력
-{
-	char Code[6];		// 종목코드
-	char hotime[8];		// 시간
-	char offer[7];		// 매도 호가
-	char bid[7];		// 매수 호가
-	char offerrem[9];		// 매도 호가잔량
-	char bidrem[9];		// 매수 호가잔량
-	char P_offer[7];		// 차 매도 호가
-	char P_bid[7];		// 차 매수 호가
-	char P_offerrem[9];		// 차 매도 호가잔량
-	char P_bidrem[9];		// 차 매수 호가잔량
-	char S_offer[7];		// 차차 매도 호가
-	char S_bid[7];		// 차차 매수 호가
-	char S_offerrem[9];		// 차차 매도 호가잔량
-	char S_bidrem[9];		// 차차 매수 호가잔량
-	char S4_offer[7];		// 4차 매도 호가
-	char S4_bid[7];		// 4차 매수 호가
-	char S4_offerrem[9];		// 4차 매도 호가잔량
-	char S4_bidrem[9];		// 4차 매수 호가잔량
-	char S5_offer[7];		// 5차 매도 호가
-	char S5_bid[7];		// 5차 매수 호가
-	char S5_offerrem[9];		// 5차 매도 호가잔량
-	char S5_bidrem[9];		// 5차 매수 호가잔량
-	char T_offerrem[9];		// 총 매도 호가잔량
-	char T_bidrem[9];		// 총 매수 호가잔량
-	char S6_offer[7];		// 6차 매도 호가
-	char S6_bid[7];		// 6차 매수 호가
-	char S6_offerrem[9];		// 6차 매도 호가잔량
-	char S6_bidrem[9];		// 6차 매수 호가잔량
-	char S7_offer[7];		// 7차 매도 호가
-	char S7_bid[7];		// 7차 매수 호가
-	char S7_offerrem[9];		// 7차 매도 호가잔량
-	char S7_bidrem[9];		// 7차 매수 호가잔량
-	char S8_offer[7];		// 8차 매도 호가
-	char S8_bid[7];		// 8차 매수 호가
-	char S8_offerrem[9];		// 8차 매도 호가잔량
-	char S8_bidrem[9];		// 8차 매수 호가잔량
-	char S9_offer[7];		// 9차 매도 호가
-	char S9_bid[7];		// 9차 매수 호가
-	char S9_offerrem[9];		// 9차 매도 호가잔량
-	char S9_bidrem[9];		// 9차 매수 호가잔량
-	char S10_offer[7];		// 10차 매도 호가
-	char S10_bid[7];		// 10차 매수 호가
-	char S10_offerrem[9];		// 10차 매도 호가잔량
-	char S10_bidrem[9];		// 10차 매수 호가잔량
-	char volume[9];		// 누적거래량
-} Th1OutBlock;
-
-typedef struct tagh1
-{
-	Th1InBlock                        h1inblock                             ;		// 입력
-	Th1OutBlock                       h1outblock                            ;		// 출력
-} Th1;
-
-typedef struct tagk3InBlock// 입력
-{
-	char Code[6];		// 종목코드
-} Tk3InBlock;
-
-typedef struct tagk3OutBlock// 출력
-{
-	char Code[6];		// 종목코드
-	char time[8];		// 시간
-	char offer[7];		// 매도 호가
-	char bid[7];		// 매수 호가
-	char offerrem[9];		// 매도 호가잔량
-	char bidrem[9];		// 매수 호가잔량
-	char P_offer[7];		// 차 매도 호가
-	char P_bid[7];		// 차 매수 호가
-	char P_offerrem[9];		// 차 매도 호가잔량
-	char P_bidrem[9];		// 차 매수 호가잔량
-	char S_offer[7];		// 차차 매도 호가
-	char S_bid[7];		// 차차 매수 호가
-	char S_offerrem[9];		// 차차 매도 호가잔량
-	char S_bidrem[9];		// 차차 매수 호가잔량
-	char S4_offer[7];		// 4차 매도 호가
-	char S4_bid[7];		// 4차 매수 호가
-	char S4_offerrem[9];		// 4차 매도 호가잔량
-	char S4_bidrem[9];		// 4차 매수 호가잔량
-	char S5_offer[7];		// 5차 매도 호가
-	char S5_bid[7];		// 5차 매수 호가
-	char S5_offerrem[9];		// 5차 매도 호가잔량
-	char S5_bidrem[9];		// 5차 매수 호가잔량
-	char T_offerrem[9];		// 총 매도 호가잔량
-	char T_bidrem[9];		// 총 매수 호가잔량
-	char S6_offer[7];		// 6차 매도 호가
-	char S6_bid[7];		// 6차 매수 호가
-	char S6_offerrem[9];		// 6차 매도 호가잔량
-	char S6_bidrem[9];		// 6차 매수 호가잔량
-	char S7_offer[7];		// 7차 매도 호가
-	char S7_bid[7];		// 7차 매수 호가
-	char S7_offerrem[9];		// 7차 매도 호가잔량
-	char S7_bidrem[9];		// 7차 매수 호가잔량
-	char S8_offer[7];		// 8차 매도 호가
-	char S8_bid[7];		// 8차 매수 호가
-	char S8_offerrem[9];		// 8차 매도 호가잔량
-	char S8_bidrem[9];		// 8차 매수 호가잔량
-	char S9_offer[7];		// 9차 매도 호가
-	char S9_bid[7];		// 9차 매수 호가
-	char S9_offerrem[9];		// 9차 매도 호가잔량
-	char S9_bidrem[9];		// 9차 매수 호가잔량
-	char S10_offer[7];		// 10차 매도 호가
-	char S10_bid[7];		// 10차 매수 호가
-	char S10_offerrem[9];		// 10차 매도 호가잔량
-	char S10_bidrem[9];		// 10차 매수 호가잔량
-	char volume[9];		// 거래량
-} Tk3OutBlock;
-
-typedef struct tagk3
-{
-	Tk3InBlock                        k3inblock                             ;		// 입력
-	Tk3OutBlock                       k3outblock                            ;		// 출력
-} Tk3;
-
-typedef struct tagh2InBlock// 입력
-{
-	char Code[6];		// 종목코드
-} Th2InBlock;
-
-typedef struct tagh2OutBlock// 출력
-{
-	char Code[6];		// 종목코드
-	char hotime[8];		// 시간
-	char O_offerrem[9];		// 총 매도 호가잔량
-	char O_bidrem[9];		// 총 매수 호가잔량
-} Th2OutBlock;
-
-typedef struct tagh2
-{
-	Th2InBlock                        h2inblock                             ;		// 입력
-	Th2OutBlock                       h2outblock                            ;		// 출력
-} Th2;
-
-typedef struct tagk4InBlock// 입력
-{
-	char Code[6];		// 종목코드
-} Tk4InBlock;
-
-typedef struct tagk4OutBlock// 출력
-{
-	char Code[6];		// 종목코드
-	char hotime[8];		// 시간
-	char O_offerrem[9];		// 총 매도 호가잔량
-	char O_bidrem[9];		// 총 매수 호가잔량
-} Tk4OutBlock;
-
-typedef struct tagk4
-{
-	Tk4InBlock                        k4inblock                             ;		// 입력
-	Tk4OutBlock                       k4outblock                            ;		// 출력
-} Tk4;
-
-typedef struct tagh3InBlock// 입력
-{
-	char Code[6];		// 종목코드
-} Th3InBlock;
-
-typedef struct tagh3OutBlock// 출력
-{
-	char Code[6];		// 종목코드
-	char hotime[8];		// 시간
-	char dongsi[1];		// 동시구분
-	char jeqprice[7];		// 예상체결가
-	char jeqsign[1];		// 예상등락부호
-	char jeqchange[6];		// 예상등락폭
-	char jeqchrate[5];		// 예상등락률
-	char jeqvol[9];		// 예상체결수량
-	char offer[7];		// 매도 호가
-	char bid[7];		// 매수 호가
-	char offerrem[9];		// 매도 호가잔량
-	char bidrem[9];		// 매수 호가잔량
-} Th3OutBlock;
-
-typedef struct tagh3
-{
-	Th3InBlock                        h3inblock                             ;		// 입력
-	Th3OutBlock                       h3outblock                            ;		// 출력
-} Th3;
-
-typedef struct tagk5InBlock// 입력
-{
-	char Code[6];		// 종목코드
-} Tk5InBlock;
-
-typedef struct tagk5OutBlock// 출력
-{
-	char Code[6];		// 종목코드
-	char hotime[8];		// 시간
-	char dongsi[1];		// 동시구분
-	char jeqprice[7];		// 예상체결가
-	char jeqsign[1];		// 예상등락부호
-	char jeqchange[6];		// 예상등락폭
-	char jeqchrate[5];		// 예상등락률
-	char jeqvol[9];		// 예상체결수량
-	char offer[7];		// 매도 호가
-	char bid[7];		// 매수 호가
-	char offerrem[9];		// 매도 호가잔량
-	char bidrem[9];		// 매수 호가잔량
-} Tk5OutBlock;
-
-typedef struct tagk5
-{
-	Tk5InBlock                        k5inblock                             ;		// 입력
-	Tk5OutBlock                       k5outblock                            ;		// 출력
-} Tk5;
-
-typedef struct tagj8InBlock// 입력
-{
-	char Code[6];	char _Code;		// 종목코드
-} Tj8InBlock;
-
-typedef struct tagj8OutBlock// 출력
-{
-	char Code[6];	char _Code;		// 종목코드
-	char time[8];	char _time;		// 시간
-	char sign[1];	char _sign;		// 등락부호
-	char change[6];	char _change;		// 등락폭
-	char price[7];	char _price;		// 현재가
-	char chrate[5];	char _chrate;		// 등락률
-	char high[7];	char _high;		// 고가
-	char low[7];	char _low;		// 저가
-	char offer[7];	char _offer;		// 매도 호가
-	char bid[7];	char _bid;		// 매수 호가
-	char volume[9];	char _volume;		// 거래량
-	char volrate[6];	char _volrate;		// 거래량전일비
-	char movolume[8];	char _movolume;		// 변동거래량
-	char value[9];	char _value;		// 거래대금
-	char open[7];	char _open;		// 시가
-	char avgprice[7];	char _avgprice;		// 가중평균가
-	char janggubun[1];	char _janggubun;		// 장구분
-} Tj8OutBlock;
-
-typedef struct tagj8
-{
-	Tj8InBlock                        j8inblock                             ;		// 입력
-	Tj8OutBlock                       j8outblock                            ;		// 출력
-} Tj8;
-
-typedef struct tagk8InBlock// 입력
-{
-	char Code[6];	char _Code;		// 종목코드
-} Tk8InBlock;
-
-typedef struct tagk8OutBlock// 출력
-{
-	char Code[6];	char _Code;		// 종목코드
-	char time[8];	char _time;		// 시간
-	char price[7];	char _price;		// 현재가
-	char sign[1];	char _sign;		// 등락부호
-	char change[6];	char _change;		// 등락폭
-	char chrate[5];	char _chrate;		// 등락률
-	char high[7];	char _high;		// 고가
-	char low[7];	char _low;		// 저가
-	char offer[7];	char _offer;		// 매도 호가
-	char bid[7];	char _bid;		// 매수 호가
-	char volume[9];	char _volume;		// 거래량
-	char volrate[6];	char _volrate;		// 거래량전일비
-	char movolume[8];	char _movolume;		// 변동거래량
-	char value[9];	char _value;		// 거래대금
-	char open[7];	char _open;		// 시가
-	char avgprice[7];	char _avgprice;		// 가중평균가
-	char janggubun[1];	char _janggubun;		// 장구분
-} Tk8OutBlock;
-
-typedef struct tagk8
-{
-	Tk8InBlock                        k8inblock                             ;		// 입력
-	Tk8OutBlock                       k8outblock                            ;		// 출력
-} Tk8;
 
 typedef struct tagf1InBlock// 입력
 {
@@ -1952,8 +1232,8 @@ typedef struct tagf1OutBlock// 출력
 
 typedef struct tagf1
 {
-	Tf1InBlock                        f1inblock                             ;		// 입력
-	Tf1OutBlock                       f1outblock                            ;		// 출력
+	Tf1InBlock                        f1InBlock                             ;		// 입력
+	Tf1OutBlock                       f1OutBlock                            ;		// 출력
 } Tf1;
 
 typedef struct tagf3InBlock// 입력
@@ -1972,8 +1252,8 @@ typedef struct tagf3OutBlock// 출력
 
 typedef struct tagf3
 {
-	Tf3InBlock                        f3inblock                             ;		// 입력
-	Tf3OutBlock                       f3outblock                            ;		// 출력
+	Tf3InBlock                        f3InBlock                             ;		// 입력
+	Tf3OutBlock                       f3OutBlock                            ;		// 출력
 } Tf3;
 
 typedef struct tagf4InBlock// 입력
@@ -1991,8 +1271,8 @@ typedef struct tagf4OutBlock// 출력
 
 typedef struct tagf4
 {
-	Tf4InBlock                        f4inblock                             ;		// 입력
-	Tf4OutBlock                       f4outblock                            ;		// 출력
+	Tf4InBlock                        f4InBlock                             ;		// 입력
+	Tf4OutBlock                       f4OutBlock                            ;		// 출력
 } Tf4;
 
 typedef struct tagf8InBlock// 입력
@@ -2035,8 +1315,8 @@ typedef struct tagf8OutBlock// 출력
 
 typedef struct tagf8
 {
-	Tf8InBlock                        f8inblock                             ;		// 입력
-	Tf8OutBlock                       f8outblock                            ;		// 출력
+	Tf8InBlock                        f8InBlock                             ;		// 입력
+	Tf8OutBlock                       f8OutBlock                            ;		// 출력
 } Tf8;
 
 typedef struct tagq1InBlock// 입력
@@ -2086,8 +1366,8 @@ typedef struct tagq1OutBlock// 출력
 
 typedef struct tagq1
 {
-	Tq1InBlock                        q1inblock                             ;		// 입력
-	Tq1OutBlock                       q1outblock                            ;		// 출력
+	Tq1InBlock                        q1InBlock                             ;		// 입력
+	Tq1OutBlock                       q1OutBlock                            ;		// 출력
 } Tq1;
 
 typedef struct tagq2InBlock// 입력
@@ -2119,8 +1399,8 @@ typedef struct tagq2OutBlock// 출력
 
 typedef struct tagq2
 {
-	Tq2InBlock                        q2inblock                             ;		// 입력
-	Tq2OutBlock                       q2outblock                            ;		// 출력
+	Tq2InBlock                        q2InBlock                             ;		// 입력
+	Tq2OutBlock                       q2OutBlock                            ;		// 출력
 } Tq2;
 
 typedef struct tago1InBlock// 입력
@@ -2170,8 +1450,8 @@ typedef struct tago1OutBlock// 출력
 
 typedef struct tago1
 {
-	To1InBlock                        o1inblock                             ;		// 입력
-	To1OutBlock                       o1outblock                            ;		// 출력
+	To1InBlock                        o1InBlock                             ;		// 입력
+	To1OutBlock                       o1OutBlock                            ;		// 출력
 } To1;
 
 typedef struct tago2InBlock// 입력
@@ -2238,8 +1518,8 @@ typedef struct tago2OutBlock// 출력
 
 typedef struct tago2
 {
-	To2InBlock                        o2inblock                             ;		// 입력
-	To2OutBlock                       o2outblock                            ;		// 출력
+	To2InBlock                        o2InBlock                             ;		// 입력
+	To2OutBlock                       o2OutBlock                            ;		// 출력
 } To2;
 
 typedef struct tago3InBlock// 입력
@@ -2264,8 +1544,8 @@ typedef struct tago3OutBlock// 출력
 
 typedef struct tago3
 {
-	To3InBlock                        o3inblock                             ;		// 입력
-	To3OutBlock                       o3outblock                            ;		// 출력
+	To3InBlock                        o3InBlock                             ;		// 입력
+	To3OutBlock                       o3OutBlock                            ;		// 출력
 } To3;
 
 typedef struct tago4InBlock// 입력
@@ -2283,8 +1563,8 @@ typedef struct tago4OutBlock// 출력
 
 typedef struct tago4
 {
-	To4InBlock                        o4inblock                             ;		// 입력
-	To4OutBlock                       o4outblock                            ;		// 출력
+	To4InBlock                        o4InBlock                             ;		// 입력
+	To4OutBlock                       o4OutBlock                            ;		// 출력
 } To4;
 
 typedef struct tagvHInBlock// 입력
@@ -2296,8 +1576,8 @@ typedef struct tagvHOutBlock// 출력
 {
 	char fuitem[8];		// 종목코드
 	char futime[8];		// 시간 HH:MM:SS
-	char offer[7];		// 매도 호가
-	char bid[7];		// 매수 호가
+	char OfferPrice[7];		// 매도 호가
+	char BidPrice[7];		// 매수 호가
 	char offerjan[6];		// 매도 잔량
 	char bidjan[6];		// 매수 잔량
 	char S2offer[7];		// 차 매도 호가
@@ -2364,8 +1644,8 @@ typedef struct tagvHOutBlock// 출력
 
 typedef struct tagvH
 {
-	TvHInBlock                        vhinblock                             ;		// 입력
-	TvHOutBlock                       vhoutblock                            ;		// 출력
+	TvHInBlock                        vhInBlock                             ;		// 입력
+	TvHOutBlock                       vhOutBlock                            ;		// 출력
 } TvH;
 
 typedef struct tagvCInBlock// 입력
@@ -2389,8 +1669,8 @@ typedef struct tagvCOutBlock// 출력
 	char fuvalall[12];	char _fuvalall;		// 누적거래대금
 	char openyak[7];	char _openyak;		// 미결제약정수량
 	char jandatecnt[3];	char _jandatecnt;		// 잔존일수
-	char offer[7];	char _offer;		// 매도 호가
-	char bid[7];	char _bid;		// 매수 호가
+	char OfferPrice[7];	char _OfferPrice;		// 매도 호가
+	char BidPrice[7];	char _BidPrice;		// 매수 호가
 	char offerjan[6];	char _offerjan;		// 매도 잔량
 	char bidjan[6];	char _bidjan;		// 매수 잔량
 	char S2offer[7];	char _S2offer;		// 차 매도 호가
@@ -2464,8 +1744,8 @@ typedef struct tagvCOutBlock// 출력
 
 typedef struct tagvC
 {
-	TvCInBlock                        vcinblock                             ;		// 입력
-	TvCOutBlock                       vcoutblock                            ;		// 출력
+	TvCInBlock                        vcInBlock                             ;		// 입력
+	TvCOutBlock                       vcOutBlock                            ;		// 출력
 } TvC;
 
 typedef struct tagvVInBlock// 입력
@@ -2484,8 +1764,8 @@ typedef struct tagvVOutBlock// 출력
 
 typedef struct tagvV
 {
-	TvVInBlock                        vvinblock                             ;		// 입력
-	TvVOutBlock                       vvoutblock                            ;		// 출력
+	TvVInBlock                        vvInBlock                             ;		// 입력
+	TvVOutBlock                       vvOutBlock                            ;		// 출력
 } TvV;
 
 typedef struct tagvMInBlock// 입력
@@ -2503,8 +1783,8 @@ typedef struct tagvMOutBlock// 출력
 
 typedef struct tagvM
 {
-	TvMInBlock                        vminblock                             ;		// 입력
-	TvMOutBlock                       vmoutblock                            ;		// 출력
+	TvMInBlock                        vmInBlock                             ;		// 입력
+	TvMOutBlock                       vmOutBlock                            ;		// 출력
 } TvM;
 
 typedef struct tagv7InBlock// 입력
@@ -2516,8 +1796,8 @@ typedef struct tagv7OutBlock// 출력
 {
 	char fspitem[8];		// 스프레드종목코드
 	char fsptime[8];		// 시간 HH:MM:SS
-	char offer[8];		// 매도 호가
-	char bid[8];		// 매수 호가
+	char OfferPrice[8];		// 매도 호가
+	char BidPrice[8];		// 매수 호가
 	char offerjan[6];		// 매도 잔량
 	char bidjan[6];		// 매수 잔량
 	char S2offer[8];		// 차 매도 호가
@@ -2584,8 +1864,8 @@ typedef struct tagv7OutBlock// 출력
 
 typedef struct tagv7
 {
-	Tv7InBlock                        v7inblock                             ;		// 입력
-	Tv7OutBlock                       v7outblock                            ;		// 출력
+	Tv7InBlock                        v7InBlock                             ;		// 입력
+	Tv7OutBlock                       v7OutBlock                            ;		// 출력
 } Tv7;
 
 typedef struct tagv8InBlock// 입력
@@ -2609,8 +1889,8 @@ typedef struct tagv8OutBlock// 출력
 	char fspvol[6];	char _fspvol;		// 체결수량
 	char fspvolall[7];	char _fspvolall;		// 누적 체결수량
 	char fspvalall[12];	char _fspvalall;		// 누적거래대금
-	char offer[8];	char _offer;		// 매도 호가
-	char bid[8];	char _bid;		// 매수 호가
+	char OfferPrice[8];	char _OfferPrice;		// 매도 호가
+	char BidPrice[8];	char _BidPrice;		// 매수 호가
 	char offerjan[6];	char _offerjan;		// 매도 잔량
 	char bidjan[6];	char _bidjan;		// 매수 잔량
 	char S2offer[8];	char _S2offer;		// 차 매도 호가
@@ -2679,8 +1959,8 @@ typedef struct tagv8OutBlock// 출력
 
 typedef struct tagv8
 {
-	Tv8InBlock                        v8inblock                             ;		// 입력
-	Tv8OutBlock                       v8outblock                            ;		// 출력
+	Tv8InBlock                        v8InBlock                             ;		// 입력
+	Tv8OutBlock                       v8OutBlock                            ;		// 출력
 } Tv8;
 
 typedef struct tageCInBlock// 입력
@@ -2696,12 +1976,12 @@ typedef struct tageCOutBlock// 출력
 	char sign[1];	char _sign;		// 등락부호
 	char change[6];	char _change;		// 등락폭
 	char chrate[5];	char _chrate;		// 등락률
-	char open[7];	char _open;		// 시가
-	char high[7];	char _high;		// 고가
-	char low[7];	char _low;		// 저가
-	char offer[7];	char _offer;		// 매도 호가
-	char bid[7];	char _bid;		// 매수 호가
-	char volume[9];	char _volume;		// 누적거래량
+	char Open[7];	char _Open;		// 시가
+	char High[7];	char _High;		// 고가
+	char Low[7];	char _Low;		// 저가
+	char OfferPrice[7];	char _OfferPrice;		// 매도 호가
+	char BidPrice[7];	char _BidPrice;		// 매수 호가
+	char Volume[9];	char _Volume;		// 누적거래량
 	char volrate[6];	char _volrate;		// 거래량 전일비
 	char movolume[8];	char _movolume;		// 변동거래량
 	char value[9];	char _value;		// 거래대금 백만원
@@ -2716,8 +1996,8 @@ typedef struct tageCOutBlock// 출력
 
 typedef struct tageC
 {
-	TeCInBlock                        ecinblock                             ;		// 입력
-	TeCOutBlock                       ecoutblock                            ;		// 출력
+	TeCInBlock                        ecInBlock                             ;		// 입력
+	TeCOutBlock                       ecOutBlock                            ;		// 출력
 } TeC;
 
 typedef struct tageHInBlock// 입력
@@ -2801,8 +2081,8 @@ typedef struct tageHOutBlock// 출력
 
 typedef struct tageH
 {
-	TeHInBlock                        ehinblock                             ;		// 입력
-	TeHOutBlock                       ehoutblock                            ;		// 출력
+	TeHInBlock                        ehInBlock                             ;		// 입력
+	TeHOutBlock                       ehOutBlock                            ;		// 출력
 } TeH;
 
 typedef struct tageVInBlock// 입력
@@ -2827,8 +2107,8 @@ typedef struct tageVOutBlock// 출력
 
 typedef struct tageV
 {
-	TeVInBlock                        evinblock                             ;		// 입력
-	TeVOutBlock                       evoutblock                            ;		// 출력
+	TeVInBlock                        evInBlock                             ;		// 입력
+	TeVOutBlock                       evOutBlock                            ;		// 출력
 } TeV;
 
 typedef struct tageLInBlock// 입력
@@ -2850,8 +2130,8 @@ typedef struct tageLOutBlock// 출력
 
 typedef struct tageL
 {
-	TeLInBlock                        elinblock                             ;		// 입력
-	TeLOutBlock                       eloutblock                            ;		// 출력
+	TeLInBlock                        elInBlock                             ;		// 입력
+	TeLOutBlock                       elOutBlock                            ;		// 출력
 } TeL;
 
 typedef struct tageTInBlock// 입력
@@ -2937,8 +2217,8 @@ typedef struct tageTOutBlock// 출력
 
 typedef struct tageT
 {
-	TeTInBlock                        etinblock                             ;		// 입력
-	TeTOutBlock                       etoutblock                            ;		// 출력
+	TeTInBlock                        etInBlock                             ;		// 입력
+	TeTOutBlock                       etOutBlock                            ;		// 출력
 } TeT;
 
 typedef struct tagfEInBlock// 입력
@@ -2959,8 +2239,8 @@ typedef struct tagfEOutBlock// 출력
 
 typedef struct tagfE
 {
-	TfEInBlock                        feinblock                             ;		// 입력
-	TfEOutBlock                       feoutblock                            ;		// 출력
+	TfEInBlock                        feInBlock                             ;		// 입력
+	TfEOutBlock                       feOutBlock                            ;		// 출력
 } TfE;
 
 typedef struct tagoEInBlock// 입력
@@ -2981,8 +2261,8 @@ typedef struct tagoEOutBlock// 출력
 
 typedef struct tagoE
 {
-	ToEInBlock                        oeinblock                             ;		// 입력
-	ToEOutBlock                       oeoutblock                            ;		// 출력
+	ToEInBlock                        oeInBlock                             ;		// 입력
+	ToEOutBlock                       oeOutBlock                            ;		// 출력
 } ToE;
 
 typedef struct tagvEInBlock// 입력
@@ -3003,8 +2283,8 @@ typedef struct tagvEOutBlock// 출력
 
 typedef struct tagvE
 {
-	TvEInBlock                        veinblock                             ;		// 입력
-	TvEOutBlock                       veoutblock                            ;		// 출력
+	TvEInBlock                        veInBlock                             ;		// 입력
+	TvEOutBlock                       veOutBlock                            ;		// 출력
 } TvE;
 
 typedef struct tagf7InBlock// 입력
@@ -3026,8 +2306,8 @@ typedef struct tagf7OutBlock// 출력
 
 typedef struct tagf7
 {
-	Tf7InBlock                        f7inblock                             ;		// 입력
-	Tf7OutBlock                       f7outblock                            ;		// 출력
+	Tf7InBlock                        f7InBlock                             ;		// 입력
+	Tf7OutBlock                       f7OutBlock                            ;		// 출력
 } Tf7;
 
 typedef struct tago7InBlock// 입력
@@ -3047,8 +2327,8 @@ typedef struct tago7OutBlock// 출력
 
 typedef struct tago7
 {
-	To7InBlock                        o7inblock                             ;		// 입력
-	To7OutBlock                       o7outblock                            ;		// 출력
+	To7InBlock                        o7InBlock                             ;		// 입력
+	To7OutBlock                       o7OutBlock                            ;		// 출력
 } To7;
 
 typedef struct tagvIInBlock// 입력
@@ -3070,38 +2350,10 @@ typedef struct tagvIOutBlock// 출력
 
 typedef struct tagvI
 {
-	TvIInBlock                        viinblock                             ;		// 입력
-	TvIOutBlock                       vioutblock                            ;		// 출력
+	TvIInBlock                        viInBlock                             ;		// 입력
+	TvIOutBlock                       viOutBlock                            ;		// 출력
 } TvI;
 
-typedef struct tagu1InBlock// 입력
-{
-	char jisucode[2];	char _jisucode;		// 업종코드
-} Tu1InBlock;
-
-typedef struct tagu1OutBlock// 출력
-{
-	char jisucode[2];	char _jisucode;		// 업종코드
-	char jisutime[8];	char _jisutime;		// 시간
-	char jisu[8];	char _jisu;		// 지수
-	char jisusign[1];	char _jisusign;		// 등락부호
-	char jisuchange[8];	char _jisuchange;		// 등락폭
-	char jisuvolume[8];	char _jisuvolume;		// 거래량
-	char jisuvalue[8];	char _jisuvalue;		// 거래대금
-	char jisuopen[8];	char _jisuopen;		// 시가지수
-	char jisuhigh[8];	char _jisuhigh;		// 고가지수
-	char jisuhightime[8];	char _jisuhightime;		// 고가시간
-	char jisulow[8];	char _jisulow;		// 저가지수
-	char jisulowtime[8];	char _jisulowtime;		// 저가시간
-	char jisuchrate[5];	char _jisuchrate;		// 지수등락률
-	char jisubrkvol[5];	char _jisubrkvol;		// 거래비중
-} Tu1OutBlock;
-
-typedef struct tagu1
-{
-	Tu1InBlock                        u1inblock                             ;		// 입력
-	Tu1OutBlock                       u1outblock                            ;		// 출력
-} Tu1;
 
 typedef struct tagk1InBlock// 입력
 {
@@ -3128,6 +2380,6 @@ typedef struct tagk1OutBlock// 출력
 
 typedef struct tagk1
 {
-	Tk1InBlock k1inblock;		// 입력
-	Tk1OutBlock k1outblock;		// 출력
+	Tk1InBlock k1InBlock;		// 입력
+	Tk1OutBlock k1OutBlock;		// 출력
 } Tk1;
