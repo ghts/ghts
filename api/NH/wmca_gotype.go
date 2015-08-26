@@ -1,203 +1,147 @@
-/* This file is part of GHTS.
+package NH
 
-GHTS is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-GHTS is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
-
-@author: UnHa Kim <unha.kim.ghts@gmail.com> */
-
-//# include <stdbool.h>
-# include <windef.h>
-
-typedef	BOOL(__stdcall *F_BOOL)();
-
-// 함수 실행과정에서 에러가 발생했는 지 여부와
-// 함수 실행결과 얻은 bool형식의 값을
-// 한꺼번에 Go언어로 전달하기 위한 구조체.
-// C언어는 Go언어와 달리 복수 반환값을 지원하지 않아서 만들게 되었음.
-//typedef struct {
-//	bool Value;
-//	DWORD ErrorCode;
-//} ErrBool;
-
-// 여기서부터 아래 부분은 증권사 제공 예제코드를 복사 후 붙여넣기 한 후 약간 수정한 것임.
-
-/* COPIED FROM 'WmcaIntf.h' in NH OpenAPI sample code.
-* MODIFIED by GHTS Authors for updated API.
-* LICENSING TERM follows that of original code.
-*
-* NH 오픈API 에 포함된 샘플 소스코드에서 복사해서 붙여넣기 된 후,
-* GHTS 개발자에 의해서 일부 수정됨.
-* 저작권 관련 규정은 원래 샘플 소스코드의 저작권 규정을 따름.
-* (샘플 소스코드에는 저작권 항목을 찾을 수 없었기에
-* 자유롭게 사용할 수 있는 Public Domain이 아닐까 추정하지만,
-* 그것은 단지 개인적인 추정일 뿐이며 저작권 관련 정확한 사항은
-* API를 배포한 증권사 측에 문의해 봐야함.
-
-* 변수명명규칙 : 포인터는 p로 시작하도록 하고, 나머지는 Java나 C#에서 쓰이는 camelCase형식을 따름.
-* 가독성은 python의 명명 규칙이 더 낫지만 변수명이 너무 길어지고,
-* Java나 C#이 더 주류언어에 가까우므로 그렇게 선택함.
-* C언어도 strong type에 컴파일러가 형 체크를 해 주므로 헝가리안 표기법을 쓰지 않아도 될 듯 함.
-* 단, 포인터의 경우 구별을 위해서 앞에 p(혹은 P)를 붙임.
-* Go언어와 데이터를 주고 받는 구조체의 멤버 변수는 Go언어와의 호환성을 위해서,
-* Go언어에서 public형은 대문자로 시작해야 하는 규칙을 여기서도 따름.
-*/
-
-# include <windef.h>
-
-typedef	BOOL (__stdcall *F_Connect)(HWND hWnd,DWORD msg,char mediaType,char userType,const char* pID,const char* pPW,const char* pCertPW);
-typedef	BOOL (__stdcall *F_Query)(HWND hWnd,int trId,const char* trCode,const char* pInputData,int inputDataSize,int accountIndex);
-typedef	BOOL (__stdcall *F_Attach)(HWND hWnd,const char* pSiseName,const char* pInputCode,int inputCodeSize,int inputCodeTotalSize);
-typedef	BOOL (__stdcall *F_Detach)(HWND hWnd,const char* pSiseName,const char* pInputCode,int inputCodeSize,int inputCodeTotalSize);
-typedef	BOOL (__stdcall *F_Window)(HWND hWnd);
+import (
+	"time"
+)
 
 //----------------------------------------------------------------------//
 // WMCA_CONNECTED 로그인 구조체
 //----------------------------------------------------------------------//
-typedef	struct {
-    char 	AccountNo[11];			//계좌번호
-    char	AccountName[40];		//계좌명
-    char	act_pdt_cdz3[3];		//상품코드 ??
-    char	amn_tab_cdz4[4];		//관리점코드 ??
-    char	ExpirationDate8[8];		//위임만기일
-    char	Granted;				//일괄주문 허용계좌(G:허용)
-    char	Filler[189];			//filler ??
-} ACCOUNTINFO;
+type S로그인_정보_블록 struct {
+	TR구분번호 int,
+	M로그인_정보 S로그인_정보,
+}
 
-typedef struct {
-    char    Date[14];				// 접속시각
-    char	ServerName[15];			// 접속서버
-    char	UserID[8];				// 접속자ID
-    char    AccountCount[3];		// 계좌수
-    ACCOUNTINFO	Accountlist	[999];	// 계좌목록
-} LOGININFO;
+type S로그인_정보 struct {
+	M접속시각 time.Time,
+	M접속서버 string,
+	M접속ID string,
+	M계좌수 int,
+	M계좌_목록 []S계좌_정보,
+}
 
-typedef struct {
-    int       TrIndex;
-    LOGININFO *LoginInfo;
-} LOGINBLOCK;
+type S계좌_정보 struct {
+	M계좌번호 string,
+	M계좌명 string,
+	M상품_코드 string,
+	M관리점_코드 string,
+	M위임_만기일 time.Time,
+	M일괄주문_허용계좌 bool, // ('G': 허용)
+	M주석 string,
+}
 
 //----------------------------------------------------------------------//
-// WMCA 문자message 구조체
+// WMCA 문자 message 구조체
 //----------------------------------------------------------------------//
-typedef struct  {
-    char	MsgCode[5];	//00000:정상, 기타:비정상(해당 코드값을 이용하여 코딩하지 마세요. 코드값은 언제든지 변경될 수 있습니다.)
-    char	UsrMsg[80];
-} MSGHEADER;
-
+type S메시지 struct {
+	메시지_코드 string, //00000:정상, 기타:비정상(코드값은 언제든지 변경될 수 있음.)
+	메시지_내용 string,
+}
 
 //----------------------------------------------------------------------//
 // WMCA TR 응답 구조체
 //----------------------------------------------------------------------//
-typedef struct {
-    char*	BlockName;
-    char*	DataString;
-    int	Length;
-} RECEIVED;
+type S수신_블록 struct {
+	TR구분번호 int,
+	M수신_데이터 S수신_데이터,
+}
 
-typedef struct {
-    int		  TrIndex;
-    RECEIVED* DataStruct;
-} OUTDATABLOCK;
-
+type S수신_데이터 struct {
+	블록_이름 string,
+	데이터 []byte,
+}
 
 //----------------------------------------------------------------------//
 // 주식 현재가 조회 (c1101)
 //----------------------------------------------------------------------//
-typedef struct tagc1101InBlock { // 기본입력
-	char Lang[1];	char _Lang;							// 한영구분
-	char Code[6];	char _Code;							// 종목코드
-} Tc1101InBlock;
+type S주식_현재가_조회_질의 struct {
+	M한영구분 string,
+	M종목코드 string,
+}
 
-typedef struct tagc1101OutBlock { // 종목마스타기본자료
-	char Code[6];	char _Code;							// 종목코드
-	char Title[13];	char _Title;						// 종목명. 첫자리는 kospi200은 ‘*’, 스타지수종목은 ‘#’. 실제 종목명은 12 byte임
-	char MarketPrice[7];	char _MarketPrice;			// 현재가
-	char DiffSign[1];	char _DiffSign;					// 등락부호. 0x18 :상한, 0x1E :상승, 0x20 :보함, 0x19 :하한, 0x1F :하락. 등락부호는 시장과 관계없이 동일한 코드체계 사용
-	char Diff[6];	char _Diff;							// 등락폭
-	char DiffRate[5];	char _DiffRate;					// 등락률
-	char OfferPrice[7];	char _OfferPrice;				// 매도 호가
-	char BidPrice[7];	char _BidPrice;					// 매수 호가
-	char Volume[9];	char _Volume;						// 거래량
-	char TrVolRate[6];	char _TrVolRate;				// 거래비율
-	char FloatRate[5];	char _FloatRate;				// 유동주회전율
-	char TrAmount[9];	char _TrAmount;					// 거래대금
-	char UpLmtPrice[7];	char _UpLmtPrice;				// 상한가
-	char High[7];	char _High;							// 장중고가
-	char Open[7];	char _Open;							// 시가
-	char VsOpenSign[1];	char _VsOpenSign;				// 시가대비부호
-	char VsOpenDiff[6];	char _VsOpenDiff;				// 시가대비등락폭
-	char Low[7];	char _Low;							// 장중저가
-	char LowLmtPrice[7];	char _LowLmtPrice;			// 하한가
-	char QuoteTime[8];	char _QuoteTime;				// 호가시간
-	char OfferPrice1[7];	char _OfferPrice1;			// 매도 최우선호가
-	char OfferPrice2[7];	char _OfferPrice2;			// 매도 차선 호가
-	char OfferPrice3[7];	char _OfferPrice3;			// 매도 차차선 호가
-	char OfferPrice4[7];	char _OfferPrice4;			// 매도 4차선 호가
-	char OfferPrice5[7];	char _OfferPrice5;			// 매도 5차선 호가
-	char OfferPrice6[7];	char _OfferPrice6;			// 매도 6차선 호가
-	char OfferPrice7[7];	char _OfferPrice7;			// 매도 7차선 호가
-	char OfferPrice8[7];	char _OfferPrice8;			// 매도 8차선 호가
-	char OfferPrice9[7];	char _OfferPrice9;			// 매도 9차선 호가
-	char OfferPrice10[7];	char _OfferPrice10;			// 매도 10차선 호가
-	char BidPrice1[7];	char _BidPrice1;				// 매수 최우선 호가
-	char BidPrice2[7];	char _BidPrice2;				// 매수 차선 호가
-	char BidPrice3[7];	char _BidPrice3;				// 매수 차차선 호가
-	char BidPrice4[7];	char _BidPrice4;				// 매수 4차선 호가
-	char BidPrice5[7];	char _BidPrice5;				// 매수 5차선 호가
-	char BidPrice6[7];	char _BidPrice6;				// 매수 6차선 호가
-	char BidPrice7[7];	char _BidPrice7;				// 매수 7차선 호가
-	char BidPrice8[7];	char _BidPrice8;				// 매수 8차선 호가
-	char BidPrice9[7];	char _BidPrice9;				// 매수 9차선 호가
-	char BidPrice10[7];	char _BidPrice10;				// 매수 10차선 호가
-	char OfferVolume1[9];	char _OfferVolume1;			// 매도 최우선 잔량
-	char OfferVolume2[9];	char _OfferVolume2;			// 매도 차선 잔량
-	char OfferVolume3[9];	char _OfferVolume3;			// 매도 차차선 잔량
-	char OfferVolume4[9];	char _OfferVolume4;			// 매도 4차선 잔량
-	char OfferVolume5[9];	char _OfferVolume5;			// 매도 5차선 잔량
-	char OfferVolume6[9];	char _OfferVolume6;			// 매도 6차선 잔량
-	char OfferVolume7[9];	char _OfferVolume7;			// 매도 7차선 잔량
-	char OfferVolume8[9];	char _OfferVolume8;			// 매도 8차선 잔량
-	char OfferVolume9[9];	char _OfferVolume9;			// 매도 9차선 잔량
-	char OfferVolume10[9];	char _OfferVolume10;		// 매도 10차선 잔량
-	char BidVolume1[9];	char _BidVolume1;				// 매수 최우선 잔량
-	char BidVolume2[9];	char _BidVolume2;				// 매수 차선 잔량
-	char BidVolume3[9];	char _BidVolume3;				// 매수 차차선 잔량
-	char BidVolume4[9];	char _BidVolume4;				// 매수 4차선 잔량
-	char BidVolume5[9];	char _BidVolume5;				// 매수 5차선 잔량
-	char BidVolume6[9];	char _BidVolume6;				// 매수 6차선 잔량
-	char BidVolume7[9];	char _BidVolume7;				// 매수 7차선 잔량
-	char BidVolume8[9];	char _BidVolume8;				// 매수 8차선 잔량
-	char BidVolume9[9];	char _BidVolume9;				// 매수 9차선 잔량
-	char BidVolume10[9];	char _BidVolume10;			// 매수 10차선 잔량
-	char OfferVolTot[9];	char _OfferVolTot;			// 총 매도 잔량
-	char BidVolTot[9];	char _BidVolTot;				// 총 매수 잔량
-	char OfferVolAfterHour[9];	char _OfferVolAfterHour; // 시간외 매도 잔량
-	char BidVolAfterHour[9];	char _BidVolAfterHour;	// 시간외 매수 잔량
-	char PivotUp2[7];	char _PivotUp2;					// 피봇 2차 저항 : 피봇가 + 전일 고가 – 전일 저가
-	char PivotUp1[7];	char _PivotUp1;					// 피봇 1차 저항 : (피봇가 * 2) – 전일 저가
-	char PivotPrice[7];	char _PivotPrice;				// 피봇가 : (전일 고가 + 전일 저가 + 전일 종가) / 3
-	char PivotDown1[7];	char _PivotDown1;				// 피봇 1차 지지 : (피봇가 * 2) – 전일 고가
-	char PivotDown2[7];	char _PivotDown2;				// 피봇 2차 지지 : 피봇가 – 전일고가 + 전일 저가
-	char Market[6];	char _Market;						// 코스피/코스닥 구분 : '코스피' , '코스닥'
-	char Sector[18];	char _Sector;					// 업종명
-	char CapSize[6];	char _CapSize;					// 자본금규모
-	char SettleMonth[16];	char _SettleMonth;			// 결산월
-	char MarketAction1[16];	char _MarketAction1;		// 시장조치1
-	char MarketAction2[16];	char _MarketAction2;		// 시장조치2
-	char MarketAction3[16];	char _MarketAction3;		// 시장조치3
-	char MarketAction4[16];	char _MarketAction4;		// 시장조치4
-	char MarketAction5[16];	char _MarketAction5;		// 시장조치5
-	char MarketAction6[16];	char _MarketAction6;		// 시장조치6
+type S주식_현재가_조회_기본_자료 struct {
+	M종목코드 string,
+	M종목명 string, // 첫자리는 KOSPI200은 ‘*’, 스타지수종목은 ‘#’
+	M현재가 int64,
+	M등락부호 string, // 0x18 :상한, 0x1E :상승, 0x20 :보합, 0x19 :하한, 0x1F :하락
+	M등락폭 int64,
+	M등락률 float64,
+	M매도호가 int64,
+	M매수호가 int64,
+	M거래량 int64,
+	M거래비율 float64,
+	M유동주_회전율 float64,
+	M거래대금 int64,
+	M상한가 int64,
+	M고가 int64,
+	M시가 int64,
+	M시가_대비_부호 string,
+	M시가_대비_등락폭 int64,
+	M저가 int64,
+	M하한가 int64,
+	M시각 time.Time,
+	M매도_호가_최우선 int64,
+	M매도_호가_차선 int64,
+	M매도_호가_차차선 int64,
+	M매도_호가_4차선 int64,
+	M매도_호가_5차선 int64,
+	M매도_호가_6차선 int64,
+	M매도_호가_7차선 int64,
+	M매도_호가_8차선 int64,
+	M매도_호가_9차선 int64,
+	M매도_호가_10차선 int64,
+	M매수_호가_최우선 int64,
+	M매수_호가_차선 int64,
+	M매수_호가_차차선 int64,
+	M매수_호가_4차선 int64,
+	M매수_호가_5차선 int64,
+	M매수_호가_6차선 int64,
+	M매수_호가_7차선 int64,
+	M매수_호가_8차선 int64,
+	M매수_호가_9차선 int64,
+	M매수_호가_10차선 int64,
+	M매도_최우선_잔량 int64;
+	M매도_차선_잔량 int64;
+	M매도_차차선_잔량 int64;
+	M매도_4차선_잔량 int64;
+	M매도_5차선_잔량 int64;
+	M매도_6차선_잔량 int64;
+	M매도_7차선_잔량 int64;
+	M매도_8차선_잔량 int64;
+	M매도_9차선_잔량 int64;
+	M매도_10차선_잔량 int64;
+	M매수_최우선_잔량 int64;
+	M매수_차선_잔량 int64;
+	M매수_차차선_잔량 int64;
+	M매수_4차선_잔량 int64;
+	M매수_5차선_잔량 int64;
+	M매수_6차선_잔량 int64;
+	M매수_7차선_잔량 int64;
+	M매수_8차선_잔량 int64;
+	M매수_9차선_잔량 int64;
+	M매수_10차선_잔량 int64;
+	M매도_잔량_총합 int64;
+	M매수_잔량_총합 int64;
+	M시간외_매도_잔량 int64;
+	M시간외_매수_잔량 int64;
+	M피봇_2차_저항 int64;	// 피봇가 + 전일 고가 – 전일 저가
+	M피봇_1차_저항 int64;	// (피봇가 * 2) – 전일 저가
+	M피봇가 int64;		// (전일 고가 + 전일 저가 + 전일 종가) / 3
+	M피봇_1차_지지 int64;	// (피봇가 * 2) – 전일 고가
+	M피봇_2차_지지 int64;	// 피봇가 – 전일고가 + 전일 저가
+	M코스피_코스닥_구분 string;	// '코스피' , '코스닥'
+	M업종명 string;
+	M자본금_규모 string;
+	M결산월 string;
+	M시장조치1 string;
+	M시장조치2 string;
+	M시장조치3 string;
+	M시장조치4 string;
+	M시장조치5 string;
+	M시장조치6 string;
+	
+	여기까지
+	
 	char ConvertBond[6];	char _ConvertBond;			// CB구분
 	char NominalPrice[7];	char _NominalPrice;			// 액면가
 	char PrevPriceTitle[12];	char _PrevPriceTitle;	// 전일 종가 타이틀 (평가가격, 기준가, 전일종가)
@@ -973,3 +917,6 @@ typedef struct tagk1 {
 	Tk1InBlock k1InBlock;							// 입력
 	Tk1OutBlock k1OutBlock;							// 출력
 } Tk1;
+
+
+
