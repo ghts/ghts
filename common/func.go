@@ -44,6 +44,9 @@ func F2문자열(값 interface{}) string {
 		
 		//n := bytes.IndexByte(바이트_모음, 0)
 		//return string(바이트_모음[:n])
+	case *byte:
+		F메모("*byte를 문자열로 변환하는 기능 추가할 것.")
+		return "" 
 	default:
 		return F포맷된_문자열("%v", 값)
 	}
@@ -91,6 +94,22 @@ func F2인터페이스_모음(문자열_모음 []string) []interface{} {
 	}
 
 	return 인터페이스_모음
+}
+
+func F바이트_모음_늘리기(바이트_모음 []byte, 길이 int) []byte {
+	if len(바이트_모음) > 길이 {
+		에러 := F에러_생성("지정된 길이가 더 짧음.")
+		F에러_출력(에러)
+		panic(에러)
+	}
+	
+	반환값 := make([]byte, 길이)
+	
+	for i:=0 ; i < len(바이트_모음) ; i++ {
+		반환값[i] = 바이트_모음[i]
+	}
+	
+	return 반환값
 }
 
 func F타입_이름(i interface{}) string {
