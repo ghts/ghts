@@ -138,7 +138,7 @@ typedef struct tagc1101OutBlock { // 종목마스타기본자료
 	char VsOpenDiff[6];	char _VsOpenDiff;				// 시가대비등락폭
 	char Low[7];	char _Low;							// 장중저가
 	char LowLmtPrice[7];	char _LowLmtPrice;			// 하한가
-	char QuoteTime[8];	char _QuoteTime;				// 호가시간
+	char Time[8];	char _Time;				// 호가시간
 	char OfferPrice1[7];	char _OfferPrice1;			// 매도 최우선호가
 	char OfferPrice2[7];	char _OfferPrice2;			// 매도 차선 호가
 	char OfferPrice3[7];	char _OfferPrice3;			// 매도 차차선 호가
@@ -218,23 +218,23 @@ typedef struct tagc1101OutBlock { // 종목마스타기본자료
 	char TraderInfoTime[5];	char _TraderInfoTime;		// 거래원 정보 최종 수신 시간
 	char Seller1[6];	char _Seller1;					// 매도 거래원1
 	char Buyer1[6];	char _Buyer1;						// 매수 거래원1
-	char Seller1Volumn[9];	char _Seller1Volume;		// 매도 거래량1
+	char Seller1Volume[9];	char _Seller1Volume;		// 매도 거래량1
 	char Buyer1Volume[9];	char _Buyer1Volume;			// 매수 거래량1
 	char Seller2[6];	char _Seller2;					// 매도 거래원2
 	char Buyer2[6];	char _Buyer2;						// 매수 거래원2
-	char Seller2Volumn[9];	char _Seller2Volume;		// 매도 거래량2
+	char Seller2Volume[9];	char _Seller2Volume;		// 매도 거래량2
 	char Buyer2Volume[9];	char _Buyer2Volume;			// 매수 거래량2
 	char Seller3[6];	char _Seller3;					// 매도 거래원3
 	char Buyer3[6];	char _Buyer3;						// 매수 거래원3
-	char Seller3Volumn[9];	char _Seller3Volume;		// 매도 거래량3
+	char Seller3Volume[9];	char _Seller3Volume;		// 매도 거래량3
 	char Buyer3Volume[9];	char _Buyer3Volume;			// 매수 거래량3
 	char Seller4[6];	char _Seller4;					// 매도 거래원4
 	char Buyer4[6];	char _Buyer4;						// 매수 거래원4
-	char Seller4Volumn[9];	char _Seller4Volume;		// 매도 거래량4
+	char Seller4Volume[9];	char _Seller4Volume;		// 매도 거래량4
 	char Buyer4Volume[9];	char _Buyer4Volume;			// 매수 거래량4
 	char Seller5[6];	char _Seller5;					// 매도 거래원5
 	char Buyer5[6];	char _Buyer5;						// 매수 거래원5
-	char Seller5Volumn[9];	char _Seller5Volume;		// 매도 거래량5
+	char Seller5Volume[9];	char _Seller5Volume;		// 매도 거래량5
 	char Buyer5Volume[9];	char _Buyer5Volume;			// 매수 거래량5
 	char ForeignSellVolume[9];	char _ForeignSellVolume; // 외국인 매도 거래량
 	char ForeignBuyVolume[9];	char _ForeignBuyVolume;	// 외국인 매수 거래량
@@ -245,10 +245,10 @@ typedef struct tagc1101OutBlock { // 종목마스타기본자료
 	char RightsIssueDate[4];	char _RightsIssueDate;	// 유상 기준일
 	char BonusIssueDate[4];	char _BonusIssueDate;		// 무상 기준일
 	char RightsIssueRate[5];	char _RightsIssueRate;	// 유상 배정비율
-	char ForeignFloatVol[10];	char _ForeignFloatVol;	// 외국인 변동주 수
 	char BonusIssueRate[5];	char _BonusIssueRate;		// 무상 배정비율
+	char ForeignFloatVol[10];	char _ForeignFloatVol;	// 외국인 변동주 수
 	char TreasuryStock[1];	char _TreasuryStock;		// 당일 자사주 신청 여부  1: 자사주 신청
-	char IPO_Date[8];	char _IPO_Date;					// 상장일
+	char IpoDate[8];	char _IpoDate;					// 상장일
 	char MajorHoldRate[5];	char _MajorHoldRate;		// 대주주지분율
 	char MajorHoldInfoDate[6];	char _MajorHoldInfoDate; // 대주주지분일자
 	char FourLeafClover[1];	char _FourLeafClover;		// 네잎클로버 종목 여부 1: 네잎클로버 종목
@@ -275,11 +275,11 @@ typedef struct tagc1101OutBlock { // 종목마스타기본자료
 	char High1YearDate2[4];	char _High1YearDate2;		// 연중 최고가일
 	char Low1Year2[7];	char _Low1Year2;				// 연중 최저가
 	char Low1YearDate2[4];	char _Low1YearDate2;		// 연중 최저가일
-	char ForeignHoldNo[15];	char _ForeignHoldNo;		// 외국인 보유 주식수
+	char ForeignHoldQty[15];	char _ForeignHoldQty;	// 외국인 보유 주식수
 	char ForeignLmtPercent[5];	char _ForeignLmtPercent; // 외국인 한도율(%)
 	char TrUnitVolume[5];	char _TrUnitVolume;			// 매매 수량 단위
-	char BlackPoolOfferBid[1];	char _BlackPoolOfferBid; // 경쟁대량방향구분. 0: 해당없음, 1: 매도, 2: 매수
-	char BlackPoolExist[1];	char _BlackPoolExist;		// 대량매매구분. 1: 대량매매有, 0:대량매매無
+	char DarkPoolOfferBid[1];	char _BlackPoolOfferBid; // 경쟁대량방향구분. 0: 해당없음, 1: 매도, 2: 매수
+	char DarkPoolExist[1];	char _BlackPoolExist;		// 대량매매구분. 1: 대량매매有, 0:대량매매無
 } Tc1101OutBlock;
 
 typedef struct tagc1101OutBlock2 { // 변동거래량자료,[반복]
@@ -347,7 +347,7 @@ typedef struct tagc1151OutBlock { // 종목마스타기본자료
 	char VsOpenDiff[6];	char _VsOpenDiff;				// 시가대비등락폭
 	char Low[7];	char _Low;							// 장중저가
 	char LowLmtPrice[7];	char _LowLmtPrice;			// 하한가
-	char QuoteTime[8];	char _QuoteTime;				// 호가시간
+	char Time[8];	char _Time;				// 호가시간
 	char OfferPrice1[7];	char _OfferPrice1;			// 매도 최우선 호가
 	char OfferPrice2[7];	char _OfferPrice2;			// 매도 차선 호가
 	char OfferPrice3[7];	char _OfferPrice3;			// 매도 차차선 호가
@@ -427,23 +427,23 @@ typedef struct tagc1151OutBlock { // 종목마스타기본자료
 	char TraderInfoTime[5];	char _TraderInfoTime;		// 거래원 정보 최종 수신 시간
 	char Seller1[6];	char _Seller1;					// 매도 거래원1
 	char Buyer1[6];	char _Buyer1;						// 매수 거래원1
-	char Seller1Volumn[9];	char _Seller1Volume;		// 매도 거래량1
+	char Seller1Volume[9];	char _Seller1Volume;		// 매도 거래량1
 	char Buyer1Volume[9];	char _Buyer1Volume;			// 매수 거래량1
 	char Seller2[6];	char _Seller2;					// 매도 거래원2
 	char Buyer2[6];	char _Buyer2;						// 매수 거래원2
-	char Seller2Volumn[9];	char _Seller2Volume;		// 매도 거래량2
+	char Seller2Volume[9];	char _Seller2Volume;		// 매도 거래량2
 	char Buyer2Volume[9];	char _Buyer2Volume;			// 매수 거래량2
 	char Seller3[6];	char _Seller3;					// 매도 거래원3
 	char Buyer3[6];	char _Buyer3;						// 매수 거래원3
-	char Seller3Volumn[9];	char _Seller3Volume;		// 매도 거래량3
+	char Seller3Volume[9];	char _Seller3Volume;		// 매도 거래량3
 	char Buyer3Volume[9];	char _Buyer3Volume;			// 매수 거래량3
 	char Seller4[6];	char _Seller4;					// 매도 거래원4
 	char Buyer4[6];	char _Buyer4;						// 매수 거래원4
-	char Seller4Volumn[9];	char _Seller4Volume;		// 매도 거래량4
+	char Seller4Volume[9];	char _Seller4Volume;		// 매도 거래량4
 	char Buyer4Volume[9];	char _Buyer4Volume;			// 매수 거래량4
 	char Seller5[6];	char _Seller5;					// 매도 거래원5
 	char Buyer5[6];	char _Buyer5;						// 매수 거래원5
-	char Seller5Volumn[9];	char _Seller5Volume;		// 매도 거래량5
+	char Seller5Volume[9];	char _Seller5Volume;		// 매도 거래량5
 	char Buyer5Volume[9];	char _Buyer5Volume;			// 매수 거래량5
 	char ForeignSellVolume[9];	char _ForeignSellVolume; // 외국인 매도 거래량
 	char ForeignBuyVolume[9];	char _ForeignBuyVolume;	// 외국인 매수 거래량
@@ -455,7 +455,7 @@ typedef struct tagc1151OutBlock { // 종목마스타기본자료
 	char BonusIssueDate[4];	char _BonusIssueDate;		// 무상기준일
 	char RightsIssueRate[5];	char _RightsIssueRate;	// 유상배정비율
 	char BonusIssueRate[5];	char _BonusIssueRate;		// 무상배정비율
-	char IPO_Date[8];	char _IPO_Date;					// 상장일
+	char IpoDate[8];	char _IpoDate;					// 상장일
 	char ListedVolume[12];	char _ListedVolume;			// 상장주식수_주
 	char SellTotalSum[9];	char _SellTotalSum;			// 전체 거래원 매도 합계
 	char BuyTotalSum[9];	char _BuyTotalSum;			// 전체 거래원 매수 합계
@@ -468,7 +468,7 @@ typedef struct tagc1151OutBlock2 { // 변동거래량자료
 	char Diff[6];	char _Diff;							// 등락폭
 	char OfferPrice[7];	char _OfferPrice;				// 매도 호가
 	char BidPrice[7];	char _BidPrice;					// 매수 호가
-	char DiffVolume[8];	char _DiffVolumn;				// 변동거래량
+	char DiffVolume[8];	char _DiffVolume;				// 변동거래량
 	char Volume[9];	char _Volume;						// 거래량
 } Tc1151OutBlock2;
 
@@ -802,7 +802,7 @@ typedef struct tagk8OutBlock { // 출력
 	char BidPrice[7];	char _BidPrice;				// 매수 호가
 	char Volume[9];	char _Volume;					// 거래량
 	char VolRate[6];	char _VolRate;				// 거래량 전일비
-	char DiffVolumn[8];	char _DiffVolume;			// 변동거래량
+	char DiffVolume[8];	char _DiffVolume;			// 변동거래량
 	char TrAmount[9];	char _TrAmount;				// 거래대금
 	char Open[7];	char _Open;						// 시가
 	char WeightAvgPrice[7];	char _WeightAvgPrice;	// 가중평균가

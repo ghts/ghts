@@ -14,6 +14,16 @@ import (
 	"strings"
 )
 
+const (
+	P상한 byte = Ox18
+	P상승 = Ox1E
+	P보합 = Ox20
+	P하한 = Ox19
+	P하락 = Ox1F
+)
+
+func f등락부호(c값 [1]byte) 
+
 func fDLL존재함() bool {
 	에러 := windows.NewLazyDLL(wmca_dll).Load()
 

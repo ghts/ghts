@@ -74,13 +74,34 @@ func F2정수64(문자열 string) (int64, error) {
 	return strconv.ParseInt(문자열, 10, 64)
 }
 
+func F2정수64_바이트(바이트_모음 []byte) int64 {
+	반환값, 에러 := strconv.ParseInt(F2문자열(바이트_모음), 10, 64)
+	F에러_패닉(에러)
+	
+	return 반환값
+}
+
 func F2실수(문자열 string) (float64, error) {
 	return strconv.ParseFloat(문자열, 64)
 }
 
-func F2시점(문자열 string) (time.Time, error) {
+func F2실수_바이트(바이트_모음 []byte) float64 {
+	반환값, 에러 := strconv.ParseFloat(F2문자열(바이트_모음), 64)
+	F에러_패닉(에러)
+	
+	return 반환값
+}
+
+func F2시각(문자열 string) (time.Time, error) {
 	return time.Parse(P시간_형식, 문자열)
 }
+
+func F2시각_바이트(바이트_모음 []byte, 포맷_문자열 string) time.Time {
+	반환값, 에러 := time.Parse(포맷_문자열, F2문자열(바이트_모음))
+	F에러_패닉(에러)
+	
+	return 반환값
+} 
 
 func F2인터페이스_모음(문자열_모음 []string) []interface{} {
 	if 문자열_모음 == nil {

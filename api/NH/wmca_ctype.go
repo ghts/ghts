@@ -84,8 +84,8 @@ type Tc1101OutBlock struct {
 	X_Low			byte
 	LowLmtPrice		[7]byte
 	X_LowLmtPrice		byte
-	QuoteTime		[8]byte
-	X_QuoteTime		byte
+	Time			[8]byte
+	X_Time			byte
 	OfferPrice1		[7]byte
 	X_OfferPrice1		byte
 	OfferPrice2		[7]byte
@@ -244,7 +244,7 @@ type Tc1101OutBlock struct {
 	X_Seller1		byte
 	Buyer1			[6]byte
 	X_Buyer1		byte
-	Seller1Volumn		[9]byte
+	Seller1Volume		[9]byte
 	X_Seller1Volume		byte
 	Buyer1Volume		[9]byte
 	X_Buyer1Volume		byte
@@ -252,7 +252,7 @@ type Tc1101OutBlock struct {
 	X_Seller2		byte
 	Buyer2			[6]byte
 	X_Buyer2		byte
-	Seller2Volumn		[9]byte
+	Seller2Volume		[9]byte
 	X_Seller2Volume		byte
 	Buyer2Volume		[9]byte
 	X_Buyer2Volume		byte
@@ -260,7 +260,7 @@ type Tc1101OutBlock struct {
 	X_Seller3		byte
 	Buyer3			[6]byte
 	X_Buyer3		byte
-	Seller3Volumn		[9]byte
+	Seller3Volume		[9]byte
 	X_Seller3Volume		byte
 	Buyer3Volume		[9]byte
 	X_Buyer3Volume		byte
@@ -268,7 +268,7 @@ type Tc1101OutBlock struct {
 	X_Seller4		byte
 	Buyer4			[6]byte
 	X_Buyer4		byte
-	Seller4Volumn		[9]byte
+	Seller4Volume		[9]byte
 	X_Seller4Volume		byte
 	Buyer4Volume		[9]byte
 	X_Buyer4Volume		byte
@@ -276,7 +276,7 @@ type Tc1101OutBlock struct {
 	X_Seller5		byte
 	Buyer5			[6]byte
 	X_Buyer5		byte
-	Seller5Volumn		[9]byte
+	Seller5Volume		[9]byte
 	X_Seller5Volume		byte
 	Buyer5Volume		[9]byte
 	X_Buyer5Volume		byte
@@ -298,14 +298,14 @@ type Tc1101OutBlock struct {
 	X_BonusIssueDate	byte
 	RightsIssueRate		[5]byte
 	X_RightsIssueRate	byte
-	ForeignFloatVol		[10]byte
-	X_ForeignFloatVol	byte
 	BonusIssueRate		[5]byte
 	X_BonusIssueRate	byte
+	ForeignFloatVol		[10]byte
+	X_ForeignFloatVol	byte
 	TreasuryStock		[1]byte
 	X_TreasuryStock		byte
-	Date			[8]byte
-	X_IPO_Date		byte
+	IpoDate			[8]byte
+	X_IpoDate		byte
 	MajorHoldRate		[5]byte
 	X_MajorHoldRate		byte
 	MajorHoldInfoDate	[6]byte
@@ -358,15 +358,15 @@ type Tc1101OutBlock struct {
 	X_Low1Year2		byte
 	Low1YearDate2		[4]byte
 	X_Low1YearDate2		byte
-	ForeignHoldNo		[15]byte
-	X_ForeignHoldNo		byte
+	ForeignHoldQty		[15]byte
+	X_ForeignHoldQty	byte
 	ForeignLmtPercent	[5]byte
 	X_ForeignLmtPercent	byte
 	TrUnitVolume		[5]byte
 	X_TrUnitVolume		byte
-	BlackPoolOfferBid	[1]byte
+	DarkPoolOfferBid	[1]byte
 	X_BlackPoolOfferBid	byte
-	BlackPoolExist		[1]byte
+	DarkPoolExist		[1]byte
 	X_BlackPoolExist	byte
 }
 type Tc1101OutBlock2 struct {
@@ -465,8 +465,8 @@ type Tc1151OutBlock struct {
 	X_Low			byte
 	LowLmtPrice		[7]byte
 	X_LowLmtPrice		byte
-	QuoteTime		[8]byte
-	X_QuoteTime		byte
+	Time			[8]byte
+	X_Time			byte
 	OfferPrice1		[7]byte
 	X_OfferPrice1		byte
 	OfferPrice2		[7]byte
@@ -625,7 +625,7 @@ type Tc1151OutBlock struct {
 	X_Seller1		byte
 	Buyer1			[6]byte
 	X_Buyer1		byte
-	Seller1Volumn		[9]byte
+	Seller1Volume		[9]byte
 	X_Seller1Volume		byte
 	Buyer1Volume		[9]byte
 	X_Buyer1Volume		byte
@@ -633,7 +633,7 @@ type Tc1151OutBlock struct {
 	X_Seller2		byte
 	Buyer2			[6]byte
 	X_Buyer2		byte
-	Seller2Volumn		[9]byte
+	Seller2Volume		[9]byte
 	X_Seller2Volume		byte
 	Buyer2Volume		[9]byte
 	X_Buyer2Volume		byte
@@ -641,7 +641,7 @@ type Tc1151OutBlock struct {
 	X_Seller3		byte
 	Buyer3			[6]byte
 	X_Buyer3		byte
-	Seller3Volumn		[9]byte
+	Seller3Volume		[9]byte
 	X_Seller3Volume		byte
 	Buyer3Volume		[9]byte
 	X_Buyer3Volume		byte
@@ -649,7 +649,7 @@ type Tc1151OutBlock struct {
 	X_Seller4		byte
 	Buyer4			[6]byte
 	X_Buyer4		byte
-	Seller4Volumn		[9]byte
+	Seller4Volume		[9]byte
 	X_Seller4Volume		byte
 	Buyer4Volume		[9]byte
 	X_Buyer4Volume		byte
@@ -657,7 +657,7 @@ type Tc1151OutBlock struct {
 	X_Seller5		byte
 	Buyer5			[6]byte
 	X_Buyer5		byte
-	Seller5Volumn		[9]byte
+	Seller5Volume		[9]byte
 	X_Seller5Volume		byte
 	Buyer5Volume		[9]byte
 	X_Buyer5Volume		byte
@@ -681,8 +681,8 @@ type Tc1151OutBlock struct {
 	X_RightsIssueRate	byte
 	BonusIssueRate		[5]byte
 	X_BonusIssueRate	byte
-	Date			[8]byte
-	X_IPO_Date		byte
+	IpoDate			[8]byte
+	X_IpoDate		byte
 	ListedVolume		[12]byte
 	X_ListedVolume		byte
 	SellTotalSum		[9]byte
@@ -704,7 +704,7 @@ type Tc1151OutBlock2 struct {
 	BidPrice	[7]byte
 	X_BidPrice	byte
 	DiffVolume	[8]byte
-	X_DiffVolumn	byte
+	X_DiffVolume	byte
 	Volume		[9]byte
 	X_Volume	byte
 }
@@ -1043,7 +1043,7 @@ type Tk8OutBlock struct {
 	X_Volume		byte
 	VolRate			[6]byte
 	X_VolRate		byte
-	DiffVolumn		[8]byte
+	DiffVolume		[8]byte
 	X_DiffVolume		byte
 	TrAmount		[9]byte
 	X_TrAmount		byte
