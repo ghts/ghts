@@ -126,11 +126,6 @@ func New수신_데이터(c Received) S수신_데이터 {
 //----------------------------------------------------------------------//
 // 주식 현재가 조회 (c1101)
 //----------------------------------------------------------------------//
-type S주식_현재가_조회_질의 struct {
-	M한영구분 string
-	M종목코드 string
-}
-
 func New주식_현재가_조회_질의(종목코드 string) C.Tc1101InBlock {
 	c := Tc1101InBlock{}
 	c.Lang = []byte("K")
@@ -230,11 +225,11 @@ type S주식_현재가_조회_기본_자료 struct {
 	M20일_고가 int64
 	M20일_저가 int64
 	M52주_고가 int64	// 거래일만 따지면 1년이 52주이었던 것으로 기억함.
-	M52주_고가일 time.Time
+	M52주_고가_일자 time.Time
 	M52주_저가 int64	
-	M52주_저가일 time.Time
+	M52주_저가_일자 time.Time
 	M유동_주식수 int64
-	M상장_주식수_1000주_단위 int64
+	M상장_주식_수량_1000주_단위 int64
 	M시가_총액 int64
 	M거래원_정보_수신_시간 time.Time
 	M매도_거래원_1 string
@@ -262,7 +257,7 @@ type S주식_현재가_조회_기본_자료 struct {
 	M외국인_시간 time.Time
 	M외국인_지분율 float64
 	M결제일 time.Time
-	M신용잔고_비율 float64
+	M신용잔고_퍼센트 float64
 	M유상_배정_기준일 time.Time
 	M무상_배정_기준일 time.Time
 	M유상_배정_비율 float64
@@ -286,8 +281,8 @@ type S주식_현재가_조회_기본_자료 struct {
 	PER float64 // PER
 	M종목별_신용_한도 int64
 	M가중_평균_가격 int64
-	M상장_주식수 int64
-	M추가_상장_주식수 int64
+	M상장_주식_수량 int64
+	M추가_상장_주식_수량 int64
 	M종목_코멘트 string
 	M전일_거래량 int64
 	M전일대비_등락부호 byte
@@ -395,11 +390,11 @@ func New주식_현재가_조회_기본_자료(c Tc1101OutBlock) S주식_현재�
 		M20일_고가: 공용.F2정수64_바이트(c.High20Day),
 		M20일_저가: 공용.F2정수64_바이트(c.Low20Day),
 		M52주_고가: 공용.F2정수64_바이트(c.High1Year),
-		M52주_고가일: 공용.F2시점(c.High1YearDate, "포맷 문자열은 내용 확인 후 결정할 것."),
+		M52주_고가_일자: 공용.F2시점(c.High1YearDate, "포맷 문자열은 내용 확인 후 결정할 것."),
 		M52주_저가: 공용.F2정수64_바이트(c.Low1Year),
-		M52주_저가일: 공용.F2시점(c.Low1YearDate, "포맷 문자열은 내용 확인 후 결정할 것."),
+		M52주_저가_일자: 공용.F2시점(c.Low1YearDate, "포맷 문자열은 내용 확인 후 결정할 것."),
 		M유동_주식수: 공용.F2정수64_바이트(c.FloatVolume),
-		M상장_주식수_1000주_단위: 공용.F2정수64_바이트(c.ListVolBy1000),
+		M상장_주식_수량_1000주_단위: 공용.F2정수64_바이트(c.ListVolBy1000),
 		M시가_총액: 공용.F2정수64_바이트(c.MarketCapital),
 		M거래원_정보_수신_시간: 공용.F2시점(c.TraderInfoTime, "포맷 문자열은 내용 확인 후 결정할 것."),
 		M매도_거래원_1: 공용.F2문자열(c.Seller1),
@@ -427,7 +422,7 @@ func New주식_현재가_조회_기본_자료(c Tc1101OutBlock) S주식_현재�
 		M외국인_시간: 공용.F2시각_바이트(c.ForeignTime, "포맷 문자열은 내용 확인 후 결정할 것."),
 		M외국인_지분율: 공용.F2실수_바이트(c.ForeignHoldingRate),
 		M결제일: 공용.F2시각_바이트(c.SettleDate, "포맷 문자열은 내용 확인 후 결정할 것."),
-		M신용잔고_비율: 공용.F2실수_바이트(c.DebtPercent),
+		M신용잔고_퍼센트: 공용.F2실수_바이트(c.DebtPercent),
 		M유상_배정_기준일: 공용.F2시각_바이트(c.RightsIssueDate, "포맷 문자열은 내용 확인 후 결정할 것."),
 		M무상_배정_기준일: 공용.F2시각_바이트(c.BonusIssueDate, "포맷 문자열은 내용 확인 후 결정할 것."),
 		M유상_배정_비율: 공용.F2실수_바이트(c.RightsIssueRate),
@@ -451,8 +446,8 @@ func New주식_현재가_조회_기본_자료(c Tc1101OutBlock) S주식_현재�
 		PER: 공용.F2실수_바이트(c.PER),
 		M종목별_신용_한도: 공용.F2문자열(c.DebtLimit),
 		M가중_평균_가격: 공용.F2정수64_바이트(c.WeightAvgPrice),
-		M상장_주식수: 공용.F2정수64_바이트(c.ListedVolume),
-		M추가_상장_주식수: 공용.F2정수64_바이트(c.AddListing),
+		M상장_주식_수량: 공용.F2정수64_바이트(c.ListedVolume),
+		M추가_상장_주식_수량: 공용.F2정수64_바이트(c.AddListing),
 		M종목_코멘트: 공용.F2문자열(c.Comment),
 		M전일_거래량: 공용.F2정수64_바이트(c.PrevVolume),
 		M전일대비_등락부호: c.VsPrevSign, 
@@ -491,7 +486,7 @@ func New주식_현재가_조회_변동_거래량_자료(c Tc1101OutBlock2) S주�
 		M거래량: 공용.F2정수64_바이트(c.Volume)}
 }
 
-type S주식_현재가_조회_종목_지표 { // 종목지표
+type S주식_현재가_조회_종목_지표 struct { // 종목지표
 	M동시_호가_구분 byte	// 0:동시호가 아님 1:동시호가 2:동시호가연장 3:시가범위연장 4:종가범위연장 5:배분개시 6:변동성 완화장치 발동
 	M예상_체결가 int64
 	M예상_체결부호 byte
@@ -562,7 +557,7 @@ type S_ETF_현재가_조회_기본_자료 struct { // 종목마스타기본자�
 	M시가_대비_등락폭 int64
 	M저가 int64
 	M하한가 int64
-	M호가_시각 time.Time
+	M시각 time.Time
 	M매도_최우선_호가 int64
 	M매도_차선_호가 int64
 	M매도_차차선_호가 int64
@@ -637,7 +632,7 @@ type S_ETF_현재가_조회_기본_자료 struct { // 종목마스타기본자�
 	M52주_저가 int64
 	M52주_저가_일자 time.Time
 	M유동_주식수 int64
-	M상장_주식수_1000주_단위 int64
+	M상장_주식_수량_1000주_단위 int64
 	M시가_총액 int64
 	M거래원_정보_수신_시점 time.Time
 	M매도_거래원_1 string
@@ -678,8 +673,137 @@ type S_ETF_현재가_조회_기본_자료 struct { // 종목마스타기본자�
 
 func New_ETF_현재가_조회_기본_자료(c Tc1151OutBlock) S_ETF_현재가_조회_기본_자료 {
 	return S_ETF_현재가_조회_기본_자료{
-		여기
-	}
+		M종목코드: 공용.F2문자열(c.Code),
+		M종목명: 공용.F2문자열(c.Title),
+		M현재가: 공용.F2정수64_바이트(c.MarketPrice),
+		M등락부호: c.DiffSign[0],
+		M등락폭: 공용.F2실수_바이트(c.Diff),
+		M등락률: 공용.F2실수_바이트(c.DiffRate),
+		M매도_호가: 공용.F2정수64_바이트(c.OfferPrice),
+		M매수_호가: 공용.F2정수64_바이트(c.BidPrice),
+		M거래량: 공용.F2정수64_바이트(c.Volume),
+		M거래비율: 공용.F2실수_바이트(c.TrVolRate),
+		M유동주_회전율: 공용.F2실수_바이트(c.FloatRate),
+		M거래대금: 공용.F2정수64_바이트(c.TrAmount),
+		M상한가: 공용.F2정수64_바이트(c.UpLmtPrice),
+		M고가: 공용.F2정수64_바이트(c.High),
+		M시가: 공용.F2정수64_바이트(c.Open),
+		M시가_대비_부호: c.VsOpenSign, 
+		M시가_대비_등락폭: 공용.F2정수64_바이트(c.VsOpenDiff),
+		M저가: 공용.F2정수64_바이트(c.Low),
+		M하한가: 공용.F2정수64_바이트(c.LowLmtPrice),
+		M시각: 공용.F2시각_바이트(c.QuoteTime),
+		M매도_호가_최우선: 공용.F2정수64_바이트(c.OfferPrice1),
+		M매도_호가_차선: 공용.F2정수64_바이트(c.OfferPrice2),
+		M매도_호가_차차선: 공용.F2정수64_바이트(c.OfferPrice3),
+		M매도_호가_4차선: 공용.F2정수64_바이트(c.OfferPrice4),
+		M매도_호가_5차선: 공용.F2정수64_바이트(c.OfferPrice5),
+		M매도_호가_6차선: 공용.F2정수64_바이트(c.OfferPrice6),
+		M매도_호가_7차선: 공용.F2정수64_바이트(c.OfferPrice7),
+		M매도_호가_8차선: 공용.F2정수64_바이트(c.OfferPrice8),
+		M매도_호가_9차선: 공용.F2정수64_바이트(c.OfferPrice9),
+		M매도_호가_10차선: 공용.F2정수64_바이트(c.OfferPrice10),
+		M매수_호가_최우선: 공용.F2정수64_바이트(c.BiPrice1),
+		M매수_호가_차선: 공용.F2정수64_바이트(c.BiPrice2),
+		M매수_호가_차차선: 공용.F2정수64_바이트(c.BiPrice3),
+		M매수_호가_4차선: 공용.F2정수64_바이트(c.BiPrice4),
+		M매수_호가_5차선: 공용.F2정수64_바이트(c.BiPrice5),
+		M매수_호가_6차선: 공용.F2정수64_바이트(c.BiPrice6),
+		M매수_호가_7차선: 공용.F2정수64_바이트(c.BiPrice7),
+		M매수_호가_8차선: 공용.F2정수64_바이트(c.BiPrice8),
+		M매수_호가_9차선: 공용.F2정수64_바이트(c.BiPrice9),
+		M매수_호가_10차선: 공용.F2정수64_바이트(c.BiPrice10),
+		M매도_최우선_잔량: 공용.F2정수64_바이트(c.OfferVolume1),
+		M매도_차선_잔량: 공용.F2정수64_바이트(c.OfferVolume2),
+		M매도_차차선_잔량: 공용.F2정수64_바이트(c.OfferVolume3),
+		M매도_4차선_잔량: 공용.F2정수64_바이트(c.OfferVolume4),
+		M매도_5차선_잔량: 공용.F2정수64_바이트(c.OfferVolume5),
+		M매도_6차선_잔량: 공용.F2정수64_바이트(c.OfferVolume6),
+		M매도_7차선_잔량: 공용.F2정수64_바이트(c.OfferVolume7),
+		M매도_8차선_잔량: 공용.F2정수64_바이트(c.OfferVolume8),
+		M매도_9차선_잔량: 공용.F2정수64_바이트(c.OfferVolume9),
+		M매도_10차선_잔량: 공용.F2정수64_바이트(c.OfferVolume10),
+		M매수_최우선_잔량: 공용.F2정수64_바이트(c.BidVolume1),
+		M매수_차선_잔량: 공용.F2정수64_바이트(c.BidVolume2),
+		M매수_차차선_잔량: 공용.F2정수64_바이트(c.BidVolume3),
+		M매수_4차선_잔량: 공용.F2정수64_바이트(c.BidVolume4),
+		M매수_5차선_잔량: 공용.F2정수64_바이트(c.BidVolume5),
+		M매수_6차선_잔량: 공용.F2정수64_바이트(c.BidVolume6),
+		M매수_7차선_잔량: 공용.F2정수64_바이트(c.BidVolume7),
+		M매수_8차선_잔량: 공용.F2정수64_바이트(c.BidVolume8),
+		M매수_9차선_잔량: 공용.F2정수64_바이트(c.BidVolume9),
+		M매수_10차선_잔량: 공용.F2정수64_바이트(c.BidVolume10),
+		M매도_잔량_총합: 공용.F2정수64_바이트(c.OfferVolTot),
+		M매수_잔량_총합: 공용.F2정수64_바이트(c.BidVolTot),
+		M시간외_매도_잔량: 공용.F2정수64_바이트(c.OfferVolAfterHour),
+		M시간외_매수_잔량: 공용.F2정수64_바이트(c.BidVolAfterHour),
+		M피봇_2차_저항: 공용.F2정수64_바이트(c.PivotUp2),
+		M피봇_1차_저항: 공용.F2정수64_바이트(c.PivotUp1),
+		M피봇가: 공용.F2정수64_바이트(c.PivotPrice),
+		M피봇_1차_지지: 공용.F2정수64_바이트(c.PivotDown1),
+		M피봇_2차_지지: 공용.F2정수64_바이트(c.PivotDown2),
+		M코스피_코스닥_구분: 공용.F2문자열(c.Market),
+		M업종명: 공용.F2문자열(c.Sector),
+		M자본금_규모: 공용.F2문자열(c.CapSize),
+		M결산월: 공용.F2문자열(c.SettleMonth),
+		M시장조치1: 공용.F2문자열(c.Market1),
+		M시장조치2: 공용.F2문자열(c.Market2),
+		M시장조치3: 공용.F2문자열(c.Market3),
+		M시장조치4: 공용.F2문자열(c.Market4),
+		M시장조치5: 공용.F2문자열(c.Market5),
+		M시장조치6: 공용.F2문자열(c.Market6),
+		M전환사채_구분: 공용.F2문자열(c.ConvertBond),
+		M액면가: 공용.F2정수64_바이트(c.NominalPrice),
+		M전일종가_타이틀: 공용.F2문자열(c.PrevPriceTitle),
+		M전일종가: 공용.F2정수64_바이트(c.PrevPrice),
+		M대용가: 공용.F2정수64_바이트(c.MortgageValue),
+		M공모가: 공용.F2정수64_바이트(c.PublicOfferPrice),
+		M5일_고가: 공용.F2정수64_바이트(c.High5Day),
+		M5일_저가: 공용.F2정수64_바이트(c.Low5Day),
+		M20일_고가: 공용.F2정수64_바이트(c.High20Day),
+		M20일_저가: 공용.F2정수64_바이트(c.Low20Day),
+		M52주_고가: 공용.F2정수64_바이트(c.High1Year),
+		M52주_고가_일자: 공용.F2시점(c.High1YearDate, "포맷 문자열은 내용 확인 후 결정할 것."),
+		M52주_저가: 공용.F2정수64_바이트(c.Low1Year),
+		M52주_저가_일자: 공용.F2시점(c.Low1YearDate, "포맷 문자열은 내용 확인 후 결정할 것."),
+		M유동_주식수: 공용.F2정수64_바이트(c.FloatVolume),
+		M상장_주식_수량_1000주_단위: 공용.F2정수64_바이트(c.ListVolBy1000),
+		M시가_총액: 공용.F2정수64_바이트(c.MarketCapital),
+		M거래원_정보_수신_시간: 공용.F2시점(c.TraderInfoTime, "포맷 문자열은 내용 확인 후 결정할 것."),
+		M매도_거래원_1: 공용.F2문자열(c.Seller1),
+		M매수_거래원_1: 공용.F2문자열(c.Buyer1),
+		M매도_거래량_1: 공용.F2정수64_바이트(c.Seller1Volume),
+		M매수_거래량_1: 공용.F2정수64_바이트(c.Buyer1Volume),
+		M매도_거래원_2: 공용.F2문자열(c.Seller2),
+		M매수_거래원_2: 공용.F2문자열(c.Buyer2),
+		M매도_거래량_2: 공용.F2정수64_바이트(c.Seller2Volume),
+		M매수_거래량_2: 공용.F2정수64_바이트(c.Buyer2Volume),
+		M매도_거래원_3: 공용.F2문자열(c.Seller3),
+		M매수_거래원_3: 공용.F2문자열(c.Buyer3),
+		M매도_거래량_3: 공용.F2정수64_바이트(c.Seller3Volume),
+		M매수_거래량_3: 공용.F2정수64_바이트(c.Buyer3Volume),
+		M매도_거래원_4: 공용.F2문자열(c.Seller4),
+		M매수_거래원_4: 공용.F2문자열(c.Buyer4),
+		M매도_거래량_4: 공용.F2정수64_바이트(c.Seller4Volume),
+		M매수_거래량_4: 공용.F2정수64_바이트(c.Buyer4Volume),
+		M매도_거래원_5: 공용.F2문자열(c.Seller5),
+		M매수_거래원_5: 공용.F2문자열(c.Buyer5),
+		M매도_거래량_5: 공용.F2정수64_바이트(c.Seller5Volume),
+		M매수_거래량_5: 공용.F2정수64_바이트(c.Buyer5Volume),
+		M외국인_매도_거래량: 공용.F2정수64_바이트(c.ForeignSellVolume),
+		M외국인_매수_거래량: 공용.F2정수64_바이트(c.ForeignBuyVolume),
+		M외국인_시간: 공용.F2시각_바이트(c.ForeignTime, "포맷 문자열은 내용 확인 후 결정할 것."),
+		M외국인_지분율: 공용.F2실수_바이트(c.ForeignHoldingRate),
+		M결제일: 공용.F2시각_바이트(c.SettleDate, "포맷 문자열은 내용 확인 후 결정할 것."),
+		M신용잔고_퍼센트: 공용.F2실수_바이트(c.DebtPercent),
+		M유상_배정_기준일: 공용.F2시각_바이트(c.RightsIssueDate, "포맷 문자열은 내용 확인 후 결정할 것."),
+		M무상_배정_기준일: 공용.F2시각_바이트(c.BonusIssueDate, "포맷 문자열은 내용 확인 후 결정할 것."),
+		M유상_배정_비율: 공용.F2실수_바이트(c.RightsIssueRate),
+		M무상_배정_비율: 공용.F2실수_바이트(c.BonusIssueRate),
+		M상장일: 공용.F2시각_바이트(c.IpoDate, "포맷 문자열은 내용 확인 후 결정할 것."),
+		M상장_주식_수량: 공용.F2정수64_바이트(c.ListedVolume),
+		M전체_거래원_매도_합계: 공용.F2정수64_바이트(c.SellTotalSum),
+		M전체_거래원_매수_합계: 공용.F2정수64_바이트(c.BuyTotalSum)}
 }
 
 type S_ETF_현재가_조회_변동_거래량 struct {
@@ -693,6 +817,18 @@ type S_ETF_현재가_조회_변동_거래량 struct {
 	M거래량 int64
 }
 
+func New_ETF_현재가_조회_변동_거래량(c Tc1151OutBlock2) S_ETF_현재가_조회_변동_거래량 {
+	return S_ETF_현재가_조회_변동_거래량{
+		M시간: c.Time,
+		M현재가: 공용.F2정수64_바이트(c.MarketPrice),
+		M등락_부호: c.DiffSign,
+		M등락폭: c.Diff,
+		M매도_호가: 공용.F2정수64_바이트(c.OfferPrice),
+		M매수_호가: 공용.F2정수64_바이트(c.BidPrice),
+		M변동_거래량: 공용.F2정수64_바이트(c.DiffVolume),
+		M거래량: 공용.F2정수64_바이트(c.Volume)}
+}
+
 type S_ETF_현재가_조회_예상_체결 struct {
 	M동시_호가_구분 string
 	M예상_체결가 int64
@@ -702,11 +838,21 @@ type S_ETF_현재가_조회_예상_체결 struct {
 	M예상_체결_수량 int64
 }
 
+func New_ETF_현재가_조회_예상_체결(c Tc1151OutBlock3) S_ETF_현재가_조회_예상_체결 {
+	return S_ETF_현재가_조회_예상_체결{
+		M동시_호가_구분: 공용.F2문자열(c.SyncOfferBid),
+		M예상_체결가: 공용.F2정수64_바이트(c.EstmPrice),
+		M예상_체결_부호: c.EstmSign,
+		M예상_체결_등락폭: 공용.F2정수64_바이트(c.EstmDiff),
+		M예상_체결_등락율: 공용.F2실수_바이트(c.EstmDiffRate),
+		M예상_체결_수량: 공용.F2정수64_바이트(c.EstmVolume)}
+}
+
 type S_ETF_현재가_조회_ETF자료 struct {
 	ETF구분 string
 	NAV float64
-	NAV등락부호 byte
-	NAV등락폭 int64
+	NAV_등락_부호 byte
+	NAV_등락폭 int64
 	M전일NAV int64
 	M괴리율 float64
 	M괴리율_부호 byte
@@ -736,13 +882,50 @@ type S_ETF_현재가_조회_ETF자료 struct {
 	LP_매수_10차선_잔량 int64
 	ETF_복제_방법_구분_코드 string
 	ETF_상품_유형_코드 string
-} Tc1151OutBlock4;
+}
 
-type S_ETF_현재가_조회_기반_지수_자료 {
+func New_ETF_현재가_조회_ETF자료(c Tc1151OutBlock4) S_ETF_현재가_조회_ETF자료 {
+	return S_ETF_현재가_조회_ETF자료{
+		ETF구분: 공용.F2문자열(c.ETF),
+		NAV: 공용.F2실수_바이트(c.NAV),
+		NAV_등락_부호: c.DiffSign,
+		NAV_등락폭: 공용.F2실수_바이트(c.Diff),
+		M전일NAV: 공용.F2실수_바이트(c.PrevNAV),
+		M괴리율: 공용.F2실수_바이트(c.DivergeRate),
+		M괴리율_부호: c.DivergeSign,
+		M설정단위_당_현금_배당액: 공용.F2정수64_바이트(c.DividendPerCU),
+		M구성_종목수: 공용.F2정수64_바이트(c.ConstituentNo),
+		M순자산_총액_억원: 공용.F2정수64_바이트(c.NAVBy100Million),
+		M추적_오차율: 공용.F2실수_바이트(c.TrackingErrRate),
+		LP_매도_최우선_잔량: 공용.F2정수64_바이트(c.LP_OfferVolume1),
+		LP_매도_차선_잔량: 공용.F2정수64_바이트(c.LP_OfferVolume2),
+		LP_매도_차차선_잔량: 공용.F2정수64_바이트(c.LP_OfferVolume3),
+		LP_매도_4차선_잔량: 공용.F2정수64_바이트(c.LP_OfferVolume4),
+		LP_매도_5차선_잔량: 공용.F2정수64_바이트(c.LP_OfferVolume5),
+		LP_매도_6차선_잔량: 공용.F2정수64_바이트(c.LP_OfferVolume6),
+		LP_매도_7차선_잔량: 공용.F2정수64_바이트(c.LP_OfferVolume7),
+		LP_매도_8차선_잔량: 공용.F2정수64_바이트(c.LP_OfferVolume8),
+		LP_매도_9차선_잔량: 공용.F2정수64_바이트(c.LP_OfferVolume9),
+		LP_매도_10차선_잔량: 공용.F2정수64_바이트(c.LP_OfferVolume10),
+		LP_매수_최우선_잔량: 공용.F2정수64_바이트(c.LP_BidVolume1),
+		LP_매수_차선_잔량: 공용.F2정수64_바이트(c.LP_BidVolume2),
+		LP_매수_차차선_잔량: 공용.F2정수64_바이트(c.LP_BidVolume3),
+		LP_매수_4차선_잔량: 공용.F2정수64_바이트(c.LP_BidVolume4),
+		LP_매수_5차선_잔량: 공용.F2정수64_바이트(c.LP_BidVolume5),
+		LP_매수_6차선_잔량: 공용.F2정수64_바이트(c.LP_BidVolume6),
+		LP_매수_7차선_잔량: 공용.F2정수64_바이트(c.LP_BidVolume7),
+		LP_매수_8차선_잔량: 공용.F2정수64_바이트(c.LP_BidVolume8),
+		LP_매수_9차선_잔량: 공용.F2정수64_바이트(c.LP_BidVolume9),
+		LP_매수_10차선_잔량: 공용.F2정수64_바이트(c.LP_BidVolume10),
+		ETF_복제_방법_구분_코드: 공용.F2문자열(c.TrackingMethod),
+		ETF_상품_유형_코드: 공용.F2문자열(c.ETF_Type)}
+}
+
+type S_ETF_현재가_조회_기반_지수_자료 struct {
 	M지수_코드 string
 	M업종_코드 string
 	M지수_이름 string
-	M지수 float64
+	M코스피200 float64
 	M코스피200_등락부호 byte
 	M코스피200_등락폭 float64
 	M채권_지수 float64
@@ -754,14 +937,34 @@ type S_ETF_현재가_조회_기반_지수_자료 {
 	M채권_지수_세부_코드 string
 }
 
+func New_ETF_현재가_조회_기반_지수_자료(c Tc1151OutBlock5) S_ETF_현재가_조회_기반_지수_자료 {
+	return S_ETF_현재가_조회_기반_지수_자료{
+		M지수_코드: 공용.F2문자열(c.IndexCode),
+		M업종_코드: 공용.F2문자열(c.SectorCode),
+		M지수_이름: 공용.F2문자열(c.IndexName),
+		M코스피200: 공용.F2실수_바이트(c.KP200Index),
+		M코스피200_등락부호: c.KP200Sign,
+		M코스피200_등락폭: 공용.F2실수_바이트(c.KP200Diff),
+		M채권_지수: 공용.F2실수_바이트(c.BondIndex),
+		M채권_지수_등락부호: c.BondDiff,
+		M채권_지수_등락폭: 공용.F2실수_바이트(c.BondDiff),
+		M해외_지수_코드: 공용.F2문자열(c.ForeignIndexSymbol),
+		M기타_업종_코드: 공용.F2문자열(c.EtcSectorCode),
+		M채권_지수_코드: 공용.F2문자열(c.BondIndexCode),
+		M채권_지수_세부_코드: 공용.F2문자열(c.BondDetailCode)}
+}
+
 //----------------------------------------------------------------------//
 // 코스피 호가 잔량 (h1)
 //----------------------------------------------------------------------//
-type S코스피_호가_잔량_질의 struct {
-	M종목_코드 string
+func New코스피_호가_잔량_질의(종목코드 string) C.Th1InBlock {
+	c := Th1InBlock{}
+	copy(c.Code, 종목코드)
+	
+	return *((*C.Th1InBlock)(unsafe.Pointer(c)))
 }
 
-type S코스피_호가_잔량_응답 struct {
+type S코스피_호가_잔량 struct {
 	M종목_코드 string
 	M시점 time.Time
 	M매도_호가 int64
@@ -805,6 +1008,53 @@ type S코스피_호가_잔량_응답 struct {
 	M10차선_매도_호가_잔량 int64
 	M10차선_매수_호가_잔량 int64
 	M누적_거래량 int64
+}
+
+func New코스피_호가_잔량(c Th1OutBlock) S코스피_호가_잔량 {
+	return S코스피_호가_잔량{
+		M종목_코드: 공용.F2문자열(c.Code),
+		M시점: 공용.F2시각_바이트(c.Time, "포맷 문자열은 내용 확인 후 작성할 것."),
+		M매도_호가: 공용.F2정수64_바이트(c.OfferPrice1),
+		M매수_호가: 공용.F2정수64_바이트(c.BidPrice1),
+		M매도_호가_잔량: 공용.F2정수64_바이트(c.OfferVolume1),
+		M매수_호가_잔량: 공용.F2정수64_바이트(c.BidVolume1),
+		M차선_매도_호가: 공용.F2정수64_바이트(c.OfferPrice2),
+		M차선_매수_호가: 공용.F2정수64_바이트(c.BidPrice2),
+		M차선_매도_호가_잔량: 공용.F2정수64_바이트(c.OfferVolume2),
+		M차선_매수_호가_잔량: 공용.F2정수64_바이트(c.BidVolume2),
+		M차차선_매도_호가: 공용.F2정수64_바이트(c.OfferPrice3),
+		M차차선_매수_호가: 공용.F2정수64_바이트(c.BidPrice3),
+		M차차선_매도_호가_잔량: 공용.F2정수64_바이트(c.OfferVolume3),
+		M차차선_매수_호가_잔량: 공용.F2정수64_바이트(c.BidVolume3),
+		M4차선_매도_호가: 공용.F2정수64_바이트(c.OfferPrice4),
+		M4차선_매수_호가: 공용.F2정수64_바이트(c.BidPrice4),
+		M4차선_매도_호가_잔량: 공용.F2정수64_바이트(c.OfferVolume4),
+		M4차선_매수_호가_잔량: 공용.F2정수64_바이트(c.BidVolume4),
+		M5차선_매도_호가: 공용.F2정수64_바이트(c.OfferPrice5),
+		M5차선_매수_호가: 공용.F2정수64_바이트(c.BidPrice5),
+		M5차선_매도_호가_잔량: 공용.F2정수64_바이트(c.OfferVolume5),
+		M5차선_매수_호가_잔량: 공용.F2정수64_바이트(c.BidVolume5),
+		M6차선_매도_호가: 공용.F2정수64_바이트(c.OfferPrice6),
+		M6차선_매수_호가: 공용.F2정수64_바이트(c.BidPrice6),
+		M6차선_매도_호가_잔량: 공용.F2정수64_바이트(c.OfferVolume6),
+		M6차선_매수_호가_잔량: 공용.F2정수64_바이트(c.BidVolume6),
+		M7차선_매도_호가: 공용.F2정수64_바이트(c.OfferPrice7),
+		M7차선_매수_호가: 공용.F2정수64_바이트(c.BidPrice7),
+		M7차선_매도_호가_잔량: 공용.F2정수64_바이트(c.OfferVolume7),
+		M7차선_매수_호가_잔량: 공용.F2정수64_바이트(c.BidVolume7),
+		M8차선_매도_호가: 공용.F2정수64_바이트(c.OfferPrice8),
+		M8차선_매수_호가: 공용.F2정수64_바이트(c.BidPrice8),
+		M8차선_매도_호가_잔량: 공용.F2정수64_바이트(c.OfferVolume8),
+		M8차선_매수_호가_잔량: 공용.F2정수64_바이트(c.BidVolume8),
+		M9차선_매도_호가: 공용.F2정수64_바이트(c.OfferPrice9),
+		M9차선_매수_호가: 공용.F2정수64_바이트(c.BidPrice9),
+		M9차선_매도_호가_잔량: 공용.F2정수64_바이트(c.OfferVolume9),
+		M9차선_매수_호가_잔량: 공용.F2정수64_바이트(c.BidVolume9),
+		M10차선_매도_호가: 공용.F2정수64_바이트(c.OfferPrice10),
+		M10차선_매수_호가: 공용.F2정수64_바이트(c.BidPrice10),
+		M10차선_매도_호가_잔량: 공용.F2정수64_바이트(c.OfferVolume10),
+		M10차선_매수_호가_잔량: 공용.F2정수64_바이트(c.BidVolume10),
+		M누적_거래량: 공용.F2정수64_바이트(c.Volume)}
 }
 
 //----------------------------------------------------------------------//
@@ -814,7 +1064,14 @@ type S코스닥_호가_잔량_질의 struct {
 	M종목_코드 string
 }
 
-type S코스닥_호가_잔량_응답 struct {
+func New코스닥_호가_잔량_질의(종목코드 string) C.Tk1InBlock {
+	c := Tk1InBlock{}
+	copy(c.Code, 종목코드)
+	
+	return *((*C.Tk1InBlock)(unsafe.Pointer(c)))
+}
+
+type S코스닥_호가_잔량 struct {
 	M종목_코드 string
 	M시점 time.Time
 	M매도_호가 int64
@@ -858,6 +1115,53 @@ type S코스닥_호가_잔량_응답 struct {
 	M10차선_매도_호가_잔량 int64
 	M10차선_매수_호가_잔량 int64
 	M누적_거래량 int64
+}
+
+func New코스닥_호가_잔량(c Tk3OutBlock) S코스닥_호가_잔량 {
+	return S코스닥_호가_잔량{
+		M종목_코드: 공용.F2문자열(c.Code),
+		M시점: 공용.F2시각_바이트(c.Time, "포맷 문자열은 내용 확인 후 작성할 것."),
+		M매도_호가: 공용.F2정수64_바이트(c.OfferPrice1),
+		M매수_호가: 공용.F2정수64_바이트(c.BidPrice1),
+		M매도_호가_잔량: 공용.F2정수64_바이트(c.OfferVolume1),
+		M매수_호가_잔량: 공용.F2정수64_바이트(c.BidVolume1),
+		M차선_매도_호가: 공용.F2정수64_바이트(c.OfferPrice2),
+		M차선_매수_호가: 공용.F2정수64_바이트(c.BidPrice2),
+		M차선_매도_호가_잔량: 공용.F2정수64_바이트(c.OfferVolume2),
+		M차선_매수_호가_잔량: 공용.F2정수64_바이트(c.BidVolume2),
+		M차차선_매도_호가: 공용.F2정수64_바이트(c.OfferPrice3),
+		M차차선_매수_호가: 공용.F2정수64_바이트(c.BidPrice3),
+		M차차선_매도_호가_잔량: 공용.F2정수64_바이트(c.OfferVolume3),
+		M차차선_매수_호가_잔량: 공용.F2정수64_바이트(c.BidVolume3),
+		M4차선_매도_호가: 공용.F2정수64_바이트(c.OfferPrice4),
+		M4차선_매수_호가: 공용.F2정수64_바이트(c.BidPrice4),
+		M4차선_매도_호가_잔량: 공용.F2정수64_바이트(c.OfferVolume4),
+		M4차선_매수_호가_잔량: 공용.F2정수64_바이트(c.BidVolume4),
+		M5차선_매도_호가: 공용.F2정수64_바이트(c.OfferPrice5),
+		M5차선_매수_호가: 공용.F2정수64_바이트(c.BidPrice5),
+		M5차선_매도_호가_잔량: 공용.F2정수64_바이트(c.OfferVolume5),
+		M5차선_매수_호가_잔량: 공용.F2정수64_바이트(c.BidVolume5),
+		M6차선_매도_호가: 공용.F2정수64_바이트(c.OfferPrice6),
+		M6차선_매수_호가: 공용.F2정수64_바이트(c.BidPrice6),
+		M6차선_매도_호가_잔량: 공용.F2정수64_바이트(c.OfferVolume6),
+		M6차선_매수_호가_잔량: 공용.F2정수64_바이트(c.BidVolume6),
+		M7차선_매도_호가: 공용.F2정수64_바이트(c.OfferPrice7),
+		M7차선_매수_호가: 공용.F2정수64_바이트(c.BidPrice7),
+		M7차선_매도_호가_잔량: 공용.F2정수64_바이트(c.OfferVolume7),
+		M7차선_매수_호가_잔량: 공용.F2정수64_바이트(c.BidVolume7),
+		M8차선_매도_호가: 공용.F2정수64_바이트(c.OfferPrice8),
+		M8차선_매수_호가: 공용.F2정수64_바이트(c.BidPrice8),
+		M8차선_매도_호가_잔량: 공용.F2정수64_바이트(c.OfferVolume8),
+		M8차선_매수_호가_잔량: 공용.F2정수64_바이트(c.BidVolume8),
+		M9차선_매도_호가: 공용.F2정수64_바이트(c.OfferPrice9),
+		M9차선_매수_호가: 공용.F2정수64_바이트(c.BidPrice9),
+		M9차선_매도_호가_잔량: 공용.F2정수64_바이트(c.OfferVolume9),
+		M9차선_매수_호가_잔량: 공용.F2정수64_바이트(c.BidVolume9),
+		M10차선_매도_호가: 공용.F2정수64_바이트(c.OfferPrice10),
+		M10차선_매수_호가: 공용.F2정수64_바이트(c.BidPrice10),
+		M10차선_매도_호가_잔량: 공용.F2정수64_바이트(c.OfferVolume10),
+		M10차선_매수_호가_잔량: 공용.F2정수64_바이트(c.BidVolume10),
+		M누적_거래량: 공용.F2정수64_바이트(c.Volume)}
 }
 
 //----------------------------------------------------------------------//
@@ -868,11 +1172,26 @@ type S코스피_시간외_호가_잔량_질의 struct {
 	M종목_코드 string
 }
 
-type S코스피_시간외_호가_잔량_응답 struct {
+func New코스피_시간외_호가_잔량_질의(종목코드 string) C.Th2InBlock {
+	c := Th2InBlock{}
+	copy(c.Code, 종목코드)
+	
+	return *((*C.Th2InBlock)(unsafe.Pointer(c)))
+}
+
+type S코스피_시간외_호가_잔량 struct {
 	M종목_코드 string
 	M시점 time.Time
 	M매도_호가_잔량 int64
 	M매수_호가_잔량 int64
+}
+
+func New코스피_시간외_호가_잔량(c Th2OutBlock) S코스피_시간외_호가_잔량 {
+	return S코스피_시간외_호가_잔량{
+		M종목_코드: 공용.F2문자열(c.Code),
+		M시점: 공용.F2시각_바이트(c.Time, "포맷 문자열은 내용 확인 후 작성할 것."),
+		M매도_호가_잔량: 공용.F2정수64_바이트(c.OfferVolume),
+		M매수_호가_잔량: 공용.F2정수64_바이트(c.BidVolumn)}
 }
 
 //----------------------------------------------------------------------//
@@ -883,11 +1202,26 @@ type S코스닥_시간외_호가_잔량_질의 struct {
 	M종목_코드 string
 }
 
-type S코스닥_시간외_호가_잔량_응답 struct {
+func New코스닥_시간외_호가_잔량_질의(종목코드 string) C.Tk4InBlock {
+	c := Tk4InBlock{}
+	copy(c.Code, 종목코드)
+	
+	return *((*C.Tk4InBlock)(unsafe.Pointer(c)))
+}
+
+type S코스닥_시간외_호가_잔량 struct {
 	M종목_코드 string
 	M시점 time.Time
 	M매도_호가_잔량 int64
 	M매수_호가_잔량 int64
+}
+
+func New코스닥_시간외_호가_잔량(c Tk4OutBlock) S코스닥_시간외_호가_잔량 {
+	return S코스닥_시간외_호가_잔량{
+		M종목_코드: 공용.F2문자열(c.Code),
+		M시점: 공용.F2시각_바이트(c.Time, "포맷 문자열은 내용 확인 후 작성할 것."),
+		M매도_호가_잔량: 공용.F2정수64_바이트(c.OfferVolume),
+		M매수_호가_잔량: 공용.F2정수64_바이트(c.BidVolumn)}
 }
 
 //----------------------------------------------------------------------//
@@ -898,7 +1232,14 @@ type S코스피_예상_호가_잔량_질의 struct {
 	M종목_코드 string
 }
 
-type S코스피_예상_호가_잔량_응답 struct {
+func New코스피_예상_호가_잔량_질의(종목코드 string) C.Th3InBlock {
+	c := Th3InBlock{}
+	copy(c.Code, 종목코드)
+	
+	return *((*C.Th3InBlock)(unsafe.Pointer(c)))
+}
+
+type S코스피_예상_호가_잔량 struct {
 	M종목_코드 string
 	M시점 string
 	M동시_호가_구분 string
@@ -911,6 +1252,22 @@ type S코스피_예상_호가_잔량_응답 struct {
 	M매수_호가 int64
 	M매도_호가_잔량 int64
 	M매수_호가_잔량 int64
+}
+
+func New코스피_예상_호가_잔량(c Th3OutBlock) S코스피_예상_호가_잔량 {
+	return S코스피_예상_호가_잔량{
+		M종목_코드: 공용.F2문자열(c.Code),
+		M시점: 공용.F2시각_바이트(c.Time, "포맷 문자열은 내용 확인 후 작성할 것."),
+		M동시_호가_구분: 공용.F2문자열(c.SyncOfferBid),
+		M예상_체결가: 공용.F2정수64_바이트(c.EstmPrice),
+		M예상_등락_부호: c.EstmDiffSign,
+		M예상_등락폭: 공용.F2정수64_바이트(c.EstmDiff),
+		M예상_등락율: 공용.F2실수_바이트(c.EstmDiffRate),
+		M예상_체결_수량: 공용.F2정수64_바이트(c.EstmVolume),
+		M매도_호가: 공용.F2정수64_바이트(c.OfferPrice),
+		M매수_호가: 공용.F2정수64_바이트(c.BidPrice),
+		M매도_호가_잔량: 공용.F2정수64_바이트(c.OfferVolume),
+		M매수_호가_잔량: 공용.F2정수64_바이트(c.BidVolume)}	
 }
 
 //----------------------------------------------------------------------//
@@ -921,7 +1278,14 @@ type S코스닥_예상_호가_잔량_질의 struct {
 	M종목_코드 string
 }
 
-type S코스닥_예상_호가_잔량_응답 struct {
+func New코스닥_예상_호가_잔량_질의(종목코드 string) C.Tk5InBlock {
+	c := Tk5InBlock{}
+	copy(c.Code, 종목코드)
+	
+	return *((*C.Tk5InBlock)(unsafe.Pointer(c)))
+}
+
+type S코스닥_예상_호가_잔량 struct {
 	M종목_코드 string
 	M시점 string
 	M동시_호가_구분 string
@@ -936,6 +1300,22 @@ type S코스닥_예상_호가_잔량_응답 struct {
 	M매수_호가_잔량 int64
 }
 
+func New코스닥_예상_호가_잔량(c Tk5OutBlock) S코스닥_예상_호가_잔량 {
+	return S코스닥_예상_호가_잔량{
+		M종목_코드: 공용.F2문자열(c.Code),
+		M시점: 공용.F2시각_바이트(c.Time, "포맷 문자열은 내용 확인 후 작성할 것."),
+		M동시_호가_구분: 공용.F2문자열(c.SyncOfferBid),
+		M예상_체결가: 공용.F2정수64_바이트(c.EstmPrice),
+		M예상_등락_부호: c.EstmDiffSign,
+		M예상_등락폭: 공용.F2정수64_바이트(c.EstmDiff),
+		M예상_등락율: 공용.F2실수_바이트(c.EstmDiffRate),
+		M예상_체결_수량: 공용.F2정수64_바이트(c.EstmVolume),
+		M매도_호가: 공용.F2정수64_바이트(c.OfferPrice),
+		M매수_호가: 공용.F2정수64_바이트(c.BidPrice),
+		M매도_호가_잔량: 공용.F2정수64_바이트(c.OfferVolume),
+		M매수_호가_잔량: 공용.F2정수64_바이트(c.BidVolume)}	
+}
+
 //----------------------------------------------------------------------//
 // 코스피 체결 (j8)
 //----------------------------------------------------------------------//
@@ -944,7 +1324,14 @@ type S코스피_체결_질의 struct {
 	M종목_코드 string
 }
 
-type S코스피_체결_응답 struct {
+func New코스피_체결_질의(종목코드 string) C.Tj8InBlock {
+	c := Tj8InBlock{}
+	copy(c.Code, 종목코드)
+	
+	return *((*C.Tj8InBlock)(unsafe.Pointer(c)))
+}
+
+type S코스피_체결 struct {
 	M종목_코드 string
 	M시각 time.Time
 	M등락_부호 byte
@@ -962,6 +1349,27 @@ type S코스피_체결_응답 struct {
 	M시가 int64
 	M가중_평균_가격 int64
 	M장구분 string
+}
+
+func New코스피_체결(c Tj8OutBlock) S코스피_체결 {
+	return S코스피_체결{
+		M종목_코드: 공용.F2문자열(c.Code),
+		M시각: 공용.F2시각_바이트(c.Time, "포맷 문자열은 내용 확인 후 작성할 것."),
+		M등락_부호: c.DiffSign,
+		M등락폭: 공용.F2정수64_바이트(c.Diff),
+		M현재가: 공용.F2정수64_바이트(c.MarketPrice),
+		M등락율: 공용.F2실수_바이트(c.DiffRate),
+		M고가: 공용.F2정수64_바이트(c.High),
+		M저가: 공용.F2정수64_바이트(c.Low),
+		M매도_호가: 공용.F2정수64_바이트(c.OfferPrice),
+		M매수_호가: 공용.F2정수64_바이트(c.BidPrice),
+		M누적_거래량: 공용.F2정수64_바이트(c.Volume),
+		M전일_거래량_대비_비율: 공용.F2실수_바이트(c.VsPrevVolRate),
+		M변동_거래량: 공용.F2정수64_바이트(c.DiffVolume),
+		M거래_대금: 공용.F2정수64_바이트(c.TrAmount),
+		M시가: 공용.F2정수64_바이트(c.Open),
+		M가중_평균_가격: 공용.F2정수64_바이트(c.WeightAvgPrice),
+		M장구분: 공용.F2문자열(c.Market)}
 }
 
 //----------------------------------------------------------------------//
@@ -972,7 +1380,14 @@ type S코스닥_체결_질의 struct {
 	M종목_코드 string
 }
 
-type S코스닥_체결_응답 struct {
+func New코스닥_체결_질의(종목코드 string) C.Tk8InBlock {
+	c := Tk8InBlock{}
+	copy(c.Code, 종목코드)
+	
+	return *((*C.Tk8InBlock)(unsafe.Pointer(c)))
+}
+
+type S코스닥_체결 struct {
 	M종목_코드 string
 	M시각 time.Time
 	M등락_부호 byte
@@ -992,6 +1407,27 @@ type S코스닥_체결_응답 struct {
 	M장구분 string
 }
 
+func New코스닥_체결(c Tj8OutBlock) S코스닥_체결 {
+	return S코스닥_체결{
+		M종목_코드: 공용.F2문자열(c.Code),
+		M시각: 공용.F2시각_바이트(c.Time, "포맷 문자열은 내용 확인 후 작성할 것."),
+		M등락_부호: c.DiffSign,
+		M등락폭: 공용.F2정수64_바이트(c.Diff),
+		M현재가: 공용.F2정수64_바이트(c.MarketPrice),
+		M등락율: 공용.F2실수_바이트(c.DiffRate),
+		M고가: 공용.F2정수64_바이트(c.High),
+		M저가: 공용.F2정수64_바이트(c.Low),
+		M매도_호가: 공용.F2정수64_바이트(c.OfferPrice),
+		M매수_호가: 공용.F2정수64_바이트(c.BidPrice),
+		M누적_거래량: 공용.F2정수64_바이트(c.Volume),
+		M전일_거래량_대비_비율: 공용.F2실수_바이트(c.VsPrevVolRate),
+		M변동_거래량: 공용.F2정수64_바이트(c.DiffVolume),
+		M거래_대금: 공용.F2정수64_바이트(c.TrAmount),
+		M시가: 공용.F2정수64_바이트(c.Open),
+		M가중_평균_가격: 공용.F2정수64_바이트(c.WeightAvgPrice),
+		M장구분: 공용.F2문자열(c.Market)}
+}
+
 //----------------------------------------------------------------------//
 // 코스피 ETF NAV (j1) (예제코드가 없음. 패딩 필드가 필요한 지 추가 확인 필요함.)
 //----------------------------------------------------------------------//
@@ -1000,7 +1436,7 @@ type S_코스피_ETF_NAV struct {
 	M종목_코드 string
 }
 
-type S_코스피_ETF_NAV_응답 struct {
+type S_코스피_ETF_NAV struct {
 	M종목_코드 string
 	M시점 time.Time
 	M등락_부호 byte
@@ -1023,7 +1459,7 @@ type S_코스닥_ETF_NAV struct {
 	M종목_코드 string
 }
 
-type S_코스닥_ETF_NAV_응답 struct {
+type S_코스닥_ETF_NAV struct {
 	M종목_코드 string
 	M시점 time.Time
 	M등락_부호 byte
@@ -1093,7 +1529,7 @@ type S코스피_업종_지수_질의 struct {
 	M업종_코드 string
 }
 
-type S코스피_업종_지수_응답 struct {
+type S코스피_업종_지수 struct {
 	M업종_코드 string
 	M시각 time.Time
 	M지수값 float64
@@ -1118,7 +1554,7 @@ type S코스닥_업종_지수_질의 struct {
 	M업종_코드 string
 }
 
-type S코스닥_업종_지수_응답 struct {
+type S코스닥_업종_지수 struct {
 	M업종_코드 string
 	M시각 time.Time
 	M지수값 float64

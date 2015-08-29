@@ -769,7 +769,7 @@ typedef struct tagj8OutBlock { // 출력
 	char OfferPrice[7];	char _OfferPrice;			// 매도 호가
 	char BidPrice[7];	char _BidPrice;				// 매수 호가
 	char Volume[9];	char _Volume;					// 거래량
-	char TrVolRate[6];	char _TrVolRate;			// 거래량전일비
+	char VsPrevVolRate[6];	char _VsPrevVolRate;	// 거래량전일비
 	char DiffVolume[8];	char _DiffVolume;			// 변동거래량
 	char TrAmount[9];	char _TrAmount;				// 거래대금
 	char Open[7];	char _Open;						// 시가

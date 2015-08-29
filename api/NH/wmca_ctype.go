@@ -1000,8 +1000,8 @@ type Tj8OutBlock struct {
 	X_BidPrice		byte
 	Volume			[9]byte
 	X_Volume		byte
-	TrVolRate		[6]byte
-	X_TrVolRate		byte
+	VsPrevVolRate		[6]byte
+	X_VsPrevVolRate		byte
 	DiffVolume		[8]byte
 	X_DiffVolume		byte
 	TrAmount		[9]byte
