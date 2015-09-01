@@ -18,11 +18,13 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 package common
 
 import (
+	"C"
 	//"bytes"
 	"reflect"
 	"runtime"
 	"strconv"
 	"time"
+	"unsafe"
 )
 
 func F에러_패닉(에러 error) {
@@ -37,16 +39,10 @@ func F2문자열(값 interface{}) string {
 		return 값.(time.Time).Format(P시간_형식)
 	case float64:
 		return strconv.FormatFloat(값.(float64), 'f', -1, 64)
-	case []byte:
-		바이트_모음 := 값.([]byte)	
-		
-		return string(바이트_모음[:])
-		
-		//n := bytes.IndexByte(바이트_모음, 0)
-		//return string(바이트_모음[:n])
 	case *byte:
-		F메모("*byte를 문자열로 변환하는 기능 추가할 것.")
-		return "" 
+		return C.GoString((*C.char)(unsafe.Pointer(값.(*byte))))
+	case []byte:
+		return string(값.([]byte))
 	default:
 		return F포맷된_문자열("%v", 값)
 	}
@@ -101,7 +97,15 @@ func F2시각_바이트(바이트_모음 []byte, 포맷_문자열 string) time.T
 	F에러_패닉(에러)
 	
 	return 반환값
-} 
+}
+
+func F2참거짓_바이트(바이트_모음 []byte, 조건 string, 결과 bool) bool {
+	if string(바이트_모음) == "1" {
+		return 결과
+	}
+	
+	return !결과
+}
 
 func F2인터페이스_모음(문자열_모음 []string) []interface{} {
 	if 문자열_모음 == nil {

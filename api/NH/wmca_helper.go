@@ -15,14 +15,20 @@ import (
 )
 
 const (
-	P상한 byte = Ox18
-	P상승 = Ox1E
-	P보합 = Ox20
-	P하한 = Ox19
-	P하락 = Ox1F
+	P상한 byte = 0x18
+	P상승 = 0x1E
+	P보합 = 0x20
+	P하한 = 0x19
+	P하락 = 0x1F
 )
 
-func f등락부호(c값 [1]byte) 
+func fByte2Bool(값 []byte, 조건 string, 결과 bool) bool {
+	if string(값) == 조건 {
+		return 결과
+	}
+	
+	return !결과
+} 
 
 func fDLL존재함() bool {
 	에러 := windows.NewLazyDLL(wmca_dll).Load()

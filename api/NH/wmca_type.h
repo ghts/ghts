@@ -113,12 +113,13 @@ typedef struct {
 //----------------------------------------------------------------------//
 // 주식 현재가 조회 (c1101)
 //----------------------------------------------------------------------//
-typedef struct tagc1101InBlock { // 기본입력
+
+typedef struct { // 기본입력
 	char Lang[1];	char _Lang;							// 한영구분
 	char Code[6];	char _Code;							// 종목코드
 } Tc1101InBlock;
 
-typedef struct tagc1101OutBlock { // 종목마스타기본자료
+typedef struct { // 종목마스타기본자료
 	char Code[6];	char _Code;							// 종목코드
 	char Title[13];	char _Title;						// 종목명. 첫자리는 kospi200은 ‘*’, 스타지수종목은 ‘#’. 실제 종목명은 12 byte임
 	char MarketPrice[7];	char _MarketPrice;			// 현재가
@@ -278,11 +279,11 @@ typedef struct tagc1101OutBlock { // 종목마스타기본자료
 	char ForeignHoldQty[15];	char _ForeignHoldQty;	// 외국인 보유 주식수
 	char ForeignLmtPercent[5];	char _ForeignLmtPercent; // 외국인 한도율(%)
 	char TrUnitVolume[5];	char _TrUnitVolume;			// 매매 수량 단위
-	char DarkPoolOfferBid[1];	char _BlackPoolOfferBid; // 경쟁대량방향구분. 0: 해당없음, 1: 매도, 2: 매수
-	char DarkPoolExist[1];	char _BlackPoolExist;		// 대량매매구분. 1: 대량매매有, 0:대량매매無
+	char DarkPoolOfferBid[1];	char _DarkPoolOfferBid; // 경쟁대량방향구분. 0: 해당없음, 1: 매도, 2: 매수
+	char DarkPoolExist[1];	char _DarkPoolExist;		// 대량매매구분. 1: 대량매매有, 0:대량매매無
 } Tc1101OutBlock;
 
-typedef struct tagc1101OutBlock2 { // 변동거래량자료,[반복]
+typedef struct { // 변동거래량자료,[반복]
 	char Time[8];	char _Time;							// 시간
 	char MarketPrice[7];	char _MarketPrice;			// 현재가
 	char DiffSign[1];	char _DiffSign;					// 등락부호
@@ -293,7 +294,7 @@ typedef struct tagc1101OutBlock2 { // 변동거래량자료,[반복]
 	char Volume[9];	char _Volume;						// 거래량
 } Tc1101OutBlock2;
 
-typedef struct tagc1101OutBlock3 { // 종목지표
+typedef struct { // 종목지표
 	char SyncOfferBid[1];	char _SyncOfferBid;			// 동시호가 구분.  0:동시호가 아님, 1:동시호가, 2:동시호가연장, 3:시가범위연장, 4:종가범위연장, 5:배분개시, 6:변동성 완화장치 발동
 	char EstmPrice[7];	char _EstmPrice;		// 예상체결가
 	char EstmSign[1];	char _EstmSign;			// 예상체결 부호
@@ -311,7 +312,7 @@ typedef struct tagc1101OutBlock3 { // 종목지표
 	char VsECN_EstmDiffRate[5];	char _ECN_EstmDiffRate;	// ECN대비 예상 체결 등락률
 } Tc1101OutBlock3;
 
-typedef struct tagc1101 {
+typedef struct {
 	Tc1101InBlock c1101InBlock;							// 기본입력
 	Tc1101OutBlock c1101OutBlock;						// 종목마스타기본자료
 	Tc1101OutBlock2 c1101OutBlock2[20];					// 변동거래량자료 ,[반복]
@@ -322,12 +323,12 @@ typedef struct tagc1101 {
 //----------------------------------------------------------------------//
 // ETF 현재가 조회 (c1151)
 //----------------------------------------------------------------------//
-typedef struct tagc1151InBlock { // 기본입력
+typedef struct { // 기본입력
 	char Lang[1];	char _Lang;							// 한영구분. 기본값 'K'
 	char Code[6];	char _Code;							// 종목코드
 } Tc1151InBlock;
 
-typedef struct tagc1151OutBlock { // 종목마스타기본자료
+typedef struct { // 종목마스타기본자료
 	char Code[6];	char _Code;							// 종목코드
 	char Title[13];	char _Title;						// 종목명
 	char MarketPrice[7];	char _MarketPrice;			// 현재가
@@ -461,7 +462,7 @@ typedef struct tagc1151OutBlock { // 종목마스타기본자료
 	char BuyTotalSum[9];	char _BuyTotalSum;			// 전체 거래원 매수 합계
 } Tc1151OutBlock;
 
-typedef struct tagc1151OutBlock2 { // 변동거래량자료
+typedef struct { // 변동거래량자료
 	char Time[8];	char _Time;							// 시간
 	char MarketPrice[7];	char _MarketPrice;			// 현재가
 	char DiffSign[1];	char _DiffSign;					// 등락부호
@@ -472,7 +473,7 @@ typedef struct tagc1151OutBlock2 { // 변동거래량자료
 	char Volume[9];	char _Volume;						// 거래량
 } Tc1151OutBlock2;
 
-typedef struct tagc1151OutBlock3 { // 예상체결
+typedef struct { // 예상체결
 	char SyncOfferBid[1];	char _SyncOfferBid;			// 동시 호가 구분
 	char EstmPrice[7];	char _EstmPrice;				// 예상 체결가
 	char EstmSign[1];	char _EstmSign;					// 예상 체결 부호
@@ -481,7 +482,7 @@ typedef struct tagc1151OutBlock3 { // 예상체결
 	char EstmVolume[9];	char _EstmVolume;				// 예상체결 수량
 } Tc1151OutBlock3;
 
-typedef struct tagc1151OutBlock4 { // ETF자료
+typedef struct { // ETF자료
 	char ETF[1];	char _ETF;							// ETF 구분
 	char NAV[9];	char _NAV;							// 장중/최종 NAV
 	char DiffSign[1];	char _DiffSign;					// NAV 등락 부호
@@ -517,7 +518,7 @@ typedef struct tagc1151OutBlock4 { // ETF자료
 	char ETF_Type[6];	char _ETF_Type;					// ETF 상품 유형 코드
 } Tc1151OutBlock4;
 
-typedef struct tagc1151OutBlock5 { // 베이스지수자료
+typedef struct { // 베이스지수자료
 	char IndexCode[2];	char _IndexCode;				// 지수코드
 	char SectorCode[4];	char _SectorCode;				// 섹터코드
 	char IndexName[20];	char _IndexName;				// 지수명
@@ -533,23 +534,14 @@ typedef struct tagc1151OutBlock5 { // 베이스지수자료
 	char BondDetailCode[1];	char _BondDetailCode;		// 채권지수세부코드
 } Tc1151OutBlock5;
 
-typedef struct tagc1151 {
-	Tc1151InBlock c1151InBlock;							// 기본입력
-	Tc1151OutBlock c1151OutBlock;						// 종목마스타기본자료
-	Tc1151OutBlock2 c1151OutBlock2;						// 변동거래량자료
-	Tc1151OutBlock3 c1151OutBlock3;						// 예상체결
-	Tc1151OutBlock4 c1151OutBlock4;						// ETF자료
-	Tc1151OutBlock5 c1151OutBlock5;						// 베이스지수자료
-} Tc1151;
-
 //----------------------------------------------------------------------//
 // 코스피 호가 잔량 (h1)
 //----------------------------------------------------------------------//
-typedef struct tagh1InBlock { // 입력
+typedef struct { // 입력
 	char Code[6];				// 종목코드
 } Th1InBlock;
 
-typedef struct tagh1OutBlock { // 출력
+typedef struct { // 출력
 	char Code[6];				// 종목코드
 	char Time[8];				// 시간
 	char OfferPrice1[7];		// 매도 호가
@@ -595,7 +587,7 @@ typedef struct tagh1OutBlock { // 출력
 	char Volume[9];				// 누적거래량
 } Th1OutBlock;
 
-typedef struct tagh1 {
+typedef struct {
 	Th1InBlock h1InBlock;		// 입력
 	Th1OutBlock h1OutBlock;		// 출력
 } Th1;
@@ -603,11 +595,11 @@ typedef struct tagh1 {
 //----------------------------------------------------------------------//
 // 코스닥 호가 잔량 (k3)
 //----------------------------------------------------------------------//
-typedef struct tagk3InBlock { // 입력
+typedef struct { // 입력
 	char Code[6];				// 종목코드
 } Tk3InBlock;
 
-typedef struct tagk3OutBlock { // 출력
+typedef struct { // 출력
 	char Code[6];				// 종목코드
 	char Time[8];				// 시간
 	char OfferPrice1[7];		// 매도 호가
@@ -653,26 +645,21 @@ typedef struct tagk3OutBlock { // 출력
 	char Volume[9];				// 누적거래량
 } Tk3OutBlock;
 
-typedef struct tagk3 {
-	Tk3InBlock k3InBlock;		// 입력
-	Tk3OutBlock k3OutBlock;		// 출력
-} Tk3;
-
 //----------------------------------------------------------------------//
 // 코스피 시간외 호가 잔량 (h2)
 //----------------------------------------------------------------------//
-typedef struct tagh2InBlock { // 입력
+typedef struct { // 입력
 	char Code[6];				// 종목코드
 } Th2InBlock;
 
-typedef struct tagh2OutBlock { // 출력
+typedef struct { // 출력
 	char Code[6];				// 종목코드
 	char Time[8];				// 시간
 	char OfferVolume[9];		// 총 매도 호가잔량
 	char BidVolume[9];			// 총 매수 호가잔량
 } Th2OutBlock;
 
-typedef struct tagh2 {
+typedef struct {
 	Th2InBlock h2InBlock;		// 입력
 	Th2OutBlock h2OutBlock;		// 출력
 } Th2;
@@ -680,30 +667,25 @@ typedef struct tagh2 {
 //----------------------------------------------------------------------//
 // 코스닥 시간외 호가 잔량 (k4)
 //----------------------------------------------------------------------//
-typedef struct tagk4InBlock { // 입력
+typedef struct { // 입력
 	char Code[6];				// 종목코드
 } Tk4InBlock;
 
-typedef struct tagk4OutBlock { // 출력
+typedef struct { // 출력
 	char Code[6];				// 종목코드
 	char Time[8];				// 시간
 	char OfferVolume[9];		// 총 매도 호가잔량
 	char BidVolume[9];			// 총 매수 호가잔량
 } Tk4OutBlock;
 
-typedef struct tagk4 {
-	Tk4InBlock k4InBlock;		// 입력
-	Tk4OutBlock k4OutBlock;		// 출력
-} Tk4;
-
 //----------------------------------------------------------------------//
 // 코스피 예상 호가 잔량 (h3)
 //----------------------------------------------------------------------//
-typedef struct tagh3InBlock { // 입력
+typedef struct { // 입력
 	char Code[6];				// 종목코드
 } Th3InBlock;
 
-typedef struct tagh3OutBlock { // 출력
+typedef struct { // 출력
 	char Code[6];				// 종목코드
 	char Time[8];				// 시간
 	char SyncOfferBid[1];		// 동시구분
@@ -718,7 +700,7 @@ typedef struct tagh3OutBlock { // 출력
 	char BidVolume[9];			// 매수 호가잔량
 } Th3OutBlock;
 
-typedef struct tagh3 {
+typedef struct {
 	Th3InBlock h3InBlock;		// 입력
 	Th3OutBlock h3OutBlock;		// 출력
 } Th3;
@@ -726,11 +708,11 @@ typedef struct tagh3 {
 //----------------------------------------------------------------------//
 // 코스닥 예상 호가 잔량 (k5)
 //----------------------------------------------------------------------//
-typedef struct tagk5InBlock { // 입력
+typedef struct { // 입력
 	char Code[6];				// 종목코드
 } Tk5InBlock;
 
-typedef struct tagk5OutBlock { // 출력
+typedef struct { // 출력
 	char Code[6];				// 종목코드
 	char Time[8];				// 시간
 	char SyncOfferBid[1];		// 동시구분
@@ -745,19 +727,14 @@ typedef struct tagk5OutBlock { // 출력
 	char BidVolume[9];			// 매수 호가잔량
 } Tk5OutBlock;
 
-typedef struct tagk5 {
-	Tk5InBlock k5InBlock;		// 입력
-	Tk5OutBlock k5OutBlock;		// 출력
-} Tk5;
-
 //----------------------------------------------------------------------//
 // 코스피 체결 (j8)
 //----------------------------------------------------------------------//
-typedef struct tagj8InBlock { // 입력
+typedef struct { // 입력
 	char Code[6];	char _Code;						// 종목코드
 } Tj8InBlock;
 
-typedef struct tagj8OutBlock { // 출력
+typedef struct { // 출력
 	char Code[6];	char _Code;						// 종목코드
 	char Time[8];	char _Time;						// 시간
 	char DiffSign[1];	char _DiffSign;				// 등락부호
@@ -777,19 +754,14 @@ typedef struct tagj8OutBlock { // 출력
 	char Market[1];	char _Market;					// 장구분
 } Tj8OutBlock;
 
-typedef struct tagj8 {
-	Tj8InBlock j8InBlock;							// 입력
-	Tj8OutBlock j8OutBlock;							// 출력
-} Tj8;
-
 //----------------------------------------------------------------------//
 // 코스닥 체결 (k8)
 //----------------------------------------------------------------------//
-typedef struct tagk8InBlock { // 입력
+typedef struct { // 입력
 	char Code[6];	char _Code;						// 종목코드
 } Tk8InBlock;
 
-typedef struct tagk8OutBlock { // 출력
+typedef struct { // 출력
 	char Code[6];	char _Code;						// 종목코드
 	char Time[8];	char _Time;						// 시간
 	char MarketPrice[7];	char _MarketPrice;		// 현재가
@@ -952,7 +924,7 @@ typedef struct tagk1InBlock { // 입력
 	char SectorCode[2];	char _SectorCode;			// 업종코드
 } Tk1InBlock;
 
-typedef struct tagk1OutBlock { // 출력
+typedef struct { // 출력
 	char SectorCode[2];	char _SectorCode;			// 업종코드
 	char Time[8];	char _Time;						// 시간
 	char IndexValue[8];	char _IndexValue;			// 지수값
@@ -968,8 +940,3 @@ typedef struct tagk1OutBlock { // 출력
 	char DiffRate[5];	char _DiffRate;				// 지수등락률
 	char TrVolRate[5];	char _TrVolRate;			// 거래비중 ???
 } Tk1OutBlock;
-
-typedef struct tagk1 {
-	Tk1InBlock k1InBlock;							// 입력
-	Tk1OutBlock k1OutBlock;							// 출력
-} Tk1;

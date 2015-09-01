@@ -2353,33 +2353,3 @@ typedef struct tagvI
 	TvIInBlock                        viInBlock                             ;		// 입력
 	TvIOutBlock                       viOutBlock                            ;		// 출력
 } TvI;
-
-
-typedef struct tagk1InBlock// 입력
-{
-	char jisukcode[2];	char _jisukcode;		// 업종코드
-} Tk1InBlock;
-
-typedef struct tagk1OutBlock// 출력
-{
-	char jisukcode[2];	char _jisukcode;		// 업종코드
-	char jisuktime[8];	char _jisuktime;		// 시간
-	char jisuk[8];	char _jisuk;		// 지수
-	char jisuksign[1];	char _jisuksign;		// 등락부호
-	char jisukchange[8];	char _jisukchange;		// 등락폭
-	char jisukvolume[8];	char _jisukvolume;		// 거래량
-	char jisukvalue[8];	char _jisukvalue;		// 거래대금
-	char jisukopen[8];	char _jisukopen;		// 시가지수
-	char jisukhigh[8];	char _jisukhigh;		// 고가지수
-	char jisukhightime[8];	char _jisukhightime;		// 고가시간
-	char jisuklow[8];	char _jisuklow;		// 저가지수
-	char jisuklowtime[8];	char _jisuklowtime;		// 저가시간
-	char jisukchrate[5];	char _jisukchrate;		// 지수등락률
-	char jisukbrkvol[5];	char _jisukbrkvol;		// 거래비중
-} Tk1OutBlock;
-
-typedef struct tagk1
-{
-	Tk1InBlock k1InBlock;		// 입력
-	Tk1OutBlock k1OutBlock;		// 출력
-} Tk1;

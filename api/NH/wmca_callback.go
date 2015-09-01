@@ -4,8 +4,6 @@ package NH
 // #include <stdio.h>
 // #include <stdlib.h>
 // #include "./wmca_type.h"
-// #include "./trio_inv.h"
-// #include "./trio_ord.h"
 import "C"
 
 import (
@@ -36,7 +34,7 @@ func OnTrData_Go(c데이터 *C.OUTDATABLOCK) {
 		case "c1101OutBlock":	// 단순출력 처리 방식
 			블록 := (*Tc1101OutBlock)(unsafe.Pointer(데이터.DataStruct.DataString))
 			공용.F문자열_출력(">>  주식현재가조회 - 현재가")
-			공용.F문자열_출력(공용.F2문자열(블록.QuoteTime))
+			공용.F문자열_출력(공용.F2문자열(블록.Time))
 			공용.F문자열_출력(공용.F2문자열(블록.Code))
 			공용.F문자열_출력(공용.F2문자열(블록.Title))
 			공용.F문자열_출력(공용.F2문자열(블록.MarketPrice))
