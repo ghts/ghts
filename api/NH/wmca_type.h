@@ -718,7 +718,7 @@ typedef struct { // 출력
 	char SyncOfferBid[1];		// 동시구분
 	char EstmPrice[7];			// 예상체결가
 	char EstmDiffSign[1];		// 예상등락부호
-	char EstmDiffChange[6];		// 예상등락폭
+	char EstmDiff[6];			// 예상등락폭
 	char EstmDiffRate[5];		// 예상등락률
 	char EstmVolume[9];			// 예상체결수량
 	char OfferPrice[7];			// 매도 호가
@@ -802,7 +802,7 @@ typedef struct tagj1OutBlock { // 출력
 	char NAV_Open[9];	char _NAV_Open;				// NAV 시가
 	char NAV_High[9];	char _NAV_High;				// NAV 고가
 	char NAV_Low[9];	char _NAV_Low;				// NAV 저가
-	char TrackingSign[1];	char _TrackingSign;		// 추적 부호
+	char TrackErrSign[1];	char _TrackingSign;		// 추적 부호
 	char TrackingError[9];	char _TrackingError;	// 추적 오차
 	char DivergeSign[1];	char _DivergeSign;		// 괴리율 부호
 	char DivergeRate[9];	char _DivergeRate;		// 괴리율
@@ -829,7 +829,7 @@ typedef struct tagj0OutBlock { // 출력
 	char NAV_Open[9];	char _NAV_Open;				// NAV 시가
 	char NAV_High[9];	char _NAV_High;				// NAV 고가
 	char NAV_Low[9];	char _NAV_Low;				// NAV 저가
-	char TrackingSign[1];	char _TrackingSign;		// 추적 부호
+	char TrackErrSign[1];	char _TrackErrSign;		// 추적 부호
 	char TrackingError[9];	char _TrackingError;	// 추적 오차
 	char DivergeSign[1];	char _DivergeSign;		// 괴리율 부호
 	char DivergeRate[9];	char _DivergeRate;		// 괴리율

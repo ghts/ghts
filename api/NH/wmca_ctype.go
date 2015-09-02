@@ -365,9 +365,9 @@ type Tc1101OutBlock struct {
 	TrUnitVolume		[5]byte
 	X_TrUnitVolume		byte
 	DarkPoolOfferBid	[1]byte
-	X_BlackPoolOfferBid	byte
+	X_DarkPoolOfferBid	byte
 	DarkPoolExist		[1]byte
-	X_BlackPoolExist	byte
+	X_DarkPoolExist		byte
 }
 type Tc1101OutBlock2 struct {
 	Time		[8]byte
@@ -964,7 +964,7 @@ type Tk5OutBlock struct {
 	SyncOfferBid	[1]byte
 	EstmPrice	[7]byte
 	EstmDiffSign	[1]byte
-	EstmDiffChange	[6]byte
+	EstmDiff	[6]byte
 	EstmDiffRate	[5]byte
 	EstmVolume	[9]byte
 	OfferPrice	[7]byte
@@ -1076,7 +1076,7 @@ type Tj1OutBlock struct {
 	X_NAV_High	byte
 	Low		[9]byte
 	X_NAV_Low	byte
-	TrackingSign	[1]byte
+	TrackErrSign	[1]byte
 	X_TrackingSign	byte
 	TrackingError	[9]byte
 	X_TrackingError	byte
@@ -1107,8 +1107,8 @@ type Tj0OutBlock struct {
 	X_NAV_High	byte
 	Low		[9]byte
 	X_NAV_Low	byte
-	TrackingSign	[1]byte
-	X_TrackingSign	byte
+	TrackErrSign	[1]byte
+	X_TrackErrSign	byte
 	TrackingError	[9]byte
 	X_TrackingError	byte
 	DivergeSign	[1]byte

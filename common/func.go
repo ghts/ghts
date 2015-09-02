@@ -99,12 +99,29 @@ func F2시각_바이트(바이트_모음 []byte, 포맷_문자열 string) time.T
 	return 반환값
 }
 
-func F2참거짓_바이트(바이트_모음 []byte, 조건 string, 결과 bool) bool {
-	if string(바이트_모음) == "1" {
-		return 결과
+func F2참거짓_바이트(바이트_모음 []byte, 조건 interface{}, 결과 bool) bool {
+	switch 조건.(type) {
+	case string:
+		if string(바이트_모음) == 조건.(string) {
+			return 결과
+		} else {
+			return !결과
+		}
+	case int:
+		if len(바이트_모음) != 1 {
+			에러 := F에러_생성("바이트_모음 길이가 %v임. 예상치 못한 경우.", len(바이트_모음))
+			F에러_출력(에러); panic(에러)
+		}
+		
+		if int(uint(바이트_모음[0])) == 조건.(int) {
+			return 결과
+		} else {
+			return !결과
+		}
 	}
 	
-	return !결과
+	에러 := F에러_생성("예상치 못한 경우.")
+	F에러_출력(에러); panic(에러)
 }
 
 func F2인터페이스_모음(문자열_모음 []string) []interface{} {
