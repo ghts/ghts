@@ -30,24 +30,8 @@ func fByte2Bool(값 []byte, 조건 string, 결과 bool) bool {
 	return !결과
 }
 
-func fDLL존재함() bool {
-	에러 := windows.NewLazyDLL(wmca_dll).Load()
-
-	if 에러 != nil {
-		return false
-	} else {
-		return true
-	}
-}
-
 func fHWND() C.HWND {
 	return C.getHWND()
-}
-
-func f자원_정리() {
-	// cgo의 버그로 인해서 인수가 없으면 '사용하지 않는 변수' 컴파일 경고 발생.
-	// 컴파일 경고를 없애기 위해서 사용하지 않는 인수를 추가함.
-	C.wmcaFreeResource(C.int(1))
 }
 
 func f호출(함수명 string, 인수 ...uintptr) bool {

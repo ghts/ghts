@@ -4,14 +4,30 @@ import (
 	공용 "github.com/ghts/ghts/common"
 
 	"testing"
+	"time"
 )
 
-func TestF로드가능(테스트 *testing.T) {
-	공용.F테스트_참임(테스트, f로드가능())
+func TestDLL존재함(테스트 *testing.T) {
+	공용.F테스트_참임(테스트, fDLL존재함())
 }
 
+func TestF접속됨(테스트 *testing.T) {
+	if f접속됨() {
+		f접속끊기()
+	}
+	
+	공용.F테스트_거짓임(테스트, f접속됨())
+} 
+
 func TestF접속하기(테스트 *testing.T) {
-	f접속하기("ID", "PW", "CertPW")
+	if f접속됨() {
+		f접속끊기()
+	}
+	
+	공용.F테스트_참임(테스트, time.Now().Before(유효기간_테스트용_계좌))
+	공용.F테스트_참임(테스트, f접속하기(ID_테스트용, 암호_테스트용, 공인인증_암호_테스트용))
+	
+var 계좌번호_테스트용 string
 
 	공용.F메모("\n" +
 		"HWND를 1개를 공유해서 사용할 경우, 1번에 1개의 동작만 수행해야 함.\n" +

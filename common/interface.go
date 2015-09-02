@@ -126,8 +126,7 @@ func New회신(에러 error, 내용 ...interface{}) I회신 {
 		문자열_모음, ok := 내용[0].([]string)
 
 		if ok {
-			내용_원본 := 내용
-			내용 = make([]interface{}, len(내용_원본))
+			내용 = make([]interface{}, len(문자열_모음))
 
 			for 인덱스, 문자열 := range 문자열_모음 {
 				내용[인덱스] = 문자열
@@ -136,6 +135,84 @@ func New회신(에러 error, 내용 ...interface{}) I회신 {
 	}
 
 	return s회신_메시지{에러: 에러, s기본_메시지: New메시지(메시지_구분, 내용...).(s기본_메시지)}
+}
+
+
+// 기본 가변형 메시지
+// I메시지는 immutable 자료형인 string을 사용해서 안전하지만,
+// I메시지_가변형은 mutable 자료형을 주고 받게 되며,
+// 참조형 데이터를 주고 받게 되면 위험성이 더 높아지니 주의 요망.
+type I메시지_가변형 interface {
+	G구분() string
+	G내용(인덱스 int) interface{}
+	G내용_전체() []interface{}
+	G길이() int
+	String() string
+}
+
+func New메시지_가변형(구분 string, 내용 ...interface{}) I메시지_가변형 {
+	if 내용 == nil || len(내용) == 0 {
+		내용 = make([]interface{}, 0)
+	}
+	
+	return s기본_메시지_가변형{구분: 구분, 내용: 내용}
+}
+
+// 가변형 질의
+type I질의_가변형 interface {
+	I메시지_가변형 // 질의 내용
+	G검사(메시지_구분 string, 질의_길이 int) error
+	G회신(채널 chan I질의_가변형) I회신_가변형
+	S회신(에러 error, 내용 ...interface{}) error
+}
+
+func New질의_가변형(메시지_구분 string, 내용 ...interface{}) I질의_가변형 {
+	switch 메시지_구분 {
+	case P메시지_GET:
+	case P메시지_SET:
+	case P메시지_DEL:
+	case P메시지_초기화:
+	case P메시지_종료:
+	default:
+		에러 := F에러_생성("잘못된 질의 메시지 구분 %v", 메시지_구분)
+		F에러_출력(에러)
+		//panic(에러)
+		return nil
+	}
+
+	회신_채널 := make(chan I회신_가변형, 1)
+	메시지 := New메시지_가변형(메시지_구분, 내용...).(s기본_메시지_가변형)
+
+	return s질의_메시지_가변형{회신_채널: 회신_채널, s기본_메시지_가변형: 메시지}
+}
+
+// 회신
+type I회신_가변형 interface {
+	I메시지_가변형
+	G에러() error
+}
+
+func New회신_가변형(에러 error, 내용 ...interface{}) I회신_가변형 {
+	메시지_구분 := ""
+
+	if 에러 == nil || F포맷된_문자열("%v", 에러) == "<nil>" {
+		메시지_구분 = P메시지_OK
+	} else {
+		메시지_구분 = P메시지_에러
+	}
+
+	if len(내용) == 1 {
+		가변형_모음, ok := 내용[0].([]interface{})
+
+		if ok {
+			내용 = make([]interface{}, 0)
+			내용 = append(내용, 가변형_모음...)
+		}
+	}
+	
+	메시지 := New메시지_가변형(메시지_구분, 내용...).(s기본_메시지_가변형)
+
+	return s회신_메시지_가변형{에러: 에러, s기본_메시지_가변형: 메시지}
 }
 
 // 종목

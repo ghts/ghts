@@ -18,10 +18,10 @@ type S로그인_정보_블록 struct {
 	M로그인_정보 S로그인_정보
 }
 
-func New로그인_정보_블록(c LoginBlock) S로그인_정보_블록 {
+func New로그인_정보_블록(c *LoginBlock) S로그인_정보_블록 {
 	return S로그인_정보_블록{
 		TR구분번호:  int(c.TrIndex),
-		M로그인_정보: New로그인_정보(*(c.LoginInfo))}
+		M로그인_정보: New로그인_정보(c.LoginInfo)}
 }
 
 type S로그인_정보 struct {
@@ -31,7 +31,7 @@ type S로그인_정보 struct {
 	M계좌_목록 []S계좌_정보
 }
 
-func New로그인_정보(c LoginInfo) S로그인_정보 {
+func New로그인_정보(c *LoginInfo) S로그인_정보 {
 	시각, 에러 := time.Parse(공용.F2문자열(c.Date[:]), "값을 확인한 후 포맷 문자열 수정할 것.")
 	공용.F에러_패닉(에러)
 

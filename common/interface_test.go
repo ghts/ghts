@@ -201,6 +201,12 @@ func testI질의_도우미_Go루틴(ch초기화 chan bool, ch질의 chan I질의
 	}
 }
 
+func TestI메시지_가변형(테스트 *testing.T) {
+	테스트.Parallel()
+
+	F메모("가변형 메시지, 질의, 회신 테스트 추가할 것.")
+}
+
 func TestI종목(테스트 *testing.T) {
 	테스트.Parallel()
 

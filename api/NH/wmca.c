@@ -71,7 +71,7 @@ bool BOOL2bool(BOOL value) {
 //-------------------------------------------------//
 
 // 접속 후 로그인 (인증)
-bool wmcaConnect(char* ID, char* PW, char* CertPW) {
+bool wmcaConnect(char* ID, char* PWD, char* CertPWD) {
     F_Connect func = (F_Connect)wmcaFunc("wmcaConnect");
     if (func == NULL) {
         return false;
@@ -80,7 +80,7 @@ bool wmcaConnect(char* ID, char* PW, char* CertPW) {
     const DWORD CA_WMCA_EVENT = WM_USER+8400;
 
     BOOL value = func(getHWND(), CA_WMCA_EVENT, 'T', 'W',
-                      ID, PW, CertPW);
+                      ID, PWD, CertPWD);
 
     return BOOL2bool(value);
 }
