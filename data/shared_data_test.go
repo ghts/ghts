@@ -19,7 +19,7 @@ package data
 
 import (
 	공용 "github.com/ghts/ghts/common"
-	
+
 	"strconv"
 	"strings"
 	"testing"

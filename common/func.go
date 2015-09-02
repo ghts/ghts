@@ -73,7 +73,7 @@ func F2정수64(문자열 string) (int64, error) {
 func F2정수64_바이트(바이트_모음 []byte) int64 {
 	반환값, 에러 := strconv.ParseInt(F2문자열(바이트_모음), 10, 64)
 	F에러_패닉(에러)
-	
+
 	return 반환값
 }
 
@@ -84,7 +84,7 @@ func F2실수(문자열 string) (float64, error) {
 func F2실수_바이트(바이트_모음 []byte) float64 {
 	반환값, 에러 := strconv.ParseFloat(F2문자열(바이트_모음), 64)
 	F에러_패닉(에러)
-	
+
 	return 반환값
 }
 
@@ -95,7 +95,7 @@ func F2시각(문자열 string) (time.Time, error) {
 func F2시각_바이트(바이트_모음 []byte, 포맷_문자열 string) time.Time {
 	반환값, 에러 := time.Parse(포맷_문자열, F2문자열(바이트_모음))
 	F에러_패닉(에러)
-	
+
 	return 반환값
 }
 
@@ -110,18 +110,20 @@ func F2참거짓_바이트(바이트_모음 []byte, 조건 interface{}, 결과 b
 	case int:
 		if len(바이트_모음) != 1 {
 			에러 := F에러_생성("바이트_모음 길이가 %v임. 예상치 못한 경우.", len(바이트_모음))
-			F에러_출력(에러); panic(에러)
+			F에러_출력(에러)
+			panic(에러)
 		}
-		
+
 		if int(uint(바이트_모음[0])) == 조건.(int) {
 			return 결과
 		} else {
 			return !결과
 		}
 	}
-	
+
 	에러 := F에러_생성("예상치 못한 경우.")
-	F에러_출력(에러); panic(에러)
+	F에러_출력(에러)
+	panic(에러)
 }
 
 func F2인터페이스_모음(문자열_모음 []string) []interface{} {
@@ -144,13 +146,13 @@ func F바이트_모음_늘리기(바이트_모음 []byte, 길이 int) []byte {
 		F에러_출력(에러)
 		panic(에러)
 	}
-	
+
 	반환값 := make([]byte, 길이)
-	
-	for i:=0 ; i < len(바이트_모음) ; i++ {
+
+	for i := 0; i < len(바이트_모음); i++ {
 		반환값[i] = 바이트_모음[i]
 	}
-	
+
 	return 반환값
 }
 

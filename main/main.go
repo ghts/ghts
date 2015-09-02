@@ -18,8 +18,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 package main
 
 import (
-	//공용 "github.com/ghts/ghts/shared"
+//공용 "github.com/ghts/ghts/shared"
 )
-
 
 func main() {}
