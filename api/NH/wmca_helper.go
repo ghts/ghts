@@ -1,7 +1,6 @@
 package NH
 
 // #cgo CFLAGS: -m32 -Wall
-// #include <stdio.h>
 // #include <stdlib.h>
 // #include <windows.h>
 // #include "./wmca_func.h"
@@ -12,6 +11,7 @@ import (
 	"golang.org/x/sys/windows"
 
 	"strings"
+	"time"
 	"unsafe"
 )
 
@@ -22,6 +22,32 @@ const (
 	P하한      = 0x19
 	P하락      = 0x1F
 )
+
+// 콜백 대기 함수 구분
+const (
+	p접속 = "접속"
+	p접속_해제 = "접속_해제"
+	p실시간_서비스_등록 = "실시간_서비스_등록"
+	p실시간_서비스_해제 = "실시간_서비스_해제"
+	p실시간_서비스_모두_해제 = "실시간_서비스_모두_해제"
+)
+
+type s콜백_대기 struct {
+	TR식별번호 uint32
+	TR코드 string
+	M질의 공용.I질의_가변형
+	M유효기간 time.Time
+}
+
+func new콜백_대기(TR코드 string, 질의 공용.I질의_가변형) s콜백_대기 {
+	return s콜백_대기 {
+		TR식별번호: f_TR식별번호(),
+		TR코드: TR코드,
+		M질의: 질의,
+		M유효기간: time.Now().Add(30 * time.Second)}	
+}
+
+
 
 func fByte2Bool(값 []byte, 조건 string, 결과 bool) bool {
 	if string(값) == 조건 {
@@ -164,4 +190,108 @@ var tr식별번호 = uint32(0)
 func f_TR식별번호() uint32 {
 	tr식별번호 = tr식별번호 + 1
 	return tr식별번호
+}
+
+func fDLL존재함() bool {
+	에러 := windows.NewLazyDLL(wmca_dll).Load()
+
+	if 에러 != nil {
+		return false
+	} else {
+		return true
+	}
+}
+
+func f접속_안_되어_있으면_에러(질의 공용.I질의_가변형) error {
+	if !f접속됨() {
+		에러 := 공용.F에러_생성("접속되지 않음")
+		공용.F에러_출력(에러)
+		질의.S회신(에러, nil)
+		
+		return 에러	
+	}
+	
+	return nil
+}
+
+func f조회(TR식별번호 uint32, TR코드 string, 데이터_포인터 unsafe.Pointer, 길이 int, 계좌_인덱스 int) bool {
+	cTR식별번호 := C.int(TR식별번호)
+	cTR코드 := C.CString(TR코드)
+	c데이터 := (*C.char)(데이터_포인터)
+	c길이 := C.int(길이)
+	c계좌_인덱스 := C.int(계좌_인덱스)
+
+	defer func() {
+		C.free(unsafe.Pointer(cTR코드))
+		C.free(unsafe.Pointer(c데이터)) // C언어 구조체로 변환된 후에는 직접 free 해 줘야 하는 듯.
+	}()
+
+	반환값 := C.wmcaQuery(cTR식별번호, cTR코드, c데이터, c길이, c계좌_인덱스)
+
+	return bool(반환값)
+}
+
+func f실시간_서비스_등록(타입 string, 코드_모음 string, 단위_길이 int, 전체_길이 int) bool {
+	c타입 := C.CString(타입)
+	c코드_모음 := C.CString(코드_모음)
+	c단위_길이 := C.int(단위_길이)
+	c전체_길이 := C.int(전체_길이)
+
+	defer func() {
+		C.free(unsafe.Pointer(c타입))
+		C.free(unsafe.Pointer(c코드_모음))
+	}()
+
+	반환값 := C.wmcaAttach(c타입, c코드_모음, c단위_길이, c전체_길이)
+
+	return bool(반환값)
+}
+
+func f실시간_서비스_해제(타입 string, 코드_모음 string, 단위_길이 int, 전체_길이 int) bool {
+	c타입 := C.CString(타입)
+	c코드_모음 := C.CString(코드_모음)
+	c단위_길이 := C.int(단위_길이)
+	c전체_길이 := C.int(전체_길이)
+
+	defer func() {
+		C.free(unsafe.Pointer(c타입))
+		C.free(unsafe.Pointer(c코드_모음))
+	}()
+
+	반환값 := C.wmcaDetach(c타입, c코드_모음, c단위_길이, c전체_길이)
+
+	return bool(반환값)
+}
+
+
+func f접속(아이디, 암호, 공인인증서_암호 string) bool {
+	c아이디 := C.CString(아이디)
+	c암호 := C.CString(암호)
+	c공인인증서_암호 := C.CString(공인인증서_암호)
+
+	defer func() {
+		C.free(unsafe.Pointer(c아이디))
+		C.free(unsafe.Pointer(c암호))
+		C.free(unsafe.Pointer(c공인인증서_암호))
+	}()
+
+	return bool(C.wmcaConnect(c아이디, c암호, c공인인증서_암호))
+}
+
+func f접속됨() bool {
+	return f호출("wmcaIsConnected")
+}
+
+func f실시간_서비스_모두_해제() bool {
+	return f호출("wmcaDetachAll")
+}
+
+func f자원_정리() {
+	// cgo의 버그로 인해서 인수가 없으면 '사용하지 않는 변수' 컴파일 경고 발생.
+	// 컴파일 경고를 없애기 위해서 사용하지 않는 인수를 추가함.
+	C.wmcaFreeResource(C.int(1))
+}
+
+func f접속_해제() bool {
+	return f호출("wmcaDisconnect")
 }

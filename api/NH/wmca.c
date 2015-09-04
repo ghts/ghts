@@ -77,10 +77,7 @@ bool wmcaConnect(char* ID, char* PWD, char* CertPWD) {
         return false;
     }
 
-    const DWORD CA_WMCA_EVENT = WM_USER+8400;
-
-    BOOL value = func(getHWND(), CA_WMCA_EVENT, 'T', 'W',
-                      ID, PWD, CertPWD);
+    BOOL value = func(getHWND(), 0, 'T', 'W', ID, PWD, CertPWD);
 
     return BOOL2bool(value);
 }
@@ -171,6 +168,11 @@ void OnDisconnected_C() {
 
 // API에서 오는 응답을 처리하는 함수. 윈도우 운영체제가 이 함수를 호출함.
 // 예제코드의 CWMCALOADERDlg::OnWmcaEvent메소드를 조금 수정함.
+
+// WndProc이 맞는 지 WindowProc이 맞는 지 모르겠음.
+// 둘 다 시도해 보고 제대로 작동하는 것을 사용할 것.
+
+//LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     // C++과 달리 C언어에서는 const로 선언된 변수가 switch문에서 라벨 역할을 할 수 없다고 함.
     // 그래서, C++ 예제코드의 switch문을 if문으로 변환함.
