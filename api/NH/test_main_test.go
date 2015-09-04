@@ -20,6 +20,7 @@ package NH
 import (
 	공용 "github.com/ghts/ghts/common"
 	ini "gopkg.in/ini.v1"
+	"golang.org/x/sys/windows"
 	
 	"os"
 	"testing"
