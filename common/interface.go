@@ -43,6 +43,15 @@ func New안전한_string(값 string) I안전한_string {
 	return &s안전한_string{값: 값}
 }
 
+// 안전한 일련 번호
+type I안전한_일련_번호 interface {
+	G값() int
+}
+
+func New안전한_일련_번호() I안전한_일련_번호 {
+	return &s안전한_일련_번호{}
+}
+
 // 기본 메시지
 type I메시지 interface {
 	G구분() string

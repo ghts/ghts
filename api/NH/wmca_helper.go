@@ -17,10 +17,10 @@ import (
 
 const (
 	P상한 byte = 0x18
-	P상승      = 0x1E
-	P보합      = 0x20
-	P하한      = 0x19
-	P하락      = 0x1F
+	P상승 byte = 0x1E
+	P보합 byte = 0x20
+	P하한 byte = 0x19
+	P하락 byte = 0x1F
 )
 
 // 질의 종류
@@ -43,9 +43,11 @@ type s콜백_대기 struct {
 	M유효기간    time.Time
 }
 
+var 질의_식별번호 = 공용.New안전한_일련_번호()
+
 func new콜백_대기(질의_종류 T질의_종류, TR코드 string, 질의 공용.I질의_가변형) s콜백_대기 {
 	return s콜백_대기{
-		M질의_식별번호: f질의_식별번호(),
+		M질의_식별번호: 질의_식별번호.G값(),
 		M질의_종류:   질의_종류,
 		TR코드:     TR코드,
 		M질의:      질의,
@@ -186,13 +188,6 @@ func f호출(함수명 string, 인수 ...uintptr) bool {
 	default:
 		return true
 	}
-}
-
-var 질의_식별번호 = int(0)
-
-func f질의_식별번호() int {
-	질의_식별번호 = 질의_식별번호 + 1
-	return 질의_식별번호
 }
 
 func fDLL존재함() bool {

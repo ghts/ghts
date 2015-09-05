@@ -74,6 +74,21 @@ func (this *s안전한_string) S값(값 string) {
 	this.값 = 값
 }
 
+// 안전한 일련 번호
+type s안전한_일련_번호 struct {
+	sync.Mutex
+	식별_번호 int
+}
+
+func (this *s안전한_일련_번호) G값() int {
+	this.Lock() // Go언어의 Embedded Lock
+	defer this.Unlock()
+	
+	this.식별_번호 = this.식별_번호 + 1 
+
+	return this.식별_번호
+}
+
 // 기본 메시지
 type s기본_메시지 struct {
 	구분 string

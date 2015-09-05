@@ -42,14 +42,13 @@ var ch콜백_에러 = make(chan *S수신_데이터_블록, 100)
 var ch콜백_소켓_에러 = make(chan int, 10)
 var ch콜백_접속_해제 = make(chan 공용.S비어있는_구조체, 10)
 
+// 호출 후 콜백을 수신할 때까지 대기하는 임시 저장소
+var 대기항목_맵 = make(map[int]s콜백_대기)
+
 // NH OpenAPI는 thread-safe 하다고 명시되어 있지 않으므로,
 // 다수 스레드(thread) 혹은 Go루틴에서 API를 호출하는 경우,
 // 문제가 생긴다고 봐야 함.
 // API호출 및 콜백 처리가 1번에 1개씩만 이루어지도록 하기 위하여 Go루틴을 사용함.
-
-// 호출 후 콜백을 수신할 때까지 대기하는 임시 저장소
-var 대기항목_맵 = make(map[int]s콜백_대기)
-
 func F_NH_OpenAPI_Go루틴(ch초기화 chan bool) {
 	// 이미 실행 중인 Go루틴이 존재하는 지 확인.
 	에러 := nh_OpenAPI_Go루틴_실행_중.S값(true)
