@@ -149,7 +149,8 @@ type S수신_데이터 struct {
 }
 
 func new수신_데이터(c *C.RECEIVED) S수신_데이터 {
-	블록_이름, 데이터 := f_Go구조체로_변환(c)
+	블록_이름 := C.GoString(c.BlockName)
+	데이터 := f_Go구조체로_변환(c)
 
 	s := new(S수신_데이터)
 	s.M블록_이름 = 블록_이름
