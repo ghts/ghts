@@ -20,7 +20,7 @@ type LoginInfo struct {
 	Accountlist  [999]AccountInfo
 }
 type LoginBlock struct {
-	TrIndex   int32
+	TrIdNo    int32
 	LoginInfo *LoginInfo
 }
 
@@ -35,7 +35,7 @@ type Received struct {
 	Length     int32
 }
 type OutDataBlock struct {
-	TrIndex    int32
+	TrIdNo     int32
 	DataStruct *Received
 }
 

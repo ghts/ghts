@@ -23,31 +23,34 @@ const (
 	P하락      = 0x1F
 )
 
-// 콜백 대기 함수 구분
+// 질의 종류
+type T질의_종류 int
+
 const (
-	p접속 = "접속"
-	p접속_해제 = "접속_해제"
-	p실시간_서비스_등록 = "실시간_서비스_등록"
-	p실시간_서비스_해제 = "실시간_서비스_해제"
-	p실시간_서비스_모두_해제 = "실시간_서비스_모두_해제"
+	P접속 T질의_종류 = iota
+	P접속_해제
+	P조회
+	P실시간_서비스_등록
+	P실시간_서비스_해제
+	P실시간_서비스_모두_해제
 )
 
 type s콜백_대기 struct {
-	TR식별번호 uint32
-	TR코드 string
-	M질의 공용.I질의_가변형
-	M유효기간 time.Time
+	M질의_식별번호 int
+	M질의_종류   T질의_종류
+	TR코드     string
+	M질의      공용.I질의_가변형
+	M유효기간    time.Time
 }
 
-func new콜백_대기(TR코드 string, 질의 공용.I질의_가변형) s콜백_대기 {
-	return s콜백_대기 {
-		TR식별번호: f_TR식별번호(),
-		TR코드: TR코드,
-		M질의: 질의,
-		M유효기간: time.Now().Add(30 * time.Second)}	
+func new콜백_대기(질의_종류 T질의_종류, TR코드 string, 질의 공용.I질의_가변형) s콜백_대기 {
+	return s콜백_대기{
+		M질의_식별번호: f질의_식별번호(),
+		M질의_종류:   질의_종류,
+		TR코드:     TR코드,
+		M질의:      질의,
+		M유효기간:    time.Now().Add(30 * time.Second)}
 }
-
-
 
 func fByte2Bool(값 []byte, 조건 string, 결과 bool) bool {
 	if string(값) == 조건 {
@@ -59,31 +62,31 @@ func fByte2Bool(값 []byte, 조건 string, 결과 bool) bool {
 
 func f_Go구조체로_변환(c *C.RECEIVED) (string, interface{}) {
 	// 반대로 변환할 때는 (*C.char)(unsafe.Pointer(&b[0]))
-	
+
 	블록_이름 := C.GoString(c.BlockName)
 	전체_길이 := int(c.Length)
 	데이터 := c.DataString
-	
+
 	switch 블록_이름 {
 	case "c1101OutBlock":
 		f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Tc1101OutBlock{}))
 		return 블록_이름, New주식_현재가_조회_기본_자료(데이터)
-	case "c1101OutBlock2":	
+	case "c1101OutBlock2":
 		수량 := 전체_길이 / int(unsafe.Sizeof(C.Tc1101OutBlock2{}))
-		
+
 		// 큰 배열로 캐스팅 한 다음에 슬라이스를 취함.
 		// 충분히 큰 숫자이면 아무 것이나 상관없으며, 반드시 반드시 10000이어야 하는 것은 아님.
-		// Go위키에서는 '1 << 30'을 사용하지만, 너무 큰 수를 사용하니까 메모리 범위를 벗어난다고 에러 발생. 
-        슬라이스 := (*[10000]C.Tc1101OutBlock2)(unsafe.Pointer(데이터))[:수량:수량]
+		// Go위키에서는 '1 << 30'을 사용하지만, 너무 큰 수를 사용하니까 메모리 범위를 벗어난다고 에러 발생.
+		슬라이스 := (*[10000]C.Tc1101OutBlock2)(unsafe.Pointer(데이터))[:수량:수량]
 		go슬라이스 := make([]S주식_현재가_조회_변동_거래량_자료, 수량)
-		
-		for i:=0 ; i<수량 ; i++ {
+
+		for i := 0; i < 수량; i++ {
 			c := 슬라이스[i]
 			g := New주식_현재가_조회_변동_거래량_자료(&c)
 			go슬라이스[i] = *g
 			C.free(unsafe.Pointer(&c))
 		}
-		
+
 		return 블록_이름, go슬라이스
 	case "c1101OutBlock3":
 		f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Tc1101OutBlock3{}))
@@ -144,13 +147,13 @@ func f_Go구조체로_변환(c *C.RECEIVED) (string, interface{}) {
 		공용.F에러_출력(에러)
 		panic(에러)
 	}
-	
+
 	return 블록_이름, nil
 }
 
 func f반복되면_패닉(블록_이름 string, 전체_길이 int, 구조체_길이 uintptr) {
 	수량 := 전체_길이 / int(구조체_길이)
-	
+
 	if 수량 != 1 {
 		에러 := 공용.F에러_생성("반복되는 구조체임. %v", 블록_이름)
 		공용.F에러_출력(에러)
@@ -185,11 +188,11 @@ func f호출(함수명 string, 인수 ...uintptr) bool {
 	}
 }
 
-var tr식별번호 = uint32(0)
+var 질의_식별번호 = int(0)
 
-func f_TR식별번호() uint32 {
-	tr식별번호 = tr식별번호 + 1
-	return tr식별번호
+func f질의_식별번호() int {
+	질의_식별번호 = 질의_식별번호 + 1
+	return 질의_식별번호
 }
 
 func fDLL존재함() bool {
@@ -207,14 +210,14 @@ func f접속_안_되어_있으면_에러(질의 공용.I질의_가변형) error 
 		에러 := 공용.F에러_생성("접속되지 않음")
 		공용.F에러_출력(에러)
 		질의.S회신(에러, nil)
-		
-		return 에러	
+
+		return 에러
 	}
-	
+
 	return nil
 }
 
-func f조회(TR식별번호 uint32, TR코드 string, 데이터_포인터 unsafe.Pointer, 길이 int, 계좌_인덱스 int) bool {
+func f조회(TR식별번호 int, TR코드 string, 데이터_포인터 unsafe.Pointer, 길이 int, 계좌_인덱스 int) bool {
 	cTR식별번호 := C.int(TR식별번호)
 	cTR코드 := C.CString(TR코드)
 	c데이터 := (*C.char)(데이터_포인터)
@@ -262,7 +265,6 @@ func f실시간_서비스_해제(타입 string, 코드_모음 string, 단위_길
 
 	return bool(반환값)
 }
-
 
 func f접속(아이디, 암호, 공인인증서_암호 string) bool {
 	c아이디 := C.CString(아이디)

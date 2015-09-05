@@ -14,22 +14,22 @@ import (
 //----------------------------------------------------------------------//
 // WMCA_CONNECTED 로그인 구조체
 //----------------------------------------------------------------------//
-type S로그인_정보_블록 struct {
-	TR식별번호  uint32
+type S로그인_데이터_블록 struct {
+	M식별번호   int
 	M로그인_정보 S로그인_정보
 }
 
-func New로그인_정보_블록(c *C.LOGINBLOCK) *S로그인_정보_블록 {
+func New로그인_데이터_블록(c *C.LOGINBLOCK) *S로그인_데이터_블록 {
 	// 포인터 형태 자료형은 모두 정리.
 	defer func() {
 		C.free(unsafe.Pointer(c.LoginInfo))
 		C.free(unsafe.Pointer(c))
 	}()
-	
-	s := new(S로그인_정보_블록)
-	s.TR식별번호 = uint32(c.TrIndex)
+
+	s := new(S로그인_데이터_블록)
+	s.M식별번호 = int(c.TrIdNo)
 	s.M로그인_정보 = new로그인_정보(c.LoginInfo)
-	
+
 	return s
 }
 
@@ -42,7 +42,7 @@ type S로그인_정보 struct {
 
 func new로그인_정보(c *C.LOGININFO) S로그인_정보 {
 	g := (*LoginInfo)(unsafe.Pointer(c))
-	
+
 	시각, 에러 := time.Parse(공용.F2문자열(g.Date[:]), "값을 확인한 후 포맷 문자열 수정할 것.")
 	공용.F에러_패닉(에러)
 
@@ -59,7 +59,7 @@ func new로그인_정보(c *C.LOGININFO) S로그인_정보 {
 	s.M접속서버 = 공용.F2문자열(g.ServerName[:])
 	s.M접속ID = 공용.F2문자열(g.UserID[:])
 	s.M계좌_목록 = 계좌_목록
-	
+
 	return *s
 }
 
@@ -98,7 +98,7 @@ func new계좌_정보(g AccountInfo) S계좌_정보 {
 // WMCA 문자 message 구조체
 //----------------------------------------------------------------------//
 type S수신_메시지_블록 struct {
-	TR식별번호  uint32
+	M식별번호   int
 	M메시지_코드 string //00000:정상, 기타:비정상(코드값은 언제든지 변경될 수 있음.)
 	M메시지_내용 string
 }
@@ -108,22 +108,22 @@ func New수신_메시지_블록(c *C.OUTDATABLOCK) *S수신_메시지_블록 {
 		C.free(unsafe.Pointer(c.DataStruct))
 		C.free(unsafe.Pointer(c))
 	}()
-	
+
 	g := (*MsgHeader)(unsafe.Pointer(c.DataStruct))
-	
+
 	s := new(S수신_메시지_블록)
-	s.TR식별번호 = uint32(c.TrIndex)
+	s.M식별번호 = int(c.TrIdNo)
 	s.M메시지_코드 = 공용.F2문자열(g.MsgCode[:])
 	s.M메시지_내용 = 공용.F2문자열(g.UsrMsg[:])
-	
-	return s	
+
+	return s
 }
 
 //----------------------------------------------------------------------//
 // WMCA TR 응답 구조체
 //----------------------------------------------------------------------//
 type S수신_데이터_블록 struct {
-	TR식별번호  uint32
+	M식별번호   int
 	M수신_데이터 S수신_데이터
 }
 
@@ -135,11 +135,11 @@ func New수신_데이터_블록(c *C.OUTDATABLOCK) *S수신_데이터_블록 {
 		C.free(unsafe.Pointer(c.DataStruct))
 		C.free(unsafe.Pointer(c))
 	}()
-	
+
 	s := new(S수신_데이터_블록)
-	s.TR식별번호 = uint32(c.TrIndex)
+	s.M식별번호 = int(c.TrIdNo)
 	s.M수신_데이터 = new수신_데이터(c.DataStruct)
-	
+
 	return s
 }
 
@@ -150,11 +150,11 @@ type S수신_데이터 struct {
 
 func new수신_데이터(c *C.RECEIVED) S수신_데이터 {
 	블록_이름, 데이터 := f_Go구조체로_변환(c)
-	
+
 	s := new(S수신_데이터)
 	s.M블록_이름 = 블록_이름
 	s.M데이터 = 데이터
-	
+
 	return *s
 }
 
@@ -164,13 +164,13 @@ func new수신_데이터(c *C.RECEIVED) S수신_데이터 {
 func New주식_현재가_조회_질의(종목_코드 string) C.Tc1101InBlock {
 	// 포인터는 동시 실행에서 위험성이 있고,
 	// 구조체의 데이터 크기가 얼마 되지 않으므로,
-	// 포인터를 사용하지 않고 구조체를 그냥 사용함.		
+	// 포인터를 사용하지 않고 구조체를 그냥 사용함.
 	c := Tc1101InBlock{}
 	c.Lang[0] = ([]byte("K"))[0]
 
 	if len(종목_코드) > len(c.Code) {
 		종목_코드 = 종목_코드[:len(c.Code)]
-		
+
 		에러 := 공용.F에러_생성(
 			"종목 코드 길이가 허용 한도를 초과함. 허용 한도  = %v, 종목_코드 길이  = %v.",
 			len(c.Code[:]), len(종목_코드))
@@ -352,7 +352,7 @@ type S주식_현재가_조회_기본_자료 struct {
 
 func New주식_현재가_조회_기본_자료(c *C.char) *S주식_현재가_조회_기본_자료 {
 	g := (*Tc1101OutBlock)(unsafe.Pointer(c))
-	
+
 	s := new(S주식_현재가_조회_기본_자료)
 	s.M종목_코드 = 공용.F2문자열(g.Code[:])
 	s.M종목명 = 공용.F2문자열(g.Title[:])
@@ -515,7 +515,7 @@ func New주식_현재가_조회_기본_자료(c *C.char) *S주식_현재가_조�
 	s.M매매_수량_단위 = 공용.F2정수64_바이트(g.TrUnitVolume[:])
 	s.M대량_매매_방향 = int8(공용.F2정수64_바이트(g.DarkPoolOfferBid[:])) // 0 = 해당없음 1 = 매도 2 = 매수
 	s.M대량_매매_존재 = 공용.F2참거짓_바이트(g.DarkPoolExist[:], "1", true)
-	
+
 	return s
 }
 
@@ -532,7 +532,7 @@ type S주식_현재가_조회_변동_거래량_자료 struct { // 변동거래�
 
 func New주식_현재가_조회_변동_거래량_자료(c *C.Tc1101OutBlock2) *S주식_현재가_조회_변동_거래량_자료 {
 	g := (*Tc1101OutBlock2)(unsafe.Pointer(c))
-	
+
 	s := new(S주식_현재가_조회_변동_거래량_자료)
 	s.M시간 = 공용.F2시각_바이트(g.Time[:], "포맷 문자열")
 	s.M현재가 = 공용.F2정수64_바이트(g.MarketPrice[:])
@@ -542,7 +542,7 @@ func New주식_현재가_조회_변동_거래량_자료(c *C.Tc1101OutBlock2) *S
 	s.M매수_호가 = 공용.F2정수64_바이트(g.BidPrice[:])
 	s.M변동_거래량 = 공용.F2정수64_바이트(g.DiffVolume[:])
 	s.M거래량 = 공용.F2정수64_바이트(g.Volume[:])
-	
+
 	return s
 }
 
@@ -566,7 +566,7 @@ type S주식_현재가_조회_종목_지표 struct { // 종목지표
 
 func New주식_현재가_조회_종목_지표(c *C.char) *S주식_현재가_조회_종목_지표 {
 	g := (*Tc1101OutBlock3)(unsafe.Pointer(c))
-	
+
 	s := new(S주식_현재가_조회_종목_지표)
 	s.M동시_호가_구분 = 공용.F2문자열(g.SyncOfferBid[:]) // 0:동시호가 아님 1:동시호가 2:동시호가연장 3:시가범위연장 4:종가범위연장 5:배분개시 6:변동성 완화장치 발동
 	s.M예상_체결가 = 공용.F2정수64_바이트(g.EstmPrice[:])
@@ -583,7 +583,7 @@ func New주식_현재가_조회_종목_지표(c *C.char) *S주식_현재가_조�
 	s.ECN대비_예상_체결_부호 = g.VsECN_EstmSign[0]
 	s.ECN대비_예상_체결_등락폭 = 공용.F2정수64_바이트(g.VsECN_EstmDiff[:])
 	s.ECN대비_예상_체결_등락율 = 공용.F2실수_바이트(g.VsECN_EstmDiffRate[:])
-		
+
 	return s
 }
 
@@ -596,7 +596,7 @@ func New_ETF_현재가_조회_질의(종목_코드 string) C.Tc1151InBlock {
 
 	if len(종목_코드) > len(c.Code) {
 		종목_코드 = 종목_코드[:len(c.Code)]
-		
+
 		에러 := 공용.F에러_생성(
 			"종목 코드 길이가 허용 한도를 초과함. 허용 한도  = %v, 종목_코드 길이  = %v.",
 			len(c.Code[:]), len(종목_코드))
@@ -748,7 +748,7 @@ type S_ETF_현재가_조회_기본_자료 struct { // 종목마스타기본자�
 
 func New_ETF_현재가_조회_기본_자료(c *C.char) *S_ETF_현재가_조회_기본_자료 {
 	g := (*Tc1151OutBlock)(unsafe.Pointer(c))
-	
+
 	s := new(S_ETF_현재가_조회_기본_자료)
 	s.M종목_코드 = 공용.F2문자열(g.Code[:])
 	s.M종목명 = 공용.F2문자열(g.Title[:])
@@ -881,7 +881,7 @@ func New_ETF_현재가_조회_기본_자료(c *C.char) *S_ETF_현재가_조회_�
 	s.M상장_주식_수량 = 공용.F2정수64_바이트(g.ListedVolume[:])
 	s.M전체_거래원_매도_합계 = 공용.F2정수64_바이트(g.SellTotalSum[:])
 	s.M전체_거래원_매수_합계 = 공용.F2정수64_바이트(g.BuyTotalSum[:])
-	
+
 	return s
 }
 
@@ -898,7 +898,7 @@ type S_ETF_현재가_조회_변동_거래량 struct {
 
 func New_ETF_현재가_조회_변동_거래량(c *C.char) *S_ETF_현재가_조회_변동_거래량 {
 	g := (*Tc1151OutBlock2)(unsafe.Pointer(c))
-	
+
 	s := new(S_ETF_현재가_조회_변동_거래량)
 	s.M시간 = 공용.F2시각_바이트(g.Time[:], "포맷 문자열은 내용 확인 후 작성할 것.")
 	s.M현재가 = 공용.F2정수64_바이트(g.MarketPrice[:])
@@ -908,7 +908,7 @@ func New_ETF_현재가_조회_변동_거래량(c *C.char) *S_ETF_현재가_조�
 	s.M매수_호가 = 공용.F2정수64_바이트(g.BidPrice[:])
 	s.M변동_거래량 = 공용.F2정수64_바이트(g.DiffVolume[:])
 	s.M거래량 = 공용.F2정수64_바이트(g.Volume[:])
-	
+
 	return s
 }
 
@@ -923,7 +923,7 @@ type S_ETF_현재가_조회_예상_체결 struct {
 
 func New_ETF_현재가_조회_예상_체결(c *C.char) *S_ETF_현재가_조회_예상_체결 {
 	g := (*Tc1151OutBlock3)(unsafe.Pointer(c))
-	
+
 	s := new(S_ETF_현재가_조회_예상_체결)
 	s.M동시_호가_구분 = 공용.F2문자열(g.SyncOfferBid[:])
 	s.M예상_체결가 = 공용.F2정수64_바이트(g.EstmPrice[:])
@@ -931,7 +931,7 @@ func New_ETF_현재가_조회_예상_체결(c *C.char) *S_ETF_현재가_조회_�
 	s.M예상_체결_등락폭 = 공용.F2정수64_바이트(g.EstmDiff[:])
 	s.M예상_체결_등락율 = 공용.F2실수_바이트(g.EstmDiffRate[:])
 	s.M예상_체결_수량 = 공용.F2정수64_바이트(g.EstmVolume[:])
-	
+
 	return s
 }
 
@@ -973,7 +973,7 @@ type S_ETF_현재가_조회_ETF자료 struct {
 
 func New_ETF_현재가_조회_ETF자료(c *C.char) *S_ETF_현재가_조회_ETF자료 {
 	g := (*Tc1151OutBlock4)(unsafe.Pointer(c))
-	
+
 	s := new(S_ETF_현재가_조회_ETF자료)
 	s.ETF구분 = 공용.F2문자열(g.ETF[:])
 	s.NAV = 공용.F2실수_바이트(g.NAV[:])
@@ -1008,7 +1008,7 @@ func New_ETF_현재가_조회_ETF자료(c *C.char) *S_ETF_현재가_조회_ETF�
 	s.LP_매수_10차선_잔량 = 공용.F2정수64_바이트(g.LP_BidVolume10[:])
 	s.ETF_복제_방법_구분_코드 = 공용.F2문자열(g.TrackingMethod[:])
 	s.ETF_상품_유형_코드 = 공용.F2문자열(g.ETF_Type[:])
-	
+
 	return s
 }
 
@@ -1030,7 +1030,7 @@ type S_ETF_현재가_조회_기반_지수_자료 struct {
 
 func New_ETF_현재가_조회_기반_지수_자료(c *C.char) *S_ETF_현재가_조회_기반_지수_자료 {
 	g := (*Tc1151OutBlock5)(unsafe.Pointer(c))
-	
+
 	s := new(S_ETF_현재가_조회_기반_지수_자료)
 	s.M지수_코드 = 공용.F2문자열(g.IndexCode[:])
 	s.M업종_코드 = 공용.F2문자열(g.SectorCode[:])
@@ -1045,7 +1045,7 @@ func New_ETF_현재가_조회_기반_지수_자료(c *C.char) *S_ETF_현재가_�
 	s.M기타_업종_코드 = 공용.F2문자열(g.EtcSectorCode[:])
 	s.M채권_지수_코드 = 공용.F2문자열(g.BondIndexCode[:])
 	s.M채권_지수_세부_코드 = 공용.F2문자열(g.BondDetailCode[:])
-	
+
 	return s
 }
 
@@ -1057,7 +1057,7 @@ func New코스피_호가_잔량_질의(종목_코드 string) C.Th1InBlock {
 
 	if len(종목_코드) > len(c.Code) {
 		종목_코드 = 종목_코드[:len(c.Code)]
-		
+
 		에러 := 공용.F에러_생성(
 			"종목 코드 길이가 허용 한도를 초과함. 허용 한도  = %v, 종목_코드 길이  = %v.",
 			len(c.Code[:]), len(종목_코드))
@@ -1121,7 +1121,7 @@ type S코스피_호가_잔량 struct {
 
 func New코스피_호가_잔량(c *C.char) *S코스피_호가_잔량 {
 	g := (*Th1OutBlock)(unsafe.Pointer(c))
-	
+
 	s := new(S코스피_호가_잔량)
 	s.M종목_코드 = 공용.F2문자열(g.Code[:])
 	s.M시각 = 공용.F2시각_바이트(g.Time[:], "포맷 문자열은 내용 확인 후 작성할 것.")
@@ -1166,7 +1166,7 @@ func New코스피_호가_잔량(c *C.char) *S코스피_호가_잔량 {
 	s.M10차선_매도_호가_잔량 = 공용.F2정수64_바이트(g.OfferVolume10[:])
 	s.M10차선_매수_호가_잔량 = 공용.F2정수64_바이트(g.BidVolume10[:])
 	s.M누적_거래량 = 공용.F2정수64_바이트(g.Volume[:])
-	
+
 	return s
 }
 
@@ -1178,7 +1178,7 @@ func New코스닥_호가_잔량_질의(종목_코드 string) C.Tk3InBlock {
 
 	if len(종목_코드) > len(c.Code) {
 		종목_코드 = 종목_코드[:len(c.Code)]
-		
+
 		에러 := 공용.F에러_생성(
 			"종목 코드 길이가 허용 한도를 초과함. 허용 한도  = %v, 종목_코드 길이  = %v.",
 			len(c.Code[:]), len(종목_코드))
@@ -1242,7 +1242,7 @@ type S코스닥_호가_잔량 struct {
 
 func New코스닥_호가_잔량(c *C.char) *S코스닥_호가_잔량 {
 	g := (*Tk3OutBlock)(unsafe.Pointer(c))
-	
+
 	s := new(S코스닥_호가_잔량)
 	s.M종목_코드 = 공용.F2문자열(g.Code[:])
 	s.M시각 = 공용.F2시각_바이트(g.Time[:], "포맷 문자열은 내용 확인 후 작성할 것.")
@@ -1287,7 +1287,7 @@ func New코스닥_호가_잔량(c *C.char) *S코스닥_호가_잔량 {
 	s.M10차선_매도_호가_잔량 = 공용.F2정수64_바이트(g.OfferVolume10[:])
 	s.M10차선_매수_호가_잔량 = 공용.F2정수64_바이트(g.BidVolume10[:])
 	s.M누적_거래량 = 공용.F2정수64_바이트(g.Volume[:])
-	
+
 	return s
 }
 
@@ -1300,7 +1300,7 @@ func New코스피_시간외_호가_잔량_질의(종목_코드 string) C.Th2InBl
 
 	if len(종목_코드) > len(c.Code) {
 		종목_코드 = 종목_코드[:len(c.Code)]
-		
+
 		에러 := 공용.F에러_생성(
 			"종목 코드 길이가 허용 한도를 초과함. 허용 한도  = %v, 종목_코드 길이  = %v.",
 			len(c.Code[:]), len(종목_코드))
@@ -1325,13 +1325,13 @@ type S코스피_시간외_호가_잔량 struct {
 
 func New코스피_시간외_호가_잔량(c *C.char) *S코스피_시간외_호가_잔량 {
 	g := (*Th2OutBlock)(unsafe.Pointer(c))
-	
+
 	s := new(S코스피_시간외_호가_잔량)
 	s.M종목_코드 = 공용.F2문자열(g.Code[:])
 	s.M시각 = 공용.F2시각_바이트(g.Time[:], "포맷 문자열")
 	s.M매도_호가_잔량 = 공용.F2정수64_바이트(g.OfferVolume[:])
 	s.M매수_호가_잔량 = 공용.F2정수64_바이트(g.BidVolume[:])
-	
+
 	return s
 }
 
@@ -1344,7 +1344,7 @@ func New코스닥_시간외_호가_잔량_질의(종목_코드 string) C.Tk4InBl
 
 	if len(종목_코드) > len(c.Code) {
 		종목_코드 = 종목_코드[:len(c.Code)]
-		
+
 		에러 := 공용.F에러_생성(
 			"종목 코드 길이가 허용 한도를 초과함. 허용 한도  = %v, 종목_코드 길이  = %v.",
 			len(c.Code[:]), len(종목_코드))
@@ -1369,13 +1369,13 @@ type S코스닥_시간외_호가_잔량 struct {
 
 func New코스닥_시간외_호가_잔량(c *C.char) *S코스닥_시간외_호가_잔량 {
 	g := (*Tk4OutBlock)(unsafe.Pointer(c))
-	
+
 	s := new(S코스닥_시간외_호가_잔량)
 	s.M종목_코드 = 공용.F2문자열(g.Code[:])
 	s.M시각 = 공용.F2시각_바이트(g.Time[:], "포맷 문자열은 내용 확인 후 작성할 것.")
 	s.M매도_호가_잔량 = 공용.F2정수64_바이트(g.OfferVolume[:])
 	s.M매수_호가_잔량 = 공용.F2정수64_바이트(g.BidVolume[:])
-	
+
 	return s
 }
 
@@ -1388,7 +1388,7 @@ func New코스피_예상_호가_잔량_질의(종목_코드 string) C.Th3InBlock
 
 	if len(종목_코드) > len(c.Code) {
 		종목_코드 = 종목_코드[:len(c.Code)]
-		
+
 		에러 := 공용.F에러_생성(
 			"종목 코드 길이가 허용 한도를 초과함. 허용 한도  = %v, 종목_코드 길이  = %v.",
 			len(c.Code[:]), len(종목_코드))
@@ -1421,7 +1421,7 @@ type S코스피_예상_호가_잔량 struct {
 
 func New코스피_예상_호가_잔량(c *C.char) *S코스피_예상_호가_잔량 {
 	g := (*Th3OutBlock)(unsafe.Pointer(c))
-	
+
 	s := new(S코스피_예상_호가_잔량)
 	s.M종목_코드 = 공용.F2문자열(g.Code[:])
 	s.M시각 = 공용.F2시각_바이트(g.Time[:], "포맷 문자열")
@@ -1435,7 +1435,7 @@ func New코스피_예상_호가_잔량(c *C.char) *S코스피_예상_호가_잔�
 	s.M매수_호가 = 공용.F2정수64_바이트(g.BidPrice[:])
 	s.M매도_호가_잔량 = 공용.F2정수64_바이트(g.OfferVolume[:])
 	s.M매수_호가_잔량 = 공용.F2정수64_바이트(g.BidVolume[:])
-	
+
 	return s
 }
 
@@ -1448,7 +1448,7 @@ func New코스닥_예상_호가_잔량_질의(종목_코드 string) C.Tk5InBlock
 
 	if len(종목_코드) > len(c.Code) {
 		종목_코드 = 종목_코드[:len(c.Code)]
-		
+
 		에러 := 공용.F에러_생성(
 			"종목 코드 길이가 허용 한도를 초과함. 허용 한도  = %v, 종목_코드 길이  = %v.",
 			len(c.Code[:]), len(종목_코드))
@@ -1481,7 +1481,7 @@ type S코스닥_예상_호가_잔량 struct {
 
 func New코스닥_예상_호가_잔량(c *C.char) *S코스닥_예상_호가_잔량 {
 	g := (*Tk5OutBlock)(unsafe.Pointer(c))
-	
+
 	s := new(S코스닥_예상_호가_잔량)
 	s.M종목_코드 = 공용.F2문자열(g.Code[:])
 	s.M시각 = 공용.F2시각_바이트(g.Time[:], "포맷 문자열")
@@ -1495,7 +1495,7 @@ func New코스닥_예상_호가_잔량(c *C.char) *S코스닥_예상_호가_잔�
 	s.M매수_호가 = 공용.F2정수64_바이트(g.BidPrice[:])
 	s.M매도_호가_잔량 = 공용.F2정수64_바이트(g.OfferVolume[:])
 	s.M매수_호가_잔량 = 공용.F2정수64_바이트(g.BidVolume[:])
-	
+
 	return s
 }
 
@@ -1508,7 +1508,7 @@ func New코스피_체결_질의(종목_코드 string) C.Tj8InBlock {
 
 	if len(종목_코드) > len(c.Code) {
 		종목_코드 = 종목_코드[:len(c.Code)]
-		
+
 		에러 := 공용.F에러_생성(
 			"종목 코드 길이가 허용 한도를 초과함. 허용 한도  = %v, 종목_코드 길이  = %v.",
 			len(c.Code[:]), len(종목_코드))
@@ -1546,7 +1546,7 @@ type S코스피_체결 struct {
 
 func New코스피_체결(c *C.char) *S코스피_체결 {
 	g := (*Tj8OutBlock)(unsafe.Pointer(c))
-	
+
 	s := new(S코스피_체결)
 	s.M종목_코드 = 공용.F2문자열(g.Code[:])
 	s.M시각 = 공용.F2시각_바이트(g.Time[:], "포맷 문자열은 내용 확인 후 작성할 것.")
@@ -1565,7 +1565,7 @@ func New코스피_체결(c *C.char) *S코스피_체결 {
 	s.M시가 = 공용.F2정수64_바이트(g.Open[:])
 	s.M가중_평균_가격 = 공용.F2정수64_바이트(g.WeightAvgPrice[:])
 	s.M장구분 = 공용.F2문자열(g.Market[:])
-	
+
 	return s
 }
 
@@ -1615,7 +1615,7 @@ type S코스닥_체결 struct {
 
 func New코스닥_체결(c *C.char) *S코스닥_체결 {
 	g := (*Tj8OutBlock)(unsafe.Pointer(c))
-	
+
 	s := new(S코스닥_체결)
 	s.M종목_코드 = 공용.F2문자열(g.Code[:])
 	s.M시각 = 공용.F2시각_바이트(g.Time[:], "포맷 문자열은 내용 확인 후 작성할 것.")
@@ -1634,7 +1634,7 @@ func New코스닥_체결(c *C.char) *S코스닥_체결 {
 	s.M시가 = 공용.F2정수64_바이트(g.Open[:])
 	s.M가중_평균_가격 = 공용.F2정수64_바이트(g.WeightAvgPrice[:])
 	s.M장구분 = 공용.F2문자열(g.Market[:])
-	
+
 	return s
 }
 
@@ -1659,7 +1659,7 @@ type S코스피_ETF_NAV struct {
 
 func New코스피_ETF(c *C.char) *S코스피_ETF_NAV {
 	g := (*Tj1OutBlock)(unsafe.Pointer(c))
-	
+
 	s := new(S코스피_ETF_NAV)
 	s.M종목_코드 = 공용.F2문자열(g.Code[:])
 	s.M시각 = 공용.F2시각_바이트(g.Time[:], "포맷 문자열")
@@ -1673,7 +1673,7 @@ func New코스피_ETF(c *C.char) *S코스피_ETF_NAV {
 	s.M추적_오차 = 공용.F2실수_바이트(g.TrackingError[:])
 	s.M괴리율_부호 = g.DivergeSign[0]
 	s.M괴리율 = 공용.F2실수_바이트(g.DivergeRate[:])
-	
+
 	return s
 }
 
@@ -1698,7 +1698,7 @@ type S코스닥_ETF_NAV struct {
 
 func New코스닥_ETF(c *C.char) *S코스닥_ETF_NAV {
 	g := (*Tj0OutBlock)(unsafe.Pointer(c))
-	
+
 	s := new(S코스닥_ETF_NAV)
 	s.M종목_코드 = 공용.F2문자열(g.Code[:])
 	s.M시각 = 공용.F2시각_바이트(g.Time[:], "포맷 문자열")
@@ -1712,7 +1712,7 @@ func New코스닥_ETF(c *C.char) *S코스닥_ETF_NAV {
 	s.M추적_오차 = 공용.F2실수_바이트(g.TrackingError[:])
 	s.M괴리율_부호 = g.DivergeSign[0]
 	s.M괴리율 = 공용.F2실수_바이트(g.DivergeRate[:])
-	
+
 	return s
 }
 
@@ -1806,7 +1806,7 @@ type S코스피_업종_지수 struct {
 
 func New코스피_업종_지수(c *C.char) *S코스피_업종_지수 {
 	g := (*Tu1OutBlock)(unsafe.Pointer(c))
-	
+
 	s := new(S코스피_업종_지수)
 	s.M업종_코드 = 공용.F2문자열(g.SectorCode[:])
 	s.M시각 = 공용.F2시각_바이트(g.Time[:], "포맷 문자열")
@@ -1822,7 +1822,7 @@ func New코스피_업종_지수(c *C.char) *S코스피_업종_지수 {
 	s.M최저값_시간 = 공용.F2시각_바이트(g.LowTime[:], "포맷 문자열")
 	s.M지수_등락율 = 공용.F2실수_바이트(g.DiffRate[:])
 	s.M거래_비중 = 공용.F2실수_바이트(g.TrVolRate[:])
-	
+
 	return s
 }
 
@@ -1869,7 +1869,7 @@ type S코스닥_업종_지수 struct {
 
 func New코스닥_업종_지수(c *C.char) *S코스닥_업종_지수 {
 	g := (*Tk1OutBlock)(unsafe.Pointer(c))
-	
+
 	s := new(S코스닥_업종_지수)
 	s.M업종_코드 = 공용.F2문자열(g.SectorCode[:])
 	s.M시각 = 공용.F2시각_바이트(g.Time[:], "포맷 문자열")
@@ -1885,6 +1885,6 @@ func New코스닥_업종_지수(c *C.char) *S코스닥_업종_지수 {
 	s.M최저값_시간 = 공용.F2시각_바이트(g.LowTime[:], "포맷 문자열")
 	s.M지수_등락율 = 공용.F2실수_바이트(g.DiffRate[:])
 	s.M거래_비중 = 공용.F2실수_바이트(g.TrVolRate[:])
-	
+
 	return s
 }

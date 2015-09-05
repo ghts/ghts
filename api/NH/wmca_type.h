@@ -82,7 +82,7 @@ typedef struct {
 } LOGININFO;
 
 typedef struct {
-    int       TrIndex;
+    int       TrIdNo;
     LOGININFO *LoginInfo;
 } LOGINBLOCK;
 
@@ -105,7 +105,7 @@ typedef struct {
 } RECEIVED;
 
 typedef struct {
-    int		  TrIndex;
+    int		  TrIdNo;
     RECEIVED* DataStruct;
 } OUTDATABLOCK;
 

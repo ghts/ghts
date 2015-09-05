@@ -85,7 +85,7 @@ func New질의(메시지_구분 string, 내용 ...interface{}) I질의 {
 		return nil
 	}
 
-	회신_채널 := make(chan I회신, 1)
+	회신_채널 := make(chan I회신, 100)
 	메시지 := New메시지(메시지_구분, 내용...)
 
 	return s질의_메시지{회신_채널: 회신_채널, s기본_메시지: 메시지.(s기본_메시지)}
@@ -180,7 +180,7 @@ func New질의_가변형(메시지_구분 string, 내용 ...interface{}) I질의
 		return nil
 	}
 
-	회신_채널 := make(chan I회신_가변형, 1)
+	회신_채널 := make(chan I회신_가변형, 100)
 	메시지 := New메시지_가변형(메시지_구분, 내용...).(s기본_메시지_가변형)
 
 	return s질의_메시지_가변형{회신_채널: 회신_채널, s기본_메시지_가변형: 메시지}

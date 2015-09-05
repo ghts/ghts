@@ -20,7 +20,7 @@ func OnTrData_Go(c *C.OUTDATABLOCK) {
 
 //export OnConnected_Go
 func OnConnected_Go(c *C.LOGINBLOCK) {
-	ch콜백_로그인 <- New로그인_정보_블록(c)
+	ch콜백_접속 <- New로그인_데이터_블록(c)
 }
 
 //export OnMessage_Go
