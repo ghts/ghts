@@ -76,7 +76,8 @@ func New메시지(구분 string, 내용 ...interface{}) I메시지 {
 type I질의 interface {
 	I메시지 // 질의 내용
 	G검사(메시지_구분 string, 질의_길이 int) error
-	G회신(채널 chan I질의) I회신
+	G회신() I회신
+	S질의(질의_채널 chan I질의) I질의
 	S회신(에러 error, 내용 ...interface{}) error
 }
 
@@ -171,7 +172,8 @@ func New메시지_가변형(구분 string, 내용 ...interface{}) I메시지_가
 type I질의_가변형 interface {
 	I메시지_가변형 // 질의 내용
 	G검사(메시지_구분 string, 질의_길이 int) error
-	G회신(채널 chan I질의_가변형) I회신_가변형
+	G회신() I회신_가변형
+	S질의(질의_채널 chan I질의_가변형) I질의_가변형
 	S회신(에러 error, 내용 ...interface{}) error
 }
 

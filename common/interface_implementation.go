@@ -168,15 +168,19 @@ func (this s질의_메시지) G검사(메시지_구분 string, 질의_길이 int
 	return nil
 }
 
-func (this s질의_메시지) G회신(질의_채널 chan I질의) I회신 {
-	질의_채널 <- this
-
+func (this s질의_메시지) G회신() I회신 {
 	select {
 	case 회신 := <-this.회신_채널:
 		return 회신
 	case <-time.After(P타임아웃_Go):
 		return New회신(F에러_생성("I질의.G회신() 타임아웃.\n%v", this.String()))
 	}
+}
+
+func (this s질의_메시지) S질의(질의_채널 chan I질의) I질의 {
+	질의_채널 <- this
+	
+	return this
 }
 
 func (this s질의_메시지) S회신(에러 error, 내용 ...interface{}) error {
@@ -268,15 +272,19 @@ func (this s질의_메시지_가변형) G검사(메시지_구분 string, 질의_
 	return nil
 }
 
-func (this s질의_메시지_가변형) G회신(질의_채널 chan I질의_가변형) I회신_가변형 {
-	질의_채널 <- this
-
+func (this s질의_메시지_가변형) G회신() I회신_가변형 {
 	select {
 	case 회신 := <-this.회신_채널:
 		return 회신
 	case <-time.After(P타임아웃_Go):
 		return New회신_가변형(F에러_생성("I질의.G회신() 타임아웃.\n%v", this.String()))
 	}
+}
+
+func (this s질의_메시지_가변형) S질의(질의_채널 chan I질의_가변형) I질의_가변형 {
+	질의_채널 <- this
+	
+	return this
 }
 
 func (this s질의_메시지_가변형) S회신(에러 error, 내용 ...interface{}) error {
