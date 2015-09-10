@@ -20,7 +20,7 @@ package data
 import (
 	공용 "github.com/ghts/ghts/common"
 
-	"github.com/pebbe/zmq4"
+	"github.com/pebbe/zmq3"
 )
 
 var 공용정보_zmq소켓_중계_Go루틴_실행_중 = 공용.New안전한_bool(false)
@@ -49,7 +49,7 @@ func F공용정보_zmq소켓_중계_Go루틴(ch초기화 chan bool) {
 	주소_종목정보 := 회신.G내용(0)
 
 	// zmq 소켓 초기화
-	주소정보_REP, 에러 := zmq4.NewSocket(zmq4.REP)
+	주소정보_REP, 에러 := zmq3.NewSocket(zmq3.REP)
 	if 에러 != nil {
 		ch초기화 <- false
 		return
@@ -63,7 +63,7 @@ func F공용정보_zmq소켓_중계_Go루틴(ch초기화 chan bool) {
 		return
 	}
 
-	종목정보_REP, 에러 := zmq4.NewSocket(zmq4.REP)
+	종목정보_REP, 에러 := zmq3.NewSocket(zmq3.REP)
 	if 에러 != nil {
 		ch초기화 <- false
 		return
@@ -77,9 +77,9 @@ func F공용정보_zmq소켓_중계_Go루틴(ch초기화 chan bool) {
 		return
 	}
 
-	reactor := zmq4.NewReactor()
-	reactor.AddSocket(주소정보_REP, zmq4.POLLIN, func(e zmq4.State) error { return 공용.F_zmq소켓_Go채널_중계(주소정보_REP, Ch주소) })
-	reactor.AddSocket(종목정보_REP, zmq4.POLLIN, func(e zmq4.State) error { return 공용.F_zmq소켓_Go채널_중계(종목정보_REP, Ch종목) })
+	reactor := zmq3.NewReactor()
+	reactor.AddSocket(주소정보_REP, zmq3.POLLIN, func(e zmq3.State) error { return 공용.F_zmq소켓_Go채널_중계(주소정보_REP, Ch주소) })
+	reactor.AddSocket(종목정보_REP, zmq3.POLLIN, func(e zmq3.State) error { return 공용.F_zmq소켓_Go채널_중계(종목정보_REP, Ch종목) })
 
 	// 초기화 완료
 	ch초기화 <- true

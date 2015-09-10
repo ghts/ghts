@@ -20,7 +20,7 @@ package price_data
 import (
 	공용 "github.com/ghts/ghts/common"
 	공용_정보 "github.com/ghts/ghts/data"
-	"github.com/pebbe/zmq4"
+	"github.com/pebbe/zmq3"
 
 	"testing"
 	"time"
@@ -111,7 +111,7 @@ func f테스트용_가격정보_구독_Go루틴(p주소_가격정보_배포 stri
 	}()
 
 	// 구독소켓 초기화
-	가격정보_SUB, 에러 := zmq4.NewSocket(zmq4.SUB)
+	가격정보_SUB, 에러 := zmq3.NewSocket(zmq3.SUB)
 	공용.F에러이면_패닉(에러)
 	defer 가격정보_SUB.Close()
 

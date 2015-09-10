@@ -20,7 +20,7 @@ package data
 import (
 	공용 "github.com/ghts/ghts/common"
 
-	"github.com/pebbe/zmq4"
+	"github.com/pebbe/zmq3"
 
 	"math/rand"
 	"strconv"
@@ -54,7 +54,7 @@ func TestF공용정보_zmq소켓_중계_Go루틴(테스트 *testing.T) {
 }
 
 func f테스트용_주소정보_요청_Go루틴(ch테스트_결과 chan bool, 테스트_반복횟수 int, 구분_인덱스 int) {
-	주소정보_REQ, 에러 := zmq4.NewSocket(zmq4.REQ)
+	주소정보_REQ, 에러 := zmq3.NewSocket(zmq3.REQ)
 	defer 주소정보_REQ.Close()
 
 	if 에러 != nil {
@@ -128,7 +128,7 @@ func f테스트용_주소정보_요청_Go루틴(ch테스트_결과 chan bool, �
 }
 
 func f테스트용_종목정보_요청_Go루틴(ch테스트_결과 chan bool, 테스트_반복횟수 int, 구분_인덱스 int) {
-	종목정보_REQ, 에러 := zmq4.NewSocket(zmq4.REQ)
+	종목정보_REQ, 에러 := zmq3.NewSocket(zmq3.REQ)
 	defer 종목정보_REQ.Close()
 
 	if 에러 != nil {
@@ -211,7 +211,7 @@ func TestF공용정보_zmq소켓_중계_Go루틴_Python(테스트 *testing.T) {
 	회신 := 공용.New질의(공용.P메시지_GET, 공용.P주소명_종목정보).G회신(Ch주소)
 
 	// zmq 소켓 초기화
-	테스트_결과_REP, 에러 := zmq4.NewSocket(zmq4.REP)
+	테스트_결과_REP, 에러 := zmq3.NewSocket(zmq3.REP)
 	defer 테스트_결과_REP.Close()
 
 	공용.F테스트_에러없음(테스트, 에러)

@@ -19,7 +19,9 @@ package common
 
 import (
 	"C"
-	//"bytes"
+
+	"github.com/suapapa/go_hangul/encoding/cp949"
+
 	"reflect"
 	"runtime"
 	"strconv"
@@ -33,17 +35,129 @@ func F에러_패닉(에러 error) {
 	}
 }
 
+func F2가변형(값 interface{}) interface{} { return 값 }
+
+func F2바이트_모음(값 interface{}) []byte {
+	switch 값.(type) {
+	case []C.char:
+		배열 := 값.([]C.char)
+		return C.GoBytes(unsafe.Pointer(&배열), C.int(unsafe.Sizeof(배열)))
+	case [1]C.char:
+		배열 := 값.([1]C.char)
+		return C.GoBytes(unsafe.Pointer(&배열), C.int(unsafe.Sizeof(배열)))
+	case [2]C.char:
+		배열 := 값.([2]C.char)
+		return C.GoBytes(unsafe.Pointer(&배열), C.int(unsafe.Sizeof(배열)))
+	case [3]C.char:
+		배열 := 값.([3]C.char)
+		return C.GoBytes(unsafe.Pointer(&배열), C.int(unsafe.Sizeof(배열)))
+	case [4]C.char:
+		배열 := 값.([4]C.char)
+		return C.GoBytes(unsafe.Pointer(&배열), C.int(unsafe.Sizeof(배열)))
+	case [5]C.char:
+		배열 := 값.([5]C.char)
+		return C.GoBytes(unsafe.Pointer(&배열), C.int(unsafe.Sizeof(배열)))
+	case [6]C.char:
+		배열 := 값.([6]C.char)
+		return C.GoBytes(unsafe.Pointer(&배열), C.int(unsafe.Sizeof(배열)))
+	case [7]C.char:
+		배열 := 값.([7]C.char)
+		return C.GoBytes(unsafe.Pointer(&배열), C.int(unsafe.Sizeof(배열)))
+	case [8]C.char:
+		배열 := 값.([8]C.char)
+		return C.GoBytes(unsafe.Pointer(&배열), C.int(unsafe.Sizeof(배열)))
+	case [9]C.char:
+		배열 := 값.([9]C.char)
+		return C.GoBytes(unsafe.Pointer(&배열), C.int(unsafe.Sizeof(배열)))
+	case [10]C.char:
+		배열 := 값.([10]C.char)
+		return C.GoBytes(unsafe.Pointer(&배열), C.int(unsafe.Sizeof(배열)))
+	case [11]C.char:
+		배열 := 값.([11]C.char)
+		return C.GoBytes(unsafe.Pointer(&배열), C.int(unsafe.Sizeof(배열)))
+	case [12]C.char:
+		배열 := 값.([12]C.char)
+		return C.GoBytes(unsafe.Pointer(&배열), C.int(unsafe.Sizeof(배열)))
+	case [13]C.char:
+		배열 := 값.([13]C.char)
+		return C.GoBytes(unsafe.Pointer(&배열), C.int(unsafe.Sizeof(배열)))
+	case [14]C.char:
+		배열 := 값.([14]C.char)
+		return C.GoBytes(unsafe.Pointer(&배열), C.int(unsafe.Sizeof(배열)))
+	case [15]C.char:
+		배열 := 값.([15]C.char)
+		return C.GoBytes(unsafe.Pointer(&배열), C.int(unsafe.Sizeof(배열)))
+	case [16]C.char:
+		배열 := 값.([16]C.char)
+		return C.GoBytes(unsafe.Pointer(&배열), C.int(unsafe.Sizeof(배열)))
+	case [17]C.char:
+		배열 := 값.([17]C.char)
+		return C.GoBytes(unsafe.Pointer(&배열), C.int(unsafe.Sizeof(배열)))
+	case [18]C.char:
+		배열 := 값.([18]C.char)
+		return C.GoBytes(unsafe.Pointer(&배열), C.int(unsafe.Sizeof(배열)))
+	case [19]C.char:
+		배열 := 값.([19]C.char)
+		return C.GoBytes(unsafe.Pointer(&배열), C.int(unsafe.Sizeof(배열)))
+	case [20]C.char:
+		배열 := 값.([20]C.char)
+		return C.GoBytes(unsafe.Pointer(&배열), C.int(unsafe.Sizeof(배열)))
+	case [21]C.char:
+		배열 := 값.([21]C.char)
+		return C.GoBytes(unsafe.Pointer(&배열), C.int(unsafe.Sizeof(배열)))
+	case [22]C.char:
+		배열 := 값.([22]C.char)
+		return C.GoBytes(unsafe.Pointer(&배열), C.int(unsafe.Sizeof(배열)))
+	case [23]C.char:
+		배열 := 값.([23]C.char)
+		return C.GoBytes(unsafe.Pointer(&배열), C.int(unsafe.Sizeof(배열)))
+	case [24]C.char:
+		배열 := 값.([24]C.char)
+		return C.GoBytes(unsafe.Pointer(&배열), C.int(unsafe.Sizeof(배열)))
+	case [25]C.char:
+		배열 := 값.([25]C.char)
+		return C.GoBytes(unsafe.Pointer(&배열), C.int(unsafe.Sizeof(배열)))
+	case [26]C.char:
+		배열 := 값.([26]C.char)
+		return C.GoBytes(unsafe.Pointer(&배열), C.int(unsafe.Sizeof(배열)))
+	case [27]C.char:
+		배열 := 값.([27]C.char)
+		return C.GoBytes(unsafe.Pointer(&배열), C.int(unsafe.Sizeof(배열)))
+	case [28]C.char:
+		배열 := 값.([28]C.char)
+		return C.GoBytes(unsafe.Pointer(&배열), C.int(unsafe.Sizeof(배열)))
+	case [29]C.char:
+		배열 := 값.([29]C.char)
+		return C.GoBytes(unsafe.Pointer(&배열), C.int(unsafe.Sizeof(배열)))
+	case [30]C.char:
+		배열 := 값.([30]C.char)
+		return C.GoBytes(unsafe.Pointer(&배열), C.int(unsafe.Sizeof(배열)))
+	case [80]C.char:
+		배열 := 값.([80]C.char)
+		return C.GoBytes(unsafe.Pointer(&배열), C.int(unsafe.Sizeof(배열)))
+	default:
+		F변수값_확인(값)
+		panic(F에러_생성("예상치 못한 자료형"))
+	}
+}
+
+func F2문자열_CP949(바이트_모음_cp949 []byte) string {
+	바이트_모음_utf8, 에러 := cp949.From(바이트_모음_cp949)
+	F에러_패닉(에러)
+
+	return string(바이트_모음_utf8)
+}
+
 func F2문자열(값 interface{}) string {
 	switch 값.(type) {
 	case time.Time:
 		return 값.(time.Time).Format(P시간_형식)
 	case float64:
 		return strconv.FormatFloat(값.(float64), 'f', -1, 64)
-	case *byte:
-		return C.GoString((*C.char)(unsafe.Pointer(값.(*byte))))
 	case []byte:
 		return string(값.([]byte))
 	default:
+		F변수값_확인(값)
 		return F포맷된_문자열("%v", 값)
 	}
 }

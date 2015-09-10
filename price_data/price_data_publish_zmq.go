@@ -4,11 +4,11 @@ import (
 	공용 "github.com/ghts/ghts/common"
 	공용_정보 "github.com/ghts/ghts/data"
 
-	"github.com/pebbe/zmq4"
+	"github.com/pebbe/zmq3"
 )
 
 type S구독소켓_등록 struct {
-	M구독_소켓 *zmq4.Socket
+	M구독_소켓 *zmq3.Socket
 	M회신_채널 chan error
 }
 
@@ -37,7 +37,7 @@ func f가격정보_배포_Go루틴_zmq소켓(ch초기화 chan bool) {
 	p주소_가격정보_배포 := 회신.G내용(0)
 
 	// 가격정보_PUB 소켓 초기화
-	가격정보_PUB, 에러 := zmq4.NewSocket(zmq4.PUB)
+	가격정보_PUB, 에러 := zmq3.NewSocket(zmq3.PUB)
 	if 에러 != nil {
 		공용.F에러_출력(에러)
 		ch초기화 <- false

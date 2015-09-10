@@ -147,7 +147,6 @@ func New회신(에러 error, 내용 ...interface{}) I회신 {
 	return s회신_메시지{에러: 에러, s기본_메시지: New메시지(메시지_구분, 내용...).(s기본_메시지)}
 }
 
-
 // 기본 가변형 메시지
 // I메시지는 immutable 자료형인 string을 사용해서 안전하지만,
 // I메시지_가변형은 mutable 자료형을 주고 받게 되며,
@@ -164,7 +163,7 @@ func New메시지_가변형(구분 string, 내용 ...interface{}) I메시지_가
 	if 내용 == nil || len(내용) == 0 {
 		내용 = make([]interface{}, 0)
 	}
-	
+
 	return s기본_메시지_가변형{구분: 구분, 내용: 내용}
 }
 
@@ -173,11 +172,12 @@ type I질의_가변형 interface {
 	I메시지_가변형 // 질의 내용
 	G검사(메시지_구분 string, 질의_길이 int) error
 	G회신() I회신_가변형
+	G타임아웃() time.Duration
 	S질의(질의_채널 chan I질의_가변형) I질의_가변형
 	S회신(에러 error, 내용 ...interface{}) error
 }
 
-func New질의_가변형(메시지_구분 string, 내용 ...interface{}) I질의_가변형 {
+func New질의_가변형(타임아웃 time.Duration, 메시지_구분 string, 내용 ...interface{}) I질의_가변형 {
 	switch 메시지_구분 {
 	case P메시지_GET:
 	case P메시지_SET:
@@ -194,7 +194,7 @@ func New질의_가변형(메시지_구분 string, 내용 ...interface{}) I질의
 	회신_채널 := make(chan I회신_가변형, 100)
 	메시지 := New메시지_가변형(메시지_구분, 내용...).(s기본_메시지_가변형)
 
-	return s질의_메시지_가변형{회신_채널: 회신_채널, s기본_메시지_가변형: 메시지}
+	return s질의_메시지_가변형{회신_채널: 회신_채널, 타임아웃: 타임아웃, s기본_메시지_가변형: 메시지}
 }
 
 // 회신
@@ -220,7 +220,7 @@ func New회신_가변형(에러 error, 내용 ...interface{}) I회신_가변형 
 			내용 = append(내용, 가변형_모음...)
 		}
 	}
-	
+
 	메시지 := New메시지_가변형(메시지_구분, 내용...).(s기본_메시지_가변형)
 
 	return s회신_메시지_가변형{에러: 에러, s기본_메시지_가변형: 메시지}

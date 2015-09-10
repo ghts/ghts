@@ -1,15 +1,15 @@
 @echo off
 
+REM SET CGO_ENABLED=1
 SET OLDPATH=%PATH%
-
 SET GOARCH=386
-SET CGO_ENABLED=1
-SET GHTS_PATH=%GOPATH%\src\github.com\ghts\ghts
-SET ZMQ_SRC_DIR=%GHTS_PATH%\3rd_party\zeromq4-x
-SET C_INCLUDE_PATH=%ZMQ_SRC_DIR%\include
-SET LIBRARY_PATH=%ZMQ_SRC_DIR%\builds\mingw32
-SET GCC=%GHTS_PATH%\3rd_party\ruby_devkit_32
-SET PATH=%GHTS_PATH%\bin;%GHTS_PATH%\3rd_party\NH_OpenAPI;%GCC%\bin;%GCC%\mingw\bin;%ZMQ_SRC_DIR%\builds\mingw32;%PATH%
+SET GHTS_DIR=%GOPATH%\src\github.com\ghts\ghts
+SET GCC_DIR=%GHTS_DIR%\3rd_party\ruby_devkit_32
+SET BUILD_DEP_DIR=%GHTS_DIR%\3rd_party\build_dep
+SET C_INCLUDE_PATH=%BUILD_DEP_DIR%\include
+SET LIBRARY_PATH=%BUILD_DEP_DIR%\lib
+SET NH_OpenAPI_DIR=%GHTS_DIR%\3rd_party\NH_OpenAPI
+SET PATH=GHTS_DIR\bin;%GCC_DIR%\bin;%GCC_DIR%\mingw\bin;%BUILD_DEP_DIR%\bin;%NH_OpenAPI_DIR%;%PATH%
 
 cls
 go test -race

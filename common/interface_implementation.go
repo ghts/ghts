@@ -83,8 +83,8 @@ type s안전한_일련_번호 struct {
 func (this *s안전한_일련_번호) G값() int {
 	this.Lock() // Go언어의 Embedded Lock
 	defer this.Unlock()
-	
-	this.식별_번호 = this.식별_번호 + 1 
+
+	this.식별_번호 = this.식별_번호 + 1
 
 	return this.식별_번호
 }
@@ -179,7 +179,7 @@ func (this s질의_메시지) G회신() I회신 {
 
 func (this s질의_메시지) S질의(질의_채널 chan I질의) I질의 {
 	질의_채널 <- this
-	
+
 	return this
 }
 
@@ -252,7 +252,8 @@ func (this s기본_메시지_가변형) String() string {
 // 질의 메시지 가변형
 type s질의_메시지_가변형 struct {
 	s기본_메시지_가변형 // Go언어 구조체 embedding(임베딩) 기능. 상속 비스무리함.
-	회신_채널   chan I회신_가변형
+	회신_채널       chan I회신_가변형
+	타임아웃        time.Duration
 }
 
 func (this s질의_메시지_가변형) G검사(메시지_구분 string, 질의_길이 int) error {
@@ -276,14 +277,16 @@ func (this s질의_메시지_가변형) G회신() I회신_가변형 {
 	select {
 	case 회신 := <-this.회신_채널:
 		return 회신
-	case <-time.After(P타임아웃_Go):
+	case <-time.After(this.타임아웃):
 		return New회신_가변형(F에러_생성("I질의.G회신() 타임아웃.\n%v", this.String()))
 	}
 }
 
+func (this s질의_메시지_가변형) G타임아웃() time.Duration { return this.타임아웃 }
+
 func (this s질의_메시지_가변형) S질의(질의_채널 chan I질의_가변형) I질의_가변형 {
 	질의_채널 <- this
-	
+
 	return this
 }
 
@@ -291,7 +294,7 @@ func (this s질의_메시지_가변형) S회신(에러 error, 내용 ...interfac
 	select {
 	case this.회신_채널 <- New회신_가변형(에러, 내용...):
 		return nil
-	case <-time.After(P타임아웃_Go):
+	case <-time.After(this.타임아웃):
 		return F에러_생성("I질의.S회신() 타임아웃.\n%v", this.String())
 	}
 }
@@ -299,7 +302,7 @@ func (this s질의_메시지_가변형) S회신(에러 error, 내용 ...interfac
 // 회신 메시지 가변형
 type s회신_메시지_가변형 struct {
 	s기본_메시지_가변형 // Go언어 구조체 embedding(임베딩)
-	에러      error
+	에러          error
 }
 
 func (this s회신_메시지_가변형) G에러() error {
