@@ -1,4 +1,4 @@
-package NH
+package internal
 
 // #cgo CFLAGS: -m32 -Wall
 // #include <stdlib.h>
@@ -14,6 +14,10 @@ import (
 	"time"
 	"unsafe"
 )
+
+const wmca_dll = "wmca.dll"
+const 실행_성공 = "completed successfully"
+const P30초 = 30 * time.Second
 
 const (
 	P상한 byte = 0x18
@@ -35,26 +39,32 @@ const (
 	P실시간_서비스_모두_해제
 )
 
-type s콜백_대기 struct {
-	M질의_식별번호 int
-	M질의_종류   T질의_종류
-	TR코드     string
-	M질의      공용.I질의_가변형
-	M유효기간    time.Time
+func New콜백_대기(질의_종류 T질의_종류, TR코드 string, 질의 공용.I질의_가변형) s콜백_대기 {
+	return s콜백_대기{
+		식별번호:  질의_식별번호.G값(),
+		질의_종류: 질의_종류,
+		질의_코드: TR코드,
+		질의:    질의,
+		유효기간:  time.Now().Add(30 * time.Second)}
 }
+
+type s콜백_대기 struct {
+	식별번호  int
+	질의_종류 T질의_종류
+	질의_코드 string // TR코드
+	질의    공용.I질의_가변형
+	유효기간  time.Time
+}
+
+func (this s콜백_대기) G식별번호() int       { return this.식별번호 }
+func (this s콜백_대기) G질의_종류() T질의_종류   { return this.질의_종류 }
+func (this s콜백_대기) G질의_코드() string   { return this.질의_코드 }
+func (this s콜백_대기) G질의() 공용.I질의_가변형  { return this.질의 }
+func (this s콜백_대기) G유효기간() time.Time { return this.유효기간 }
 
 var 질의_식별번호 = 공용.New안전한_일련_번호()
 
-func new콜백_대기(질의_종류 T질의_종류, TR코드 string, 질의 공용.I질의_가변형) s콜백_대기 {
-	return s콜백_대기{
-		M질의_식별번호: 질의_식별번호.G값(),
-		M질의_종류:   질의_종류,
-		TR코드:     TR코드,
-		M질의:      질의,
-		M유효기간:    time.Now().Add(30 * time.Second)}
-}
-
-func fByte2Bool(값 []byte, 조건 string, 결과 bool) bool {
+func f바이트2참거짓(값 []byte, 조건 string, 결과 bool) bool {
 	if string(값) == 조건 {
 		return 결과
 	}
@@ -262,6 +272,8 @@ func f실시간_서비스_해제(타입 string, 코드_모음 string, 단위_길
 }
 
 func f접속(아이디, 암호, 공인인증서_암호 string) bool {
+	f자원_정리()
+
 	c아이디 := C.CString(아이디)
 	c암호 := C.CString(암호)
 	c공인인증서_암호 := C.CString(공인인증서_암호)
@@ -271,6 +283,39 @@ func f접속(아이디, 암호, 공인인증서_암호 string) bool {
 		C.free(unsafe.Pointer(c암호))
 		C.free(unsafe.Pointer(c공인인증서_암호))
 	}()
+
+	서버_이름 := (*C.char)(unsafe.Pointer(nil))
+	포트_번호 := 0
+
+	if 공용.F테스트_모드_실행_중() {
+		공용.F문자열_출력("테스트용 모의 서버")
+		서버_이름 = C.CString("newmt.wontrading.com")
+		포트_번호 = 8400
+	} else {
+		공용.F문자열_출력("거래 서버")
+		서버_이름 = C.CString("wmca.wontrading.com")
+		포트_번호 = 8200
+	}
+
+	defer C.free(unsafe.Pointer(서버_이름))
+
+	로드_성공 := bool(C.wmcaLoad())
+	if !로드_성공 {
+		공용.F문자열_출력("로드 실패")
+		return false
+	}
+
+	서버_설정_성공 := bool(C.wmcaSetServer(서버_이름))
+	if !서버_설정_성공 {
+		공용.F문자열_출력("서버 설정 실패")
+		return false
+	}
+
+	포트_설정_성공 := bool(C.wmcaSetPort(C.int(포트_번호)))
+	if !포트_설정_성공 {
+		공용.F문자열_출력("포트 설정 실패")
+		return false
+	}
 
 	return bool(C.wmcaConnect(c아이디, c암호, c공인인증서_암호))
 }

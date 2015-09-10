@@ -54,11 +54,14 @@ typedef	BOOL(__stdcall *F_BOOL)();
 
 # include <windef.h>
 
+typedef	BOOL (__stdcall *F_Load)();
+typedef	BOOL (__stdcall *F_SetServer)(const char* ServerDnsName);
+typedef	BOOL (__stdcall *F_SetPort)(const int nPort);
 typedef	BOOL (__stdcall *F_Connect)(HWND hWnd,DWORD msg,char mediaType,char userType,const char* pID,const char* pPW,const char* pCertPW);
 typedef	BOOL (__stdcall *F_Query)(HWND hWnd,int trId,const char* trCode,const char* pInputData,int inputDataSize,int accountIndex);
 typedef	BOOL (__stdcall *F_Attach)(HWND hWnd,const char* pSiseName,const char* pInputCode,int inputCodeSize,int inputCodeTotalSize);
 typedef	BOOL (__stdcall *F_Detach)(HWND hWnd,const char* pSiseName,const char* pInputCode,int inputCodeSize,int inputCodeTotalSize);
-typedef	BOOL (__stdcall *F_Window)(HWND hWnd);
+//typedef	BOOL (__stdcall *F_Window)(HWND hWnd);
 
 //----------------------------------------------------------------------//
 // WMCA_CONNECTED 로그인 구조체
@@ -66,9 +69,9 @@ typedef	BOOL (__stdcall *F_Window)(HWND hWnd);
 typedef	struct {
     char 	AccountNo[11];			//계좌번호
     char	AccountName[40];		//계좌명
-    char	act_pdt_cdz3[3];		//상품코드 ??
-    char	amn_tab_cdz4[4];		//관리점코드 ??
-    char	ExpirationDate8[8];		//위임만기일
+    char	AccountProductCode[3];	//상품코드
+    char	AmnTabCode[4];			//관리점코드 ?? 도대체 무엇의 약자일까?
+    char	ExpirationDate[8];		//위임만기일
     char	Granted;				//일괄주문 허용계좌(G:허용)
     char	Filler[189];			//filler ??
 } ACCOUNTINFO;

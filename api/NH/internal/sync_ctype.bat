@@ -12,11 +12,15 @@ SET GCC=%GHTS_PATH%\3rd_party\ruby_devkit_32
 SET PATH=%GHTS_PATH%\bin;%GHTS_PATH%\3rd_party\NH_OpenAPI;%GCC%\bin;%GCC%\mingw\bin;%ZMQ_SRC_DIR%\builds\mingw32;%PATH%
 
 cls
-cd %GHTS_PATH%\api\NH
-copy %GHTS_PATH%\api\NH\wmca_ctype.orig %GHTS_PATH%\api\NH\wmca_ctype_orig.go
-go tool cgo -godefs %GHTS_PATH%\api\NH\wmca_ctype_orig.go > %GHTS_PATH%\api\NH\wmca_ctype_pre.go
-sed -e 's/int8/byte/g' %GHTS_PATH%\api\NH\wmca_ctype_pre.go > %GHTS_PATH%\api\NH\wmca_ctype.go
-del %GHTS_PATH%\api\NH\wmca_ctype_orig.go
-del %GHTS_PATH%\api\NH\wmca_ctype_pre.go
+
+SET NH_PATH=%GHTS_PATH%\api\nh\internal
+
+cd %NH_PATH%
+copy %NH_PATH%\wmca_ctype.orig %NH_PATH%\wmca_ctype_orig.go
+go tool cgo -godefs %NH_PATH%\wmca_ctype_orig.go > %NH_PATH%\wmca_ctype.go
+go tool cgo -godefs %NH_PATH%\wmca_ctype_orig.go > %NH_PATH%\wmca_ctype_pre.go
+sed -e 's/int8/byte/g' %NH_PATH%\wmca_ctype_pre.go > %NH_PATH%\wmca_ctype.go
+del %NH_PATH%\wmca_ctype_orig.go
+del %NH_PATH%\wmca_ctype_pre.go
 
 SET PATH=%OLDPATH%

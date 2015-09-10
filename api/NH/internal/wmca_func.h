@@ -2,8 +2,14 @@
 #include <windef.h>
 #include "./wmca_type.h"
 
-HWND getHWND();
-void wmcaFreeResource(int arg4suppressWarning);
+// 로드
+bool wmcaLoad();
+
+// 서버 설정
+bool wmcaSetServer(char* ServerDnsName);
+
+// 포트 설정
+bool wmcaSetPort(int PortNo);
 
 // 접속 후 로그인(인증)
 bool wmcaConnect(char* Id, char* Pwd, char* CertPwd);
@@ -23,3 +29,12 @@ bool wmcaDetach(char* szBCType, char* input,
 // hwnd에 관련된 실시간 서비스 일괄 해제.
 // 어차피 메시지 전용 윈도우 1개만  사용할 계획이니 굳이 필요없을 듯.
 //bool wmcaDetachWindow(HWND hwnd);
+
+// 윈도우 핸들
+HWND getHWND();
+
+// 자원 정리
+void wmcaFreeResource(int arg4suppressWarning);
+
+// 윈도우 메시지 처리
+void ProcessWindowsMessage(int arg4suppressWarning);

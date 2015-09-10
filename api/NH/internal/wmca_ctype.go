@@ -1,16 +1,16 @@
 // Created by cgo -godefs - DO NOT EDIT
-// cgo -godefs D:\Go\src\github.com\ghts\ghts\api\NH\wmca_ctype_orig.go
+// cgo -godefs D:\Go\src\github.com\ghts\ghts\api\nh\internal\wmca_ctype_orig.go
 
-package NH
+package internal
 
 type AccountInfo struct {
-	AccountNo       [11]byte
-	AccountName     [40]byte
-	Act_pdt_cdz3    [3]byte
-	Amn_tab_cdz4    [4]byte
-	ExpirationDate8 [8]byte
-	Granted         byte
-	Filler          [189]byte
+	AccountNo          [11]byte
+	AccountName        [40]byte
+	AccountProductCode [3]byte
+	AmnTabCode         [4]byte
+	ExpirationDate     [8]byte
+	Granted            byte
+	Filler             [189]byte
 }
 type LoginInfo struct {
 	Date         [14]byte
@@ -25,8 +25,8 @@ type LoginBlock struct {
 }
 
 type MsgHeader struct {
-	MsgCode [5]byte
-	UsrMsg  [80]byte
+	MsgCode [5]int8
+	UsrMsg  [80]int8
 }
 
 type Received struct {

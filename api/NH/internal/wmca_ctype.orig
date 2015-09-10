@@ -1,4 +1,4 @@
-package NH
+package internal
 
 // #include "./wmca_type.h"
 import "C"

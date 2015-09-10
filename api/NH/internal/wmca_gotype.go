@@ -1,11 +1,13 @@
-package NH
+package internal
 
 // #include <stdlib.h>
-// #include "./wmca_type.h"
+// #include "./wmca_func.h"
 import "C"
 
 import (
 	공용 "github.com/ghts/ghts/common"
+	//"github.com/suapapa/go_hangul/encoding/cp949"
+	//iconv "github.com/djimenez/iconv-go"
 
 	"time"
 	"unsafe"
@@ -14,25 +16,6 @@ import (
 //----------------------------------------------------------------------//
 // WMCA_CONNECTED 로그인 구조체
 //----------------------------------------------------------------------//
-type S로그인_데이터_블록 struct {
-	M식별번호   int
-	M로그인_정보 S로그인_정보
-}
-
-func New로그인_데이터_블록(c *C.LOGINBLOCK) *S로그인_데이터_블록 {
-	// 포인터 형태 자료형은 모두 정리.
-	defer func() {
-		C.free(unsafe.Pointer(c.LoginInfo))
-		C.free(unsafe.Pointer(c))
-	}()
-
-	s := new(S로그인_데이터_블록)
-	s.M식별번호 = int(c.TrIdNo)
-	s.M로그인_정보 = new로그인_정보(c.LoginInfo)
-
-	return s
-}
-
 type S로그인_정보 struct {
 	M접속시각  time.Time
 	M접속서버  string
@@ -40,13 +23,15 @@ type S로그인_정보 struct {
 	M계좌_목록 []S계좌_정보
 }
 
-func new로그인_정보(c *C.LOGININFO) S로그인_정보 {
-	g := (*LoginInfo)(unsafe.Pointer(c))
+func New로그인_정보(c *C.LOGINBLOCK) S로그인_정보 {
+	defer C.free(unsafe.Pointer(c))
 
-	시각, 에러 := time.Parse(공용.F2문자열(g.Date[:]), "값을 확인한 후 포맷 문자열 수정할 것.")
+	g := (*LoginInfo)(unsafe.Pointer(c.LoginInfo))
+
+	시각, 에러 := time.Parse("20060102150405", 공용.F2문자열(g.Date[:]))
 	공용.F에러_패닉(에러)
 
-	계좌_수량, 에러 := 공용.F2정수(공용.F2문자열(g.AccountCount))
+	계좌_수량, 에러 := 공용.F2정수(공용.F2문자열(g.AccountCount[:]))
 	공용.F에러_패닉(에러)
 
 	계좌_목록 := make([]S계좌_정보, 계좌_수량)
@@ -74,8 +59,15 @@ type S계좌_정보 struct {
 }
 
 func new계좌_정보(g AccountInfo) S계좌_정보 {
-	위임_만기일, 에러 := time.Parse(공용.F2문자열(g.ExpirationDate8[:]), "값을 확인한 후 포맷 문자열 수정할 것.")
-	공용.F에러_패닉(에러)
+	위임_만기일, 에러 := time.Parse("20060102", 공용.F2문자열(g.ExpirationDate[:]))
+	if 에러 != nil {
+		if 공용.F테스트_모드_실행_중() {
+			// 테스트 서버에서는 빈 문자열만 나옴.
+			위임_만기일 = time.Now()
+		} else {
+			panic(에러)
+		}
+	}
 
 	일괄주문_허용계좌 := false
 	if 공용.F2문자열(g.Granted) == "G" {
@@ -85,8 +77,8 @@ func new계좌_정보(g AccountInfo) S계좌_정보 {
 	s := new(S계좌_정보)
 	s.M계좌_번호 = 공용.F2문자열(g.AccountNo[:])
 	s.M계좌명 = 공용.F2문자열(g.AccountName[:])
-	s.M상품_코드 = 공용.F2문자열(g.Act_pdt_cdz3[:])
-	s.M관리점_코드 = 공용.F2문자열(g.Amn_tab_cdz4[:])
+	s.M상품_코드 = 공용.F2문자열(g.AccountProductCode[:])
+	s.M관리점_코드 = 공용.F2문자열(g.AmnTabCode[:])
 	s.M위임_만기일 = 위임_만기일
 	s.M일괄주문_허용계좌 = 일괄주문_허용계좌
 	s.M주석 = 공용.F2문자열(g.Filler[:])
@@ -103,20 +95,34 @@ type S수신_메시지_블록 struct {
 	M메시지_내용 string
 }
 
-func New수신_메시지_블록(c *C.OUTDATABLOCK) *S수신_메시지_블록 {
+type S디버깅용_데이터 struct {
+	M코드  []int8
+	M메시지 []int8
+}
+
+func New수신_메시지_블록(c블록 *C.OUTDATABLOCK) S수신_메시지_블록 {
 	defer func() {
-		C.free(unsafe.Pointer(c.DataStruct))
-		C.free(unsafe.Pointer(c))
+		//C.free(unsafe.Pointer(c블록.DataStruct))	// 이걸 실행하면 에러 발생함.
+		C.free(unsafe.Pointer(c블록))
 	}()
 
-	g := (*MsgHeader)(unsafe.Pointer(c.DataStruct))
+	공용.F문자열_출력("New수신_메시지_블록()")
+
+	c := (*C.MSGHEADER)(unsafe.Pointer(c블록.DataStruct.DataString))
+	g := (*MsgHeader)(unsafe.Pointer(c블록.DataStruct.DataString))
+
+	바이트_모음 := C.GoBytes(unsafe.Pointer(&c.MsgCode), C.int(len(g.MsgCode)))
+	코드 := 공용.F2문자열_CP949(바이트_모음)
+
+	바이트_모음 = C.GoBytes(unsafe.Pointer(&c.UsrMsg), C.int(len(g.UsrMsg)))
+	메시지 := 공용.F2문자열_CP949(바이트_모음)
 
 	s := new(S수신_메시지_블록)
-	s.M식별번호 = int(c.TrIdNo)
-	s.M메시지_코드 = 공용.F2문자열(g.MsgCode[:])
-	s.M메시지_내용 = 공용.F2문자열(g.UsrMsg[:])
+	s.M식별번호 = int(c블록.TrIdNo)
+	s.M메시지_코드 = 코드
+	s.M메시지_내용 = 메시지
 
-	return s
+	return *s
 }
 
 //----------------------------------------------------------------------//
