@@ -6,8 +6,6 @@ import "C"
 
 import (
 	공용 "github.com/ghts/ghts/common"
-	//"github.com/suapapa/go_hangul/encoding/cp949"
-	//iconv "github.com/djimenez/iconv-go"
 
 	"time"
 	"unsafe"
@@ -105,8 +103,6 @@ func New수신_메시지_블록(c블록 *C.OUTDATABLOCK) S수신_메시지_블�
 		//C.free(unsafe.Pointer(c블록.DataStruct))	// 이걸 실행하면 에러 발생함.
 		C.free(unsafe.Pointer(c블록))
 	}()
-
-	공용.F문자열_출력("New수신_메시지_블록()")
 
 	c := (*C.MSGHEADER)(unsafe.Pointer(c블록.DataStruct.DataString))
 	g := (*MsgHeader)(unsafe.Pointer(c블록.DataStruct.DataString))

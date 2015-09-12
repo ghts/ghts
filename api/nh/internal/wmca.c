@@ -8,17 +8,9 @@
 //      콜백 함수
 //-------------------------------------------------//
 
-void OnConnected_C(LOGINBLOCK* loginData) {
-	//로그인이 성공하면, 접속시각 및 계좌번호 정보를 받아 적절히 보관/출력합니다.
-	//계좌번호에 대한 순서(인덱스)는 계좌관련 서비스 호출시 사용되므로 중요합니다.
-	printf("OnConnected_C()\n");
-	OnConnected_Go(loginData);
-}
-
-void OnMessage_C(OUTDATABLOCK* message) {
-    printf("OnMessage_C()\n");
-    OnMessage_Go(message);
-}
+void OnConnected_C(LOGINBLOCK* loginData) { OnConnected_Go(loginData); }
+void OnDisconnected_C() { OnDisconnected_Go(); }
+void OnMessage_C(OUTDATABLOCK* message) { OnMessage_Go(message); }
 
 void OnTrData_C(OUTDATABLOCK* data) {
     printf("OnTrData_C()\n");
@@ -45,50 +37,61 @@ void OnSocketError_C(int socketErrorCode) {
     OnSocketError_Go(socketErrorCode);
 }
 
-void OnDisconnected_C() {
-    printf("OnDisconnected_C()\n");
-    OnDisconnected_Go();
+// 윈도우 메시지를 처리하는 함수.
+// 증권사 서버에서 회신이 도착하면 메시지가 발생한다.
+// Go루틴에서 cgo를 통해서 이 함수를 호출한다.
+// 이 함수는 HWND에 등록된 WindowProc()을 호출하게 되며,
+// WindowProc()함수는 Go함수를 역호출(콜백)하게 된다.
+// int 인수는 컴파일 경고를 업애기 위한 목적이며 다른 의미는 없음. (Go언어 버그임.)
+void ProcessWindowsMessage(int arg4suppressWarning) {
+	MSG msg;
+
+	// PeekMessage는 메시지 큐에 메시지가 존재할 때만 이를 처리함. (Non-blocking)
+	while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
 }
 
-// API에서 오는 응답을 처리하는 함수. 윈도우 운영체제가 이 함수를 호출함.
-// 예제코드의 CWMCALOADERDlg::OnWmcaEvent메소드를 조금 수정함.
-
-// WndProc이 맞는 지 WindowProc이 맞는 지 모르겠음.
-// 둘 다 시도해 보고 제대로 작동하는 것을 사용할 것.
-LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wMsgType, LPARAM lParam) {
-    // C++과 달리 C언어에서는 const로 선언된 변수가 switch문에서 라벨 역할을 할 수 없다고 함.
-    // 그래서, C++ 예제코드의 switch문을 if문으로 변환함.
-
-	//printf("WindowProc : ");
-
-    if (wMsgType == CA_CONNECTED) {
-    	printf("CA_CONNECTED\n");
-        OnConnected_C((LOGINBLOCK*)lParam);			// 로그인 성공
-    } else if (wMsgType == CA_TR_DATA) {
-    	printf("CA_TR_DATA\n");
-        OnTrData_C((OUTDATABLOCK*)lParam);			// 서비스 응답 수신(TR)
-    } else if (wMsgType == CA_REALTIME_DATA) {
-    	printf("CA_REALTIME_DATA\n");
-        OnRealTimeData_C((OUTDATABLOCK*)lParam);	// 실시간 데이터 수신(BC)
-    } else if (wMsgType == CA_MESSAGE) {
-    	printf("CA_MESSAGE\n");
-        OnMessage_C((OUTDATABLOCK*)lParam);			//상태 메시지 수신 (입력값이 잘못되었을 경우 문자열형태로 설명이 수신됨)
-    } else if (wMsgType == CA_COMPLETE) {
-    	printf("CA_COMPLETE\n");
-        OnComplete_C((OUTDATABLOCK*)lParam);		//서비스 처리 완료
-    } else if (wMsgType == CA_ERROR) {
-    	printf("CA_ERROR\n");
-        OnError_C((OUTDATABLOCK*)lParam);			//서비스 처리중 오류 발생 (입력값 오류등)
-    } else if (wMsgType == CA_SOCKET_ERROR) {
-    	printf("CA_SOCKET_ERROR\n");
-        OnSocketError_C((int)lParam);				// 통신 오류 발생
-    } else if (wMsgType == CA_DISCONNECTED) {
-    	printf("CA_DISCONNECTED\n");
-        OnDisconnected_C();							// 접속 끊김
-    } else {
-    	// wMsgType == wParam
-    	DefWindowProc(hWnd, uMsg, wMsgType, lParam);
-    }
+// ProcessWindowsMessage()에서 메시지가 처리 될 때,
+// 증권사 서버에 접속할 때 등록한 HWND의 lpfnWndProc에서
+// 메시지 처리함수로 이 함수를 등록했으므로, 이 함수가 호출되면서 메시지가 전달됨.
+LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+	if (wParam == CA_REALTIME_DATA) {
+		printf("CA_REALTIME_DATA\n");
+		// 실시간 데이터 수신(BC)
+		OnRealTimeData_C((OUTDATABLOCK*)lParam);
+	} else if (wParam == CA_TR_DATA) {
+		printf("CA_TR_DATA\n");
+		// 서비스 응답 수신(TR)
+		OnTrData_C((OUTDATABLOCK*)lParam);
+	} else if (wParam == CA_MESSAGE) {
+		printf("CA_MESSAGE\n");
+		//상태 메시지 수신 (입력값이 잘못되었을 경우 문자열형태로 설명이 수신됨)
+		OnMessage_C((OUTDATABLOCK*)lParam);
+	} else if (wParam == CA_COMPLETE) {
+		printf("CA_COMPLETE\n");
+		//서비스 처리 완료
+		OnComplete_C((OUTDATABLOCK*)lParam);
+	} else if (wParam == CA_ERROR) {
+		printf("CA_ERROR\n");
+		//서비스 처리중 오류 발생 (입력값 오류등)
+		OnError_C((OUTDATABLOCK*)lParam);
+	} else if (wParam == CA_SOCKET_ERROR) {
+		printf("CA_SOCKET_ERROR\n");
+		// 통신 오류 발생
+		OnSocketError_C((int)lParam);
+	} else if (wParam == CA_CONNECTED) {
+		//printf("CA_CONNECTED\n");
+		// 로그인 성공
+		OnConnected_C((LOGINBLOCK*)lParam);
+	} else if (wParam == CA_DISCONNECTED) {
+		//printf("CA_DISCONNECTED\n");
+		// 접속 끊김
+		OnDisconnected_C();
+	} else {
+		DefWindowProc(hWnd, uMsg, wParam, lParam);
+	}
 
     return TRUE;
 }
@@ -148,20 +151,6 @@ HWND _hWnd(int code) {
 
 HWND getHWND() { return _hWnd(pGet); }
 void resetHWND() { _hWnd(pReset2Null); }
-
-// Go언어의 cgo 사용 시 간단한 변수 호출을 하면  '사용되지 않는 변수' 컴파일 경고가 생김.
-// Go언어의 cgo 관련 버그인 데, 사용상 큰 문제는 없어서 고칠 의향이 없는 듯 함.
-// 버그를 피해가기 위해서 인수을 추가함. (사용하지는 않음.)
-void ProcessWindowsMessage(int arg4suppressWarning) {
-	MSG msg;
-
-	// PeekMessage는 메시지 큐에 메시지가 존재할 때만 이를 처리함. (Non-blocking)
-	while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
-		//printf("ProcessWindowsMessage()\n");
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
-	}
-}
 
 // 함수 포인터
 FARPROC wmcaFunc(char* name) {
@@ -237,11 +226,12 @@ bool wmcaSetPort(int PortNo) {
 // 접속 후 로그인 (인증)
 bool wmcaConnect(char* ID, char* PWD, char* CertPWD) {
     F_Connect func = (F_Connect)wmcaFunc("wmcaConnect");
-    if (func == NULL) {
+	if (func == NULL) {
         return false;
     }
 
-    BOOL value = func(getHWND(), CA_WMCAEVENT, 'T', 'W', ID, PWD, CertPWD);
+	HWND hWnd = getHWND();
+    BOOL value = func(hWnd, CA_WMCAEVENT, 'T', 'W', ID, PWD, CertPWD);
 
     return BOOL2bool(value);
 }
