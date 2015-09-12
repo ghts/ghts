@@ -11,56 +11,8 @@ import (
 	"golang.org/x/sys/windows"
 
 	"strings"
-	"time"
 	"unsafe"
 )
-
-const wmca_dll = "wmca.dll"
-const 실행_성공 = "completed successfully"
-const P30초 = 30 * time.Second
-
-const (
-	P상한 byte = 0x18
-	P상승 byte = 0x1E
-	P보합 byte = 0x20
-	P하한 byte = 0x19
-	P하락 byte = 0x1F
-)
-
-// 질의 종류
-type T질의_종류 int
-
-const (
-	P접속 T질의_종류 = iota
-	P접속_해제
-	P조회
-	P실시간_서비스_등록
-	P실시간_서비스_해제
-	P실시간_서비스_모두_해제
-)
-
-func New콜백_대기(질의_종류 T질의_종류, TR코드 string, 질의 공용.I질의_가변형) s콜백_대기 {
-	return s콜백_대기{
-		식별번호:  질의_식별번호.G값(),
-		질의_종류: 질의_종류,
-		질의_코드: TR코드,
-		질의:    질의,
-		유효기간:  time.Now().Add(30 * time.Second)}
-}
-
-type s콜백_대기 struct {
-	식별번호  int
-	질의_종류 T질의_종류
-	질의_코드 string // TR코드
-	질의    공용.I질의_가변형
-	유효기간  time.Time
-}
-
-func (this s콜백_대기) G식별번호() int       { return this.식별번호 }
-func (this s콜백_대기) G질의_종류() T질의_종류   { return this.질의_종류 }
-func (this s콜백_대기) G질의_코드() string   { return this.질의_코드 }
-func (this s콜백_대기) G질의() 공용.I질의_가변형  { return this.질의 }
-func (this s콜백_대기) G유효기간() time.Time { return this.유효기간 }
 
 var 질의_식별번호 = 공용.New안전한_일련_번호()
 
@@ -74,13 +26,22 @@ func f바이트2참거짓(값 []byte, 조건 string, 결과 bool) bool {
 
 func f_Go구조체로_변환(c *C.RECEIVED) interface{} {
 	// 반대로 변환할 때는 (*C.char)(unsafe.Pointer(&b[0]))
+	
+	g := (*Received)(unsafe.Pointer(c))
 
 	블록_이름 := C.GoString(c.BlockName)
-	전체_길이 := int(c.Length)
+	//전체_길이 := int(c.Length)
+	전체_길이 := int(g.Length)
 	데이터 := c.DataString
 
 	switch 블록_이름 {
-	case "c1101OutBlock":
+	case "c1101":
+		공용.F변수값_확인(블록_이름, 전체_길이, unsafe.Sizeof(C.Tc1101{}))
+		
+		f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Tc1101{}))
+		c := (*C.Tc1101)(unsafe.Pointer(데이터))
+		return New주식_현재가_조회(c)
+	/* case "c1101OutBlock":
 		f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Tc1101OutBlock{}))
 		return New주식_현재가_조회_기본_자료(데이터)
 	case "c1101OutBlock2":
@@ -102,7 +63,7 @@ func f_Go구조체로_변환(c *C.RECEIVED) interface{} {
 		return go슬라이스
 	case "c1101OutBlock3":
 		f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Tc1101OutBlock3{}))
-		return New주식_현재가_조회_종목_지표(데이터)
+		return New주식_현재가_조회_종목_지표(데이터) */
 	case "c1151OutBlock":
 		f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Tc1151OutBlock{}))
 		return New_ETF_현재가_조회_기본_자료(데이터)
@@ -222,11 +183,10 @@ func f접속_안_되어_있으면_에러(질의 공용.I질의_가변형) error 
 	return nil
 }
 
-func f조회(TR식별번호 int, TR코드 string, 데이터_포인터 unsafe.Pointer, 길이 int, 계좌_인덱스 int) bool {
+func f조회(TR식별번호 int, TR코드 string, c데이터 *C.char, 계좌_인덱스 int) bool {
 	cTR식별번호 := C.int(TR식별번호)
 	cTR코드 := C.CString(TR코드)
-	c데이터 := (*C.char)(데이터_포인터)
-	c길이 := C.int(길이)
+	c길이 := C.int(unsafe.Sizeof(*c데이터))
 	c계좌_인덱스 := C.int(계좌_인덱스)
 
 	defer func() {
@@ -277,18 +237,18 @@ func f접속(아이디, 암호, 공인인증서_암호 string) bool {
 	c아이디 := C.CString(아이디)
 	c암호 := C.CString(암호)
 	c공인인증서_암호 := C.CString(공인인증서_암호)
-
+	
 	defer func() {
 		C.free(unsafe.Pointer(c아이디))
 		C.free(unsafe.Pointer(c암호))
 		C.free(unsafe.Pointer(c공인인증서_암호))
 	}()
-
+	
 	서버_이름 := (*C.char)(unsafe.Pointer(nil))
 	포트_번호 := 0
-
+	
 	if 공용.F테스트_모드_실행_중() {
-		공용.F문자열_출력("테스트용 모의 서버")
+		//공용.F문자열_출력("테스트용 모의 서버")
 		서버_이름 = C.CString("newmt.wontrading.com")
 		포트_번호 = 8400
 	} else {
@@ -298,7 +258,7 @@ func f접속(아이디, 암호, 공인인증서_암호 string) bool {
 	}
 
 	defer C.free(unsafe.Pointer(서버_이름))
-
+	
 	로드_성공 := bool(C.wmcaLoad())
 	if !로드_성공 {
 		공용.F문자열_출력("로드 실패")

@@ -28,6 +28,7 @@ type Tc1101InBlock C.Tc1101InBlock
 type Tc1101OutBlock C.Tc1101OutBlock
 type Tc1101OutBlock2 C.Tc1101OutBlock2
 type Tc1101OutBlock3 C.Tc1101OutBlock3
+type Tc1101 C.Tc1101
 
 //----------------------------------------------------------------------//
 // ETF 현재가 조회 (c1151)

@@ -145,64 +145,6 @@ func (this s기본_메시지) String() string {
 	return 버퍼.String()
 }
 
-// 질의 메시지
-type s질의_메시지 struct {
-	s기본_메시지 // Go언어 구조체 embedding(임베딩) 기능. 상속 비스무리함.
-	회신_채널   chan I회신
-}
-
-func (this s질의_메시지) G검사(메시지_구분 string, 질의_길이 int) error {
-	switch {
-	case this.G구분() != 메시지_구분:
-		에러 := F에러_생성("잘못된 질의 메시지 구분.\n%s", this.String())
-		F에러_출력(에러)
-		this.회신_채널 <- New회신(에러, P메시지_에러)
-		return 에러
-	case this.G길이() != 질의_길이:
-		에러 := F에러_생성("잘못된 질의 내용 길이.\n%s", this.String())
-		F에러_출력(에러)
-		this.회신_채널 <- New회신(에러, P메시지_에러)
-		return 에러
-	}
-
-	return nil
-}
-
-func (this s질의_메시지) G회신() I회신 {
-	select {
-	case 회신 := <-this.회신_채널:
-		return 회신
-	case <-time.After(P타임아웃_Go):
-		return New회신(F에러_생성("I질의.G회신() 타임아웃.\n%v", this.String()))
-	}
-}
-
-func (this s질의_메시지) S질의(질의_채널 chan I질의) I질의 {
-	질의_채널 <- this
-
-	return this
-}
-
-func (this s질의_메시지) S회신(에러 error, 내용 ...interface{}) error {
-	select {
-	case this.회신_채널 <- New회신(에러, 내용...):
-		return nil
-	case <-time.After(P타임아웃_Go):
-		return F에러_생성("I질의.S회신() 타임아웃.\n%v", this)
-	}
-
-}
-
-// 회신 메시지
-type s회신_메시지 struct {
-	s기본_메시지 // Go언어 구조체 embedding(임베딩)
-	에러      error
-}
-
-func (this s회신_메시지) G에러() error {
-	return this.에러
-}
-
 // 기본 메시지 가변형
 type s기본_메시지_가변형 struct {
 	구분 string
@@ -249,10 +191,74 @@ func (this s기본_메시지_가변형) String() string {
 	return 버퍼.String()
 }
 
+// 질의 메시지
+type s질의_메시지 struct {
+	s기본_메시지 // Go언어 구조체 embedding(임베딩) 기능. 상속 비스무리함.
+	회신_채널   chan I회신
+	회신_종료 bool
+}
+
+func (this s질의_메시지) G검사(메시지_구분 string, 질의_길이 int) error {
+	switch {
+	case this.G구분() != 메시지_구분:
+		에러 := F에러_생성("잘못된 질의 메시지 구분.\n%s", this.String())
+		F에러_출력(에러)
+		this.회신_채널 <- New회신(에러, P메시지_에러)
+		return 에러
+	case this.G길이() != 질의_길이:
+		에러 := F에러_생성("잘못된 질의 내용 길이.\n%s", this.String())
+		F에러_출력(에러)
+		this.회신_채널 <- New회신(에러, P메시지_에러)
+		return 에러
+	}
+
+	return nil
+}
+
+func (this s질의_메시지) G회신() I회신 {
+	select {
+	case 회신 := <-this.회신_채널:
+		return 회신
+	case <-time.After(P타임아웃_Go):
+		return New회신(F에러_생성("I질의.G회신() 타임아웃.\n%v", this.String()))
+	}
+}
+
+func (this s질의_메시지) G회신_종료() bool { return this.회신_종료 }
+
+func (this *s질의_메시지) S질의(질의_채널 chan I질의) I질의 {
+	질의_채널 <- this
+
+	return this
+}
+
+func (this s질의_메시지) S회신(에러 error, 내용 ...interface{}) error {
+	select {
+	case this.회신_채널 <- New회신(에러, 내용...):
+		return nil
+	case <-time.After(P타임아웃_Go):
+		return F에러_생성("I질의.S회신() 타임아웃.\n%v", this)
+	}
+
+}
+
+func (this *s질의_메시지) S회신_종료() { this.회신_종료 = true }
+
+// 회신 메시지
+type s회신_메시지 struct {
+	s기본_메시지 // Go언어 구조체 embedding(임베딩)
+	에러      error
+}
+
+func (this s회신_메시지) G에러() error {
+	return this.에러
+}
+
 // 질의 메시지 가변형
 type s질의_메시지_가변형 struct {
-	s기본_메시지_가변형 // Go언어 구조체 embedding(임베딩) 기능. 상속 비스무리함.
+	s기본_메시지_가변형 
 	회신_채널       chan I회신_가변형
+	회신_종료 bool
 	타임아웃        time.Duration
 }
 
@@ -284,7 +290,9 @@ func (this s질의_메시지_가변형) G회신() I회신_가변형 {
 
 func (this s질의_메시지_가변형) G타임아웃() time.Duration { return this.타임아웃 }
 
-func (this s질의_메시지_가변형) S질의(질의_채널 chan I질의_가변형) I질의_가변형 {
+func (this s질의_메시지_가변형) G회신_종료() bool { return this.회신_종료 }
+
+func (this *s질의_메시지_가변형) S질의(질의_채널 chan I질의_가변형) I질의_가변형 {
 	질의_채널 <- this
 
 	return this
@@ -298,6 +306,8 @@ func (this s질의_메시지_가변형) S회신(에러 error, 내용 ...interfac
 		return F에러_생성("I질의.S회신() 타임아웃.\n%v", this.String())
 	}
 }
+
+func (this *s질의_메시지_가변형) S회신_종료() { this.회신_종료 = true }
 
 // 회신 메시지 가변형
 type s회신_메시지_가변형 struct {

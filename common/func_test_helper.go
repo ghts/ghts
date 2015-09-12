@@ -500,8 +500,8 @@ func F변수_내역_문자열(변수_모음 ...interface{}) string {
 		}
 
 		버퍼.WriteString(
-			F포맷된_문자열("형식%v : %v, 값%v : %v",
-				인덱스+1, reflect.TypeOf(변수), 인덱스+1, 변수))
+			F포맷된_문자열("형식 : %v\t, 종류 : %v\t, 값 : %v\n",
+				reflect.TypeOf(변수), reflect.TypeOf(변수).Kind(), 변수))
 	}
 
 	return 버퍼.String()

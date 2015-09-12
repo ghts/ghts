@@ -316,10 +316,10 @@ typedef struct { // 종목지표
 } Tc1101OutBlock3;
 
 typedef struct {
-	Tc1101InBlock c1101InBlock;							// 기본입력
-	Tc1101OutBlock c1101OutBlock;						// 종목마스타기본자료
-	Tc1101OutBlock2 c1101OutBlock2[20];					// 변동거래량자료 ,[반복]
-	Tc1101OutBlock3 c1101OutBlock3;						// 종목지표
+	Tc1101InBlock C1101InBlock;							// 기본입력
+	Tc1101OutBlock C1101OutBlock;						// 종목마스타기본자료
+	Tc1101OutBlock2 C1101OutBlock2[20];					// 변동거래량자료 ,[반복]
+	Tc1101OutBlock3 C1101OutBlock3;						// 종목지표
 } Tc1101;
 
 

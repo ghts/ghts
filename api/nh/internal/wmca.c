@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <windows.h>
+#include <winuser.h>
 #include "wmca_const.h"
 #include "_cgo_export.h"
 
@@ -8,7 +9,7 @@
 //      콜백 함수
 //-------------------------------------------------//
 
-void OnConnected_C(LOGINBLOCK* loginData) { OnConnected_Go(loginData); }
+void OnConnected_C(LOGINBLOCK* loginData) {OnConnected_Go(loginData); }
 void OnDisconnected_C() { OnDisconnected_Go(); }
 void OnMessage_C(OUTDATABLOCK* message) { OnMessage_Go(message); }
 
@@ -82,11 +83,11 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 		// 통신 오류 발생
 		OnSocketError_C((int)lParam);
 	} else if (wParam == CA_CONNECTED) {
-		//printf("CA_CONNECTED\n");
+		printf("CA_CONNECTED\n");
 		// 로그인 성공
 		OnConnected_C((LOGINBLOCK*)lParam);
 	} else if (wParam == CA_DISCONNECTED) {
-		//printf("CA_DISCONNECTED\n");
+		printf("CA_DISCONNECTED\n");
 		// 접속 끊김
 		OnDisconnected_C();
 	} else {
@@ -101,43 +102,65 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 //-------------------------------------------------//
 // wmca.dll 로드 및 반환
 HINSTANCE wmcaDLL() {
-	static HINSTANCE hInstance = NULL;
+	return LoadLibrary(TEXT("wmca.dll"));
+	/*static HINSTANCE hInstance = NULL;
 
 	if (hInstance == NULL) {
 		hInstance = LoadLibrary(TEXT("wmca.dll"));
 	}
 
-	return hInstance;
+	return hInstance; */
 }
 
+const int pReset2Null = 0;
 const int pGet = 1;
-const int pReset2Null = -1;
 
 // 메시지 전용 HWND 생성 및 반환.
 HWND _hWnd(int code) {
 	static HWND hWnd = NULL;
-	static const char* className = "MessageOnlyWindowClass";
-	static WNDCLASSEX wcx = {};
+	static HINSTANCE hInstance = NULL;
+	static const char* className = "MessageOnlyWindow";
 
 	if (code == pReset2Null) {
 		CloseWindow(hWnd);
+		DestroyWindow(hWnd);
+		UnregisterClass(className, hInstance);
 		hWnd = NULL;
+		hInstance = NULL;
 
 		return NULL;
 	} else if (code != pGet) {
 		printf("Unexpected code %d", code);
-
 		return NULL;
 	}
 
 	if (hWnd == NULL) {
+		hInstance = wmcaDLL();
+
+		WNDCLASSEX wcx = {};
 		wcx.cbSize = sizeof(WNDCLASSEX);
 		wcx.lpfnWndProc = (WNDPROC) WindowProc;
-		wcx.hInstance = wmcaDLL();	// current hInstance == HMODULE
+		wcx.hInstance = hInstance;	// current hInstance == HMODULE
 		wcx.lpszClassName = className;
 
 		if (!RegisterClassEx(&wcx) ) {
-			printf("Failed to RegisterClassEx()");
+			LPVOID lpMsgBuf;
+			DWORD dw = GetLastError();
+
+			FormatMessage(
+					FORMAT_MESSAGE_ALLOCATE_BUFFER |
+			        FORMAT_MESSAGE_FROM_SYSTEM |
+			        FORMAT_MESSAGE_IGNORE_INSERTS,
+			        NULL,
+			        dw,
+			        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+			        (LPTSTR) &lpMsgBuf,
+			        0, NULL );
+
+			printf("RegisterClassEx failed with error %d: %s", (int)dw, (char*)lpMsgBuf);
+			LocalFree(lpMsgBuf);
+
+			//printf("\nFailed to RegisterClassEx()\n");
 			return NULL;
 		}
 
@@ -243,8 +266,9 @@ bool wmcaQuery(int trId, char* trCode, char* data, int len, int accountIdx) {
         return false;
     }
 
-    BOOL value = func(getHWND(), trId, trCode, (char*)data,
-                      len, accountIdx);
+    BOOL value = func(getHWND(), trId, trCode, data, len, accountIdx);
+
+    free(data);
 
     return BOOL2bool(value);
 }

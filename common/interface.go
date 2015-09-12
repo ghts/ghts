@@ -77,8 +77,10 @@ type I질의 interface {
 	I메시지 // 질의 내용
 	G검사(메시지_구분 string, 질의_길이 int) error
 	G회신() I회신
+	G회신_종료() bool
 	S질의(질의_채널 chan I질의) I질의
 	S회신(에러 error, 내용 ...interface{}) error
+	S회신_종료()
 }
 
 func New질의(메시지_구분 string, 내용 ...interface{}) I질의 {
@@ -98,7 +100,12 @@ func New질의(메시지_구분 string, 내용 ...interface{}) I질의 {
 	회신_채널 := make(chan I회신, 100)
 	메시지 := New메시지(메시지_구분, 내용...)
 
-	return s질의_메시지{회신_채널: 회신_채널, s기본_메시지: 메시지.(s기본_메시지)}
+	s := new(s질의_메시지)
+	s.회신_채널 = 회신_채널
+	s.회신_종료 = false
+	s.s기본_메시지 = 메시지.(s기본_메시지)
+	
+	return s
 }
 
 func New질의_zmq메시지(zmq메시지 []string) I질의 {
@@ -173,8 +180,10 @@ type I질의_가변형 interface {
 	G검사(메시지_구분 string, 질의_길이 int) error
 	G회신() I회신_가변형
 	G타임아웃() time.Duration
+	G회신_종료() bool
 	S질의(질의_채널 chan I질의_가변형) I질의_가변형
 	S회신(에러 error, 내용 ...interface{}) error
+	S회신_종료()
 }
 
 func New질의_가변형(타임아웃 time.Duration, 메시지_구분 string, 내용 ...interface{}) I질의_가변형 {
@@ -193,8 +202,14 @@ func New질의_가변형(타임아웃 time.Duration, 메시지_구분 string, �
 
 	회신_채널 := make(chan I회신_가변형, 100)
 	메시지 := New메시지_가변형(메시지_구분, 내용...).(s기본_메시지_가변형)
-
-	return s질의_메시지_가변형{회신_채널: 회신_채널, 타임아웃: 타임아웃, s기본_메시지_가변형: 메시지}
+	
+	s := new(s질의_메시지_가변형)
+	s.회신_채널 = 회신_채널
+	s.타임아웃 = 타임아웃
+	s.회신_종료 = false
+	s.s기본_메시지_가변형 = 메시지
+	
+	return s
 }
 
 // 회신
