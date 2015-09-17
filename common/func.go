@@ -250,6 +250,13 @@ func F2시각(값 interface{}) (time.Time, error) {
 }
 
 func F2포맷된_시각(포맷 string, 값 interface{}) (time.Time, error) {
+	if strings.Contains(포맷, "포맷 문자열") {
+		F문자열_출력("%v 디버깅용 time 내용 : %v", F소스코드_위치(1), F2문자열(값))
+		
+		t1900_01_01 := time.Date(1900, time.January, 1, 0, 0, 0, 0, time.Now().Location())
+		return t1900_01_01 , nil
+	} 
+	
 	문자열 := ""
 	
 	switch 값.(type) {

@@ -16,3 +16,5 @@ cd %GHTS_DIR%\api\nh\internal
 
 cls
 go test
+
+SET PATH=%OLDPATH%

@@ -182,7 +182,7 @@ type I질의_가변형 interface {
 	G타임아웃() time.Duration
 	G회신_종료() bool
 	S질의(질의_채널 chan I질의_가변형) I질의_가변형
-	S회신(에러 error, 내용 ...interface{}) error
+	S회신(에러 error, 메시지_구분 string, 내용 ...interface{}) error
 	S회신_종료()
 }
 
@@ -218,15 +218,7 @@ type I회신_가변형 interface {
 	G에러() error
 }
 
-func New회신_가변형(에러 error, 내용 ...interface{}) I회신_가변형 {
-	메시지_구분 := ""
-
-	if 에러 == nil || F포맷된_문자열("%v", 에러) == "<nil>" {
-		메시지_구분 = P메시지_OK
-	} else {
-		메시지_구분 = P메시지_에러
-	}
-
+func New회신_가변형(에러 error, 메시지_구분 string, 내용 ...interface{}) I회신_가변형 {
 	if len(내용) == 1 {
 		가변형_모음, ok := 내용[0].([]interface{})
 

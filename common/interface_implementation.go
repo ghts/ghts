@@ -284,7 +284,7 @@ func (this s질의_메시지_가변형) G회신() I회신_가변형 {
 	case 회신 := <-this.회신_채널:
 		return 회신
 	case <-time.After(this.타임아웃):
-		return New회신_가변형(F에러_생성("I질의.G회신() 타임아웃.\n%v", this.String()))
+		return New회신_가변형(F에러_생성("I질의.G회신() 타임아웃.\n%v", this.String()), P메시지_에러)
 	}
 }
 
@@ -298,9 +298,9 @@ func (this *s질의_메시지_가변형) S질의(질의_채널 chan I질의_가�
 	return this
 }
 
-func (this s질의_메시지_가변형) S회신(에러 error, 내용 ...interface{}) error {
+func (this s질의_메시지_가변형) S회신(에러 error, 메시지_구분 string, 내용 ...interface{}) error {
 	select {
-	case this.회신_채널 <- New회신_가변형(에러, 내용...):
+	case this.회신_채널 <- New회신_가변형(에러, 메시지_구분, 내용...):
 		return nil
 	case <-time.After(this.타임아웃):
 		return F에러_생성("I질의.S회신() 타임아웃.\n%v", this.String())
