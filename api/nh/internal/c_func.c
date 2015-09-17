@@ -9,35 +9,20 @@
 //      콜백 함수
 //-------------------------------------------------//
 
-void OnConnected_C(LOGINBLOCK* loginData) {
-	printf("OnConnected_C()\n");
-	OnConnected_Go(loginData);
-}
+void OnConnected_C(LOGINBLOCK* loginData) { OnConnected_Go(loginData); }
 
-void OnDisconnected_C() {
-	printf("OnDisconnected_C()\n");
-	OnDisconnected_Go();
-}
+void OnDisconnected_C() { OnDisconnected_Go(); }
 
-void OnMessage_C(OUTDATABLOCK* message) {
-	printf("OnMessage_C()\n");
-	OnMessage_Go(message);
-}
+void OnMessage_C(OUTDATABLOCK* message) { OnMessage_Go(message); }
 
-void OnTrData_C(OUTDATABLOCK* data) {
-    printf("OnTrData_C()\n");
-    OnTrData_Go(data);
-}
+void OnTrData_C(OUTDATABLOCK* data) { OnTrData_Go(data); }
 
 void OnRealTimeData_C(OUTDATABLOCK* data) {
     printf("OnRealTimeData_C()\n");
     OnRealTimeData_Go(data);
 }
 
-void OnComplete_C(OUTDATABLOCK* data) {
-    printf("OnComplete_C()\n");
-    OnComplete_Go(data);
-}
+void OnComplete_C(OUTDATABLOCK* data) { OnComplete_Go(data); }
 
 void OnError_C(OUTDATABLOCK* error) {
     printf("OnError_C()\n");
@@ -70,23 +55,23 @@ void ProcessWindowsMessage(int arg4suppressWarning) {
 // 메시지 처리함수로 이 함수를 등록했으므로, 이 함수가 호출되면서 메시지가 전달됨.
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	if (wParam == CA_REALTIME_DATA) {
-		printf("CA_REALTIME_DATA\n");
+		printf("\n*** CA_REALTIME_DATA ***\n");
 		// 실시간 데이터 수신(BC)
 		OnRealTimeData_C((OUTDATABLOCK*)lParam);
 	} else if (wParam == CA_TR_DATA) {
-		printf("CA_TR_DATA\n");
+		printf("\n*** CA_TR_DATA ***\n");
 		// 서비스 응답 수신(TR)
 		OnTrData_C((OUTDATABLOCK*)lParam);
 	} else if (wParam == CA_MESSAGE) {
-		printf("CA_MESSAGE\n");
+		printf("\n*** CA_MESSAGE ***\n");
 		//상태 메시지 수신 (입력값이 잘못되었을 경우 문자열형태로 설명이 수신됨)
 		OnMessage_C((OUTDATABLOCK*)lParam);
 	} else if (wParam == CA_COMPLETE) {
-		printf("CA_COMPLETE\n");
+		printf("\n*** CA_COMPLETE ***\n");
 		//서비스 처리 완료
 		OnComplete_C((OUTDATABLOCK*)lParam);
 	} else if (wParam == CA_ERROR) {
-		printf("CA_ERROR\n");
+		printf("\n*** CA_ERROR ***\n");
 		//서비스 처리중 오류 발생 (입력값 오류등)
 		OnError_C((OUTDATABLOCK*)lParam);
 	} else if (wParam == CA_SOCKET_ERROR) {
@@ -94,11 +79,11 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 		// 통신 오류 발생
 		OnSocketError_C((int)lParam);
 	} else if (wParam == CA_CONNECTED) {
-		printf("CA_CONNECTED\n");
+		printf("\n*** CA_CONNECTED ***\n");
 		// 로그인 성공
 		OnConnected_C((LOGINBLOCK*)lParam);
 	} else if (wParam == CA_DISCONNECTED) {
-		printf("CA_DISCONNECTED\n");
+		printf("\n*** CA_DISCONNECTED ***\n");
 		// 접속 끊김
 		OnDisconnected_C();
 	} else {

@@ -9,11 +9,11 @@ const 실행_성공 = "completed successfully"
 const P30초 = 30 * time.Second
 
 const (
-	P상한 byte = 0x18
-	P상승 byte = 0x1E
-	P보합 byte = 0x20
-	P하한 byte = 0x19
-	P하락 byte = 0x1F
+	P상한 int8 = 0x18
+	P상승 int8 = 0x1E
+	P보합 int8 = 0x20
+	P하한 int8 = 0x19
+	P하락 int8 = 0x1F
 )
 
 // 질의 종류
@@ -28,15 +28,17 @@ const (
 
 // 회신 종류
 const (
-	P회신_접속 = "C"
-	P회신_접속_해제 = "D"
-	P회신_메시지 = "M"
-	P회신_조회 = "Q"
-	P회신_실시간_데이터 = "R"
-	P회신_완료 = "P"
-	P회신_에러 = "O"
-	P회신_소켓_에러 = "S"
-	P회신_종료 = "Q"
+	P회신_접속 string = string(100 + iota)
+	P회신_접속_해제
+	P회신_접속됨
+	P회신_메시지
+	P회신_조회
+	P회신_실시간_데이터
+	P회신_완료
+	P회신_에러
+	P회신_소켓_에러
+	P회신_종료
+	P회신_실시간_서비스_모두_해지
 )
 
 const (

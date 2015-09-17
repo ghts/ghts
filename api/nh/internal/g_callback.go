@@ -21,22 +21,16 @@ func OnDisconnected_Go() { f접속_해제_콜백_처리() }
 //export OnMessage_Go
 func OnMessage_Go(c *C.OUTDATABLOCK) { f메시지_콜백_처리(c) }
 
+//export OnTrData_Go
+func OnTrData_Go(c *C.OUTDATABLOCK) { f조회_데이터_콜백_처리(c) }
+
+//export OnComplete_Go
+func OnComplete_Go(c *C.OUTDATABLOCK) { f완료_콜백_처리(c) }
+
 //export OnRealTimeData_Go
 func OnRealTimeData_Go(c *C.OUTDATABLOCK) {
 	공용.F문자열_출력("OnRealTimeData_Go")
 	f실시간_데이터_콜백_처리(c)
-}
-
-//export OnTrData_Go
-func OnTrData_Go(c *C.OUTDATABLOCK) {
-	공용.F문자열_출력("OnTrData_Go")
-	f조회_데이터_콜백_처리(c)
-}
-
-//export OnComplete_Go
-func OnComplete_Go(c *C.OUTDATABLOCK) {
-	공용.F문자열_출력("OnComplete_Go")
-	f완료_콜백_처리(c)
 }
 
 //export OnError_Go
@@ -55,8 +49,6 @@ func OnSocketError_Go(에러_코드 C.int) {
 // 콜백(역호출)으로 수신한 데이터를 실제로 처리하는 함수(핸들러?)들
 
 func f접속_콜백_처리(c *C.LOGINBLOCK) {
-	//공용.F문자열_출력("f접속_콜백_처리()")
-
 	데이터 := New로그인_정보(c)
 
 	for 키, 대기_항목 := range 대기항목_맵 {
@@ -75,7 +67,7 @@ func f접속_해제_콜백_처리() {
 		switch {
 		case 대기_항목.G질의_종류() == P질의_접속_해제:
 			// 접속 해제 요청이 성공했으므로, 에러가 아님
-			대기_항목.G질의().S회신(nil, P회신_접속_해제, 접속_해제_에러.Error())
+			대기_항목.G질의().S회신(nil, P회신_접속_해제, true)
 		default:
 			// 나머지 모든 경우에 대해서 에러 회신.
 			대기_항목.G질의().S회신(접속_해제_에러, P회신_접속_해제)
@@ -88,8 +80,6 @@ func f접속_해제_콜백_처리() {
 }
 
 func f메시지_콜백_처리(c *C.OUTDATABLOCK) {
-	//공용.F문자열_출력("f메시지_콜백_처리()")
-	
 	defer C.free(unsafe.Pointer(c))
 	
 	데이터 := New수신_메시지_블록(c)

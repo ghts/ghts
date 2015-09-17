@@ -35,7 +35,6 @@ func f_Go구조체로_변환(c *C.RECEIVED) interface{} {
 	데이터 := c.DataString
 	
 	공용.F문자열_출력("블록 이름 : %v", 블록_이름)
-	공용.F문자열_출력("전체 길이, sizeof : %v, %v", 전체_길이, unsafe.Sizeof(C.Tc1101{}))
 	
 	if 전체_길이 == 0 {
 		return nil
@@ -46,9 +45,9 @@ func f_Go구조체로_변환(c *C.RECEIVED) interface{} {
 		//f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Tc1101{}))
 		//c := (*C.Tc1101)(unsafe.Pointer(데이터))
 		//return New주식_현재가_조회(c)
+		panic("예상치 못한 경우")
 		return nil
 	case "c1101OutBlock":
-		f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Tc1101OutBlock{}))
 		c := (*C.Tc1101OutBlock)(unsafe.Pointer(데이터))
 		return New주식_현재가_조회_기본_자료(c)
 	case "c1101OutBlock2":
@@ -73,54 +72,71 @@ func f_Go구조체로_변환(c *C.RECEIVED) interface{} {
 		c := (*C.Tc1101OutBlock3)(unsafe.Pointer(데이터))
 		return New주식_현재가_조회_종목_지표(c)
 	case "c1151OutBlock":
+		공용.F문자열_출력("전체 길이, sizeof : %v, %v", 전체_길이, unsafe.Sizeof(C.Tc1151OutBlock{}))
 		f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Tc1151OutBlock{}))
 		return New_ETF_현재가_조회_기본_자료(데이터)
 	case "c1151OutBlock2":
+		공용.F문자열_출력("전체 길이, sizeof : %v, %v", 전체_길이, unsafe.Sizeof(C.Tc1151OutBlock2{}))
 		f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Tc1151OutBlock2{}))
 		return New_ETF_현재가_조회_기본_자료(데이터)
 	case "c1151OutBlock3":
+		공용.F문자열_출력("전체 길이, sizeof : %v, %v", 전체_길이, unsafe.Sizeof(C.Tc1151OutBlock3{}))
 		f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Tc1151OutBlock3{}))
 		return New_ETF_현재가_조회_예상_체결(데이터)
 	case "c1151OutBlock4":
+		공용.F문자열_출력("전체 길이, sizeof : %v, %v", 전체_길이, unsafe.Sizeof(C.Tc1151OutBlock4{}))
 		f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Tc1151OutBlock4{}))
 		return New_ETF_현재가_조회_ETF자료(데이터)
 	case "c1151OutBlock5":
+		공용.F문자열_출력("전체 길이, sizeof : %v, %v", 전체_길이, unsafe.Sizeof(C.Tc1151OutBlock5{}))
 		f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Tc1151OutBlock5{}))
 		return New_ETF_현재가_조회_기반_지수_자료(데이터)
 	case "h1OutBlock":
+		공용.F문자열_출력("전체 길이, sizeof : %v, %v", 전체_길이, unsafe.Sizeof(C.Th1OutBlock{}))
 		f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Th1OutBlock{}))
 		return New코스피_호가_잔량(데이터)
 	case "k3OutBlock":
+		공용.F문자열_출력("전체 길이, sizeof : %v, %v", 전체_길이, unsafe.Sizeof(C.Tk3OutBlock{}))
 		f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Tk3OutBlock{}))
 		return New코스닥_호가_잔량(데이터)
 	case "h2OutBlock":
+		공용.F문자열_출력("전체 길이, sizeof : %v, %v", 전체_길이, unsafe.Sizeof(C.Th2OutBlock{}))
 		f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Th2OutBlock{}))
 		return New코스피_시간외_호가_잔량(데이터)
 	case "k4OutBlock":
+		공용.F문자열_출력("전체 길이, sizeof : %v, %v", 전체_길이, unsafe.Sizeof(C.Tk4OutBlock{}))
 		f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Tk4OutBlock{}))
 		return New코스닥_시간외_호가_잔량(데이터)
 	case "h3OutBlock":
+		공용.F문자열_출력("전체 길이, sizeof : %v, %v", 전체_길이, unsafe.Sizeof(C.Th3OutBlock{}))
 		f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Th3OutBlock{}))
 		return New코스피_예상_호가_잔량(데이터)
 	case "k5OutBlock":
+		공용.F문자열_출력("전체 길이, sizeof : %v, %v", 전체_길이, unsafe.Sizeof(C.Tk5OutBlock{}))
 		f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Tk5OutBlock{}))
 		return New코스닥_예상_호가_잔량(데이터)
 	case "j8OutBlock":
+		공용.F문자열_출력("전체 길이, sizeof : %v, %v", 전체_길이, unsafe.Sizeof(C.Tj8OutBlock{}))
 		f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Tj8OutBlock{}))
 		return New코스피_체결(데이터)
 	case "k8OutBlock":
+		공용.F문자열_출력("전체 길이, sizeof : %v, %v", 전체_길이, unsafe.Sizeof(C.Tk8OutBlock{}))
 		f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Tk8OutBlock{}))
 		return New코스닥_체결(데이터)
 	case "j1OutBlock":
+		공용.F문자열_출력("전체 길이, sizeof : %v, %v", 전체_길이, unsafe.Sizeof(C.Tj1OutBlock{}))
 		f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Tj1OutBlock{}))
 		return New코스피_ETF(데이터)
 	case "j0OutBlock":
+		공용.F문자열_출력("전체 길이, sizeof : %v, %v", 전체_길이, unsafe.Sizeof(C.Tj0OutBlock{}))
 		f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Tj0OutBlock{}))
 		return New코스닥_ETF(데이터)
 	case "u1OutBlock":
+		공용.F문자열_출력("전체 길이, sizeof : %v, %v", 전체_길이, unsafe.Sizeof(C.Tu1OutBlock{}))
 		f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Tu1OutBlock{}))
 		return New코스피_업종_지수(데이터)
 	case "k1OutBlock":
+		공용.F문자열_출력("전체 길이, sizeof : %v, %v", 전체_길이, unsafe.Sizeof(C.Tk1OutBlock{}))
 		f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Tk1OutBlock{}))
 		return New코스닥_업종_지수(데이터)
 	default:
