@@ -1,8 +1,4 @@
-/doc/
-/sample_vcpp/
+/config.ini
+/debug_data
 /trio_inv.h
 /trio_ord.h
-/test_cfg.ini
-/config.ini
-/wmca.ini
-/debug_data
