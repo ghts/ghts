@@ -138,8 +138,27 @@ func F2바이트_모음(값 interface{}) []byte {
 	}
 }
 
-func F2문자열_CP949(바이트_모음_cp949 []byte) string {
-	바이트_모음_utf8, 에러 := cp949.From(바이트_모음_cp949)
+func F2문자열_CP949(값 interface{}) string {
+	바이트_모음_CP949 := make([]byte, 0)
+	
+	switch 값.(type) {
+	case []byte:
+		바이트_모음_CP949 = 값.([]byte)
+	case [1]byte, [2]byte, [3]byte, [4]byte, [5]byte,
+		[6]byte, [7]byte, [8]byte, [9]byte, [10]byte,
+		[11]byte, [12]byte, [13]byte, [14]byte, [15]byte,
+		[16]byte, [17]byte, [18]byte, [19]byte, [20]byte,
+		[21]byte, [22]byte, [23]byte, [24]byte, [25]byte,
+		[26]byte, [27]byte, [28]byte, [29]byte, [30]byte,
+		[80]byte:
+		바이트_모음_CP949 = F2바이트_모음(값)
+	default:
+		에러 := F에러_생성("예상치 못한 자료 형식. %v", reflect.TypeOf(값))
+		F에러_출력(에러)
+		panic(에러) 
+	}
+	 
+	바이트_모음_utf8, 에러 := cp949.From(바이트_모음_CP949)
 	F에러_패닉(에러)
 
 	return string(바이트_모음_utf8)
@@ -250,7 +269,7 @@ func F2시각(값 interface{}) (time.Time, error) {
 }
 
 func F2포맷된_시각(포맷 string, 값 interface{}) (time.Time, error) {
-	if strings.Contains(포맷, "포맷 문자열") {
+	if strings.Contains(포맷, "포맷") {
 		F문자열_출력("%v 디버깅용 time 내용 : %v", F소스코드_위치(1), F2문자열(값))
 		
 		t1900_01_01 := time.Date(1900, time.January, 1, 0, 0, 0, 0, time.Now().Location())

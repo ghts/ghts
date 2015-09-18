@@ -9,11 +9,11 @@ const 실행_성공 = "completed successfully"
 const P30초 = 30 * time.Second
 
 const (
-	P상한 int8 = 0x18
-	P상승 int8 = 0x1E
-	P보합 int8 = 0x20
-	P하한 int8 = 0x19
-	P하락 int8 = 0x1F
+	P상한 uint8 = 0x18
+	P상승 uint8 = 0x1E
+	P보합 uint8 = 0x20
+	P하한 uint8 = 0x19
+	P하락 uint8 = 0x1F
 )
 
 // 질의 종류

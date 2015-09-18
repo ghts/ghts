@@ -498,7 +498,8 @@ func F변수_내역_문자열(값_모음 ...interface{}) string {
 		자료_종류 := 자료형.Kind()
 		
 		switch {
-		case 자료_종류 == reflect.Struct:
+		case 자료_종류 == reflect.Struct &&
+			자료형.String() != "time.Time":
 			버퍼.WriteString(F포맷된_문자열(
 				"형식 : %v\t, 종류 : %v\t, 이름 : %v\n", 
 				자료형, 자료형.Kind(), 자료형.Name()))
