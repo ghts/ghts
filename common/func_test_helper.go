@@ -20,6 +20,7 @@ package common
 import (
 	"bytes"
 	"fmt"
+	"math"
 	"math/rand"
 	"path/filepath"
 	"reflect"
@@ -63,6 +64,26 @@ func F문자열_출력_일시정지_해제() error {
 	return 문자열_출력_일시정지_모드.S값(false)
 }
 
+func F오차율(값1 interface{}, 값2 interface{}) float64 {
+	실수1, 에러 := F2실수(값1)
+	F에러_패닉(에러)
+	
+	실수2, 에러 := F2실수(값2)
+	F에러_패닉(에러)
+	
+	오차율1, 오차율2 := float64(0), float64(0)
+	
+	if 실수1 != 0 {
+		오차율1 = math.Abs((실수1 - 실수2) / 실수1) * 100
+	}
+	
+	if 실수2 != 0 {
+		오차율2 = math.Abs((실수2 - 실수1) / 실수2) * 100
+	}
+	
+	return math.Max(오차율1, 오차율2) 
+}
+
 func F테스트_참임(테스트 testing.TB, true이어야_하는_조건 bool, 추가_매개변수 ...interface{}) {
 	// 종료할 때 문자열 출력 일시정지 상태를 원상 회복
 	문자열_출력_일시정지_중_원본 := F문자열_출력_일시정지_중()
@@ -81,7 +102,7 @@ func F테스트_참임(테스트 testing.TB, true이어야_하는_조건 bool, �
 
 	F문자열_출력_일시정지_해제()
 
-	출력_문자열 := "true이어야 하는 조건이 false임. "
+	출력_문자열 := "true이어야 하는 조건이 false임.\n"
 
 	if 추가_매개변수 != nil && len(추가_매개변수) != 0 {
 		출력_문자열 += F변수_내역_문자열(추가_매개변수...)

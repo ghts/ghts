@@ -132,6 +132,9 @@ func F2바이트_모음(값 interface{}) []byte {
 	case [80]byte:
 		배열 := 값.([80]byte)
 		return 배열[:]
+	case [100]byte:
+		배열 := 값.([100]byte)
+		return 배열[:]
 	default:
 		F변수값_확인(값)
 		panic(F에러_생성("예상치 못한 자료형"))
@@ -150,7 +153,7 @@ func F2문자열_CP949(값 interface{}) string {
 		[16]byte, [17]byte, [18]byte, [19]byte, [20]byte,
 		[21]byte, [22]byte, [23]byte, [24]byte, [25]byte,
 		[26]byte, [27]byte, [28]byte, [29]byte, [30]byte,
-		[80]byte:
+		[80]byte, [100]byte:
 		바이트_모음_CP949 = F2바이트_모음(값)
 	default:
 		에러 := F에러_생성("예상치 못한 자료 형식. %v", reflect.TypeOf(값))
@@ -186,7 +189,7 @@ func F2문자열(값 interface{}) string {
 		[16]byte, [17]byte, [18]byte, [19]byte, [20]byte,
 		[21]byte, [22]byte, [23]byte, [24]byte, [25]byte,
 		[26]byte, [27]byte, [28]byte, [29]byte, [30]byte,
-		[80]byte:
+		[80]byte, [100]byte:
 		return string(F2바이트_모음(값))
 	default:
 		자료형 := reflect.TypeOf(값) 
@@ -272,8 +275,10 @@ func F2포맷된_시각(포맷 string, 값 interface{}) (time.Time, error) {
 	if strings.Contains(포맷, "포맷") {
 		F문자열_출력("%v 디버깅용 time 내용 : %v", F소스코드_위치(1), F2문자열(값))
 		
-		t1900_01_01 := time.Date(1900, time.January, 1, 0, 0, 0, 0, time.Now().Location())
-		return t1900_01_01 , nil
+		무의미한_값 := time.Date(0, time.Month(1), 1, 0, 0, 0, 0, time.UTC)
+		에러 := F에러_생성("포맷 문자열이 지정되어 있지 않음.")
+		
+		return 무의미한_값, 에러 
 	} 
 	
 	문자열 := ""
@@ -283,6 +288,12 @@ func F2포맷된_시각(포맷 string, 값 interface{}) (time.Time, error) {
 		문자열 = 값.(string)
 	default:
 		문자열 = F2문자열(값)
+	}
+	
+	문자열 = strings.TrimSpace(문자열)
+	
+	if F2문자열(값) == "06:51" {
+		F문자열_출력(문자열)
 	}
 	
 	return time.Parse(포맷, 문자열)
