@@ -64,13 +64,12 @@ func F문자열_출력_일시정지_해제() error {
 	return 문자열_출력_일시정지_모드.S값(false)
 }
 
+func F오차(값1 interface{}, 값2 interface{}) float64 {
+	return math.Abs(F2실수(값1) - F2실수(값2))
+}
+
 func F오차율(값1 interface{}, 값2 interface{}) float64 {
-	실수1, 에러 := F2실수(값1)
-	F에러_패닉(에러)
-	
-	실수2, 에러 := F2실수(값2)
-	F에러_패닉(에러)
-	
+	실수1, 실수2 := F2실수(값1), F2실수(값2)
 	오차율1, 오차율2 := float64(0), float64(0)
 	
 	if 실수1 != 0 {
@@ -416,6 +415,13 @@ func F호출경로_문자열(호출경로_건너뛰기_단계 int) string {
 
 func F포맷된_문자열(포맷_문자열 string, 추가_매개변수 ...interface{}) string {
 	return fmt.Errorf(포맷_문자열, 추가_매개변수...).Error()
+}
+
+func F에러(포맷_문자열 string, 추가_매개변수 ...interface{}) error {
+	에러 := F에러_생성(포맷_문자열, 추가_매개변수...)
+	F에러_출력(에러)
+	
+	return 에러
 }
 
 func F에러_생성(포맷_문자열 string, 추가_매개변수 ...interface{}) error {

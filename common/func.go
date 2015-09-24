@@ -219,68 +219,7 @@ func F2문자열_모음(인터페이스_모음 []interface{}) []string {
 	return 문자열_모음
 }
 
-func F2정수(값 interface{}) (int, error) {
-	문자열 := ""
-	
-	switch 값.(type) {
-	case string:
-		문자열 = 값.(string)
-	default:
-		문자열 = F2문자열(값)
-	}
-	
-	return strconv.Atoi(문자열)
-}
-
-func F2정수64(값 interface{}) (int64, error) {
-	문자열 := ""
-	
-	switch 값.(type) {
-	case string:
-		문자열 = 값.(string)
-	default:
-		문자열 = F2문자열(값)
-	}
-	
-	return strconv.ParseInt(문자열, 10, 64)
-}
-
-func F2실수(값 interface{}) (float64, error) {
-	문자열 := ""
-	
-	switch 값.(type) {
-	case string:
-		문자열 = 값.(string)
-	default:
-		문자열 = F2문자열(값)
-	}
-	
-	return strconv.ParseFloat(문자열, 64)
-}
-
-func F2시각(값 interface{}) (time.Time, error) {
-	문자열 := ""
-	
-	switch 값.(type) {
-	case string:
-		문자열 = 값.(string)
-	default:
-		문자열 = F2문자열(값)
-	}
-	
-	return time.Parse(P시간_형식, 문자열)
-}
-
-func F2포맷된_시각(포맷 string, 값 interface{}) (time.Time, error) {
-	if strings.Contains(포맷, "포맷") {
-		F문자열_출력("%v 디버깅용 time 내용 : %v", F소스코드_위치(1), F2문자열(값))
-		
-		무의미한_값 := time.Date(0, time.Month(1), 1, 0, 0, 0, 0, time.UTC)
-		에러 := F에러_생성("포맷 문자열이 지정되어 있지 않음.")
-		
-		return 무의미한_값, 에러 
-	} 
-	
+func F2정수(값 interface{}) int {
 	문자열 := ""
 	
 	switch 값.(type) {
@@ -292,11 +231,82 @@ func F2포맷된_시각(포맷 string, 값 interface{}) (time.Time, error) {
 	
 	문자열 = strings.TrimSpace(문자열)
 	
-	if F2문자열(값) == "06:51" {
-		F문자열_출력(문자열)
+	반환값, 에러 := strconv.Atoi(문자열)
+	F에러_패닉(에러)
+	
+	return 반환값 
+}
+
+func F2정수64(값 interface{}) int64 {
+	문자열 := ""
+	
+	switch 값.(type) {
+	case string:
+		문자열 = 값.(string)
+	default:
+		문자열 = F2문자열(값)
 	}
 	
-	return time.Parse(포맷, 문자열)
+	문자열 = strings.TrimSpace(문자열)
+
+	반환값, 에러 := strconv.ParseInt(문자열, 10, 64)
+	F에러_패닉(에러)
+	
+	return 반환값 
+}
+
+func F2실수(값 interface{}) float64 {
+	문자열 := ""
+	
+	switch 값.(type) {
+	case string:
+		문자열 = 값.(string)
+	default:
+		문자열 = F2문자열(값)
+	}
+	
+	문자열 = strings.TrimSpace(문자열)
+
+	반환값, 에러 := strconv.ParseFloat(문자열, 64)
+	F에러_패닉(에러)
+	
+	return 반환값
+}
+
+func F2시각(값 interface{}) time.Time {
+	문자열 := ""
+	
+	switch 값.(type) {
+	case string:
+		문자열 = 값.(string)
+	default:
+		문자열 = F2문자열(값)
+	}
+	
+	문자열 = strings.TrimSpace(문자열)
+
+	반환값, 에러 := time.Parse(P시간_형식, 문자열)
+	F에러_패닉(에러)
+	
+	return 반환값
+}
+
+func F2포맷된_시각(포맷 string, 값 interface{}) time.Time {
+	문자열 := ""
+	
+	switch 값.(type) {
+	case string:
+		문자열 = 값.(string)
+	default:
+		문자열 = F2문자열(값)
+	}
+	
+	문자열 = strings.TrimSpace(문자열)
+
+	반환값, 에러 := time.Parse(포맷, 문자열)
+	F에러_패닉(에러)
+	
+	return 반환값 
 }
 
 func F2참거짓(값 interface{}, 조건 interface{}, 결과 bool) bool {
@@ -321,6 +331,7 @@ func F2인터페이스_모음(문자열_모음 []string) []interface{} {
 	return 인터페이스_모음
 }
 
+/*
 func F바이트_모음_늘리기(바이트_모음 []byte, 길이 int) []byte {
 	if len(바이트_모음) > 길이 {
 		에러 := F에러_생성("지정된 길이가 더 짧음.")
@@ -335,7 +346,8 @@ func F바이트_모음_늘리기(바이트_모음 []byte, 길이 int) []byte {
 	}
 
 	return 반환값
-}
+} 
+*/
 
 func F타입_이름(i interface{}) string {
 	return reflect.TypeOf(i).Name()

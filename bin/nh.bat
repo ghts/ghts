@@ -1,6 +1,5 @@
 @echo off
 
-REM SET CGO_ENABLED=1
 SET OLDPATH=%PATH%
 SET GOARCH=386
 SET GHTS_DIR=%GOPATH%\src\github.com\ghts\ghts

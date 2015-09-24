@@ -16,6 +16,68 @@ import (
 
 var 질의_식별번호 = 공용.New안전한_일련_번호()
 
+func f2등락부호(바이트_모음 [1]byte) uint8 {
+	값 := uint8(바이트_모음[0])
+		
+	switch 값 {
+	case P상한, P상승, P보합, P하한, P하락:
+		return 값
+	}
+	
+	go문자열 := 공용.F2문자열(바이트_모음)
+	
+	switch go문자열 {
+	case "1", "6":
+		return P상한
+	case "2", "7":
+		return P상승
+	case "3", "0":
+		return P보합
+	case "4", "8":
+		return P하한
+	case "5", "9":
+		return P하락
+	}
+	
+	공용.F변수값_확인(바이트_모음)
+	공용.F변수값_확인(값)
+	공용.F변수값_확인(go문자열)
+	에러 := 공용.F에러_생성("예상치 못한 등락부호 값.")
+	공용.F에러_출력(에러)
+	panic(에러)
+	
+	return 0xFF
+}
+
+func f올바른_등락부호(값 uint8) bool {
+	switch 값 {
+	case P상한, P상승, P보합, P하락, P하한:
+		return true
+	default:
+		return false
+	}
+}
+
+func f2실수_소숫점_추가(값 interface{}, 소숫점_이하_자릿수 int) float64 {
+	문자열 := strings.Replace(공용.F2문자열(값), " ", "0", -1)
+	
+	if len(문자열) < 소숫점_이하_자릿수 {
+		에러 := 공용.F에러_생성("문자열 길이가 소숫점_이하_자릿수 보다 짧습니다.")
+		공용.F에러_출력(에러)
+		panic(에러)
+	}
+	
+	소숫점_추가_문자열 := ""
+	
+	if strings.Contains(문자열, ".") {
+		소숫점_추가_문자열 = 문자열
+	} else {
+		소숫점_추가_문자열 = 문자열[:len(문자열) - 소숫점_이하_자릿수] + "." + 문자열[len(문자열) - 소숫점_이하_자릿수:]
+	}
+	
+	return 공용.F2실수(소숫점_추가_문자열)
+}
+
 func f바이트2참거짓(값 []byte, 조건 string, 결과 bool) bool {
 	if string(값) == 조건 {
 		return 결과
