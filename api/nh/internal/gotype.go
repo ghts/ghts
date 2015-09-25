@@ -144,7 +144,6 @@ func New수신_메시지_블록(c블록 *C.OUTDATABLOCK) S수신_메시지_블�
 
 	코드 := 공용.F2문자열(g.MsgCode)
 	
-	
 	바이트_모음 := C.GoBytes(unsafe.Pointer(&c.UsrMsg), C.int(len(c.UsrMsg)))
 	
 	if len(바이트_모음) > len(c.UsrMsg[:]) {
@@ -415,7 +414,14 @@ type S주식_현재가_조회_기본_자료 struct {
 	M대량_매매_존재          bool
 }
 
-func New주식_현재가_조회_기본_자료(c *C.Tc1101OutBlock) *S주식_현재가_조회_기본_자료 {
+func New주식_현재가_조회_기본_자료(c *C.Tc1101OutBlock) (데이터 *S주식_현재가_조회_기본_자료) {
+	defer func() {
+		if 값 := recover(); 값 != nil {
+			공용.F에러(공용.F포맷된_문자열("%v", 값))
+			데이터 = nil
+		}
+	}()
+	
 	g := (*Tc1101OutBlock)(unsafe.Pointer(c))
 	
 	s := new(S주식_현재가_조회_기본_자료)
@@ -502,8 +508,6 @@ func New주식_현재가_조회_기본_자료(c *C.Tc1101OutBlock) *S주식_현�
 	s.M종목_정보_4 = 공용.F2문자열_CP949(g.MarketAction4)
 	s.M종목_정보_5 = 공용.F2문자열_CP949(g.MarketAction5)
 	s.M종목_정보_6 = 공용.F2문자열_CP949(g.MarketAction6)
-	
-	공용.F변수값_확인(g.ConvertBond, 공용.F2문자열(g.ConvertBond))
 	s.M전환사채_구분 = 공용.F2문자열(g.ConvertBond)
 	s.M액면가 = 공용.F2정수64(g.NominalPrice)
 	//s.M전일종가_타이틀 = 공용.F2문자열_CP949(g.PrevPriceTitle)
@@ -649,7 +653,13 @@ func New주식_현재가_조회_기본_자료(c *C.Tc1101OutBlock) *S주식_현�
 	case "6":
 		종목별_신용한도_문자열 = s.M종목_정보_6
 	default:
-		에러 := 공용.F에러("시각 %v, 종목코드 %v, 예상하지 못한 종목별_신용한도_위치. %v", 종목별_신용한도_위치)
+		에러 := 공용.F에러("시각 %v, 종목코드 %v\n" +
+			"예상하지 못한 종목별_신용한도_위치. %v\n" +
+			" 1 : %v\n2 : %v\n3 : %v\n" +
+			" 4 : %v\n5 : %v\n6 : %v\n", 
+			s.M시각, s.M종목_코드, 종목별_신용한도_위치,
+			s.M종목_정보_1, s.M종목_정보_2, s.M종목_정보_3, 
+			s.M종목_정보_4, s.M종목_정보_5, s.M종목_정보_6)
 		panic(에러)
 	}
 		
@@ -688,17 +698,16 @@ func New주식_현재가_조회_기본_자료(c *C.Tc1101OutBlock) *S주식_현�
 	s.M외국인_지분_한도 = f2실수_소숫점_추가(g.ForeignLmtPercent, 2)
 	s.M매매_수량_단위 = 공용.F2정수64(g.TrUnitVolume)
 	
-	공용.F변수값_확인(g.DarkPoolOfferBid, 공용.F2문자열(g.DarkPoolOfferBid))
+	공용.F메모("'M대량_매매_방향'이 ASCII코드가 아닌  숫자값인 게 정상인지 확인할 것.")
+	//공용.F변수값_확인(g.DarkPoolOfferBid, 공용.F2문자열(g.DarkPoolOfferBid))
 	s.M대량_매매_방향 = uint8(g.DarkPoolOfferBid[0]) // 0 = 해당없음 1 = 매도 2 = 매수
-	
-	공용.F변수값_확인(g.DarkPoolExist, 공용.F2문자열(g.DarkPoolExist))
 	s.M대량_매매_존재 = 공용.F2참거짓(g.DarkPoolExist, "1", true)
 
 	return s
 }
 
 type S주식_현재가_조회_변동_거래량_자료 struct { // 변동거래량자료[반복]
-	M시간     time.Time
+	M시각     time.Time
 	M현재가    int64
 	M등락부호   uint8
 	M등락폭    int64
@@ -708,11 +717,18 @@ type S주식_현재가_조회_변동_거래량_자료 struct { // 변동거래�
 	M거래량    int64
 }
 
-func New주식_현재가_조회_변동_거래량_자료(c *C.Tc1101OutBlock2) *S주식_현재가_조회_변동_거래량_자료 {
+func New주식_현재가_조회_변동_거래량_자료(c *C.Tc1101OutBlock2) (데이터 *S주식_현재가_조회_변동_거래량_자료) {
+	defer func() {
+		if 값 := recover(); 값 != nil {
+			공용.F에러(공용.F포맷된_문자열("%v", 값))
+			데이터 = nil
+		}
+	}()
+	
 	g := (*Tc1101OutBlock2)(unsafe.Pointer(c))
 	
 	s := new(S주식_현재가_조회_변동_거래량_자료)
-	s.M시간 = 공용.F2포맷된_시각("15:04:05", g.Time)
+	s.M시각 = 공용.F2포맷된_시각("15:04:05", g.Time)
 	s.M현재가 = 공용.F2정수64(g.MarketPrice)
 	s.M등락부호 = f2등락부호(g.DiffSign)
 	s.M등락폭 = 공용.F2정수64(g.Diff)
@@ -725,7 +741,7 @@ func New주식_현재가_조회_변동_거래량_자료(c *C.Tc1101OutBlock2) *S
 }
 
 type S주식_현재가_조회_종목_지표 struct { // 종목지표
-	M동시_호가_구분       string // 0:동시호가 아님 1:동시호가 2:동시호가연장 3:시가범위연장 4:종가범위연장 5:배분개시 6:변동성 완화장치 발동
+	M동시_호가_구분       uint8 // 0:동시호가 아님 1:동시호가 2:동시호가연장 3:시가범위연장 4:종가범위연장 5:배분개시 6:변동성 완화장치 발동
 	M예상_체결가         int64
 	M예상_체결부호        uint8
 	M예상_등락폭         int64
@@ -746,7 +762,7 @@ func New주식_현재가_조회_종목_지표(c *C.Tc1101OutBlock3) *S주식_현
 	g := (*Tc1101OutBlock3)(unsafe.Pointer(c))
 	
 	s := new(S주식_현재가_조회_종목_지표)
-	s.M동시_호가_구분 = 공용.F2문자열(g.SyncOfferBid) // 0:동시호가 아님 1:동시호가 2:동시호가연장 3:시가범위연장 4:종가범위연장 5:배분개시 6:변동성 완화장치 발동
+	s.M동시_호가_구분 = uint8(공용.F2정수(g.SyncOfferBid))
 	s.M예상_체결가 = 공용.F2정수64(g.EstmPrice)
 	s.M예상_체결부호 = f2등락부호(g.EstmSign)
 	s.M예상_등락폭 = 공용.F2정수64(g.EstmDiff)
@@ -1089,7 +1105,7 @@ func New_ETF_현재가_조회_기본_자료(c *C.char) *S_ETF_현재가_조회_�
 }
 
 type S_ETF_현재가_조회_변동_거래량 struct {
-	M시간     time.Time
+	M시각     time.Time
 	M현재가    int64
 	M등락부호  uint8
 	M등락폭    int64
@@ -1103,7 +1119,7 @@ func New_ETF_현재가_조회_변동_거래량(c *C.char) *S_ETF_현재가_조�
 	g := (*Tc1151OutBlock2)(unsafe.Pointer(c))
 
 	s := new(S_ETF_현재가_조회_변동_거래량)
-	s.M시간 = 공용.F2포맷된_시각("포맷 문자열", g.Time)
+	s.M시각 = 공용.F2포맷된_시각("포맷 문자열", g.Time)
 	s.M현재가 = 공용.F2정수64(g.MarketPrice)
 	s.M등락부호 = f2등락부호(g.DiffSign)
 	s.M등락폭 = 공용.F2정수64(g.Diff)

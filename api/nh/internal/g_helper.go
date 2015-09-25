@@ -89,21 +89,22 @@ func f바이트2참거짓(값 []byte, 조건 string, 결과 bool) bool {
 func f_Go구조체로_변환(c *C.RECEIVED) interface{} {
 	// 반대로 변환할 때는 (*C.char)(unsafe.Pointer(&b[0]))
 	
+	공용.F문자열_출력("블록 이름 : %v", C.GoString(c.BlockName))
+	
 	g := (*Received)(unsafe.Pointer(c))
-
+	
 	블록_이름 := C.GoString(c.BlockName)
 	//전체_길이 := int(c.Length)
 	전체_길이 := int(g.Length)
 	데이터 := c.DataString
-	
-	공용.F문자열_출력("블록 이름 : %v", 블록_이름)
 	
 	if 전체_길이 == 0 {
 		return nil
 	}
 
 	switch 블록_이름 {
-	case "c1101":	
+	case "c1101":
+		공용.F문자열_출력("c1101 전체 길이 : %v", 전체_길이)	
 		//f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Tc1101{}))
 		//c := (*C.Tc1101)(unsafe.Pointer(데이터))
 		//return New주식_현재가_조회(c)
