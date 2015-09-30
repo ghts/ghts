@@ -204,8 +204,17 @@ func new수신_데이터(c *C.RECEIVED) *S수신_데이터 {
 // 주식 현재가 조회 (c1101)
 //----------------------------------------------------------------------//
 func NewC1101InBlock(종목_코드 string) *C.char {
+	
+	언어_구분 := C.CString("k")
+	공백_문자 := C.CString(" ")
+	
+	defer func() {
+		C.free(unsafe.Pointer(언어_구분))
+		C.free(unsafe.Pointer(공백_문자))
+	}()
+	
 	c := new(C.Tc1101InBlock)	
-	c.Lang[0] = *(C.CString("k"))
+	c.Lang[0] = *언어_구분
 	
 	// 종목코드 검사
 	switch {
@@ -219,8 +228,12 @@ func NewC1101InBlock(종목_코드 string) *C.char {
 		panic(에러)
 	}
 	
-	for i := 0; i < len(종목_코드) && i < len(c.Code); i++ {
-	    c.Code[i] = C.char(종목_코드[i])
+	for i := 0; i < len(c.Code); i++ {
+		if i < len(종목_코드) {
+			c.Code[i] = C.char(종목_코드[i])
+		} else {
+			c.Code[i] = *공백_문자
+		}	    
     }
 	
 	/* 공용.F문자열_출력("** 입력값 확인 **")
@@ -640,6 +653,8 @@ func New주식_현재가_조회_기본_자료(c *C.Tc1101OutBlock) (데이터 *S
 	종목별_신용한도_문자열 := ""
 	
 	switch 종목별_신용한도_위치 {
+	case "0":
+		종목별_신용한도_문자열 = ""
 	case "1":
 		종목별_신용한도_문자열 = s.M종목_정보_1
 	case "2":
@@ -662,10 +677,13 @@ func New주식_현재가_조회_기본_자료(c *C.Tc1101OutBlock) (데이터 *S
 			s.M종목_정보_4, s.M종목_정보_5, s.M종목_정보_6)
 		panic(에러)
 	}
-		
-	if strings.Contains(종목별_신용한도_문자열, "없음") {
+	
+	switch {
+	case 종목별_신용한도_문자열 == "":
+		s.M종목별_신용한도 = 0
+	case strings.Contains(종목별_신용한도_문자열, "없음"):
 		s.M종목별_신용한도 = 100
-	} else {
+	default:
 		종목별_신용한도_문자열 = strings.Replace(종목별_신용한도_문자열, "신용", "", -1)
 		종목별_신용한도_문자열 = strings.Replace(종목별_신용한도_문자열, "한도", "", -1)
 		종목별_신용한도_문자열 = strings.Replace(종목별_신용한도_문자열, "제한", "", -1)
@@ -699,7 +717,8 @@ func New주식_현재가_조회_기본_자료(c *C.Tc1101OutBlock) (데이터 *S
 	s.M매매_수량_단위 = 공용.F2정수64(g.TrUnitVolume)
 	
 	공용.F메모("'M대량_매매_방향'이 ASCII코드가 아닌  숫자값인 게 정상인지 확인할 것.")
-	//공용.F변수값_확인(g.DarkPoolOfferBid, 공용.F2문자열(g.DarkPoolOfferBid))
+	
+	//공용.F변수값_확인(g.DarkPoolOfferBid, C.GoStringN(&(c.DarkPoolOfferBid[0]), 1), 공용.F2문자열(g.DarkPoolOfferBid))
 	s.M대량_매매_방향 = uint8(g.DarkPoolOfferBid[0]) // 0 = 해당없음 1 = 매도 2 = 매수
 	s.M대량_매매_존재 = 공용.F2참거짓(g.DarkPoolExist, "1", true)
 
