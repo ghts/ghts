@@ -22,6 +22,7 @@ import (
 
 	"github.com/suapapa/go_hangul/encoding/cp949"
 
+	"bytes"
 	"reflect"
 	"runtime"
 	"strconv"
@@ -143,7 +144,7 @@ func F2바이트_모음(값 interface{}) []byte {
 
 func F2문자열_CP949(값 interface{}) string {
 	바이트_모음_CP949 := make([]byte, 0)
-	
+
 	switch 값.(type) {
 	case []byte:
 		바이트_모음_CP949 = 값.([]byte)
@@ -158,15 +159,16 @@ func F2문자열_CP949(값 interface{}) string {
 	default:
 		에러 := F에러_생성("예상치 못한 자료 형식. %v", reflect.TypeOf(값))
 		F에러_출력(에러)
-		panic(에러) 
+		panic(에러)
 	}
-	
+
+	바이트_모음_CP949 = bytes.TrimPrefix(바이트_모음_CP949, []byte("\x00"))
 	null문자_인덱스 := strings.Index(string(바이트_모음_CP949), "\x00")
-	
+
 	if null문자_인덱스 >= 0 {
 		바이트_모음_CP949 = 바이트_모음_CP949[:null문자_인덱스]
 	}
-	 
+
 	바이트_모음_utf8, 에러 := cp949.From(바이트_모음_CP949)
 	F에러_패닉(에러)
 
@@ -197,23 +199,25 @@ func F2문자열(값 interface{}) string {
 		[26]byte, [27]byte, [28]byte, [29]byte, [30]byte,
 		[80]byte, [100]byte:
 		바이트_모음 := F2바이트_모음(값)
-		
+
+		바이트_모음 = bytes.TrimPrefix(바이트_모음, []byte("\x00"))
 		null문자_인덱스 := strings.Index(string(바이트_모음), "\x00")
-	
+
 		if null문자_인덱스 >= 0 {
 			바이트_모음 = 바이트_모음[:null문자_인덱스]
 		}
+
 		return string(바이트_모음)
 	default:
-		자료형 := reflect.TypeOf(값) 
-		
+		자료형 := reflect.TypeOf(값)
+
 		if 자료형.Kind() == reflect.Array &&
 			strings.HasSuffix(자료형.String(), "_Ctype_char") {
 			에러 := F에러_생성("C.char 배열")
 			F에러_출력(에러)
 			panic(에러)
 		}
-			
+
 		return F포맷된_문자열("%v", 값)
 	}
 }
@@ -234,92 +238,92 @@ func F2문자열_모음(인터페이스_모음 []interface{}) []string {
 
 func F2정수(값 interface{}) int {
 	문자열 := ""
-	
+
 	switch 값.(type) {
 	case string:
 		문자열 = 값.(string)
 	default:
 		문자열 = F2문자열(값)
 	}
-	
+
 	문자열 = strings.TrimSpace(문자열)
-	
+
 	반환값, 에러 := strconv.Atoi(문자열)
 	F에러_패닉(에러)
-	
-	return 반환값 
+
+	return 반환값
 }
 
 func F2정수64(값 interface{}) int64 {
 	문자열 := ""
-	
+
 	switch 값.(type) {
 	case string:
 		문자열 = 값.(string)
 	default:
 		문자열 = F2문자열(값)
 	}
-	
+
 	문자열 = strings.TrimSpace(문자열)
 
 	반환값, 에러 := strconv.ParseInt(문자열, 10, 64)
 	F에러_패닉(에러)
-	
-	return 반환값 
+
+	return 반환값
 }
 
 func F2실수(값 interface{}) float64 {
 	문자열 := ""
-	
+
 	switch 값.(type) {
 	case string:
 		문자열 = 값.(string)
 	default:
 		문자열 = F2문자열(값)
 	}
-	
+
 	문자열 = strings.TrimSpace(문자열)
 
 	반환값, 에러 := strconv.ParseFloat(문자열, 64)
 	F에러_패닉(에러)
-	
+
 	return 반환값
 }
 
 func F2시각(값 interface{}) time.Time {
 	문자열 := ""
-	
+
 	switch 값.(type) {
 	case string:
 		문자열 = 값.(string)
 	default:
 		문자열 = F2문자열(값)
 	}
-	
+
 	문자열 = strings.TrimSpace(문자열)
 
 	반환값, 에러 := time.Parse(P시간_형식, 문자열)
 	F에러_패닉(에러)
-	
+
 	return 반환값
 }
 
 func F2포맷된_시각(포맷 string, 값 interface{}) time.Time {
 	문자열 := ""
-	
+
 	switch 값.(type) {
 	case string:
 		문자열 = 값.(string)
 	default:
 		문자열 = F2문자열(값)
 	}
-	
+
 	문자열 = strings.TrimSpace(문자열)
 
 	반환값, 에러 := time.Parse(포맷, 문자열)
 	F에러_패닉(에러)
-	
-	return 반환값 
+
+	return 반환값
 }
 
 func F2참거짓(값 interface{}, 조건 interface{}, 결과 bool) bool {
@@ -359,7 +363,7 @@ func F바이트_모음_늘리기(바이트_모음 []byte, 길이 int) []byte {
 	}
 
 	return 반환값
-} 
+}
 */
 
 func F타입_이름(i interface{}) string {

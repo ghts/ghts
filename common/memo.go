@@ -42,7 +42,7 @@ func f메모() {
 	버퍼.WriteString("잠시 기다린 후 재시도 하면 해결됨.\n")
 	버퍼.WriteString("\n")
 
-	문자열 := 버퍼.String() + "\n\n"
+	문자열 := 버퍼.String()
 
 	fmt.Println(문자열)
 }

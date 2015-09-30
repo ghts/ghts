@@ -251,9 +251,9 @@ func (this s회신_메시지) G에러() error {
 
 // 질의 메시지 가변형
 type s질의_메시지_가변형 struct {
-	s기본_메시지_가변형 
-	회신_채널       chan I회신_가변형
-	타임아웃        time.Duration
+	s기본_메시지_가변형
+	회신_채널 chan I회신_가변형
+	타임아웃  time.Duration
 }
 
 func (this s질의_메시지_가변형) G검사(메시지_구분 string, 질의_길이 int) error {

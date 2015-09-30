@@ -18,14 +18,14 @@ var 질의_식별번호 = 공용.New안전한_일련_번호()
 
 func f2등락부호(바이트_모음 [1]byte) uint8 {
 	값 := uint8(바이트_모음[0])
-		
+
 	switch 값 {
 	case P상한, P상승, P보합, P하한, P하락:
 		return 값
 	}
-	
+
 	go문자열 := 공용.F2문자열(바이트_모음)
-	
+
 	switch go문자열 {
 	case "1", "6":
 		return P상한
@@ -38,14 +38,14 @@ func f2등락부호(바이트_모음 [1]byte) uint8 {
 	case "5", "9":
 		return P하락
 	}
-	
+
 	공용.F변수값_확인(바이트_모음)
 	공용.F변수값_확인(값)
 	공용.F변수값_확인(go문자열)
 	에러 := 공용.F에러_생성("예상치 못한 등락부호 값.")
 	공용.F에러_출력(에러)
 	panic(에러)
-	
+
 	return 0xFF
 }
 
@@ -60,21 +60,21 @@ func f올바른_등락부호(값 uint8) bool {
 
 func f2실수_소숫점_추가(값 interface{}, 소숫점_이하_자릿수 int) float64 {
 	문자열 := strings.Replace(공용.F2문자열(값), " ", "0", -1)
-	
+
 	if len(문자열) < 소숫점_이하_자릿수 {
 		에러 := 공용.F에러_생성("문자열 길이가 소숫점_이하_자릿수 보다 짧습니다.")
 		공용.F에러_출력(에러)
 		panic(에러)
 	}
-	
+
 	소숫점_추가_문자열 := ""
-	
+
 	if strings.Contains(문자열, ".") {
 		소숫점_추가_문자열 = 문자열
 	} else {
-		소숫점_추가_문자열 = 문자열[:len(문자열) - 소숫점_이하_자릿수] + "." + 문자열[len(문자열) - 소숫점_이하_자릿수:]
+		소숫점_추가_문자열 = 문자열[:len(문자열)-소숫점_이하_자릿수] + "." + 문자열[len(문자열)-소숫점_이하_자릿수:]
 	}
-	
+
 	return 공용.F2실수(소숫점_추가_문자열)
 }
 
@@ -88,23 +88,23 @@ func f바이트2참거짓(값 []byte, 조건 string, 결과 bool) bool {
 
 func f_Go구조체로_변환(c *C.RECEIVED) interface{} {
 	// 반대로 변환할 때는 (*C.char)(unsafe.Pointer(&b[0]))
-	
+
 	공용.F문자열_출력("블록 이름 : %v", C.GoString(c.BlockName))
-	
+
 	g := (*Received)(unsafe.Pointer(c))
-	
+
 	블록_이름 := C.GoString(c.BlockName)
 	//전체_길이 := int(c.Length)
 	전체_길이 := int(g.Length)
 	데이터 := c.DataString
-	
+
 	if 전체_길이 == 0 {
 		return nil
 	}
 
 	switch 블록_이름 {
 	case "c1101":
-		공용.F문자열_출력("c1101 전체 길이 : %v", 전체_길이)	
+		공용.F문자열_출력("c1101 전체 길이 : %v", 전체_길이)
 		//f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Tc1101{}))
 		//c := (*C.Tc1101)(unsafe.Pointer(데이터))
 		//return New주식_현재가_조회(c)
@@ -214,10 +214,10 @@ func f_Go구조체로_변환(c *C.RECEIVED) interface{} {
 func f반복되면_패닉(블록_이름 string, 전체_길이 int, 구조체_길이 uintptr) {
 	if 전체_길이 == 0 && 구조체_길이 > 0 {
 		공용.F문자열_출력("데이터 길이가 0임. 데이터 구조체 형식이 잘못됨.")
-		// '전체_길이' 값이 제대로 수신되지 않음. 
+		// '전체_길이' 값이 제대로 수신되지 않음.
 		return
 	}
-	
+
 	수량 := 전체_길이 / int(구조체_길이)
 
 	if 수량 != 1 {
@@ -280,7 +280,7 @@ func f조회(TR식별번호 int, TR코드 string, c데이터 *C.char, c길이 C.
 	cTR식별번호 := C.int(TR식별번호)
 	cTR코드 := C.CString(TR코드)
 	c계좌_인덱스 := C.int(계좌_인덱스)
-	
+
 	defer func() {
 		C.free(unsafe.Pointer(cTR코드))
 		C.free(unsafe.Pointer(c데이터)) // C언어 구조체로 변환된 후에는 직접 free 해 줘야 하는 듯.
@@ -329,16 +329,16 @@ func f접속(아이디, 암호, 공인인증서_암호 string) bool {
 	c아이디 := C.CString(아이디)
 	c암호 := C.CString(암호)
 	c공인인증서_암호 := C.CString(공인인증서_암호)
-	
+
 	defer func() {
 		C.free(unsafe.Pointer(c아이디))
 		C.free(unsafe.Pointer(c암호))
 		C.free(unsafe.Pointer(c공인인증서_암호))
 	}()
-	
+
 	서버_이름 := (*C.char)(unsafe.Pointer(nil))
 	포트_번호 := 0
-	
+
 	if 공용.F테스트_모드_실행_중() {
 		//공용.F문자열_출력("테스트용 모의 서버")
 		서버_이름 = C.CString("newmt.wontrading.com")
@@ -350,7 +350,7 @@ func f접속(아이디, 암호, 공인인증서_암호 string) bool {
 	}
 
 	defer C.free(unsafe.Pointer(서버_이름))
-	
+
 	로드_성공 := bool(C.wmcaLoad())
 	if !로드_성공 {
 		공용.F문자열_출력("로드 실패")

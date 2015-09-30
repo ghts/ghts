@@ -71,16 +71,16 @@ func F오차(값1 interface{}, 값2 interface{}) float64 {
 func F오차율(값1 interface{}, 값2 interface{}) float64 {
 	실수1, 실수2 := F2실수(값1), F2실수(값2)
 	오차율1, 오차율2 := float64(0), float64(0)
-	
+
 	if 실수1 != 0 {
-		오차율1 = math.Abs((실수1 - 실수2) / 실수1) * 100
+		오차율1 = math.Abs((실수1-실수2)/실수1) * 100
 	}
-	
+
 	if 실수2 != 0 {
-		오차율2 = math.Abs((실수2 - 실수1) / 실수2) * 100
+		오차율2 = math.Abs((실수2-실수1)/실수2) * 100
 	}
-	
-	return math.Max(오차율1, 오차율2) 
+
+	return math.Max(오차율1, 오차율2)
 }
 
 func F테스트_참임(테스트 testing.TB, true이어야_하는_조건 bool, 추가_매개변수 ...interface{}) {
@@ -420,7 +420,7 @@ func F포맷된_문자열(포맷_문자열 string, 추가_매개변수 ...interf
 func F에러(포맷_문자열 string, 추가_매개변수 ...interface{}) error {
 	에러 := F에러_생성(포맷_문자열, 추가_매개변수...)
 	F에러_출력(에러)
-	
+
 	return 에러
 }
 
@@ -519,25 +519,25 @@ func F변수값_확인(값_모음 ...interface{}) {
 
 func F변수_내역_문자열(값_모음 ...interface{}) string {
 	버퍼 := new(bytes.Buffer)
-	
+
 	for _, 값 := range 값_모음 {
 		자료형 := reflect.TypeOf(값)
 		자료_종류 := 자료형.Kind()
-		
+
 		switch {
 		case 자료_종류 == reflect.Struct &&
 			자료형.String() != "time.Time":
 			버퍼.WriteString(F포맷된_문자열(
-				"형식 : %v\t, 종류 : %v\t, 이름 : %v\n", 
+				"형식 : %v\t, 종류 : %v\t, 이름 : %v\n",
 				자료형, 자료형.Kind(), 자료형.Name()))
-			
+
 			구조체 := reflect.ValueOf(값) //.Elem()
 			구조체_자료형 := reflect.TypeOf(값)
-			
+
 			for i := 0; i < 구조체.NumField(); i++ {
 				필드 := 구조체.Field(i)
 				필드_자료형 := 구조체_자료형.Field(i)
-				
+
 				if 필드.Kind() == reflect.Struct {
 					버퍼.WriteString(
 						F포맷된_문자열("%v 필드명 : '%v', 형식 : %v,  값 : %v\n",
@@ -550,8 +550,8 @@ func F변수_내역_문자열(값_모음 ...interface{}) string {
 			}
 		//case 자료형.Kind() == reflect.Ptr &&
 		//	reflect.TypeOf(*변수).Kind() == reflect.Struct:
-		//	F변수_내역_문자열(*변수)		
-		
+		//	F변수_내역_문자열(*변수)
+
 		default:
 			버퍼.WriteString(F포맷된_문자열(
 				"형식 : %v\t, 종류 : %v\n값 : %v\n",
@@ -577,7 +577,7 @@ func F메모(문자열 string) {
 		return
 	}
 
-	fmt.Printf("\nTODO : %s %s\n\n", F소스코드_위치(1), 문자열)
+	fmt.Printf("\n\nTODO : %s\n%s\n", 문자열, F소스코드_위치(1))
 
 	이미_출력한_메모_모음_잠금.Lock()
 	이미_출력한_메모_모음[문자열] = S비어있는_구조체{}
