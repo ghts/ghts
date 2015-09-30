@@ -160,6 +160,12 @@ func F2문자열_CP949(값 interface{}) string {
 		F에러_출력(에러)
 		panic(에러) 
 	}
+	
+	null문자_인덱스 := strings.Index(string(바이트_모음_CP949), "\x00")
+	
+	if null문자_인덱스 >= 0 {
+		바이트_모음_CP949 = 바이트_모음_CP949[:null문자_인덱스]
+	}
 	 
 	바이트_모음_utf8, 에러 := cp949.From(바이트_모음_CP949)
 	F에러_패닉(에러)
@@ -190,7 +196,14 @@ func F2문자열(값 interface{}) string {
 		[21]byte, [22]byte, [23]byte, [24]byte, [25]byte,
 		[26]byte, [27]byte, [28]byte, [29]byte, [30]byte,
 		[80]byte, [100]byte:
-		return string(F2바이트_모음(값))
+		바이트_모음 := F2바이트_모음(값)
+		
+		null문자_인덱스 := strings.Index(string(바이트_모음), "\x00")
+	
+		if null문자_인덱스 >= 0 {
+			바이트_모음 = 바이트_모음[:null문자_인덱스]
+		}
+		return string(바이트_모음)
 	default:
 		자료형 := reflect.TypeOf(값) 
 		
