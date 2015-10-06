@@ -16,11 +16,11 @@ cls
 SET NH_PATH=%GHTS_PATH%\api\nh\internal
 
 cd %NH_PATH%
-copy %NH_PATH%\wmca_ctype.orig %NH_PATH%\wmca_ctype_orig.go
-go tool cgo -godefs %NH_PATH%\wmca_ctype_orig.go > %NH_PATH%\wmca_ctype.go
-go tool cgo -godefs %NH_PATH%\wmca_ctype_orig.go > %NH_PATH%\wmca_ctype_pre.go
-sed -e 's/int8/byte/g' %NH_PATH%\wmca_ctype_pre.go > %NH_PATH%\wmca_ctype.go
-del %NH_PATH%\wmca_ctype_orig.go
-del %NH_PATH%\wmca_ctype_pre.go
+copy %NH_PATH%\g_ctype.orig %NH_PATH%\g_ctype_orig.go
+go tool cgo -godefs %NH_PATH%\g_ctype_orig.go > %NH_PATH%\g_ctype.go
+go tool cgo -godefs %NH_PATH%\g_ctype_orig.go > %NH_PATH%\g_ctype_pre.go
+sed -e 's/int8/byte/g' %NH_PATH%\g_ctype_pre.go > %NH_PATH%\g_ctype.go
+del %NH_PATH%\g_ctype_orig.go
+del %NH_PATH%\g_ctype_pre.go
 
 SET PATH=%OLDPATH%

@@ -202,7 +202,7 @@ typedef struct { // 종목마스타기본자료
 	char MarketAction4[16];	char _MarketAction4;		// 시장조치4
 	char MarketAction5[16];	char _MarketAction5;		// 시장조치5
 	char MarketAction6[16];	char _MarketAction6;		// 시장조치6
-	char ConvertBond[6];	char _ConvertBond;			// CB구분
+	char CircuitBreaker[6];	char _CircuitBreaker;		// 서킷 브레이커 발동 구분
 	char NominalPrice[7];	char _NominalPrice;			// 액면가
 	char PrevPriceTitle[12];	char _PrevPriceTitle;	// 전일 종가 타이틀 (평가가격, 기준가, 전일종가)
 	char PrevPrice[7];	char _PrevPrice;				// 전일종가
@@ -411,7 +411,7 @@ typedef struct { // 종목마스타기본자료
 	char MarketAction4[16];	char _MarketAction4;		// 시장조치4
 	char MarketAction5[16];	char _MarketAction5;		// 시장조치5
 	char MarketAction6[16];	char _MarketAction6;		// 시장조치6
-	char ConvertBond[6];	char _ConvertBond;			// CB구분
+	char CircuitBreaker[6];	char _CircuitBreaker;		// 서킷 브레이커 구분
 	char NominalPrice[7];	char _NominalPrice;			// 액면가
 	char PrevPriceTitle[12];	char _PrevPriceTitle;	// 전일 종가 타이틀
 	char PrevPrice[7];	char _PrevPrice;				// 전일종가
