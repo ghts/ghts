@@ -138,7 +138,8 @@ func F2바이트_모음(값 interface{}) []byte {
 		return 배열[:]
 	default:
 		F변수값_확인(값)
-		panic(F에러_생성("예상치 못한 자료형"))
+		에러 := F에러("예상치 못한 자료형")
+		panic(에러)
 	}
 }
 
@@ -157,12 +158,10 @@ func F2문자열_CP949(값 interface{}) string {
 		[80]byte, [100]byte:
 		바이트_모음_CP949 = F2바이트_모음(값)
 	default:
-		에러 := F에러_생성("예상치 못한 자료 형식. %v", reflect.TypeOf(값))
-		F에러_출력(에러)
+		에러 := F에러("예상치 못한 자료 형식. %v", reflect.TypeOf(값))
 		panic(에러)
 	}
 
-	바이트_모음_CP949 = bytes.TrimPrefix(바이트_모음_CP949, []byte("\x00"))
 	null문자_인덱스 := strings.Index(string(바이트_모음_CP949), "\x00")
 
 	if null문자_인덱스 >= 0 {
@@ -213,8 +212,7 @@ func F2문자열(값 interface{}) string {
 
 		if 자료형.Kind() == reflect.Array &&
 			strings.HasSuffix(자료형.String(), "_Ctype_char") {
-			에러 := F에러_생성("C.char 배열")
-			F에러_출력(에러)
+			에러 := F에러("C.char 배열")
 			panic(에러)
 		}
 
@@ -351,8 +349,7 @@ func F2인터페이스_모음(문자열_모음 []string) []interface{} {
 /*
 func F바이트_모음_늘리기(바이트_모음 []byte, 길이 int) []byte {
 	if len(바이트_모음) > 길이 {
-		에러 := F에러_생성("지정된 길이가 더 짧음.")
-		F에러_출력(에러)
+		에러 := F에러("지정된 길이가 더 짧음.")
 		panic(에러)
 	}
 

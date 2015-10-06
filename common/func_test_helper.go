@@ -157,7 +157,6 @@ func F테스트_에러없음(테스트 testing.TB, nil이어야_하는_에러 er
 	}
 
 	F문자열_출력_일시정지_해제()
-
 	F호출경로_건너뛴_문자열_출력(1, "예상과 달리 에러가 nil이 아님.\n"+nil이어야_하는_에러.Error())
 	테스트.FailNow()
 }
@@ -418,7 +417,16 @@ func F포맷된_문자열(포맷_문자열 string, 추가_매개변수 ...interf
 }
 
 func F에러(포맷_문자열 string, 추가_매개변수 ...interface{}) error {
-	에러 := F에러_생성(포맷_문자열, 추가_매개변수...)
+	if !strings.HasSuffix(포맷_문자열, "\n") {
+		포맷_문자열 += "\n"
+	}
+
+	// 호출 경로가 중복되어 추가되는 것을 방지.
+	if !strings.Contains(포맷_문자열, F소스코드_위치(1)) {
+		포맷_문자열 += F호출경로_문자열(1)
+	}
+
+	에러 := fmt.Errorf(F포맷된_문자열(포맷_문자열, 추가_매개변수...))
 	F에러_출력(에러)
 
 	return 에러
@@ -434,7 +442,27 @@ func F에러_생성(포맷_문자열 string, 추가_매개변수 ...interface{})
 		포맷_문자열 += F호출경로_문자열(1)
 	}
 
-	return fmt.Errorf(F포맷된_문자열(포맷_문자열, 추가_매개변수...))
+	에러 := fmt.Errorf(F포맷된_문자열(포맷_문자열, 추가_매개변수...))
+
+	return 에러
+}
+
+func F에러_출력(에러 error) {
+	if F문자열_출력_일시정지_중() {
+		return
+	}
+
+	if 에러 == nil {
+		fmt.Println(nil)
+		return
+	}
+
+	fmt.Println(에러.Error())
+
+	// 에러 자체에 호출경로가 포함되어 있으면 중복 출력하지 않는다.
+	if !strings.Contains(에러.Error(), F소스코드_위치(1)) {
+		fmt.Println(F호출경로_문자열(1))
+	}
 }
 
 func F문자열_출력(포맷_문자열 string, 추가_매개변수 ...interface{}) {
@@ -464,24 +492,6 @@ func F문자열_및_호출경로_출력(포맷_문자열 string, 추가_매개�
 
 	// 포맷_문자열 자체에 호출경로가 포함되어 있으면 중복 출력하지 않는다.
 	if !strings.Contains(포맷_문자열, F소스코드_위치(1)) {
-		fmt.Println(F호출경로_문자열(1))
-	}
-}
-
-func F에러_출력(에러 error) {
-	if F문자열_출력_일시정지_중() {
-		return
-	}
-
-	if 에러 == nil {
-		fmt.Println(nil)
-		return
-	}
-
-	fmt.Println(에러.Error())
-
-	// 에러 자체에 호출경로가 포함되어 있으면 중복 출력하지 않는다.
-	if !strings.Contains(에러.Error(), F소스코드_위치(1)) {
 		fmt.Println(F호출경로_문자열(1))
 	}
 }
@@ -521,6 +531,11 @@ func F변수_내역_문자열(값_모음 ...interface{}) string {
 	버퍼 := new(bytes.Buffer)
 
 	for _, 값 := range 값_모음 {
+		if 값 == nil {
+			버퍼.WriteString("형식 : nil\t, 종류 : nil\n값 : nil\n")
+			continue
+		}
+
 		자료형 := reflect.TypeOf(값)
 		자료_종류 := 자료형.Kind()
 

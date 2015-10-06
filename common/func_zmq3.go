@@ -44,7 +44,7 @@ func F_zmq소켓_Go채널_중계(zmq소켓 *zmq3.Socket, Go채널 chan I질의) 
 		r := recover()
 
 		if r != nil {
-			에러 = F에러_생성("%v", r)
+			에러 = F에러("%v", r)
 		}
 
 		if 에러 != nil {
@@ -59,7 +59,7 @@ func F_zmq소켓_Go채널_중계(zmq소켓 *zmq3.Socket, Go채널 chan I질의) 
 	case 에러 != nil:
 		return 에러
 	case zmq메시지 == nil, len(zmq메시지) == 0:
-		return F에러_생성("비어있는 zmq메시지.\n'%v'\n", zmq메시지)
+		return F에러("비어있는 zmq메시지.\n'%v'\n", zmq메시지)
 	}
 
 	질의 := New질의_zmq메시지(zmq메시지)
@@ -76,7 +76,8 @@ func F_zmq소켓_Go채널_중계(zmq소켓 *zmq3.Socket, Go채널 chan I질의) 
 		return F메시지_송신(zmq소켓, 메시지)
 	default:
 		// 예상치 못한 경우
-		panic(F에러_생성("잘못된 회신.\n에러 '%v'\n구분 '%v'\n길이 %v\n내용 '%v'\n",
-			회신.G에러(), 회신.G구분(), 회신.G길이(), 회신.G내용_전체()))
+		에러 := F에러("잘못된 회신.\n에러 '%v'\n구분 '%v'\n길이 %v\n내용 '%v'\n",
+			회신.G에러(), 회신.G구분(), 회신.G길이(), 회신.G내용_전체())
+		panic(에러)
 	}
 }

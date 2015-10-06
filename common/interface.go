@@ -89,8 +89,7 @@ func New질의(메시지_구분 string, 내용 ...interface{}) I질의 {
 	case P메시지_초기화:
 	case P메시지_종료:
 	default:
-		에러 := F에러_생성("잘못된 질의 메시지 구분 %v", 메시지_구분)
-		F에러_출력(에러)
+		F에러("잘못된 질의 메시지 구분 %v", 메시지_구분)
 		//panic(에러)
 		return nil
 	}
@@ -189,8 +188,7 @@ func New질의_가변형(타임아웃 time.Duration, 메시지_구분 string, �
 	case P메시지_초기화:
 	case P메시지_종료:
 	default:
-		에러 := F에러_생성("잘못된 질의 메시지 구분 %v", 메시지_구분)
-		F에러_출력(에러)
+		F에러("잘못된 질의 메시지 구분 %v", 메시지_구분)
 		//panic(에러)
 		return nil
 	}
@@ -289,7 +287,7 @@ func F통화단위_검사(통화단위 string) error {
 	case "KRW", "USD", "EUR", "CNY":
 		return nil
 	default:
-		return F에러_생성("잘못된 통화단위 %v", 통화단위)
+		return F에러("잘못된 통화단위 %v", 통화단위)
 	}
 }
 
@@ -318,8 +316,7 @@ type I종목별_보유량 interface {
 
 func New종목별_보유량(종목코드 string, 롱포지션 int64, 숏포지션 int64) I종목별_보유량 {
 	if 롱포지션 < 0 || 숏포지션 < 0 {
-		에러 := F에러_생성("입력된 보유량 음수임. %v %v", 롱포지션, 숏포지션)
-		F에러_출력(에러)
+		에러 := F에러("입력된 보유량 음수임. %v %v", 롱포지션, 숏포지션)
 		panic(에러)
 	}
 

@@ -200,13 +200,11 @@ type s질의_메시지 struct {
 func (this s질의_메시지) G검사(메시지_구분 string, 질의_길이 int) error {
 	switch {
 	case this.G구분() != 메시지_구분:
-		에러 := F에러_생성("잘못된 질의 메시지 구분.\n%s", this.String())
-		F에러_출력(에러)
+		에러 := F에러("잘못된 질의 메시지 구분.\n%s", this.String())
 		this.회신_채널 <- New회신(에러, P메시지_에러)
 		return 에러
 	case this.G길이() != 질의_길이:
-		에러 := F에러_생성("잘못된 질의 내용 길이.\n%s", this.String())
-		F에러_출력(에러)
+		에러 := F에러("잘못된 질의 내용 길이.\n%s", this.String())
 		this.회신_채널 <- New회신(에러, P메시지_에러)
 		return 에러
 	}
@@ -219,7 +217,7 @@ func (this s질의_메시지) G회신() I회신 {
 	case 회신 := <-this.회신_채널:
 		return 회신
 	case <-time.After(P타임아웃_Go):
-		return New회신(F에러_생성("I질의.G회신() 타임아웃.\n%v", this.String()))
+		return New회신(F에러("I질의.G회신() 타임아웃.\n%v", this.String()))
 	}
 }
 
@@ -234,7 +232,7 @@ func (this s질의_메시지) S회신(에러 error, 내용 ...interface{}) error
 	case this.회신_채널 <- New회신(에러, 내용...):
 		return nil
 	case <-time.After(P타임아웃_Go):
-		return F에러_생성("I질의.S회신() 타임아웃.\n%v", this)
+		return F에러("I질의.S회신() 타임아웃.\n%v", this)
 	}
 
 }
@@ -259,13 +257,11 @@ type s질의_메시지_가변형 struct {
 func (this s질의_메시지_가변형) G검사(메시지_구분 string, 질의_길이 int) error {
 	switch {
 	case this.G구분() != 메시지_구분:
-		에러 := F에러_생성("잘못된 질의 메시지 구분.\n%s", this.String())
-		F에러_출력(에러)
+		에러 := F에러("잘못된 질의 메시지 구분.\n%s", this.String())
 		this.회신_채널 <- New회신_가변형(에러, P메시지_에러)
 		return 에러
 	case this.G길이() != 질의_길이:
-		에러 := F에러_생성("잘못된 질의 내용 길이.\n%s", this.String())
-		F에러_출력(에러)
+		에러 := F에러("잘못된 질의 내용 길이.\n%s", this.String())
 		this.회신_채널 <- New회신_가변형(에러, P메시지_에러)
 		return 에러
 	}
@@ -278,7 +274,7 @@ func (this s질의_메시지_가변형) G회신() I회신_가변형 {
 	case 회신 := <-this.회신_채널:
 		return 회신
 	case <-time.After(this.타임아웃):
-		return New회신_가변형(F에러_생성("I질의.G회신() 타임아웃.\n%v", this.String()), P메시지_에러)
+		return New회신_가변형(F에러("I질의.G회신() 타임아웃.\n%v", this.String()), P메시지_에러)
 	}
 }
 
@@ -295,7 +291,7 @@ func (this s질의_메시지_가변형) S회신(에러 error, 메시지_구분 s
 	case this.회신_채널 <- New회신_가변형(에러, 메시지_구분, 내용...):
 		return nil
 	case <-time.After(this.타임아웃):
-		return F에러_생성("I질의.S회신() 타임아웃.\n%v", this.String())
+		return F에러("I질의.S회신() 타임아웃.\n%v", this.String())
 	}
 }
 
@@ -378,7 +374,8 @@ func (this *s통화) S동결() {
 
 func (this *s통화) S더하기(값 float64) I통화 {
 	if this.변경불가 {
-		panic(F에러_생성("변경불가능한 값입니다."))
+		에러 := F에러("변경불가능한 값입니다.")
+		panic(에러)
 		return this
 	}
 
@@ -389,7 +386,8 @@ func (this *s통화) S더하기(값 float64) I통화 {
 
 func (this *s통화) S빼기(값 float64) I통화 {
 	if this.변경불가 {
-		panic(F에러_생성("변경불가능한 값입니다."))
+		에러 := F에러("변경불가능한 값입니다.")
+		panic(에러)
 		return this
 	}
 
@@ -400,7 +398,8 @@ func (this *s통화) S빼기(값 float64) I통화 {
 
 func (this *s통화) S곱하기(값 float64) I통화 {
 	if this.변경불가 {
-		panic(F에러_생성("변경불가능한 값입니다."))
+		에러 := F에러("변경불가능한 값입니다.")
+		panic(에러)
 		return this
 	}
 
@@ -412,11 +411,13 @@ func (this *s통화) S곱하기(값 float64) I통화 {
 func (this *s통화) S나누기(값 float64) (I통화, error) {
 	switch {
 	case this.변경불가:
-		panic(F에러_생성("변경불가능한 값입니다."))
-		return this, F에러_생성("변경불가능한 값입니다.")
+		에러 := F에러("변경불가능한 값입니다.")
+		panic(에러)
+		return this, 에러
 	case 값 == 0.0:
-		//panic(F에러_생성("분모가 0인 나눗셈 불가."))
-		return nil, F에러_생성("분모가 0인 나눗셈 불가.")
+		에러 := F에러("분모가 0인 나눗셈 불가.")
+		//panic(에러)
+		return nil, 에러
 	default:
 		this.금액 = this.금액.Div(dec.New(값))
 		return this, nil
@@ -473,8 +474,7 @@ func (this *s종목별_보유량) S더하기_롱포지션(수량 int64) error {
 	atomic.AddInt64(&this.롱포지션, 수량)
 
 	if this.롱포지션 < 0 {
-		에러 := F에러_생성("롱포지션이 음수임. %v", this.롱포지션)
-		F에러_출력(에러)
+		에러 := F에러("롱포지션이 음수임. %v", this.롱포지션)
 		//panic(에러)
 		return 에러
 	}
@@ -485,8 +485,7 @@ func (this *s종목별_보유량) S더하기_숏포지션(수량 int64) error {
 	atomic.AddInt64(&this.숏포지션, int64(수량))
 
 	if this.숏포지션 < 0 {
-		에러 := F에러_생성("숏포지션이 음수임. %v", this.숏포지션)
-		F에러_출력(에러)
+		에러 := F에러("숏포지션이 음수임. %v", this.숏포지션)
 		//panic(에러)
 		return 에러
 	}
