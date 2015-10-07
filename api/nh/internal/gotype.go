@@ -267,8 +267,8 @@ type S주식_현재가_조회_기본_자료 struct {
 	M등락부호        uint8
 	M등락폭         int64
 	M등락율         float64
-	M매도_호가       int64
-	M매수_호가       int64
+	//M매도_호가       int64
+	//M매수_호가       int64
 	M거래량         int64
 	M전일대비_거래량_비율 float64 // 금일 거래량 / 전일 거래량
 	M유동주_회전율     float64
@@ -281,48 +281,10 @@ type S주식_현재가_조회_기본_자료 struct {
 	M저가          int64
 	M하한가         int64
 	M시각          time.Time
-	M매도_호가_최우선   int64
-	M매도_호가_차선    int64
-	M매도_호가_차차선   int64
-	M매도_호가_4차선   int64
-	M매도_호가_5차선   int64
-	M매도_호가_6차선   int64
-	M매도_호가_7차선   int64
-	M매도_호가_8차선   int64
-	M매도_호가_9차선   int64
-	M매도_호가_10차선  int64
-	M매수_호가_최우선   int64
-	M매수_호가_차선    int64
-	M매수_호가_차차선   int64
-	M매수_호가_4차선   int64
-	M매수_호가_5차선   int64
-	M매수_호가_6차선   int64
-	M매수_호가_7차선   int64
-	M매수_호가_8차선   int64
-	M매수_호가_9차선   int64
-	M매수_호가_10차선  int64
-	M매도_잔량_최우선   int64
-	M매도_잔량_차선    int64
-	M매도_잔량_차차선   int64
-	M매도_잔량_4차선   int64
-	M매도_잔량_5차선   int64
-	M매도_잔량_6차선   int64
-	M매도_잔량_7차선   int64
-	M매도_잔량_8차선   int64
-	M매도_잔량_9차선   int64
-	M매도_잔량_10차선  int64
-	M매수_잔량_최우선   int64
-	M매수_잔량_차선    int64
-	M매수_잔량_차차선   int64
-	M매수_잔량_4차선   int64
-	M매수_잔량_5차선   int64
-	M매수_잔량_6차선   int64
-	M매수_잔량_7차선   int64
-	M매수_잔량_8차선   int64
-	M매수_잔량_9차선   int64
-	M매수_잔량_10차선  int64
-	M매도_잔량_총합    int64
-	M매수_잔량_총합    int64
+	M매도_호가_모음 []int64
+	M매도_잔량_모음 []int64
+	M매수_호가_모음 []int64
+	M매수_잔량_모음 []int64
 	M시간외_매도_잔량   int64
 	M시간외_매수_잔량   int64
 	M피봇_2차_저항    int64  // 피봇가 + 전일 고가 – 전일 저가
@@ -334,12 +296,7 @@ type S주식_현재가_조회_기본_자료 struct {
 	M업종명         string
 	M자본금_규모      string
 	M결산월         string
-	M종목_정보_1     string
-	M종목_정보_2     string
-	M종목_정보_3     string
-	M종목_정보_4     string
-	M종목_정보_5     string
-	M종목_정보_6     string
+	M추가_정보_모음 []string
 	M서킷_브레이커_구분 string
 	M액면가         int64
 	//M전일종가_타이틀          string
@@ -358,26 +315,10 @@ type S주식_현재가_조회_기본_자료 struct {
 	//M상장_주식수_1000주 int64
 	M시가_총액_억       int64
 	M거래원_정보_수신_시간  time.Time
-	M매도_거래원_1      string
-	M매수_거래원_1      string
-	M매도_거래량_1      int64
-	M매수_거래량_1      int64
-	M매도_거래원_2      string
-	M매수_거래원_2      string
-	M매도_거래량_2      int64
-	M매수_거래량_2      int64
-	M매도_거래원_3      string
-	M매수_거래원_3      string
-	M매도_거래량_3      int64
-	M매수_거래량_3      int64
-	M매도_거래원_4      string
-	M매수_거래원_4      string
-	M매도_거래량_4      int64
-	M매수_거래량_4      int64
-	M매도_거래원_5      string
-	M매수_거래원_5      string
-	M매도_거래량_5      int64
-	M매수_거래량_5      int64
+	M매도_거래원_모음 []string
+	M매도_거래량_모음 []int64
+	M매수_거래원_모음 []string
+	M매수_거래량_모음 []int64
 	M외국인_매도_거래량    int64
 	M외국인_매수_거래량    int64
 	M외국인_시간        time.Time
@@ -441,8 +382,8 @@ func New주식_현재가_조회_기본_자료(c *C.Tc1101OutBlock) (데이터 *S
 	s.M등락부호 = f2등락부호(g.DiffSign)
 	s.M등락폭 = 공용.F2정수64(g.Diff)
 	s.M등락율 = f2실수_소숫점_추가(g.DiffRate, 2)
-	s.M매도_호가 = 공용.F2정수64(g.OfferPrice)
-	s.M매수_호가 = 공용.F2정수64(g.BidPrice)
+	//s.M매도_호가 = 공용.F2정수64(g.OfferPrice)
+	//s.M매수_호가 = 공용.F2정수64(g.BidPrice)
 	s.M거래량 = 공용.F2정수64(g.Volume)
 	s.M전일대비_거래량_비율 = f2실수_소숫점_추가(g.TrVolRate, 2) // 당일 거래량 / 전일 거래량
 	s.M유동주_회전율 = f2실수_소숫점_추가(g.FloatRate, 2)
@@ -462,47 +403,79 @@ func New주식_현재가_조회_기본_자료(c *C.Tc1101OutBlock) (데이터 *S
 	if s.M시각.After(삼분후) {
 		s.M시각 = s.M시각.Add(-24 * time.Hour)
 	}
-
-	s.M매도_호가_최우선 = 공용.F2정수64(g.OfferPrice1)
-	s.M매도_호가_차선 = 공용.F2정수64(g.OfferPrice2)
-	s.M매도_호가_차차선 = 공용.F2정수64(g.OfferPrice3)
-	s.M매도_호가_4차선 = 공용.F2정수64(g.OfferPrice4)
-	s.M매도_호가_5차선 = 공용.F2정수64(g.OfferPrice5)
-	s.M매도_호가_6차선 = 공용.F2정수64(g.OfferPrice6)
-	s.M매도_호가_7차선 = 공용.F2정수64(g.OfferPrice7)
-	s.M매도_호가_8차선 = 공용.F2정수64(g.OfferPrice8)
-	s.M매도_호가_9차선 = 공용.F2정수64(g.OfferPrice9)
-	s.M매도_호가_10차선 = 공용.F2정수64(g.OfferPrice10)
-	s.M매수_호가_최우선 = 공용.F2정수64(g.BidPrice1)
-	s.M매수_호가_차선 = 공용.F2정수64(g.BidPrice2)
-	s.M매수_호가_차차선 = 공용.F2정수64(g.BidPrice3)
-	s.M매수_호가_4차선 = 공용.F2정수64(g.BidPrice4)
-	s.M매수_호가_5차선 = 공용.F2정수64(g.BidPrice5)
-	s.M매수_호가_6차선 = 공용.F2정수64(g.BidPrice6)
-	s.M매수_호가_7차선 = 공용.F2정수64(g.BidPrice7)
-	s.M매수_호가_8차선 = 공용.F2정수64(g.BidPrice8)
-	s.M매수_호가_9차선 = 공용.F2정수64(g.BidPrice9)
-	s.M매수_호가_10차선 = 공용.F2정수64(g.BidPrice10)
-	s.M매도_잔량_최우선 = 공용.F2정수64(g.OfferVolume1)
-	s.M매도_잔량_차선 = 공용.F2정수64(g.OfferVolume2)
-	s.M매도_잔량_차차선 = 공용.F2정수64(g.OfferVolume3)
-	s.M매도_잔량_4차선 = 공용.F2정수64(g.OfferVolume4)
-	s.M매도_잔량_5차선 = 공용.F2정수64(g.OfferVolume5)
-	s.M매도_잔량_6차선 = 공용.F2정수64(g.OfferVolume6)
-	s.M매도_잔량_7차선 = 공용.F2정수64(g.OfferVolume7)
-	s.M매도_잔량_8차선 = 공용.F2정수64(g.OfferVolume8)
-	s.M매도_잔량_9차선 = 공용.F2정수64(g.OfferVolume9)
-	s.M매도_잔량_10차선 = 공용.F2정수64(g.OfferVolume10)
-	s.M매수_잔량_최우선 = 공용.F2정수64(g.BidVolume1)
-	s.M매수_잔량_차선 = 공용.F2정수64(g.BidVolume2)
-	s.M매수_잔량_차차선 = 공용.F2정수64(g.BidVolume3)
-	s.M매수_잔량_4차선 = 공용.F2정수64(g.BidVolume4)
-	s.M매수_잔량_5차선 = 공용.F2정수64(g.BidVolume5)
-	s.M매수_잔량_6차선 = 공용.F2정수64(g.BidVolume6)
-	s.M매수_잔량_7차선 = 공용.F2정수64(g.BidVolume7)
-	s.M매수_잔량_8차선 = 공용.F2정수64(g.BidVolume8)
-	s.M매수_잔량_9차선 = 공용.F2정수64(g.BidVolume9)
-	s.M매수_잔량_10차선 = 공용.F2정수64(g.BidVolume10)
+	
+	매도_호가_모음 = []int64{
+		공용.F2정수64(g.OfferPrice1),
+		공용.F2정수64(g.OfferPrice2),
+		공용.F2정수64(g.OfferPrice3),
+		공용.F2정수64(g.OfferPrice4),
+		공용.F2정수64(g.OfferPrice5),
+		공용.F2정수64(g.OfferPrice6),
+		공용.F2정수64(g.OfferPrice7),
+		공용.F2정수64(g.OfferPrice8),
+		공용.F2정수64(g.OfferPrice9),
+		공용.F2정수64(g.OfferPrice10)
+	}
+	
+	매도_잔량_모음 = []int64{
+		공용.F2정수64(g.OfferVolume1),
+		공용.F2정수64(g.OfferVolume2),
+		공용.F2정수64(g.OfferVolume3),
+		공용.F2정수64(g.OfferVolume4),
+		공용.F2정수64(g.OfferVolume5),
+		공용.F2정수64(g.OfferVolume6),
+		공용.F2정수64(g.OfferVolume7),
+		공용.F2정수64(g.OfferVolume8),
+		공용.F2정수64(g.OfferVolume9),
+		공용.F2정수64(g.OfferVolume10)
+	}
+	
+	s.M매도_호가_모음 = make([]int64, 0)
+	s.M매도_잔량_모음 = make([]int64, 0)
+	
+	for i, 매도_호가 := range 매도_호가_모음 {
+		if 매도_호가 >= s.M현재가 && 매도_잔량_모음[i] > 0 {
+			s.M매도_호가_모음 = append(s.M매도_호가_모음, 매도_호가)
+			s.M매도_잔량_모음 = append(s.M매도_잔량_모음, 매도_잔량_모음[i])
+		}
+	}
+	
+	매수_호가_모음 = []int64{
+		공용.F2정수64(g.BidPrice1),
+		공용.F2정수64(g.BidPrice2),
+		공용.F2정수64(g.BidPrice3),
+		공용.F2정수64(g.BidPrice4),
+		공용.F2정수64(g.BidPrice5),
+		공용.F2정수64(g.BidPrice6),
+		공용.F2정수64(g.BidPrice7),
+		공용.F2정수64(g.BidPrice8),
+		공용.F2정수64(g.BidPrice9),
+		공용.F2정수64(g.BidPrice10)
+	}
+	
+	매수_잔량_모음 = []int64{
+		공용.F2정수64(g.BidVolume1),
+		공용.F2정수64(g.BidVolume2),
+		공용.F2정수64(g.BidVolume3),
+		공용.F2정수64(g.BidVolume4),
+		공용.F2정수64(g.BidVolume5),
+		공용.F2정수64(g.BidVolume6),
+		공용.F2정수64(g.BidVolume7),
+		공용.F2정수64(g.BidVolume8),
+		공용.F2정수64(g.BidVolume9),
+		공용.F2정수64(g.BidVolume10)
+	}
+	
+	s.M매수_호가_모음 = make([]int64, 0)
+	s.M매수_잔량_모음 = make([]int64, 0)
+	
+	for i, 매수_호가 := range 매수_호가_모음 {
+		if 매수_호가 <= s.M현재가 && 매수_잔량_모음[i] > 0 {
+			s.M매수_호가_모음 = append(s.M매수_호가_모음, 매수_호가)
+			s.M매수_잔량_모음 = append(s.M매수_잔량_모음, 매수_잔량_모음[i])
+		}
+	}
+	
 	s.M매도_잔량_총합 = 공용.F2정수64(g.OfferVolTot)
 	s.M매수_잔량_총합 = 공용.F2정수64(g.BidVolTot)
 	s.M시간외_매도_잔량 = 공용.F2정수64(g.OfferVolAfterHour)
@@ -516,12 +489,16 @@ func New주식_현재가_조회_기본_자료(c *C.Tc1101OutBlock) (데이터 *S
 	s.M업종명 = 공용.F2문자열_CP949(g.Sector)
 	s.M자본금_규모 = 공용.F2문자열_CP949(g.CapSize)
 	s.M결산월 = 공용.F2문자열_CP949(g.SettleMonth)
-	s.M종목_정보_1 = 공용.F2문자열_CP949(g.MarketAction1)
-	s.M종목_정보_2 = 공용.F2문자열_CP949(g.MarketAction2)
-	s.M종목_정보_3 = 공용.F2문자열_CP949(g.MarketAction3)
-	s.M종목_정보_4 = 공용.F2문자열_CP949(g.MarketAction4)
-	s.M종목_정보_5 = 공용.F2문자열_CP949(g.MarketAction5)
-	s.M종목_정보_6 = 공용.F2문자열_CP949(g.MarketAction6)
+	
+	s.M추가_정보_모음 = []string{
+		공용.F2문자열_CP949(g.MarketAction1),
+		공용.F2문자열_CP949(g.MarketAction2),
+		공용.F2문자열_CP949(g.MarketAction3),
+		공용.F2문자열_CP949(g.MarketAction4),
+		공용.F2문자열_CP949(g.MarketAction5),
+		공용.F2문자열_CP949(g.MarketAction6)
+	}
+	
 	s.M서킷_브레이커_구분 = strings.TrimSpace(공용.F2문자열_CP949(g.CircuitBreaker))
 	s.M액면가 = 공용.F2정수64(g.NominalPrice)
 	//s.M전일종가_타이틀 = 공용.F2문자열_CP949(g.PrevPriceTitle)
@@ -560,28 +537,40 @@ func New주식_현재가_조회_기본_자료(c *C.Tc1101OutBlock) (데이터 *S
 	s.M거래원_정보_수신_시간 = time.Date(지금.Year(), 지금.Month(), 지금.Day(), 시각.Hour(), 시각.Minute(), 0, 0, 지금.Location())
 	if s.M거래원_정보_수신_시간.After(삼분후) {
 		s.M거래원_정보_수신_시간 = s.M거래원_정보_수신_시간.Add(-24 * time.Hour)
-	} 
+	}
+	
+	s.M매도_거래원_모음 = []string{
+		공용.F2문자열_CP949(g.Seller1),
+		공용.F2문자열_CP949(g.Seller2),
+		공용.F2문자열_CP949(g.Seller3),
+		공용.F2문자열_CP949(g.Seller4),
+		공용.F2문자열_CP949(g.Seller5)
+	}
+	
+	s.M매도_거래량_모음 = []int64{
+		공용.F2정수64(g.Seller1Volume),
+		공용.F2정수64(g.Seller2Volume),
+		공용.F2정수64(g.Seller3Volume),
+		공용.F2정수64(g.Seller4Volume),
+		공용.F2정수64(g.Seller5Volume)
+	}
+	
+	s.M매수_거래원_모음 = []string{
+		공용.F2문자열_CP949(g.Buyer1),
+		공용.F2문자열_CP949(g.Buyer2),
+		공용.F2문자열_CP949(g.Buyer3),
+		공용.F2문자열_CP949(g.Buyer4),
+		공용.F2문자열_CP949(g.Buyer5)
+	}
+	
+	s.M매수_거래량_모음 = []int64{
+		공용.F2정수64(g.Buyer1Volume),
+		공용.F2정수64(g.Buyer2Volume),
+		공용.F2정수64(g.Buyer3Volume),
+		공용.F2정수64(g.Buyer4Volume),
+		공용.F2정수64(g.Buyer5Volume)
+	}
 
-	s.M매도_거래원_1 = 공용.F2문자열_CP949(g.Seller1)
-	s.M매수_거래원_1 = 공용.F2문자열_CP949(g.Buyer1)
-	s.M매도_거래량_1 = 공용.F2정수64(g.Seller1Volume)
-	s.M매수_거래량_1 = 공용.F2정수64(g.Buyer1Volume)
-	s.M매도_거래원_2 = 공용.F2문자열_CP949(g.Seller2)
-	s.M매수_거래원_2 = 공용.F2문자열_CP949(g.Buyer2)
-	s.M매도_거래량_2 = 공용.F2정수64(g.Seller2Volume)
-	s.M매수_거래량_2 = 공용.F2정수64(g.Buyer2Volume)
-	s.M매도_거래원_3 = 공용.F2문자열_CP949(g.Seller3)
-	s.M매수_거래원_3 = 공용.F2문자열_CP949(g.Buyer3)
-	s.M매도_거래량_3 = 공용.F2정수64(g.Seller3Volume)
-	s.M매수_거래량_3 = 공용.F2정수64(g.Buyer3Volume)
-	s.M매도_거래원_4 = 공용.F2문자열_CP949(g.Seller4)
-	s.M매수_거래원_4 = 공용.F2문자열_CP949(g.Buyer4)
-	s.M매도_거래량_4 = 공용.F2정수64(g.Seller4Volume)
-	s.M매수_거래량_4 = 공용.F2정수64(g.Buyer4Volume)
-	s.M매도_거래원_5 = 공용.F2문자열_CP949(g.Seller5)
-	s.M매수_거래원_5 = 공용.F2문자열_CP949(g.Buyer5)
-	s.M매도_거래량_5 = 공용.F2정수64(g.Seller5Volume)
-	s.M매수_거래량_5 = 공용.F2정수64(g.Buyer5Volume)
 	s.M외국인_매도_거래량 = 공용.F2정수64(g.ForeignSellVolume)
 	s.M외국인_매수_거래량 = 공용.F2정수64(g.ForeignBuyVolume)
 
@@ -616,20 +605,11 @@ func New주식_현재가_조회_기본_자료(c *C.Tc1101OutBlock) (데이터 *S
 
 	증거금_비율_위치 := 공용.F2문자열(g.MarginRate)
 	증거금_비율_문자열 := ""
-
-	switch 증거금_비율_위치 {
-	case "1":
-		증거금_비율_문자열 = s.M종목_정보_1
-	case "2":
-		증거금_비율_문자열 = s.M종목_정보_2
-	case "3":
-		증거금_비율_문자열 = s.M종목_정보_3
-	case "4":
-		증거금_비율_문자열 = s.M종목_정보_4
-	case "5":
-		증거금_비율_문자열 = s.M종목_정보_5
-	case "6":
-		증거금_비율_문자열 = s.M종목_정보_6
+	
+	switch  {
+	case "1", "2", "3", "4", "5", "6":
+		위치 := 공용.F2정수(증거금_비율_위치)
+		증거금_비율_문자열 = s.M추가_정보_모음[위치-1] 
 	default:
 		에러 := 공용.F에러("예상하지 못한 증거금_비율_위치. %v", 증거금_비율_위치)
 		panic(에러)
@@ -659,26 +639,17 @@ func New주식_현재가_조회_기본_자료(c *C.Tc1101OutBlock) (데이터 *S
 	switch 종목별_신용한도_위치 {
 	case "0":
 		종목별_신용한도_문자열 = ""
-	case "1":
-		종목별_신용한도_문자열 = s.M종목_정보_1
-	case "2":
-		종목별_신용한도_문자열 = s.M종목_정보_2
-	case "3":
-		종목별_신용한도_문자열 = s.M종목_정보_3
-	case "4":
-		종목별_신용한도_문자열 = s.M종목_정보_4
-	case "5":
-		종목별_신용한도_문자열 = s.M종목_정보_5
-	case "6":
-		종목별_신용한도_문자열 = s.M종목_정보_6
+	case "1", "2", "3", "4", "5", "6":
+		위치 := 공용.F2정수(종목별_신용한도_위치)
+		종목별_신용한도_문자열 = s.M추가_정보_모음[위치-1]
 	default:
 		에러 := 공용.F에러("시각 %v, 종목코드 %v\n"+
 			"예상하지 못한 종목별_신용한도_위치. %v\n"+
 			" 1 : %v\n2 : %v\n3 : %v\n"+
 			" 4 : %v\n5 : %v\n6 : %v\n",
 			s.M시각, s.M종목_코드, 종목별_신용한도_위치,
-			s.M종목_정보_1, s.M종목_정보_2, s.M종목_정보_3,
-			s.M종목_정보_4, s.M종목_정보_5, s.M종목_정보_6)
+			s.M추가_정보_모음[0], s.M추가_정보_모음[1], s.M추가_정보_모음[2],
+			s.M추가_정보_모음[3], s.M추가_정보_모음[4], s.M추가_정보_모음[5])
 		panic(에러)
 	}
 
@@ -843,8 +814,8 @@ type S_ETF_현재가_조회_기본_자료 struct { // 종목마스타기본자�
 	M등락부호       uint8
 	M등락폭        int64
 	M등락율        float64
-	M매도_호가      int64
-	M매수_호가      int64
+	//M매도_호가      int64
+	//M매수_호가      int64
 	M거래량        int64
 	M전일대비_거래량_비율 float64
 	M유동주_회전율    float64
@@ -857,48 +828,10 @@ type S_ETF_현재가_조회_기본_자료 struct { // 종목마스타기본자�
 	M저가         int64
 	M하한가        int64
 	M시각         time.Time
-	M매도_호가_최우선  int64
-	M매도_호가_차선   int64
-	M매도_호가_차차선  int64
-	M매도_호가_4차선  int64
-	M매도_호가_5차선  int64
-	M매도_호가_6차선  int64
-	M매도_호가_7차선  int64
-	M매도_호가_8차선  int64
-	M매도_호가_9차선  int64
-	M매도_호가_10차선 int64
-	M매수_호가_최우선  int64
-	M매수_호가_차선   int64
-	M매수_호가_차차선  int64
-	M매수_호가_4차선  int64
-	M매수_호가_5차선  int64
-	M매수_호가_6차선  int64
-	M매수_호가_7차선  int64
-	M매수_호가_8차선  int64
-	M매수_호가_9차선  int64
-	M매수_호가_10차선 int64
-	M매도_잔량_최우선  int64
-	M매도_잔량_차선   int64
-	M매도_잔량_차차선  int64
-	M매도_잔량_4차선  int64
-	M매도_잔량_5차선  int64
-	M매도_잔량_6차선  int64
-	M매도_잔량_7차선  int64
-	M매도_잔량_8차선  int64
-	M매도_잔량_9차선  int64
-	M매도_잔량_10차선 int64
-	M매수_잔량_최우선  int64
-	M매수_잔량_차선   int64
-	M매수_잔량_차차선  int64
-	M매수_잔량_4차선  int64
-	M매수_잔량_5차선  int64
-	M매수_잔량_6차선  int64
-	M매수_잔량_7차선  int64
-	M매수_잔량_8차선  int64
-	M매수_잔량_9차선  int64
-	M매수_잔량_10차선 int64
-	M매도_잔량_총합   int64
-	M매수_잔량_총합   int64
+	M매도_호가_모음 []int64
+	M매도_잔량_모음 []int64
+	M매수_호가_모음 []int64
+	M매수_잔량_모음 []int64
 	M시간외_매도_잔량  int64
 	M시간외_매수_잔량  int64
 	M피봇_2차_저항   int64
@@ -910,12 +843,7 @@ type S_ETF_현재가_조회_기본_자료 struct { // 종목마스타기본자�
 	M업종명        string
 	M자본금_규모     string
 	M결산월        string
-	M시장_조치_1    string
-	M시장_조치_2    string
-	M시장_조치_3    string
-	M시장_조치_4    string
-	M시장_조치_5    string
-	M시장_조치_6    string
+	M추가_정보_모음 []string
 	M서킷_브레이커_구분 string
 	M액면가        int64
 	//M전일_종가_타이틀         string // GUI화면에 쓸 자료이니 별 필요 없을 듯...
@@ -934,31 +862,15 @@ type S_ETF_현재가_조회_기본_자료 struct { // 종목마스타기본자�
 	//M상장_주식수_1000주 int64
 	M시가_총액_억     int64
 	M거래원_정보_수신_시각 time.Time
-	M매도_거래원_1     string
-	M매수_거래원_1     string
-	M매도_거래량_1     int64
-	M매수_거래량_1     int64
-	M매도_거래원_2     string
-	M매수_거래원_2     string
-	M매도_거래량_2 int64
-	M매수_거래량_2 int64
-	M매도_거래원_3     string
-	M매수_거래원_3     string
-	M매도_거래량_3 int64
-	M매수_거래량_3 int64
-	M매도_거래원_4     string
-	M매수_거래원_4     string
-	M매도_거래량_4 int64
-	M매수_거래량_4 int64
-	M매도_거래원_5     string
-	M매수_거래원_5     string
-	M매도_거래량_5 int64
-	M매수_거래량_5 int64
+	M매도_거래원_모음 []string
+	M매도_거래량_모음 []int
+	M매수_거래원_모음 []string
+	M매수_거래량_모음 []int
 	M외국인_매도_거래량   int64
 	M외국인_매수_거래량   int64
 	M외국인_시간       time.Time
 	M외국인_지분율      float64
-	M결제일          time.Time
+	M신용잔고_기준_결제일 time.Time
 	M신용잔고율        float64
 	M유상_배정_기준일    time.Time
 	M무상_배정_기준일    time.Time
@@ -975,7 +887,7 @@ func New_ETF_현재가_조회_기본_자료(c *C.char) *S_ETF_현재가_조회_�
 
 	s := new(S_ETF_현재가_조회_기본_자료)
 	s.M종목_코드 = 공용.F2문자열(g.Code)
-	s.M종목명 = 공용.F2문자열(g.Title)
+	s.M종목명 = 공용.F2문자열_CP949(g.Title)
 	s.M현재가 = 공용.F2정수64(g.MarketPrice)
 	s.M등락부호 = f2등락부호(g.DiffSign)
 	s.M등락폭 = 공용.F2정수64(g.Diff)
@@ -993,47 +905,78 @@ func New_ETF_현재가_조회_기본_자료(c *C.char) *S_ETF_현재가_조회_�
 	s.M시가대비_등락폭 = 공용.F2정수64(g.VsOpenDiff)
 	s.M저가 = 공용.F2정수64(g.Low)
 	s.M하한가 = 공용.F2정수64(g.LowLmtPrice)
-	s.M시각 = 공용.F2포맷된_시각("포맷 문자열", g.Time)
-	s.M매도_호가_최우선 = 공용.F2정수64(g.OfferPrice1)
-	s.M매도_호가_차선 = 공용.F2정수64(g.OfferPrice2)
-	s.M매도_호가_차차선 = 공용.F2정수64(g.OfferPrice3)
-	s.M매도_호가_4차선 = 공용.F2정수64(g.OfferPrice4)
-	s.M매도_호가_5차선 = 공용.F2정수64(g.OfferPrice5)
-	s.M매도_호가_6차선 = 공용.F2정수64(g.OfferPrice6)
-	s.M매도_호가_7차선 = 공용.F2정수64(g.OfferPrice7)
-	s.M매도_호가_8차선 = 공용.F2정수64(g.OfferPrice8)
-	s.M매도_호가_9차선 = 공용.F2정수64(g.OfferPrice9)
-	s.M매도_호가_10차선 = 공용.F2정수64(g.OfferPrice10)
-	s.M매수_호가_최우선 = 공용.F2정수64(g.BidPrice1)
-	s.M매수_호가_차선 = 공용.F2정수64(g.BidPrice2)
-	s.M매수_호가_차차선 = 공용.F2정수64(g.BidPrice3)
-	s.M매수_호가_4차선 = 공용.F2정수64(g.BidPrice4)
-	s.M매수_호가_5차선 = 공용.F2정수64(g.BidPrice5)
-	s.M매수_호가_6차선 = 공용.F2정수64(g.BidPrice6)
-	s.M매수_호가_7차선 = 공용.F2정수64(g.BidPrice7)
-	s.M매수_호가_8차선 = 공용.F2정수64(g.BidPrice8)
-	s.M매수_호가_9차선 = 공용.F2정수64(g.BidPrice9)
-	s.M매수_호가_10차선 = 공용.F2정수64(g.BidPrice10)
-	s.M매도_잔량_최우선 = 공용.F2정수64(g.OfferVolume1)
-	s.M매도_잔량_차선 = 공용.F2정수64(g.OfferVolume2)
-	s.M매도_잔량_차차선 = 공용.F2정수64(g.OfferVolume3)
-	s.M매도_잔량_4차선 = 공용.F2정수64(g.OfferVolume4)
-	s.M매도_잔량_5차선 = 공용.F2정수64(g.OfferVolume5)
-	s.M매도_잔량_6차선 = 공용.F2정수64(g.OfferVolume6)
-	s.M매도_잔량_7차선 = 공용.F2정수64(g.OfferVolume7)
-	s.M매도_잔량_8차선 = 공용.F2정수64(g.OfferVolume8)
-	s.M매도_잔량_9차선 = 공용.F2정수64(g.OfferVolume9)
-	s.M매도_잔량_10차선 = 공용.F2정수64(g.OfferVolume10)
-	s.M매수_잔량_최우선 = 공용.F2정수64(g.BidVolume1)
-	s.M매수_잔량_차선 = 공용.F2정수64(g.BidVolume2)
-	s.M매수_잔량_차차선 = 공용.F2정수64(g.BidVolume3)
-	s.M매수_잔량_4차선 = 공용.F2정수64(g.BidVolume4)
-	s.M매수_잔량_5차선 = 공용.F2정수64(g.BidVolume5)
-	s.M매수_잔량_6차선 = 공용.F2정수64(g.BidVolume6)
-	s.M매수_잔량_7차선 = 공용.F2정수64(g.BidVolume7)
-	s.M매수_잔량_8차선 = 공용.F2정수64(g.BidVolume8)
-	s.M매수_잔량_9차선 = 공용.F2정수64(g.BidVolume9)
-	s.M매수_잔량_10차선 = 공용.F2정수64(g.BidVolume10)
+
+	지금 := time.Now()
+	삼분후 := 지금.Add(3 * time.Minute)
+	시각 := 공용.F2포맷된_시각("15:04:05", g.Time)
+	s.M시각 = time.Date(지금.Year(), 지금.Month(), 지금.Day(), 시각.Hour(), 시각.Minute(), 시각.Second(), 0, 지금.Location())
+	if s.M시각.After(삼분후) {
+		s.M시각 = s.M시각.Add(-24 * time.Hour)
+	}
+	
+	매도_호가_모음 := []int64{
+		공용.F2정수64(g.OfferPrice1),
+		공용.F2정수64(g.OfferPrice2),
+		공용.F2정수64(g.OfferPrice3),
+		공용.F2정수64(g.OfferPrice4),
+		공용.F2정수64(g.OfferPrice5),
+		공용.F2정수64(g.OfferPrice6),
+		공용.F2정수64(g.OfferPrice7),
+		공용.F2정수64(g.OfferPrice8),
+		공용.F2정수64(g.OfferPrice9),
+		공용.F2정수64(g.OfferPrice10)}
+	
+	매도_잔량_모음 := []int64{
+		공용.F2정수64(g.OfferVolume1),
+		공용.F2정수64(g.OfferVolume2),
+		공용.F2정수64(g.OfferVolume3),
+		공용.F2정수64(g.OfferVolume4),
+		공용.F2정수64(g.OfferVolume5),
+		공용.F2정수64(g.OfferVolume6),
+		공용.F2정수64(g.OfferVolume7),
+		공용.F2정수64(g.OfferVolume8),
+		공용.F2정수64(g.OfferVolume9),
+		공용.F2정수64(g.OfferVolume10)}
+	
+	for i, 매도_호가 := range 매도_호가_모음 {
+		if 매도_호가 >= s.M현재가 && 매도_잔량_모음[i] > 0 {
+			s.M매도_호가_모음 = append(s.M매도_호가_모음, 매도_호가)
+			s.M매도_잔량_모음 = append(s.M매도_잔량_모음, 매도_잔량_모음[i])
+		}
+	}
+	
+	
+	매수_호가_모음 := []int64{
+		공용.F2정수64(g.BidPrice1),
+		공용.F2정수64(g.BidPrice2),
+		공용.F2정수64(g.BidPrice3),
+		공용.F2정수64(g.BidPrice4),
+		공용.F2정수64(g.BidPrice5),
+		공용.F2정수64(g.BidPrice6),
+		공용.F2정수64(g.BidPrice7),
+		공용.F2정수64(g.BidPrice8),
+		공용.F2정수64(g.BidPrice9),
+		공용.F2정수64(g.BidPrice10)}
+	
+	매수_잔량_모음 := []int64{
+		공용.F2정수64(g.BidVolume1),
+		공용.F2정수64(g.BidVolume2),
+		공용.F2정수64(g.BidVolume3),
+		공용.F2정수64(g.BidVolume4),
+		공용.F2정수64(g.BidVolume5),
+		공용.F2정수64(g.BidVolume6),
+		공용.F2정수64(g.BidVolume7),
+		공용.F2정수64(g.BidVolume8),
+		공용.F2정수64(g.BidVolume9),
+		공용.F2정수64(g.BidVolume10)}
+	
+	for i, 매수_호가 := range 매수_호가_모음 {
+		if 매수_호가 >= s.M현재가 && 매수_잔량_모음[i] > 0 {
+			s.M매수_호가_모음 = append(s.M매수_호가_모음, 매수_호가)
+			s.M매수_잔량_모음 = append(s.M매수_잔량_모음, 매수_잔량_모음[i])
+		}
+	}
+		
 	s.M매도_잔량_총합 = 공용.F2정수64(g.OfferVolTot)
 	s.M매수_잔량_총합 = 공용.F2정수64(g.BidVolTot)
 	s.M시간외_매도_잔량 = 공용.F2정수64(g.OfferVolAfterHour)
@@ -1043,19 +986,20 @@ func New_ETF_현재가_조회_기본_자료(c *C.char) *S_ETF_현재가_조회_�
 	s.M피봇_가격 = 공용.F2정수64(g.PivotPrice)
 	s.M피봇_1차_지지 = 공용.F2정수64(g.PivotDown1)
 	s.M피봇_2차_지지 = 공용.F2정수64(g.PivotDown2)
-	s.M시장_구분 = 공용.F2문자열(g.Market)
-	s.M업종명 = 공용.F2문자열(g.Sector)
-	s.M자본금_규모 = 공용.F2문자열(g.CapSize)
-	s.M결산월 = 공용.F2문자열(g.SettleMonth)
-	s.M시장_조치_1 = 공용.F2문자열(g.MarketAction1)
-	s.M시장_조치_2 = 공용.F2문자열(g.MarketAction2)
-	s.M시장_조치_3 = 공용.F2문자열(g.MarketAction3)
-	s.M시장_조치_4 = 공용.F2문자열(g.MarketAction4)
-	s.M시장_조치_5 = 공용.F2문자열(g.MarketAction5)
-	s.M시장_조치_6 = 공용.F2문자열(g.MarketAction6)
-	s.M서킷_브레이커_구분 = 공용.F2문자열_CP949(g.CircuitBreaker)
+	s.M시장_구분 = 공용.F2문자열_CP949(g.Market)
+	s.M업종명 = 공용.F2문자열_CP949(g.Sector)
+	s.M자본금_규모 = 공용.F2문자열_CP949(g.CapSize)
+	s.M결산월 = 공용.F2문자열_CP949(g.SettleMonth)
+	s.M추가_정보_모음 = []string{
+		공용.F2문자열_CP949(g.MarketAction1),
+		공용.F2문자열_CP949(g.MarketAction2),
+		공용.F2문자열_CP949(g.MarketAction3),
+		공용.F2문자열_CP949(g.MarketAction4),
+		공용.F2문자열_CP949(g.MarketAction5),
+		공용.F2문자열_CP949(g.MarketAction6)}	
+	s.M서킷_브레이커_구분 = strings.TrimSpace(공용.F2문자열_CP949(g.CircuitBreaker))
 	s.M액면가 = 공용.F2정수64(g.NominalPrice)
-	//s.M전일_종가_타이틀 = 공용.F2문자열(g.PrevPriceTitle)
+	//s.M전일_종가_타이틀 = 공용.F2문자열_CP949(g.PrevPriceTitle)
 	s.M전일_종가 = 공용.F2정수64(g.PrevPrice)
 	s.M대용가 = 공용.F2정수64(g.MortgageValue)
 	s.M공모가 = 공용.F2정수64(g.PublicOfferPrice)
@@ -1086,38 +1030,68 @@ func New_ETF_현재가_조회_기본_자료(c *C.char) *S_ETF_현재가_조회_�
 	s.M유동_주식수_1000주 = 공용.F2정수64(g.FloatVolume)
 	//s.M상장_주식수_1000주 = 공용.F2정수64(g.ListVolBy1000)
 	s.M시가_총액_억 = 공용.F2정수64(g.MarketCapital)
-	s.M거래원_정보_수신_시각 = 공용.F2포맷된_시각("포맷 문자열", g.TraderInfoTime)
-	s.M매도_거래원_1 = 공용.F2문자열(g.Seller1)
-	s.M매수_거래원_1 = 공용.F2문자열(g.Buyer1)
-	s.M매도_거래원_1_거래량 = 공용.F2정수64(g.Seller1Volume)
-	s.M매수_거래원_1_거래량 = 공용.F2정수64(g.Buyer1Volume)
-	s.M매도_거래원_2 = 공용.F2문자열(g.Seller2)
-	s.M매수_거래원_2 = 공용.F2문자열(g.Buyer2)
-	s.M매도_거래량_2 = 공용.F2정수64(g.Seller2Volume)
-	s.M매수_거래량_2 = 공용.F2정수64(g.Buyer2Volume)
-	s.M매도_거래원_3 = 공용.F2문자열(g.Seller3)
-	s.M매수_거래원_3 = 공용.F2문자열(g.Buyer3)
-	s.M매도_거래량_3 = 공용.F2정수64(g.Seller3Volume)
-	s.M매수_거래량_3 = 공용.F2정수64(g.Buyer3Volume)
-	s.M매도_거래원_4 = 공용.F2문자열(g.Seller4)
-	s.M매수_거래원_4 = 공용.F2문자열(g.Buyer4)
-	s.M매도_거래량_4 = 공용.F2정수64(g.Seller4Volume)
-	s.M매수_거래량_4 = 공용.F2정수64(g.Buyer4Volume)
-	s.M매도_거래원_5 = 공용.F2문자열(g.Seller5)
-	s.M매수_거래원_5 = 공용.F2문자열(g.Buyer5)
-	s.M매도_거래량_5 = 공용.F2정수64(g.Seller5Volume)
-	s.M매수_거래량_5 = 공용.F2정수64(g.Buyer5Volume)
+	
+	시각 = 공용.F2포맷된_시각("15:04", g.TraderInfoTime)
+	s.M거래원_정보_수신_시간 = time.Date(지금.Year(), 지금.Month(), 지금.Day(), 시각.Hour(), 시각.Minute(), 0, 0, 지금.Location())
+	if s.M거래원_정보_수신_시간.After(삼분후) {
+		s.M거래원_정보_수신_시간 = s.M거래원_정보_수신_시간.Add(-24 * time.Hour)
+	}
+	
+	s.M매도_거래원_모음 = []string{
+		공용.F2문자열_CP949(g.Seller1),
+		공용.F2문자열_CP949(g.Seller2),
+		공용.F2문자열_CP949(g.Seller3),
+		공용.F2문자열_CP949(g.Seller4),
+		공용.F2문자열_CP949(g.Seller5)}
+	
+	s.M매도_거래량_모음 = []int{
+		공용.F2정수64(g.Seller1Volume),
+		공용.F2정수64(g.Seller2Volume),
+		공용.F2정수64(g.Seller3Volume),
+		공용.F2정수64(g.Seller4Volume),
+		공용.F2정수64(g.Seller5Volume)
+	}
+	
+	s.M매수_거래원_모음 = []string{
+		공용.F2문자열_CP949(g.Buyer1),
+		공용.F2문자열_CP949(g.Buyer2),
+		공용.F2문자열_CP949(g.Buyer3),
+		공용.F2문자열_CP949(g.Buyer4),
+		공용.F2문자열_CP949(g.Buyer5)}
+
+	s.M매수_거래량_모음 = []int{
+		공용.F2정수64(g.Buyer1Volume),
+		공용.F2정수64(g.Buyer2Volume),
+		공용.F2정수64(g.Buyer3Volume),
+		공용.F2정수64(g.Buyer4Volume),
+		공용.F2정수64(g.Buyer5Volume)}
+		
 	s.M외국인_매도_거래량 = 공용.F2정수64(g.ForeignSellVolume)
 	s.M외국인_매수_거래량 = 공용.F2정수64(g.ForeignBuyVolume)
-	s.M외국인_시간 = 공용.F2포맷된_시각("포맷 문자열", g.ForeignTime)
+	
+	시각 = 공용.F2포맷된_시각("15:04", g.ForeignTime)
+	s.M외국인_시간 = time.Date(지금.Year(), 지금.Month(), 지금.Day(), 시각.Hour(), 시각.Minute(), 0, 0, 지금.Location())
 	s.M외국인_지분율 = f2실수_소숫점_추가(g.ForeignHoldingRate, 2)
-	s.M결제일 = 공용.F2포맷된_시각("포맷 문자열", g.SettleDate)
+	
+	시각 = 공용.F2포맷된_시각("0102", g.SettleDate)
+	s.M신용잔고_기준_결제일 = time.Date(지금.Year(), 시각.Month(), 시각.Day(), 0, 0, 0, 0, 지금.Location())
 	s.M신용잔고율 = f2실수_소숫점_추가(g.DebtPercent, 2)
-	s.M유상_배정_기준일 = 공용.F2포맷된_시각("0102", g.RightsIssueDate)
-	s.M무상_배정_기준일 = 공용.F2포맷된_시각("0102", g.BonusIssueDate)
+	
+	if strings.TrimSpace(공용.F2문자열(g.RightsIssueDate)) != "" {
+		s.M유상_배정_기준일 = 공용.F2포맷된_시각("0102", g.RightsIssueDate)
+	} else {
+		s.M유상_배정_기준일 = time.Date(0, time.Month(1), 1, 0, 0, 0, 0, time.UTC)
+	}
+
+	if strings.TrimSpace(공용.F2문자열(g.BonusIssueDate)) != "" {
+		s.M무상_배정_기준일 = 공용.F2포맷된_시각("0102", g.BonusIssueDate)
+	} else {
+		s.M무상_배정_기준일 = time.Date(0, time.Month(1), 1, 0, 0, 0, 0, time.UTC)
+	}
+	
 	s.M유상_배정_비율 = f2실수_소숫점_추가(g.RightsIssueRate, 2)
 	s.M무상_배정_비율 = f2실수_소숫점_추가(g.BonusIssueRate, 2)
-	s.M상장일 = 공용.F2포맷된_시각("포맷 문자열", g.IpoDate)
+	s.M상장일 = 공용.F2포맷된_시각("20060102", g.IpoDate)
 	s.M상장_주식수 = 공용.F2정수64(g.ListedVolume)
 	s.M전체_거래원_매도_합계 = 공용.F2정수64(g.SellTotalSum)
 	s.M전체_거래원_매수_합계 = 공용.F2정수64(g.BuyTotalSum)
@@ -1125,7 +1099,7 @@ func New_ETF_현재가_조회_기본_자료(c *C.char) *S_ETF_현재가_조회_�
 	return s
 }
 
-type S_ETF_현재가_조회_변동_거래 struct {
+type S_ETF_현재가_조회_변동_거래_자료 struct {
 	M시각     time.Time
 	M현재가    int64
 	M등락부호   uint8
@@ -1136,11 +1110,11 @@ type S_ETF_현재가_조회_변동_거래 struct {
 	M거래량    int64
 }
 
-func New_ETF_현재가_조회_변동_거래_자료(c *C.char) *S_ETF_현재가_조회_변동_거래량 {
+func New_ETF_현재가_조회_변동_거래_자료(c *C.char) *S_ETF_현재가_조회_변동_거래_자료 {
 	g := (*Tc1151OutBlock2)(unsafe.Pointer(c))
 
 	s := new(S_ETF_현재가_조회_변동_거래_자료)
-	s.M시각 = 공용.F2포맷된_시각("포맷 문자열", g.Time)
+	s.M시각 = 공용.F2포맷된_시각("15:04:05", g.Time)
 	s.M현재가 = 공용.F2정수64(g.MarketPrice)
 	s.M등락부호 = f2등락부호(g.DiffSign)
 	s.M등락폭 = 공용.F2정수64(g.Diff)
@@ -1165,12 +1139,12 @@ func New_ETF_현재가_조회_동시호가(c *C.char) *S_ETF_현재가_조회_�
 	g := (*Tc1151OutBlock3)(unsafe.Pointer(c))
 
 	s := new(S_ETF_현재가_조회_동시호가)
-	s.M동시호가_구분 = 공용.F2문자열(g.SyncOfferBid)
+	s.M동시호가_구분 = uint8(공용.F2정수(g.SyncOfferBid))
 	s.M예상_체결가 = 공용.F2정수64(g.EstmPrice)
-	s.M예상_체결_부호 = f2등락부호(g.EstmSign)
-	s.M예상_체결_등락폭 = 공용.F2정수64(g.EstmDiff)
-	s.M예상_체결_등락율 = f2실수_소숫점_추가(g.EstmDiffRate, 2)
-	s.M예상_체결_수량 = 공용.F2정수64(g.EstmVolume)
+	s.M예상_체결부호 = f2등락부호(g.EstmSign)
+	s.M예상_등락폭 = 공용.F2정수64(g.EstmDiff)
+	s.M예상_등락율 = f2실수_소숫점_추가(g.EstmDiffRate, 2)
+	s.M예상_체결수량 = 공용.F2정수64(g.EstmVol)
 
 	return s
 }
@@ -1187,26 +1161,8 @@ type S_ETF_현재가_조회_ETF자료 struct {
 	M구성_종목수         int64
 	M순자산_총액_억      int64
 	M추적_오차율         float64
-	LP_매도_잔량_최우선    int64
-	LP_매도_잔량_차선     int64
-	LP_매도_잔량_차차선    int64
-	LP_매도_잔량_4차선    int64
-	LP_매도_잔량_5차선    int64
-	LP_매도_잔량_6차선    int64
-	LP_매도_잔량_7차선    int64
-	LP_매도_잔량_8차선    int64
-	LP_매도_잔량_9차선    int64
-	LP_매도_잔량_10차선   int64
-	LP_매수_잔량_최우선    int64
-	LP_매수_잔량_차선     int64
-	LP_매수_잔량_차차선    int64
-	LP_매수_잔량_4차선    int64
-	LP_매수_잔량_5차선    int64
-	LP_매수_잔량_6차선    int64
-	LP_매수_잔량_7차선    int64
-	LP_매수_잔량_8차선    int64
-	LP_매수_잔량_9차선    int64
-	LP_매수_잔량_10차선   int64
+	LP_매도_잔량_모음 []int64
+	LP_매수_잔량_모음 []int64
 	ETF_복제_방법_구분_코드 string
 	ETF_상품_유형_코드    string
 }
@@ -1226,33 +1182,35 @@ func New_ETF_현재가_조회_ETF자료(c *C.char) *S_ETF_현재가_조회_ETF�
 	s.M구성_종목수 = 공용.F2정수64(g.ConstituentNo)
 	s.M순자산_총액_억 = 공용.F2정수64(g.NAVBy100Million)
 	s.M추적_오차율 = f2실수_소숫점_추가(g.TrackingErrRate, 2)
-	s.LP_매도_잔량_최우선 = 공용.F2정수64(g.LP_OfferVolume1)
-	s.LP_매도_잔량_차선 = 공용.F2정수64(g.LP_OfferVolume2)
-	s.LP_매도_잔량_차차선 = 공용.F2정수64(g.LP_OfferVolume3)
-	s.LP_매도_잔량_4차선 = 공용.F2정수64(g.LP_OfferVolume4)
-	s.LP_매도_잔량_5차선 = 공용.F2정수64(g.LP_OfferVolume5)
-	s.LP_매도_잔량_6차선 = 공용.F2정수64(g.LP_OfferVolume6)
-	s.LP_매도_잔량_7차선 = 공용.F2정수64(g.LP_OfferVolume7)
-	s.LP_매도_잔량_8차선 = 공용.F2정수64(g.LP_OfferVolume8)
-	s.LP_매도_잔량_9차선 = 공용.F2정수64(g.LP_OfferVolume9)
-	s.LP_매도_잔량_10차선 = 공용.F2정수64(g.LP_OfferVolume10)
-	s.LP_매수_잔량_최우선 = 공용.F2정수64(g.LP_BidVolume1)
-	s.LP_매수_잔량_차선 = 공용.F2정수64(g.LP_BidVolume2)
-	s.LP_매수_잔량_차차선 = 공용.F2정수64(g.LP_BidVolume3)
-	s.LP_매수_잔량_4차선 = 공용.F2정수64(g.LP_BidVolume4)
-	s.LP_매수_잔량_5차선 = 공용.F2정수64(g.LP_BidVolume5)
-	s.LP_매수_잔량_6차선 = 공용.F2정수64(g.LP_BidVolume6)
-	s.LP_매수_잔량_7차선 = 공용.F2정수64(g.LP_BidVolume7)
-	s.LP_매수_잔량_8차선 = 공용.F2정수64(g.LP_BidVolume8)
-	s.LP_매수_잔량_9차선 = 공용.F2정수64(g.LP_BidVolume9)
-	s.LP_매수_잔량_10차선 = 공용.F2정수64(g.LP_BidVolume10)
+	s.LP_매도_잔량_모음 = []int64{
+		공용.F2정수64(g.LP_OfferVolume1),
+		공용.F2정수64(g.LP_OfferVolume2),
+		공용.F2정수64(g.LP_OfferVolume3),
+		공용.F2정수64(g.LP_OfferVolume4),
+		공용.F2정수64(g.LP_OfferVolume5),
+		공용.F2정수64(g.LP_OfferVolume6),
+		공용.F2정수64(g.LP_OfferVolume7),
+		공용.F2정수64(g.LP_OfferVolume8),
+		공용.F2정수64(g.LP_OfferVolume9),
+		공용.F2정수64(g.LP_OfferVolume10)}
+	s.LP_매수_잔량_모음 = []int64{
+		공용.F2정수64(g.LP_BidVolume1),
+		공용.F2정수64(g.LP_BidVolume2),
+		공용.F2정수64(g.LP_BidVolume3),
+		공용.F2정수64(g.LP_BidVolume4),
+		공용.F2정수64(g.LP_BidVolume5),
+		공용.F2정수64(g.LP_BidVolume6),
+		공용.F2정수64(g.LP_BidVolume7),
+		공용.F2정수64(g.LP_BidVolume8),
+		공용.F2정수64(g.LP_BidVolume9),
+		공용.F2정수64(g.LP_BidVolume10)}
 	s.ETF_복제_방법_구분_코드 = 공용.F2문자열(g.TrackingMethod)
 	s.ETF_상품_유형_코드 = 공용.F2문자열(g.ETF_Type)
 
 	return s
 }
 
-type S_ETF_현재가_조회_기반_지수_자료 struct {
+type S_ETF_현재가_조회_지수_자료 struct {
 	M지수_코드       string
 	M업종_코드       string
 	M지수_이름       string
@@ -1268,10 +1226,10 @@ type S_ETF_현재가_조회_기반_지수_자료 struct {
 	M채권_지수_세부_코드 string
 }
 
-func New_ETF_현재가_조회_기반_지수_자료(c *C.char) *S_ETF_현재가_조회_기반_지수_자료 {
+func New_ETF_현재가_조회_지수_자료(c *C.char) *S_ETF_현재가_조회_지수_자료 {
 	g := (*Tc1151OutBlock5)(unsafe.Pointer(c))
 
-	s := new(S_ETF_현재가_조회_기반_지수_자료)
+	s := new(S_ETF_현재가_조회_지수_자료)
 	s.M지수_코드 = 공용.F2문자열(g.IndexCode)
 	s.M업종_코드 = 공용.F2문자열(g.SectorCode)
 	s.M지수_이름 = 공용.F2문자열(g.IndexName)

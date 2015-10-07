@@ -11,6 +11,7 @@ import (
 	"golang.org/x/sys/windows"
 
 	"strings"
+	"testing"
 	"unsafe"
 )
 
