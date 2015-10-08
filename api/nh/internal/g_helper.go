@@ -105,8 +105,6 @@ func f테스트_등락율(테스트 *testing.T, 부호 uint8, 등락율 float64)
 	}
 }
 
-
-
 func f2실수_소숫점_추가(값 interface{}, 소숫점_이하_자릿수 int) float64 {
 	문자열 := strings.Replace(공용.F2문자열(값), " ", "0", -1)
 
@@ -193,7 +191,7 @@ func f_Go구조체로_변환(c *C.RECEIVED) interface{} {
 	case "c1151OutBlock3":
 		공용.F문자열_출력("전체 길이, sizeof : %v, %v", 전체_길이, unsafe.Sizeof(C.Tc1151OutBlock3{}))
 		f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Tc1151OutBlock3{}))
-		return New_ETF_현재가_조회_예상_체결(데이터)
+		return New_ETF_현재가_조회_동시호가(데이터)
 	case "c1151OutBlock4":
 		공용.F문자열_출력("전체 길이, sizeof : %v, %v", 전체_길이, unsafe.Sizeof(C.Tc1151OutBlock4{}))
 		f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Tc1151OutBlock4{}))
@@ -201,7 +199,7 @@ func f_Go구조체로_변환(c *C.RECEIVED) interface{} {
 	case "c1151OutBlock5":
 		공용.F문자열_출력("전체 길이, sizeof : %v, %v", 전체_길이, unsafe.Sizeof(C.Tc1151OutBlock5{}))
 		f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Tc1151OutBlock5{}))
-		return New_ETF_현재가_조회_기반_지수_자료(데이터)
+		return New_ETF_현재가_조회_지수_자료(데이터)
 	case "h1OutBlock":
 		공용.F문자열_출력("전체 길이, sizeof : %v, %v", 전체_길이, unsafe.Sizeof(C.Th1OutBlock{}))
 		f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Th1OutBlock{}))
