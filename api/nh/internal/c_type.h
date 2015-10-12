@@ -351,7 +351,7 @@ typedef struct { // 종목마스타기본자료
 	char VsOpenDiff[6];	char _VsOpenDiff;				// 시가대비등락폭
 	char Low[7];	char _Low;							// 장중저가
 	char LowLmtPrice[7];	char _LowLmtPrice;			// 하한가
-	char Time[8];	char _Time;				// 호가시간
+	char Time[8];	char _Time;							// 호가시간
 	char OfferPrice1[7];	char _OfferPrice1;			// 매도 최우선 호가
 	char OfferPrice2[7];	char _OfferPrice2;			// 매도 차선 호가
 	char OfferPrice3[7];	char _OfferPrice3;			// 매도 차차선 호가

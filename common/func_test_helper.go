@@ -592,7 +592,7 @@ func F메모(문자열 string) {
 		return
 	}
 
-	fmt.Printf("\n\nTODO : %s\n%s\n", 문자열, F소스코드_위치(1))
+	fmt.Printf("\n\nTODO : %s\n%s\n", F소스코드_위치(1), 문자열)
 
 	이미_출력한_메모_모음_잠금.Lock()
 	이미_출력한_메모_모음[문자열] = S비어있는_구조체{}

@@ -32,7 +32,8 @@ import (
 
 func F에러_패닉(에러 error) {
 	if 에러 != nil {
-		panic(에러)
+		F에러_출력(에러)
+		panic("")
 	}
 }
 

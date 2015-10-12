@@ -166,12 +166,18 @@ func f_Go구조체로_변환(c *C.RECEIVED) interface{} {
 		// 충분히 큰 숫자이면 아무 것이나 상관없으며, 반드시 반드시 10000이어야 하는 것은 아님.
 		// Go위키에서는 '1 << 30'을 사용하지만, 너무 큰 수를 사용하니까 메모리 범위를 벗어난다고 에러 발생.
 		슬라이스 := (*[10000]C.Tc1101OutBlock2)(unsafe.Pointer(데이터))[:수량:수량]
-		go슬라이스 := make([]S주식_현재가_조회_변동_거래량_자료, 수량)
+		go슬라이스 := make([]S주식_현재가_조회_변동_거래량_자료, 0)
 
 		for i := 0; i < 수량; i++ {
 			c := 슬라이스[i]
 			g := New주식_현재가_조회_변동_거래량_자료(&c)
-			go슬라이스[i] = *g
+			
+			// 잘못된 데이터는 걸러내자
+			if g.M매도_호가 == 0 || g.M매수_호가 == 0 {
+				continue
+			}
+			
+			go슬라이스 = append(go슬라이스, *g)
 			C.free(unsafe.Pointer(&c))
 		}
 
@@ -181,23 +187,38 @@ func f_Go구조체로_변환(c *C.RECEIVED) interface{} {
 		c := (*C.Tc1101OutBlock3)(unsafe.Pointer(데이터))
 		return New주식_현재가_조회_동시호가(c)
 	case "c1151OutBlock":
-		공용.F문자열_출력("전체 길이, sizeof : %v, %v", 전체_길이, unsafe.Sizeof(C.Tc1151OutBlock{}))
 		f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Tc1151OutBlock{}))
 		return New_ETF_현재가_조회_기본_자료(데이터)
 	case "c1151OutBlock2":
-		공용.F문자열_출력("전체 길이, sizeof : %v, %v", 전체_길이, unsafe.Sizeof(C.Tc1151OutBlock2{}))
-		f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Tc1151OutBlock2{}))
-		return New_ETF_현재가_조회_기본_자료(데이터)
+		수량 := 전체_길이 / int(unsafe.Sizeof(C.Tc1151OutBlock2{}))
+
+		// 큰 배열로 캐스팅 한 다음에 슬라이스를 취함.
+		// 충분히 큰 숫자이면 아무 것이나 상관없으며, 반드시 반드시 10000이어야 하는 것은 아님.
+		// Go위키에서는 '1 << 30'을 사용하지만, 너무 큰 수를 사용하니까 메모리 범위를 벗어난다고 에러 발생.
+		슬라이스 := (*[10000]C.Tc1151OutBlock2)(unsafe.Pointer(데이터))[:수량:수량]
+		go슬라이스 := make([]S_ETF_현재가_조회_변동_거래_자료, 0)
+
+		for i := 0; i < 수량; i++ {
+			c := 슬라이스[i]
+			g := New_ETF_현재가_조회_변동_거래_자료(&c)
+			
+			// 잘못된 데이터는 걸러내자
+			if g.M매도_호가 == 0 || g.M매수_호가 == 0 {
+				continue
+			}
+			
+			go슬라이스 = append(go슬라이스, *g)
+			C.free(unsafe.Pointer(&c))
+		}
+
+		return go슬라이스
 	case "c1151OutBlock3":
-		공용.F문자열_출력("전체 길이, sizeof : %v, %v", 전체_길이, unsafe.Sizeof(C.Tc1151OutBlock3{}))
 		f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Tc1151OutBlock3{}))
 		return New_ETF_현재가_조회_동시호가(데이터)
 	case "c1151OutBlock4":
-		공용.F문자열_출력("전체 길이, sizeof : %v, %v", 전체_길이, unsafe.Sizeof(C.Tc1151OutBlock4{}))
 		f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Tc1151OutBlock4{}))
 		return New_ETF_현재가_조회_ETF자료(데이터)
 	case "c1151OutBlock5":
-		공용.F문자열_출력("전체 길이, sizeof : %v, %v", 전체_길이, unsafe.Sizeof(C.Tc1151OutBlock5{}))
 		f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Tc1151OutBlock5{}))
 		return New_ETF_현재가_조회_지수_자료(데이터)
 	case "h1OutBlock":
