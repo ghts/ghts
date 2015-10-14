@@ -319,10 +319,13 @@ func F2포맷된_시각(포맷 string, 값 interface{}) time.Time {
 
 	문자열 = strings.TrimSpace(문자열)
 
-	반환값, 에러 := time.Parse(포맷, 문자열)
-	F에러_패닉(에러)
+	시각, 에러 := time.Parse(포맷, 문자열)
+	
+	if 에러 != nil {
+		시각 = time.Time{}
+	}
 
-	return 반환값
+	return 시각
 }
 
 func F2참거짓(값 interface{}, 조건 interface{}, 결과 bool) bool {

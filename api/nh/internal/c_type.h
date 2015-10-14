@@ -303,7 +303,7 @@ typedef struct { // 종목지표
 	char EstmSign[1];	char _EstmSign;			// 예상체결 부호
 	char EstmDiff[6];	char _EstmDiff;			// 예상체결 등락폭
 	char EstmDiffRate[5];	char _EstmDiffRate;	// 예상체결 등락률
-	char EstmVol[9];	char _EstmVol;			// 예상체결수량
+	char EstmVolume[9];	char _EstmVol;			// 예상체결수량
 	char ECN_InfoExist[1];	char _ECN_InfoExist;		// ECN정보 유무 구분 (우리나라에는 ECN이 아직 없을텐데...)
 	char ECN_PrevPrice[9];	char _ECN_PrevPrice;		// ECN 전일종가
 	char ECN_DiffSign[1];	char _ECN_DiffSign;			// ECN 부호
@@ -522,8 +522,8 @@ typedef struct { // ETF자료
 } Tc1151OutBlock4;
 
 typedef struct { // 베이스지수자료
-	char IndexCode[2];	char _IndexCode;				// 지수코드
-	char SectorCode[4];	char _SectorCode;				// 섹터코드
+	char SectorCode[2];	char _SectorCode;				// 업종코드
+	char IndexCode[4];	char _IndexCode;				// 지수코드
 	char IndexName[20];	char _IndexName;				// 지수명
 	char KP200Index[8];	char _KP200Index;				// 지수
 	char KP200Sign[1];	char _KP200Sign;				// 등락부호

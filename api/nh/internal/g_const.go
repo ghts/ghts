@@ -9,6 +9,15 @@ const 실행_성공 = "completed successfully"
 const P30초 = 30 * time.Second
 
 const (
+	P코스피 string = "코스피"
+	P코스닥 string = "코스닥"
+	P실물복제 string = "실물복제"
+	P합성복제 string = "합성복제"
+	P일반형 string = "일반형"
+	P파생형 string = "파생형"
+)
+
+const (
 	P상한 uint8 = 0x18 // 24
 	P상승 uint8 = 0x1E // 30
 	P보합 uint8 = 0x20 // 32

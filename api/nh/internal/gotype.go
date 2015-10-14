@@ -374,8 +374,11 @@ func New주식_현재가_조회_기본_자료(c *C.Tc1101OutBlock) (데이터 *S
 			데이터 = nil
 		}
 	}()
-
+	
 	g := (*Tc1101OutBlock)(unsafe.Pointer(c))
+	
+	지금 := time.Now()
+	삼분후 := 지금.Add(3 * time.Minute)
 
 	s := new(S주식_현재가_조회_기본_자료)
 	s.M종목_코드 = 공용.F2문자열(g.Code)
@@ -398,8 +401,6 @@ func New주식_현재가_조회_기본_자료(c *C.Tc1101OutBlock) (데이터 *S
 	s.M저가 = 공용.F2정수64(g.Low)
 	s.M하한가 = 공용.F2정수64(g.LowLmtPrice)
 
-	지금 := time.Now()
-	삼분후 := 지금.Add(3 * time.Minute)
 	시각 := 공용.F2포맷된_시각("15:04:05", g.Time)
 	s.M시각 = time.Date(지금.Year(), 지금.Month(), 지금.Day(), 시각.Hour(), 시각.Minute(), 시각.Second(), 0, 지금.Location())
 	if s.M시각.After(삼분후) {
@@ -564,8 +565,17 @@ func New주식_현재가_조회_기본_자료(c *C.Tc1101OutBlock) (데이터 *S
 		공용.F2정수64(g.Buyer4Volume),
 		공용.F2정수64(g.Buyer5Volume)}
 
-	s.M외국인_매도_거래량 = 공용.F2정수64(g.ForeignSellVolume)
-	s.M외국인_매수_거래량 = 공용.F2정수64(g.ForeignBuyVolume)
+	if strings.TrimSpace(공용.F2문자열(g.ForeignSellVolume)) != "" {
+		s.M외국인_매도_거래량 = 공용.F2정수64(g.ForeignSellVolume)
+	} else {
+		s.M외국인_매도_거래량 = 0
+	}
+	
+	if strings.TrimSpace(공용.F2문자열(g.ForeignBuyVolume)) != "" {
+		s.M외국인_매수_거래량 = 공용.F2정수64(g.ForeignBuyVolume)
+	} else {
+		s.M외국인_매수_거래량 = 0
+	}
 
 	시각 = 공용.F2포맷된_시각("15:04", g.ForeignTime)
 	s.M외국인_시간 = time.Date(지금.Year(), 지금.Month(), 지금.Day(), 시각.Hour(), 시각.Minute(), 0, 0, 지금.Location())
@@ -715,17 +725,9 @@ func New주식_현재가_조회_변동_거래량_자료(c *C.Tc1101OutBlock2) (�
 	시각 := 공용.F2포맷된_시각("15:04:05", g.Time)
 	s.M시각 = time.Date(지금.Year(), 지금.Month(), 지금.Day(), 시각.Hour(), 시각.Minute(), 시각.Second(), 0, 지금.Location())
 	
+	공용.F메모("가장 최근 영업일을 알아내어서 시각 값에 적용해야 함.")
 	if s.M시각.After(지금) {
 		s.M시각 = s.M시각.Add(-24 * time.Hour)
-	}
-	
-	금일_0시 := time.Date(지금.Year(), 지금.Month(), 지금.Day(), 0, 0, 0, 0, 지금.Location())
-	
-	if s.M시각.Before(금일_0시) {
-		공용.F문자열_출력("***************")
-		공용.F문자열_출력("** 문제점 찾았음 **")
-		공용.F문자열_출력("***************")
-		공용.F변수값_확인(공용.F2문자열(g.Time), 시각, s.M시각)
 	}
 	
 	s.M현재가 = 공용.F2정수64(g.MarketPrice)
@@ -735,6 +737,14 @@ func New주식_현재가_조회_변동_거래량_자료(c *C.Tc1101OutBlock2) (�
 	s.M매수_호가 = 공용.F2정수64(g.BidPrice)
 	s.M변동_거래량 = 공용.F2정수64(g.DiffVolume)
 	s.M거래량 = 공용.F2정수64(g.Volume)
+	
+	if s.M매도_호가 < s.M현재가 && s.M매도_호가 > 0 {
+		s.M매도_호가 = s.M현재가
+	}
+	
+	if s.M매수_호가 > s.M현재가 && s.M현재가 > 0 {
+		s.M매수_호가 = s.M현재가
+	}
 
 	return s
 }
@@ -895,8 +905,6 @@ func New_ETF_현재가_조회_기본_자료(c *C.char) *S_ETF_현재가_조회_�
 	지금 := time.Now()
 	삼분후 := 지금.Add(3 * time.Minute)
 	
-	무효한_시점값 := time.Date(0, time.January, 1, 0, 0, 0, 0, 지금.Location())
-	
 	g := (*Tc1151OutBlock)(unsafe.Pointer(c))
 	s := new(S_ETF_현재가_조회_기본_자료)
 	s.M종목_코드 = 공용.F2문자열(g.Code)
@@ -1019,30 +1027,24 @@ func New_ETF_현재가_조회_기본_자료(c *C.char) *S_ETF_현재가_조회_�
 	s.M20일_저가 = 공용.F2정수64(g.Low20Day)
 	s.M52주_고가 = 공용.F2정수64(g.High1Year)
 	
-	if strings.TrimSpace(공용.F2문자열(g.High1YearDate)) != "" {
-		시각 = 공용.F2포맷된_시각("0102", g.High1YearDate)
-		_, 월, 일 := 시각.Date()
-		s.M52주_고가_일자 = time.Date(지금.Year(), 월, 일, 0, 0, 0, 0, 지금.Location())
+	시각 = 공용.F2포맷된_시각("0102", g.High1YearDate)
+	s.M52주_고가_일자 = time.Date(지금.Year(), 시각.Month(), 시각.Day(), 
+		0, 0, 0, 0, 지금.Location())
 		
-		if s.M52주_고가_일자.After(지금) {
-			s.M52주_고가_일자 = time.Date(지금.Year()-1, 월, 일, 0, 0, 0, 0, 지금.Location())
-		}
-	} else {
-		s.M52주_고가_일자 = 무효한_시점값
+	if s.M52주_고가_일자.After(지금) {
+		s.M52주_고가_일자 = time.Date(지금.Year()-1, 시각.Month(), 시각.Day(), 
+			0, 0, 0, 0, 지금.Location())
 	}
 	
 	s.M52주_저가 = 공용.F2정수64(g.Low1Year)
 	
-	if strings.TrimSpace(공용.F2문자열(g.Low1YearDate)) != "" {
-		시각 = 공용.F2포맷된_시각("0102", g.Low1YearDate)
-		_, 월, 일 := 시각.Date()
-		s.M52주_저가_일자 = time.Date(지금.Year(), 월, 일, 0, 0, 0, 0, 지금.Location())
-		
-		if s.M52주_저가_일자.After(지금) {
-			s.M52주_저가_일자 = time.Date(지금.Year()-1, 월, 일, 0, 0, 0, 0, 지금.Location())
-		}
-	} else {
-		s.M52주_저가_일자 = 무효한_시점값
+	시각 = 공용.F2포맷된_시각("0102", g.Low1YearDate)
+	s.M52주_저가_일자 = time.Date(지금.Year(), 시각.Month(), 시각.Day(), 
+		0, 0, 0, 0, 지금.Location())
+	
+	if s.M52주_저가_일자.After(지금) {
+		s.M52주_저가_일자 = time.Date(지금.Year()-1, 시각.Month(), 시각.Day(), 
+			0, 0, 0, 0, 지금.Location())
 	}
 	
 	if strings.TrimSpace(공용.F2문자열(g.FloatVolume)) != "" {
@@ -1095,28 +1097,13 @@ func New_ETF_현재가_조회_기본_자료(c *C.char) *S_ETF_현재가_조회_�
 	s.M외국인_시간 = time.Date(지금.Year(), 지금.Month(), 지금.Day(), 시각.Hour(), 시각.Minute(), 0, 0, 지금.Location())
 	s.M외국인_지분율 = f2실수_소숫점_추가(g.ForeignHoldingRate, 2)
 	
-	if strings.TrimSpace(공용.F2문자열(g.SettleDate)) != "" {
-		시각 = 공용.F2포맷된_시각("0102", g.SettleDate)
-		_, 월, 일 := 시각.Date()
-		s.M신용잔고_기준_결제일 = time.Date(지금.Year(), 월, 일, 0, 0, 0, 0, 지금.Location())
-	} else {
-		s.M신용잔고_기준_결제일 = 무효한_시점값
-	}
+	시각 = 공용.F2포맷된_시각("0102", g.SettleDate)
+	s.M신용잔고_기준_결제일 = time.Date(지금.Year(), 시각.Month(), 시각.Day(), 
+		0, 0, 0, 0, 지금.Location())
 	
 	s.M신용잔고율 = f2실수_소숫점_추가(g.DebtPercent, 2)
-	
-	if strings.TrimSpace(공용.F2문자열(g.RightsIssueDate)) != "" {
-		s.M유상_배정_기준일 = 공용.F2포맷된_시각("0102", g.RightsIssueDate)
-	} else {
-		s.M유상_배정_기준일 = 무효한_시점값
-	}
-
-	if strings.TrimSpace(공용.F2문자열(g.BonusIssueDate)) != "" {
-		s.M무상_배정_기준일 = 공용.F2포맷된_시각("0102", g.BonusIssueDate)
-	} else {
-		s.M무상_배정_기준일 = time.Date(0, time.Month(1), 1, 0, 0, 0, 0, time.UTC)
-	}
-	
+	s.M유상_배정_기준일 = 공용.F2포맷된_시각("0102", g.RightsIssueDate)
+	s.M무상_배정_기준일 = 공용.F2포맷된_시각("0102", g.BonusIssueDate)
 	s.M유상_배정_비율 = f2실수_소숫점_추가(g.RightsIssueRate, 2)
 	s.M무상_배정_비율 = f2실수_소숫점_추가(g.BonusIssueRate, 2)
 	s.M상장일 = 공용.F2포맷된_시각("20060102", g.IpoDate)
@@ -1158,6 +1145,14 @@ func New_ETF_현재가_조회_변동_거래_자료(c *C.Tc1151OutBlock2) (
 	s.M매수_호가 = 공용.F2정수64(g.BidPrice)
 	s.M변동_거래량 = 공용.F2정수64(g.DiffVolume)
 	s.M거래량 = 공용.F2정수64(g.Volume)
+	
+	if s.M매도_호가 < s.M현재가 && s.M매도_호가 > 0 {
+		s.M매도_호가 = s.M현재가
+	}
+	
+	if s.M매수_호가 > s.M현재가 && s.M현재가 > 0 {
+		s.M매수_호가 = s.M현재가
+	}
 
 	return s
 }
@@ -1207,7 +1202,16 @@ func New_ETF_현재가_조회_ETF자료(c *C.char) *S_ETF_현재가_조회_ETF�
 	g := (*Tc1151OutBlock4)(unsafe.Pointer(c))
 
 	s := new(S_ETF_현재가_조회_ETF자료)
-	s.ETF구분 = 공용.F2문자열(g.ETF)
+	
+	switch 공용.F2문자열(g.ETF) {
+	case "4":
+		s.ETF구분 = P코스닥
+	case "8":
+		s.ETF구분 = P코스피
+	default:
+		공용.F에러("예상치 못한 구분값. %v", 공용.F2문자열(g.ETF))
+	}
+	
 	s.NAV = f2실수_소숫점_추가(g.NAV, 2)
 	s.NAV등락부호 = f2등락부호(g.DiffSign)
 	s.NAV등락폭 = f2실수_소숫점_추가(g.Diff, 2)
@@ -1247,12 +1251,12 @@ func New_ETF_현재가_조회_ETF자료(c *C.char) *S_ETF_현재가_조회_ETF�
 }
 
 type S_ETF_현재가_조회_지수_자료 struct {
-	M지수_코드       string
 	M업종_코드       string
+	M지수_코드       string
 	M지수_이름       string
-	M코스피200      float64
-	M코스피200_등락부호 uint8
-	M코스피200_등락폭  float64
+	M지수      float64
+	M지수_등락부호 uint8
+	M지수_등락폭  float64
 	M채권_지수       float64
 	M채권_지수_등락부호  uint8
 	M채권_지수_등락폭   float64
@@ -1266,12 +1270,12 @@ func New_ETF_현재가_조회_지수_자료(c *C.char) *S_ETF_현재가_조회_�
 	g := (*Tc1151OutBlock5)(unsafe.Pointer(c))
 
 	s := new(S_ETF_현재가_조회_지수_자료)
-	s.M지수_코드 = 공용.F2문자열(g.IndexCode)
 	s.M업종_코드 = 공용.F2문자열(g.SectorCode)
+	s.M지수_코드 = 공용.F2문자열(g.IndexCode)
 	s.M지수_이름 = 공용.F2문자열(g.IndexName)
-	s.M코스피200 = f2실수_소숫점_추가(g.KP200Index, 2)
-	s.M코스피200_등락부호 = f2등락부호(g.KP200Sign)
-	s.M코스피200_등락폭 = f2실수_소숫점_추가(g.KP200Diff, 2)
+	s.M지수 = f2실수_소숫점_추가(g.KP200Index, 2)
+	s.M지수_등락부호 = f2등락부호(g.KP200Sign)
+	s.M지수_등락폭 = f2실수_소숫점_추가(g.KP200Diff, 2)
 	s.M채권_지수 = f2실수_소숫점_추가(g.BondIndex, 2)
 	s.M채권_지수_등락부호 = f2등락부호(g.BondSign)
 	s.M채권_지수_등락폭 = f2실수_소숫점_추가(g.BondDiff, 2)
