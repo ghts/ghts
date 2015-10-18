@@ -9,7 +9,6 @@ import "C"
 import (
 	공용 "github.com/ghts/ghts/common"
 	"golang.org/x/sys/windows"
-
 	"strings"
 	"testing"
 	"unsafe"
@@ -23,9 +22,21 @@ func f2등락부호(바이트_모음 [1]byte) uint8 {
 	switch 값 {
 	case P상한, P상승, P보합, P하한, P하락:
 		return 값
+	// 이하 내용은 게시판에 답변에 따름.
+	case 1, 6:
+		return P상한
+	case 2, 7:
+		return P상승
+	case 3, 0:
+		return P보합
+	case 4, 8:
+		return P하한
+	case 5, 9:
+		return P하락
 	}
 
 	go문자열 := 공용.F2문자열(바이트_모음)
+	//go문자열 := 공용.F2문자열(값)
 
 	switch go문자열 {
 	case "1", "6":
