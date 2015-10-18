@@ -89,6 +89,26 @@ func (this *s안전한_일련_번호) G값() int {
 	return this.식별_번호
 }
 
+// 안전한 string
+type s안전한_시각 struct {
+	sync.RWMutex
+	값 time.Time
+}
+
+func (this *s안전한_시각) G값() time.Time {
+	this.RLock() // Go언어의 Embedded Lock
+	defer this.RUnlock()
+
+	return this.값
+}
+
+func (this *s안전한_시각) S값(값 time.Time) {
+	this.Lock()
+	defer this.Unlock()
+
+	this.값 = 값
+}
+
 // 기본 메시지
 type s기본_메시지 struct {
 	구분 string

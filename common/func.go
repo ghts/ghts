@@ -23,12 +23,73 @@ import (
 	"github.com/suapapa/go_hangul/encoding/cp949"
 
 	"bytes"
+	"io/ioutil"
+	"math"
+	"net/http"
 	"reflect"
+	"regexp"
 	"runtime"
 	"strconv"
 	"strings"
 	"time"
 )
+
+func F_HTTP회신_본문(url string) (string, error) {
+	응답, 에러 := http.Get(url)
+	defer func() {
+		if 응답 != nil && 응답.Body != nil {
+			응답.Body.Close()
+		}
+	}()
+
+	if 에러 != nil || 응답.Body == nil {
+		return "", 에러
+	}
+
+	바이트_모음, 에러 := ioutil.ReadAll(응답.Body)
+
+	if 에러 != nil || 바이트_모음 == nil {
+		return "", 에러
+	}
+
+	return string(바이트_모음), nil
+}
+
+func F문자열_검색_복수_정규식(검색_대상 string, 정규식_문자열_모음 []string) string {
+	검색_결과 := ""
+
+	for _, 정규식_문자열 := range 정규식_문자열_모음 {
+		정규식 := regexp.MustCompile(정규식_문자열)
+		검색_결과 = 정규식.FindString(검색_대상)
+
+		if 검색_결과 == "" {
+			break
+		}
+
+		검색_대상 = 검색_결과
+	}
+
+	return 검색_결과
+}
+
+func F절대값(값 interface{}) float64 {
+	실수값 := float64(0.0)
+	switch 값.(type) {
+	case int:
+		실수값 = float64(값.(int))
+	case int64:
+		실수값 = float64(값.(int64))
+	case float32:
+		실수값 = float64(값.(float32))
+	case float64:
+		실수값 = 값.(float64)
+	default:
+		에러 := F에러("예상치 못한 자료형. %v %v", reflect.TypeOf(값), 값)
+		panic(에러)
+	}
+
+	return math.Abs(실수값)
+}
 
 func F에러_패닉(에러 error) {
 	if 에러 != nil {
@@ -209,12 +270,14 @@ func F2문자열(값 interface{}) string {
 
 		return string(바이트_모음)
 	default:
-		자료형 := reflect.TypeOf(값)
+		if 값 != nil {
+			자료형 := reflect.TypeOf(값)
 
-		if 자료형.Kind() == reflect.Array &&
-			strings.HasSuffix(자료형.String(), "_Ctype_char") {
-			에러 := F에러("C.char 배열")
-			panic(에러)
+			if 자료형.Kind() == reflect.Array &&
+				strings.HasSuffix(자료형.String(), "_Ctype_char") {
+				에러 := F에러("C.char 배열")
+				panic(에러)
+			}
 		}
 
 		return F포맷된_문자열("%v", 값)
@@ -253,7 +316,7 @@ func F2정수(값 interface{}) int {
 	return 반환값
 }
 
-func F2정수64(값 interface{}) int64 {
+func F2정수64(값 interface{}) (int64, error) {
 	문자열 := ""
 
 	switch 값.(type) {
@@ -266,9 +329,29 @@ func F2정수64(값 interface{}) int64 {
 	문자열 = strings.TrimSpace(문자열)
 
 	반환값, 에러 := strconv.ParseInt(문자열, 10, 64)
-	F에러_패닉(에러)
 
-	return 반환값
+	if 에러 != nil {
+		반환값 = 0
+	}
+
+	return 반환값, 에러
+}
+
+func F2정수64_모음(값_모음 []interface{}) ([]int64, error) {
+	정수64_모음 := make([]int64, 0)
+
+	for _, 값 := range 값_모음 {
+		정수64, 에러 := F2정수64(값)
+
+		if 에러 != nil {
+			F에러("정수 변환 에러 발생. '%v'\n%v", 값, 에러)
+			return make([]int64, 0), 에러
+		}
+
+		정수64_모음 = append(정수64_모음, 정수64)
+	}
+
+	return 정수64_모음, nil
 }
 
 func F2실수(값 interface{}) float64 {
@@ -307,7 +390,7 @@ func F2시각(값 interface{}) time.Time {
 	return 반환값
 }
 
-func F2포맷된_시각(포맷 string, 값 interface{}) time.Time {
+func F2포맷된_시각(포맷 string, 값 interface{}) (time.Time, error) {
 	문자열 := ""
 
 	switch 값.(type) {
@@ -320,12 +403,21 @@ func F2포맷된_시각(포맷 string, 값 interface{}) time.Time {
 	문자열 = strings.TrimSpace(문자열)
 
 	시각, 에러 := time.Parse(포맷, 문자열)
-	
+
 	if 에러 != nil {
-		시각 = time.Time{}
+		return time.Time{}, 에러
 	}
 
-	return 시각
+	if strings.Contains(포맷, "MST") {
+		시각 = 시각.Local() // 현지 시간으로 변환
+	} else {
+		// 포멧에 시간대가 없으면 UTC임. 현지 시간대로 바꿈.
+		시각 = time.Date(시각.Year(), 시각.Month(), 시각.Day(),
+			시각.Hour(), 시각.Minute(), 시각.Second(), 시각.Nanosecond(),
+			time.Now().Location())
+	}
+
+	return 시각, 에러
 }
 
 func F2참거짓(값 interface{}, 조건 interface{}, 결과 bool) bool {

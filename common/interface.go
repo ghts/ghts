@@ -52,6 +52,16 @@ func New안전한_일련_번호() I안전한_일련_번호 {
 	return &s안전한_일련_번호{}
 }
 
+// 안전한 시각
+type I안전한_시각 interface {
+	G값() time.Time
+	S값(값 time.Time)
+}
+
+func New안전한_시각(값 time.Time) I안전한_시각 {
+	return &s안전한_시각{값: 값}
+}
+
 // 기본 메시지
 type I메시지 interface {
 	G구분() string

@@ -46,6 +46,31 @@ func TestI안전한_string(테스트 *testing.T) {
 	F테스트_같음(테스트, 안전한_string.G값(), "테스트 2")
 }
 
+func TestI안전한_일련_번호(테스트 *testing.T) {
+	F메모("TestI안전한_일련_번호() 작성")
+}
+
+func TestI안전한_시각(테스트 *testing.T) {
+	테스트.Parallel()
+
+	지금 := time.Now()
+	시각1 := 지금.Add(-10 * time.Second)
+	시각2 := 지금.Add(10 * time.Second)
+
+	안전한_시각 := New안전한_시각(시각1)
+	결과값1 := 안전한_시각.G값()
+
+	안전한_시각.S값(시각2)
+	결과값2 := 안전한_시각.G값()
+
+	안전한_시각.S값(시각1)
+	결과값3 := 안전한_시각.G값()
+
+	F테스트_같음(테스트, 결과값1, 시각1)
+	F테스트_같음(테스트, 결과값2, 시각2)
+	F테스트_같음(테스트, 결과값3, 시각1)
+}
+
 func TestI메시지(테스트 *testing.T) {
 	테스트.Parallel()
 
