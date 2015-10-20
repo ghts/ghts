@@ -49,7 +49,8 @@ func F한국증시_최근_개장일() (time.Time, error) {
 	// 개장일 데이터 갱신 반환
 	도우미_함수_모음 := [](func() (time.Time, error)){
 		f최근_개장일_다음넷,
-		f최근_개장일_네이버,
+		f최근_개장일_네이버, 
+		f최근_개장일_네이트,
 		f최근_개장일_야후}
 
 	최근_개장일_모음 := make([]time.Time, 0)
@@ -103,20 +104,32 @@ func f최근_개장일_다음넷() (time.Time, error) {
 		return time.Time{}, 에러
 	}
 
-	정규_표현식_모음 := []string{
+	정규_표현식_모음_장중 := []string{
+		`<span class='time'>[0-9]{1,2}:[0-9]{1,2}</span>(\t| ){0,5}<span class='txt_standard'>실시간</span>`}
+	장중_문자열 := F문자열_검색_복수_정규식(본문, 정규_표현식_모음_장중)
+	
+	정규_표현식_모음_장외 := []string{
 		`<span class='date'>[0-9]{1,2}\.[0-9]{1,2}</span>`,
 		`[0-9]{1,2}\.[0-9]{1,2}`}
-
-	일자_문자열 := F문자열_검색_복수_정규식(본문, 정규_표현식_모음)
-
-	if 일자_문자열 == "" {
+	장외_문자열 := F문자열_검색_복수_정규식(본문, 정규_표현식_모음_장외)
+	
+	switch {
+	case 장중_문자열 == "" && 장외_문자열 == "":
 		return time.Time{}, F에러("검색 결과 없음")
+	case 장중_문자열 != "" && 장외_문자열 == "":
+		지금 := time.Now()
+		최근_개장일 := time.Date(지금.Year(), 지금.Month(), 지금.Day(),
+			0, 0, 0, 0, 지금.Location())
+		
+		return 최근_개장일, nil
+	case 장중_문자열 == "" && 장외_문자열 != "":
+		연도 := F2문자열(time.Now().Year())
+		일자_문자열 := 연도 + "." + 장외_문자열
+
+		return F2포맷된_시각("2006.01.02", 일자_문자열)
+	default:
+		return time.Time{}, F에러("예상치 못한 경우")
 	}
-
-	연도 := F2문자열(time.Now().Year())
-	일자_문자열 = 연도 + "." + 일자_문자열
-
-	return F2포맷된_시각("2006.01.02", 일자_문자열)
 }
 
 func f최근_개장일_네이버() (time.Time, error) {
@@ -141,6 +154,35 @@ func f최근_개장일_네이버() (time.Time, error) {
 	return F2포맷된_시각("2006.01.02", 일자_문자열)
 }
 
+func f최근_개장일_네이트() (time.Time, error) {
+	본문, 에러 := F_HTTP회신_본문("http://stock.nate.com")
+
+	if 에러 != nil {
+		return time.Time{}, 에러
+	}
+
+	정규_표현식_모음 := []string{
+		`[0-9]{4}/[0-9]{1,2}/[0-9]{1,2} [0-9]{1,2}:[0-9]{1,2}`}
+
+	일자_문자열 := F문자열_검색_복수_정규식(본문, 정규_표현식_모음)
+	
+	if 일자_문자열 == "" {
+		return time.Time{}, F에러("검색 결과 없음")
+	}
+
+	시각, 에러 := F2포맷된_시각("2006/01/02 15:04", 일자_문자열)
+	
+	if 에러 != nil {
+		F에러_출력(에러)
+		return time.Time{}, 에러
+	}
+	
+	최근_개장일 := time.Date(시각.Year(), 시각.Month(), 시각.Day(), 
+		0, 0, 0, 0, 시각.Location())
+
+	return 최근_개장일, nil
+}
+
 func f최근_개장일_야후() (time.Time, error) {
 	url := `https://finance.yahoo.com/q?uhb=uh3_finance_vert&fr=&type=2button&s=000030.KS`
 
@@ -149,30 +191,39 @@ func f최근_개장일_야후() (time.Time, error) {
 	if 에러 != nil {
 		return time.Time{}, 에러
 	}
+	
+	정규_표현식_모음_장중 := []string{
+		`<span class="time_rtq">.{0,100}</span>`,
+		`[0-9]{1,2}:[0-9]{2}(AM|PM) [A-Z]{3}`}
+	장중_문자열 := F문자열_검색_복수_정규식(본문, 정규_표현식_모음_장중)
 
-	정규_표현식_모음 := []string{
+	정규_표현식_모음_장외 := []string{
 		`<span class="time_rtq">.{0,100}</span>`,
 		`[a-zA-Z]{3} [0-9]{1,2}, [0-9]{1,2}:[0-9]{2}(AM|PM) [A-Z]{3}`}
-
-	일자_문자열 := F문자열_검색_복수_정규식(본문, 정규_표현식_모음)
-
-	if 일자_문자열 == "" {
+	장외_문자열 := F문자열_검색_복수_정규식(본문, 정규_표현식_모음_장외)
+	
+	switch {
+	case 장중_문자열 == "" && 장외_문자열 == "":
 		return time.Time{}, F에러("검색 결과 없음")
-	}
-
-	연도 := F2문자열(time.Now().Year())
-	일자_문자열 = 연도 + " " + 일자_문자열
-
-	일자, 에러 := F2포맷된_시각("2006 Jan 2, 3:04PM MST", 일자_문자열)
-
-	if 에러 != nil {
-		return time.Time{}, 에러
-	}
-
-	if 일자.Hour() != 0 {
+	case 장중_문자열 != "" && 장외_문자열 == "":
+		지금 := time.Now()
+		최근_개장일 := time.Date(지금.Year(), 지금.Month(), 지금.Day(),
+			0, 0, 0, 0, 지금.Location())
+		return 최근_개장일, nil
+	case 장중_문자열 == "" && 장외_문자열 != "":
+		연도 := F2문자열(time.Now().Year())
+		일자_문자열 := 연도 + " " + 장외_문자열
+		일자, 에러 := F2포맷된_시각("3:04PM MST", 일자_문자열)
+	
+		if 에러 != nil {
+			return time.Time{}, 에러
+		}
+	
 		일자 = time.Date(일자.Year(), 일자.Month(), 일자.Day(),
-			0, 0, 0, 0, 일자.Location())
-	}
-
-	return 일자, nil
+				0, 0, 0, 0, 일자.Location())
+	
+		return 일자, nil
+	default:
+		return time.Time{}, F에러("예상치 못한 경우")
+	}	
 }
