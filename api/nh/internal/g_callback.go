@@ -8,6 +8,7 @@ import "C"
 import (
 	공용 "github.com/ghts/ghts/common"
 
+	"strings"
 	"time"
 	"unsafe"
 )
@@ -82,7 +83,9 @@ func f메시지_콜백_처리(c *C.OUTDATABLOCK) {
 
 	데이터 := New수신_메시지_블록(c)
 
-	공용.F문자열_출력("%v : %v", 데이터.G메시지_코드(), 데이터.G메시지_내용())
+	공용.F문자열_출력("%v : %v", 
+		strings.TrimSpace(데이터.G메시지_코드()), 
+		strings.TrimSpace(데이터.G메시지_내용()))
 
 	// 해당되는 조회 질의가 존재하면 처리.
 	대기_항목, 존재함 := 대기항목_맵[데이터.G식별번호()]

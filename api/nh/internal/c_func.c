@@ -264,7 +264,8 @@ bool wmcaQuery(int trId, char* trCode, char* data, int len, int accountIdx) {
 
     BOOL value = func(getHWND(), trId, trCode, data, len, accountIdx);
 
-    free(data);
+    // Let golang caller function free the trCode & data
+    //free(data);
 
     return BOOL2bool(value);
 }

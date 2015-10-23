@@ -9,6 +9,7 @@ import "C"
 import (
 	공용 "github.com/ghts/ghts/common"
 	"golang.org/x/sys/windows"
+	"math"
 	"strings"
 	"testing"
 	"unsafe"
@@ -88,11 +89,11 @@ func f테스트_등락부호(테스트 *testing.T, 등락부호 uint8, 값, 비�
 	case P상한:
 		공용.F테스트_같음(테스트, 값, 상한)
 	case P상승:
-		공용.F테스트_참임(테스트, 값 > 비교대상)
+		공용.F테스트_참임(테스트, 값 > 비교대상, 값, 비교대상)
 	case P보합:
-		공용.F테스트_참임(테스트, 값 == 비교대상)
+		공용.F테스트_같음(테스트, 값, 비교대상)
 	case P하락:
-		공용.F테스트_참임(테스트, 값 < 비교대상)
+		공용.F테스트_참임(테스트, 값 < 비교대상, 값, 비교대상)
 	case P하한:
 		공용.F테스트_같음(테스트, 값, 하한)
 	default:
@@ -125,11 +126,15 @@ func f2실수_소숫점_추가(값 interface{}, 소숫점_이하_자릿수 int) 
 	}
 
 	소숫점_추가_문자열 := ""
-
-	if strings.Contains(문자열, ".") {
+	
+	switch {
+	case strings.Contains(문자열, "INF"):
+		return math.Inf(1)
+	case strings.Contains(문자열, "."):
 		소숫점_추가_문자열 = 문자열
-	} else {
-		소숫점_추가_문자열 = 문자열[:len(문자열)-소숫점_이하_자릿수] + "." + 문자열[len(문자열)-소숫점_이하_자릿수:]
+	default:
+		소숫점_추가_문자열 = 문자열[:len(문자열)-소숫점_이하_자릿수] + "." + 
+			문자열[len(문자열)-소숫점_이하_자릿수:]
 	}
 
 	return 공용.F2실수(소숫점_추가_문자열)
@@ -160,13 +165,6 @@ func f_Go구조체로_변환(c *C.RECEIVED) interface{} {
 	}
 
 	switch 블록_이름 {
-	case "c1101":
-		공용.F문자열_출력("c1101 전체 길이 : %v", 전체_길이)
-		//f반복되면_패닉(블록_이름, 전체_길이, unsafe.Sizeof(C.Tc1101{}))
-		//c := (*C.Tc1101)(unsafe.Pointer(데이터))
-		//return New주식_현재가_조회(c)
-		panic("예상치 못한 경우")
-		return nil
 	case "c1101OutBlock":
 		c := (*C.Tc1101OutBlock)(unsafe.Pointer(데이터))
 		return New주식_현재가_조회_기본_자료(c)
@@ -183,9 +181,8 @@ func f_Go구조체로_변환(c *C.RECEIVED) interface{} {
 			c := 슬라이스[i]
 			g := New주식_현재가_조회_변동_거래량_자료(&c)
 			
-			//go슬라이스 = append(go슬라이스, *g)
 			go슬라이스[i] = *g
-			C.free(unsafe.Pointer(&c))
+			//C.free(unsafe.Pointer(&c))
 		}
 
 		return go슬라이스
@@ -209,9 +206,8 @@ func f_Go구조체로_변환(c *C.RECEIVED) interface{} {
 			c := 슬라이스[i]
 			g := New_ETF_현재가_조회_변동_거래_자료(&c)
 			
-			//go슬라이스 = append(go슬라이스, *g)
 			go슬라이스[i] = *g
-			C.free(unsafe.Pointer(&c))
+			//C.free(unsafe.Pointer(&c))
 		}
 
 		return go슬라이스
@@ -348,11 +344,11 @@ func f조회(TR식별번호 int, TR코드 string, c데이터 *C.char, c길이 C.
 	cTR코드 := C.CString(TR코드)
 	c계좌_인덱스 := C.int(계좌_인덱스)
 
-	defer func() {
-		C.free(unsafe.Pointer(cTR코드))
-		C.free(unsafe.Pointer(c데이터)) // C언어 구조체로 변환된 후에는 직접 free 해 줘야 하는 듯.
-	}()
-
+	defer C.free(unsafe.Pointer(cTR코드))
+	
+	// C언어의 원칙에 따라서 변수를 생성한 곳에서 free()하도록 한다.
+	//defer C.free(unsafe.Pointer(c데이터))
+	
 	반환값 := C.wmcaQuery(cTR식별번호, cTR코드, c데이터, c길이, c계좌_인덱스)
 
 	return bool(반환값)

@@ -487,11 +487,12 @@ func F문자열_출력(포맷_문자열 string, 추가_매개변수 ...interface
 		return
 	}
 
-	if !strings.HasSuffix(포맷_문자열, "\n") {
-		포맷_문자열 += "\n"
+	if !strings.HasSuffix(포맷_문자열, "\t") &&
+		!strings.HasSuffix(포맷_문자열, "\n") {
+		포맷_문자열 += "\t"
 	}
 
-	포맷_문자열 += F소스코드_위치(1) + "\n\n"
+	포맷_문자열 += F소스코드_위치(1) + "\n"
 
 	fmt.Printf(포맷_문자열, 추가_매개변수...)
 }
@@ -592,6 +593,10 @@ func F변수_내역_문자열(값_모음 ...interface{}) string {
 	}
 
 	return 버퍼.String()
+}
+
+func F자료형(값 interface{}) string {
+	return reflect.TypeOf(값).String()
 }
 
 // 메모 해야할 일을 소스코드 위치와 함께 표기해 주는 메소드.

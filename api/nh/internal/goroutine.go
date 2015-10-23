@@ -48,14 +48,15 @@ func F_NH_OpenAPI_Go루틴(ch초기화 chan bool) {
 		ch초기화 <- false
 		return
 	}
-
-	defer NH_OpenAPI_Go루틴_실행_중.S값(false)
+	
+	// Win32 API는 싱글 스레드를 기반으로 했으므로 현재 스레드를 고정 시킨다.
+	runtime.LockOSThread()
 
 	// 매초마다 임시 저장소에 유효기간이 지난 항목이 있는 지 확인을 위한 이벤트 발생기.
 	점검_주기 := time.NewTicker(time.Second)
-
-	// Win32 API는 싱글 스레드를 기반으로 했으므로 현재 스레드를 고정 시킨다.
-	runtime.LockOSThread()
+	
+	// Go루틴 종료할 때 원상 복구.
+	defer NH_OpenAPI_Go루틴_실행_중.S값(false)
 
 	// 초기화 완료.
 	ch초기화 <- true
@@ -154,9 +155,14 @@ func f조회_질의_처리(질의 공용.I질의_가변형) {
 	
 	TR코드 := 질의.G내용(0).(string)
 	계좌_인덱스 := 0
+	
 	c데이터 := C.CString("")
-	길이 := C.int(0)
+	// C언어의 원칙에 따라서 변수를 생성한 곳에서 free()하도록 한다.
 	defer C.free(unsafe.Pointer(c데이터))
+	
+	길이 := C.int(0)
+	
+	
 
 	대기_항목 := New콜백_대기(P질의_조회, TR코드, 질의)
 	대기항목_맵[대기_항목.G식별번호()] = 대기_항목
