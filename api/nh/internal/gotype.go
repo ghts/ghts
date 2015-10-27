@@ -152,12 +152,15 @@ func New수신_메시지_블록(c블록 *C.OUTDATABLOCK) S수신_메시지_블�
 
 	코드 := 공용.F2문자열(g.MsgCode)
 
-	바이트_모음 := C.GoBytes(unsafe.Pointer(&c.UsrMsg), C.int(len(c.UsrMsg)))
-
-	if len(바이트_모음) > len(c.UsrMsg[:]) {
-		바이트_모음 = 바이트_모음[:]
-	}
-
+	공용.F메모("여기에서 계속 메모리 오류가 발생한다. 원인이 뭘까?")
+	바이트_모음 := C.GoBytes(unsafe.Pointer(&c.UsrMsg), C.int(len(c.UsrMsg[:])))
+	//바이트_모음 := C.GoBytes(unsafe.Pointer(&c.UsrMsg), C.int(len(c.UsrMsg)))
+	//if len(바이트_모음) > len(c.UsrMsg[:]) {
+	//	바이트_모음 = 바이트_모음[:]
+	//}
+	
+	
+	
 	메시지 := 공용.F2문자열_CP949(바이트_모음)
 
 	s := new(S수신_메시지_블록)
@@ -1289,7 +1292,7 @@ func New_ETF_현재가_조회_ETF자료(c *C.char) *S_ETF_현재가_조회_ETF�
 	s.M순자산_총액_억,_ = 공용.F2정수64(g.NAVBy100Million)
 	s.M추적_오차율 = f2실수_소숫점_추가(g.TrackingErrRate, 2)
 	
-	매도_잔량_모음, _ = 공용.F2정수64_모음(
+	매도_잔량_모음, _ := 공용.F2정수64_모음(
 		[]interface{}{
 			g.LP_OfferVolume1,
 			g.LP_OfferVolume2,
@@ -1302,8 +1305,7 @@ func New_ETF_현재가_조회_ETF자료(c *C.char) *S_ETF_현재가_조회_ETF�
 			g.LP_OfferVolume9,
 			g.LP_OfferVolume10})
 	
-	s.LP_매도_잔량_모음 := make([]int64, 0)
-	
+	s.LP_매도_잔량_모음 = make([]int64, 0)
 	
 	for _, 매도_잔량 := range 매도_잔량_모음 {
 		// 수량이 0인 주문은 없는 것이나 마찬가지이니 걸러낸다.
@@ -1314,7 +1316,7 @@ func New_ETF_현재가_조회_ETF자료(c *C.char) *S_ETF_현재가_조회_ETF�
 		s.LP_매도_잔량_모음 = append(s.LP_매도_잔량_모음, 매도_잔량)
 	}
 	
-	매수_잔량_모음, _ = 공용.F2정수64_모음(
+	매수_잔량_모음, _ := 공용.F2정수64_모음(
 		[]interface{}{
 			g.LP_BidVolume1,
 			g.LP_BidVolume2,
@@ -1327,7 +1329,7 @@ func New_ETF_현재가_조회_ETF자료(c *C.char) *S_ETF_현재가_조회_ETF�
 			g.LP_BidVolume9,
 			g.LP_BidVolume10})
 	
-	s.LP_매수_잔량_모음 := make([]int64, 0)
+	s.LP_매수_잔량_모음 = make([]int64, 0)
 	
 	for _, 매수_잔량 := range 매수_잔량_모음 {
 		// 수량이 0인 주문은 없는 것이나 마찬가지이니 걸러낸다.

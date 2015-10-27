@@ -55,6 +55,27 @@ func F_HTTP회신_본문(url string) (string, error) {
 	return string(바이트_모음), nil
 }
 
+func F_HTTP회신_본문_CP949(url string) (string, error) {
+	응답, 에러 := http.Get(url)
+	defer func() {
+		if 응답 != nil && 응답.Body != nil {
+			응답.Body.Close()
+		}
+	}()
+
+	if 에러 != nil || 응답.Body == nil {
+		return "", 에러
+	}
+
+	바이트_모음, 에러 := ioutil.ReadAll(응답.Body)
+
+	if 에러 != nil || 바이트_모음 == nil {
+		return "", 에러
+	}
+
+	return F2문자열_CP949(바이트_모음), nil
+}
+
 func F문자열_검색_복수_정규식(검색_대상 string, 정규식_문자열_모음 []string) string {
 	검색_결과 := ""
 

@@ -46,7 +46,8 @@ func F한국증시_최근_개장일() (time.Time, error) {
 		return 한국증시_최근_개장일.G값(), nil
 	}
 	
-	F문자열_출력("개장일 갱신")
+	F메모("HTTP쿼리를 go루틴으로 분리하고 select문을 이용하여 타임아웃 설정할 것.")
+	F문자열_출력("개장일 갱신.")
 
 	// 개장일 데이터 갱신 반환
 	도우미_함수_모음 := [](func() (time.Time, error)){
@@ -230,6 +231,6 @@ func f최근_개장일_야후() (time.Time, error) {
 	
 		return 일자, nil
 	default:
-		return time.Time{}, F에러("예상치 못한 경우")
+		return time.Time{}, F에러("예상치 못한 경우 %v, %v", 장중_문자열, 장마감_문자열)
 	}	
 }
