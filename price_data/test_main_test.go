@@ -18,7 +18,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
 package price_data
 
 import (
-	공용 "github.com/ghts/ghts/shared/minimal"
+	공용 "github.com/ghts/ghts/common"
 
 	"os"
 	"testing"
@@ -37,4 +37,11 @@ func TestMain(m *testing.M) {
 	defer f가격정보_Go루틴_테스트_초기화()
 
 	os.Exit(m.Run())
+}
+
+func f가격정보_Go루틴_테스트_초기화() error {
+	F가격정보_모듈_실행()
+	회신 := 공용.New질의(공용.P메시지_초기화).G회신(ch제어_가격정보_Go루틴)
+
+	return 회신.G에러()
 }
