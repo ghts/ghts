@@ -13,6 +13,28 @@ This software is in very early stage of development.
 It is NOT RECOMMENDED for any real use.
 *********************************************************
 
+현재 여러 서브 프로젝트로 분리됨.
+
+- lib : 공용 기능
+  (https://github.com/ghts/lib)
+  
+- api_bridge_nh : NH API 관련 일부 조회 기능을 소켓 메시지를 통해서 제공
+  (https://github.com/ghts/api_bridge_nh)
+  
+- api_bridge_xing : Xing API 관련 일부 주문 및 조회 기능을 소켓 메시지를 통해서 제공
+  (https://github.com/ghts/api_bridge_xing)
+  
+- api_helper_nh : api_bridge_nh를 통해서 NH API를 사용하기 편한 함수 형태로 제공.
+  (https://github.com/ghts/api_helper_nh)
+  
+- util : 각종 유틸리티 모음
+  (https://github.com/ghts/utils)
+  
+- ghts_dependency : C언어 컴파일러, 개발보조 배치 스크립트등
+  (https://github.com/ghts/ghts_dependency)
+
+*********************************************************
+
 '프로그램 매매' 혹은 '시스템 트레이딩' 소프트웨어를 개발하는 데 사용되는 기반 '라이브러리'.
 
 '라이브러리'라는 것은 그 자체로 완성된 프로그램이 '아니라',
