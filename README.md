@@ -5,13 +5,12 @@ GHTS : GH 프로그램 매매 시스템.
 
 *********************************************************
 참고>
-이 프로젝트는 현재 여러 서브 프로젝트로 분리되었으며,
-더 이상 개발되지 않습니다.
+이 프로젝트는 현재 여러 서브 프로젝트로 분리되었으며 통합된 형태로는 더 이상 개발되지 않습니다.
 분리된 서브 프로젝트에 관해서는 아래 내용을 참고하시기 바랍니다.
 
 Note>
-Additional development has moved to sub-projects and,
-there will be no additional development for this repository.
+Additional development has moved to separated sub-projects and,
+there will be no additional development in aggregated source code format.
 Please refer to the following about the sub-projects.
 *********************************************************
 
