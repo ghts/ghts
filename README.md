@@ -13,7 +13,10 @@ This software is in very early stage of development.
 It is NOT RECOMMENDED for any real use.
 *********************************************************
 
-현재 여러 서브 프로젝트로 분리됨.
+이 프로젝트는 현재 여러 서브 프로젝트로 분리되었으며,
+더 이상 개발되지 않습니다.
+
+분리된 서브 프로젝트에 관해서는 아래 내용을 참고하시기 바랍니다.
 
 - lib : 공용 기능
   (https://github.com/ghts/lib)
