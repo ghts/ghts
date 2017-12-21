@@ -5,35 +5,43 @@ GHTS : GH 프로그램 매매 시스템.
 
 *********************************************************
 참고>
-현재 개발 초기 단계입니다.
-앞으로 많은 변화가 있을 예정이며, 본격적인 사용에 적합하지 않습니다.
-
-Note>
-This software is in very early stage of development.
-It is NOT RECOMMENDED for any real use.
-*********************************************************
-
 이 프로젝트는 현재 여러 서브 프로젝트로 분리되었으며,
 더 이상 개발되지 않습니다.
-
 분리된 서브 프로젝트에 관해서는 아래 내용을 참고하시기 바랍니다.
 
-- lib : 공용 기능
+Note>
+Additional development has moved to sub-projects and,
+there will be no additional development for this repository.
+Please refer to the following about the sub-projects.
+*********************************************************
+
+
+- lib : 공용 기능. common functionality
   (https://github.com/ghts/lib)
   
-- api_bridge_nh : NH API 관련 일부 조회 기능을 소켓 메시지를 통해서 제공
+- api_bridge_nh (NH투자증권 : https://www.nhqv.com/) 
+  NH API 관련 일부 조회 기능을 소켓 메시지를 통해서 제공
+  Selected query functionality from NH API  
   (https://github.com/ghts/api_bridge_nh)
   
-- api_bridge_xing : Xing API 관련 일부 주문 및 조회 기능을 소켓 메시지를 통해서 제공
+- api_bridge_xing (이베스트투자증권 : http://www.ebestsec.co.kr/)
+: Xing API 관련 일부 주문 및 조회 기능을 소켓 메시지를 통해서 제공
+  Selected order and query functionality from Xing API
   (https://github.com/ghts/api_bridge_xing)
   
-- api_helper_nh : api_bridge_nh를 통해서 NH API를 사용하기 편한 함수 형태로 제공.
+- api_helper_nh
+  api_bridge_nh를 통해서 NH API를 사용하기 편한 함수 형태로 제공.
+  Helper functions for api_bridge_nh for easier use.
   (https://github.com/ghts/api_helper_nh)
   
-- util : 각종 유틸리티 모음
+- util
+  각종 유틸리티 모음 (가격정보 수집 등...)
+  Selected utils for algrithm trading. (Data aggregation & etc...)
   (https://github.com/ghts/utils)
   
-- ghts_dependency : C언어 컴파일러, 개발보조 배치 스크립트등
+- ghts_dependency
+  의존성 모음 (C언어 컴파일러, 개발보조 배치 스크립트등)
+  Dependencies for GHTS. (C compiler, Assistant batch scritps and etc...) 
   (https://github.com/ghts/ghts_dependency)
 
 *********************************************************
