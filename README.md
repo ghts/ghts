@@ -14,34 +14,40 @@ there will be no additional development in aggregated source code format.
 Please refer to the following about the sub-projects.
 *********************************************************
 
-
 - lib : 공용 기능. common functionality
   (https://github.com/ghts/lib)
-  
-- api_bridge_nh (NH투자증권 : https://www.nhqv.com/) 
+
+- dep : 개발에 필요한 외부 의존성 모음 (C언어 컴파일러, 개발용 편의 스크립트등)
+  Dependencies for GHTS. (C compiler, Assistant batch scritps and etc...) 
+  (https://github.com/ghts/dep)
+
+- xing (이베스트투자증권 : http://www.ebestsec.co.kr/)
+  Xing API 관련 일부 주문 및 조회 기능을 소켓 메시지를 통해서 제공
+  Selected order and query functionality through Xing API
+  (https://github.com/ghts/xing)
+
+- xing_C32 : xing모듈에서 DLL을 호출하는 부분만 별도로 분리한 32비트 전용 모듈.
+             덕분에, xing모듈이 32비트/64비트에 무관하게 개발/실행이 가능해 짐.
+             32bit only module for calling Xing API DLL.
+             With the help of xing_C32, xing module is 32bit/64bit free.
+  (https://github.com/ghts/xing_C32)
+
+- nh (NH투자증권 : https://www.nhqv.com/) 
   NH API 관련 일부 조회 기능을 소켓 메시지를 통해서 제공
   Selected query functionality from NH API  
-  (https://github.com/ghts/api_bridge_nh)
+  (https://github.com/ghts/nh)
   
-- api_bridge_xing (이베스트투자증권 : http://www.ebestsec.co.kr/)
-: Xing API 관련 일부 주문 및 조회 기능을 소켓 메시지를 통해서 제공
-  Selected order and query functionality from Xing API
-  (https://github.com/ghts/api_bridge_xing)
-  
-- api_helper_nh
-  api_bridge_nh를 통해서 NH API를 사용하기 편한 함수 형태로 제공.
-  Helper functions for api_bridge_nh for easier use.
-  (https://github.com/ghts/api_helper_nh)
+- nh_C32 : nh모듈에서 DLL을 호출하는 부분만 별도로 분리한 32비트 전용 모듈
+           덕분에, nh모듈이 32비트/64비트에 무관하게 개발/실행이 가능해 짐.
+           32bit only module for calling NH Open API DLL.
+           With the help of nh_C32, nh module is 32bit/64bit free.
+  (https://github.com/ghts/nh_C32)
   
 - util
   각종 유틸리티 모음 (가격정보 수집 등...)
   Selected utils for algrithm trading. (Data aggregation & etc...)
   (https://github.com/ghts/utils)
   
-- ghts_dependency
-  의존성 모음 (C언어 컴파일러, 개발보조 배치 스크립트등)
-  Dependencies for GHTS. (C compiler, Assistant batch scritps and etc...) 
-  (https://github.com/ghts/ghts_dependency)
 
 *********************************************************
 
