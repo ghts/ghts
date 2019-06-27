@@ -133,12 +133,10 @@ func NewCFOBQ105000OutBlock(b []byte) (값 *CFOBQ10500_선물옵션_예탁금_�
 	lib.F확인(에러)
 
 	수량 := lib.F2정수_단순형(버퍼.Next(5))
-	나머지 := 버퍼.Bytes()
+	lib.F조건부_패닉(버퍼.Len() != 수량*SizeCFOBQ10500OutBlock3, "예상하지 못한 길이 : '%v' '%v' '%v'",
+		버퍼.Len(), 수량, SizeCFOBQ10500OutBlock3)
 
-	lib.F조건부_패닉(len(나머지) != 수량*SizeCFOBQ10500OutBlock3, "예상하지 못한 길이 : '%v' '%v' '%v'",
-		len(나머지), 수량, SizeCFOBQ10500OutBlock3)
-
-	값.M반복값_모음, 에러 = newCFOBQ10500_선물옵션_예탁금_증거금_조회_반복값_모음(나머지)
+	값.M반복값_모음, 에러 = newCFOBQ10500_선물옵션_예탁금_증거금_조회_반복값_모음(버퍼.Bytes())
 	lib.F확인(에러)
 
 	return 값, nil

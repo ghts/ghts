@@ -209,9 +209,10 @@ func f접속_확인(ch완료 chan lib.T신호) {
 		}
 	}()
 
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 10; i++ {
 		if 접속됨, 에러 := F접속됨(); 에러 != nil {
 			lib.F에러_출력(에러)
+			lib.F대기(lib.P1초)
 			continue
 		} else if !접속됨 {
 			panic(lib.New에러("이 시점에 접속되어 있어야 함."))

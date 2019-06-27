@@ -56,7 +56,6 @@ type CFOAT00100_선물옵션_정상주문_응답 struct {
 
 type CFOAT00100_선물옵션_정상주문_응답1 struct {
 	M레코드갯수    int
-	M주문시장     T주문시장구분
 	M계좌번호     string
 	M종목코드     string
 	M매매구분     lib.T매도_매수_구분
@@ -129,7 +128,7 @@ func newCFOAT00100_선물옵션_정상주문_응답1(b []byte) (값 *CFOAT00100_
 
 	값 = new(CFOAT00100_선물옵션_정상주문_응답1)
 	값.M레코드갯수 = lib.F2정수_단순형(g.RecCnt)
-	값.M주문시장 = T주문시장구분(lib.F2정수_단순형(g.OrdMktCode))
+	//값.M주문시장 = T주문시장구분(lib.F2정수_단순형(g.OrdMktCode))	// 해당 필드는 운영/모의투자 서버 동일하게 값이 40으로 고정되어 있습니다.
 	값.M계좌번호 = lib.F2문자열(g.AcntNo)
 	값.M종목코드 = lib.F2문자열(g.FnoIsuNo)
 	값.M매매구분 = lib.T매도_매수_구분(lib.F2정수_단순형(g.BnsTpCode))

@@ -126,7 +126,7 @@ func NewCFOFQ02400InBlock1(질의값 *CFOFQ02400_선물옵션_미결제약정_�
 	lib.F바이트_복사_정수(g.RecCnt[:], 1)
 	lib.F바이트_복사_문자열(g.AcntNo[:], 질의값.M계좌번호)
 	lib.F바이트_복사_문자열(g.Pwd[:], 비밀번호)
-	lib.F바이트_복사_정수(g.RegMktCode[:], 질의값.M등록시장코드)
+	lib.F바이트_복사_정수(g.RegMktCode[:], int(질의값.M등록시장코드))
 	lib.F바이트_복사_문자열(g.BuyDt[:], 질의값.M매수일자.Format("20060102"))
 
 	return g
@@ -135,18 +135,28 @@ func NewCFOFQ02400InBlock1(질의값 *CFOFQ02400_선물옵션_미결제약정_�
 func NewCFOFQ02400OutBlock(b []byte) (값 *CFOFQ02400_선물옵션_미결제약정_응답, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
 
+	버퍼 := bytes.NewBuffer(b)
+
 	값 = new(CFOFQ02400_선물옵션_미결제약정_응답)
 
-	값.M응답1, 에러 = newCFOFQ02400_선물옵션_미결제약정_응답1(b)
+	값.M응답1, 에러 = newCFOFQ02400_선물옵션_미결제약정_응답1(버퍼.Next(SizeCFOFQ02400OutBlock1))
 	lib.F확인(에러)
 
-	값.M응답2, 에러 = newCFOFQ02400_선물옵션_미결제약정_응답2(b)
+	값.M응답2, 에러 = newCFOFQ02400_선물옵션_미결제약정_응답2(버퍼.Next(SizeCFOFQ02400OutBlock2))
 	lib.F확인(에러)
 
-	값.M반복값1_모음, 에러 = newCFOFQ02400_선물옵션_미결제약정_반복값1_모음(b)
+	수량1 := lib.F2정수_단순형(버퍼.Next(5))
+	lib.F조건부_패닉(버퍼.Len() < 5 + 수량1*SizeCFOFQ02400OutBlock3, "예상하지 못한 길이 : '%v' '%v'",
+		버퍼.Len(), 5 + 수량1*SizeCFOFQ02400OutBlock3)
+
+	값.M반복값1_모음, 에러 = newCFOFQ02400_선물옵션_미결제약정_반복값1_모음(버퍼.Next(수량1*SizeCFOFQ02400OutBlock3))
 	lib.F확인(에러)
 
-	값.M반복값2_모음, 에러 = newCFOFQ02400_선물옵션_미결제약정_반복값2_모음(b)
+	수량2 := lib.F2정수_단순형(버퍼.Next(5))
+	lib.F조건부_패닉(버퍼.Len() != 수량2*SizeCFOFQ02400OutBlock4, "예상하지 못한 길이 : '%v' '%v'",
+		버퍼.Len(), 수량2*SizeCFOFQ02400OutBlock4)
+
+	값.M반복값2_모음, 에러 = newCFOFQ02400_선물옵션_미결제약정_반복값2_모음(버퍼.Bytes())
 	lib.F확인(에러)
 
 	return 값, nil
@@ -155,18 +165,16 @@ func NewCFOFQ02400OutBlock(b []byte) (값 *CFOFQ02400_선물옵션_미결제약�
 func newCFOFQ02400_선물옵션_미결제약정_응답1(b []byte) (값 *CFOFQ02400_선물옵션_미결제약정_응답1, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
 
-	lib.F조건부_패닉(len(b) != SizeCFOBQ10500OutBlock1, "예상하지 못한 길이 : '%v", len(b))
+	lib.F조건부_패닉(len(b) != SizeCFOFQ02400OutBlock1, "예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(CFOFQ02400OutBlock1)
 	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
 
 	값 = new(CFOFQ02400_선물옵션_미결제약정_응답1)
 	값.M레코드수량 = lib.F2정수64_단순형(g.RecCnt)
-	값.M계좌번호 = lib.F2문자열(g.AcntNo)
+	값.M계좌번호 = lib.F2문자열_공백제거(g.AcntNo)
 	값.M등록시장 = CFOFQ02400_등록시장(lib.F2정수_단순형(g.RegMktCode))
-
-	lib.F체크포인트(lib.F2문자열(g.BuyDt))
-	값.M매수일자 = lib.F2포맷된_일자_단순형("??", g.BuyDt)
+	값.M매수일자 = lib.F2포맷된_일자_단순형("20060102", g.BuyDt)
 
 	return 값, nil
 }
@@ -174,7 +182,7 @@ func newCFOFQ02400_선물옵션_미결제약정_응답1(b []byte) (값 *CFOFQ024
 func newCFOFQ02400_선물옵션_미결제약정_응답2(b []byte) (값 *CFOFQ02400_선물옵션_미결제약정_응답2, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
 
-	lib.F조건부_패닉(len(b) != SizeCFOBQ10500OutBlock2, "예상하지 못한 길이 : '%v", len(b))
+	lib.F조건부_패닉(len(b) != SizeCFOFQ02400OutBlock2, "예상하지 못한 길이 : '%v", len(b))
 
 	g := new(CFOFQ02400OutBlock2)
 	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))

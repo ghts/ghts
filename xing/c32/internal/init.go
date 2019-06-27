@@ -83,7 +83,7 @@ func f초기화_서버_접속(서버_구분 xt.T서버_구분) (에러 error) {
 	소켓REQ := lib.NewNano소켓REQ_단순형(lib.P주소_Xing_C함수_호출, lib.P30초, 타임아웃)
 	defer 소켓REQ.Close()
 
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 10; i++ {
 		if 응답, 에러 := 소켓REQ.G질의_응답(lib.P변환형식_기본값, 질의값); 에러 != nil {
 			lib.F에러_출력(에러)
 			continue
@@ -92,6 +92,7 @@ func f초기화_서버_접속(서버_구분 xt.T서버_구분) (에러 error) {
 			continue
 		} else if !응답.G해석값_단순형(0).(bool) {
 			lib.F문자열_출력("접속 처리 실행 실패 후 재시도.")
+			lib.F대기(lib.P1초)
 			continue
 		}
 
