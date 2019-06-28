@@ -61,10 +61,10 @@ type CFOAT00100_선물옵션_정상주문_응답1 struct {
 	M매매구분     lib.T매도_매수_구분
 	M주문유형     T주문유형 // 선물옵션주문유형코드(FnoOrdPtnCode) - "00" 고정값 입니다.
 	M호가유형     T호가유형
-	M거래유형     string // 선물옵션거래유형코드(FnoTrdPtnCode) - "03" 고정값 입니다.
+	//M거래유형     string // 선물옵션거래유형코드(FnoTrdPtnCode) - "03" 고정값 입니다.
 	M주문가격     float64
 	M주문수량     int64
-	M통신매체     T통신매체구분
+	//M통신매체     T통신매체구분
 	M협의매매완료시각 time.Time
 	//M그룹ID     T증권그룹	// 그룹ID(GroupID) - 모두 SPACE 입니다.
 	M주문번호    int64
@@ -129,27 +129,24 @@ func newCFOAT00100_선물옵션_정상주문_응답1(b []byte) (값 *CFOAT00100_
 	값 = new(CFOAT00100_선물옵션_정상주문_응답1)
 	값.M레코드갯수 = lib.F2정수_단순형(g.RecCnt)
 	//값.M주문시장 = T주문시장구분(lib.F2정수_단순형(g.OrdMktCode))	// 해당 필드는 운영/모의투자 서버 동일하게 값이 40으로 고정되어 있습니다.
-	값.M계좌번호 = lib.F2문자열(g.AcntNo)
-	값.M종목코드 = lib.F2문자열(g.FnoIsuNo)
+	값.M계좌번호 = lib.F2문자열_공백제거(g.AcntNo)
+	값.M종목코드 = lib.F2문자열_공백제거(g.FnoIsuNo)
 	값.M매매구분 = lib.T매도_매수_구분(lib.F2정수_단순형(g.BnsTpCode))
 	값.M주문유형 = T주문유형(lib.F2정수_단순형(g.FnoOrdPtnCode))
 	값.M호가유형 = T호가유형(lib.F2정수_단순형(g.FnoOrdprcPtnCode))
-	값.M거래유형 = lib.F2문자열(g.FnoTrdPtnCode)
+	//값.M거래유형 = lib.F2문자열(g.FnoTrdPtnCode)
 	값.M주문가격 = lib.F2실수_소숫점_추가_단순형(g.OrdPrc, 2)
 	값.M주문수량 = lib.F2정수64_단순형(g.OrdQty)
-	값.M통신매체 = T통신매체구분(lib.F2정수_단순형(g.CommdaCode))
-
-	lib.F체크포인트(lib.F2문자열(g.DscusBnsCmpltTime))
-
+	//값.M통신매체 = T통신매체구분(lib.F2정수_단순형(g.CommdaCode))
 	값.M협의매매완료시각 = lib.F2일자별_시각_단순형_공백은_초기값(당일.G값(), "150405.99", g.DscusBnsCmpltTime)
 	값.M주문번호 = lib.F2정수64_단순형(g.OrdSeqno)
 	값.M포트폴리오번호 = lib.F2정수64_단순형(g.PtflNo)
 	값.M바스켓번호 = lib.F2정수64_단순형(g.BskNo)
 	값.M트렌치번호 = lib.F2정수64_단순형(g.TrchNo)
 	값.M항목번호 = lib.F2정수64_단순형(g.ItemNo)
-	값.M운용지시번호 = lib.F2문자열(g.OpDrtnNo)
-	값.M관리사원번호 = lib.F2문자열(g.MgempNo)
-	값.M펀드ID = lib.F2문자열(g.FundId)
+	값.M운용지시번호 = lib.F2문자열_공백제거(g.OpDrtnNo)
+	값.M관리사원번호 = lib.F2문자열_공백제거(g.MgempNo)
+	값.M펀드ID = lib.F2문자열_공백제거(g.FundId)
 	값.M펀드주문번호 = lib.F2정수64_단순형(g.FundOrdNo)
 
 	return 값, nil

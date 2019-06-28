@@ -46,7 +46,7 @@ type CFOFQ02400_선물옵션_미결제약정_질의값 struct {
 	M계좌번호  string
 	// 비밀번호
 	M등록시장코드 CFOFQ02400_등록시장
-	M매수일자    time.Time
+	M매수일자	string
 	M연속조회_여부 bool
 	M연속키     string
 }
@@ -122,12 +122,13 @@ type CFOFQ02400_선물옵션_미결제약정_반복값2 struct {
 }
 
 func NewCFOFQ02400InBlock1(질의값 *CFOFQ02400_선물옵션_미결제약정_질의값, 비밀번호 string) (g *CFOFQ02400InBlock1) {
+
 	g = new(CFOFQ02400InBlock1)
 	lib.F바이트_복사_정수(g.RecCnt[:], 1)
 	lib.F바이트_복사_문자열(g.AcntNo[:], 질의값.M계좌번호)
 	lib.F바이트_복사_문자열(g.Pwd[:], 비밀번호)
 	lib.F바이트_복사_정수(g.RegMktCode[:], int(질의값.M등록시장코드))
-	lib.F바이트_복사_문자열(g.BuyDt[:], 질의값.M매수일자.Format("20060102"))
+	lib.F바이트_복사_문자열(g.BuyDt[:], 질의값.M매수일자)
 
 	return g
 }
@@ -264,8 +265,8 @@ func newCFOFQ02400_선물옵션_미결제약정_반복값2_모음(b []byte) (값
 		lib.F확인(binary.Read(버퍼, binary.BigEndian, g))
 
 		값 := new(CFOFQ02400_선물옵션_미결제약정_반복값2)
-		값.M종목코드 = lib.F2문자열(g.IsuNo)
-		값.M종목명 = lib.F2문자열(g.IsuNm)
+		값.M종목코드 = lib.F2문자열_공백제거(g.IsuNo)
+		값.M종목명 = lib.F2문자열_EUC_KR_공백제거(g.IsuNm)
 		값.M매도_매수_구분 = lib.T매도_매수_구분(lib.F2정수_단순형(g.BnsTpCode))
 		값.M잔고수량 = lib.F2정수64_단순형(g.BalQty)
 		값.M평균가 = lib.F2실수_소숫점_추가_단순형(g.FnoAvrPrc, 8)

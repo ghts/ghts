@@ -106,7 +106,7 @@ type CFOAQ00600_선물옵션_계좌주문체결내역_반복값 struct {
 	M매매손익금액   int64
 	M미체결수량    int64
 	M사용자ID    string
-	M통신매체     T통신매체구분
+	//M통신매체     T통신매체구분
 }
 
 func NewCFOAQ00600InBlock1(질의값 *CFOAQ00600_선물옵션_주문체결내역_질의값, 비밀번호 string) (g *CFOAQ00600InBlock1) {
@@ -134,35 +134,27 @@ func NewCFOAQ00600InBlock1(질의값 *CFOAQ00600_선물옵션_주문체결내역
 	lib.F바이트_복사_문자열(g.StnlnSeqTp[:], 정렬구분)
 	lib.F바이트_복사_정수(g.CommdaCode[:], 99)
 
-	lib.F체크포인트(
-		lib.F2문자열(g.RecCnt),
-		lib.F2문자열(g.AcntNo),
-		lib.F2문자열(g.InptPwd),
-		lib.F2문자열(g.QrySrtDt),
-		lib.F2문자열(g.QryEndDt),
-		lib.F2문자열(g.FnoClssCode),
-		lib.F2문자열(g.PrdgrpCode),
-		lib.F2문자열(g.PrdtExecTpCode),
-		lib.F2문자열(g.StnlnSeqTp),
-		lib.F2문자열(g.CommdaCode))
-
 	return g
 }
 
 func NewCFOAQ00600OutBlock(b []byte) (값 *CFOAQ00600_선물옵션_주문체결내역_응답, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
 
+	버퍼 := bytes.NewBuffer(b)
+
 	값 = new(CFOAQ00600_선물옵션_주문체결내역_응답)
 
-	값.M응답1, 에러 = newCFOAQ00600_선물옵션_계좌주문체결내역_응답1(b[:57])
+	값.M응답1, 에러 = newCFOAQ00600_선물옵션_계좌주문체결내역_응답1(버퍼.Next(SizeCFOAQ00600OutBlock1))
 	lib.F확인(에러)
 
-	값.M응답2, 에러 = newCFOAQ00600_선물옵션_계좌주문체결내역_응답2(b[57:57+109])
+	값.M응답2, 에러 = newCFOAQ00600_선물옵션_계좌주문체결내역_응답2(버퍼.Next(SizeCFOAQ00600OutBlock2))
 	lib.F확인(에러)
 
-	lib.F체크포인트(lib.F2문자열(b[57+109:57+109+5]))
+	수량 := lib.F2정수_단순형(버퍼.Next(5))
+	lib.F조건부_패닉(버퍼.Len() != 수량*SizeCFOAQ00600OutBlock3, "예상하지 못한 길이 : '%v' '%v'",
+		버퍼.Len(), 수량*SizeCFOAQ00600OutBlock3)
 
-	값.M반복값_모음, 에러 = newCFOAQ00600_선물옵션_계좌주문체결내역_반복값(b[57+109+5:])
+	값.M반복값_모음, 에러 = newCFOAQ00600_선물옵션_계좌주문체결내역_반복값(버퍼.Bytes())
 	lib.F확인(에러)
 
 	return 값, nil
@@ -232,15 +224,26 @@ func newCFOAQ00600_선물옵션_계좌주문체결내역_반복값(b []byte) (�
 		g = new(CFOAQ00600OutBlock3)
 		lib.F확인(binary.Read(버퍼, binary.BigEndian, g))
 
-		주문일 := lib.F2포맷된_일자_단순형("??", g.OrdDt)
+		주문일 := lib.F2포맷된_일자_단순형("20060102", g.OrdDt)
+		주문시각 := lib.F2문자열(g.OrdTime)
+		약정시각 := lib.F2문자열(g.CtrctTime)
 
 		값 := new(CFOAQ00600_선물옵션_계좌주문체결내역_반복값)
-		값.M주문시각 = lib.F2일자별_시각_단순형(주문일, "??", g.OrdTime)
+		값.M주문시각 = lib.F2일자별_시각_단순형(주문일, "150405.999", 주문시각[:6] + "." + 주문시각[6:])
 		값.M주문번호 = lib.F2정수64_단순형(g.OrdNo)
 		값.M원주문번호 = lib.F2정수64_단순형(g.OrgOrdNo)
-		값.M종목코드 = lib.F2문자열(g.FnoIsuNo)
-		값.M종목명 = lib.F2문자열(g.IsuNm)
-		값.M매도_매수_구분 = lib.T매도_매수_구분(lib.F2정수64_단순형(g.BnsTpNm))
+		값.M종목코드 = lib.F2문자열_공백제거(g.FnoIsuNo)
+		값.M종목명 = lib.F2문자열_EUC_KR_공백제거(g.IsuNm)
+
+		switch lib.F2문자열_EUC_KR_공백제거(g.BnsTpNm) {
+		case "매수":
+			값.M매도_매수_구분 = lib.P매수
+		case "매도":
+			값.M매도_매수_구분 = lib.P매도
+		default:
+			panic(lib.New에러("예상하지 못한 값 : '%v'", lib.F2문자열_EUC_KR_공백제거(g.BnsTpNm)))
+		}
+
 		값.M정정취소구분 = lib.T신규_정정_취소(lib.F2정수64_단순형(g.MrcTpNm))
 		값.M호가유형 = T호가유형(lib.F2정수_단순형(g.FnoOrdprcPtnCode))
 		값.M주문가 =  lib.F2실수_소숫점_추가_단순형_공백은_0(g.OrdPrc, 2)
@@ -255,7 +258,7 @@ func newCFOAQ00600_선물옵션_계좌주문체결내역_반복값(b []byte) (�
 			값.M주문구분 = P주문_거부
 		}
 
-		switch lib.F2문자열(g.ExecTpNm) {
+		switch lib.F2문자열_EUC_KR_공백제거(g.ExecTpNm) {
 		case "매도":
 			값.M체결구분 = P선물옵션_매도
 		case "매수":
@@ -277,18 +280,18 @@ func newCFOAQ00600_선물옵션_계좌주문체결내역_반복값(b []byte) (�
 		case "미배정":
 			값.M체결구분 = P선물옵션_미배정
 		default:
-			panic(lib.New에러("예상하지 못한 값 : '%v'", lib.F2문자열(g.ExecTpNm)))
+			panic(lib.New에러("예상하지 못한 값 : '%v'", lib.F2문자열_EUC_KR_공백제거(g.ExecTpNm)))
 		}
 
 		값.M체결가 = lib.F2실수_소숫점_추가_단순형(g.ExecPrc, 2)
 		값.M체결수량 = lib.F2정수64_단순형(g.ExecQty)
-		값.M약정시각 = lib.F2포맷된_시각_단순형("??", g.CtrctTime)
+		값.M약정시각 = lib.F2일자별_시각_단순형(주문일, "150405.999", 약정시각[:6] + "." + 약정시각[6:])
 		값.M약정번호 = lib.F2정수64_단순형(g.CtrctNo)
 		값.M체결번호 = lib.F2정수64_단순형(g.ExecNo)
 		값.M매매손익금액 = lib.F2정수64_단순형(g.BnsplAmt)
 		값.M미체결수량 = lib.F2정수64_단순형(g.UnercQty)
-		값.M사용자ID = lib.F2문자열(g.UserId)
-		값.M통신매체 = T통신매체구분(lib.F2정수_단순형(g.CommdaCode))
+		값.M사용자ID = lib.F2문자열_공백제거(g.UserId)
+		//값.M통신매체 = T통신매체구분(lib.F2정수_단순형(g.CommdaCode))
 
 		값_모음[i] = 값
 	}

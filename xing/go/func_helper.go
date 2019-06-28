@@ -195,7 +195,7 @@ func f에러_발생(TR코드, 코드, 내용 string) bool {
 		xt.TR현물_종목_조회_t8436:
 		return 코드 != "00000"
 	case xt.TR선물옵션_정상주문_CFOAT00100:
-		return 코드 != "00040"
+		return 코드 != "00039" && 코드 != "00040"
 	case xt.TR현물_정정_주문_CSPAT00700:
 		return 코드 != "00131"
 	case xt.TR선물옵션_예탁금_증거금_조회_CFOBQ10500,
