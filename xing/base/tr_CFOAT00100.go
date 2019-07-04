@@ -59,7 +59,7 @@ type CFOAT00100_선물옵션_정상주문_응답1 struct {
 	M계좌번호     string
 	M종목코드     string
 	M매매구분     lib.T매도_매수_구분
-	M주문유형     T주문유형 // 선물옵션주문유형코드(FnoOrdPtnCode) - "00" 고정값 입니다.
+	//M주문유형     T주문유형 // 선물옵션주문유형코드(FnoOrdPtnCode) - "00" 고정값 입니다.
 	M호가유형     T호가유형
 	//M거래유형     string // 선물옵션거래유형코드(FnoTrdPtnCode) - "03" 고정값 입니다.
 	M주문가격     float64
@@ -107,12 +107,14 @@ func NewCFOAT00100InBlock1(질의값 *CFOAT00100_선물옵션_정상주문_질�
 func NewCFOAT00100OutBlock(b []byte) (값 *CFOAT00100_선물옵션_정상주문_응답, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
 
+	버퍼 := bytes.NewBuffer(b)
+
 	값 = new(CFOAT00100_선물옵션_정상주문_응답)
 
-	값.M응답1, 에러 = newCFOAT00100_선물옵션_정상주문_응답1(b[0:SizeCFOAT00100OutBlock1])
+	값.M응답1, 에러 = newCFOAT00100_선물옵션_정상주문_응답1(버퍼.Next(SizeCFOAT00100OutBlock1))
 	lib.F확인(에러)
 
-	값.M응답2, 에러 = newCFOAT00100_선물옵션_정상주문_응답2(b[SizeCFOAT00100OutBlock1:])
+	값.M응답2, 에러 = newCFOAT00100_선물옵션_정상주문_응답2(버퍼.Bytes())
 	lib.F확인(에러)
 
 	return 값, nil
@@ -121,7 +123,8 @@ func NewCFOAT00100OutBlock(b []byte) (값 *CFOAT00100_선물옵션_정상주문_
 func newCFOAT00100_선물옵션_정상주문_응답1(b []byte) (값 *CFOAT00100_선물옵션_정상주문_응답1, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
 
-	lib.F조건부_패닉(len(b) != SizeCFOAT00100OutBlock1, "예상하지 못한 길이 : '%v", len(b))
+	lib.F조건부_패닉(len(b) != SizeCFOAT00100OutBlock1,
+		"예상하지 못한 길이 : '%v' '%v'", SizeCFOAT00100OutBlock1, len(b))
 
 	g := new(CFOAT00100OutBlock1)
 	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
@@ -132,7 +135,7 @@ func newCFOAT00100_선물옵션_정상주문_응답1(b []byte) (값 *CFOAT00100_
 	값.M계좌번호 = lib.F2문자열_공백제거(g.AcntNo)
 	값.M종목코드 = lib.F2문자열_공백제거(g.FnoIsuNo)
 	값.M매매구분 = lib.T매도_매수_구분(lib.F2정수_단순형(g.BnsTpCode))
-	값.M주문유형 = T주문유형(lib.F2정수_단순형(g.FnoOrdPtnCode))
+	//값.M주문유형 = T주문유형(lib.F2정수_단순형(g.FnoOrdPtnCode))
 	값.M호가유형 = T호가유형(lib.F2정수_단순형(g.FnoOrdprcPtnCode))
 	//값.M거래유형 = lib.F2문자열(g.FnoTrdPtnCode)
 	값.M주문가격 = lib.F2실수_소숫점_추가_단순형(g.OrdPrc, 2)

@@ -54,24 +54,24 @@ type CFOAT00300_선물옵션_취소주문_응답 struct {
 
 type CFOAT00300_선물옵션_취소주문_응답1 struct {
 	M레코드갯수    int
-	M주문시장     T주문시장구분
+	//M주문시장     T주문시장구분
 	M계좌번호     string
 	M종목코드     string
-	M주문유형     T주문유형
+	//M주문유형     T주문유형
 	M원주문번호    int64
 	M취소수량     int64
-	M통신매체     T통신매체구분
+	//M통신매체     T통신매체구분
 	M협의매매완료시각 time.Time
 	//M그룹ID     T증권그룹
-	M주문번호     int64
-	M포트폴리오번호  int64
-	M바스켓번호    int64
-	M트렌치번호    int64
-	M항목번호     int64
-	M관리사원번호   string
-	M펀드ID     string
-	M펀드원주문번호  int64
-	M펀드주문번호   int64
+	//M주문번호     int64
+	//M포트폴리오번호  int64
+	//M바스켓번호    int64
+	//M트렌치번호    int64
+	//M항목번호     int64
+	//M관리사원번호   string
+	//M펀드ID     string
+	//M펀드원주문번호  int64
+	//M펀드주문번호   int64
 }
 
 type CFOAT00300_선물옵션_취소주문_응답2 struct {
@@ -101,12 +101,14 @@ func NewCFOAT00300InBlock1(질의값 *CFOAT00300_선물옵션_취소주문_질�
 func NewCFOAT00300OutBlock(b []byte) (값 *CFOAT00300_선물옵션_취소주문_응답, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
 
+	버퍼 := bytes.NewBuffer(b)
+
 	값 = new(CFOAT00300_선물옵션_취소주문_응답)
 
-	값.M응답1, 에러 = newCFOAT00300_선물옵션_취소주문_응답1(b)
+	값.M응답1, 에러 = newCFOAT00300_선물옵션_취소주문_응답1(버퍼.Next(SizeCFOAT00300OutBlock1))
 	lib.F확인(에러)
 
-	값.M응답2, 에러 = newCFOAT00300_선물옵션_취소주문_응답2(b)
+	값.M응답2, 에러 = newCFOAT00300_선물옵션_취소주문_응답2(버퍼.Bytes())
 	lib.F확인(에러)
 
 	return 값, nil
@@ -122,24 +124,24 @@ func newCFOAT00300_선물옵션_취소주문_응답1(b []byte) (값 *CFOAT00300_
 
 	값 = new(CFOAT00300_선물옵션_취소주문_응답1)
 	값.M레코드갯수 = lib.F2정수_단순형(g.RecCnt)
-	값.M주문시장 = T주문시장구분(lib.F2정수_단순형(g.OrdMktCode))
-	값.M계좌번호 = lib.F2문자열(g.AcntNo)
+	//값.M주문시장 = T주문시장구분(lib.F2정수_단순형(g.OrdMktCode))
+	값.M계좌번호 = lib.F2문자열_공백제거(g.AcntNo)
 	값.M종목코드 = lib.F2문자열(g.FnoIsuNo)
-	값.M주문유형 = T주문유형(lib.F2정수_단순형(g.FnoOrdPtnCode))
+	//값.M주문유형 = T주문유형(lib.F2정수_단순형(g.FnoOrdPtnCode))
 	값.M원주문번호 = lib.F2정수64_단순형(g.OrgOrdNo)
 	값.M취소수량 = lib.F2정수64_단순형(g.CancQty)
-	값.M통신매체 = T통신매체구분(lib.F2정수_단순형(g.CommdaCode))
-	값.M협의매매완료시각 = lib.F2일자별_시각_단순형(당일.G값(), "??", g.DscusBnsCmpltTime)
+	//값.M통신매체 = T통신매체구분(lib.F2정수_단순형(g.CommdaCode))
+	값.M협의매매완료시각 = lib.F2일자별_시각_단순형_공백은_초기값(당일.G값(), "150405.99", g.DscusBnsCmpltTime)
 	//M그룹ID     T증권그룹
-	값.M주문번호 = lib.F2정수64_단순형(g.OrdSeqno)
-	값.M포트폴리오번호 = lib.F2정수64_단순형(g.PtflNo)
-	값.M바스켓번호 = lib.F2정수64_단순형(g.BskNo)
-	값.M트렌치번호 = lib.F2정수64_단순형(g.TrchNo)
-	값.M항목번호 = lib.F2정수64_단순형(g.ItemNo)
-	값.M관리사원번호 = lib.F2문자열(g.MgempNo)
-	값.M펀드ID = lib.F2문자열(g.FundId)
-	값.M펀드원주문번호 = lib.F2정수64_단순형(g.FundOrgOrdNo)
-	값.M펀드주문번호 = lib.F2정수64_단순형(g.FundOrdNo)
+	//값.M주문번호 = lib.F2정수64_단순형(g.OrdSeqno)
+	//값.M포트폴리오번호 = lib.F2정수64_단순형(g.PtflNo)
+	//값.M바스켓번호 = lib.F2정수64_단순형(g.BskNo)
+	//값.M트렌치번호 = lib.F2정수64_단순형(g.TrchNo)
+	//값.M항목번호 = lib.F2정수64_단순형(g.ItemNo)
+	//값.M관리사원번호 = lib.F2문자열(g.MgempNo)
+	//값.M펀드ID = lib.F2문자열(g.FundId)
+	//값.M펀드원주문번호 = lib.F2정수64_단순형(g.FundOrgOrdNo)
+	//값.M펀드주문번호 = lib.F2정수64_단순형(g.FundOrdNo)
 
 	return 값, nil
 }
@@ -147,7 +149,8 @@ func newCFOAT00300_선물옵션_취소주문_응답1(b []byte) (값 *CFOAT00300_
 func newCFOAT00300_선물옵션_취소주문_응답2(b []byte) (값 *CFOAT00300_선물옵션_취소주문_응답2, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
 
-	lib.F조건부_패닉(len(b) != SizeCFOAT00300OutBlock2, "예상하지 못한 길이 : '%v", len(b))
+	lib.F조건부_패닉(len(b) != SizeCFOAT00300OutBlock2,
+		"예상하지 못한 길이 : '%v' '%v'", SizeCFOAT00300OutBlock2, len(b))
 
 	g := new(CFOAT00300OutBlock2)
 	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))

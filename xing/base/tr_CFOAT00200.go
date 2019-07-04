@@ -57,7 +57,7 @@ type CFOAT00200_선물옵션_정정주문_응답 struct {
 
 type CFOAT00200_선물옵션_정정주문_응답1 struct {
 	M레코드갯수    int
-	M주문시장     T주문시장구분
+	//M주문시장     T주문시장구분
 	M계좌번호     string
 	M종목코드     string
 	M주문유형     T주문유형
@@ -108,12 +108,14 @@ func NewCFOAT00200InBlock1(질의값 *CFOAT00200_선물옵션_정정주문_질�
 func NewCFOAT00200OutBlock(b []byte) (값 *CFOAT00200_선물옵션_정정주문_응답, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
 
+	버퍼 := bytes.NewBuffer(b)
+
 	값 = new(CFOAT00200_선물옵션_정정주문_응답)
 
-	값.M응답1, 에러 = newCFOAT00200_선물옵션_정정주문_응답1(b)
+	값.M응답1, 에러 = newCFOAT00200_선물옵션_정정주문_응답1(버퍼.Next(SizeCFOAT00200OutBlock1))
 	lib.F확인(에러)
 
-	값.M응답2, 에러 = newCFOAT00200_선물옵션_정정주문_응답2(b)
+	값.M응답2, 에러 = newCFOAT00200_선물옵션_정정주문_응답2(버퍼.Bytes())
 	lib.F확인(에러)
 
 	return 값, nil
@@ -129,10 +131,10 @@ func newCFOAT00200_선물옵션_정정주문_응답1(b []byte) (값 *CFOAT00200_
 
 	값 = new(CFOAT00200_선물옵션_정정주문_응답1)
 	값.M레코드갯수 = lib.F2정수_단순형(g.RecCnt)
-	값.M주문시장 = T주문시장구분(lib.F2정수_단순형(g.OrdMktCode))
+	//값.M주문시장 = T주문시장구분(lib.F2정수_단순형(g.OrdMktCode))
 	값.M계좌번호 = lib.F2문자열(g.AcntNo)
 	값.M종목코드 = lib.F2문자열(g.FnoIsuNo)
-	값.M주문유형 = T주문유형(lib.F2정수_단순형(g.FnoOrdPtnCode))
+	//값.M주문유형 = T주문유형(lib.F2정수_단순형(g.FnoOrdPtnCode))
 	값.M원주문번호 = lib.F2정수64_단순형(g.OrgOrdNo)
 	값.M호가유형 = T호가유형(lib.F2정수_단순형(g.FnoOrdprcPtnCode))
 	값.M주문가격 = lib.F2실수_소숫점_추가_단순형(g.OrdPrc, 2)

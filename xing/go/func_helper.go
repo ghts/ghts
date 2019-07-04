@@ -195,8 +195,11 @@ func f에러_발생(TR코드, 코드, 내용 string) bool {
 		xt.TR지수선물_마스터_조회_t8432,
 		xt.TR현물_종목_조회_t8436:
 		return 코드 != "00000"
-	case xt.TR선물옵션_정상주문_CFOAT00100:
+	case xt.TR선물옵션_정상주문_CFOAT00100,
+		xt.TR선물옵션_정정주문_CFOAT00200:
 		return 코드 != "00039" && 코드 != "00040"
+	case xt.TR선물옵션_취소주문_CFOAT00300:
+		return 코드 != "00156"
 	case xt.TR현물_정정_주문_CSPAT00700:
 		return 코드 != "00131"
 	case xt.TR선물옵션_예탁금_증거금_조회_CFOBQ10500,
@@ -204,8 +207,9 @@ func f에러_발생(TR코드, 코드, 내용 string) bool {
 		return 코드 != "00136"
 	case xt.TR현물_취소_주문_CSPAT00800:
 		return 코드 != "00156"
-	case xt.TR선물옵션_주문체결내역조회_CFOAQ00600,
-		xt.TR현물계좌_잔고내역_조회_CSPAQ12300:
+	case xt.TR선물옵션_주문체결내역조회_CFOAQ00600:
+		return 코드 != "00136" && 코드 != "00133"
+	case xt.TR현물계좌_잔고내역_조회_CSPAQ12300:
 		return 코드 != "00136"
 	case xt.TR현물계좌_주문체결내역_조회_CSPAQ13700:
 		// 조회내역이 없을 때 : 실서버(00200), 모의서버(09901)

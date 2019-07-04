@@ -869,7 +869,7 @@ func (p T주문시장구분) String() string {
 	case P주문시장_JASDAQ:
 		return "JASDAQ"
 	default:
-		panic(lib.New에러("예상하지 못한 주문_시장구분 : '%v'", int(p)))
+		panic(lib.New에러("예상하지 못한 주문_시장구분 : '%d'", int(p)))
 	}
 }
 
