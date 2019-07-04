@@ -76,4 +76,3 @@ func 신한API_초기화_경로() (string, error) {
 //	return nil
 //	//return f콜백_동기식(콜백값)	// 동기식으로 전환할 때 사용.
 //}
-

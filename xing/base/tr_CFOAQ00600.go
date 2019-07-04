@@ -170,7 +170,7 @@ func newCFOAQ00600_선물옵션_계좌주문체결내역_응답1(b []byte) (값 
 
 	값 = new(CFOAQ00600_선물옵션_계좌주문체결내역_응답1)
 	값.M레코드갯수 = lib.F2정수64_단순형(g.RecCnt)
-	값.M계좌번호  = lib.F2문자열_공백제거(g.AcntNo)
+	값.M계좌번호 = lib.F2문자열_공백제거(g.AcntNo)
 	값.M조회_시작일 = lib.F2포맷된_일자_단순형("20060102", g.QrySrtDt)
 	값.M조회_종료일 = lib.F2포맷된_일자_단순형("20060102", g.QryEndDt)
 	값.M선물옵션분류 = CFOAQ00600_선물옵션분류(lib.F2정수_단순형(g.FnoClssCode))
@@ -200,7 +200,7 @@ func newCFOAQ00600_선물옵션_계좌주문체결내역_응답2(b []byte) (값 
 
 	값 = new(CFOAQ00600_선물옵션_계좌주문체결내역_응답2)
 	값.M레코드갯수 = lib.F2정수64_단순형(g.RecCnt)
-	값.M계좌명  = lib.F2문자열_EUC_KR_공백제거(g.AcntNm)
+	값.M계좌명 = lib.F2문자열_EUC_KR_공백제거(g.AcntNm)
 	값.M선물주문수량 = lib.F2정수64_단순형(g.FutsOrdQty)
 	값.M선물체결수량 = lib.F2정수64_단순형(g.FutsExecQty)
 	값.M옵션주문수량 = lib.F2정수64_단순형(g.OptOrdQty)
@@ -229,7 +229,7 @@ func newCFOAQ00600_선물옵션_계좌주문체결내역_반복값(b []byte) (�
 		약정시각 := lib.F2문자열(g.CtrctTime)
 
 		값 := new(CFOAQ00600_선물옵션_계좌주문체결내역_반복값)
-		값.M주문시각 = lib.F2일자별_시각_단순형(주문일, "150405.999", 주문시각[:6] + "." + 주문시각[6:])
+		값.M주문시각 = lib.F2일자별_시각_단순형(주문일, "150405.999", 주문시각[:6]+"."+주문시각[6:])
 		값.M주문번호 = lib.F2정수64_단순형(g.OrdNo)
 		값.M원주문번호 = lib.F2정수64_단순형(g.OrgOrdNo)
 		값.M종목코드 = lib.F2문자열_공백제거(g.FnoIsuNo)
@@ -246,7 +246,7 @@ func newCFOAQ00600_선물옵션_계좌주문체결내역_반복값(b []byte) (�
 
 		값.M정정취소구분 = lib.T신규_정정_취소(lib.F2정수64_단순형(g.MrcTpNm))
 		값.M호가유형 = T호가유형(lib.F2정수_단순형(g.FnoOrdprcPtnCode))
-		값.M주문가 =  lib.F2실수_소숫점_추가_단순형_공백은_0(g.OrdPrc, 2)
+		값.M주문가 = lib.F2실수_소숫점_추가_단순형_공백은_0(g.OrdPrc, 2)
 		값.M주문수량 = lib.F2정수64_단순형(g.OrdQty)
 
 		switch lib.F2문자열(g.OrdTpNm) {
@@ -285,7 +285,7 @@ func newCFOAQ00600_선물옵션_계좌주문체결내역_반복값(b []byte) (�
 
 		값.M체결가 = lib.F2실수_소숫점_추가_단순형(g.ExecPrc, 2)
 		값.M체결수량 = lib.F2정수64_단순형(g.ExecQty)
-		값.M약정시각 = lib.F2일자별_시각_단순형(주문일, "150405.999", 약정시각[:6] + "." + 약정시각[6:])
+		값.M약정시각 = lib.F2일자별_시각_단순형(주문일, "150405.999", 약정시각[:6]+"."+약정시각[6:])
 		값.M약정번호 = lib.F2정수64_단순형(g.CtrctNo)
 		값.M체결번호 = lib.F2정수64_단순형(g.ExecNo)
 		값.M매매손익금액 = lib.F2정수64_단순형(g.BnsplAmt)

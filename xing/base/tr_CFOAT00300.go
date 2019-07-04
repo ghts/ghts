@@ -42,24 +42,24 @@ import (
 
 type CFOAT00300_선물옵션_취소주문_질의값 struct {
 	*lib.S질의값_단일_종목
-	M계좌번호    string
-	M원주문번호   int64
-	M취소수량    int64
+	M계좌번호  string
+	M원주문번호 int64
+	M취소수량  int64
 }
 
 type CFOAT00300_선물옵션_취소주문_응답 struct {
-	M응답1        *CFOAT00300_선물옵션_취소주문_응답1
-	M응답2        *CFOAT00300_선물옵션_취소주문_응답2
+	M응답1 *CFOAT00300_선물옵션_취소주문_응답1
+	M응답2 *CFOAT00300_선물옵션_취소주문_응답2
 }
 
 type CFOAT00300_선물옵션_취소주문_응답1 struct {
-	M레코드갯수    int
+	M레코드갯수 int
 	//M주문시장     T주문시장구분
-	M계좌번호     string
-	M종목코드     string
+	M계좌번호 string
+	M종목코드 string
 	//M주문유형     T주문유형
-	M원주문번호    int64
-	M취소수량     int64
+	M원주문번호 int64
+	M취소수량  int64
 	//M통신매체     T통신매체구분
 	M협의매매완료시각 time.Time
 	//M그룹ID     T증권그룹

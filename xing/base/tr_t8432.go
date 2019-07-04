@@ -41,18 +41,18 @@ import (
 )
 
 type T8432_지수선물_마스터_조회_반복값 struct {
-	M종목명 string
+	M종목명  string
 	M종목코드 string
 	M확장코드 string
-	M상한가 float64
-	M하한가 float64
+	M상한가  float64
+	M하한가  float64
 	M전일종가 float64
 	M전일고가 float64
 	M전일저가 float64
-	M기준가 float64
+	M기준가  float64
 }
 
-func NewT8432InBlock(질의값 *lib.S질의값_문자열)  (g *T8432InBlock) {
+func NewT8432InBlock(질의값 *lib.S질의값_문자열) (g *T8432InBlock) {
 	g = new(T8432InBlock)
 	lib.F바이트_복사_문자열(g.Gubun[:], 질의값.M문자열)
 
@@ -79,8 +79,8 @@ func NewT8432_증시주변자금추이_응답_반복값_모음(b []byte) (값_�
 		s.M종목코드 = lib.F2문자열_공백제거(g.Shcode)
 		s.M확장코드 = lib.F2문자열_공백제거(g.Expcode)
 		s.M상한가 = lib.F2실수_소숫점_추가_단순형(g.Uplmtprice, 2)
-		s.M하한가 =  lib.F2실수_소숫점_추가_단순형(g.Dnlmtprice, 2)
-		s.M전일종가 =  lib.F2실수_소숫점_추가_단순형(g.Jnilclose, 2)
+		s.M하한가 = lib.F2실수_소숫점_추가_단순형(g.Dnlmtprice, 2)
+		s.M전일종가 = lib.F2실수_소숫점_추가_단순형(g.Jnilclose, 2)
 		s.M전일고가 = lib.F2실수_소숫점_추가_단순형(g.Jnilhigh, 2)
 		s.M전일저가 = lib.F2실수_소숫점_추가_단순형(g.Jnillow, 2)
 		s.M기준가 = lib.F2실수_소숫점_추가_단순형(g.Recprice, 2)

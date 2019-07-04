@@ -45,8 +45,8 @@ type CFOFQ02400_선물옵션_미결제약정_질의값 struct {
 	M레코드수량 int64
 	M계좌번호  string
 	// 비밀번호
-	M등록시장코드 CFOFQ02400_등록시장
-	M매수일자	string
+	M등록시장코드  CFOFQ02400_등록시장
+	M매수일자    string
 	M연속조회_여부 bool
 	M연속키     string
 }
@@ -147,10 +147,10 @@ func NewCFOFQ02400OutBlock(b []byte) (값 *CFOFQ02400_선물옵션_미결제약�
 	lib.F확인(에러)
 
 	수량1 := lib.F2정수_단순형(버퍼.Next(5))
-	lib.F조건부_패닉(버퍼.Len() < 5 + 수량1*SizeCFOFQ02400OutBlock3, "예상하지 못한 길이 : '%v' '%v'",
-		버퍼.Len(), 5 + 수량1*SizeCFOFQ02400OutBlock3)
+	lib.F조건부_패닉(버퍼.Len() < 5+수량1*SizeCFOFQ02400OutBlock3, "예상하지 못한 길이 : '%v' '%v'",
+		버퍼.Len(), 5+수량1*SizeCFOFQ02400OutBlock3)
 
-	값.M반복값1_모음, 에러 = newCFOFQ02400_선물옵션_미결제약정_반복값1_모음(버퍼.Next(수량1*SizeCFOFQ02400OutBlock3))
+	값.M반복값1_모음, 에러 = newCFOFQ02400_선물옵션_미결제약정_반복값1_모음(버퍼.Next(수량1 * SizeCFOFQ02400OutBlock3))
 	lib.F확인(에러)
 
 	수량2 := lib.F2정수_단순형(버퍼.Next(5))

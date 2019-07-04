@@ -27,8 +27,8 @@ package main
 
 import (
 	"github.com/ghts/ghts/lib"
-	c32 "github.com/ghts/ghts/xing/c32/internal"
 	"github.com/ghts/ghts/xing/base"
+	c32 "github.com/ghts/ghts/xing/c32/internal"
 )
 
 func main() {

@@ -41,52 +41,52 @@ import (
 )
 
 const (
-	Sizeof_C_TR_DATA       = 107 // C.sizeof_TR_DATA
-	Sizeof_C_MSG_DATA      = 26  // C.sizeof_MSG_DATA
-	Sizeof_C_REALTIME_DATA = 86  // C.sizeof_REALTIME_DATA
-	SizeSC0_OutBlock       = int(unsafe.Sizeof(SC0_OutBlock{}))
-	SizeSC1_OutBlock       = int(unsafe.Sizeof(SC1_OutBlock{}))
-	SizeSC2_OutBlock       = int(unsafe.Sizeof(SC2_OutBlock{}))
-	SizeSC3_OutBlock       = int(unsafe.Sizeof(SC3_OutBlock{}))
-	SizeSC4_OutBlock       = int(unsafe.Sizeof(SC4_OutBlock{}))
-	SizeH1_OutBlock        = int(unsafe.Sizeof(H1_OutBlock{}))
-	SizeH2_OutBlock        = int(unsafe.Sizeof(H2_OutBlock{}))
-	SizeS3_OutBlock        = int(unsafe.Sizeof(S3_OutBlock{}))
-	SizeYS3OutBlock        = int(unsafe.Sizeof(YS3OutBlock{}))
-	SizeI5_OutBlock        = int(unsafe.Sizeof(I5_OutBlock{}))
-	SizeVI_OutBlock        = int(unsafe.Sizeof(VI_OutBlock{}))
-	SizeDVIOutBlock        = int(unsafe.Sizeof(DVIOutBlock{}))
-	SizeJIFOutBlock        = int(unsafe.Sizeof(JIFOutBlock{}))
-	SizeCFOAQ00600InBlock1 = int(unsafe.Sizeof(CFOAQ00600InBlock1{}))
+	Sizeof_C_TR_DATA        = 107 // C.sizeof_TR_DATA
+	Sizeof_C_MSG_DATA       = 26  // C.sizeof_MSG_DATA
+	Sizeof_C_REALTIME_DATA  = 86  // C.sizeof_REALTIME_DATA
+	SizeSC0_OutBlock        = int(unsafe.Sizeof(SC0_OutBlock{}))
+	SizeSC1_OutBlock        = int(unsafe.Sizeof(SC1_OutBlock{}))
+	SizeSC2_OutBlock        = int(unsafe.Sizeof(SC2_OutBlock{}))
+	SizeSC3_OutBlock        = int(unsafe.Sizeof(SC3_OutBlock{}))
+	SizeSC4_OutBlock        = int(unsafe.Sizeof(SC4_OutBlock{}))
+	SizeH1_OutBlock         = int(unsafe.Sizeof(H1_OutBlock{}))
+	SizeH2_OutBlock         = int(unsafe.Sizeof(H2_OutBlock{}))
+	SizeS3_OutBlock         = int(unsafe.Sizeof(S3_OutBlock{}))
+	SizeYS3OutBlock         = int(unsafe.Sizeof(YS3OutBlock{}))
+	SizeI5_OutBlock         = int(unsafe.Sizeof(I5_OutBlock{}))
+	SizeVI_OutBlock         = int(unsafe.Sizeof(VI_OutBlock{}))
+	SizeDVIOutBlock         = int(unsafe.Sizeof(DVIOutBlock{}))
+	SizeJIFOutBlock         = int(unsafe.Sizeof(JIFOutBlock{}))
+	SizeCFOAQ00600InBlock1  = int(unsafe.Sizeof(CFOAQ00600InBlock1{}))
 	SizeCFOAQ00600OutBlock1 = int(unsafe.Sizeof(CFOAQ00600OutBlock1{}))
 	SizeCFOAQ00600OutBlock2 = int(unsafe.Sizeof(CFOAQ00600OutBlock2{}))
 	SizeCFOAQ00600OutBlock3 = int(unsafe.Sizeof(CFOAQ00600OutBlock3{}))
-	SizeCFOAT00100InBlock1 = int(unsafe.Sizeof(CFOAT00100InBlock1{}))
-	SizeCFOAT00100OutBlock = int(unsafe.Sizeof(CFOAT00100OutBlock{}))
+	SizeCFOAT00100InBlock1  = int(unsafe.Sizeof(CFOAT00100InBlock1{}))
+	SizeCFOAT00100OutBlock  = int(unsafe.Sizeof(CFOAT00100OutBlock{}))
 	SizeCFOAT00100OutBlock1 = int(unsafe.Sizeof(CFOAT00100OutBlock1{}))
 	SizeCFOAT00100OutBlock2 = int(unsafe.Sizeof(CFOAT00100OutBlock2{}))
-	SizeCFOAT00200InBlock1 = int(unsafe.Sizeof(CFOAT00200InBlock1{}))
-	SizeCFOAT00200OutBlock = int(unsafe.Sizeof(CFOAT00200OutBlock{}))
+	SizeCFOAT00200InBlock1  = int(unsafe.Sizeof(CFOAT00200InBlock1{}))
+	SizeCFOAT00200OutBlock  = int(unsafe.Sizeof(CFOAT00200OutBlock{}))
 	SizeCFOAT00200OutBlock1 = int(unsafe.Sizeof(CFOAT00200OutBlock1{}))
 	SizeCFOAT00200OutBlock2 = int(unsafe.Sizeof(CFOAT00200OutBlock2{}))
-	SizeCFOAT00300InBlock1 = int(unsafe.Sizeof(CFOAT00300InBlock1{}))
-	SizeCFOAT00300OutBlock = int(unsafe.Sizeof(CFOAT00300OutBlock{}))
+	SizeCFOAT00300InBlock1  = int(unsafe.Sizeof(CFOAT00300InBlock1{}))
+	SizeCFOAT00300OutBlock  = int(unsafe.Sizeof(CFOAT00300OutBlock{}))
 	SizeCFOAT00300OutBlock1 = int(unsafe.Sizeof(CFOAT00300OutBlock1{}))
 	SizeCFOAT00300OutBlock2 = int(unsafe.Sizeof(CFOAT00300OutBlock2{}))
-	SizeCFOBQ10500InBlock1 = int(unsafe.Sizeof(CFOBQ10500InBlock1{}))
+	SizeCFOBQ10500InBlock1  = int(unsafe.Sizeof(CFOBQ10500InBlock1{}))
 	SizeCFOBQ10500OutBlock1 = int(unsafe.Sizeof(CFOBQ10500OutBlock1{}))
 	SizeCFOBQ10500OutBlock2 = int(unsafe.Sizeof(CFOBQ10500OutBlock2{}))
 	SizeCFOBQ10500OutBlock3 = int(unsafe.Sizeof(CFOBQ10500OutBlock3{}))
-	SizeCFOFQ02400InBlock1 = int(unsafe.Sizeof(CFOFQ02400InBlock1{}))
+	SizeCFOFQ02400InBlock1  = int(unsafe.Sizeof(CFOFQ02400InBlock1{}))
 	SizeCFOFQ02400OutBlock1 = int(unsafe.Sizeof(CFOFQ02400OutBlock1{}))
 	SizeCFOFQ02400OutBlock2 = int(unsafe.Sizeof(CFOFQ02400OutBlock2{}))
 	SizeCFOFQ02400OutBlock3 = int(unsafe.Sizeof(CFOFQ02400OutBlock3{}))
 	SizeCFOFQ02400OutBlock4 = int(unsafe.Sizeof(CFOFQ02400OutBlock4{}))
-	SizeCSPAQ12300InBlock1 = int(unsafe.Sizeof(CSPAQ12300InBlock1{}))
+	SizeCSPAQ12300InBlock1  = int(unsafe.Sizeof(CSPAQ12300InBlock1{}))
 	SizeCSPAQ12300OutBlock1 = int(unsafe.Sizeof(CSPAQ12300OutBlock1{}))
 	SizeCSPAQ12300OutBlock2 = int(unsafe.Sizeof(CSPAQ12300OutBlock2{}))
 	SizeCSPAQ12300OutBlock3 = int(unsafe.Sizeof(CSPAQ12300OutBlock3{}))
-	SizeCSPAQ13700InBlock1 = int(unsafe.Sizeof(CSPAQ13700InBlock1{}))
+	SizeCSPAQ13700InBlock1  = int(unsafe.Sizeof(CSPAQ13700InBlock1{}))
 	SizeCSPAQ13700OutBlock1 = int(unsafe.Sizeof(CSPAQ13700OutBlock1{}))
 	SizeCSPAQ13700OutBlock2 = int(unsafe.Sizeof(CSPAQ13700OutBlock2{}))
 	SizeCSPAQ13700OutBlock3 = int(unsafe.Sizeof(CSPAQ13700OutBlock3{}))
@@ -102,54 +102,54 @@ const (
 	SizeCSPAT00800OutBlock  = int(unsafe.Sizeof(CSPAT00800OutBlock{}))
 	SizeCSPAT00800OutBlock1 = int(unsafe.Sizeof(CSPAT00800OutBlock1{}))
 	SizeCSPAT00800OutBlock2 = int(unsafe.Sizeof(CSPAT00800OutBlock2{}))
-	SizeT0150InBlock       = int(unsafe.Sizeof(T0150InBlock{}))
+	SizeT0150InBlock        = int(unsafe.Sizeof(T0150InBlock{}))
 	SizeT0150OutBlock       = int(unsafe.Sizeof(T0150OutBlock{}))
 	SizeT0150OutBlock1      = int(unsafe.Sizeof(T0150OutBlock1{}))
 	SizeT0151OutBlock       = int(unsafe.Sizeof(T0151OutBlock{}))
 	SizeT0151OutBlock1      = int(unsafe.Sizeof(T0151OutBlock1{}))
 	SizeT0167OutBlock       = int(unsafe.Sizeof(T0167OutBlock{}))
-	SizeT0425InBlock       = int(unsafe.Sizeof(T0425InBlock{}))
+	SizeT0425InBlock        = int(unsafe.Sizeof(T0425InBlock{}))
 	SizeT0425OutBlock       = int(unsafe.Sizeof(T0425OutBlock{}))
 	SizeT0425OutBlock1      = int(unsafe.Sizeof(T0425OutBlock1{}))
-	SizeT1101InBlock       = int(unsafe.Sizeof(T1101InBlock{}))
+	SizeT1101InBlock        = int(unsafe.Sizeof(T1101InBlock{}))
 	SizeT1101OutBlock       = int(unsafe.Sizeof(T1101OutBlock{}))
-	SizeT1102InBlock       = int(unsafe.Sizeof(T1102InBlock{}))
+	SizeT1102InBlock        = int(unsafe.Sizeof(T1102InBlock{}))
 	SizeT1102OutBlock       = int(unsafe.Sizeof(T1102OutBlock{}))
-	SizeT1305InBlock       = int(unsafe.Sizeof(T1305InBlock{}))
+	SizeT1305InBlock        = int(unsafe.Sizeof(T1305InBlock{}))
 	SizeT1305OutBlock       = int(unsafe.Sizeof(T1305OutBlock{}))
 	SizeT1305OutBlock1      = int(unsafe.Sizeof(T1305OutBlock1{}))
-	SizeT1310InBlock       = int(unsafe.Sizeof(T1310InBlock{}))
+	SizeT1310InBlock        = int(unsafe.Sizeof(T1310InBlock{}))
 	SizeT1310OutBlock       = int(unsafe.Sizeof(T1310OutBlock{}))
 	SizeT1310OutBlock1      = int(unsafe.Sizeof(T1310OutBlock1{}))
-	SizeT1404InBlock       = int(unsafe.Sizeof(T1404InBlock{}))
+	SizeT1404InBlock        = int(unsafe.Sizeof(T1404InBlock{}))
 	SizeT1404OutBlock       = int(unsafe.Sizeof(T1404OutBlock{}))
 	SizeT1404OutBlock1      = int(unsafe.Sizeof(T1404OutBlock1{}))
-	SizeT1405InBlock       = int(unsafe.Sizeof(T1405InBlock{}))
+	SizeT1405InBlock        = int(unsafe.Sizeof(T1405InBlock{}))
 	SizeT1405OutBlock       = int(unsafe.Sizeof(T1405OutBlock{}))
 	SizeT1405OutBlock1      = int(unsafe.Sizeof(T1405OutBlock1{}))
-	SizeT1902InBlock       = int(unsafe.Sizeof(T1902InBlock{}))
+	SizeT1902InBlock        = int(unsafe.Sizeof(T1902InBlock{}))
 	SizeT1902OutBlock       = int(unsafe.Sizeof(T1902OutBlock{}))
 	SizeT1902OutBlock1      = int(unsafe.Sizeof(T1902OutBlock1{}))
-	SizeT3320InBlock       = int(unsafe.Sizeof(T3320InBlock{}))
+	SizeT3320InBlock        = int(unsafe.Sizeof(T3320InBlock{}))
 	SizeT3320OutBlock       = int(unsafe.Sizeof(T3320OutBlock{}))
 	SizeT3320OutBlock1      = int(unsafe.Sizeof(T3320OutBlock1{}))
-	SizeT3341InBlock       = int(unsafe.Sizeof(T3341InBlock{}))
+	SizeT3341InBlock        = int(unsafe.Sizeof(T3341InBlock{}))
 	SizeT3341OutBlock       = int(unsafe.Sizeof(T3341OutBlock{}))
 	SizeT3341OutBlock1      = int(unsafe.Sizeof(T3341OutBlock1{}))
-	SizeT8411InBlock       = int(unsafe.Sizeof(T8411InBlock{}))
+	SizeT8411InBlock        = int(unsafe.Sizeof(T8411InBlock{}))
 	SizeT8411OutBlock       = int(unsafe.Sizeof(T8411OutBlock{}))
 	SizeT8411OutBlock1      = int(unsafe.Sizeof(T8411OutBlock1{}))
-	SizeT8412InBlock       = int(unsafe.Sizeof(T8412InBlock{}))
+	SizeT8412InBlock        = int(unsafe.Sizeof(T8412InBlock{}))
 	SizeT8412OutBlock       = int(unsafe.Sizeof(T8412OutBlock{}))
 	SizeT8412OutBlock1      = int(unsafe.Sizeof(T8412OutBlock1{}))
-	SizeT8413InBlock       = int(unsafe.Sizeof(T8413InBlock{}))
+	SizeT8413InBlock        = int(unsafe.Sizeof(T8413InBlock{}))
 	SizeT8413OutBlock       = int(unsafe.Sizeof(T8413OutBlock{}))
 	SizeT8413OutBlock1      = int(unsafe.Sizeof(T8413OutBlock1{}))
-	SizeT8428InBlock       = int(unsafe.Sizeof(T8428InBlock{}))
+	SizeT8428InBlock        = int(unsafe.Sizeof(T8428InBlock{}))
 	SizeT8428OutBlock       = int(unsafe.Sizeof(T8428OutBlock{}))
 	SizeT8428OutBlock1      = int(unsafe.Sizeof(T8428OutBlock1{}))
-	SizeT8432OutBlock      = int(unsafe.Sizeof(T8432OutBlock{}))
-	SizeT8436InBlock       = int(unsafe.Sizeof(T8436InBlock{}))
+	SizeT8432OutBlock       = int(unsafe.Sizeof(T8432OutBlock{}))
+	SizeT8436InBlock        = int(unsafe.Sizeof(T8436InBlock{}))
 	SizeT8436OutBlock       = int(unsafe.Sizeof(T8436OutBlock{}))
 
 	P자료형_nil                            = "nil"
@@ -160,24 +160,24 @@ const (
 	P자료형_S콜백_메시지_및_에러                   = "S콜백_메시지_및_에러"
 	P자료형_S현물_주문_응답_실시간_정보               = "S현물_주문_응답_실시간_정보"
 	P자료형_CFOAQ00600_선물옵션_주문체결내역_질의값     = "CFOAQ00600_선물옵션_주문체결내역_질의값"
-	P자료형_CFOAQ00600OutBlock           = "CFOAQ00600OutBlock"
+	P자료형_CFOAQ00600OutBlock             = "CFOAQ00600OutBlock"
 	P자료형_CFOAT00100_선물옵션_정상주문_질의값       = "CFOAT00100_선물옵션_정상주문_질의값"
-	P자료형_CFOAT00100OutBlock           = "CFOAT00100OutBlock"
+	P자료형_CFOAT00100OutBlock             = "CFOAT00100OutBlock"
 	P자료형_CFOAT00200_선물옵션_정정주문_질의값       = "CFOAT00200_선물옵션_정정주문_질의값"
-	P자료형_CFOAT00200OutBlock           = "CFOAT00200OutBlock"
+	P자료형_CFOAT00200OutBlock             = "CFOAT00200OutBlock"
 	P자료형_CFOAT00300_선물옵션_취소주문_질의값       = "CFOAT00300_선물옵션_취소주문_질의값"
-	P자료형_CFOAT00300OutBlock           = "CFOAT00300OutBlock"
+	P자료형_CFOAT00300OutBlock             = "CFOAT00300OutBlock"
 	P자료형_CFOBQ10500_선물옵션_예탁금_증거금_조회_질의값 = "CFOBQ10500_선물옵션_예탁금_증거금_조회_질의값"
-	P자료형_CFOBQ10500OutBlock           = "CFOBQ10500OutBlock"
+	P자료형_CFOBQ10500OutBlock             = "CFOBQ10500OutBlock"
 	P자료형_CFOFQ02400_선물옵션_미결제약정_질의값      = "CFOFQ02400_선물옵션_미결제약정_질의값"
-	P자료형_CFOFQ02400OutBlock           = "CFOFQ02400OutBlock"
-	P자료형_CSPAQ12300_현물계좌_잔고내역_질의값     = "CSPAQ12300_현물계좌_잔고내역_질의값"
-	P자료형_CSPAQ12300OutBlock           = "CSPAQ12300OutBlock"
-	P자료형_CSPAQ13700_현물계좌_주문체결내역_질의값   = "CSPAQ13700_현물계좌_주문체결내역_질의값"
-	P자료형_CSPAQ13700OutBlock           = "CSPAQ13700OutBlock"
-	P자료형_CSPAT00600_현물_정상_주문_질의값      = "CSPAT00600_현물_정상_주문_질의값"
-	P자료형_CSPAT00600OutBlock           = "CSPAT00600OutBlock"
-	P자료형_CSPAT00700_현물_정정_주문_질의값      = "CSPAT00700_현물_정정_주문_질의값"
+	P자료형_CFOFQ02400OutBlock             = "CFOFQ02400OutBlock"
+	P자료형_CSPAQ12300_현물계좌_잔고내역_질의값       = "CSPAQ12300_현물계좌_잔고내역_질의값"
+	P자료형_CSPAQ12300OutBlock             = "CSPAQ12300OutBlock"
+	P자료형_CSPAQ13700_현물계좌_주문체결내역_질의값     = "CSPAQ13700_현물계좌_주문체결내역_질의값"
+	P자료형_CSPAQ13700OutBlock             = "CSPAQ13700OutBlock"
+	P자료형_CSPAT00600_현물_정상_주문_질의값        = "CSPAT00600_현물_정상_주문_질의값"
+	P자료형_CSPAT00600OutBlock             = "CSPAT00600OutBlock"
+	P자료형_CSPAT00700_현물_정정_주문_질의값        = "CSPAT00700_현물_정정_주문_질의값"
 	P자료형_CSPAT00700OutBlock             = "CSPAT00700OutBlock"
 	P자료형_CSPAT00800_현물_취소_주문_질의값        = "CSPAT00800_현물_취소_주문_질의값"
 	P자료형_CSPAT00800OutBlock             = "CSPAT00800OutBlock"
@@ -267,7 +267,7 @@ const (
 	P자료형_T8428_증시주변_자금추이_응답_반복값_모음      = "T8428_증시주변_자금추이_응답_반복값_모음"
 	P자료형_T8428OutBlock                  = "T8428OutBlock"
 	P자료형_T8428OutBlock1                 = "T8428OutBlock1"
-	P자료형_T8432OutBlock				   = "T8432OutBlock"
+	P자료형_T8432OutBlock                  = "T8432OutBlock"
 	P자료형_T8436_현물_종목조회_응답_반복값           = "T8436_현물_종목조회_응답_반복값"
 	P자료형_T8436_현물_종목조회_응답_반복값_모음        = "T8436_현물_종목조회_응답_반복값_모음"
 	P자료형_T8436OutBlock                  = "T8436OutBlock"
@@ -377,7 +377,7 @@ const (
 	TR현물_차트_분_t8412           = "t8412"
 	TR현물_차트_일주월_t8413         = "t8413"
 	TR증시_주변_자금_추이_t8428       = "t8428"
-	TR지수선물_마스터_조회_t8432	= "t8432"
+	TR지수선물_마스터_조회_t8432       = "t8432"
 	TR현물_종목_조회_t8436          = "t8436"
 
 	// 구현된 RT코드
@@ -1915,7 +1915,6 @@ func (p CFOAQ00600_선물옵션분류) String() string {
 
 type T선옵_상품군 uint8
 
-
 const (
 	P선옵_상품군_전체      T선옵_상품군 = 0
 	P선옵_상품군_주가지수    T선옵_상품군 = 1
@@ -2056,11 +2055,11 @@ func (p T선물옵션품목) String() string {
 type CFOFQ02400_등록시장 uint8
 
 const (
-	CFOFQ02400_전체 CFOFQ02400_등록시장 = 99
-	CFOFQ02400_KOSPI CFOFQ02400_등록시장 = 40
+	CFOFQ02400_전체     CFOFQ02400_등록시장 = 99
+	CFOFQ02400_KOSPI  CFOFQ02400_등록시장 = 40
 	CFOFQ02400_KOSDAQ CFOFQ02400_등록시장 = 20
-	CFOFQ02400_KSE CFOFQ02400_등록시장 = 10
-	CFOFQ02400_KOFEX CFOFQ02400_등록시장 = 50
+	CFOFQ02400_KSE    CFOFQ02400_등록시장 = 10
+	CFOFQ02400_KOFEX  CFOFQ02400_등록시장 = 50
 )
 
 func (p CFOFQ02400_등록시장) String() string {

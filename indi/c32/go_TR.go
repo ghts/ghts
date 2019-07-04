@@ -83,14 +83,14 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 		case <-ch종료:
 			return nil
 		default:
-			lib.F실행권한_양보()	// Go언어가 for반복문에서 태스트 스위칭이 잘 안 되는 경우가 있어서 수동으로 해 줌.
+			lib.F실행권한_양보() // Go언어가 for반복문에서 태스트 스위칭이 잘 안 되는 경우가 있어서 수동으로 해 줌.
 		}
 	}
 }
 
 // 질의값을 소켓으로 수신 후 함수 호출 모듈로 전달.
 func go소켓_전달_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
-	defer lib.S예외처리{M에러:&에러, M함수: func() {
+	defer lib.S예외처리{M에러: &에러, M함수: func() {
 		소켓REP_TR수신.S송신(lib.JSON, 에러)
 		ch종료 <- lib.P신호_종료
 	}}.S실행()
@@ -138,7 +138,7 @@ func go소켓_전달_도우미(ch초기화, ch종료 chan lib.T신호) (에러 e
 			return nil
 		}
 
-		lib.F실행권한_양보()	// Go언어가 for반복문에서 태스트 전환이 잘 안 되는 경우가 있으므로, 수동으로 태스트 전환.
+		lib.F실행권한_양보() // Go언어가 for반복문에서 태스트 전환이 잘 안 되는 경우가 있으므로, 수동으로 태스트 전환.
 	}
 }
 
@@ -165,7 +165,7 @@ func go함수_호출_도우미(ch초기화, ch종료 chan lib.T신호) {
 }
 
 func COM객체_초기화() (에러 error) {
-	defer lib.S예외처리{M에러:&에러}.S실행()
+	defer lib.S예외처리{M에러: &에러}.S실행()
 
 	질의 := new(lib.S채널_질의_API)
 	질의.M질의값 = lib.New질의값_기본형(lib.TR초기화, "")

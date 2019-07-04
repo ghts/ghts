@@ -105,7 +105,7 @@ func f자료형_문자열_해석(g *xt.TR_DATA) (자료형_문자열 string, 에
 			return xt.P자료형_CFOAT00300OutBlock, nil
 		}
 	case xt.TR선물옵션_예탁금_증거금_조회_CFOBQ10500:
-		const 헤더_길이 = xt.SizeCFOBQ10500OutBlock1+xt.SizeCFOBQ10500OutBlock2+5
+		const 헤더_길이 = xt.SizeCFOBQ10500OutBlock1 + xt.SizeCFOBQ10500OutBlock2 + 5
 
 		if 길이 == 0 {
 			return xt.P자료형_nil, nil
@@ -115,17 +115,17 @@ func f자료형_문자열_해석(g *xt.TR_DATA) (자료형_문자열 string, 에
 
 		return xt.P자료형_CFOBQ10500OutBlock, nil
 	case xt.TR선물옵션_미결제약정_현황_CFOFQ02400:
-		const 헤더_길이 = xt.SizeCFOFQ02400OutBlock1+xt.SizeCFOFQ02400OutBlock2+5+5
+		const 헤더_길이 = xt.SizeCFOFQ02400OutBlock1 + xt.SizeCFOFQ02400OutBlock2 + 5 + 5
 
 		if 길이 == 0 {
 			return xt.P자료형_nil, nil
-		} else if 길이 < 헤더_길이 {	// 각 Occurs OutBlock 앞에 5자리로 Count 가 들어갑니다.
+		} else if 길이 < 헤더_길이 { // 각 Occurs OutBlock 앞에 5자리로 Count 가 들어갑니다.
 			break
 		}
 
 		return xt.P자료형_CFOFQ02400OutBlock, nil
 	case xt.TR현물계좌_잔고내역_조회_CSPAQ12300:
-		const 헤더_길이 = xt.SizeCSPAQ12300OutBlock1+xt.SizeCSPAQ12300OutBlock2+5
+		const 헤더_길이 = xt.SizeCSPAQ12300OutBlock1 + xt.SizeCSPAQ12300OutBlock2 + 5
 		// Non-block 모드는 Occurs데이터 수량을 나타내는 5바이트 추가됨.
 		if 길이 == 0 {
 			return xt.P자료형_nil, nil
@@ -135,7 +135,7 @@ func f자료형_문자열_해석(g *xt.TR_DATA) (자료형_문자열 string, 에
 
 		return xt.P자료형_CSPAQ12300OutBlock, nil
 	case xt.TR현물계좌_주문체결내역_조회_CSPAQ13700:
-		const 헤더_길이 = xt.SizeCSPAQ13700OutBlock1+xt.SizeCSPAQ13700OutBlock2+5
+		const 헤더_길이 = xt.SizeCSPAQ13700OutBlock1 + xt.SizeCSPAQ13700OutBlock2 + 5
 		// Non-block 모드는 Occurs데이터 수량을 나타내는 5바이트 추가됨.
 		if 길이 == 0 {
 			return xt.P자료형_nil, nil
@@ -148,31 +148,31 @@ func f자료형_문자열_해석(g *xt.TR_DATA) (자료형_문자열 string, 에
 		switch 길이 {
 		case xt.SizeCSPAT00600OutBlock:
 			return xt.P자료형_CSPAT00600OutBlock, nil
-		//case xt.SizeCSPAT00600OutBlock1:
-		//	return xt.P자료형_CSPAT00600OutBlock1, nil
-		//case xt.SizeCSPAT00600OutBlock2:
-		//	return xt.P자료형_CSPAT00600OutBlock2, nil
+			//case xt.SizeCSPAT00600OutBlock1:
+			//	return xt.P자료형_CSPAT00600OutBlock1, nil
+			//case xt.SizeCSPAT00600OutBlock2:
+			//	return xt.P자료형_CSPAT00600OutBlock2, nil
 		}
 	case xt.TR현물_정정_주문_CSPAT00700:
 		switch 길이 {
 		case xt.SizeCSPAT00700OutBlock:
 			return xt.P자료형_CSPAT00700OutBlock, nil
-		//case xt.SizeCSPAT00700OutBlock1:
-		//	return xt.P자료형_CSPAT00700OutBlock1, nil
-		//case xt.SizeCSPAT00700OutBlock2:
-		//	return xt.P자료형_CSPAT00700OutBlock2, nil
+			//case xt.SizeCSPAT00700OutBlock1:
+			//	return xt.P자료형_CSPAT00700OutBlock1, nil
+			//case xt.SizeCSPAT00700OutBlock2:
+			//	return xt.P자료형_CSPAT00700OutBlock2, nil
 		}
 	case xt.TR현물_취소_주문_CSPAT00800:
 		switch 길이 {
 		case xt.SizeCSPAT00800OutBlock:
 			return xt.P자료형_CSPAT00800OutBlock, nil
-		//case xt.SizeCSPAT00800OutBlock1:
-		//	return xt.P자료형_CSPAT00800OutBlock1, nil
-		//case xt.SizeCSPAT00800OutBlock2:
-		//	return xt.P자료형_CSPAT00800OutBlock2, nil
+			//case xt.SizeCSPAT00800OutBlock1:
+			//	return xt.P자료형_CSPAT00800OutBlock1, nil
+			//case xt.SizeCSPAT00800OutBlock2:
+			//	return xt.P자료형_CSPAT00800OutBlock2, nil
 		}
 	case xt.TR현물_당일_매매일지_수수료_t0150:
-		const 헤더_길이 = xt.SizeT0150OutBlock+5
+		const 헤더_길이 = xt.SizeT0150OutBlock + 5
 		// Non-block 모드는 Occurs데이터 수량을 나타내는 5바이트 추가됨.
 		if 길이 == 0 {
 			return xt.P자료형_nil, nil
@@ -321,7 +321,7 @@ func f민감정보_삭제(raw값 []byte, 구분_문자열 string) []byte {
 }
 
 func f민감정보_삭제_도우미(raw값 []byte, 시작_인덱스, 길이 int) {
-	for i:=시작_인덱스; i<(시작_인덱스+길이) ; i++ {
+	for i := 시작_인덱스; i < (시작_인덱스 + 길이); i++ {
 		raw값[i] = 0
 	}
 }

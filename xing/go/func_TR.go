@@ -43,7 +43,7 @@ import (
 
 func TrCFOAQ00600_선물옵션_주문체결내역(계좌번호 string, 선물옵션구분 xt.CFOAQ00600_선물옵션분류, 상품군 xt.T선옵_상품군,
 	체결구분 lib.T체결_구분, 조회_시작일, 조회_종료일 time.Time) (응답값 *xt.CFOAQ00600_선물옵션_주문체결내역_응답, 에러 error) {
-	defer lib.S예외처리{M에러:&에러, M함수:func() { 응답값 = nil}}.S실행()
+	defer lib.S예외처리{M에러: &에러, M함수: func() { 응답값 = nil }}.S실행()
 
 	F접속_확인()
 
@@ -88,9 +88,9 @@ func TrCFOAQ00600_선물옵션_주문체결내역(계좌번호 string, 선물옵
 	return 응답값, nil
 }
 
-func TrCFOAT00100_선물옵션_정상주문 (계좌번호 string, 선옵_종목코드 string, 매매구분 lib.T매도_매수_구분,
+func TrCFOAT00100_선물옵션_정상주문(계좌번호 string, 선옵_종목코드 string, 매매구분 lib.T매도_매수_구분,
 	호가유형 xt.T호가유형, 주문가격 float64, 주문수량 int64) (응답값 *xt.CFOAT00100_선물옵션_정상주문_응답, 에러 error) {
-	defer lib.S예외처리{M에러:&에러, M함수:func() { 응답값 = nil}}.S실행()
+	defer lib.S예외처리{M에러: &에러, M함수: func() { 응답값 = nil }}.S실행()
 
 	F접속_확인()
 
@@ -114,9 +114,9 @@ func TrCFOAT00100_선물옵션_정상주문 (계좌번호 string, 선옵_종목�
 	return 응답값, nil
 }
 
-func TrCFOAT00200_선물옵션_정정주문 (선옵_종목코드 string, 계좌번호 string, 매매구분 lib.T매도_매수_구분,
+func TrCFOAT00200_선물옵션_정정주문(선옵_종목코드 string, 계좌번호 string, 매매구분 lib.T매도_매수_구분,
 	호가유형 xt.T호가유형, 원주문번호 int64, 주문가격 float64, 정정수량 int64) (응답값 *xt.CFOAT00200_선물옵션_정정주문_응답, 에러 error) {
-	defer lib.S예외처리{M에러:&에러, M함수:func() { 응답값 = nil}}.S실행()
+	defer lib.S예외처리{M에러: &에러, M함수: func() { 응답값 = nil }}.S실행()
 
 	F접속_확인()
 
@@ -162,9 +162,8 @@ func TrCFOAT00300_선물옵션_취소주문(선옵_종목코드 string, 계좌�
 
 		lib.F체크포인트(i, 1)
 
-		if 에러 != nil && (
-			strings.Contains(에러.Error(), "원주문번호를 잘못") ||
-				strings.Contains(에러.Error(), "접수 대기 상태")) {
+		if 에러 != nil && (strings.Contains(에러.Error(), "원주문번호를 잘못") ||
+			strings.Contains(에러.Error(), "접수 대기 상태")) {
 			continue // 재시도
 		}
 
@@ -186,7 +185,7 @@ func TrCFOAT00300_선물옵션_취소주문(선옵_종목코드 string, 계좌�
 }
 
 func TrCFOBQ10500_선물옵션_예탁금_증거금_조회(계좌번호 string) (응답값 *xt.CFOBQ10500_선물옵션_예탁금_증거금_조회_응답, 에러 error) {
-	defer lib.S예외처리{M에러:&에러, M함수:func() { 응답값 = nil}}.S실행()
+	defer lib.S예외처리{M에러: &에러, M함수: func() { 응답값 = nil }}.S실행()
 
 	F접속_확인()
 
@@ -313,8 +312,7 @@ func TrCSPAT00800_현물_취소주문(질의값 *lib.S질의값_취소_주문) (
 	for i := 0; i < 10; i++ { // 최대 10번 재시도
 		i응답값, 에러 := F질의_단일TR(질의값)
 
-		if 에러 != nil && (
-			strings.Contains(에러.Error(), "원주문번호를 잘못") ||
+		if 에러 != nil && (strings.Contains(에러.Error(), "원주문번호를 잘못") ||
 			strings.Contains(에러.Error(), "접수 대기 상태")) {
 			continue // 재시도
 		}

@@ -64,7 +64,7 @@ func f2역순_인터페이스_슬라이스(인수_모음 ...interface{}) []inter
 	베이스_인덱스 := 길이 - 1
 
 	for i, 인수 := range 인수_모음 {
-		응답값[베이스_인덱스 - i] = 인수
+		응답값[베이스_인덱스-i] = 인수
 	}
 
 	return 응답값
@@ -294,7 +294,7 @@ func f에러_코드2에러_메시지(에러_코드 int) string {
 	// ask windows for the remaining errors
 	var flags uint32 = syscall.FORMAT_MESSAGE_FROM_SYSTEM | syscall.FORMAT_MESSAGE_ARGUMENT_ARRAY | syscall.FORMAT_MESSAGE_IGNORE_INSERTS
 	b := make([]uint16, 300)
-	n, err :=  syscall.FormatMessage(flags, 0, uint32(에러_코드), 0, b, nil)
+	n, err := syscall.FormatMessage(flags, 0, uint32(에러_코드), 0, b, nil)
 	if err != nil {
 		return fmt.Sprintf("error %d (FormatMessage failed with: %v)", 에러_코드, err)
 	}
@@ -303,4 +303,3 @@ func f에러_코드2에러_메시지(에러_코드 int) string {
 	}
 	return string(utf16.Decode(b[:n]))
 }
-

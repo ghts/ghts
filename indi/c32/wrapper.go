@@ -56,7 +56,6 @@ func (s *S신한API) InvokeVariant(Id int, 인수_모음 ...interface{}) (결과
 	VARIANT인수_모음 := f2DISPARAMS(인수_모음)
 	defer f인수_리소스_정리(인수_모음, VARIANT인수_모음)
 
-
 	COM인수 := new(DISPPARAMS)
 	COM인수.명명인수_호출ID_배열 = 0
 	COM인수.명명인수_수량 = 0

@@ -60,7 +60,7 @@ func F윈도우_메시지_처리() {
 // COPIED & MODIFED FROM 'https://github.com/lxn/win'
 
 const (
-	WM_QUIT                   = 18
+	WM_QUIT = 18
 )
 
 func PeekMessage(lpMsg *MSG, hWnd HWND, wMsgFilterMin, wMsgFilterMax, wRemoveMsg uint32) bool {
@@ -88,8 +88,8 @@ var libuser32 = windows.NewLazySystemDLL("user32.dll")
 var dispatchMessage = libuser32.NewProc("DispatchMessageW")
 var peekMessage = libuser32.NewProc("PeekMessageW")
 
-type HANDLE        uintptr
-type HWND      HANDLE
+type HANDLE uintptr
+type HWND HANDLE
 
 type MSG struct {
 	HWnd    HWND

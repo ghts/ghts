@@ -42,28 +42,28 @@ import (
 
 type CFOAT00100_선물옵션_정상주문_질의값 struct {
 	*lib.S질의값_단일_종목
-	M계좌번호    string
-	M매매구분    lib.T매도_매수_구분
-	M호가유형    T호가유형
-	M주문가격    float64
-	M주문수량    int64
+	M계좌번호 string
+	M매매구분 lib.T매도_매수_구분
+	M호가유형 T호가유형
+	M주문가격 float64
+	M주문수량 int64
 }
 
 type CFOAT00100_선물옵션_정상주문_응답 struct {
-	M응답1        *CFOAT00100_선물옵션_정상주문_응답1
-	M응답2        *CFOAT00100_선물옵션_정상주문_응답2
+	M응답1 *CFOAT00100_선물옵션_정상주문_응답1
+	M응답2 *CFOAT00100_선물옵션_정상주문_응답2
 }
 
 type CFOAT00100_선물옵션_정상주문_응답1 struct {
-	M레코드갯수    int
-	M계좌번호     string
-	M종목코드     string
-	M매매구분     lib.T매도_매수_구분
+	M레코드갯수 int
+	M계좌번호  string
+	M종목코드  string
+	M매매구분  lib.T매도_매수_구분
 	//M주문유형     T주문유형 // 선물옵션주문유형코드(FnoOrdPtnCode) - "00" 고정값 입니다.
-	M호가유형     T호가유형
+	M호가유형 T호가유형
 	//M거래유형     string // 선물옵션거래유형코드(FnoTrdPtnCode) - "03" 고정값 입니다.
-	M주문가격     float64
-	M주문수량     int64
+	M주문가격 float64
+	M주문수량 int64
 	//M통신매체     T통신매체구분
 	M협의매매완료시각 time.Time
 	//M그룹ID     T증권그룹	// 그룹ID(GroupID) - 모두 SPACE 입니다.

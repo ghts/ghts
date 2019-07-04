@@ -47,7 +47,7 @@ func TestCSPAQ12300_현물계좌_잔고내역_질의값(t *testing.T) {
 
 func TestCSPAQ12300_현물계좌_잔고내역_조회(t *testing.T) {
 	t.Parallel()
-	
+
 	//lib.F체크포인트("CSPAQ12300 테스트 에러 발생. 보류.")
 	//
 	//t.SkipNow()

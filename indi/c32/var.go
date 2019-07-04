@@ -40,14 +40,14 @@ import (
 )
 
 var (
-	신한API_저장소 = make(chan *S신한API, 1)
+	신한API_저장소    = make(chan *S신한API, 1)
 	소켓REP_TR수신   = lib.F확인(lib.NewNano소켓REP(lib.P주소_Xing_TR)).(lib.I소켓)
 	소켓PUB_실시간_정보 = lib.F확인(lib.NewNano소켓PUB(lib.P주소_신한_실시간)).(lib.I소켓)
-	소켓REQ_저장소 = lib.New소켓_저장소(20, func() lib.I소켓_질의 {
+	소켓REQ_저장소    = lib.New소켓_저장소(20, func() lib.I소켓_질의 {
 		return lib.NewNano소켓REQ_단순형(lib.P주소_신한_C함수_콜백, lib.P30초)
 	})
 
-	Ch질의 chan *lib.S채널_질의_API
+	Ch질의    chan *lib.S채널_질의_API
 	Ch메인_종료 = make(chan lib.T신호, 1)
 )
 
@@ -56,6 +56,5 @@ var (
 	설정파일_디렉토리 = filepath.Join(lib.GOPATH(), "src", reflect.TypeOf(S신한API{}).PkgPath())
 	설정파일_경로   = filepath.Join(설정파일_디렉토리, "config.ini")
 	계좌번호_모음   []string
-	계좌_비밀번호 string
+	계좌_비밀번호   string
 )
-

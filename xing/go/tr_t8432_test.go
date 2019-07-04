@@ -80,4 +80,3 @@ func TestT8432_지수선물_마스터_조회(t *testing.T) {
 		}
 	}
 }
-
