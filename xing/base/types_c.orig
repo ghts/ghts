@@ -223,6 +223,10 @@ type T8428InBlock C.T8428InBlock
 type T8428OutBlock C.T8428OutBlock
 type T8428OutBlock1 C.T8428OutBlock1
 
+// 지수선물종목조회 API용
+type T8432InBlock C.T8432InBlock
+type T8432OutBlock C.T8432OutBlock
+
 // 주식종목조회 API용
 type T8436InBlock C.T8436InBlock
 type T8436OutBlock C.T8436OutBlock

@@ -148,6 +148,7 @@ const (
 	SizeT8428InBlock       = int(unsafe.Sizeof(T8428InBlock{}))
 	SizeT8428OutBlock       = int(unsafe.Sizeof(T8428OutBlock{}))
 	SizeT8428OutBlock1      = int(unsafe.Sizeof(T8428OutBlock1{}))
+	SizeT8432OutBlock      = int(unsafe.Sizeof(T8432OutBlock{}))
 	SizeT8436InBlock       = int(unsafe.Sizeof(T8436InBlock{}))
 	SizeT8436OutBlock       = int(unsafe.Sizeof(T8436OutBlock{}))
 
@@ -266,6 +267,7 @@ const (
 	P자료형_T8428_증시주변_자금추이_응답_반복값_모음      = "T8428_증시주변_자금추이_응답_반복값_모음"
 	P자료형_T8428OutBlock                  = "T8428OutBlock"
 	P자료형_T8428OutBlock1                 = "T8428OutBlock1"
+	P자료형_T8432OutBlock				   = "T8432OutBlock"
 	P자료형_T8436_현물_종목조회_응답_반복값           = "T8436_현물_종목조회_응답_반복값"
 	P자료형_T8436_현물_종목조회_응답_반복값_모음        = "T8436_현물_종목조회_응답_반복값_모음"
 	P자료형_T8436OutBlock                  = "T8436OutBlock"
@@ -375,6 +377,7 @@ const (
 	TR현물_차트_분_t8412           = "t8412"
 	TR현물_차트_일주월_t8413         = "t8413"
 	TR증시_주변_자금_추이_t8428       = "t8428"
+	TR지수선물_마스터_조회_t8432	= "t8432"
 	TR현물_종목_조회_t8436          = "t8436"
 
 	// 구현된 RT코드

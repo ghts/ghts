@@ -648,6 +648,8 @@ func F바이트_변환값_해석_Raw(바이트_변환값 *lib.S바이트_변환)
 		return NewT8428_증시주변자금추이_응답_헤더(b)
 	case P자료형_T8428OutBlock1:
 		return NewT8428_증시주변자금추이_응답_반복값_모음(b)
+	case P자료형_T8432OutBlock:
+		return NewT8432_증시주변자금추이_응답_반복값_모음(b)
 	case P자료형_T8436OutBlock:
 		return NewT8436_현물_종목조회_응답_반복값_모음(b)
 	default:

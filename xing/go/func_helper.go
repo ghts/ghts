@@ -192,6 +192,7 @@ func f에러_발생(TR코드, 코드, 내용 string) bool {
 		xt.TR현물_차트_분_t8412,
 		xt.TR현물_차트_일주월_t8413,
 		xt.TR증시_주변_자금_추이_t8428,
+		xt.TR지수선물_마스터_조회_t8432,
 		xt.TR현물_종목_조회_t8436:
 		return 코드 != "00000"
 	case xt.TR선물옵션_정상주문_CFOAT00100:
@@ -329,7 +330,7 @@ func f처리_가능한_TR코드(TR코드 string) bool {
 		xt.TR_ETF_시간별_추이_t1902,
 		xt.TR기업정보_요약_t3320, xt.TR재무순위_종합_t3341,
 		xt.TR현물_차트_틱_t8411, xt.TR현물_차트_분_t8412, xt.TR현물_차트_일주월_t8413,
-		xt.TR증시_주변_자금_추이_t8428, xt.TR현물_종목_조회_t8436:
+		xt.TR증시_주변_자금_추이_t8428, xt.TR지수선물_마스터_조회_t8432, xt.TR현물_종목_조회_t8436:
 		return true
 	default:
 		lib.F문자열_출력("예상하지 못한 TR코드 : '%v'", TR코드)

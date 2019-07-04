@@ -2615,8 +2615,27 @@ typedef struct {
     char    mbndmoney           [   8];    char    _mbndmoney           ;    // [long  ,    8] 혼합형_억원(채권)               StartPos 136, Length 8
     char    bndmoney            [   8];    char    _bndmoney            ;    // [long  ,    8] 채권형_억원                     StartPos 145, Length 8
     char    bndsmoney           [   8];    char    _bndsmoney           ;    // [long  ,    8] 필러(구.단기채권)               StartPos 154, Length 8
-    char    mmfmoney            [   8];    char    _mmfmoney            ;    // [long  ,    8] MMF_억원(주식)                  StartPos 163, Length 8
+    char    mmfmsoney            [   8];    char    _mmfmoney            ;    // [long  ,    8] MMF_억원(주식)                  StartPos 163, Length 8
 } T8428OutBlock1;
+
+//------------------------------------------------------------------------------
+// 지수선물 조회 API용 (t8432)
+//------------------------------------------------------------------------------
+typedef struct {
+    char    gubun               [   1];    // [string,    1] 구분                            StartPos 0, Length 1
+} T8432InBlock;
+
+typedef struct {
+    char    hname               [  20];    // [string,   20] 종목명                          StartPos 0, Length 20
+    char    shcode              [   8];    // [string,    8] 단축코드                        StartPos 20, Length 8
+    char    expcode             [  12];    // [string,   12] 확장코드                        StartPos 28, Length 12
+    char    uplmtprice          [   6];    // [float ,  6.2] 상한가                          StartPos 40, Length 6
+    char    dnlmtprice          [   6];    // [float ,  6.2] 하한가                          StartPos 46, Length 6
+    char    jnilclose           [   6];    // [float ,  6.2] 전일종가                        StartPos 52, Length 6
+    char    jnilhigh            [   6];    // [float ,  6.2] 전일고가                        StartPos 58, Length 6
+    char    jnillow             [   6];    // [float ,  6.2] 전일저가                        StartPos 64, Length 6
+    char    recprice            [   6];    // [float ,  6.2] 기준가                          StartPos 70, Length 6
+} T8432OutBlock;
 
 //------------------------------------------------------------------------------
 // 주식종목조회 API용 (t8436)

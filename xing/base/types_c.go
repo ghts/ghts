@@ -908,7 +908,7 @@ type CFOAT00100OutBlock2 struct {
 }
 type CFOAT00100OutBlock struct {
 	OutBlock1	CFOAT00100OutBlock1
-	OutBlock2	CFOAT00200OutBlock2
+	OutBlock2	CFOAT00100OutBlock2
 }
 
 type CFOAT00200InBlock1 struct {
@@ -958,7 +958,7 @@ type CFOAT00200OutBlock2 struct {
 }
 type CFOAT00200OutBlock struct {
 	OutBlock1	CFOAT00200OutBlock1
-	OutBlock2	CFOAT00200OutBlock2
+	OutBlock2	CFOAT00100OutBlock2
 }
 
 type CFOAT00300InBlock1 struct {
@@ -1004,7 +1004,7 @@ type CFOAT00300OutBlock2 struct {
 }
 type CFOAT00300OutBlock struct {
 	OutBlock1	CFOAT00300OutBlock1
-	OutBlock2	CFOAT00200OutBlock2
+	OutBlock2	CFOAT00100OutBlock2
 }
 
 type CFOAQ00600InBlock1 struct {
@@ -3068,8 +3068,23 @@ type T8428OutBlock1 struct {
 	X_bndmoney	byte
 	Bndsmoney	[8]byte
 	X_bndsmoney	byte
-	Mmfmoney	[8]byte
+	Mmfmsoney	[8]byte
 	X_mmfmoney	byte
+}
+
+type T8432InBlock struct {
+	Gubun [1]byte
+}
+type T8432OutBlock struct {
+	Hname		[20]byte
+	Shcode		[8]byte
+	Expcode		[12]byte
+	Uplmtprice	[6]byte
+	Dnlmtprice	[6]byte
+	Jnilclose	[6]byte
+	Jnilhigh	[6]byte
+	Jnillow		[6]byte
+	Recprice	[6]byte
 }
 
 type T8436InBlock struct {

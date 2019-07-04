@@ -360,6 +360,9 @@ func f조회_및_주문_질의_처리(질의값 lib.I질의값) (식별번호 in
 
 		c데이터 = unsafe.Pointer(xt.NewT8428InBlock(질의값.(*xt.T8428_증시주변_자금추이_질의값)))
 		길이 = xt.SizeT8428InBlock
+	case xt.TR지수선물_마스터_조회_t8432:
+		c데이터 = unsafe.Pointer(xt.NewT8432InBlock(질의값.(*lib.S질의값_문자열)))
+		길이 = xt.SizeT8428InBlock
 	case xt.TR현물_종목_조회_t8436:
 		c데이터 = unsafe.Pointer(xt.NewT8436InBlock(질의값.(*lib.S질의값_문자열)))
 		길이 = xt.SizeT8436InBlock

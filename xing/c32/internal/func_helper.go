@@ -283,6 +283,11 @@ func f자료형_문자열_해석(g *xt.TR_DATA) (자료형_문자열 string, 에
 		case 길이%xt.SizeT8428OutBlock1 == 0:
 			return xt.P자료형_T8428OutBlock1, nil
 		}
+	case xt.TR지수선물_마스터_조회_t8432:
+		switch {
+		case 길이%xt.SizeT8432OutBlock == 0:
+			return xt.P자료형_T8432OutBlock, nil
+		}
 	case xt.TR현물_종목_조회_t8436:
 		if 길이%xt.SizeT8436OutBlock == 0 {
 			return xt.P자료형_T8436OutBlock, nil
