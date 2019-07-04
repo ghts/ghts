@@ -3,6 +3,7 @@ module github.com/ghts/ghts
 go 1.12
 
 require (
+	github.com/go-ole/go-ole v1.2.4
 	github.com/mitchellh/go-ps v0.0.0-20170309133038-4fdf99ab2936
 	github.com/ugorji/go/codec v1.1.5-pre
 	golang.org/x/sys v0.0.0-20190621203818-d432491b9138
