@@ -228,6 +228,10 @@ const (
 	P주소_Xing_실시간
 	P주소_Xing_C함수_콜백
 	P주소_Xing_C함수_호출
+	P주소_신한_TR
+	P주소_신한_실시간
+	P주소_신한_C함수_콜백
+	P주소_신한_C함수_호출
 )
 
 type T주소 int

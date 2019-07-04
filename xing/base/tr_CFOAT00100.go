@@ -67,15 +67,15 @@ type CFOAT00100_선물옵션_정상주문_응답1 struct {
 	//M통신매체     T통신매체구분
 	M협의매매완료시각 time.Time
 	//M그룹ID     T증권그룹	// 그룹ID(GroupID) - 모두 SPACE 입니다.
-	M주문번호    int64
-	M포트폴리오번호 int64
-	M바스켓번호   int64
-	M트렌치번호   int64
-	M항목번호    int64
-	M운용지시번호  string
-	M관리사원번호  string
-	M펀드ID    string
-	M펀드주문번호  int64
+	//M주문번호    int64
+	//M포트폴리오번호 int64
+	//M바스켓번호   int64
+	//M트렌치번호   int64
+	//M항목번호    int64
+	//M운용지시번호  string
+	//M관리사원번호  string
+	//M펀드ID    string
+	//M펀드주문번호  int64
 }
 
 type CFOAT00100_선물옵션_정상주문_응답2 struct {
@@ -139,15 +139,15 @@ func newCFOAT00100_선물옵션_정상주문_응답1(b []byte) (값 *CFOAT00100_
 	값.M주문수량 = lib.F2정수64_단순형(g.OrdQty)
 	//값.M통신매체 = T통신매체구분(lib.F2정수_단순형(g.CommdaCode))
 	값.M협의매매완료시각 = lib.F2일자별_시각_단순형_공백은_초기값(당일.G값(), "150405.99", g.DscusBnsCmpltTime)
-	값.M주문번호 = lib.F2정수64_단순형(g.OrdSeqno)
-	값.M포트폴리오번호 = lib.F2정수64_단순형(g.PtflNo)
-	값.M바스켓번호 = lib.F2정수64_단순형(g.BskNo)
-	값.M트렌치번호 = lib.F2정수64_단순형(g.TrchNo)
-	값.M항목번호 = lib.F2정수64_단순형(g.ItemNo)
-	값.M운용지시번호 = lib.F2문자열_공백제거(g.OpDrtnNo)
-	값.M관리사원번호 = lib.F2문자열_공백제거(g.MgempNo)
-	값.M펀드ID = lib.F2문자열_공백제거(g.FundId)
-	값.M펀드주문번호 = lib.F2정수64_단순형(g.FundOrdNo)
+	//값.M주문번호 = lib.F2정수64_단순형(g.OrdSeqno)
+	//값.M포트폴리오번호 = lib.F2정수64_단순형(g.PtflNo)
+	//값.M바스켓번호 = lib.F2정수64_단순형(g.BskNo)
+	//값.M트렌치번호 = lib.F2정수64_단순형(g.TrchNo)
+	//값.M항목번호 = lib.F2정수64_단순형(g.ItemNo)
+	//값.M운용지시번호 = lib.F2문자열_공백제거(g.OpDrtnNo)
+	//값.M관리사원번호 = lib.F2문자열_공백제거(g.MgempNo)
+	//값.M펀드ID = lib.F2문자열_공백제거(g.FundId)
+	//값.M펀드주문번호 = lib.F2정수64_단순형(g.FundOrdNo)
 
 	return 값, nil
 }

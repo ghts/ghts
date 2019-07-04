@@ -185,7 +185,7 @@ func NewT8428_증시주변자금추이_응답_반복값_모음(b []byte) (값 *T
 		s.M혼합형_주식_억 = lib.F2정수64_단순형(g.Mstkmoney)
 		s.M혼합형_채권_억 = lib.F2정수64_단순형(g.Mbndmoney)
 		s.M채권형_억 = lib.F2정수64_단순형(g.Bndmoney)
-		s.MMF_억 = lib.F2정수64_단순형(g.Mmfmoney)
+		s.MMF_억 = lib.F2정수64_단순형(g.Mmfmsoney)
 
 		값.M배열[i] = s
 	}
