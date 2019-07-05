@@ -31,10 +31,10 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package shinhan_C32
+package s32
 
 //#cgo CFLAGS: -Wall -m32
-//#cgo CXXFLAGS: -Wall -std=c++11
+//#cgo CXXFLAGS: -Wall -m32 -std=c++11
 //#cgo LDFLAGS: -lole32 -lOleAut32 -luuid
 //#include "event_handler.h"
 import "C"
@@ -152,131 +152,131 @@ func (s *S신한API) InvokeArray(Id int, 인수_모음 ...interface{}) (*ole.Saf
 func (s *S신한API) SetSingleData(인덱스 int, 인수_모음 ...interface{}) (bool, error) {
 	인수_모음 = append([]interface{}{인덱스}, 인수_모음...)
 
-	return s.InvokeBool(base.IdSetSingleData, 인수_모음...)
+	return s.InvokeBool(st.IdSetSingleData, 인수_모음...)
 }
 
 func (s *S신한API) SetMultiData(행, 인덱스 int, 인수_모음 ...interface{}) (bool, error) {
 	인수_모음 = append([]interface{}{행, 인덱스}, 인수_모음...)
 
-	return s.InvokeBool(base.IdSetMultiData, 인수_모음...)
+	return s.InvokeBool(st.IdSetMultiData, 인수_모음...)
 }
 
 func (s *S신한API) SetQueryName(쿼리명 string) (bool, error) {
-	return s.InvokeBool(base.IdSetQueryName, 쿼리명)
+	return s.InvokeBool(st.IdSetQueryName, 쿼리명)
 }
 
 func (s *S신한API) GetQueryName() (string, error) {
-	return s.InvokeString(base.IdGetQueryName)
+	return s.InvokeString(st.IdGetQueryName)
 }
 
 func (s *S신한API) RequestData() (int, error) {
-	return s.InvokeInt(base.IdRequestData)
+	return s.InvokeInt(st.IdRequestData)
 }
 
 func (s *S신한API) RequestRTReg(타입, 코드 string) (bool, error) {
-	return s.InvokeBool(base.IdRequestRTReg, 타입, 코드)
+	return s.InvokeBool(st.IdRequestRTReg, 타입, 코드)
 }
 
 func (s *S신한API) UnRequestRTReg(타입, 코드 string) (bool, error) {
-	return s.InvokeBool(base.IdUnRequestRTReg, 타입, 코드)
+	return s.InvokeBool(st.IdUnRequestRTReg, 타입, 코드)
 }
 
 func (s *S신한API) GetSingleData(인덱스 int) (*ole.VARIANT, error) {
-	return s.InvokeVariant(base.IdGetSingleData, 인덱스)
+	return s.InvokeVariant(st.IdGetSingleData, 인덱스)
 }
 
 func (s *S신한API) GetMultiData(행, 인덱스 int) (*ole.VARIANT, error) {
-	return s.InvokeVariant(base.IdGetMultiData, 인덱스)
+	return s.InvokeVariant(st.IdGetMultiData, 인덱스)
 }
 
 func (s *S신한API) GetSingleBlockData() (*ole.SafeArrayConversion, error) {
-	return s.InvokeArray(base.IdGetSingleBlockData)
+	return s.InvokeArray(st.IdGetSingleBlockData)
 }
 
 func (s *S신한API) GetMultiBlockData() (*ole.SafeArrayConversion, error) {
-	return s.InvokeArray(base.IdGetMultiBlockData)
+	return s.InvokeArray(st.IdGetMultiBlockData)
 }
 
 func (s *S신한API) GetSingleRowCount() (int, error) {
-	return s.InvokeInt(base.IdGetSingleRowCount)
+	return s.InvokeInt(st.IdGetSingleRowCount)
 }
 
 func (s *S신한API) GetMultiRowCount() (int, error) {
-	return s.InvokeInt(base.IdGetMultiRowCount)
+	return s.InvokeInt(st.IdGetMultiRowCount)
 }
 
 func (s *S신한API) GetErrorState() (int, error) {
-	return s.InvokeInt(base.IdGetErrorState)
+	return s.InvokeInt(st.IdGetErrorState)
 }
 
 func (s *S신한API) GetErrorCode() (string, error) {
-	return s.InvokeString(base.IdGetErrorCode)
+	return s.InvokeString(st.IdGetErrorCode)
 }
 
 func (s *S신한API) GetErrorMessage() (string, error) {
-	return s.InvokeString(base.IdGetErrorMessage)
+	return s.InvokeString(st.IdGetErrorMessage)
 }
 
 func (s *S신한API) GetCommState() (bool, error) {
-	return s.InvokeBool(base.IdGetCommState)
+	return s.InvokeBool(st.IdGetCommState)
 }
 
 func (s *S신한API) UnRequestRTRegAll() (bool, error) {
-	return s.InvokeBool(base.IdUnRequestRTRegAll)
+	return s.InvokeBool(st.IdUnRequestRTRegAll)
 }
 
 func (s *S신한API) SetRQCount(행_수량 int) {
-	s.InvokeNull(base.IdSetRQCount, 행_수량)
+	s.InvokeNull(st.IdSetRQCount, 행_수량)
 }
 
 func (s *S신한API) ClearReceiveBuffer() {
-	s.InvokeNull(base.IdClearReceiveBuffer)
+	s.InvokeNull(st.IdClearReceiveBuffer)
 }
 
 func (s *S신한API) SelfMemFree(실행_여부 bool) {
-	s.InvokeNull(base.IdSelfMemFree, 실행_여부)
+	s.InvokeNull(st.IdSelfMemFree, 실행_여부)
 }
 
 func (s *S신한API) SetID(ID string) (bool, error) {
-	return s.InvokeBool(base.IdSetID, ID)
+	return s.InvokeBool(st.IdSetID, ID)
 }
 
 func (s *S신한API) GetCodeByName(이름 string) (string, error) {
-	return s.InvokeString(base.IdGetCodeByName, 이름)
+	return s.InvokeString(st.IdGetCodeByName, 이름)
 }
 
 func (s *S신한API) SetSingleEncData(인덱스 int, 데이터 interface{}) (bool, error) {
-	return s.InvokeBool(base.IdSetSingleEncData, 인덱스, 데이터)
+	return s.InvokeBool(st.IdSetSingleEncData, 인덱스, 데이터)
 }
 
 func (s *S신한API) StartIndi(아이디, 암호, 공증암호, 경로 string) (bool, error) {
-	return s.InvokeBool(base.IdStartIndi, 아이디, 암호, 공증암호, 경로)
+	return s.InvokeBool(st.IdStartIndi, 아이디, 암호, 공증암호, 경로)
 }
 
 func (s *S신한API) CloseIndi() (bool, error) {
-	return s.CloseIndi()
+	return s.InvokeBool(st.IdCloseIndi)
 }
 
 func (s *S신한API) GetInputSingleData(질의ID, 인덱스 int) (*ole.VARIANT, error) {
-	return s.InvokeVariant(base.IdGetInputSingleData, 질의ID, 인덱스)
+	return s.InvokeVariant(st.IdGetInputSingleData, 질의ID, 인덱스)
 }
 
 func (s *S신한API) GetInputMultiData(질의ID, 행, 인덱스 int) (*ole.VARIANT, error) {
-	return s.InvokeVariant(base.IdGetInputMultiData, 질의ID, 행, 인덱스)
+	return s.InvokeVariant(st.IdGetInputMultiData, 질의ID, 행, 인덱스)
 }
 
 func (s *S신한API) GetInputTRName(질의ID int) (*ole.VARIANT, error) {
-	return s.InvokeVariant(base.IdGetInputTRName, 질의ID)
+	return s.InvokeVariant(st.IdGetInputTRName, 질의ID)
 }
 
 func (s *S신한API) ReceiveData(조회ID int) {
-	s.InvokeNull(base.IdReceiveData)
+	s.InvokeNull(st.IdReceiveData)
 }
 
 func (s *S신한API) ReceiveRTData(타입 string) {
-	s.InvokeNull(base.IdReceiveRTData)
+	s.InvokeNull(st.IdReceiveRTData)
 }
 
 func (s *S신한API) ReceiveSysMsg(메시지ID int) {
-	s.InvokeNull(base.IdReceiveSysMsg, 메시지ID)
+	s.InvokeNull(st.IdReceiveSysMsg, 메시지ID)
 }

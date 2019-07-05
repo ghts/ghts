@@ -31,57 +31,72 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package shinhan_C32
+package s32
 
+import "C"
 import (
 	"github.com/ghts/ghts/indi/base"
 	"github.com/ghts/ghts/lib"
-	"github.com/go-ole/go-ole"
 	"runtime"
 )
 
 func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
-	ch전달_도우미_초기화 := make([]chan lib.T신호, 2)
+	전달_도우미_수량 := runtime.NumCPU() / 2
+	if 전달_도우미_수량 < 2 {
+		전달_도우미_수량 = 2
+	}
+
+	콜백_도우미_수량 := runtime.NumCPU() / 2
+	if 콜백_도우미_수량 < 2 {
+		콜백_도우미_수량 = 2
+	}
+
+	ch전달_도우미_초기화 := make(chan lib.T신호, 10)
 	ch전달_도우미_종료 := make(chan lib.T신호)
 
 	ch호출_도우미_초기화 := make(chan lib.T신호)
 	ch호출_도우미_종료 := make(chan lib.T신호)
 
-	for i, _ := range ch전달_도우미_초기화 {
-		go go소켓_전달_도우미(ch전달_도우미_초기화[i], ch전달_도우미_종료)
+	ch콜백_도우미_초기화 := make(chan lib.T신호, 10)
+	ch콜백_도우미_종료 := make(chan lib.T신호)
+
+	for i:=0 ; i<전달_도우미_수량 ; i++ {
+		go go소켓_전달_도우미(ch전달_도우미_초기화, ch전달_도우미_종료)
 	}
 
 	go go함수_호출_도우미(ch호출_도우미_초기화, ch호출_도우미_종료)
 
-	for i, _ := range ch전달_도우미_초기화 {
-		lib.F체크포인트(i)
-		<-ch전달_도우미_초기화[i]
-		lib.F체크포인트(i)
+	for i:=0 ; i<콜백_도우미_수량 ; i++ {
+		go go콜백_도우미(ch콜백_도우미_초기화, ch콜백_도우미_종료)
 	}
 
-	lib.F체크포인트()
+	for i:=0 ; i<전달_도우미_수량 ; i++ {
+		<-ch전달_도우미_초기화
+	}
 
 	<-ch호출_도우미_초기화
 
-	lib.F체크포인트()
+	for i:=0 ; i<콜백_도우미_수량 ; i++ {
+		<-ch콜백_도우미_초기화
+	}
 
 	ch종료 := lib.F공통_종료_채널()
-	ch초기화 <- lib.P신호_초기화 // 초기화 완료.
-
-	lib.F체크포인트()
+	ch초기화 <- lib.P신호_초기화
 
 	for {
 		select {
+		case <-ch종료:
+			return nil
 		case <-ch전달_도우미_종료:
-			go go소켓_전달_도우미(ch전달_도우미_초기화[0], ch전달_도우미_종료)
-			<-ch전달_도우미_초기화[0]
+			go go소켓_전달_도우미(ch전달_도우미_초기화, ch전달_도우미_종료)
+			<-ch전달_도우미_초기화
 		case <-ch호출_도우미_종료:
 			go go함수_호출_도우미(ch호출_도우미_초기화, ch호출_도우미_종료)
 			<-ch호출_도우미_초기화
-		case <-ch종료:
-			return nil
+		case <-ch콜백_도우미_종료:
+			go go콜백_도우미(ch콜백_도우미_초기화, ch콜백_도우미_종료)
 		default:
 			lib.F실행권한_양보() // Go언어가 for반복문에서 태스트 스위칭이 잘 안 되는 경우가 있어서 수동으로 해 줌.
 		}
@@ -105,6 +120,7 @@ func go소켓_전달_도우미(ch초기화, ch종료 chan lib.T신호) (에러 e
 
 	ch공통_종료 := lib.F공통_종료_채널()
 	ch초기화 <- lib.P신호_초기화
+
 
 	for {
 		수신값, 에러 = 소켓REP_TR수신.G수신()
@@ -150,6 +166,7 @@ func go함수_호출_도우미(ch초기화, ch종료 chan lib.T신호) {
 	defer runtime.UnlockOSThread()
 
 	COM객체_초기화() // 모든 API 액세스를 단일 스레드에서 하기 위해서 여기에서 API 초기화를 실행함.
+
 	Ch질의 = make(chan *lib.S채널_질의_API, 10)
 	ch공통_종료 := lib.F공통_종료_채널()
 	ch초기화 <- lib.P신호_초기화
@@ -164,40 +181,18 @@ func go함수_호출_도우미(ch초기화, ch종료 chan lib.T신호) {
 	}
 }
 
-func COM객체_초기화() (에러 error) {
-	defer lib.S예외처리{M에러: &에러}.S실행()
-
-	질의 := new(lib.S채널_질의_API)
-	질의.M질의값 = lib.New질의값_기본형(lib.TR초기화, "")
-	질의.Ch회신값 = make(chan interface{}, 0)
-	질의.Ch에러 = make(chan error, 0)
-
-	Ch질의 <- 질의
-
-	select {
-	case <-질의.Ch회신값:
-		return nil
-	case 에러 := <-질의.Ch에러:
-		panic(에러)
-	}
-}
-
 func f질의값_처리(질의 *lib.S채널_질의_API) {
 	var 에러 error
 
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 질의.Ch에러 <- 에러 }}.S실행()
 
 	switch 질의.M질의값.TR구분() {
-	case base.TR초기화:
-		ole.CoInitializeEx(0, ole.COINIT_APARTMENTTHREADED)
-		신한API_초기화()
-		질의.Ch회신값 <- lib.P신호_OK
-	case base.TR종료:
-		신한Indi := 신한API_취득()
-		defer 신한API_반환(신한Indi)
-
-		신한Indi.UnRequestRTRegAll()
-		신한Indi.CloseIndi()
+	case st.TR조회:
+		식별번호 := lib.F확인(f조회_질의_처리(질의.M질의값)).(int)
+		질의.Ch회신값 <- 식별번호
+	case st.TR종료:
+		신한API_실시간.UnRequestRTRegAll()
+		신한API_실시간.CloseIndi()
 
 		질의.Ch회신값 <- lib.P신호_종료
 		Ch메인_종료 <- lib.P신호_종료
@@ -205,4 +200,25 @@ func f질의값_처리(질의 *lib.S채널_질의_API) {
 	default:
 		panic(lib.New에러("예상하지 못한 TR구분값 : '%v'", int(질의.M질의값.TR구분())))
 	}
+}
+
+func f조회_질의_처리(질의값 lib.I질의값) (식별번호 int, 에러 error) {
+	defer lib.S예외처리{M에러: &에러, M함수: func() { 식별번호 = 0 }}.S실행()
+
+	TR코드 := 질의값.(lib.I질의값).TR코드()
+
+	SetQueryName호출_결과 := lib.F확인(신한API_조회.SetQueryName(TR코드)).(bool)
+	lib.F조건부_패닉(!SetQueryName호출_결과, "'%v' : SetQueryName() 실패.", TR코드)
+
+	switch TR코드 {
+	case st.TR현물_종목코드_전체_조회_stock_mst:
+		// 인수 없음.
+	default:
+		panic(lib.New에러("미구현 : '%v'", TR코드))
+	}
+
+	식별번호 = lib.F확인(신한API_조회.RequestData()).(int)
+	lib.F조건부_패닉(식별번호 == 0, "'%v' : RequestData() 실패.", TR코드)
+
+	return 식별번호, nil
 }

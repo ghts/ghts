@@ -1,4 +1,4 @@
-/* Copyright (C) 2015-2019 김운하(UnHa Kim)  unha.kim.ghts@gmail.com
+/* Copyright (C) 2015-2019 김운하(UnHa Kim)  < unha.kim.ghts at gmail dot com >
 
 이 파일은 GHTS의 일부입니다.
 
@@ -15,7 +15,7 @@ GNU LGPL 2.1판은 이 프로그램과 함께 제공됩니다.
 (자유 소프트웨어 재단 : Free Software Foundation, Inc.,
 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA)
 
-Copyright (C) 2015-2019년 UnHa Kim (unha.kim.ghts@gmail.com)
+Copyright (C) 2015-2019년 UnHa Kim (< unha.kim.ghts at gmail dot com >)
 
 This file is part of GHTS.
 
@@ -31,30 +31,22 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package shinhan_C32
+package indi
 
 import (
+	st "github.com/ghts/ghts/indi/base"
 	"github.com/ghts/ghts/lib"
-	"path/filepath"
-	"reflect"
 )
 
-var (
-	신한API_저장소    = make(chan *S신한API, 1)
-	소켓REP_TR수신   = lib.F확인(lib.NewNano소켓REP(lib.P주소_Xing_TR)).(lib.I소켓)
-	소켓PUB_실시간_정보 = lib.F확인(lib.NewNano소켓PUB(lib.P주소_신한_실시간)).(lib.I소켓)
-	소켓REQ_저장소    = lib.New소켓_저장소(20, func() lib.I소켓_질의 {
-		return lib.NewNano소켓REQ_단순형(lib.P주소_신한_C함수_콜백, lib.P30초)
-	})
+func TrStockMst_현물_종목코드_전체_조회() (응답값 *st.Stock_mst_현물_종목코드_조회_응답, 에러 error) {
+	defer lib.S예외처리{M에러: &에러, M함수: func() { 응답값 = nil }}.S실행()
 
-	Ch질의    chan *lib.S채널_질의_API
-	Ch메인_종료 = make(chan lib.T신호, 1)
-)
+	질의값 := lib.New질의값_기본형(lib.TR조회, st.TR현물_종목코드_전체_조회_stock_mst)
+	i응답값, 에러 := F질의_단일TR(질의값)
+	lib.F확인(에러)
 
-// 초기화 이후에는 사실상 읽기 전용이어서, 다중 사용에 문제가 없는 값들.
-var (
-	설정파일_디렉토리 = filepath.Join(lib.GOPATH(), "src", reflect.TypeOf(S신한API{}).PkgPath())
-	설정파일_경로   = filepath.Join(설정파일_디렉토리, "config.ini")
-	계좌번호_모음   []string
-	계좌_비밀번호   string
-)
+	응답값, ok := i응답값.(*st.Stock_mst_현물_종목코드_조회_응답)
+	lib.F조건부_패닉(!ok, "예상하지 못한 자료형 : '%T'", i응답값)
+
+	return 응답값, nil
+}

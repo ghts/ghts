@@ -35,7 +35,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 #include "event_handler.hpp"
 
 // Exported to Go
-void *NewPair() {
+void *NewPair(int TrCodeSn) {
     PairObject *p = new PairObject();
     p->pGiExpert = NewDispatch(CLSID_GiExpert, IID_GiExpert);
     p->pGiExpertEventHandler = new EventHandler();
@@ -49,8 +49,7 @@ void FreeResources(void *pPairObject) {
     PairObject *p = (PairObject*)pPairObject;
     p->pGiExpertEventHandler->Unadvise(p->pGiExpert);
     p->pGiExpert->Release();
-    p->pGiExpertEventHandler->Release();    // 원인을 알 수 없는 에러가 발생함.
-
+//    p->pGiExpertEventHandler->Release();    // 원인을 알 수 없는 에러가 발생함.
     free(p);
 }
 
@@ -153,8 +152,6 @@ HRESULT STDMETHODCALLTYPE EventHandler::QueryInterface(REFIID riid, void **ppv) 
 		return(E_NOINTERFACE);
 	}
 
-	printf("QueryInterface : '%s'\n", GuidToString(riid).c_str());
-
 	*ppv = this;
 	this->AddRef();
 
@@ -198,26 +195,30 @@ HRESULT STDMETHODCALLTYPE EventHandler::GetIDsOfNames(REFIID riid, LPOLESTR *rgs
 
 HRESULT STDMETHODCALLTYPE EventHandler::Invoke(DISPID dispId, REFIID riid, LCID lcid, WORD wFlags,
     DISPPARAMS *pDispParams, VARIANT *pVarResult, EXCEPINFO *pExcepInfo, UINT *puArgErr) {
+
+    printf("EventHandler::Invoke() : '%ld'\n", dispId);
+    printf("EventHandler::Invoke : '%s' '%s'\n", GuidToString(riid).c_str(), GuidToString(this->iid).c_str());
+    printf("'%u', '%u',\n", pDispParams->cArgs, pDispParams->cNamedArgs)
+
 	if (riid != IID_NULL) {
 	    printf("EventHandler::Invoke() : NOT IID_NULL. Unexpected. '%s'\n", GuidToString(riid).c_str());
 		exit(-1);
 		return(DISP_E_UNKNOWNINTERFACE);
 	}
 
-	printf("EventHandler::Invoke() : '%ld'\n", dispId);
-
-    switch (dispId) {
-    case IdReceiveData:
-        printf("EventHandler ReceiveData\n");
-    case IdReceiveRTData:
-        printf("EventHandler IdReceiveRTData\n");
-    case IdReceiveSysMsg:
-        printf("EventHandler IdReceiveSysMsg\n");
-    default:
-        printf("EventHandler::Invoke() : unexpectetd dispId '%ld'\n", dispId);
-    }
-
-	Invoke_Go(dispId, pDispParams->cArgs, pDispParams->rgvarg, pVarResult);
+//    switch (dispId) {
+//    case IdReceiveData:
+//        ReceiveData_Go(this->TrCodeSn, pVarResult)
+//        printf("EventHandler ReceiveData\n");
+//    case IdReceiveRTData:
+//        printf("EventHandler IdReceiveRTData\n");
+//    case IdReceiveSysMsg:
+//        printf("EventHandler IdReceiveSysMsg\n");
+//    default:
+//        printf("EventHandler::Invoke() : unexpectetd dispId '%ld'\n", dispId);
+//    }
+//
+//	Invoke_Go(dispId, pDispParams->cArgs, pDispParams->rgvarg, pVarResult);
 
 	return S_OK;
 }

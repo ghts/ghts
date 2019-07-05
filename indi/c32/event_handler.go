@@ -31,31 +31,36 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package shinhan_C32
+package s32
 
 // #cgo LDFLAGS: -lole32 -lOleAut32 -luuid
 // #include <OaIdl.h>	// #include <windef.h>
 import "C"
 
-import (
-	"github.com/ghts/ghts/indi/base"
-	"github.com/ghts/ghts/lib"
-)
-
-//export Invoke_Go
-func Invoke_Go(c호출ID C.DISPID, c호출_인수_수량 C.uint, c호출_인수_모음, c호출_결과 *C.VARIANT) {
-	호출ID := int(c호출ID)
+//export ReceiveData_Go
+func ReceiveData_Go(조회ID int) {
+	//TR코드 := F정수2코드(int(TR코드_구분번호))
 	//호출_인수_수량 := int(c호출_인수_수량)
 	//호출_인수_모음 := (*[1 << 20]ole.VARIANT)(unsafe.Pointer(c호출_인수_모음))[:호출_인수_수량:호출_인수_수량]
 
-	switch 호출ID {
-	case base.IdReceiveData:
-		panic("TODO : 콜백 ReceiveData.")
-	case base.IdReceiveRTData:
-		panic("TODO : 콜백 ReceiveRTData.")
-	case base.IdReceiveSysMsg:
-		panic("TODO : 콜백 ReceiveSysMsg.")
-	default:
-		panic(lib.New에러with출력("예상하지 못한 콜백 ID : '%v'", 호출ID))
-	}
+	panic("TODO : 콜백 ReceiveData.")
 }
+
+//export ReceiveRTData_Go
+func ReceiveRTData_Go(조회ID int) {
+	//TR코드 := F정수2코드(int(TR코드_구분번호))
+	//호출_인수_수량 := int(c호출_인수_수량)
+	//호출_인수_모음 := (*[1 << 20]ole.VARIANT)(unsafe.Pointer(c호출_인수_모음))[:호출_인수_수량:호출_인수_수량]
+
+	panic("TODO : 콜백 ReceiveRTData.")
+}
+
+//export ReceiveSysMsg_Go
+func ReceiveSysMsg_Go(조회ID int) {
+	//TR코드 := F정수2코드(int(TR코드_구분번호))
+	//호출_인수_수량 := int(c호출_인수_수량)
+	//호출_인수_모음 := (*[1 << 20]ole.VARIANT)(unsafe.Pointer(c호출_인수_모음))[:호출_인수_수량:호출_인수_수량]
+
+	panic("TODO : 콜백 ReceiveSysMsg.")
+}
+

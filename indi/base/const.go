@@ -31,7 +31,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package base
+package st
 
 import "github.com/ghts/ghts/lib"
 
@@ -149,3 +149,217 @@ const (
 	IdReceiveRTData = 0x02
 	IdReceiveSysMsg = 0x03
 )
+
+const (
+	TR현물_종목코드_전체_조회_stock_mst = "stock_mst"
+)
+
+type T업종 uint8
+
+const (
+	P업종_미분류 T업종 = iota
+	P업종_제조업
+	P업종_전기통신
+	P업종_건설
+	P업종_유통서비스
+	P업종_금융
+)
+
+func (p T업종) String() string {
+	switch p {
+	case P업종_미분류:
+		return "미분류"
+	case P업종_제조업:
+		return "제조업"
+	case P업종_전기통신:
+		return "전기 통신"
+	case P업종_건설:
+		return "건설"
+	case P업종_유통서비스:
+		return "유통서비스"
+	case P업종_금융:
+		return "금융"
+	default:
+		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
+	}
+}
+
+type T거래정지_구분 uint8
+
+const (
+	P거래_정상   T거래정지_구분 = 0
+	P거래_정지   T거래정지_구분 = 1
+	P거래_CB발동 T거래정지_구분 = 5
+)
+
+func (p T거래정지_구분) String() string {
+	switch p {
+	case P거래_정상:
+		return "정상"
+	case P거래_정지:
+		return "정지"
+	case P거래_CB발동:
+		return "CB발동"
+	default:
+		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
+	}
+}
+
+type T관리종목_구분 uint8
+
+const (
+	P종목_정상 T관리종목_구분 = iota
+	P종목_관리
+)
+
+func (p T관리종목_구분) String() string {
+	switch p {
+	case P종목_정상:
+		return "정상"
+	case P종목_관리:
+		return "관리"
+	default:
+		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
+	}
+}
+
+type T시장경보_구분 uint8
+
+const (
+	P시장_정상 T시장경보_구분 = iota
+	P시장_주의
+	P시장_경고
+	P시장_위험
+)
+
+func (p T시장경보_구분) String() string {
+	switch p {
+	case P시장_정상:
+		return "정상"
+	case P시장_주의:
+		return "주의"
+	case P시장_경고:
+		return "경고"
+	case P시장_위험:
+		return "위험"
+	default:
+		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
+	}
+}
+
+type T락_구분 uint8
+
+const (
+	P락_미발생 T락_구분 = iota
+	P락_권리락
+	P락_배당락
+	P락_분배락
+	P락_권배락
+	P락_중간배당락
+	P락_권리중간배당락
+	P락_기타 T락_구분 = 99
+)
+
+func (p T락_구분) String() string {
+	switch p {
+	case P락_미발생:
+		return "미발생"
+	case P락_권리락:
+		return "권리락"
+	case P락_배당락:
+		return "배당락"
+	case P락_분배락:
+		return "분배락"
+	case P락_권배락:
+		return "권배락"
+	case P락_중간배당락:
+		return "중간 배당락"
+	case P락_권리중간배당락:
+		return "권리 중간 배당락"
+	case P락_기타:
+		return "기타"
+	default:
+		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
+	}
+}
+
+type ETF_구분 uint8
+
+const (
+	ETF_일반형 ETF_구분 = iota
+	ETF_투자회사형
+	ETF_수익증권형
+)
+
+func String(p ETF_구분) string {
+	switch p {
+	case ETF_일반형:
+		return "일반"
+	case ETF_투자회사형:
+		return "투자회사형"
+	case ETF_수익증권형:
+		return "수익증권형"
+	default:
+		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
+	}
+}
+
+type T증권_그룹 string
+
+const (
+	P증권_주식          T증권_그룹 = "ST"
+	P증권_증권투자회사      T증권_그룹 = "MF"
+	P증권_리츠          T증권_그룹 = "RT"
+	P증권_선박투자회사      T증권_그룹 = "SC"
+	P증권_인프라투융자회사    T증권_그룹 = "IF"
+	P증권_예탁증서        T증권_그룹 = "DR"
+	P증권_신주인수권증권     T증권_그룹 = "SW"
+	P증권_신주인수권증서     T증권_그룹 = "SR"
+	P증권_주식워런트증권_ELW T증권_그룹 = "BW"
+	P증권_선물          T증권_그룹 = "FU"
+	P증권_옵션          T증권_그룹 = "OP"
+	P증권_상장지수펀드_ETF  T증권_그룹 = "EF"
+	P증권_수익증권        T증권_그룹 = "BC"
+	P증권_해외_ETF      T증권_그룹 = "FE"
+	P증권_해외_주식       T증권_그룹 = "FS"
+	P증권_ETN         T증권_그룹 = "EN"
+)
+
+func (p T증권_그룹) String() string {
+	switch p {
+	case P증권_주식:
+		return "주식"
+	case P증권_증권투자회사:
+		return "증권투자회사"
+	case P증권_리츠:
+		return "리츠"
+	case P증권_선박투자회사:
+		return "선박투자회사"
+	case P증권_인프라투융자회사:
+		return "인프라투융자회사"
+	case P증권_예탁증서:
+		return "예탁증서"
+	case P증권_신주인수권증권:
+		return "신주인수권증권"
+	case P증권_신주인수권증서:
+		return "신주인수권증서"
+	case P증권_주식워런트증권_ELW:
+		return "ELW"
+	case P증권_선물:
+		return "선물"
+	case P증권_옵션:
+		return "옵션"
+	case P증권_상장지수펀드_ETF:
+		return "ETF"
+	case P증권_수익증권:
+		return "수익증권"
+	case P증권_해외_ETF:
+		return "해외 ETF"
+	case P증권_해외_주식:
+		return "해외 주식"
+	case P증권_ETN:
+		return "ETN"
+	default:
+		panic(lib.New에러("예상하지 못한 값 : '%v'", string(p)))
+	}
+}

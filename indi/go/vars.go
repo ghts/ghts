@@ -31,48 +31,16 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package shinhan_C32
+package indi
 
-import (
-	"github.com/ghts/ghts/lib"
-	"os"
+import "github.com/ghts/ghts/lib"
+
+var (
+	소켓REP_TR콜백 lib.I소켓Raw
+	소켓REQ_저장소  = lib.New소켓_저장소(20, func() lib.I소켓_질의 {
+		return lib.NewNano소켓REQ_단순형(lib.P주소_Xing_C함수_호출, lib.P30초)
+	})
+	소켓SUB_실시간_정보 lib.I소켓Raw
+
+	대기소_C32 = newC32_콜백_대기_저장소()
 )
-
-func 신한API_초기화_경로() (string, error) {
-	const 실행화일 = "giexpertstarter.exe"
-
-	파일경로, 에러 := lib.F실행파일_검색(실행화일)
-	if 에러 == nil {
-		return 파일경로, nil
-	}
-
-	기본_위치 := `C:\SHINHAN-i\indi\giexpertstarter.exe`
-	if _, 에러 := os.Stat(기본_위치); 에러 == nil {
-		lib.F실행경로_추가(기본_위치)
-
-		if _, 에러 := lib.F실행파일_검색(실행화일); 에러 != nil {
-			return "", lib.New에러("실행경로에 추가시켰으나 여전히 찾을 수 없음.")
-		}
-
-		return 기본_위치, nil
-	}
-
-	파일경로, 에러 = lib.F파일_검색(`C:\`, 실행화일)
-	if 에러 == nil {
-		lib.F실행경로_추가(파일경로)
-
-		if _, 에러 := lib.F실행파일_검색(실행화일); 에러 != nil {
-			return "", lib.New에러("실행경로에 추가시켰으나 여전히 찾을 수 없음.")
-		}
-
-		return 파일경로, nil
-	}
-
-	return "", lib.New에러("초기 경로를 찾을 수 없습니다.")
-}
-
-//func F콜백(콜백값 xt.I콜백) (에러 error) {
-//	ch콜백 <- 콜백값
-//	return nil
-//	//return f콜백_동기식(콜백값)	// 동기식으로 전환할 때 사용.
-//}

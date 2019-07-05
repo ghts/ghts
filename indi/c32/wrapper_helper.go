@@ -31,7 +31,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package shinhan_C32
+package s32
 
 import (
 	"bytes"
@@ -44,18 +44,6 @@ import (
 	"unicode/utf16"
 	"unsafe"
 )
-
-func 신한API_초기화() {
-	신한API_저장소 <- New신한API()
-}
-
-func 신한API_취득() *S신한API {
-	return <-신한API_저장소
-}
-
-func 신한API_반환(신한API *S신한API) {
-	신한API_저장소 <- 신한API
-}
 
 func f2역순_인터페이스_슬라이스(인수_모음 ...interface{}) []interface{} {
 	길이 := len(인수_모음)

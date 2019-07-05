@@ -33,8 +33,31 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
 package s32
 
-import "testing"
+import (
+	"github.com/ghts/ghts/lib"
+	xt "github.com/ghts/ghts/xing/base"
+	"path/filepath"
+	"reflect"
+)
 
-func TestF로그인(t *testing.T) {
+var (
+	신한API_조회, 신한API_실시간 *S신한API
 
-}
+	소켓REP_TR수신   = lib.F확인(lib.NewNano소켓REP(lib.P주소_Xing_TR)).(lib.I소켓)
+	소켓PUB_실시간_정보 = lib.F확인(lib.NewNano소켓PUB(lib.P주소_신한_실시간)).(lib.I소켓)
+	소켓REQ_저장소    = lib.New소켓_저장소(20, func() lib.I소켓_질의 {
+		return lib.NewNano소켓REQ_단순형(lib.P주소_신한_C함수_콜백, lib.P30초)
+	})
+
+	ch콜백    = make(chan xt.I콜백, 100)
+	Ch질의    = make(chan *lib.S채널_질의_API, 10)
+	Ch메인_종료 = make(chan lib.T신호, 1)
+)
+
+// 초기화 이후에는 사실상 읽기 전용이어서, 다중 사용에 문제가 없는 값들.
+var (
+	설정파일_디렉토리 = filepath.Join(lib.GOPATH(), "src", reflect.TypeOf(S신한API{}).PkgPath())
+	설정파일_경로   = filepath.Join(설정파일_디렉토리, "config.ini")
+	계좌번호_모음   []string
+	계좌_비밀번호   string
+)

@@ -31,7 +31,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package shinhan_C32
+package s32
 
 // #cgo CFLAGS: -Wall -m32
 // #include <stdlib.h>
@@ -40,51 +40,21 @@ package shinhan_C32
 import "C"
 import (
 	"github.com/ghts/ghts/lib"
-	"gopkg.in/ini.v1"
-	"path/filepath"
 	"unsafe"
-
-	"bytes"
 )
 
-func New신한API() (신한API *S신한API) {
-	defer lib.S예외처리{M함수: func() { 신한API = nil }}.S실행()
+func New신한API() (s *S신한API) {
+	defer lib.S예외처리{M함수: func() { s = nil }}.S실행()
 
-	// 로그인 정보
-	if lib.F파일_없음(설정파일_경로) {
-		버퍼 := new(bytes.Buffer)
-		버퍼.WriteString("신한증권 설정화일 없음\n")
-		버퍼.WriteString("%v가 존재하지 않습니다.\n")
-		버퍼.WriteString("config.ini.sample를 참조하여 새로 생성하십시오.")
-		panic(lib.New에러(버퍼.String(), 설정파일_경로))
-	}
+	s = new(S신한API)
+	s.C오브젝트_포인터 = uintptr(unsafe.Pointer(C.NewPair()))
 
-	설정파일_복사본_이름 := lib.F2문자열("config_%v.ini", lib.F지금().Format("20060102_150406"))
-	설정파일_복사본_경로 := filepath.Join(설정파일_디렉토리, 설정파일_복사본_이름)
-	lib.F확인(lib.F파일_복사(설정파일_경로, 설정파일_복사본_경로))
-	defer lib.F파일_삭제(설정파일_복사본_경로)
-
-	cfg파일 := lib.F확인(ini.Load(설정파일_복사본_경로)).(*ini.File)
-	섹션 := lib.F확인(cfg파일.GetSection("ShinHan_LogIn_Info")).(*ini.Section)
-
-	아이디 := lib.F확인(섹션.GetKey("ID")).(*ini.Key).String()
-	암호 := lib.F확인(섹션.GetKey("PWD")).(*ini.Key).String()
-	공증_암호 := lib.F확인(섹션.GetKey("CertPWD")).(*ini.Key).String()
-	공증_암호 = lib.F조건부_문자열(lib.F테스트_모드_실행_중(), "", 공증_암호)
-	경로 := lib.F확인(신한API_초기화_경로()).(string)
-
-	신한API = new(S신한API)
-	신한API.C오브젝트_포인터 = uintptr(unsafe.Pointer(C.NewPair()))
-	신한API.StartIndi(아이디, 암호, 공증_암호, 경로)
-
-	return 신한API
+	return s
 }
 
 func F리소스_정리() {
-	신한API := 신한API_취득()
-	defer 신한API_반환(신한API)
-
-	신한API.CloseIndi()
-	C.FreeResources(unsafe.Pointer(신한API.C오브젝트_포인터))
-	신한API.C오브젝트_포인터 = 0
+	신한API_조회.CloseIndi()
+	C.FreeResources(unsafe.Pointer(신한API_조회.C오브젝트_포인터))
+	C.FreeResources(unsafe.Pointer(신한API_실시간.C오브젝트_포인터))
+	lib.F공통_종료_채널_닫기()
 }

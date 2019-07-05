@@ -42,9 +42,9 @@ public:
     REFIID				iid = IID_GiExpertEvents;
     DWORD				dwCookie;
 
-    HRESULT STDMETHODCALLTYPE Unadvise(IDispatch *eventSrc);
+    virtual ~EventHandler();
 
-	virtual ~EventHandler();
+    HRESULT STDMETHODCALLTYPE Unadvise(IDispatch *eventSrc);
 
     // Implements IDispatch
 	HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvc);
@@ -64,7 +64,6 @@ typedef struct {
     IDispatch *pGiExpert;
     EventHandler *pGiExpertEventHandler;
 } PairObject;
-
 
 const int IdSetSingleData      = 0x01;
 const int IdSetMultiData       = 0x02;

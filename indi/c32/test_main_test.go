@@ -31,7 +31,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package shinhan_C32
+package s32
 
 import (
 	"github.com/ghts/ghts/lib"
@@ -45,25 +45,10 @@ func TestMain(m *testing.M) {
 		return
 	}
 
-	lib.F체크포인트()
-
 	f테스트_준비()
-
-	lib.F체크포인트()
-
 	defer f테스트_정리()
 
-	lib.F체크포인트()
-
-	lib.F대기(lib.P10초)
-
-	lib.F체크포인트()
-
-	lib.F공통_종료_채널_닫기()
-
-	lib.F체크포인트()
-
-	//m.Run()
+	m.Run()
 }
 
 func f테스트_준비() {
@@ -74,6 +59,8 @@ func f테스트_준비() {
 }
 
 func f테스트_정리() {
+	defer lib.S예외처리{}.S실행()
+
 	F리소스_정리()
 	lib.F테스트_모드_종료()
 }

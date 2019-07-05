@@ -1,4 +1,4 @@
-/* Copyright (C) 2015-2019 김운하(UnHa Kim)  unha.kim.ghts@gmail.com
+/* Copyright (C) 2015-2019 김운하(UnHa Kim)  < unha.kim.ghts at gmail dot com >
 
 이 파일은 GHTS의 일부입니다.
 
@@ -15,7 +15,7 @@ GNU LGPL 2.1판은 이 프로그램과 함께 제공됩니다.
 (자유 소프트웨어 재단 : Free Software Foundation, Inc.,
 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA)
 
-Copyright (C) 2015-2019년 UnHa Kim (unha.kim.ghts@gmail.com)
+Copyright (C) 2015-2019년 UnHa Kim (< unha.kim.ghts at gmail dot com >)
 
 This file is part of GHTS.
 
@@ -33,8 +33,43 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
 package s32
 
-import "testing"
+import (
+	"github.com/ghts/ghts/lib"
+	xt "github.com/ghts/ghts/xing/base"
+)
 
-func TestF로그인(t *testing.T) {
+func go콜백_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
+	defer lib.S예외처리{M에러: &에러, M함수: func() { ch종료 <- lib.P신호_종료 }}.S실행()
 
+	ch공통_종료 := lib.F공통_종료_채널()
+	ch초기화 <- lib.P신호_초기화
+
+	for {
+		select {
+		case <-ch공통_종료:
+			return nil
+		case i콜백 := <-ch콜백:
+			f콜백_동기식(i콜백)
+		}
+	}
+}
+
+func f콜백_동기식(콜백값 xt.I콜백) (에러 error) {
+	defer lib.S예외처리{M에러: &에러}.S실행()
+
+	소켓REQ := 소켓REQ_저장소.G소켓()
+	defer 소켓REQ_저장소.S회수(소켓REQ)
+
+	i값 := 소켓REQ.G질의_응답_검사(lib.P변환형식_기본값, 콜백값).G해석값_단순형(0)
+
+	switch 값 := i값.(type) {
+	case error:
+		return 값
+	case lib.T신호:
+		lib.F조건부_패닉(값 != lib.P신호_OK, "예상하지 못한 신호값 : '%v'", 값)
+	default:
+		panic(lib.New에러("예상하지 못한 자료형 : '%T'", i값))
+	}
+
+	return nil
 }
