@@ -59,16 +59,9 @@ func F초기화(서버_구분 xt.T서버_구분) (에러 error) {
 }
 
 func f초기화_Go루틴() {
-	고루틴_함수_모음 := []func(chan lib.T신호) error{Go함수_호출, go콜백}
-	ch초기화 := make(chan lib.T신호, len(고루틴_함수_모음))
-
-	for _, 고루틴_함수 := range 고루틴_함수_모음 {
-		go 고루틴_함수(ch초기화)
-	}
-
-	for range 고루틴_함수_모음 {
-		<-ch초기화
-	}
+	ch초기화 := make(chan lib.T신호)
+	go Go루틴_관리(ch초기화)
+	<-ch초기화
 }
 
 func f초기화_서버_접속(서버_구분 xt.T서버_구분) (에러 error) {

@@ -51,17 +51,17 @@ import (
 func F콜백(콜백값 xt.I콜백) (에러 error) {
 	ch콜백 <- 콜백값
 	return nil
-	//return f콜백_동기식(콜백값)	// 동기식으로 전환할 때 사용.
 }
 
-func go콜백(ch초기화 chan lib.T신호) (에러 error) {
+func go콜백_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
+	defer lib.S예외처리{M에러: &에러, M함수: func() { ch종료 <- lib.P신호_종료 }}.S실행()
 
-	ch종료 := lib.F공통_종료_채널()
+	ch공통_종료 := lib.F공통_종료_채널()
 	ch초기화 <- lib.P신호_초기화
 
 	for {
 		select {
-		case <-ch종료:
+		case <-ch공통_종료:
 			return nil
 		case i콜백 := <-ch콜백:
 			f콜백_동기식(i콜백)

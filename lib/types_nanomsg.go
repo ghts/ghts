@@ -223,11 +223,20 @@ func (s *sNano소켓) G수신() (값 *S바이트_변환_모음, 에러 error) {
 		F확인(s.Socket.SetOption(mangos.OptionRecvDeadline, s.타임아웃))
 	}
 
-	바이트_모음 := F확인(s.Socket.Recv()).([]byte)
-	값 = new(S바이트_변환_모음)
-	에러 = 값.UnmarshalBinary(바이트_모음)
-
-	return 값, 에러
+	if 바이트_모음, 에러 := s.Socket.Recv(); 에러 != nil {
+		if 에러.Error() == "connection closed" {
+			return nil, nil
+		} else {
+			return nil, 에러
+		}
+	} else {
+		값 = new(S바이트_변환_모음)
+		if 에러 = 값.UnmarshalBinary(바이트_모음); 에러 != nil {
+			return nil, 에러
+		} else {
+			return 값, nil
+		}
+	}
 }
 
 func (s *sNano소켓) G수신_검사() *S바이트_변환_모음 {

@@ -41,94 +41,150 @@ import (
 	"unsafe"
 )
 
-func Go함수_호출(ch초기화 chan lib.T신호) (에러 error) {
-	if TR_수신_중.G값() {
-		ch초기화 <- lib.P신호_초기화
-		return nil
-	} else if 에러 = TR_수신_중.S값(true); 에러 != nil {
-		ch초기화 <- lib.P신호_초기화
-		return 에러
-	}
-
-	defer TR_수신_중.S값(false)
+func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
-	var 수신값 *lib.S바이트_변환_모음
-	var 질의값 lib.I질의값
-	var ok bool
+	전달_도우미_수량 := runtime.NumCPU() / 2
+	if 전달_도우미_수량 < 2 {
+		전달_도우미_수량 = 2
+	}
 
-	ch도우미_초기화 := make(chan lib.T신호)
-	ch도우미_종료 := make(chan lib.T신호)
-	ch질의값 := make(chan lib.I질의값, 1)
-	ch회신값 := make(chan interface{})
-	ch에러 := make(chan error)
+	콜백_도우미_수량 := runtime.NumCPU() / 2
+	if 콜백_도우미_수량 < 2 {
+		콜백_도우미_수량 = 2
+	}
 
-	go go함수_호출_도우미(ch도우미_초기화, ch도우미_종료, ch질의값, ch회신값, ch에러)
-	<-ch도우미_초기화
+	ch전달_도우미_초기화 := make(chan lib.T신호, 10)
+	ch전달_도우미_종료 := make(chan lib.T신호)
+
+	ch호출_도우미_초기화 := make(chan lib.T신호)
+	ch호출_도우미_종료 := make(chan lib.T신호)
+
+	ch콜백_도우미_초기화 := make(chan lib.T신호, 10)
+	ch콜백_도우미_종료 := make(chan lib.T신호)
+
+	for i:=0 ; i<전달_도우미_수량 ; i++ {
+		go go소켓_전달_도우미(ch전달_도우미_초기화, ch전달_도우미_종료)
+	}
+
+	go go함수_호출_도우미(ch호출_도우미_초기화, ch호출_도우미_종료)
+
+	for i:=0 ; i<콜백_도우미_수량 ; i++ {
+		go go콜백_도우미(ch콜백_도우미_초기화, ch콜백_도우미_종료)
+	}
+
+	for i:=0 ; i<전달_도우미_수량 ; i++ {
+		<-ch전달_도우미_초기화
+	}
+
+	<-ch호출_도우미_초기화
+
+	for i:=0 ; i<콜백_도우미_수량 ; i++ {
+		<-ch콜백_도우미_초기화
+	}
 
 	ch종료 := lib.F공통_종료_채널()
-	ch초기화 <- lib.P신호_초기화 // 초기화 완료.
+	ch초기화 <- lib.P신호_초기화
 
 	for {
-		if 수신값, 에러 = 소켓REP_TR수신.G수신(); 에러 != nil {
-			select {
-			case <-ch종료:
-				return nil
-			default:
-				lib.F에러_출력(에러)
-			}
-
-			continue
-		}
-
-		lib.F조건부_패닉(수신값.G수량() != 1,
-			"잘못된 메시지 길이 : 예상값 1, 실제값 %v.", 수신값.G수량())
-
-		i질의값 := 수신값.S해석기(xt.F바이트_변환값_해석).G해석값_단순형(0)
-		if 질의값, ok = i질의값.(lib.I질의값); !ok {
-			에러 := lib.New에러with출력("'I질의값'형이 아님 : '%T'", i질의값)
-			소켓REP_TR수신.S송신(lib.JSON, 에러)
-			continue
-		}
-
-		ch질의값 <- 질의값
-
 		select {
-		case 회신값 := <-ch회신값:
-			소켓REP_TR수신.S송신(수신값.G변환_형식(0), 회신값)
-		case 에러 := <-ch에러:
-			lib.F에러_출력(에러)
-			소켓REP_TR수신.S송신(lib.JSON, 에러)
-		case <-ch도우미_종료:
-			go go함수_호출_도우미(ch도우미_초기화, ch도우미_종료, ch질의값, ch회신값, ch에러)
-			<-ch도우미_초기화
 		case <-ch종료:
 			return nil
+		case <-ch전달_도우미_종료:
+			go go소켓_전달_도우미(ch전달_도우미_초기화, ch전달_도우미_종료)
+			<-ch전달_도우미_초기화
+		case <-ch호출_도우미_종료:
+			go go함수_호출_도우미(ch호출_도우미_초기화, ch호출_도우미_종료)
+			<-ch호출_도우미_초기화
+		case <-ch콜백_도우미_종료:
+			go go콜백_도우미(ch콜백_도우미_초기화, ch콜백_도우미_종료)
+		default:
+			lib.F실행권한_양보() // Go언어가 for반복문에서 태스트 스위칭이 잘 안 되는 경우가 있어서 수동으로 해 줌.
 		}
-
-		lib.F실행권한_양보()
 	}
 }
 
-// API호출을 단일 스레드에서 수행하기 위한 매개 Go루틴
-func go함수_호출_도우미(ch초기화, ch종료 chan lib.T신호,
-	ch질의값 chan lib.I질의값, ch회신값 chan interface{}, ch에러 chan error) {
+// 질의값을 소켓으로 수신 후 함수 호출 모듈로 전달.
+func go소켓_전달_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
+	defer lib.S예외처리{M에러: &에러, M함수: func() {
+		소켓REP_TR수신.S송신(lib.JSON, 에러)
+		ch종료 <- lib.P신호_종료
+	}}.S실행()
+
+	var 수신값 *lib.S바이트_변환_모음
+	var i질의값 interface{}
+	var ok bool
+
+	질의 := new(lib.S채널_질의_API)
+	질의.Ch회신값 = make(chan interface{}, 0)
+	질의.Ch에러 = make(chan error, 0)
+
+	ch공통_종료 := lib.F공통_종료_채널()
+	ch초기화 <- lib.P신호_초기화
+
+	for {
+		수신값, 에러 = 소켓REP_TR수신.G수신()
+
+		// 종료 신호 수신된 상태이면 종료.
+		select {
+		case <-ch공통_종료:
+			return nil
+		default:
+		}
+
+		// 수신 과정에서 발생한 문제가 있는 지 확인
+		switch {
+		case 에러 != nil:
+			select {
+			case <-ch공통_종료:
+				return
+			default:
+				panic(lib.New에러with출력(에러))
+			}
+		case 수신값.G수량() != 1:
+			panic(lib.New에러with출력("잘못된 메시지 길이 : 예상값 1, 실제값 %v.", 수신값.G수량()))
+		}
+
+		// 질의 수행
+		if 질의.M질의값, ok = 수신값.S해석기(xt.F바이트_변환값_해석).G해석값_단순형(0).(lib.I질의값); !ok {
+			panic(lib.New에러with출력("'I질의값'형이 아님 : '%T'", i질의값))
+		}
+
+		Ch질의 <- 질의
+
+		select {
+		case 회신값 := <-질의.Ch회신값:
+			소켓REP_TR수신.S송신(수신값.G변환_형식(0), 회신값)
+		case 에러 := <-질의.Ch에러:
+			소켓REP_TR수신.S송신(lib.JSON, lib.New에러with출력(에러))
+		case <-ch공통_종료:
+			return nil
+		}
+
+		lib.F실행권한_양보() // Go언어가 for반복문에서 태스트 전환이 잘 안 되는 경우가 있으므로, 수동으로 태스트 전환.
+	}
+}
+
+// API호출을 단일 스레드에서 수행하기 위한 함수 호출 전용 Go루틴
+func go함수_호출_도우미(ch초기화, ch종료 chan lib.T신호) {
 	defer lib.S예외처리{M함수: func() { ch종료 <- lib.P신호_종료 }}.S실행()
 
 	runtime.LockOSThread()
 	defer runtime.UnlockOSThread()
 
 	f초기화_XingAPI() // 모든 API 액세스를 단일 스레드에서 하기 위해서 여기에서 API 초기화를 실행함.
+
 	ch공통_종료 := lib.F공통_종료_채널()
 	ch초기화 <- lib.P신호_초기화
 
 	for {
 		select {
-		case 질의값 := <-ch질의값:
-			f질의값_처리(질의값, ch회신값, ch에러)
+		case 질의 := <-Ch질의:
+			f질의값_처리(질의)
 		case <-ch공통_종료:
 			return
-		default: // PASS
+		default:
+			// PASS
 		}
 
 		F윈도우_메시지_처리()
@@ -136,53 +192,54 @@ func go함수_호출_도우미(ch초기화, ch종료 chan lib.T신호,
 	}
 }
 
-func f질의값_처리(질의값 lib.I질의값, ch회신값 chan interface{}, ch에러 chan error) {
+func f질의값_처리(질의 *lib.S채널_질의_API) {
 	var 에러 error
 
-	defer lib.S예외처리{M에러: &에러, M함수: func() { ch에러 <- 에러 }}.S실행()
+	defer lib.S예외처리{M에러: &에러, M함수: func() { 질의.Ch에러 <- 에러 }}.S실행()
 
-	switch 질의값.TR구분() {
+	switch 질의.M질의값.TR구분() {
 	case xt.TR조회, xt.TR주문:
-		식별번호 := lib.F확인(f조회_및_주문_질의_처리(질의값)).(int)
-		ch회신값 <- 식별번호
+		식별번호 := lib.F확인(f조회_및_주문_질의_처리(질의.M질의값)).(int)
+		질의.Ch회신값 <- 식별번호
 	case xt.TR실시간_정보_구독, xt.TR실시간_정보_해지:
-		lib.F확인(f실시간_정보_구독_해지_처리(질의값))
-		ch회신값 <- lib.P신호_OK
+		lib.F확인(f실시간_정보_구독_해지_처리(질의.M질의값))
+		질의.Ch회신값 <- lib.P신호_OK
 	case xt.TR실시간_정보_일괄_해지:
 		lib.F확인(F실시간_정보_모두_해지())
-		ch회신값 <- lib.P신호_OK
+		질의.Ch회신값 <- lib.P신호_OK
 	case xt.TR접속:
-		서버_구분 := xt.T서버_구분(질의값.(*lib.S질의값_정수).M정수값)
-		ch회신값 <- f접속_처리(서버_구분)
+		서버_구분 := xt.T서버_구분(질의.M질의값.(*lib.S질의값_정수).M정수값)
+		질의.Ch회신값 <- f접속_처리(서버_구분)
 	case xt.TR접속됨:
-		ch회신값 <- F접속됨()
+		질의.Ch회신값 <- F접속됨()
 	case xt.TR서버_이름:
-		ch회신값 <- F서버_이름()
+		질의.Ch회신값 <- F서버_이름()
 	case xt.TR에러_코드:
-		ch회신값 <- F에러_코드()
+		질의.Ch회신값 <- F에러_코드()
 	case xt.TR에러_메시지:
-		ch회신값 <- F에러_메시지(질의값.(*lib.S질의값_정수).M정수값)
+		질의.Ch회신값 <- F에러_메시지(질의.M질의값.(*lib.S질의값_정수).M정수값)
 	case xt.TR계좌_수량:
-		ch회신값 <- F계좌_수량()
+		질의.Ch회신값 <- F계좌_수량()
 	case xt.TR계좌번호_모음:
-		ch회신값 <- F계좌번호_모음()
+		질의.Ch회신값 <- F계좌번호_모음()
 	case xt.TR계좌_이름:
-		ch회신값 <- F계좌_이름(질의값.(*lib.S질의값_문자열).M문자열)
+		질의.Ch회신값 <- F계좌_이름(질의.M질의값.(*lib.S질의값_문자열).M문자열)
 	case xt.TR계좌_상세명:
-		ch회신값 <- F계좌_상세명(질의값.(*lib.S질의값_문자열).M문자열)
+		질의.Ch회신값 <- F계좌_상세명(질의.M질의값.(*lib.S질의값_문자열).M문자열)
 	case xt.TR계좌_별명:
-		ch회신값 <- F계좌_별명(질의값.(*lib.S질의값_문자열).M문자열)
+		질의.Ch회신값 <- F계좌_별명(질의.M질의값.(*lib.S질의값_문자열).M문자열)
 	case xt.TR코드별_전송_제한:
-		ch회신값 <- TR코드별_전송_제한(질의값.(*lib.S질의값_문자열_모음).M문자열_모음)
+		질의.Ch회신값 <- TR코드별_전송_제한(질의.M질의값.(*lib.S질의값_문자열_모음).M문자열_모음)
 	case xt.TR소켓_테스트:
-		ch회신값 <- lib.P신호_OK
+		질의.Ch회신값 <- lib.P신호_OK
 	case xt.TR종료:
 		F리소스_정리()
-		ch회신값 <- lib.P신호_종료
+		질의.Ch회신값 <- lib.P신호_종료
+		lib.F공통_종료_채널_닫기()
 		F회신_중단_종료()
 		Ch메인_종료 <- lib.P신호_종료
 	default:
-		panic(lib.New에러("예상하지 못한 TR구분값 : '%v'", int(질의값.TR구분())))
+		panic(lib.New에러("예상하지 못한 TR구분값 : '%v'", int(질의.M질의값.TR구분())))
 	}
 }
 

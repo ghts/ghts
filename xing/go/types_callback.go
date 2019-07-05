@@ -40,6 +40,14 @@ import (
 	"time"
 )
 
+func newC32_콜백_대기_저장소() *c32_콜백_저장소 {
+	s := new(c32_콜백_저장소)
+	s.저장소 = make(map[int]*c32_콜백_대기_항목)
+	s.최근_정리_시간 = time.Now()
+
+	return s
+}
+
 type c32_콜백_대기_항목 struct {
 	sync.Mutex
 	식별번호   int
@@ -85,14 +93,6 @@ func (s *c32_콜백_대기_항목) S회신() {
 	}
 
 	s.회신_완료 = true
-}
-
-func newC32_콜백_대기_저장소() *c32_콜백_저장소 {
-	s := new(c32_콜백_저장소)
-	s.저장소 = make(map[int]*c32_콜백_대기_항목)
-	s.최근_정리_시간 = time.Now()
-
-	return s
 }
 
 //x32  응답을 기다리는 TR 저장.
