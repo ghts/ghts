@@ -884,28 +884,6 @@ func F디코딩(변환_형식 T변환, 바이트_모음 []byte, 반환값 interf
 
 // 자료형 문자열 값이 실제와 일치하는 지 테스트 케이스에서 확인할 것.
 
-const pInt = "int"
-const pInt64 = "int64"
-const pFloat64 = "float64"
-const pBool = "bool"
-const pString = "string"
-const pStringArray = "[]string"
-const pTime = "Time"
-const pError = "error"
-const pT신호 = "T신호"
-const pS질의값_기본형 = "S질의값_기본형"
-const pS질의값_정수 = "S질의값_정수"
-const pS질의값_문자열 = "S질의값_문자열"
-const pS질의값_문자열_모음 = "S질의값_문자열_모음"
-const pS질의값_바이트_변환 = "S질의값_바이트_변환"
-const pS질의값_바이트_변환_모음 = "S질의값_바이트_변환_모음"
-const pS질의값_단일_종목 = "S질의값_단일_종목"
-const PS질의값_단일종목_연속키 = "S질의값_단일종목_연속키"
-const pS질의값_복수_종목 = "S질의값_복수_종목"
-const pS질의값_정상_주문 = "S질의값_정상_주문"
-const pS질의값_정정_주문 = "S질의값_정정_주문"
-const pS질의값_취소_주문 = "S질의값_취소_주문"
-
 func F바이트_변환값_해석(바이트_변환값 *S바이트_변환) (해석값 interface{}, 에러 error) {
 	var 자료형_문자열 string
 
@@ -914,90 +892,110 @@ func F바이트_변환값_해석(바이트_변환값 *S바이트_변환) (해석
 	자료형_문자열 = 바이트_변환값.G자료형_문자열()
 
 	switch 자료형_문자열 {
-	case pInt:
+	case P자료형_Int:
 		var s int
 		F확인(바이트_변환값.G값(&s))
 		return s, nil
-	case pInt64:
+	case P자료형_Int64:
 		var s int64
 		F확인(바이트_변환값.G값(&s))
 		return s, nil
-	case pFloat64:
+	case P자료형_Float64:
 		var s float64
 		F확인(바이트_변환값.G값(&s))
 		return s, nil
-	case pBool:
+	case P자료형_Bool:
 		var s bool
 		F확인(바이트_변환값.G값(&s))
 		return s, nil
-	case pString:
+	case P자료형_String:
 		var s string
 		F확인(바이트_변환값.G값(&s))
 		return s, nil
-	case pStringArray:
+	case P자료형_StringArray:
 		var s []string
 		F확인(바이트_변환값.G값(&s))
 		return s, nil
-	case pTime:
+	case P자료형_Time:
 		var s time.Time
 		F확인(바이트_변환값.G값(&s))
 		return s, nil
-	case pError:
+	case P자료형_Error:
 		var s error
 		F확인(바이트_변환값.G값(&s))
 		return s, nil
-	case pT신호:
+	case P자료형_T신호:
 		var s T신호
 		F확인(바이트_변환값.G값(&s))
 		return s, nil
-	case pS질의값_기본형:
+	case P자료형_S질의값_기본형:
 		s := new(S질의값_기본형)
 		F확인(바이트_변환값.G값(s))
 		return s, nil
-	case pS질의값_정수:
+	case P자료형_S질의값_정수:
 		s := new(S질의값_정수)
 		F확인(바이트_변환값.G값(s))
 		return s, nil
-	case pS질의값_문자열:
+	case P자료형_S질의값_문자열:
 		s := new(S질의값_문자열)
 		F확인(바이트_변환값.G값(s))
 		return s, nil
-	case pS질의값_문자열_모음:
+	case P자료형_S질의값_문자열_모음:
 		s := new(S질의값_문자열_모음)
 		F확인(바이트_변환값.G값(s))
 		return s, nil
-	case pS질의값_바이트_변환:
+	case P자료형_S질의값_바이트_변환:
 		s := new(S질의값_바이트_변환)
 		s.M바이트_변환 = new(S바이트_변환)
 		F확인(바이트_변환값.G값(s))
 		return s, nil
-	case pS질의값_바이트_변환_모음:
+	case P자료형_S질의값_바이트_변환_모음:
 		s := new(S질의값_바이트_변환_모음)
 		s.M바이트_변환_모음 = new(S바이트_변환_모음)
 		F확인(바이트_변환값.G값(s))
 		return s, nil
-	case pS질의값_단일_종목:
+	case P자료형_S질의값_단일_종목:
 		s := new(S질의값_단일_종목)
 		F확인(바이트_변환값.G값(s))
 		return s, nil
-	case PS질의값_단일종목_연속키:
+	case P자료형_S질의값_단일종목_연속키:
 		s := new(S질의값_단일종목_연속키)
 		F확인(바이트_변환값.G값(s))
 		return s, nil
-	case pS질의값_복수_종목:
+	case P자료형_S질의값_복수_종목:
 		s := new(S질의값_복수_종목)
 		F확인(바이트_변환값.G값(s))
 		return s, nil
-	case pS질의값_정상_주문:
+	case P자료형_S질의값_정상_주문:
 		s := new(S질의값_정상_주문)
 		F확인(바이트_변환값.G값(s))
 		return s, nil
-	case pS질의값_정정_주문:
+	case P자료형_S질의값_정정_주문:
 		s := new(S질의값_정정_주문)
 		F확인(바이트_변환값.G값(s))
 		return s, nil
-	case pS질의값_취소_주문:
+	case P자료형_S질의값_취소_주문:
 		s := new(S질의값_취소_주문)
+		F확인(바이트_변환값.G값(s))
+		return s, nil
+	case P자료형_S콜백_기본형:
+		s := new(S콜백_기본형)
+		F확인(바이트_변환값.G값(s))
+		return s, nil
+	case P자료형_S콜백_정수값:
+		s := New콜백_정수값_기본형()
+		F확인(바이트_변환값.G값(s))
+		return s, nil
+	case P자료형_S콜백_문자열:
+		s := new(S콜백_문자열)
+		F확인(바이트_변환값.G값(s))
+		return s, nil
+	case P자료형_S콜백_TR데이터:
+		s := new(S콜백_TR데이터)
+		F확인(바이트_변환값.G값(s))
+		return s, nil
+	case P자료형_S콜백_메시지_및_에러:
+		s := new(S콜백_메시지_및_에러)
 		F확인(바이트_변환값.G값(s))
 		return s, nil
 	}

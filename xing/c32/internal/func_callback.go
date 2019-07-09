@@ -48,7 +48,7 @@ import (
 	"unsafe"
 )
 
-func F콜백(콜백값 xt.I콜백) (에러 error) {
+func F콜백(콜백값 lib.I콜백) (에러 error) {
 	ch콜백 <- 콜백값
 	return nil
 }
@@ -69,7 +69,7 @@ func go콜백_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 	}
 }
 
-func f콜백_동기식(콜백값 xt.I콜백) (에러 error) {
+func f콜백_동기식(콜백값 lib.I콜백) (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
 	소켓REQ := 소켓REQ_저장소.G소켓()
@@ -129,7 +129,7 @@ func OnTrData_Go(TR데이터 *C.TR_DATA, 데이터_포인터 *C.uchar) {
 	}
 
 	바이트_변환값 := lib.F확인(lib.New바이트_변환Raw(자료형_문자열, raw값, true)).(*lib.S바이트_변환)
-	콜백값 := xt.New콜백_TR데이터(int(g.RequestID), 바이트_변환값, TR코드, 추가_연속조회_필요, 연속키)
+	콜백값 := lib.New콜백_TR데이터(int(g.RequestID), 바이트_변환값, TR코드, 추가_연속조회_필요, 연속키)
 	F콜백(콜백값)
 }
 
@@ -158,8 +158,8 @@ func OnMessageAndError_Go(MSG데이터 *C.MSG_DATA, 데이터_포인터 *C.char)
 		panic(lib.New에러("예상하지 못한 구분값. '%v'", g.SystemError))
 	}
 
-	콜백값 := new(xt.S콜백_메시지_및_에러)
-	콜백값.S콜백_기본형 = xt.New콜백_기본형(xt.P콜백_메시지_및_에러)
+	콜백값 := new(lib.S콜백_메시지_및_에러)
+	콜백값.S콜백_기본형 = lib.New콜백_기본형(lib.P콜백_메시지_및_에러)
 	콜백값.M식별번호 = int(g.RequestID)
 	콜백값.M코드 = lib.F2문자열_공백제거(g.MsgCode)
 	콜백값.M내용 = lib.F2문자열_EUC_KR_공백제거(C.GoBytes(unsafe.Pointer(데이터_포인터), C.int(g.MsgLength)))
@@ -173,7 +173,7 @@ func OnMessageAndError_Go(MSG데이터 *C.MSG_DATA, 데이터_포인터 *C.char)
 //export OnReleaseData_Go
 func OnReleaseData_Go(식별번호 C.int) {
 	f데이터_해제(int(식별번호))
-	F콜백(xt.New콜백_TR완료(int(식별번호)))
+	F콜백(lib.New콜백_TR완료(int(식별번호)))
 }
 
 //export OnRealtimeData_Go
@@ -232,15 +232,15 @@ func OnDisconnected_Go() {
 
 //export OnTimeout_Go
 func OnTimeout_Go(c C.int) {
-	F콜백(xt.New콜백_타임아웃(int(c)))
+	F콜백(lib.New콜백_타임아웃(int(c)))
 }
 
 //export OnLinkData_Go
 func OnLinkData_Go() {
-	F콜백(xt.New콜백_기본형(xt.P콜백_링크_데이터)) // TODO
+	F콜백(lib.New콜백_기본형(lib.P콜백_링크_데이터)) // TODO
 }
 
 //export OnRealtimeDataChart_Go
 func OnRealtimeDataChart_Go() {
-	F콜백(xt.New콜백_기본형(xt.P콜백_실시간_차트_데이터)) // TODO
+	F콜백(lib.New콜백_기본형(lib.P콜백_실시간_차트_데이터)) // TODO
 }

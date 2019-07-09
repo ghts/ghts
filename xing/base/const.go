@@ -153,11 +153,6 @@ const (
 	SizeT8436OutBlock       = int(unsafe.Sizeof(T8436OutBlock{}))
 
 	P자료형_nil                            = "nil"
-	P자료형_S콜백_기본형                        = "S콜백_기본형"
-	P자료형_S콜백_정수값                        = "S콜백_정수값"
-	P자료형_S콜백_문자열                        = "S콜백_문자열"
-	P자료형_S콜백_TR데이터                      = "S콜백_TR데이터"
-	P자료형_S콜백_메시지_및_에러                   = "S콜백_메시지_및_에러"
 	P자료형_S현물_주문_응답_실시간_정보               = "S현물_주문_응답_실시간_정보"
 	P자료형_CFOAQ00600_선물옵션_주문체결내역_질의값     = "CFOAQ00600_선물옵션_주문체결내역_질의값"
 	P자료형_CFOAQ00600OutBlock             = "CFOAQ00600OutBlock"
@@ -1087,39 +1082,6 @@ func (p T시장구분) String() string {
 	panic(lib.F2문자열("예상하지 못한 시장구분. '%v'", p))
 
 	return ""
-}
-
-type T콜백 uint8
-
-const (
-	P콜백_TR데이터 = iota
-	P콜백_메시지_및_에러
-	P콜백_TR완료
-	P콜백_타임아웃
-	P콜백_링크_데이터
-	P콜백_실시간_차트_데이터
-	P콜백_신호
-)
-
-func (p T콜백) String() string {
-	switch p {
-	case P콜백_TR데이터:
-		return "데이터"
-	case P콜백_메시지_및_에러:
-		return "메시지 및 에러"
-	case P콜백_TR완료:
-		return "TR완료"
-	case P콜백_타임아웃:
-		return "타임아웃"
-	case P콜백_링크_데이터:
-		return "링크_데이터"
-	case P콜백_실시간_차트_데이터:
-		return "실시간_차트_데이터"
-	case P콜백_신호:
-		return "신호"
-	default:
-		return lib.F2문자열("예상하지 못한 콜백값 : '%v'", p)
-	}
 }
 
 type T신호_C32 uint8

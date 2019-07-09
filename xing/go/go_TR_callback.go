@@ -85,7 +85,7 @@ func go루틴_콜백_처리_도우미(ch초기화 chan lib.T신호, ch도우미_
 		}
 	}}.S실행()
 
-	var 콜백값 xt.I콜백
+	var 콜백값 lib.I콜백
 	var ok bool
 	var 수신값 *lib.S바이트_변환_모음
 	ch종료 := lib.F공통_종료_채널()
@@ -114,19 +114,19 @@ func go루틴_콜백_처리_도우미(ch초기화 chan lib.T신호, ch도우미_
 
 			i값 := 수신값.S해석기(xt.F바이트_변환값_해석).G해석값_단순형(0)
 
-			콜백값, ok = i값.(xt.I콜백)
+			콜백값, ok = i값.(lib.I콜백)
 			lib.F조건부_패닉(!ok, "'I콜백'형이 아님 : '%T'", i값)
 
 			변환_형식 := 수신값.G변환_형식(0)
 
 			switch 콜백값.G콜백() {
-			case xt.P콜백_TR데이터, xt.P콜백_메시지_및_에러, xt.P콜백_TR완료, xt.P콜백_타임아웃:
+			case lib.P콜백_TR데이터, lib.P콜백_메시지_및_에러, lib.P콜백_TR완료, lib.P콜백_타임아웃:
 				f콜백_TR데이터_처리기(콜백값)
-			case xt.P콜백_신호:
+			case lib.P콜백_신호:
 				if 에러 = f콜백_신호_처리기(콜백값); 에러 != nil {
 					lib.F에러_출력(에러)
 				}
-			case xt.P콜백_링크_데이터, xt.P콜백_실시간_차트_데이터:
+			case lib.P콜백_링크_데이터, lib.P콜백_실시간_차트_데이터:
 				panic("TODO") // 변환값 := 값.(*S콜백_기본형)
 			default:
 				panic(lib.New에러("예상하지 못한 콜백 구분값 : '%v'", 콜백값.G콜백()))

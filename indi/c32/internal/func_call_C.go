@@ -47,14 +47,14 @@ func New신한API() (s *S신한API) {
 	defer lib.S예외처리{M함수: func() { s = nil }}.S실행()
 
 	s = new(S신한API)
-	s.C오브젝트_포인터 = uintptr(unsafe.Pointer(C.NewPair()))
+	C오브젝트_포인터 = uintptr(unsafe.Pointer(C.NewPair()))
 
 	return s
 }
 
 func F리소스_정리() {
-	신한API_조회.CloseIndi()
-	C.FreeResources(unsafe.Pointer(신한API_조회.C오브젝트_포인터))
-	C.FreeResources(unsafe.Pointer(신한API_실시간.C오브젝트_포인터))
+	CloseIndi()
+	C.FreeResources(unsafe.Pointer(C오브젝트_포인터))
+	C.FreeResources(unsafe.Pointer(C오브젝트_포인터))
 	lib.F공통_종료_채널_닫기()
 }

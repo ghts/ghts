@@ -423,6 +423,35 @@ func (v TR응답_구분) String() string {
 }
 
 const (
+	P자료형_Int            = "int"
+	P자료형_Int64          = "int64"
+	P자료형_Float64        = "float64"
+	P자료형_Bool           = "bool"
+	P자료형_String         = "string"
+	P자료형_StringArray    = "[]string"
+	P자료형_Time           = "Time"
+	P자료형_Error          = "error"
+	P자료형_T신호            = "T신호"
+	P자료형_S질의값_기본형       = "S질의값_기본형"
+	P자료형_S질의값_정수        = "S질의값_정수"
+	P자료형_S질의값_문자열       = "S질의값_문자열"
+	P자료형_S질의값_문자열_모음    = "S질의값_문자열_모음"
+	P자료형_S질의값_바이트_변환    = "S질의값_바이트_변환"
+	P자료형_S질의값_바이트_변환_모음 = "S질의값_바이트_변환_모음"
+	P자료형_S질의값_단일_종목     = "S질의값_단일_종목"
+	P자료형_S질의값_단일종목_연속키  = "S질의값_단일종목_연속키"
+	P자료형_S질의값_복수_종목     = "S질의값_복수_종목"
+	P자료형_S질의값_정상_주문     = "S질의값_정상_주문"
+	P자료형_S질의값_정정_주문     = "S질의값_정정_주문"
+	P자료형_S질의값_취소_주문     = "S질의값_취소_주문"
+	P자료형_S콜백_기본형        = "S콜백_기본형"
+	P자료형_S콜백_정수값        = "S콜백_정수값"
+	P자료형_S콜백_문자열        = "S콜백_문자열"
+	P자료형_S콜백_TR데이터      = "S콜백_TR데이터"
+	P자료형_S콜백_메시지_및_에러   = "S콜백_메시지_및_에러"
+)
+
+const (
 	P시장구분_전체 T시장구분 = iota
 	P시장구분_코스피
 	P시장구분_코스닥
@@ -890,5 +919,56 @@ func (t T소켓_종류) String() string {
 		return "PAIR"
 	default:
 		return F2문자열("예상하지 못한 소켓 종류 : '%v'", t)
+	}
+}
+
+type T콜백 uint8
+
+const (
+	P콜백_TR데이터 = iota
+	P콜백_메시지_및_에러
+	P콜백_TR완료
+	P콜백_타임아웃
+	P콜백_링크_데이터
+	P콜백_실시간_차트_데이터
+	P콜백_신호
+)
+
+func (p T콜백) String() string {
+	switch p {
+	case P콜백_TR데이터:
+		return "데이터"
+	case P콜백_메시지_및_에러:
+		return "메시지 및 에러"
+	case P콜백_TR완료:
+		return "TR완료"
+	case P콜백_타임아웃:
+		return "타임아웃"
+	case P콜백_링크_데이터:
+		return "링크_데이터"
+	case P콜백_실시간_차트_데이터:
+		return "실시간_차트_데이터"
+	case P콜백_신호:
+		return "신호"
+	default:
+		return F2문자열("예상하지 못한 콜백값 : '%v'", p)
+	}
+}
+
+type T신호_C32 uint8
+
+const (
+	P신호_C32_READY = iota
+	P신호_C32_종료
+)
+
+func (p T신호_C32) String() string {
+	switch p {
+	case P신호_C32_READY:
+		return "C32 READY"
+	case P신호_C32_종료:
+		return "C32 종료"
+	default:
+		return F2문자열("예상하지 못한 T신호_C32 값 : '%v'", p)
 	}
 }

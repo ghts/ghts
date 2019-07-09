@@ -31,21 +31,52 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package xing
+package s32
 
 import (
 	"github.com/ghts/ghts/lib"
-
+	"os"
 	"testing"
 )
 
-func TestT0151_현물_전일_당일_매매일지_수수료(t *testing.T) {
-	t.Parallel()
+func TestMain(m *testing.M) {
+	if os.Getenv("GOARCH") != "386" {
+		println("32비트 전용 모듈입니다.")
+		return
+	}
 
-	lib.F메모(
-		"\n\n***************************************\n" +
-		"t0151 테스트 작성할 것.\n" +
-		"***************************************\n\n")
+	f테스트_준비()
+	defer f테스트_정리()
 
-	t.SkipNow()
+	m.Run()
+}
+
+func f테스트_준비() {
+	defer lib.S예외처리{}.S실행()
+
+	lib.F테스트_모드_시작()
+	F초기화()
+}
+
+func f테스트_정리() {
+	defer lib.S예외처리{}.S실행()
+
+	F리소스_정리()
+	lib.F테스트_모드_종료()
+}
+
+func go테스트용_TR콜백_수신(ch초기화 chan lib.T신호) {
+	소켓REP_TR콜백 := lib.NewNano소켓REP_단순형(lib.P주소_신한_C함수_콜백)
+
+	ch초기화 <- lib.P신호_초기화
+
+	for {
+		값, 에러 := 소켓REP_TR콜백.G수신()
+		if 에러 != nil {
+			lib.F에러_출력(에러)
+			continue
+		}
+
+		소켓REP_TR콜백.S송신(값.G변환_형식(0), lib.P신호_OK)
+	}
 }

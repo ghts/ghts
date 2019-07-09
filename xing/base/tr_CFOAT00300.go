@@ -126,7 +126,7 @@ func newCFOAT00300_선물옵션_취소주문_응답1(b []byte) (값 *CFOAT00300_
 	값.M레코드갯수 = lib.F2정수_단순형(g.RecCnt)
 	//값.M주문시장 = T주문시장구분(lib.F2정수_단순형(g.OrdMktCode))
 	값.M계좌번호 = lib.F2문자열_공백제거(g.AcntNo)
-	값.M종목코드 = lib.F2문자열(g.FnoIsuNo)
+	값.M종목코드 = lib.F2문자열_공백제거(g.FnoIsuNo)
 	//값.M주문유형 = T주문유형(lib.F2정수_단순형(g.FnoOrdPtnCode))
 	값.M원주문번호 = lib.F2정수64_단순형(g.OrgOrdNo)
 	값.M취소수량 = lib.F2정수64_단순형(g.CancQty)

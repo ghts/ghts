@@ -31,29 +31,45 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package xt
+package s32
 
-import "testing"
+import (
+	st "github.com/ghts/ghts/indi/base"
+	"github.com/ghts/ghts/lib"
+)
 
-func TestI콜백(t *testing.T) {
-	값_모음 := []interface{}{
-		New콜백_기본형(T콜백(0)),
-		New콜백_정수값(T콜백(0), 0),
-		New콜백_문자열(T콜백(0), ""),
-		New콜백_TR데이터(0, nil, "", false, ""),
-		New콜백_메시지("", ""),
-		New콜백_에러("", "")}
+func go콜백_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
+	defer lib.S예외처리{M에러: &에러, M함수: func() { ch종료 <- lib.P신호_종료 }}.S실행()
 
-	for _, 값 := range 값_모음 {
-		f콜백_테스트_도우미(t, 값)
+	ch공통_종료 := lib.F공통_종료_채널()
+	ch초기화 <- lib.P신호_초기화
+
+	for {
+		select {
+		case <-ch공통_종료:
+			return nil
+		case i콜백 := <-ch콜백:
+			f콜백_동기식(i콜백)
+		}
 	}
 }
 
-func f콜백_테스트_도우미(t *testing.T, 값 interface{}) {
-	switch 값.(type) {
-	case I콜백:
-		return
+func f콜백_동기식(콜백값 st.I콜백) (에러 error) {
+	defer lib.S예외처리{M에러: &에러}.S실행()
+
+	소켓REQ := 소켓REQ_저장소.G소켓()
+	defer 소켓REQ_저장소.S회수(소켓REQ)
+
+	i값 := 소켓REQ.G질의_응답_검사(lib.P변환형식_기본값, 콜백값).G해석값_단순형(0)
+
+	switch 값 := i값.(type) {
+	case error:
+		return 값
+	case lib.T신호:
+		lib.F조건부_패닉(값 != lib.P신호_OK, "예상하지 못한 신호값 : '%v'", 값)
+	default:
+		panic(lib.New에러("예상하지 못한 자료형 : '%T'", i값))
 	}
 
-	t.FailNow()
+	return nil
 }

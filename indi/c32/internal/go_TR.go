@@ -97,6 +97,7 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 			<-ch호출_도우미_초기화
 		case <-ch콜백_도우미_종료:
 			go go콜백_도우미(ch콜백_도우미_초기화, ch콜백_도우미_종료)
+			<-ch콜백_도우미_초기화
 		default:
 			lib.F실행권한_양보() // Go언어가 for반복문에서 태스트 스위칭이 잘 안 되는 경우가 있어서 수동으로 해 줌.
 		}
@@ -105,6 +106,9 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 
 // 질의값을 소켓으로 수신 후 함수 호출 모듈로 전달.
 func go소켓_전달_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
+
+	lib.F체크포인트()
+
 	defer lib.S예외처리{M에러: &에러, M함수: func() {
 		소켓REP_TR수신.S송신(lib.JSON, 에러)
 		ch종료 <- lib.P신호_종료
@@ -120,7 +124,6 @@ func go소켓_전달_도우미(ch초기화, ch종료 chan lib.T신호) (에러 e
 
 	ch공통_종료 := lib.F공통_종료_채널()
 	ch초기화 <- lib.P신호_초기화
-
 
 	for {
 		수신값, 에러 = 소켓REP_TR수신.G수신()
@@ -162,6 +165,8 @@ func go소켓_전달_도우미(ch초기화, ch종료 chan lib.T신호) (에러 e
 func go함수_호출_도우미(ch초기화, ch종료 chan lib.T신호) {
 	defer lib.S예외처리{M함수: func() { ch종료 <- lib.P신호_종료 }}.S실행()
 
+	lib.F체크포인트()
+
 	runtime.LockOSThread()
 	defer runtime.UnlockOSThread()
 
@@ -174,6 +179,9 @@ func go함수_호출_도우미(ch초기화, ch종료 chan lib.T신호) {
 	for {
 		select {
 		case 질의 := <-Ch질의:
+
+			lib.F체크포인트()
+
 			f질의값_처리(질의)
 		case <-ch공통_종료:
 			return
@@ -182,6 +190,9 @@ func go함수_호출_도우미(ch초기화, ch종료 chan lib.T신호) {
 }
 
 func f질의값_처리(질의 *lib.S채널_질의_API) {
+
+	lib.F체크포인트()
+
 	var 에러 error
 
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 질의.Ch에러 <- 에러 }}.S실행()
@@ -191,8 +202,8 @@ func f질의값_처리(질의 *lib.S채널_질의_API) {
 		식별번호 := lib.F확인(f조회_질의_처리(질의.M질의값)).(int)
 		질의.Ch회신값 <- 식별번호
 	case st.TR종료:
-		신한API_실시간.UnRequestRTRegAll()
-		신한API_실시간.CloseIndi()
+		UnRequestRTRegAll()
+		CloseIndi()
 
 		질의.Ch회신값 <- lib.P신호_종료
 		Ch메인_종료 <- lib.P신호_종료
@@ -205,9 +216,11 @@ func f질의값_처리(질의 *lib.S채널_질의_API) {
 func f조회_질의_처리(질의값 lib.I질의값) (식별번호 int, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 식별번호 = 0 }}.S실행()
 
+	lib.F체크포인트()
+
 	TR코드 := 질의값.(lib.I질의값).TR코드()
 
-	SetQueryName호출_결과 := lib.F확인(신한API_조회.SetQueryName(TR코드)).(bool)
+	SetQueryName호출_결과 := lib.F확인(SetQueryName(TR코드)).(bool)
 	lib.F조건부_패닉(!SetQueryName호출_결과, "'%v' : SetQueryName() 실패.", TR코드)
 
 	switch TR코드 {
@@ -217,7 +230,7 @@ func f조회_질의_처리(질의값 lib.I질의값) (식별번호 int, 에러 e
 		panic(lib.New에러("미구현 : '%v'", TR코드))
 	}
 
-	식별번호 = lib.F확인(신한API_조회.RequestData()).(int)
+	식별번호 = lib.F확인(RequestData()).(int)
 	lib.F조건부_패닉(식별번호 == 0, "'%v' : RequestData() 실패.", TR코드)
 
 	return 식별번호, nil

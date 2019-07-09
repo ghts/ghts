@@ -39,13 +39,13 @@ import (
 	"strings"
 )
 
-func f콜백_TR데이터_처리기(값 xt.I콜백) (에러 error) {
+func f콜백_TR데이터_처리기(값 lib.I콜백) (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
 	식별번호, 대기_항목, TR코드 := f콜백_데이터_식별번호(값)
 
 	if 식별번호 == 0 || 대기_항목 == nil || TR코드 == "" {
-		if 값.G콜백() == xt.P콜백_타임아웃 {
+		if 값.G콜백() == lib.P콜백_타임아웃 {
 			lib.F체크포인트()
 			return nil
 		}
@@ -61,8 +61,8 @@ func f콜백_TR데이터_처리기(값 xt.I콜백) (에러 error) {
 	defer 대기_항목.Unlock()
 
 	switch 값.G콜백() {
-	case xt.P콜백_TR데이터:
-		if 에러 = f콜백_데이터_복원(대기_항목, 값.(*xt.S콜백_TR데이터).M데이터); 에러 != nil && 대기_항목.에러 == nil {
+	case lib.P콜백_TR데이터:
+		if 에러 = f콜백_데이터_복원(대기_항목, 값.(*lib.S콜백_TR데이터).M데이터); 에러 != nil && 대기_항목.에러 == nil {
 			switch {
 			case strings.Contains(에러.Error(), "New현물_정정_주문_응답2() : 주문번호 생성 에러"),
 				strings.Contains(에러.Error(), "New현물_취소_주문_응답2() : 주문번호 생성 에러"):
@@ -73,20 +73,20 @@ func f콜백_TR데이터_처리기(값 xt.I콜백) (에러 error) {
 		}
 
 		// 연속키가 데이터에 포함되지 않는 경우, 연속키를 전달하기 위한 추가 처리가 필요함.
-		f콜백_데이터_추가_설정(대기_항목, 값.(*xt.S콜백_TR데이터))
-	case xt.P콜백_메시지_및_에러:
-		변환값 := 값.(*xt.S콜백_메시지_및_에러)
+		f콜백_데이터_추가_설정(대기_항목, 값.(*lib.S콜백_TR데이터))
+	case lib.P콜백_메시지_및_에러:
+		변환값 := 값.(*lib.S콜백_메시지_및_에러)
 
 		if f에러_발생(TR코드, 변환값.M코드, 변환값.M내용) {
-			if !strings.Contains(변환값.M내용, "주문이 접수 대기 상태입니다") {
+			if !strings.Contains(변환값.M내용, "주문이 접수 대기 상태입니다")  {
 				대기_항목.에러 = lib.New에러("%s : %s : %s", 대기_항목.TR코드, 변환값.M코드, 변환값.M내용)
 			}
 		}
 
 		대기_항목.메시지_수신 = true
-	case xt.P콜백_TR완료:
+	case lib.P콜백_TR완료:
 		대기_항목.응답_완료 = true
-	case xt.P콜백_타임아웃:
+	case lib.P콜백_타임아웃:
 		대기_항목.에러 = lib.New에러with출력("타임아웃.")
 	default:
 		panic(lib.New에러with출력("예상하지 못한 경우. 콜백 구분값 : '%v', 자료형 : '%T'", 값.G콜백(), 값))
@@ -105,13 +105,13 @@ func f콜백_TR데이터_처리기(값 xt.I콜백) (에러 error) {
 	return
 }
 
-func f콜백_데이터_식별번호(값 xt.I콜백) (식별번호 int, 대기_항목 *c32_콜백_대기_항목, TR코드 string) {
+func f콜백_데이터_식별번호(값 lib.I콜백) (식별번호 int, 대기_항목 *c32_콜백_대기_항목, TR코드 string) {
 	switch 변환값 := 값.(type) {
-	case *xt.S콜백_TR데이터:
+	case *lib.S콜백_TR데이터:
 		식별번호 = 변환값.M식별번호
-	case *xt.S콜백_메시지_및_에러:
+	case *lib.S콜백_메시지_및_에러:
 		식별번호 = 변환값.M식별번호
-	case *xt.S콜백_정수값:
+	case *lib.S콜백_정수값:
 		식별번호 = 변환값.M정수값
 	default:
 		panic(lib.New에러("예상하지 못한 경우. 콜백 구분 : '%v', 자료형 : '%T'", 값.G콜백(), 값))
@@ -151,7 +151,7 @@ func f콜백_데이터_복원(대기_항목 *c32_콜백_대기_항목, 수신값
 	return nil
 }
 
-func f콜백_데이터_추가_설정(대기_항목 *c32_콜백_대기_항목, 콜백_데이터 *xt.S콜백_TR데이터) {
+func f콜백_데이터_추가_설정(대기_항목 *c32_콜백_대기_항목, 콜백_데이터 *lib.S콜백_TR데이터) {
 	switch 대기_항목.TR코드 {
 	case xt.TR현물계좌_잔고내역_조회_CSPAQ12300:
 		if 대기_항목.대기값 != nil {
@@ -168,10 +168,10 @@ func f콜백_데이터_추가_설정(대기_항목 *c32_콜백_대기_항목, �
 	}
 }
 
-func f콜백_신호_처리기(콜백 xt.I콜백) (에러 error) {
+func f콜백_신호_처리기(콜백 lib.I콜백) (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
-	콜백_정수값, ok := 콜백.(*xt.S콜백_정수값)
+	콜백_정수값, ok := 콜백.(*lib.S콜백_정수값)
 	lib.F조건부_패닉(!ok, "예상하지 못한 자료형 : '%T'", 콜백)
 
 	정수값 := 콜백_정수값.M정수값

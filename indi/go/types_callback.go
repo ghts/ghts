@@ -2,7 +2,6 @@ package indi
 
 import (
 	"github.com/ghts/ghts/lib"
-	xt "github.com/ghts/ghts/xing/base"
 	"sync"
 	"time"
 )
@@ -30,14 +29,16 @@ type c32_콜백_대기_항목 struct {
 }
 
 func (s *c32_콜백_대기_항목) G회신값() interface{} {
-	switch 변환값 := s.대기값.(type) {
-	case *xt.S이중_응답_일반형:
-		return 변환값.G값(s.TR코드)
-	case *xt.S헤더_반복값:
-		return 변환값.G값(s.TR코드)
-	default:
-		return s.대기값
-	}
+	return s.대기값
+
+	//switch 변환값 := s.대기값.(type) {
+	//case *st.S이중_응답_일반형:
+	//	return 변환값.G값(s.TR코드)
+	//case *st.S헤더_반복값:
+	//	return 변환값.G값(s.TR코드)
+	//default:
+	//	return s.대기값
+	//}
 }
 
 func (s *c32_콜백_대기_항목) S회신() {

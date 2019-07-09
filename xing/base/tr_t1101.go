@@ -94,11 +94,17 @@ func NewT1101_현물_호가_조회_응답(b []byte) (s *T1101_현물_호가_조�
 	g := new(T1101OutBlock)
 	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
 
-	시각_문자열 := lib.F2문자열_공백제거(g.Hotime)
+
 
 	s = new(T1101_현물_호가_조회_응답)
 	s.M종목코드 = lib.F2문자열_공백제거(g.Shcode)
-	s.M시각 = lib.F2일자별_시각_단순형_공백은_초기값(당일.G값(), "150405.999", 시각_문자열[:6]+"."+시각_문자열[6:])
+
+	if 시각_문자열 := lib.F2문자열_공백제거(g.Hotime); len(시각_문자열) <= 6 {
+		s.M시각 = time.Time{}
+	} else {
+		s.M시각 = lib.F2일자별_시각_단순형_공백은_초기값(당일.G값(), "150405.999", 시각_문자열[:6]+"."+시각_문자열[6:])
+	}
+
 	s.M종목명 = lib.F2문자열_EUC_KR(g.Hname)
 	s.M현재가 = lib.F2정수64_단순형(g.Price)
 	s.M전일대비구분 = T전일대비_구분(lib.F2정수64_단순형(g.Sign))

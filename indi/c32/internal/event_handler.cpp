@@ -198,7 +198,7 @@ HRESULT STDMETHODCALLTYPE EventHandler::Invoke(DISPID dispId, REFIID riid, LCID 
 
     printf("EventHandler::Invoke() : '%ld'\n", dispId);
     printf("EventHandler::Invoke : '%s' '%s'\n", GuidToString(riid).c_str(), GuidToString(this->iid).c_str());
-    printf("'%u', '%u',\n", pDispParams->cArgs, pDispParams->cNamedArgs)
+    printf("'%u', '%u',\n", pDispParams->cArgs, pDispParams->cNamedArgs);
 
 	if (riid != IID_NULL) {
 	    printf("EventHandler::Invoke() : NOT IID_NULL. Unexpected. '%s'\n", GuidToString(riid).c_str());

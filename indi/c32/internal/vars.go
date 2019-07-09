@@ -1,4 +1,4 @@
-/* Copyright (C) 2015-2019 김운하(UnHa Kim)  < unha.kim.ghts at gmail dot com >
+/* Copyright (C) 2015-2019 김운하(UnHa Kim)  unha.kim.ghts@gmail.com
 
 이 파일은 GHTS의 일부입니다.
 
@@ -15,7 +15,7 @@ GNU LGPL 2.1판은 이 프로그램과 함께 제공됩니다.
 (자유 소프트웨어 재단 : Free Software Foundation, Inc.,
 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA)
 
-Copyright (C) 2015-2019년 UnHa Kim (< unha.kim.ghts at gmail dot com >)
+Copyright (C) 2015-2019년 UnHa Kim (unha.kim.ghts@gmail.com)
 
 This file is part of GHTS.
 
@@ -34,49 +34,30 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package s32
 
 import (
+	st "github.com/ghts/ghts/indi/base"
 	"github.com/ghts/ghts/lib"
-	"os"
-	"testing"
+	"path/filepath"
+	"reflect"
 )
 
-func TestMain(m *testing.M) {
-	if os.Getenv("GOARCH") != "386" {
-		println("32비트 전용 모듈입니다.")
-		return
-	}
+var (
+	신한API_조회, 신한API_실시간 *S신한API
 
-	f테스트_준비()
-	defer f테스트_정리()
+	소켓REP_TR수신   = lib.F확인(lib.NewNano소켓REP(lib.P주소_신한_TR)).(lib.I소켓)
+	소켓PUB_실시간_정보 = lib.F확인(lib.NewNano소켓PUB(lib.P주소_신한_실시간)).(lib.I소켓)
+	소켓REQ_저장소    = lib.New소켓_저장소(20, func() lib.I소켓_질의 {
+		return lib.NewNano소켓REQ_단순형(lib.P주소_신한_C함수_콜백, lib.P30초)
+	})
 
-	m.Run()
-}
+	ch콜백    = make(chan st.I콜백, 100)
+	Ch질의    = make(chan *lib.S채널_질의_API, 10)
+	Ch메인_종료 = make(chan lib.T신호, 1)
+)
 
-func f테스트_준비() {
-	defer lib.S예외처리{}.S실행()
-
-	lib.F테스트_모드_시작()
-	F초기화()
-}
-
-func f테스트_정리() {
-	defer lib.S예외처리{}.S실행()
-
-	F리소스_정리()
-	lib.F테스트_모드_종료()
-}
-
-func go테스트용_TR콜백_수신(ch초기화 chan lib.T신호) {
-	소켓REP_TR콜백 := lib.NewNano소켓REP_단순형(lib.P주소_Xing_C함수_콜백)
-
-	ch초기화 <- lib.P신호_초기화
-
-	for {
-		값, 에러 := 소켓REP_TR콜백.G수신()
-		if 에러 != nil {
-			lib.F에러_출력(에러)
-			continue
-		}
-
-		소켓REP_TR콜백.S송신(값.G변환_형식(0), lib.P신호_OK)
-	}
-}
+// 초기화 이후에는 사실상 읽기 전용이어서, 다중 사용에 문제가 없는 값들.
+var (
+	설정파일_디렉토리 = filepath.Join(lib.GOPATH(), "src", reflect.TypeOf(S신한API{}).PkgPath())
+	설정파일_경로   = filepath.Join(설정파일_디렉토리, "config.ini")
+	계좌번호_모음   []string
+	계좌_비밀번호   string
+)

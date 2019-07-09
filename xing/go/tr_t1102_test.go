@@ -44,9 +44,7 @@ import (
 func TestT1102_현물_시세_조회(t *testing.T) {
 	t.Parallel()
 
-	지금 := lib.F지금()
-
-	if 지금.Hour() >= 5 && 지금.Hour() < 9 {
+	if lib.F지금().Hour() >= 5 && lib.F지금().Hour() < 9 {
 		t.SkipNow() // 이 시간대에 테스트 에러가 발생함.
 	}
 

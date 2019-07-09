@@ -103,3 +103,26 @@ func TestS질의값_단일종목(t *testing.T) {
 	F테스트_같음(t, 복원값.M코드, 원래값.M코드)
 	F테스트_같음(t, 복원값.M종목코드, 원래값.M종목코드)
 }
+
+func TestI콜백(t *testing.T) {
+	값_모음 := []interface{}{
+		New콜백_기본형(T콜백(0)),
+		New콜백_정수값(T콜백(0), 0),
+		New콜백_문자열(T콜백(0), ""),
+		New콜백_TR데이터(0, nil, "", false, ""),
+		New콜백_메시지("", ""),
+		New콜백_에러("", "")}
+
+	for _, 값 := range 값_모음 {
+		f콜백_테스트_도우미(t, 값)
+	}
+}
+
+func f콜백_테스트_도우미(t *testing.T, 값 interface{}) {
+	switch 값.(type) {
+	case I콜백:
+		return
+	}
+
+	t.FailNow()
+}

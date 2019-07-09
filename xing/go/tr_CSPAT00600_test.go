@@ -90,6 +90,8 @@ func TestCSPAT00600_현물_정상_주문(t *testing.T) {
 	for i := 0; i < 반복_횟수; i++ {
 		응답값, 에러 := TrCSPAT00600_현물_정상주문(질의값_매수)
 
+		lib.F대기(lib.P100밀리초)
+
 		lib.F테스트_에러없음(t, 에러)
 		lib.F테스트_다름(t, 응답값.M응답1, nil)
 		lib.F테스트_같음(t, 응답값.M응답1.M주문수량, 수량)
@@ -155,6 +157,8 @@ func TestCSPAT00600_현물_정상_주문(t *testing.T) {
 
 	for i := 0; i < 반복_횟수; i++ {
 		응답값, 에러 := TrCSPAT00600_현물_정상주문(질의값_매도)
+
+		lib.F대기(lib.P100밀리초)
 
 		lib.F테스트_에러없음(t, 에러)
 		lib.F테스트_다름(t, 응답값.M응답1, nil)

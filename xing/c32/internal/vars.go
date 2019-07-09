@@ -35,8 +35,6 @@ package x32
 
 import (
 	"github.com/ghts/ghts/lib"
-	"github.com/ghts/ghts/xing/base"
-
 	"path/filepath"
 	"reflect"
 	"sync"
@@ -57,7 +55,7 @@ var (
 	cgo잠금    sync.Mutex
 
 	ch로그인   = make(chan bool, 1)
-	ch콜백    = make(chan xt.I콜백, 100)
+	ch콜백    = make(chan lib.I콜백, 100)
 	Ch질의    = make(chan *lib.S채널_질의_API, 10)
 	Ch메인_종료 = make(chan lib.T신호, 1)
 
