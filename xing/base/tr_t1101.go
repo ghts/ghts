@@ -94,8 +94,6 @@ func NewT1101_현물_호가_조회_응답(b []byte) (s *T1101_현물_호가_조�
 	g := new(T1101OutBlock)
 	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
 
-
-
 	s = new(T1101_현물_호가_조회_응답)
 	s.M종목코드 = lib.F2문자열_공백제거(g.Shcode)
 

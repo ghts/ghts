@@ -34,8 +34,8 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package indi
 
 import (
-	"github.com/ghts/ghts/lib"
 	st "github.com/ghts/ghts/indi/base"
+	"github.com/ghts/ghts/lib"
 	xt "github.com/ghts/ghts/xing/base"
 
 	"fmt"

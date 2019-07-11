@@ -79,7 +79,7 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 	ch실시간_데이터_도우미_초기화 := make(chan lib.T신호)
 	ch실시간_데이터_도우미_종료 := make(chan lib.T신호)
 
-	for i:= 0 ; i<TR호출_도우미_수량; i++ {
+	for i := 0; i < TR호출_도우미_수량; i++ {
 		go go_TR호출(ch호출_도우미_초기화, ch호출_도우미_종료)
 	}
 

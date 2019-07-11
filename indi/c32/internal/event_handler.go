@@ -63,4 +63,3 @@ func ReceiveSysMsg_Go(조회ID int) {
 
 	panic("TODO : 콜백 ReceiveSysMsg.")
 }
-
