@@ -192,7 +192,7 @@ func f자료형_문자열_해석(g *xt.TR_DATA) (자료형_문자열 string, 에
 		}
 	case xt.TR시간_조회_t0167:
 		return xt.P자료형_T0167OutBlock, nil
-	case xt.TR체결_미체결_조회_t0425:
+	case xt.TR현물_체결_미체결_조회_t0425:
 		// Non-block 모드는 Occurs데이터 수량을 나타내는 5바이트 추가됨.
 		if 길이 == 0 {
 			return xt.P자료형_nil, nil
@@ -202,6 +202,16 @@ func f자료형_문자열_해석(g *xt.TR_DATA) (자료형_문자열 string, 에
 		}
 
 		return xt.P자료형_T0425OutBlock, nil
+	case xt.TR선물옵션_체결_미체결_조회_t0434:
+		// Non-block 모드는 Occurs데이터 수량을 나타내는 5바이트 추가됨.
+		if 길이 == 0 {
+			return xt.P자료형_nil, nil
+		} else if 길이 < (xt.SizeT0434OutBlock+5) ||
+			(길이-(xt.SizeT0434OutBlock+5))%xt.SizeT0434OutBlock1 != 0 {
+			break
+		}
+
+		return xt.P자료형_T0434OutBlock, nil
 	case xt.TR현물_호가_조회_t1101:
 		return xt.P자료형_T1101OutBlock, nil
 	case xt.TR현물_시세_조회_t1102:

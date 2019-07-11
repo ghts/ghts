@@ -302,6 +302,10 @@ func F바이트_변환값_해석(바이트_변환값 *lib.S바이트_변환) (�
 		s := new(T0425_현물_체결_미체결_조회_질의값)
 		lib.F확인(바이트_변환값.G값(s))
 		return s, nil
+	case P자료형_T0434_선물옵션_체결_미체결_조회_질의값:
+		s := new(T0434_선물옵션_체결_미체결_조회_질의값)
+		lib.F확인(바이트_변환값.G값(s))
+		return s, nil
 	case P자료형_T1101_현물_호가_조회_응답:
 		s := new(T1101_현물_호가_조회_응답)
 		lib.F확인(바이트_변환값.G값(s))
@@ -580,6 +584,8 @@ func F바이트_변환값_해석_Raw(바이트_변환값 *lib.S바이트_변환)
 		return NewT0167_시각_조회_응답(b)
 	case P자료형_T0425OutBlock:
 		return NewT0425_현물_체결_미체결_조회_응답(b)
+	case P자료형_T0434OutBlock:
+		return NewT0434_선물옵션_체결_미체결_조회_응답(b)
 	case P자료형_T1101OutBlock:
 		return NewT1101_현물_호가_조회_응답(b)
 	case P자료형_T1102OutBlock:

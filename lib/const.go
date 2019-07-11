@@ -546,7 +546,7 @@ func (p T매도_매수_구분) String() string {
 	}
 }
 
-func (p *T매도_매수_구분) F해석(값 interface{}) T매도_매수_구분 {
+func (p T매도_매수_구분) F해석(값 interface{}) T매도_매수_구분 {
 	문자열 := F2문자열_EUC_KR_공백제거(값)
 
 	switch 문자열 {

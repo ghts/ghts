@@ -41,8 +41,8 @@ import (
 )
 
 type T0434_선물옵션_체결_미체결_조회_질의값 struct {
+	*lib.S질의값_단일_종목
 	M계좌번호 string
-	M종목코드 string
 	M체결구분 lib.T체결_구분
 	M정렬구분 lib.T정렬_구분
 	M연속키  string
@@ -101,6 +101,10 @@ func NewT0434_선물옵션_체결_미체결_조회_응답(b []byte) (값 *T0434_
 
 	값 = new(T0434_선물옵션_체결_미체결_조회_응답)
 	값.M연속키 = lib.F2문자열_공백제거(버퍼.Next(SizeT0434OutBlock))
+
+	수량 := lib.F2정수_단순형(버퍼.Next(5))
+	lib.F조건부_패닉(버퍼.Len() != 수량*SizeT0434OutBlock1,
+		"예상하지 못한 길이 : '%v' '%v'", 버퍼.Len(), 수량*SizeT0434OutBlock1)
 
 	값.M반복값_모음, 에러 = newT0434_선물옵션_체결_미체결_반복값_모음(버퍼.Bytes())
 	lib.F확인(에러)
