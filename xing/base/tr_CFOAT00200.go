@@ -102,6 +102,8 @@ func NewCFOAT00200InBlock1(질의값 *CFOAT00200_선물옵션_정정주문_질�
 	lib.F바이트_복사_실수(g.OrdPrc[:], 질의값.M주문가격, 2)
 	lib.F바이트_복사_정수(g.MdfyQty[:], 질의값.M정정수량)
 
+	f속성값_초기화(g)
+
 	return g
 }
 

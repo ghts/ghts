@@ -56,6 +56,8 @@ func NewT8432InBlock(질의값 *lib.S질의값_문자열) (g *T8432InBlock) {
 	g = new(T8432InBlock)
 	lib.F바이트_복사_문자열(g.Gubun[:], 질의값.M문자열)
 
+	f속성값_초기화(g)
+
 	return g
 }
 

@@ -151,6 +151,11 @@ type T0425InBlock C.T0425InBlock
 type T0425OutBlock C.T0425OutBlock
 type T0425OutBlock1 C.T0425OutBlock1
 
+// 선물옵션 체결 미체결 조회 (t0434)
+type T0434InBlock C.T0434InBlock
+type T0434OutBlock C.T0434OutBlock
+type T0434OutBlock1 C.T0434OutBlock1
+
 // 현물 현재가 호가 조회 (t1101)
 type T1101InBlock C.T1101InBlock
 type T1101OutBlock C.T1101OutBlock

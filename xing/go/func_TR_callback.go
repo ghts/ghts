@@ -175,10 +175,10 @@ func f콜백_신호_처리기(콜백 lib.I콜백) (에러 error) {
 	lib.F조건부_패닉(!ok, "예상하지 못한 자료형 : '%T'", 콜백)
 
 	정수값 := 콜백_정수값.M정수값
-	신호 := xt.T신호_C32(정수값)
+	신호 := lib.T신호_32비트_모듈(정수값)
 
 	switch 신호 {
-	case xt.P신호_C32_READY, xt.P신호_C32_종료:
+	case lib.P신호_C32_READY, lib.P신호_C32_종료:
 		select {
 		case ch신호_C32_모음[정수값] <- 신호:
 		default:

@@ -95,6 +95,8 @@ func NewCFOAT00300InBlock1(질의값 *CFOAT00300_선물옵션_취소주문_질�
 	lib.F바이트_복사_정수(g.OrgOrdNo[:], 질의값.M원주문번호)
 	lib.F바이트_복사_정수(g.CancQty[:], 질의값.M취소수량)
 
+	f속성값_초기화(g)
+
 	return g
 }
 

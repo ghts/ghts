@@ -198,6 +198,8 @@ func NewCSPAQ12300InBlock(질의값 *CSPAQ12300_현물계좌_잔고내역_질의
 	lib.F바이트_복사_문자열(g.D2balBaseQryTp[:], 질의값.D2잔고기준조회_구분)
 	lib.F바이트_복사_문자열(g.UprcTpCode[:], 질의값.M단가_구분)
 
+	f속성값_초기화(g)
+
 	return g
 }
 

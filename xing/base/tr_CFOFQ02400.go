@@ -130,6 +130,8 @@ func NewCFOFQ02400InBlock1(질의값 *CFOFQ02400_선물옵션_미결제약정_�
 	lib.F바이트_복사_정수(g.RegMktCode[:], int(질의값.M등록시장코드))
 	lib.F바이트_복사_문자열(g.BuyDt[:], 질의값.M매수일자)
 
+	f속성값_초기화(g)
+
 	return g
 }
 

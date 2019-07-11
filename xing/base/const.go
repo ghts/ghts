@@ -111,6 +111,9 @@ const (
 	SizeT0425InBlock        = int(unsafe.Sizeof(T0425InBlock{}))
 	SizeT0425OutBlock       = int(unsafe.Sizeof(T0425OutBlock{}))
 	SizeT0425OutBlock1      = int(unsafe.Sizeof(T0425OutBlock1{}))
+	SizeT0434InBlock        = int(unsafe.Sizeof(T0434InBlock{}))
+	SizeT0434OutBlock       = int(unsafe.Sizeof(T0434OutBlock{}))
+	SizeT0434OutBlock1      = int(unsafe.Sizeof(T0434OutBlock1{}))
 	SizeT1101InBlock        = int(unsafe.Sizeof(T1101InBlock{}))
 	SizeT1101OutBlock       = int(unsafe.Sizeof(T1101OutBlock{}))
 	SizeT1102InBlock        = int(unsafe.Sizeof(T1102InBlock{}))
@@ -1084,24 +1087,6 @@ func (p T시장구분) String() string {
 	return ""
 }
 
-type T신호_C32 uint8
-
-const (
-	P신호_C32_READY = iota
-	P신호_C32_종료
-)
-
-func (p T신호_C32) String() string {
-	switch p {
-	case P신호_C32_READY:
-		return "C32 READY"
-	case P신호_C32_종료:
-		return "C32 종료"
-	default:
-		return lib.F2문자열("예상하지 못한 T신호_C32 값 : '%v'", p)
-	}
-}
-
 type T재무순위_구분 uint8
 
 const (
@@ -1967,8 +1952,6 @@ func (p CFOAQ00600_정렬구분) String() string {
 		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
 	}
 }
-
-type CFOAQ00600_선물옵션호가유형 uint8
 
 type CFOAQ00600_주문구분 uint8
 

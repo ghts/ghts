@@ -142,6 +142,8 @@ func NewCSPAT00600InBlock(질의값 *CSPAT00600_현물_정상_주문_질의값, 
 
 	lib.F바이트_복사_문자열(g.OrdCndiTpCode[:], strconv.Itoa(int(질의값.M주문조건)))
 
+	f속성값_초기화(g)
+
 	return g
 }
 

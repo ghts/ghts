@@ -50,7 +50,7 @@ var (
 	소켓SUB_실시간_정보 lib.I소켓Raw
 
 	ch질의        = make(chan *lib.S작업, 1000)
-	ch신호_C32_모음 []chan xt.T신호_C32
+	ch신호_C32_모음 []chan lib.T신호_32비트_모듈
 
 	대기소_C32 = newC32_콜백_대기_저장소()
 

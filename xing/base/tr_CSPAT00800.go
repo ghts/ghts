@@ -100,6 +100,8 @@ func NewCSPAT00800InBlock(질의값 *lib.S질의값_취소_주문, 비밀번호 
 	lib.F바이트_복사_문자열(g.IsuNo[:], 질의값.M종목코드)
 	lib.F바이트_복사_정수(g.OrdQty[:], 질의값.M주문수량)
 
+	f속성값_초기화(g)
+
 	return g
 }
 

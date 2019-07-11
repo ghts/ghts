@@ -134,6 +134,8 @@ func NewCFOAQ00600InBlock1(질의값 *CFOAQ00600_선물옵션_주문체결내역
 	lib.F바이트_복사_문자열(g.StnlnSeqTp[:], 정렬구분)
 	lib.F바이트_복사_정수(g.CommdaCode[:], 99)
 
+	f속성값_초기화(g)
+
 	return g
 }
 

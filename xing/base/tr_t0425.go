@@ -108,8 +108,8 @@ func NewT0425InBlock(질의값 *T0425_현물_체결_미체결_조회_질의값, 
 	lib.F바이트_복사_문자열(g.Accno[:], 질의값.M계좌번호)
 	lib.F바이트_복사_문자열(g.Passwd[:], 비밀번호)
 	lib.F바이트_복사_문자열(g.Expcode[:], 질의값.M종목코드)
-	lib.F바이트_복사_문자열(g.Chegb[:], lib.F2문자열(int(질의값.M체결구분)))
-	lib.F바이트_복사_문자열(g.Medosu[:], lib.F2문자열(int(질의값.M매도_매수_구분)))
+	lib.F바이트_복사_정수(g.Chegb[:], int(질의값.M체결구분))
+	lib.F바이트_복사_정수(g.Medosu[:], int(질의값.M매도_매수_구분))
 	lib.F바이트_복사_문자열(g.Sortgb[:], 정렬구분)
 	lib.F바이트_복사_문자열(g.Ordno[:], 질의값.M연속키)
 

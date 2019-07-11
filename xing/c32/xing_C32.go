@@ -38,7 +38,7 @@ func main() {
 
 	defer func() {
 		c32.F리소스_정리()
-		c32.F콜백(lib.New콜백_신호(xt.P신호_C32_종료))
+		c32.F콜백(lib.New콜백_신호(lib.P신호_C32_종료))
 	}()
 
 	c32.F초기화(xt.P서버_모의투자)

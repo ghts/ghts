@@ -135,6 +135,8 @@ func NewCSPAQ13700InBlock(질의값 *CSPAQ13700_현물계좌_주문체결내역_
 	lib.F바이트_복사_문자열(g.BkseqTpCode[:], 질의값.M역순구분)
 	lib.F바이트_복사_문자열(g.OrdPtnCode[:], 질의값.M주문유형코드)
 
+	f속성값_초기화(g)
+
 	return g
 }
 

@@ -311,6 +311,24 @@ func (t T신호) String() string {
 	}
 }
 
+type T신호_32비트_모듈 uint8
+
+const (
+	P신호_C32_READY = iota
+	P신호_C32_종료
+)
+
+func (p T신호_32비트_모듈) String() string {
+	switch p {
+	case P신호_C32_READY:
+		return "C32 READY"
+	case P신호_C32_종료:
+		return "C32 종료"
+	default:
+		return F2문자열("예상하지 못한 T신호_32비트_모듈 값 : '%v'", p)
+	}
+}
+
 const (
 	KRW = T통화(byte('K'))
 	USD = T통화(byte('U'))
@@ -525,6 +543,19 @@ func (p T매도_매수_구분) String() string {
 		return "매수"
 	default:
 		return F2문자열("예상하지 못한 값 : %v", int(p))
+	}
+}
+
+func (p *T매도_매수_구분) F해석(값 interface{}) T매도_매수_구분 {
+	문자열 := F2문자열_EUC_KR_공백제거(값)
+
+	switch 문자열 {
+	case P매도.String():
+		return P매도
+	case P매수.String():
+		return P매수
+	default:
+		panic(New에러("예상하지 못한 값 : '%v'", 문자열))
 	}
 }
 
@@ -955,20 +986,3 @@ func (p T콜백) String() string {
 	}
 }
 
-type T신호_C32 uint8
-
-const (
-	P신호_C32_READY = iota
-	P신호_C32_종료
-)
-
-func (p T신호_C32) String() string {
-	switch p {
-	case P신호_C32_READY:
-		return "C32 READY"
-	case P신호_C32_종료:
-		return "C32 종료"
-	default:
-		return F2문자열("예상하지 못한 T신호_C32 값 : '%v'", p)
-	}
-}

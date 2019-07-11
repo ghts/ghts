@@ -105,7 +105,7 @@ func f초기화_서버_접속(서버_구분 xt.T서버_구분) (에러 error) {
 		break
 	}
 
-	F콜백(lib.New콜백_신호(xt.P신호_C32_READY))
+	F콜백(lib.New콜백_신호(lib.P신호_C32_READY))
 
 	fmt.Println("**     C32 READY     **")
 

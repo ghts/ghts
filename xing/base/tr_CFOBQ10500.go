@@ -116,6 +116,8 @@ func NewCFOBQ105000InBlock1(질의값 *CFOBQ10500_선물옵션_예탁금_증거�
 	lib.F바이트_복사_문자열(g.AcntNo[:], 질의값.M계좌번호)
 	lib.F바이트_복사_문자열(g.Pwd[:], 비밀번호)
 
+	f속성값_초기화(g)
+
 	return g
 }
 

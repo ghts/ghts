@@ -43,10 +43,10 @@ import (
 )
 
 func init() {
-	ch신호_C32_모음 = make([]chan xt.T신호_C32, 2)
+	ch신호_C32_모음 = make([]chan lib.T신호_32비트_모듈, 2)
 
 	for i := 0; i < len(ch신호_C32_모음); i++ {
-		ch신호_C32_모음[i] = make(chan xt.T신호_C32, 1)
+		ch신호_C32_모음[i] = make(chan lib.T신호_32비트_모듈, 1)
 	}
 
 	//TR현물_호가_조회_t1101 = "t1101"	// HTS 1101 화면,  DevCenter 소숫점 비교 확인 완료.
@@ -154,7 +154,7 @@ func f초기화_작동_확인() (작동_여부 bool) {
 	ch타임아웃 := time.After(lib.P1분)
 
 	select {
-	case <-ch신호_C32_모음[xt.P신호_C32_READY]: // 서버 접속된 상태임.
+	case <-ch신호_C32_모음[lib.P신호_C32_READY]: // 서버 접속된 상태임.
 	case <-ch타임아웃:
 		lib.F체크포인트("C32 초기화 타임아웃")
 		return false
@@ -299,7 +299,7 @@ func C32_종료() (에러 error) {
 	}()
 
 	select {
-	case <-ch신호_C32_모음[xt.P신호_C32_종료]:
+	case <-ch신호_C32_모음[lib.P신호_C32_종료]:
 	case <-time.After(lib.P1초):
 	}
 
