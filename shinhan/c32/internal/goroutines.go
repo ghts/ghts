@@ -35,7 +35,7 @@ package s32
 
 import "C"
 import (
-	"github.com/ghts/ghts/indi/base"
+	"github.com/ghts/ghts/shinhan/base"
 	"github.com/ghts/ghts/lib"
 	"runtime"
 )

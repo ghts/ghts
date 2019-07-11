@@ -35,11 +35,11 @@ package st
 
 import "github.com/ghts/ghts/lib"
 
-type Stock_mst_현물_종목코드_조회_응답 struct {
-	M배열 []*Stock_mst_현물_종목코드_조회_반복값
+type S현물_종목코드_조회_응답 struct {
+	M배열 []*S현물_종목코드_조회_반복값
 }
 
-type Stock_mst_현물_종목코드_조회_반복값 struct {
+type S현물_종목코드_조회_반복값 struct {
 	M표준코드      string
 	M종목코드      string
 	M장구분       lib.T시장구분 // 0:KOSPI			1:KOSDAQ

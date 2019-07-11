@@ -1,4 +1,4 @@
-package indi
+package sh
 
 import (
 	"github.com/ghts/ghts/lib"

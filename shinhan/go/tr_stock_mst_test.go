@@ -31,10 +31,10 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package indi
+package sh
 
 import (
-	st "github.com/ghts/ghts/indi/base"
+	st "github.com/ghts/ghts/shinhan/base"
 	"github.com/ghts/ghts/lib"
 	"strings"
 	"testing"

@@ -110,6 +110,8 @@ func TR구분_String(v lib.TR구분) string {
 	}
 }
 
+
+
 // Dispatch Interface for GiExpertControl Control
 const (
 	IdSetSingleData      = 0x01
@@ -152,6 +154,15 @@ const (
 
 const (
 	TR현물_종목코드_전체_조회_stock_mst = "stock_mst"
+	TR계좌목록_조회                 = "AccountList"
+
+	RT현물_주문체결 = "AA"
+	RT현물_잔고   = "AD"
+	RT현물_ETF  = "SE"
+)
+
+const (
+	P자료형_S현물_종목코드_조회_응답 = "S현물_종목코드_조회_응답"
 )
 
 type T업종 uint8

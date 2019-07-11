@@ -31,7 +31,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package indi
+package sh
 
 import (
 	"github.com/ghts/ghts/lib"
@@ -80,14 +80,14 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 	ch실시간_데이터_도우미_종료 := make(chan lib.T신호)
 
 	for i := 0; i < TR호출_도우미_수량; i++ {
-		go go_TR호출(ch호출_도우미_초기화, ch호출_도우미_종료)
+		go go_TR호출_도우미(ch호출_도우미_초기화, ch호출_도우미_종료)
 	}
 
 	for i := 0; i < TR콜백_처리기_수량; i++ {
 		go go_TR콜백_처리(ch콜백_처리기_초기화, ch콜백_처리기_종료)
 	}
 
-	go go_실시간_데이터_처리(ch실시간_데이터_도우미_초기화, ch실시간_데이터_도우미_종료)
+	go go실시간_데이터_처리(ch실시간_데이터_도우미_초기화, ch실시간_데이터_도우미_종료)
 
 	for i := 0; i < TR호출_도우미_수량; i++ {
 		<-ch호출_도우미_초기화
@@ -107,13 +107,13 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 		case <-ch종료:
 			return nil
 		case <-ch호출_도우미_종료:
-			go go_TR호출(ch호출_도우미_초기화, ch호출_도우미_종료)
+			go go_TR호출_도우미(ch호출_도우미_초기화, ch호출_도우미_종료)
 			<-ch호출_도우미_초기화
 		case <-ch콜백_처리기_종료:
 			go go_TR콜백_처리(ch콜백_처리기_초기화, ch콜백_처리기_종료)
 			<-ch콜백_처리기_초기화
 		case <-ch콜백_처리기_종료:
-			go go_실시간_데이터_처리(ch실시간_데이터_도우미_초기화, ch실시간_데이터_도우미_종료)
+			go go실시간_데이터_처리(ch실시간_데이터_도우미_초기화, ch실시간_데이터_도우미_종료)
 			<-ch실시간_데이터_도우미_초기화
 		default:
 			lib.F실행권한_양보() // Go언어가 for반복문에서 태스트 스위칭이 잘 안 되는 경우가 있어서 수동으로 해 줌.

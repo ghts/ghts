@@ -1,4 +1,4 @@
-/* Copyright (C) 2015-2019 김운하(UnHa Kim)  < unha.kim.ghts at gmail dot com >
+/* Copyright (C) 2015-2019 김운하(UnHa Kim)  unha.kim.ghts@gmail.com
 
 이 파일은 GHTS의 일부입니다.
 
@@ -15,7 +15,7 @@ GNU LGPL 2.1판은 이 프로그램과 함께 제공됩니다.
 (자유 소프트웨어 재단 : Free Software Foundation, Inc.,
 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA)
 
-Copyright (C) 2015-2019년 UnHa Kim (< unha.kim.ghts at gmail dot com >)
+Copyright (C) 2015-2019년 UnHa Kim (unha.kim.ghts@gmail.com)
 
 This file is part of GHTS.
 
@@ -31,55 +31,23 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package indi
+package sh
 
-import (
-	"github.com/ghts/ghts/lib"
-	"testing"
+import "github.com/ghts/ghts/lib"
+
+var (
+	소켓SUB_실시간_정보 lib.I소켓Raw
+	소켓REP_TR콜백   lib.I소켓Raw
+	소켓REQ_저장소    = lib.New소켓_저장소(20, func() lib.I소켓_질의 {
+		return lib.NewNano소켓REQ_단순형(lib.P주소_신한_C함수_호출, lib.P30초)
+	})
+
+	신한_C32_경로 = lib.GOPATH() + `/src/github.com/ghts/ghts/shinhan/c32/shinhan_C32.bat`
+
+	ch초기화_C32 = make(chan lib.T신호, 1)
+	ch종료_C32  = make(chan lib.T신호, 1)
+
+	대기소_C32 = newC32_콜백_대기_저장소()
+
+	Ch질의 chan *lib.S작업
 )
-
-func TestMain(m *testing.M) {
-	lib.F체크포인트()
-
-	f테스트_준비()
-
-	lib.F체크포인트()
-
-	defer f테스트_정리()
-
-	lib.F체크포인트()
-
-	m.Run()
-
-	lib.F체크포인트()
-}
-
-func f테스트_준비() {
-	defer lib.S예외처리{}.S실행()
-
-	lib.F테스트_모드_시작()
-	F초기화()
-}
-
-func f테스트_정리() {
-	defer lib.S예외처리{}.S실행()
-
-	F리소스_정리()
-	lib.F테스트_모드_종료()
-}
-
-func go테스트용_TR콜백_수신(ch초기화 chan lib.T신호) {
-	소켓REP_TR콜백 := lib.NewNano소켓REP_단순형(lib.P주소_신한_C함수_콜백)
-
-	ch초기화 <- lib.P신호_초기화
-
-	for {
-		값, 에러 := 소켓REP_TR콜백.G수신()
-		if 에러 != nil {
-			lib.F에러_출력(에러)
-			continue
-		}
-
-		소켓REP_TR콜백.S송신(값.G변환_형식(0), lib.P신호_OK)
-	}
-}
