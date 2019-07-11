@@ -35,20 +35,23 @@ package indi
 
 import (
 	"github.com/ghts/ghts/lib"
-	"os"
 	"testing"
 )
 
 func TestMain(m *testing.M) {
-	if os.Getenv("GOARCH") != "386" {
-		println("32비트 전용 모듈입니다.")
-		return
-	}
+	lib.F체크포인트()
 
 	f테스트_준비()
+
+	lib.F체크포인트()
+
 	defer f테스트_정리()
 
+	lib.F체크포인트()
+
 	m.Run()
+
+	lib.F체크포인트()
 }
 
 func f테스트_준비() {

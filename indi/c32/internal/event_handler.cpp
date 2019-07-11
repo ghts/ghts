@@ -35,7 +35,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 #include "event_handler.hpp"
 
 // Exported to Go
-void *NewPair(int TrCodeSn) {
+void *NewPair() {
     PairObject *p = new PairObject();
     p->pGiExpert = NewDispatch(CLSID_GiExpert, IID_GiExpert);
     p->pGiExpertEventHandler = new EventHandler();

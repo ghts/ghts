@@ -53,13 +53,13 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 		콜백_도우미_수량 = 2
 	}
 
-	ch전달_도우미_초기화 := make(chan lib.T신호, 10)
+	ch전달_도우미_초기화 := make(chan lib.T신호, 전달_도우미_수량)
 	ch전달_도우미_종료 := make(chan lib.T신호)
 
 	ch호출_도우미_초기화 := make(chan lib.T신호)
 	ch호출_도우미_종료 := make(chan lib.T신호)
 
-	ch콜백_도우미_초기화 := make(chan lib.T신호, 10)
+	ch콜백_도우미_초기화 := make(chan lib.T신호, 콜백_도우미_수량)
 	ch콜백_도우미_종료 := make(chan lib.T신호)
 
 	for i:=0 ; i<전달_도우미_수량 ; i++ {
@@ -106,9 +106,6 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 
 // 질의값을 소켓으로 수신 후 함수 호출 모듈로 전달.
 func go소켓_전달_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
-
-	lib.F체크포인트()
-
 	defer lib.S예외처리{M에러: &에러, M함수: func() {
 		소켓REP_TR수신.S송신(lib.JSON, 에러)
 		ch종료 <- lib.P신호_종료
@@ -128,6 +125,8 @@ func go소켓_전달_도우미(ch초기화, ch종료 chan lib.T신호) (에러 e
 	for {
 		수신값, 에러 = 소켓REP_TR수신.G수신()
 
+		lib.F체크포인트("수신")
+
 		// 수신 과정에서 발생한 문제가 있는 지 확인
 		switch {
 		case 에러 != nil:
@@ -146,26 +145,30 @@ func go소켓_전달_도우미(ch초기화, ch종료 chan lib.T신호) (에러 e
 			panic(lib.New에러with출력("'I질의값'형이 아님 : '%T'", i질의값))
 		}
 
+		lib.F체크포인트(질의.M질의값)
+
 		Ch질의 <- 질의
+
+		lib.F체크포인트("질의값 전달")
 
 		select {
 		case 회신값 := <-질의.Ch회신값:
+			lib.F체크포인트("회신값 전달됨 : '%v'", 회신값)
 			소켓REP_TR수신.S송신(수신값.G변환_형식(0), 회신값)
 		case 에러 := <-질의.Ch에러:
+			lib.F체크포인트("에러 전달됨 : '%v'", 에러)
 			소켓REP_TR수신.S송신(lib.JSON, lib.New에러with출력(에러))
 		case <-ch공통_종료:
 			return nil
 		}
 
-		lib.F실행권한_양보() // Go언어가 for반복문에서 태스트 전환이 잘 안 되는 경우가 있으므로, 수동으로 태스트 전환.
+		lib.F실행권한_양보() // Go언어가 for 반복문에서 태스트 전환이 잘 안 되는 경우가 있으므로, 수동으로 태스트 전환.
 	}
 }
 
 // API호출을 단일 스레드에서 수행하기 위한 함수 호출 전용 Go루틴
 func go함수_호출_도우미(ch초기화, ch종료 chan lib.T신호) {
 	defer lib.S예외처리{M함수: func() { ch종료 <- lib.P신호_종료 }}.S실행()
-
-	lib.F체크포인트()
 
 	runtime.LockOSThread()
 	defer runtime.UnlockOSThread()
@@ -202,8 +205,8 @@ func f질의값_처리(질의 *lib.S채널_질의_API) {
 		식별번호 := lib.F확인(f조회_질의_처리(질의.M질의값)).(int)
 		질의.Ch회신값 <- 식별번호
 	case st.TR종료:
-		UnRequestRTRegAll()
-		CloseIndi()
+		신한API_조회.UnRequestRTRegAll()
+		신한API_조회.CloseIndi()
 
 		질의.Ch회신값 <- lib.P신호_종료
 		Ch메인_종료 <- lib.P신호_종료
@@ -220,7 +223,7 @@ func f조회_질의_처리(질의값 lib.I질의값) (식별번호 int, 에러 e
 
 	TR코드 := 질의값.(lib.I질의값).TR코드()
 
-	SetQueryName호출_결과 := lib.F확인(SetQueryName(TR코드)).(bool)
+	SetQueryName호출_결과 := lib.F확인(신한API_조회.SetQueryName(TR코드)).(bool)
 	lib.F조건부_패닉(!SetQueryName호출_결과, "'%v' : SetQueryName() 실패.", TR코드)
 
 	switch TR코드 {
@@ -230,7 +233,7 @@ func f조회_질의_처리(질의값 lib.I질의값) (식별번호 int, 에러 e
 		panic(lib.New에러("미구현 : '%v'", TR코드))
 	}
 
-	식별번호 = lib.F확인(RequestData()).(int)
+	식별번호 = lib.F확인(신한API_조회.RequestData()).(int)
 	lib.F조건부_패닉(식별번호 == 0, "'%v' : RequestData() 실패.", TR코드)
 
 	return 식별번호, nil

@@ -54,13 +54,13 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 		콜백_도우미_수량 = 2
 	}
 
-	ch전달_도우미_초기화 := make(chan lib.T신호, 10)
+	ch전달_도우미_초기화 := make(chan lib.T신호, 전달_도우미_수량)
 	ch전달_도우미_종료 := make(chan lib.T신호)
 
 	ch호출_도우미_초기화 := make(chan lib.T신호)
 	ch호출_도우미_종료 := make(chan lib.T신호)
 
-	ch콜백_도우미_초기화 := make(chan lib.T신호, 10)
+	ch콜백_도우미_초기화 := make(chan lib.T신호, 콜백_도우미_수량)
 	ch콜백_도우미_종료 := make(chan lib.T신호)
 
 	for i:=0 ; i<전달_도우미_수량 ; i++ {

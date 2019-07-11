@@ -40,16 +40,12 @@ import (
 )
 
 func TestCFOAQ00600_선물옵션_계좌주문체결내역_조회_질의값(t *testing.T) {
-	t.Parallel()
-
 	_, ok := interface{}(new(xt.CFOAQ00600_선물옵션_주문체결내역_질의값)).(lib.I질의값)
 
 	lib.F테스트_참임(t, ok)
 }
 
 func TestCFOAQ00600_선물옵션_계좌주문체결내역_조회(t *testing.T) {
-	t.Parallel()
-
 	//선물옵션구분_모음 := []xt.CFOAQ00600_선물옵션분류{xt.P선물옵션_전체, xt.P선물, xt.P옵션 }
 	//상품군_모음 := []xt.T선옵_상품군{ xt.P선옵_상품군_전체,
 	//	xt.P선옵_상품군_주가지수, xt.P선옵_상품군_개별주식, xt.P선옵_상품군_가공채권,

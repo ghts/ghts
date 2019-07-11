@@ -103,8 +103,6 @@ func 샘플_선물_종목코드() string {
 }
 
 func TestCFOAT00100_선물옵션_정상주문(t *testing.T) {
-	t.Parallel()
-
 	if !F한국증시_정규시장_거래시간임() {
 		t.SkipNow()
 	}

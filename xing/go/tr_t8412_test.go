@@ -41,8 +41,6 @@ import (
 )
 
 func TestT8412_현물_차트_분(t *testing.T) {
-	t.Parallel()
-
 	const 종목코드 = "069500" // 코덱스200
 	var 이전_일자_시각 time.Time
 

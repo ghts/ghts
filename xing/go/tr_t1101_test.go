@@ -42,8 +42,6 @@ import (
 )
 
 func TestT1101_현물_호가_조회(t *testing.T) {
-	t.Parallel()
-
 	const 종목코드 = "069500" // 코덱스200
 
 	값, 에러 := TrT1101_현물_호가_조회(종목코드)

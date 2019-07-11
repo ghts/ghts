@@ -26,9 +26,8 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package main
 
 import (
-	"github.com/ghts/ghts/lib"
-	st "github.com/ghts/ghts/indi/base"
 	s32 "github.com/ghts/ghts/indi/c32/internal"
+	"github.com/ghts/ghts/lib"
 )
 
 func main() {
@@ -38,9 +37,9 @@ func main() {
 
 	defer func() {
 		s32.F리소스_정리()
-		s32.F콜백(st.New콜백_신호(st.P신호_C32_종료))
+		s32.F콜백(lib.New콜백_신호(lib.P신호_C32_종료))
 	}()
 
-	s32.F초기화(st.P서버_모의투자)
+	s32.F초기화()
 	<-s32.Ch메인_종료
 }

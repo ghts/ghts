@@ -61,7 +61,6 @@ var (
 	전일, 당일    lib.I안전한_시각
 	최근_영업일_모음 []time.Time
 
-	xing_C32_실행_잠금  sync.Mutex
 	xing_C32_재실행_잠금 sync.Mutex
 	xing_C32_경로     = lib.GOPATH() + `/src/github.com/ghts/ghts/xing/c32/xing_C32.bat`
 

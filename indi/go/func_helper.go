@@ -35,10 +35,91 @@ package indi
 
 import (
 	"github.com/ghts/ghts/lib"
+	"github.com/mitchellh/go-ps"
+	"runtime"
 
 	"strings"
 	"time"
 )
+
+func 신한_C32_실행_중() (프로세스ID int) {
+	defer lib.S예외처리{M함수: func() { 프로세스ID = -1 }}.S실행()
+
+	프로세스_모음, 에러 := ps.Processes()
+	lib.F확인(에러)
+
+	for _, 프로세스 := range 프로세스_모음 {
+		if 실행화일명 := 프로세스.Executable(); strings.HasSuffix(신한_C32_경로, 실행화일명) {
+			return 프로세스.Pid()
+		}
+	}
+
+	return -1
+}
+
+func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
+	defer lib.S예외처리{M에러: &에러}.S실행()
+
+	TR호출_도우미_수량 := runtime.NumCPU() / 2
+	if TR호출_도우미_수량 < 2 {
+		TR호출_도우미_수량 = 2
+	}
+
+	TR콜백_처리기_수량 := runtime.NumCPU() / 2
+	if TR콜백_처리기_수량 < 2 {
+		TR콜백_처리기_수량 = 2
+	}
+
+	ch호출_도우미_초기화 := make(chan lib.T신호, TR호출_도우미_수량)
+	ch호출_도우미_종료 := make(chan lib.T신호)
+
+	ch콜백_처리기_초기화 := make(chan lib.T신호, TR콜백_처리기_수량)
+	ch콜백_처리기_종료 := make(chan lib.T신호)
+
+	ch실시간_데이터_도우미_초기화 := make(chan lib.T신호)
+	ch실시간_데이터_도우미_종료 := make(chan lib.T신호)
+
+	for i:= 0 ; i<TR호출_도우미_수량; i++ {
+		go go_TR호출(ch호출_도우미_초기화, ch호출_도우미_종료)
+	}
+
+	for i := 0; i < TR콜백_처리기_수량; i++ {
+		go go_TR콜백_처리(ch콜백_처리기_초기화, ch콜백_처리기_종료)
+	}
+
+	go go_실시간_데이터_처리(ch실시간_데이터_도우미_초기화, ch실시간_데이터_도우미_종료)
+
+	for i := 0; i < TR호출_도우미_수량; i++ {
+		<-ch호출_도우미_초기화
+	}
+
+	for i := 0; i < TR콜백_처리기_수량; i++ {
+		<-ch콜백_처리기_초기화
+	}
+
+	<-ch실시간_데이터_도우미_초기화
+
+	ch종료 := lib.F공통_종료_채널()
+	ch초기화 <- lib.P신호_초기화
+
+	for {
+		select {
+		case <-ch종료:
+			return nil
+		case <-ch호출_도우미_종료:
+			go go_TR호출(ch호출_도우미_초기화, ch호출_도우미_종료)
+			<-ch호출_도우미_초기화
+		case <-ch콜백_처리기_종료:
+			go go_TR콜백_처리(ch콜백_처리기_초기화, ch콜백_처리기_종료)
+			<-ch콜백_처리기_초기화
+		case <-ch콜백_처리기_종료:
+			go go_실시간_데이터_처리(ch실시간_데이터_도우미_초기화, ch실시간_데이터_도우미_종료)
+			<-ch실시간_데이터_도우미_초기화
+		default:
+			lib.F실행권한_양보() // Go언어가 for반복문에서 태스트 스위칭이 잘 안 되는 경우가 있어서 수동으로 해 줌.
+		}
+	}
+}
 
 //func F콜백(콜백값 st.I콜백) (에러 error) {
 //	ch콜백 <- 콜백값

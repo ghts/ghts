@@ -36,11 +36,16 @@ package indi
 import "github.com/ghts/ghts/lib"
 
 var (
-	소켓REP_TR콜백 lib.I소켓Raw
-	소켓REQ_저장소  = lib.New소켓_저장소(20, func() lib.I소켓_질의 {
+	소켓SUB_실시간_정보 lib.I소켓Raw
+	소켓REP_TR콜백   lib.I소켓Raw
+	소켓REQ_저장소    = lib.New소켓_저장소(20, func() lib.I소켓_질의 {
 		return lib.NewNano소켓REQ_단순형(lib.P주소_신한_C함수_호출, lib.P30초)
 	})
-	소켓SUB_실시간_정보 lib.I소켓Raw
+
+	신한_C32_경로 = lib.GOPATH() + `/src/github.com/ghts/ghts/indi/c32/shinhan_C32.bat`
+
+	ch초기화_C32 = make(chan lib.T신호, 1)
+	ch종료_C32 = make(chan lib.T신호, 1)
 
 	대기소_C32 = newC32_콜백_대기_저장소()
 )

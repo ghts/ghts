@@ -34,9 +34,13 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package s32
 
 import (
-	st "github.com/ghts/ghts/indi/base"
 	"github.com/ghts/ghts/lib"
 )
+
+func F콜백(콜백값 lib.I콜백) (에러 error) {
+	ch콜백 <- 콜백값
+	return nil
+}
 
 func go콜백_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { ch종료 <- lib.P신호_종료 }}.S실행()
@@ -54,7 +58,7 @@ func go콜백_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 	}
 }
 
-func f콜백_동기식(콜백값 st.I콜백) (에러 error) {
+func f콜백_동기식(콜백값 lib.I콜백) (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
 	소켓REQ := 소켓REQ_저장소.G소켓()

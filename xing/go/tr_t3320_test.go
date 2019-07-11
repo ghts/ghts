@@ -41,8 +41,6 @@ import (
 )
 
 func TestT3320_F기업정보_요약(t *testing.T) {
-	t.Parallel()
-
 	종목코드 := "051910" // LG전자
 
 	값, 에러 := TrT3320_F기업정보_요약(종목코드)

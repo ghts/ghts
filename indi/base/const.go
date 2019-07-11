@@ -62,7 +62,7 @@ const (
 	//TR계좌_이름
 	//TR계좌_상세명
 	//TR계좌_별명
-	//TR소켓_테스트
+	TR소켓_테스트
 )
 
 func TR구분_String(v lib.TR구분) string {
@@ -103,8 +103,8 @@ func TR구분_String(v lib.TR구분) string {
 	//	return "계좌_이름"
 	//case TR계좌_상세명:
 	//	return "계좌_상세명"
-	//case TR소켓_테스트:
-	//	return "신호"
+	case TR소켓_테스트:
+		return "신호"
 	default:
 		return lib.F2문자열("예상하지 못한 M값 : '%v'", v)
 	}
@@ -361,5 +361,23 @@ func (p T증권_그룹) String() string {
 		return "ETN"
 	default:
 		panic(lib.New에러("예상하지 못한 값 : '%v'", string(p)))
+	}
+}
+
+type T서버_구분 uint8
+
+const (
+	P서버_실거래 T서버_구분 = iota
+	P서버_모의투자
+)
+
+func (p T서버_구분) String() string {
+	switch p {
+	case P서버_실거래:
+		return "실서버"
+	case P서버_모의투자:
+		return "모의투자"
+	default:
+		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
 	}
 }

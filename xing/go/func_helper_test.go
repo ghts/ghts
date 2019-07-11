@@ -40,16 +40,12 @@ import (
 )
 
 func TestF접속됨(t *testing.T) {
-	t.Parallel()
-
 	접속됨, 에러 := F접속됨()
 	lib.F테스트_에러없음(t, 에러)
 	lib.F테스트_참임(t, 접속됨)
 }
 
 func TestF계좌번호_모음(t *testing.T) {
-	t.Parallel()
-
 	계좌번호_모음, 에러 := F계좌번호_모음()
 
 	lib.F테스트_에러없음(t, 에러)
@@ -61,8 +57,6 @@ func TestF계좌번호_모음(t *testing.T) {
 }
 
 func TestF계좌_관련_함수(t *testing.T) {
-	t.Parallel()
-
 	계좌_수량, 에러 := F계좌_수량()
 	lib.F테스트_에러없음(t, 에러)
 	lib.F테스트_참임(t, 계좌_수량 > 0, 계좌_수량)
@@ -87,8 +81,6 @@ func TestF계좌_관련_함수(t *testing.T) {
 }
 
 func TestF영업일_기준_전일_당일(t *testing.T) {
-	t.Parallel()
-
 	전일 := F전일()
 	당일 := F당일()
 

@@ -41,8 +41,6 @@ import (
 )
 
 func TestT0167_시각_조회(t *testing.T) {
-	t.Parallel()
-
 	시각, 에러 := (<-TrT0167_시각_조회()).G값()
 	lib.F테스트_에러없음(t, 에러)
 	lib.F테스트_같음(t, 시각.Year(), time.Now().Year())

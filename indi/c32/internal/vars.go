@@ -34,8 +34,8 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package s32
 
 import (
-	st "github.com/ghts/ghts/indi/base"
 	"github.com/ghts/ghts/lib"
+
 	"path/filepath"
 	"reflect"
 )
@@ -49,7 +49,7 @@ var (
 		return lib.NewNano소켓REQ_단순형(lib.P주소_신한_C함수_콜백, lib.P30초)
 	})
 
-	ch콜백    = make(chan st.I콜백, 100)
+	ch콜백    = make(chan lib.I콜백, 100)
 	Ch질의    = make(chan *lib.S채널_질의_API, 10)
 	Ch메인_종료 = make(chan lib.T신호, 1)
 )

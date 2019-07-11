@@ -86,7 +86,7 @@ func F로그인() (에러 error) {
 	공증_암호 = lib.F조건부_문자열(lib.F테스트_모드_실행_중(), "", 공증_암호)
 	경로 := lib.F확인(F신한API_초기화_경로()).(string)
 
-	if 결과값, 에러 := StartIndi(아이디, 암호, 공증_암호, 경로); 에러 != nil {
+	if 결과값, 에러 := 신한API_조회.StartIndi(아이디, 암호, 공증_암호, 경로); 에러 != nil {
 		return nil
 	} else if !결과값 {
 		return lib.New에러("로그인 실패.")

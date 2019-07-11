@@ -40,15 +40,11 @@ import (
 )
 
 func TestCFOBQ10500_선물옵션_예탁금_증거금_조회_질의값(t *testing.T) {
-	t.Parallel()
-
 	_, ok := interface{}(new(xt.CFOBQ10500_선물옵션_예탁금_증거금_조회_질의값)).(lib.I질의값)
 	lib.F테스트_참임(t, ok)
 }
 
 func TestCFOBQ10500_선물옵션_예탁금_증거금_조회(t *testing.T) {
-	t.Parallel()
-
 	계좌번호 := lib.F확인(F계좌_번호(1)).(string) // 선물옵션 계좌를 선택해야 함.
 	계좌_상세명, 에러 := F계좌_상세명(계좌번호)
 	lib.F테스트_에러없음(t, 에러)

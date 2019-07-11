@@ -175,8 +175,8 @@ func NewT0150_현물_당일_매매일지_수수료_응답_반복값_모음(b []b
 		lib.F확인(binary.Read(버퍼, binary.BigEndian, g))
 
 		값 := new(T0150_현물_당일_매매일지_수수료_응답_반복값)
-		값.M매매구분 = lib.F2문자열(g.Medosu)
-		값.M종목코드 = lib.F2문자열(g.Expcode)
+		값.M매매구분 = lib.F2문자열_EUC_KR_공백제거(g.Medosu)
+		값.M종목코드 = lib.F2문자열_공백제거(g.Expcode)
 		값.M수량 = lib.F2정수64_단순형(g.Qty)
 		값.M단가 = lib.F2정수64_단순형(g.Price)
 		값.M약정금액 = lib.F2정수64_단순형(g.Amt)
@@ -184,7 +184,7 @@ func NewT0150_현물_당일_매매일지_수수료_응답_반복값_모음(b []b
 		값.M거래세 = lib.F2정수64_단순형(g.Tax)
 		값.M농특세 = lib.F2정수64_단순형(g.Argtax)
 		값.M정산금액 = lib.F2정수64_단순형(g.Adjamt)
-		값.M매체 = lib.F2문자열(g.Middiv)
+		값.M매체 = lib.F2문자열_EUC_KR_공백제거(g.Middiv)
 
 		값_모음[i] = 값
 	}

@@ -47,9 +47,6 @@ func TestCSPAT00600_현물_정상_주문_질의값(t *testing.T) {
 }
 
 func TestCSPAT00600_현물_정상_주문(t *testing.T) {
-	t.SkipNow()
-	//t.Parallel()
-
 	if !F한국증시_정규시장_거래시간임() {
 		t.SkipNow()
 	}

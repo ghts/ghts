@@ -41,8 +41,6 @@ import (
 )
 
 func TestT1404_관리_종목(t *testing.T) {
-	t.Parallel()
-
 	시장_구분_모음 := []lib.T시장구분{lib.P시장구분_전체, lib.P시장구분_코스피, lib.P시장구분_코스닥}
 	시장_구분 := 시장_구분_모음[lib.F임의_범위_이내_정수값(0, len(시장_구분_모음)-1)]
 

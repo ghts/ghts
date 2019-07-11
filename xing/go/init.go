@@ -112,9 +112,6 @@ func f초기화_소켓() {
 func f초기화_xing_C32() (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
-	xing_C32_실행_잠금.Lock()
-	defer xing_C32_실행_잠금.Unlock()
-
 	if !lib.F인터넷에_접속됨() {
 		lib.F문자열_출력("인터넷을 확인하십시오.")
 		return
@@ -154,7 +151,7 @@ func f초기화_작동_확인() (작동_여부 bool) {
 	defer lib.S예외처리{M함수: func() { 작동_여부 = false }}.S실행()
 
 	ch확인 := make(chan lib.T신호, 1)
-	ch타임아웃 := time.After(lib.P10분)
+	ch타임아웃 := time.After(lib.P1분)
 
 	select {
 	case <-ch신호_C32_모음[xt.P신호_C32_READY]: // 서버 접속된 상태임.
@@ -199,6 +196,8 @@ func tr수신_소켓_동작_확인(ch완료 chan lib.T신호) {
 		if 응답 := F질의(lib.New질의값_기본형(xt.TR소켓_테스트, ""), lib.P5초); 응답.G에러() == nil {
 			return
 		}
+
+		lib.F대기(lib.P100밀리초)
 	}
 }
 
