@@ -53,12 +53,12 @@ func go콜백_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 		case <-ch공통_종료:
 			return nil
 		case i콜백 := <-ch콜백:
-			f콜백_동기식(i콜백)
+			F콜백_동기식(i콜백)
 		}
 	}
 }
 
-func f콜백_동기식(콜백값 lib.I콜백) (에러 error) {
+func F콜백_동기식(콜백값 lib.I콜백) (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
 	소켓REQ := 소켓REQ_저장소.G소켓()

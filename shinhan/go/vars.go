@@ -44,7 +44,7 @@ var (
 
 	신한_C32_경로 = lib.GOPATH() + `/src/github.com/ghts/ghts/shinhan/c32/shinhan_C32.bat`
 
-	ch초기화_C32 = make(chan lib.T신호, 1)
+	ch초기화_C32 = make(chan lib.T신호, 10)
 	ch종료_C32  = make(chan lib.T신호, 1)
 
 	대기소_C32 = newC32_콜백_대기_저장소()

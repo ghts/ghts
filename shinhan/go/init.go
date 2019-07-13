@@ -56,27 +56,16 @@ func F초기화() (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
 	f초기화_소켓()
-
-	lib.F체크포인트()
-
 	f초기화_Go루틴()
-
-	lib.F체크포인트()
-
 	lib.F확인(f초기화_신한_C32())
-
-	lib.F체크포인트()
-
 	lib.F조건부_패닉(!f초기화_작동_확인(), "초기화 작동 확인 실패.")
-
-	lib.F체크포인트()
 
 	//lib.F확인(f초기화_TR전송_제한())
 	//lib.F확인(f종목모음_설정())
 	//lib.F확인(f전일_당일_설정())
 	//f접속유지_실행()
 
-	fmt.Println("**     초기화 완료     **")
+	println("**     초기화 완료     **")
 
 	return nil
 }
@@ -103,14 +92,14 @@ func f초기화_신한_C32() (에러 error) {
 	switch runtime.GOOS {
 	case "windows":
 		if 프로세스ID := 신한_C32_실행_중(); 프로세스ID >= 0 {
-			lib.F문자열_출력("xing_C32 가 이미 실행 중입니다.")
+			lib.F문자열_출력("신한_C32 가 이미 실행 중입니다.")
 			return nil
 		}
 
 		lib.F확인(lib.F외부_프로세스_실행(신한_C32_경로))
 	default:
 		lib.F문자열_출력("*********************************************\n"+
-			"현재 OS(%v)에서는 'xing_C32'를 수동으로 실행해야 합니다.\n"+
+			"현재 OS(%v)에서는 '신한_C32'를 수동으로 실행해야 합니다.\n"+
 			"*********************************************", runtime.GOOS)
 	}
 
@@ -121,7 +110,7 @@ func f초기화_작동_확인() (작동_여부 bool) {
 	defer lib.S예외처리{M함수: func() { 작동_여부 = false }}.S실행()
 
 	// C32 프로세스 실행될 때까지 대기.
-	ch타임아웃 := time.After(lib.P1분)
+	ch타임아웃 := time.After(lib.P30초)
 
 	select {
 	case <-ch초기화_C32: // 서버 접속된 상태임.
@@ -131,7 +120,7 @@ func f초기화_작동_확인() (작동_여부 bool) {
 	}
 
 	// C32 모듈의 소켓이 초기화 될 시간을 준다.  필수적인 부분임. 삭제하지 말 것.
-	lib.F대기(lib.P10초)
+	lib.F대기(lib.P5초)
 
 	// 소켓REP_TR수신 동작 테스트
 	ch확인 := make(chan lib.T신호, 1)
@@ -194,9 +183,14 @@ func C32_종료() (에러 error) {
 	}
 
 	// 강제 종료
-	for {
-		프로세스ID := 신한_C32_실행_중()
-		lib.F프로세스_종료by프로세스ID(프로세스ID)
-		lib.F대기(lib.P1초)
+	for i:=0 ; i<10 ; i++ {
+		if 프로세스ID := 신한_C32_실행_중(); 프로세스ID > 0 {
+			lib.F프로세스_종료by프로세스ID(프로세스ID)
+			lib.F대기(lib.P1초)
+		} else {
+			return nil
+		}
 	}
+
+	return lib.New에러with출력("C32 프로세스 종료 실패.")
 }

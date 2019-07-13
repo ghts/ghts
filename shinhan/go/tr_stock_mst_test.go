@@ -40,13 +40,13 @@ import (
 	"testing"
 )
 
-func TestStockMst_현물_종목코드_전체_조회(t *testing.T) {
+func TestStockMst_현물_종목코드_조회(t *testing.T) {
 	t.Parallel()
 
-	응답값, 에러 := TrStockMst_현물_종목코드_전체_조회()
+	값_모음, 에러 := Tr현물_종목코드_조회_stock_mst()
 	lib.F테스트_에러없음(t, 에러)
 
-	for _, 값 := range 응답값.M배열 {
+	for _, 값 := range 값_모음 {
 		lib.F테스트_참임(t, strings.Contains(값.M표준코드, 값.M종목코드), 값.M표준코드, 값.M종목코드)
 		lib.F테스트_같음(t, len(값.M종목코드), 6)
 		lib.F테스트_같음(t, 값.M장구분, lib.P시장구분_코스피, lib.P시장구분_코스닥)

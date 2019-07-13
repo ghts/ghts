@@ -50,6 +50,7 @@ func 신한_C32_실행_중() (프로세스ID int) {
 
 	for _, 프로세스 := range 프로세스_모음 {
 		if 실행화일명 := 프로세스.Executable(); strings.HasSuffix(신한_C32_경로, 실행화일명) {
+			lib.F체크포인트(신한_C32_경로, 실행화일명, 프로세스.Pid())
 			return 프로세스.Pid()
 		}
 	}

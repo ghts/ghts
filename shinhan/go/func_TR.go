@@ -1,4 +1,4 @@
-/* Copyright (C) 2015-2019 김운하(UnHa Kim)  < unha.kim.ghts at gmail dot com >
+/* Copyright (C) 2015-2019 김운하(UnHa Kim)  unha.kim.ghts@gmail.com
 
 이 파일은 GHTS의 일부입니다.
 
@@ -15,7 +15,7 @@ GNU LGPL 2.1판은 이 프로그램과 함께 제공됩니다.
 (자유 소프트웨어 재단 : Free Software Foundation, Inc.,
 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA)
 
-Copyright (C) 2015-2019년 UnHa Kim (< unha.kim.ghts at gmail dot com >)
+Copyright (C) 2015-2019년 UnHa Kim (unha.kim.ghts@gmail.com)
 
 This file is part of GHTS.
 
@@ -35,48 +35,20 @@ package sh
 
 import (
 	"github.com/ghts/ghts/lib"
-	"testing"
+	st "github.com/ghts/ghts/shinhan/base"
 )
 
-func TestMain(m *testing.M) {
-	defer f테스트_정리()
+func Tr현물_종목코드_조회_stock_mst() (응답값_모음 []*st.S현물_종목코드_조회_반복값, 에러 error) {
+	defer lib.S예외처리{M에러: &에러, M함수: func() { 응답값_모음 = nil }}.S실행()
 
-	if 에러 := f테스트_준비(); 에러 != nil {
-		return
-	}
+	질의값 := lib.New질의값_기본형(st.TR조회, st.TR현물_종목코드_전체_조회_stock_mst)
 
+	i응답값, 에러 := F질의_단일TR(질의값)
+	lib.F확인(에러)
+	lib.F조건부_패닉(i응답값 == nil, "nil 응답값.")
 
-	m.Run()
-}
+	값, ok := i응답값.(*st.S현물_종목코드_조회_응답)
+	lib.F조건부_패닉(!ok, "예상하지 못한 자료형 : '%T'", i응답값)
 
-func f테스트_준비() (에러 error) {
-	defer lib.S예외처리{M에러: &에러}.S실행()
-
-	lib.F테스트_모드_시작()
-	lib.F확인(F초기화())
-
-	return nil
-}
-
-func f테스트_정리() {
-	defer lib.S예외처리{}.S실행()
-
-	F리소스_정리()
-	lib.F테스트_모드_종료()
-}
-
-func go테스트용_TR콜백_수신(ch초기화 chan lib.T신호) {
-	소켓REP_TR콜백 := lib.NewNano소켓REP_단순형(lib.P주소_신한_C함수_콜백)
-
-	ch초기화 <- lib.P신호_초기화
-
-	for {
-		값, 에러 := 소켓REP_TR콜백.G수신()
-		if 에러 != nil {
-			lib.F에러_출력(에러)
-			continue
-		}
-
-		소켓REP_TR콜백.S송신(값.G변환_형식(0), lib.P신호_OK)
-	}
+	return 값.M배열, nil
 }

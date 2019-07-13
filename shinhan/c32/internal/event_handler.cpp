@@ -57,8 +57,10 @@ void FreeResources(void *pPairObject) {
 HRESULT IDispatchInvoke(void *pPairObject, int DispId, void *pDispParams, void *pResult, void *pExcepInfo) {
     PairObject *p = (PairObject*)pPairObject;
 
-    return p->pGiExpert->Invoke((DISPID)DispId, IID_GiExpert, LOCALE_USER_DEFAULT, DISPATCH_METHOD,
+//    return p->pGiExpert->Invoke((DISPID)DispId, IID_GiExpert, LOCALE_USER_DEFAULT, DISPATCH_METHOD,
+    return p->pGiExpert->Invoke((DISPID)DispId, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD,
         (DISPPARAMS*)pDispParams, (VARIANT*)pResult, (EXCEPINFO*)pExcepInfo, NULL);
+
 }
 
 // Not Exported to Go
@@ -200,8 +202,8 @@ HRESULT STDMETHODCALLTYPE EventHandler::Invoke(DISPID dispId, REFIID riid, LCID 
     printf("EventHandler::Invoke : '%s' '%s'\n", GuidToString(riid).c_str(), GuidToString(this->iid).c_str());
     printf("'%u', '%u',\n", pDispParams->cArgs, pDispParams->cNamedArgs);
 
-	if (riid != IID_NULL) {
-	    printf("EventHandler::Invoke() : NOT IID_NULL. Unexpected. '%s'\n", GuidToString(riid).c_str());
+    if (riid != IID_GiExpert && riid != IID_GiExpertEvents && riid != IID_NULL) {
+	    printf("EventHandler::Invoke() : Unexpected IID value. '%s'\n", GuidToString(riid).c_str());
 		exit(-1);
 		return(DISP_E_UNKNOWNINTERFACE);
 	}

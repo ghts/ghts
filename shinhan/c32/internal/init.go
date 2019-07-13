@@ -47,6 +47,14 @@ func F초기화() {
 	ch초기화 := make(chan lib.T신호)
 	go Go루틴_관리(ch초기화)
 	<-ch초기화
+
+	go func() {
+		for i:=0 ; i<10; i++ {
+			F콜백_동기식(lib.New콜백_신호(lib.P신호_C32_READY))
+			lib.F대기(lib.P1초)
+		}
+	}()
+
 }
 
 func COM객체_초기화() (에러 error) {
@@ -87,7 +95,7 @@ func F로그인() (에러 error) {
 	경로 := lib.F확인(F신한API_초기화_경로()).(string)
 
 	if 결과값, 에러 := 신한API_조회.StartIndi(아이디, 암호, 공증_암호, 경로); 에러 != nil {
-		return nil
+		return 에러
 	} else if !결과값 {
 		return lib.New에러("로그인 실패.")
 	}

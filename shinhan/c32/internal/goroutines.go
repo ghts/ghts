@@ -35,8 +35,9 @@ package s32
 
 import "C"
 import (
-	"github.com/ghts/ghts/shinhan/base"
 	"github.com/ghts/ghts/lib"
+	"github.com/ghts/ghts/shinhan/base"
+	"os"
 	"runtime"
 )
 
@@ -56,31 +57,31 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 	ch전달_도우미_초기화 := make(chan lib.T신호, 전달_도우미_수량)
 	ch전달_도우미_종료 := make(chan lib.T신호)
 
-	ch호출_도우미_초기화 := make(chan lib.T신호)
-	ch호출_도우미_종료 := make(chan lib.T신호)
-
 	ch콜백_도우미_초기화 := make(chan lib.T신호, 콜백_도우미_수량)
 	ch콜백_도우미_종료 := make(chan lib.T신호)
+
+	ch호출_도우미_초기화 := make(chan lib.T신호)
+	ch호출_도우미_종료 := make(chan lib.T신호)
 
 	for i := 0; i < 전달_도우미_수량; i++ {
 		go go소켓_전달_도우미(ch전달_도우미_초기화, ch전달_도우미_종료)
 	}
 
-	go go함수_호출_도우미(ch호출_도우미_초기화, ch호출_도우미_종료)
-
 	for i := 0; i < 콜백_도우미_수량; i++ {
 		go go콜백_도우미(ch콜백_도우미_초기화, ch콜백_도우미_종료)
 	}
+
+	go go함수_호출_도우미(ch호출_도우미_초기화, ch호출_도우미_종료)
 
 	for i := 0; i < 전달_도우미_수량; i++ {
 		<-ch전달_도우미_초기화
 	}
 
-	<-ch호출_도우미_초기화
-
 	for i := 0; i < 콜백_도우미_수량; i++ {
 		<-ch콜백_도우미_초기화
 	}
+
+	<-ch호출_도우미_초기화
 
 	ch종료 := lib.F공통_종료_채널()
 	ch초기화 <- lib.P신호_초기화
@@ -125,8 +126,6 @@ func go소켓_전달_도우미(ch초기화, ch종료 chan lib.T신호) (에러 e
 	for {
 		수신값, 에러 = 소켓REP_TR수신.G수신()
 
-		lib.F체크포인트("수신")
-
 		// 수신 과정에서 발생한 문제가 있는 지 확인
 		switch {
 		case 에러 != nil:
@@ -141,22 +140,18 @@ func go소켓_전달_도우미(ch초기화, ch종료 chan lib.T신호) (에러 e
 		}
 
 		// 질의 수행
-		if 질의.M질의값, ok = 수신값.S해석기(lib.F바이트_변환값_해석).G해석값_단순형(0).(lib.I질의값); !ok {
-			panic(lib.New에러with출력("'I질의값'형이 아님 : '%T'", i질의값))
+		if 질의.M질의값, ok = 수신값.S해석기(st.F바이트_변환값_해석).G해석값_단순형(0).(lib.I질의값); !ok {
+			panic(lib.New에러with출력("예상하지 못한 자료형 : '%T'", i질의값))
 		}
-
-		lib.F체크포인트(질의.M질의값)
 
 		Ch질의 <- 질의
 
-		lib.F체크포인트("질의값 전달")
-
 		select {
 		case 회신값 := <-질의.Ch회신값:
-			lib.F체크포인트("회신값 전달됨 : '%v'", 회신값)
+			//lib.F체크포인트(lib.F2문자열("회신값 전달됨 : '%v'", 회신값))
 			소켓REP_TR수신.S송신(수신값.G변환_형식(0), 회신값)
 		case 에러 := <-질의.Ch에러:
-			lib.F체크포인트("에러 전달됨 : '%v'", 에러)
+			lib.F체크포인트(lib.F2문자열("에러 전달됨 : '%v'", 에러))
 			소켓REP_TR수신.S송신(lib.JSON, lib.New에러with출력(에러))
 		case <-ch공통_종료:
 			return nil
@@ -173,7 +168,12 @@ func go함수_호출_도우미(ch초기화, ch종료 chan lib.T신호) {
 	runtime.LockOSThread()
 	defer runtime.UnlockOSThread()
 
-	COM객체_초기화() // 모든 API 액세스를 단일 스레드에서 하기 위해서 여기에서 API 초기화를 실행함.
+	// 1개의 스레드에서 모든 API호출을 하기 위해서 여기에서 API 초기화를 실행함.
+	if 에러 := COM객체_초기화(); 에러 != nil {
+		lib.F공통_종료_채널_닫기()
+		os.Exit(1)
+	}
+
 
 	Ch질의 = make(chan *lib.S채널_질의_API, 10)
 	ch공통_종료 := lib.F공통_종료_채널()
@@ -183,7 +183,6 @@ func go함수_호출_도우미(ch초기화, ch종료 chan lib.T신호) {
 		select {
 		case 질의 := <-Ch질의:
 
-			lib.F체크포인트()
 
 			f질의값_처리(질의)
 		case <-ch공통_종료:
@@ -193,9 +192,6 @@ func go함수_호출_도우미(ch초기화, ch종료 chan lib.T신호) {
 }
 
 func f질의값_처리(질의 *lib.S채널_질의_API) {
-
-	lib.F체크포인트()
-
 	var 에러 error
 
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 질의.Ch에러 <- 에러 }}.S실행()
@@ -204,6 +200,8 @@ func f질의값_처리(질의 *lib.S채널_질의_API) {
 	case st.TR조회:
 		식별번호 := lib.F확인(f조회_질의_처리(질의.M질의값)).(int)
 		질의.Ch회신값 <- 식별번호
+	case st.TR소켓_테스트:
+		질의.Ch회신값 <- lib.P신호_OK
 	case st.TR종료:
 		신한API_조회.UnRequestRTRegAll()
 		신한API_조회.CloseIndi()
