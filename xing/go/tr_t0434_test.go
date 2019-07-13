@@ -35,7 +35,7 @@ package xing
 
 import (
 	"github.com/ghts/ghts/lib"
-	"github.com/ghts/ghts/xing/base"
+	xt "github.com/ghts/ghts/xing/base"
 	"testing"
 	"time"
 )
@@ -55,24 +55,25 @@ func TestT0434_선물옵션_체결_미체결_확인(t *testing.T) {
 		lib.F테스트_다름(t, len(값_모음), 0)
 	}
 
+	lib.F체크포인트(len(값_모음))
+
 	for _, 값 := range 값_모음 {
 		lib.F테스트_참임(t, 값.M주문번호 > 0)
 		lib.F테스트_참임(t, 값.M원주문번호 >= 0)
 		lib.F테스트_같음(t, 값.M매도_매수_구분, lib.P매도, lib.P매수)
-		lib.F체크포인트(값.M유형)
-		lib.F테스트_참임(t, 값.M주문_수량 > 0)
-		lib.F테스트_참임(t, 값.M주문_가격 > 0)
-		lib.F테스트_참임(t, 값.M체결_수량 >= 0)
-		lib.F테스트_참임(t, 값.M체결_수량 == 0 || 값.M체결_가격 > 0)
-		lib.F테스트_같음(t, 값.M미체결_잔량, 값.M주문_수량 + 값.M체결_수량)
+		lib.F테스트_같음(t, 값.M호가유형, xt.P호가_지정가, xt.P호가_시장가, xt.P호가_조건부_지정가,
+			xt.P호가_최유리_지정가, xt.P호가_최우선_지정가, xt.P호가_지정가_IOC, xt.P호가_시장가_IOC,
+			xt.P호가_최유리_지정가_IOC, xt.P호가_지정가_FOK, xt.P호가_시장가_FOK, xt.P호가_최유리_지정가_FOK,
+			xt.P호가_장전_시간외, xt.P호가_장후_시간외, xt.P호가_시간외_단일가)
+		lib.F테스트_참임(t, 값.M주문수량 > 0)
+		lib.F테스트_참임(t, 값.M주문가격 > 0)
+		lib.F테스트_참임(t, 값.M체결수량 >= 0)
+		lib.F테스트_참임(t, 값.M체결수량 == 0 || 값.M체결가격 > 0)
+		lib.F테스트_같음(t, 값.M미체결_잔량, 값.M주문수량+ 값.M체결수량)
 		lib.F체크포인트(값.M상태)
 		lib.F테스트_참임(t,  값.M주문시각.Hour() >=9 && 값.M주문시각.Hour() <= 16, 값.M주문시각)
 		lib.F테스트_같음(t, 값.M종목코드, 종목코드)
 		lib.F체크포인트(값.M사유코드)
 		lib.F체크포인트(값.M처리순번)
-		lib.F테스트_같음(t, 값.M호가유형, xt.P호가_지정가, xt.P호가_시장가, xt.P호가_조건부_지정가,
-			xt.P호가_최유리_지정가, xt.P호가_최우선_지정가, xt.P호가_지정가_IOC, xt.P호가_시장가_IOC,
-			xt.P호가_최유리_지정가_IOC, xt.P호가_지정가_FOK, xt.P호가_시장가_FOK, xt.P호가_최유리_지정가_FOK,
-			xt.P호가_장전_시간외, xt.P호가_장후_시간외, xt.P호가_시간외_단일가)
 	}
 }

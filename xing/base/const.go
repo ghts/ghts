@@ -35,6 +35,7 @@ package xt
 
 import (
 	"github.com/ghts/ghts/lib"
+	"strings"
 
 	"strconv"
 	"unsafe"
@@ -1794,6 +1795,23 @@ func (p T통신매체구분) String() string {
 	}
 }
 
+func (p T통신매체구분) F해석(값 interface{}) T통신매체구분 {
+	문자열 := lib.F2문자열_EUC_KR_공백제거(값)
+
+	switch {
+	case strings.Contains(문자열, "아이폰"):
+		return P통신매체_아이폰
+	case strings.Contains(문자열, "안드로이드"):
+		return P통신매체_안드로이드
+	case strings.Contains(문자열, "API"):
+		return P통신매체_API
+	case strings.Contains(문자열, "HTS"):
+		return P통신매체_HTS
+	default:
+		panic(lib.New에러("예상하지 못한 값 : "))
+	}
+}
+
 type T예약주문_CSPAQ13700 uint8
 
 const (
@@ -2026,3 +2044,13 @@ func (p CFOFQ02400_등록시장) String() string {
 		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
 	}
 }
+
+type T상태_T0434 uint8
+
+const (
+	P상태_완료 T상태_T0434 = iota
+	P상태_접수
+	P상태_정정확인
+	P상태_취소확인
+	P상태_거부
+)

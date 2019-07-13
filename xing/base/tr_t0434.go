@@ -57,18 +57,17 @@ type T0434_선물옵션_체결_미체결_조회_반복값 struct {
 	M주문번호     int64
 	M원주문번호    int64
 	M매도_매수_구분 lib.T매도_매수_구분
-	M유형       string // ??
-	M주문_수량    int64
-	M주문_가격    float64
-	M체결_수량    int64
-	M체결_가격    float64
+	M호가유형     T호가유형
+	M주문수량     int64
+	M주문가격     float64
+	M체결수량     int64
+	M체결가격     float64
 	M미체결_잔량   int64
 	M상태       string // ??
 	M주문시각     time.Time
 	M종목코드     string
 	M사유코드     string // ??
 	M처리순번     int64
-	M호가유형     T호가유형
 }
 
 func NewT0434InBlock(질의값 *T0434_선물옵션_체결_미체결_조회_질의값, 비밀번호 string) (*T0434InBlock) {
@@ -130,18 +129,15 @@ func newT0434_선물옵션_체결_미체결_반복값_모음(b []byte) (값_모�
 		주문시간_문자열 := string(g.Ordtime[:])
 		주문시간_문자열 = 주문시간_문자열[:6] + "." + 주문시간_문자열[6:]
 
-
-		lib.F2문자열_EUC_KR_공백제거(g.Medosu)
-
 		값 := new(T0434_선물옵션_체결_미체결_조회_반복값)
 		값.M주문번호 = lib.F2정수64_단순형(g.Ordno)
 		값.M원주문번호 = lib.F2정수64_단순형(g.Orgordno)
 		값.M매도_매수_구분 = lib.T매도_매수_구분(0).F해석(g.Medosu)
-		값.M유형 = lib.F2문자열_EUC_KR_공백제거(g.Ordgb)
-		값.M주문_수량 = lib.F2정수64_단순형(g.Qty)
-		값.M주문_가격 = lib.F2실수_단순형(g.Price)
-		값.M체결_수량 = lib.F2정수64_단순형(g.Cheqty)
-		값.M체결_가격 = lib.F2실수_단순형(g.Cheprice)
+		//값.M호가유형 = lib.F2문자열_EUC_KR_공백제거(g.Ordgb)
+		값.M주문수량 = lib.F2정수64_단순형(g.Qty)
+		값.M주문가격 = lib.F2실수_단순형(g.Price)
+		값.M체결수량 = lib.F2정수64_단순형(g.Cheqty)
+		값.M체결가격 = lib.F2실수_단순형(g.Cheprice)
 		값.M미체결_잔량 = lib.F2정수64_단순형(g.Ordrem)
 		값.M상태 = lib.F2문자열_EUC_KR_공백제거(g.Status)
 		값.M주문시각 = lib.F2일자별_시각_단순형(당일.G값(), "150405.99", 주문시간_문자열)
@@ -149,6 +145,35 @@ func newT0434_선물옵션_체결_미체결_반복값_모음(b []byte) (값_모�
 		값.M사유코드 = lib.F2문자열_공백제거(g.Rtcode)
 		값.M처리순번 = lib.F2정수64_단순형(g.Sysprocseq)
 		값.M호가유형 = T호가유형(lib.F2정수64_단순형(g.Hogatype))
+
+		switch lib.F2문자열_EUC_KR_공백제거(g.Ordgb) {
+		case "지정가(IOC)":
+			값.M호가유형 = P호가_지정가_IOC
+		case "지정가(FOK)":
+			값.M호가유형 = P호가_지정가_FOK
+		case "지정가":
+			값.M호가유형 = P호가_지정가
+		case "지정가(IOC)-전환":
+			값.M호가유형 = P호가_지정가_IOC_전환
+		case "지정가(FOK)-전환":
+			값.M호가유형 = P호가_지정가_FOK_전환
+		case "지정가-전환":
+			값.M호가유형 = P호가_지정가_전환
+		case "시장가(IOC)":
+			값.M호가유형 = P호가_시장가_IOC
+		case "시장가(FOK)":
+			값.M호가유형 = P호가_시장가_FOK
+		case "시장가":
+			값.M호가유형 = P호가_시장가
+		case "조건부지정가":
+			값.M호가유형 = P호가_조건부_지정가
+		case "최유리(IOC)":
+			값.M호가유형 = P호가_최유리_지정가_IOC
+		case "최유리(FOK)":
+			값.M호가유형 = P호가_최유리_지정가_FOK
+		case "최유리지정가":
+			값.M호가유형 = P호가_최유리_지정가
+		}
 
 		값_모음[i] = 값
 	}

@@ -80,16 +80,16 @@ type T0150_현물_당일_매매일지_수수료_응답_헤더 struct {
 }
 
 type T0150_현물_당일_매매일지_수수료_응답_반복값 struct {
-	M매매구분 string
-	M종목코드 string
-	M수량   int64
-	M단가   int64
-	M약정금액 int64
-	M수수료  int64
-	M거래세  int64
-	M농특세  int64
-	M정산금액 int64
-	M매체   string
+	M매도_매수_구분 lib.T매도_매수_구분
+	M종목코드     string
+	M수량       int64
+	M단가       int64
+	M약정금액     int64
+	M수수료      int64
+	M거래세      int64
+	M농특세      int64
+	M정산금액     int64
+	M매체		T통신매체구분
 }
 
 func NewT0150InBlock(질의값 *T0150_현물_당일_매매일지_수수료_질의값) (g *T0150InBlock) {
@@ -176,8 +176,13 @@ func NewT0150_현물_당일_매매일지_수수료_응답_반복값_모음(b []b
 		g = new(T0150OutBlock1)
 		lib.F확인(binary.Read(버퍼, binary.BigEndian, g))
 
+		if 문자열 := lib.F2문자열_EUC_KR_공백제거(g.Medosu); 문자열 != "매도" && 문자열 != "매수" {
+			lib.F체크포인트(문자열)
+			continue
+		}
+
 		값 := new(T0150_현물_당일_매매일지_수수료_응답_반복값)
-		값.M매매구분 = lib.F2문자열_EUC_KR_공백제거(g.Medosu)
+		값.M매도_매수_구분 = lib.T매도_매수_구분(0).F해석(g.Medosu)
 		값.M종목코드 = lib.F2문자열_공백제거(g.Expcode)
 		값.M수량 = lib.F2정수64_단순형(g.Qty)
 		값.M단가 = lib.F2정수64_단순형(g.Price)
@@ -186,7 +191,7 @@ func NewT0150_현물_당일_매매일지_수수료_응답_반복값_모음(b []b
 		값.M거래세 = lib.F2정수64_단순형(g.Tax)
 		값.M농특세 = lib.F2정수64_단순형(g.Argtax)
 		값.M정산금액 = lib.F2정수64_단순형(g.Adjamt)
-		값.M매체 = lib.F2문자열_EUC_KR_공백제거(g.Middiv)
+		값.M매체 = T통신매체구분(0).F해석(g.Middiv)
 
 		값_모음[i] = 값
 	}

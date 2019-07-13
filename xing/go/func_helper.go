@@ -322,28 +322,6 @@ func f데이터_복원_반복_조회(대기_항목 *c32_콜백_대기_항목, �
 	return nil
 }
 
-func f처리_가능한_TR코드(TR코드 string) bool {
-	switch TR코드 {
-	case xt.TR선물옵션_주문체결내역조회_CFOAQ00600, xt.TR선물옵션_정상주문_CFOAT00100, xt.TR선물옵션_정정주문_CFOAT00200, xt.TR선물옵션_취소주문_CFOAT00300,
-		xt.TR선물옵션_예탁금_증거금_조회_CFOBQ10500, xt.TR선물옵션_미결제약정_현황_CFOFQ02400,
-		xt.TR현물계좌_잔고내역_조회_CSPAQ12300, xt.TR현물계좌_주문체결내역_조회_CSPAQ13700,
-		xt.TR현물_정상_주문_CSPAT00600, xt.TR현물_정정_주문_CSPAT00700, xt.TR현물_취소_주문_CSPAT00800,
-		xt.TR현물_당일_매매일지_수수료_t0150, xt.TR현물_전일_매매일지_수수료_t0151,
-		xt.TR시간_조회_t0167, xt.TR현물_체결_미체결_조회_t0425, xt.TR선물옵션_체결_미체결_조회_t0434,
-		xt.TR현물_호가_조회_t1101, xt.TR현물_시세_조회_t1102,
-		xt.TR현물_기간별_조회_t1305, xt.TR현물_당일_전일_분틱_조회_t1310,
-		xt.TR관리_불성실_투자유의_조회_t1404, xt.TR투자경고_매매정지_정리매매_조회_t1405,
-		xt.TR_ETF_시간별_추이_t1902,
-		xt.TR기업정보_요약_t3320, xt.TR재무순위_종합_t3341,
-		xt.TR현물_차트_틱_t8411, xt.TR현물_차트_분_t8412, xt.TR현물_차트_일주월_t8413,
-		xt.TR증시_주변_자금_추이_t8428, xt.TR지수선물_마스터_조회_t8432, xt.TR현물_종목_조회_t8436:
-		return true
-	default:
-		lib.F문자열_출력("예상하지 못한 TR코드 : '%v'", TR코드)
-		return false
-	}
-}
-
 func F접속_확인() error {
 	if !접속_여부.G값() {
 		return C32_재시작()
