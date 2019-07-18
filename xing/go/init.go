@@ -119,11 +119,6 @@ func f초기화_xing_C32() (에러 error) {
 
 	switch runtime.GOOS {
 	case "windows":
-		if 프로세스ID := xing_C32_실행_중(); 프로세스ID > 0 {
-			C32_종료()
-			return nil
-		}
-
 		lib.F확인(lib.F외부_프로세스_실행(xing_C32_경로))
 	default:
 		lib.F문자열_출력("*********************************************\n"+
@@ -301,8 +296,7 @@ func C32_종료() (에러 error) {
 
 		if 프로세스ID < 0 && 포트_닫힘_C함수_호출 && 포트_닫힘_실시간 {
 			lib.F체크포인트("C32 종료 됨.")
-
-			lib.F대기(lib.P3초)	// 네트워크 포트가 확실히 닫힐 때까지 잠시 대기.
+			lib.F대기(lib.P5초)	// 네트워크 포트 종료 및 C32 프로세스 종료가 확실히 처리될 때까지 잠시 대기.
 
 			return nil
 		}

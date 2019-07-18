@@ -336,15 +336,14 @@ func C32_재시작() (에러 error) {
 	xing_C32_재실행_잠금.Lock()
 	defer xing_C32_재실행_잠금.Unlock()
 
-	최근에_재식작_됨 := xing_C32_재실행_시각.G값().After(lib.F지금().Add(-1 * lib.P3분))
-	if 최근에_재식작_됨 {
+	최근에_재시작_됨 := xing_C32_재실행_시각.G값().After(lib.F지금().Add(-1 * lib.P3분))
+	if 최근에_재시작_됨 {
 		return
 	}
 
 	defer xing_C32_재실행_시각.S값(lib.F지금())
 
 	lib.F문자열_출력("** C32 재시작 **")
-
 	lib.F확인(C32_종료())
 	lib.F확인(f초기화_xing_C32())
 	lib.F조건부_패닉(!f초기화_작동_확인(), "초기화 작동 확인 실패.")
