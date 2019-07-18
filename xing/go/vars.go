@@ -61,12 +61,12 @@ var (
 	전일, 당일    lib.I안전한_시각
 	최근_영업일_모음 []time.Time
 
-	xing_C32_재실행_잠금 sync.Mutex
 	xing_C32_경로     = lib.GOPATH() + `/src/github.com/ghts/ghts/xing/c32/xing_C32.bat`
+	xing_C32_재실행_잠금 sync.Mutex
+	xing_C32_재실행_시각 = lib.New안전한_시각(time.Time{})
 
 	접속유지_실행중   = lib.New안전한_bool(false)
 	주문_응답_구독_중 = lib.New안전한_bool(false)
-	접속_여부      = lib.New안전한_bool(false)
 )
 
 // 종목 관련 저장소는 초기화 이후에는 사실상 읽기 전용. 다중 사용에 문제가 없음.

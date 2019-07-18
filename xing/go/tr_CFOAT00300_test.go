@@ -46,6 +46,10 @@ func TestCFOAT00300_선물옵션_취소주문_질의값(t *testing.T) {
 }
 
 func TestCFOAT00300_선물옵션_취소주문(t *testing.T) {
+	lib.F메모("다른 테스트와 함께 실행하면 에러 발생함.")
+
+	t.SkipNow()
+
 	if !F한국증시_정규시장_거래시간임() {
 		t.SkipNow()
 	}

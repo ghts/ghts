@@ -323,7 +323,7 @@ func f데이터_복원_반복_조회(대기_항목 *c32_콜백_대기_항목, �
 }
 
 func F접속_확인() error {
-	if !접속_여부.G값() {
+	if 접속됨, 에러 := F접속됨(); !접속됨 || 에러 != nil {
 		return C32_재시작()
 	}
 
@@ -336,9 +336,12 @@ func C32_재시작() (에러 error) {
 	xing_C32_재실행_잠금.Lock()
 	defer xing_C32_재실행_잠금.Unlock()
 
-	if 접속_여부.G값() {
-		return // 이미 재시작 되었음. 재접속 필요없음.
+	최근에_재식작_됨 := xing_C32_재실행_시각.G값().After(lib.F지금().Add(-1 * lib.P3분))
+	if 최근에_재식작_됨 {
+		return
 	}
+
+	defer xing_C32_재실행_시각.S값(lib.F지금())
 
 	lib.F문자열_출력("** C32 재시작 **")
 
@@ -405,4 +408,30 @@ func f전송_시각_기록(TR코드 string) {
 	if 전송_권한, 존재함 := tr코드별_초당_전송_제한[TR코드]; 존재함 {
 		전송_권한.S기록()
 	}
+}
+
+func 현물_계좌번호() (계좌번호 string, 에러 error) {
+	return F계좌번호by상세명("위탁")
+}
+
+func 선물옵션_계좌번호() (계좌번호 string, 에러 error) {
+	return F계좌번호by상세명("선물옵션")
+}
+
+func F계좌번호by상세명(상세명 string) (계좌번호 string, 에러 error) {
+	defer lib.S예외처리{M에러: &에러}.S실행()
+
+	계좌번호_모음, 에러 := F계좌번호_모음()
+	lib.F확인(에러)
+
+	for _, 계좌번호 := range 계좌번호_모음 {
+		계좌_상세명, 에러 := F계좌_상세명(계좌번호)
+		lib.F확인(에러)
+
+		if 계좌_상세명 == 상세명 {
+			return 계좌번호, nil
+		}
+	}
+
+	return "", nil
 }

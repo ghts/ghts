@@ -67,7 +67,6 @@ func TestCSPAQ12300_현물계좌_잔고내역_조회(t *testing.T) {
 	// OutBlock2 데이터 제공 안함 (DevCenter)
 
 	for _, 값 := range 응답값.M반복값_모음 {
-		lib.F체크포인트(값.M종목코드)
 		lib.F테스트_참임(t, F종목코드_존재함(값.M종목코드), 값.M종목코드)
 		lib.F테스트_다름(t, 값.M종목명, "")
 		lib.F테스트_다름(t, 값.M유가증권잔고유형코드, "")

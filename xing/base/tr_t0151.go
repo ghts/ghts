@@ -40,10 +40,6 @@ import (
 	"time"
 )
 
-func TR_t0151_현물_전일_매매일지_수수료(계좌번호 string, 일자 time.Time) (응답값 *T0151_현물_전일_매매일지_수수료_응답, 에러 error) {
-	panic("TODO")
-}
-
 type T0151_현물_전일_매매일지_수수료_질의값 struct {
 	*lib.S질의값_기본형
 	M일자       time.Time

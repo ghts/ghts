@@ -54,20 +54,20 @@ type T0434_선물옵션_체결_미체결_조회_응답 struct {
 }
 
 type T0434_선물옵션_체결_미체결_조회_반복값 struct {
-	M주문번호     int64
-	M원주문번호    int64
-	M매도_매수_구분 lib.T매도_매수_구분
-	M호가유형     T호가유형
-	M주문수량     int64
-	M주문가격     float64
-	M체결수량     int64
-	M체결가격     float64
-	M미체결_잔량   int64
-	M상태       string // ??
-	M주문시각     time.Time
-	M종목코드     string
-	M사유코드     string // ??
-	M처리순번     int64
+	M주문번호   int64
+	M원주문번호  int64
+	M매매_구분  lib.T매도_매수_구분
+	M호가유형   T호가유형
+	M주문수량   int64
+	M주문가격   float64
+	M체결수량   int64
+	M체결가격   float64
+	M미체결_잔량 int64
+	M상태     string // ??
+	M주문시각   time.Time
+	M종목코드   string
+	M사유코드   string // ??
+	M처리순번   int64
 }
 
 func NewT0434InBlock(질의값 *T0434_선물옵션_체결_미체결_조회_질의값, 비밀번호 string) (*T0434InBlock) {
@@ -132,7 +132,7 @@ func newT0434_선물옵션_체결_미체결_반복값_모음(b []byte) (값_모�
 		값 := new(T0434_선물옵션_체결_미체결_조회_반복값)
 		값.M주문번호 = lib.F2정수64_단순형(g.Ordno)
 		값.M원주문번호 = lib.F2정수64_단순형(g.Orgordno)
-		값.M매도_매수_구분 = lib.T매도_매수_구분(0).F해석(g.Medosu)
+		값.M매매_구분 = lib.T매도_매수_구분(0).F해석(g.Medosu)
 		//값.M호가유형 = lib.F2문자열_EUC_KR_공백제거(g.Ordgb)
 		값.M주문수량 = lib.F2정수64_단순형(g.Qty)
 		값.M주문가격 = lib.F2실수_단순형(g.Price)
@@ -144,7 +144,6 @@ func newT0434_선물옵션_체결_미체결_반복값_모음(b []byte) (값_모�
 		값.M종목코드 = lib.F2문자열_공백제거(g.Expcode)
 		값.M사유코드 = lib.F2문자열_공백제거(g.Rtcode)
 		값.M처리순번 = lib.F2정수64_단순형(g.Sysprocseq)
-		값.M호가유형 = T호가유형(lib.F2정수64_단순형(g.Hogatype))
 
 		switch lib.F2문자열_EUC_KR_공백제거(g.Ordgb) {
 		case "지정가(IOC)":

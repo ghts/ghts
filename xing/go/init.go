@@ -284,34 +284,36 @@ func C32_종료() (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
 	for i:=0 ; i<10 ; i++ {
-		if 프로세스ID := xing_C32_실행_중(); 프로세스ID < 0 {
-			lib.F체크포인트()
-			return
-		}
-
 		// 종료 신호 전송
-		func() {
-			defer lib.S예외처리{M출력_숨김: true}.S실행()
-
+		lib.F패닉억제_호출(func() {
 			소켓REQ := 소켓REQ_저장소.G소켓()
 			defer 소켓REQ_저장소.S회수(소켓REQ)
 
-			소켓REQ.S옵션(lib.P5초)
+			소켓REQ.S옵션(lib.P3초)
 			소켓REQ.S송신(lib.MsgPack, lib.New질의값_기본형(xt.TR종료, ""))
-		}()
+		})
 
-		select {
-		case <-ch신호_C32_모음[lib.P신호_C32_종료]:
-		case <-time.After(lib.P1초):
+		lib.F대기(lib.P3초)	// C32 프로세스 종료될 때까지 잠시 대기.
+
+		프로세스ID := xing_C32_실행_중()
+		포트_닫힘_C함수_호출 := lib.F포트_닫힘_확인(lib.P주소_Xing_C함수_호출)
+		포트_닫힘_실시간 := lib.F포트_닫힘_확인(lib.P주소_Xing_실시간)
+
+		if 프로세스ID < 0 && 포트_닫힘_C함수_호출 && 포트_닫힘_실시간 {
+			lib.F체크포인트("C32 종료 됨.")
+
+			lib.F대기(lib.P3초)	// 네트워크 포트가 확실히 닫힐 때까지 잠시 대기.
+
+			return nil
 		}
 	}
 
-	lib.F체크포인트()
-
 	// 강제 종료
-	if 프로세스ID := xing_C32_실행_중(); 프로세스ID > 0 {
-		lib.F프로세스_종료by프로세스ID(프로세스ID)
-		lib.F대기(lib.P3초)
+	for {
+		if 프로세스ID := xing_C32_실행_중(); 프로세스ID > 0 {
+			lib.F프로세스_종료by프로세스ID(프로세스ID)
+			lib.F대기(lib.P3초)
+		}
 	}
 }
 
