@@ -119,8 +119,8 @@ func f초기화_xing_C32() (에러 error) {
 
 	switch runtime.GOOS {
 	case "windows":
-		if 프로세스ID := xing_C32_실행_중(); 프로세스ID >= 0 {
-			lib.F문자열_출력("xing_C32 가 이미 실행 중입니다.")
+		if 프로세스ID := xing_C32_실행_중(); 프로세스ID > 0 {
+			C32_종료()
 			return nil
 		}
 
@@ -217,8 +217,6 @@ func f접속_확인(ch완료 chan lib.T신호) {
 			panic(lib.New에러("이 시점에 접속되어 있어야 함."))
 		}
 
-		접속_여부.S값(true)
-
 		return
 	}
 }
@@ -285,35 +283,35 @@ func f전일_당일_설정() (에러 error) {
 func C32_종료() (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
-	defer 접속_여부.S값(false)
+	for i:=0 ; i<10 ; i++ {
+		if 프로세스ID := xing_C32_실행_중(); 프로세스ID < 0 {
+			lib.F체크포인트()
+			return
+		}
 
-	// 종료 신호 전송
-	func() {
-		defer lib.S예외처리{M출력_숨김: true}.S실행()
+		// 종료 신호 전송
+		func() {
+			defer lib.S예외처리{M출력_숨김: true}.S실행()
 
-		소켓REQ := 소켓REQ_저장소.G소켓()
-		defer 소켓REQ_저장소.S회수(소켓REQ)
+			소켓REQ := 소켓REQ_저장소.G소켓()
+			defer 소켓REQ_저장소.S회수(소켓REQ)
 
-		소켓REQ.S옵션(lib.P1초)
-		소켓REQ.S송신(lib.MsgPack, lib.New질의값_기본형(xt.TR종료, ""))
-	}()
+			소켓REQ.S옵션(lib.P5초)
+			소켓REQ.S송신(lib.MsgPack, lib.New질의값_기본형(xt.TR종료, ""))
+		}()
 
-	select {
-	case <-ch신호_C32_모음[lib.P신호_C32_종료]:
-	case <-time.After(lib.P1초):
+		select {
+		case <-ch신호_C32_모음[lib.P신호_C32_종료]:
+		case <-time.After(lib.P1초):
+		}
 	}
 
 	lib.F체크포인트()
 
 	// 강제 종료
-	for {
-		if 프로세스ID := xing_C32_실행_중(); 프로세스ID < 0 {
-			lib.F체크포인트()
-			return
-		} else {
-			lib.F프로세스_종료by프로세스ID(프로세스ID)
-			lib.F대기(lib.P3초)
-		}
+	if 프로세스ID := xing_C32_실행_중(); 프로세스ID > 0 {
+		lib.F프로세스_종료by프로세스ID(프로세스ID)
+		lib.F대기(lib.P3초)
 	}
 }
 
