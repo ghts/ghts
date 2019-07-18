@@ -38,10 +38,9 @@ package x32
 import "C"
 
 import (
+	"fmt"
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/xing/base"
-
-	"fmt"
 	"time"
 )
 
@@ -120,6 +119,31 @@ func F리소스_정리() {
 
 func F회신_중단_종료() {
 	lib.F공통_종료_채널_닫기()
-	lib.F패닉억제_호출(소켓REP_TR수신.Close)
-	lib.F패닉억제_호출(소켓PUB_실시간_정보.Close)
+
+	ch완료 := make(chan lib.T신호, 2)
+
+	go func() {
+		for {
+			lib.F패닉억제_호출(소켓REP_TR수신.Close)
+			if lib.F포트_닫힘_확인(lib.P주소_Xing_C함수_호출) {
+				break
+			}
+		}
+
+		ch완료 <- lib.P신호_OK
+	}()
+
+	go func() {
+		for {
+			lib.F패닉억제_호출(소켓PUB_실시간_정보.Close)
+			if lib.F포트_닫힘_확인(lib.P주소_Xing_실시간) {
+				break
+			}
+		}
+
+		ch완료 <- lib.P신호_OK
+	}()
+
+	<-ch완료
+	<-ch완료
 }
