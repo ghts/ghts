@@ -42,6 +42,7 @@ import (
 	"io/ioutil"
 	"math"
 	"math/big"
+	"net"
 	"net/http"
 	"os"
 	"os/exec"
@@ -224,6 +225,23 @@ func f인터넷에_접속됨(ch회신 chan<- bool, url string) {
 	}
 
 	ch회신 <- true
+}
+
+func F포트_닫힘_확인(주소 T주소) bool {
+	연결, 에러 := net.DialTimeout("tcp", 주소.G단축값(), P1초)
+
+	switch {
+	case 에러 != nil:
+		if !strings.Contains(에러.Error(), "i/o timeout") {
+			New에러with출력("접속 에러 발생 : '%v'", 에러)
+		}
+		return true
+	case 연결 != nil:
+		defer 연결.Close()
+		return false
+	default:
+		panic(New에러("예상하지 못한 경우 : '%v' '%v'", 연결, 에러))
+	}
 }
 
 func F조건부_패닉(조건 bool, 포맷_문자열 string, 추가_매개변수 ...interface{}) {

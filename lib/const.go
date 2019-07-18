@@ -35,6 +35,7 @@ package lib
 
 import (
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -236,14 +237,18 @@ const (
 
 type T주소 int
 
-func (t T주소) G값() string {
+func (t T주소) G단축값() string {
 	switch t {
 	case P주소_주소정보: // 최소한의 고정값.
-		return "tcp://127.0.0.1:3000"
+		return "127.0.0.1:3000"
 	default:
 		포트_번호 := strconv.Itoa(int(t) + 포트_번호_최소값)
-		return "tcp://127.0.0.1:" + 포트_번호
+		return "127.0.0.1:" + 포트_번호
 	}
+}
+
+func (t T주소) G값() string {
+	return "tcp://" + t.G단축값()
 }
 
 func (t T주소) String() string {
@@ -533,6 +538,10 @@ const (
 	P매도매수_전체 T매도_매수_구분 = iota
 	P매도
 	P매수
+	P매도_정정
+	P매수_정정
+	P매도_취소
+	P매수_취소
 )
 
 func (p T매도_매수_구분) String() string {
@@ -541,6 +550,14 @@ func (p T매도_매수_구분) String() string {
 		return "매도"
 	case P매수:
 		return "매수"
+	case P매도_정정:
+		return "매도 정정"
+	case P매수_정정:
+		return "매수 정정"
+	case P매도_취소:
+		return "매도 취소"
+	case P매수_취소:
+		return "매수 취소"
 	default:
 		return F2문자열("예상하지 못한 값 : %v", int(p))
 	}
@@ -554,6 +571,18 @@ func (p T매도_매수_구분) F해석(값 interface{}) T매도_매수_구분 {
 		return P매도
 	case P매수.String():
 		return P매수
+	case P매도.String():
+		return P매도
+	case P매수.String():
+		return P매수
+	case strings.ReplaceAll(P매도_정정.String(), " ", ""):
+		return P매도_정정
+	case strings.ReplaceAll(P매수_정정.String(), " ", ""):
+		return P매수_정정
+	case strings.ReplaceAll(P매도_취소.String(), " ", ""):
+		return P매도_취소
+	case strings.ReplaceAll(P매수_취소.String(), " ", ""):
+		return P매수_취소
 	default:
 		panic(New에러("예상하지 못한 값 : '%v'", 문자열))
 	}
@@ -561,7 +590,7 @@ func (p T매도_매수_구분) F해석(값 interface{}) T매도_매수_구분 {
 
 func (p T매도_매수_구분) G검사() error {
 	switch p {
-	case P매도매수_전체, P매수, P매도:
+	case P매도매수_전체, P매도, P매수, P매도_정정, P매수_정정, P매도_취소, P매수_취소:
 		return nil
 	default:
 		return New에러("잘못된 매수 매도 구분값 : %v", int(p))
