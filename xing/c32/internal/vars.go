@@ -35,8 +35,10 @@ package x32
 
 import (
 	"github.com/ghts/ghts/lib"
+	"nanomsg.org/go-mangos"
 	"path/filepath"
 	"reflect"
+	"runtime"
 	"sync"
 )
 
@@ -44,7 +46,7 @@ import (
 
 // 다중 사용에 안전한 값들.
 var (
-	소켓REP_TR수신   = lib.F확인(lib.NewNano소켓REP(lib.P주소_Xing_C함수_호출)).(lib.I소켓)
+	소켓REP_TR수신   = lib.NewRawNano소켓REP_단순형(lib.P주소_Xing_C함수_호출)
 	소켓PUB_실시간_정보 = lib.F확인(lib.NewNano소켓PUB(lib.P주소_Xing_실시간)).(lib.I소켓)
 
 	소켓REQ_저장소 = lib.New소켓_저장소(20, func() lib.I소켓_질의 {
@@ -56,8 +58,8 @@ var (
 
 	ch로그인   = make(chan bool, 1)
 	ch콜백    = make(chan lib.I콜백, 100)
-	Ch질의    = make(chan *lib.S채널_질의_API, 10)
-	Ch메인_종료 = make(chan lib.T신호, 1)
+	Ch수신    = make(chan *mangos.Message, 10000)
+	Ch질의    = make(chan *lib.S채널_질의_API, lib.F조건부_정수(runtime.NumCPU() > 4, runtime.NumCPU(), 4))
 
 	TR_수신_중    = lib.New안전한_bool(false)
 	API_초기화_완료 = lib.New안전한_bool(false)

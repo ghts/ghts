@@ -35,19 +35,19 @@ package xing
 
 import (
 	"github.com/ghts/ghts/lib"
-	"github.com/ghts/ghts/xing/base"
-	"time"
-
+	xt "github.com/ghts/ghts/xing/base"
 	"sync"
+	"time"
 )
 
 var (
+	소켓REP_TR콜백 = lib.NewRawNano소켓REP_단순형(lib.P주소_Xing_C함수_콜백)
+	소켓SUB_실시간_정보 = lib.NewNano소켓SUB_단순형(lib.P주소_Xing_실시간).(lib.I소켓Raw)
+
 	소켓REQ_저장소 = lib.New소켓_저장소(20, func() lib.I소켓_질의 {
 		return lib.NewNano소켓REQ_단순형(lib.P주소_Xing_C함수_호출, lib.P30초)
 	})
 
-	소켓REP_TR콜백   lib.I소켓Raw
-	소켓SUB_실시간_정보 lib.I소켓Raw
 
 	ch질의        = make(chan *lib.S작업, 1000)
 	ch신호_C32_모음 []chan lib.T신호_32비트_모듈

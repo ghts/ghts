@@ -35,6 +35,7 @@ package s32
 
 import (
 	"github.com/ghts/ghts/lib"
+	"runtime"
 
 	"path/filepath"
 	"reflect"
@@ -43,14 +44,15 @@ import (
 var (
 	신한API_조회, 신한API_실시간 *S신한API
 
-	소켓REP_TR수신   = lib.F확인(lib.NewNano소켓REP(lib.P주소_신한_C함수_호출)).(lib.I소켓)
+	소켓REP_TR수신   = lib.F확인(lib.NewRawNano소켓REP_단순형(lib.P주소_신한_C함수_호출)).(lib.I소켓)
 	소켓PUB_실시간_정보 = lib.F확인(lib.NewNano소켓PUB(lib.P주소_신한_실시간)).(lib.I소켓)
 	소켓REQ_저장소    = lib.New소켓_저장소(20, func() lib.I소켓_질의 {
 		return lib.NewNano소켓REQ_단순형(lib.P주소_신한_C함수_콜백, lib.P30초)
 	})
 
 	ch콜백    = make(chan lib.I콜백, 100)
-	Ch질의    = make(chan *lib.S채널_질의_API, 10)
+	Ch수신 = make(chan *lib.S채널_질의_API, lib.F조건부_정수(runtime.NumCPU() > 4, runtime.NumCPU(), 4))
+	Ch질의    = make(chan *lib.S채널_질의_API, lib.F조건부_정수(runtime.NumCPU() > 4, runtime.NumCPU(), 4))
 	Ch메인_종료 = make(chan lib.T신호, 1)
 )
 

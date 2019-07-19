@@ -90,7 +90,6 @@ func init() {
 func F초기화() (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
-	f초기화_소켓()
 	f초기화_Go루틴()
 	lib.F확인(f초기화_xing_C32())
 	lib.F조건부_패닉(!f초기화_작동_확인(), "초기화 작동 확인 실패.")
@@ -102,11 +101,6 @@ func F초기화() (에러 error) {
 	fmt.Println("**     초기화 완료     **")
 
 	return nil
-}
-
-func f초기화_소켓() {
-	소켓REP_TR콜백 = lib.NewNano소켓REP_raw_단순형(lib.P주소_Xing_C함수_콜백)
-	소켓SUB_실시간_정보 = lib.NewNano소켓SUB_단순형(lib.P주소_Xing_실시간).(lib.I소켓Raw)
 }
 
 func f초기화_xing_C32() (에러 error) {
@@ -294,9 +288,11 @@ func C32_종료() (에러 error) {
 		포트_닫힘_C함수_호출 := lib.F포트_닫힘_확인(lib.P주소_Xing_C함수_호출)
 		포트_닫힘_실시간 := lib.F포트_닫힘_확인(lib.P주소_Xing_실시간)
 
-		if 프로세스ID < 0 && 포트_닫힘_C함수_호출 && 포트_닫힘_실시간 {
+
+		if 프로세스ID < 0 &&
+			포트_닫힘_C함수_호출 &&
+			포트_닫힘_실시간 {
 			lib.F체크포인트("C32 종료 됨.")
-			lib.F대기(lib.P5초)	// 네트워크 포트 종료 및 C32 프로세스 종료가 확실히 처리될 때까지 잠시 대기.
 
 			return nil
 		}

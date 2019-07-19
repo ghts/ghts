@@ -153,15 +153,15 @@ func NewNano소켓REP_단순형(주소 T주소, 옵션_모음 ...interface{}) I�
 	return F확인(NewNano소켓REP(주소, 옵션_모음...)).(I소켓)
 }
 
-func NewNano소켓REP_raw(주소 T주소, 옵션_모음 ...interface{}) (소켓 I소켓Raw, 에러 error) {
+func NewRawNano소켓REP(주소 T주소, 옵션_모음 ...interface{}) (소켓 I소켓Raw, 에러 error) {
 	옵션_모음 = append(옵션_모음, mangos.OptionRaw)
 	일반_소켓, 에러 := NewNano소켓(P소켓_종류_REP, 주소.G값(), P소켓_접속_BIND, 옵션_모음...)
 
 	return 일반_소켓.(I소켓Raw), 에러
 }
 
-func NewNano소켓REP_raw_단순형(주소 T주소, 옵션_모음 ...interface{}) I소켓Raw {
-	소켓, 에러 := NewNano소켓REP_raw(주소, 옵션_모음...)
+func NewRawNano소켓REP_단순형(주소 T주소, 옵션_모음 ...interface{}) I소켓Raw {
+	소켓, 에러 := NewRawNano소켓REP(주소, 옵션_모음...)
 	F확인(에러)
 
 	return 소켓
@@ -259,7 +259,7 @@ func (s *sNano소켓) G수신Raw() (값 *mangos.Message, 에러 error) {
 	defer S예외처리{M에러: &에러, M출력_숨김: true, M함수: func() {
 		값 = nil
 
-		if 에러 != nil && 에러.Error() != "connection closed" {
+		if 에러 != nil && !strings.Contains(에러.Error(), "connection closed") {
 			F에러_출력(에러)
 		}
 	}}.S실행()

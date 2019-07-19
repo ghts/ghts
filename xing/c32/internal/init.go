@@ -115,12 +115,11 @@ func F리소스_정리() {
 	F실시간_정보_모두_해지()
 	F로그아웃_및_접속해제()
 	F자원_해제()
+	F소켓_정리()
 }
 
-func F회신_중단_종료() {
-	lib.F공통_종료_채널_닫기()
-
-	ch완료 := make(chan lib.T신호, 2)
+func F소켓_정리() {
+	ch완료 := make(chan lib.T신호, 3)
 
 	go func() {
 		for {
@@ -144,6 +143,16 @@ func F회신_중단_종료() {
 		ch완료 <- lib.P신호_OK
 	}()
 
-	<-ch완료
-	<-ch완료
+	go func() {
+		for i:=0 ; i<len(소켓REQ_저장소.M저장소) ; i++ {
+			소켓_질의 := <-소켓REQ_저장소.M저장소
+			소켓_질의.Close()
+		}
+
+		ch완료 <- lib.P신호_OK
+	}()
+
+	for i:=0 ; i<3 ; i++ {
+		<-ch완료
+	}
 }

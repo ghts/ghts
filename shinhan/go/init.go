@@ -71,7 +71,7 @@ func F초기화() (에러 error) {
 }
 
 func f초기화_소켓() {
-	소켓REP_TR콜백 = lib.NewNano소켓REP_raw_단순형(lib.P주소_신한_C함수_콜백)
+	소켓REP_TR콜백 = lib.NewRawNano소켓REP_단순형(lib.P주소_신한_C함수_콜백)
 	소켓SUB_실시간_정보 = lib.NewNano소켓SUB_단순형(lib.P주소_신한_실시간).(lib.I소켓Raw)
 }
 

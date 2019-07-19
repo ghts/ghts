@@ -37,7 +37,9 @@ import "C"
 import (
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/xing/base"
+	"nanomsg.org/go-mangos"
 	"runtime"
+	"strings"
 	"unsafe"
 )
 
@@ -54,6 +56,9 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 		콜백_도우미_수량 = 2
 	}
 
+	ch수신_도우미_초기화 := make(chan lib.T신호)
+	ch수신_도우미_종료 := make(chan lib.T신호)
+
 	ch전달_도우미_초기화 := make(chan lib.T신호, 전달_도우미_수량)
 	ch전달_도우미_종료 := make(chan lib.T신호)
 
@@ -63,41 +68,52 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 	ch콜백_도우미_초기화 := make(chan lib.T신호, 콜백_도우미_수량)
 	ch콜백_도우미_종료 := make(chan lib.T신호)
 
+	// Go루틴 생성
+	go go수신_도우미(ch수신_도우미_초기화, ch수신_도우미_종료)
+
 	for i := 0; i < 전달_도우미_수량; i++ {
-		go go소켓_전달_도우미(ch전달_도우미_초기화, ch전달_도우미_종료)
+		go go전달_도우미(ch전달_도우미_초기화, ch전달_도우미_종료)
 	}
+
+	go go함수_호출_도우미(ch호출_도우미_초기화, ch호출_도우미_종료)
 
 	for i := 0; i < 콜백_도우미_수량; i++ {
 		go go콜백_도우미(ch콜백_도우미_초기화, ch콜백_도우미_종료)
 	}
 
-	go go함수_호출_도우미(ch호출_도우미_초기화, ch호출_도우미_종료)
+	// Go루틴 초기화 대기
+	<-ch수신_도우미_초기화
 
 	for i := 0; i < 전달_도우미_수량; i++ {
 		<-ch전달_도우미_초기화
 	}
 
+	<-ch호출_도우미_초기화
+
 	for i := 0; i < 콜백_도우미_수량; i++ {
 		<-ch콜백_도우미_초기화
 	}
 
-	<-ch호출_도우미_초기화
-
 	ch종료 := lib.F공통_종료_채널()
 	ch초기화 <- lib.P신호_초기화
 
+	// 종료 되는 Go루틴 재생성.
 	for {
 		select {
 		case <-ch종료:
 			return nil
+		case <-ch수신_도우미_종료:
+			go go수신_도우미(ch수신_도우미_초기화, ch수신_도우미_종료)
+			<-ch수신_도우미_초기화
 		case <-ch전달_도우미_종료:
-			go go소켓_전달_도우미(ch전달_도우미_초기화, ch전달_도우미_종료)
+			go go전달_도우미(ch전달_도우미_초기화, ch전달_도우미_종료)
 			<-ch전달_도우미_초기화
 		case <-ch호출_도우미_종료:
 			go go함수_호출_도우미(ch호출_도우미_초기화, ch호출_도우미_종료)
 			<-ch호출_도우미_초기화
 		case <-ch콜백_도우미_종료:
 			go go콜백_도우미(ch콜백_도우미_초기화, ch콜백_도우미_종료)
+			<-ch콜백_도우미_초기화
 		default:
 			lib.F실행권한_양보() // Go언어가 for반복문에서 태스트 스위칭이 잘 안 되는 경우가 있어서 수동으로 해 줌.
 		}
@@ -105,9 +121,49 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 }
 
 // 질의값을 소켓으로 수신 후 함수 호출 모듈로 전달.
-func go소켓_전달_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
+func go수신_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
+	var 수신_메시지 *mangos.Message
+
+	defer lib.S예외처리{M에러: &에러, M출력_숨김: true, M함수: func() {
+		lib.F조건부_실행(수신_메시지 != nil, 소켓REP_TR수신.S회신Raw, 수신_메시지, lib.JSON, 에러)
+
+		if 에러 != nil && !strings.Contains(에러.Error(), "connection closed") {
+			lib.F에러_출력(에러)
+		}
+
+		ch종료 <- lib.P신호_종료
+	}}.S실행()
+
+	ch공통_종료 := lib.F공통_종료_채널()
+	ch초기화 <- lib.P신호_초기화
+
+	for {
+		수신_메시지, 에러 = 소켓REP_TR수신.G수신Raw()
+
+		if 에러 == nil {
+			Ch수신 <- 수신_메시지
+		} else {
+			select {
+			case <-ch공통_종료:
+				return
+			default:
+			}
+
+			if !strings.Contains(에러.Error(), "connection closed") {
+				lib.F에러_출력(에러)
+			}
+		}
+
+		lib.F실행권한_양보() // Go언어가 for반복문에서 태스트 전환이 잘 안 되는 경우가 있으므로, 수동으로 태스트 전환.
+	}
+}
+
+// 질의값을 소켓으로 수신 후 전달 모듈에 인계
+func go전달_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
+	var 수신_메시지 *mangos.Message
+
 	defer lib.S예외처리{M에러: &에러, M함수: func() {
-		소켓REP_TR수신.S송신(lib.JSON, 에러)
+		lib.F조건부_실행(수신_메시지 != nil, 소켓REP_TR수신.S회신Raw, 수신_메시지, lib.JSON, 에러)
 		ch종료 <- lib.P신호_종료
 	}}.S실행()
 
@@ -123,45 +179,32 @@ func go소켓_전달_도우미(ch초기화, ch종료 chan lib.T신호) (에러 e
 	ch초기화 <- lib.P신호_초기화
 
 	for {
-		수신값, 에러 = 소켓REP_TR수신.G수신()
-
-		// 종료 신호 수신된 상태이면 종료.
 		select {
 		case <-ch공통_종료:
-			return nil
-		default:
-		}
+			return
+		case 수신_메시지 = <-Ch수신:
+			// 수신값 해석
+			수신값 = lib.New바이트_변환_모음from바이트_배열_단순형(수신_메시지.Body)
+			lib.F조건부_패닉(수신값.G수량() != 1, "메시지 길이 : 예상값 1, 실제값 %v.", 수신값.G수량())
 
-		// 수신 과정에서 발생한 문제가 있는 지 확인
-		switch {
-		case 에러 != nil:
+			i질의값 = 수신값.S해석기(xt.F바이트_변환값_해석).G해석값_단순형(0)
+			질의.M질의값, ok = i질의값.(lib.I질의값)
+			lib.F조건부_패닉(!ok, "예상하지 못한 자료형 : '%T'", i질의값)
+
+			// 질의 수행.
+			Ch질의 <- 질의
+
 			select {
+			case 회신값 := <-질의.Ch회신값:
+				소켓REP_TR수신.S회신Raw(수신_메시지, 수신값.G변환_형식(0), 회신값)
+			case 에러 := <-질의.Ch에러:
+				소켓REP_TR수신.S회신Raw(수신_메시지, lib.JSON, lib.New에러with출력(에러))
 			case <-ch공통_종료:
-				return
-			default:
-				panic(lib.New에러with출력(에러))
+				return nil
 			}
-		case 수신값.G수량() != 1:
-			panic(lib.New에러with출력("잘못된 메시지 길이 : 예상값 1, 실제값 %v.", 수신값.G수량()))
+		default:
+			lib.F실행권한_양보() // Go언어가 for반복문에서 태스트 전환이 잘 안 되는 경우가 있으므로, 수동으로 태스트 전환.
 		}
-
-		// 질의 수행
-		if 질의.M질의값, ok = 수신값.S해석기(xt.F바이트_변환값_해석).G해석값_단순형(0).(lib.I질의값); !ok {
-			panic(lib.New에러with출력("'I질의값'형이 아님 : '%T'", i질의값))
-		}
-
-		Ch질의 <- 질의
-
-		select {
-		case 회신값 := <-질의.Ch회신값:
-			소켓REP_TR수신.S송신(수신값.G변환_형식(0), 회신값)
-		case 에러 := <-질의.Ch에러:
-			소켓REP_TR수신.S송신(lib.JSON, lib.New에러with출력(에러))
-		case <-ch공통_종료:
-			return nil
-		}
-
-		lib.F실행권한_양보() // Go언어가 for반복문에서 태스트 전환이 잘 안 되는 경우가 있으므로, 수동으로 태스트 전환.
 	}
 }
 
@@ -233,11 +276,7 @@ func f질의값_처리(질의 *lib.S채널_질의_API) {
 	case xt.TR소켓_테스트:
 		질의.Ch회신값 <- lib.P신호_OK
 	case xt.TR종료:
-		F리소스_정리()
-		질의.Ch회신값 <- lib.P신호_종료
 		lib.F공통_종료_채널_닫기()
-		F회신_중단_종료()
-		Ch메인_종료 <- lib.P신호_종료
 	default:
 		panic(lib.New에러("예상하지 못한 TR구분값 : '%v'", int(질의.M질의값.TR구분())))
 	}

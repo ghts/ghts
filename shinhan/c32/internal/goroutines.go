@@ -54,6 +54,9 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 		콜백_도우미_수량 = 2
 	}
 
+	ch수신_도우미_초기화 := make(chan lib.T신호)
+	ch수신_도우미_종료 := make(chan lib.T신호)
+
 	ch전달_도우미_초기화 := make(chan lib.T신호, 전달_도우미_수량)
 	ch전달_도우미_종료 := make(chan lib.T신호)
 
@@ -63,25 +66,31 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 	ch호출_도우미_초기화 := make(chan lib.T신호)
 	ch호출_도우미_종료 := make(chan lib.T신호)
 
+	// go 루틴 생성
+	go go수신_도우미(ch수신_도우미_초기화, ch수신_도우미_종료)
+
 	for i := 0; i < 전달_도우미_수량; i++ {
-		go go소켓_전달_도우미(ch전달_도우미_초기화, ch전달_도우미_종료)
+		go go전달_도우미(ch전달_도우미_초기화, ch전달_도우미_종료)
 	}
+
+	go go함수_호출_도우미(ch호출_도우미_초기화, ch호출_도우미_종료)
 
 	for i := 0; i < 콜백_도우미_수량; i++ {
 		go go콜백_도우미(ch콜백_도우미_초기화, ch콜백_도우미_종료)
 	}
 
-	go go함수_호출_도우미(ch호출_도우미_초기화, ch호출_도우미_종료)
+	// go 루틴 초기화 대기
+	<-ch수신_도우미_초기화
 
 	for i := 0; i < 전달_도우미_수량; i++ {
 		<-ch전달_도우미_초기화
 	}
 
+	<-ch호출_도우미_초기화
+
 	for i := 0; i < 콜백_도우미_수량; i++ {
 		<-ch콜백_도우미_초기화
 	}
-
-	<-ch호출_도우미_초기화
 
 	ch종료 := lib.F공통_종료_채널()
 	ch초기화 <- lib.P신호_초기화
@@ -90,8 +99,10 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 		select {
 		case <-ch종료:
 			return nil
+		case <-ch수신_도우미_종료:
+			go go수신_도우미(ch수신_도우미_초기화, ch수신_도우미_종료)
 		case <-ch전달_도우미_종료:
-			go go소켓_전달_도우미(ch전달_도우미_초기화, ch전달_도우미_종료)
+			go go전달_도우미(ch전달_도우미_초기화, ch전달_도우미_종료)
 			<-ch전달_도우미_초기화
 		case <-ch호출_도우미_종료:
 			go go함수_호출_도우미(ch호출_도우미_초기화, ch호출_도우미_종료)
@@ -105,8 +116,53 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 	}
 }
 
-// 질의값을 소켓으로 수신 후 함수 호출 모듈로 전달.
-func go소켓_전달_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
+// 질의값을 소켓으로 수신 후 전달 도우미에게 인계
+func go수신_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
+	defer lib.S예외처리{M에러: &에러, M함수: func() {
+		소켓REP_TR수신.S송신(lib.JSON, 에러)
+		ch종료 <- lib.P신호_종료
+	}}.S실행()
+
+	var 수신값 *lib.S바이트_변환_모음
+	var i질의값 interface{}
+	var ok bool
+
+	질의 := new(lib.S채널_질의_API)
+	질의.Ch회신값 = make(chan interface{}, 0)
+	질의.Ch에러 = make(chan error, 0)
+
+	ch공통_종료 := lib.F공통_종료_채널()
+	ch초기화 <- lib.P신호_초기화
+
+	for {
+		수신값, 에러 = 소켓REP_TR수신.G수신()
+
+		// 수신 과정에서 발생한 문제가 있는 지 확인
+		switch {
+		case 에러 != nil:
+			select {
+			case <-ch공통_종료:
+				return
+			default:
+				panic(lib.New에러with출력(에러))
+			}
+		case 수신값.G수량() != 1:
+			panic(lib.New에러with출력("잘못된 메시지 길이 : 예상값 1, 실제값 %v.", 수신값.G수량()))
+		}
+
+		// 질의 수행
+		if 질의.M질의값, ok = 수신값.S해석기(st.F바이트_변환값_해석).G해석값_단순형(0).(lib.I질의값); !ok {
+			panic(lib.New에러with출력("예상하지 못한 자료형 : '%T'", i질의값))
+		}
+
+		Ch수신 <- 질의
+
+		lib.F실행권한_양보() // Go언어가 for 반복문에서 태스트 전환이 잘 안 되는 경우가 있으므로, 수동으로 태스트 전환.
+	}
+}
+
+// 질의값을 호출 모듈로 전달.
+func go전달_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() {
 		소켓REP_TR수신.S송신(lib.JSON, 에러)
 		ch종료 <- lib.P신호_종료

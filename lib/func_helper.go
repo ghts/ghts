@@ -232,7 +232,8 @@ func F포트_닫힘_확인(주소 T주소) bool {
 
 	switch {
 	case 에러 != nil:
-		if !strings.Contains(에러.Error(), "i/o timeout") {
+		if !strings.Contains(에러.Error(), "i/o timeout") &&
+			!strings.Contains(에러.Error(), "target machine actively refused it") {
 			New에러with출력("접속 에러 발생 : '%v'", 에러)
 		}
 		return true

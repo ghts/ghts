@@ -100,6 +100,10 @@ func TestF영업일_기준_전일_당일(t *testing.T) {
 }
 
 func TestC32_재시작(t *testing.T) {
+	lib.F메모("재시작 테스트 보류")
+
+	t.SkipNow()
+
 	lib.F테스트_에러없음(t, C32_재시작())
 }
 
