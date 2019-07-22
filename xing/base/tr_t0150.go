@@ -172,7 +172,7 @@ func NewT0150_현물_당일_매매일지_수수료_응답_반복값_모음(b []b
 
 	값_모음 = make([]*T0150_현물_당일_매매일지_수수료_응답_반복값, 0)
 
-	for i, g := range g_모음 {
+	for _, g := range g_모음 {
 		g = new(T0150OutBlock1)
 		lib.F확인(binary.Read(버퍼, binary.BigEndian, g))
 

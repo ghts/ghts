@@ -140,13 +140,15 @@ func NewT0151_현물_전일_매매일지_수수료_응답_반복값_모음(b []b
 	수량 := len(b) / SizeT0151OutBlock1
 	g_모음 := make([]*T0151OutBlock1, 수량, 수량)
 
-	값_모음 = make([]*T0151_현물_전일_매매일지_수수료_응답_반복값, 수량, 수량)
+	값_모음 = make([]*T0151_현물_전일_매매일지_수수료_응답_반복값, 0)
 
-	for i, g := range g_모음 {
+	for _, g := range g_모음 {
 		g = new(T0151OutBlock1)
 		lib.F확인(binary.Read(버퍼, binary.BigEndian, g))
 
-		if 문자열 := lib.F2문자열_EUC_KR_공백제거(g.Medosu); 문자열 != "매도" && 문자열 != "매수" {
+		if 문자열 := lib.F2문자열_EUC_KR_공백제거(g.Medosu); 문자열 == "종목소계" {
+			continue
+		} else if 문자열 != "매도" && 문자열 != "매수" {
 			lib.F체크포인트(문자열)
 			continue
 		}
@@ -163,7 +165,7 @@ func NewT0151_현물_전일_매매일지_수수료_응답_반복값_모음(b []b
 		값.M정산금액 = lib.F2정수64_단순형(g.Adjamt)
 		값.M매체 = T통신매체구분(0).F해석(g.Middiv)
 
-		값_모음[i] = 값
+		값_모음 = append(값_모음, 값)
 	}
 
 	return 값_모음, nil
