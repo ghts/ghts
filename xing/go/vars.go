@@ -50,7 +50,8 @@ var (
 
 
 	ch질의        = make(chan *lib.S작업, 1000)
-	ch신호_C32_모음 []chan lib.T신호_32비트_모듈
+	ch신호_C32_시작 = make(chan lib.T신호_32비트_모듈, 1)
+	ch신호_C32_종료 = make(chan lib.T신호_32비트_모듈, 1)
 
 	대기소_C32 = newC32_콜백_대기_저장소()
 

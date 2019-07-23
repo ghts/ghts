@@ -43,12 +43,6 @@ import (
 )
 
 func init() {
-	ch신호_C32_모음 = make([]chan lib.T신호_32비트_모듈, 2)
-
-	for i := 0; i < len(ch신호_C32_모음); i++ {
-		ch신호_C32_모음[i] = make(chan lib.T신호_32비트_모듈, 1)
-	}
-
 	//TR현물_호가_조회_t1101 = "t1101"	// HTS 1101 화면,  DevCenter 소숫점 비교 확인 완료.
 	//TR현물_시세_조회_t1102 = "t1102"	// HTS 1101 화면,  DevCenter 소숫점 비교 확인 완료.
 	//TR현물_기간별_조회_t1305      = "t1305"	// HTS 1305 화면,  DevCenter 소숫점 비교 확인 완료.
@@ -143,7 +137,7 @@ func f초기화_작동_확인() (작동_여부 bool) {
 	ch타임아웃 := time.After(lib.P1분)
 
 	select {
-	case <-ch신호_C32_모음[lib.P신호_C32_READY]: // 서버 접속된 상태임.
+	case <-ch신호_C32_시작: // 서버 접속된 상태임.
 	case <-ch타임아웃:
 		lib.F체크포인트("C32 초기화 타임아웃")
 		return false
@@ -269,42 +263,38 @@ func f전일_당일_설정() (에러 error) {
 	}
 }
 
+func C32_종료됨() bool {
+	프로세스ID := xing_C32_실행_중()
+	포트_닫힘_C함수_호출 := lib.F포트_닫힘_확인(lib.P주소_Xing_C함수_호출)
+	포트_닫힘_실시간 := lib.F포트_닫힘_확인(lib.P주소_Xing_실시간)
+
+	return 프로세스ID < 0 && 포트_닫힘_C함수_호출 && 포트_닫힘_실시간
+}
+
 func C32_종료() (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
-	for i:=0 ; i<10 ; i++ {
-		// 종료 신호 전송
-		lib.F패닉억제_호출(func() {
-			소켓REQ := 소켓REQ_저장소.G소켓()
-			defer 소켓REQ_저장소.S회수(소켓REQ)
+	if !C32_종료됨() {
+		F질의(lib.New질의값_기본형(lib.TR종료, ""))
+	}
 
-			소켓REQ.S옵션(lib.P3초)
-			소켓REQ.S송신(lib.MsgPack, lib.New질의값_기본형(xt.TR종료, ""))
-		})
+	ch타임아웃 := time.After(lib.P1분)
 
-		lib.F대기(lib.P3초)	// C32 프로세스 종료될 때까지 잠시 대기.
+	select {
+	case <-ch신호_C32_종료:
+	case <-ch타임아웃:
+		return lib.New에러with출력("C32 종료 타임아웃")
+	}
 
-		프로세스ID := xing_C32_실행_중()
-		포트_닫힘_C함수_호출 := lib.F포트_닫힘_확인(lib.P주소_Xing_C함수_호출)
-		포트_닫힘_실시간 := lib.F포트_닫힘_확인(lib.P주소_Xing_실시간)
-
-
-		if 프로세스ID < 0 &&
-			포트_닫힘_C함수_호출 &&
-			포트_닫힘_실시간 {
-			lib.F체크포인트("C32 종료 됨.")
-
+	for i:=0 ; i<100 ; i++ {
+		if C32_종료됨() {
 			return nil
 		}
+
+		lib.F대기(lib.P300밀리초)
 	}
 
-	// 강제 종료
-	for {
-		if 프로세스ID := xing_C32_실행_중(); 프로세스ID > 0 {
-			lib.F프로세스_종료by프로세스ID(프로세스ID)
-			lib.F대기(lib.P3초)
-		}
-	}
+	return lib.New에러with출력("C32 종료 실패")
 }
 
 func F리소스_정리() {

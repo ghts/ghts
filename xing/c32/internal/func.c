@@ -183,7 +183,7 @@ HWND _hWnd(bool reset) {
 
 	if (reset) {
 	    if (hWnd != NULL) {
-		    CloseWindow(hWnd);
+		    //CloseWindow(hWnd);
 		    DestroyWindow(hWnd);
 		    UnregisterClass(className, hInstance);
 		    hWnd = NULL;
@@ -289,6 +289,7 @@ bool etkIsConnected() {
 
 bool etkDisconnect() {
     F_BOOL func = (F_BOOL)etkFunc("ETK_Disconnect");
+
     if (func == NULL) {
         return false;
     }

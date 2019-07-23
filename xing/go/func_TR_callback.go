@@ -169,9 +169,14 @@ func f콜백_신호_처리기(콜백 lib.I콜백) (에러 error) {
 	신호 := lib.T신호_32비트_모듈(정수값)
 
 	switch 신호 {
-	case lib.P신호_C32_READY, lib.P신호_C32_종료:
+	case lib.P신호_C32_READY:
 		select {
-		case ch신호_C32_모음[정수값] <- 신호:
+		case ch신호_C32_시작 <- 신호:
+		default:
+		}
+	case lib.P신호_C32_종료:
+		select {
+		case ch신호_C32_종료 <- 신호:
 		default:
 		}
 	default:
