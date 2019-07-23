@@ -56,10 +56,10 @@ var (
 	접속_처리_잠금 sync.Mutex
 	cgo잠금    sync.Mutex
 
-	ch로그인   = make(chan bool, 1)
-	ch콜백    = make(chan lib.I콜백, 100)
-	Ch수신    = make(chan *mangos.Message, 10000)
-	Ch질의    = make(chan *lib.S채널_질의_API, lib.F조건부_정수(runtime.NumCPU() > 4, runtime.NumCPU(), 4))
+	ch로그인 = make(chan bool, 1)
+	ch콜백  = make(chan lib.I콜백, 100)
+	Ch수신  = make(chan *mangos.Message, 10000)
+	Ch질의  = make(chan *lib.S채널_질의_API, lib.F조건부_정수(runtime.NumCPU() > 4, runtime.NumCPU(), 4))
 
 	TR_수신_중    = lib.New안전한_bool(false)
 	API_초기화_완료 = lib.New안전한_bool(false)

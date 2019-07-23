@@ -1014,4 +1014,3 @@ func (p T콜백) String() string {
 		return F2문자열("예상하지 못한 콜백값 : '%v'", p)
 	}
 }
-

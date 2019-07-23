@@ -70,7 +70,7 @@ type T0434_선물옵션_체결_미체결_조회_반복값 struct {
 	M처리순번   int64
 }
 
-func NewT0434InBlock(질의값 *T0434_선물옵션_체결_미체결_조회_질의값, 비밀번호 string) (*T0434InBlock) {
+func NewT0434InBlock(질의값 *T0434_선물옵션_체결_미체결_조회_질의값, 비밀번호 string) *T0434InBlock {
 	정렬구분 := " "
 
 	switch 질의값.M정렬구분 { // '1' : 역순, '2' : 정순

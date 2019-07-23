@@ -144,7 +144,7 @@ func F소켓_정리() {
 	}()
 
 	go func() {
-		for i:=0 ; i<len(소켓REQ_저장소.M저장소) ; i++ {
+		for i := 0; i < len(소켓REQ_저장소.M저장소); i++ {
 			소켓_질의 := <-소켓REQ_저장소.M저장소
 			소켓_질의.Close()
 		}
@@ -152,7 +152,7 @@ func F소켓_정리() {
 		ch완료 <- lib.P신호_OK
 	}()
 
-	for i:=0 ; i<3 ; i++ {
+	for i := 0; i < 3; i++ {
 		<-ch완료
 	}
 }

@@ -110,8 +110,6 @@ func TR구분_String(v lib.TR구분) string {
 	}
 }
 
-
-
 // Dispatch Interface for GiExpertControl Control
 const (
 	IdSetSingleData      = 0x01

@@ -89,7 +89,7 @@ type T0150_현물_당일_매매일지_수수료_응답_반복값 struct {
 	M거래세      int64
 	M농특세      int64
 	M정산금액     int64
-	M매체		T통신매체구분
+	M매체       T통신매체구분
 }
 
 func NewT0150InBlock(질의값 *T0150_현물_당일_매매일지_수수료_질의값) (g *T0150InBlock) {

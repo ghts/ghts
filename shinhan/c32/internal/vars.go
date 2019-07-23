@@ -51,7 +51,7 @@ var (
 	})
 
 	ch콜백    = make(chan lib.I콜백, 100)
-	Ch수신 = make(chan *lib.S채널_질의_API, lib.F조건부_정수(runtime.NumCPU() > 4, runtime.NumCPU(), 4))
+	Ch수신    = make(chan *lib.S채널_질의_API, lib.F조건부_정수(runtime.NumCPU() > 4, runtime.NumCPU(), 4))
 	Ch질의    = make(chan *lib.S채널_질의_API, lib.F조건부_정수(runtime.NumCPU() > 4, runtime.NumCPU(), 4))
 	Ch메인_종료 = make(chan lib.T신호, 1)
 )

@@ -230,7 +230,6 @@ func go함수_호출_도우미(ch초기화, ch종료 chan lib.T신호) {
 		os.Exit(1)
 	}
 
-
 	Ch질의 = make(chan *lib.S채널_질의_API, 10)
 	ch공통_종료 := lib.F공통_종료_채널()
 	ch초기화 <- lib.P신호_초기화
@@ -238,7 +237,6 @@ func go함수_호출_도우미(ch초기화, ch종료 chan lib.T신호) {
 	for {
 		select {
 		case 질의 := <-Ch질의:
-
 
 			f질의값_처리(질의)
 		case <-ch공통_종료:

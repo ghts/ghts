@@ -119,7 +119,7 @@ func NewCSPAT00700InBlock(질의값 *CSPAT00700_현물_정정_주문_질의값, 
 	lib.F바이트_복사_정수(g.OrdPrc[:], 질의값.M주문단가)
 
 	f속성값_초기화(g)
-	
+
 	return g
 }
 

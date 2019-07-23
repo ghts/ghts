@@ -34,8 +34,8 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package sh
 
 import (
-	st "github.com/ghts/ghts/shinhan/base"
 	"github.com/ghts/ghts/lib"
+	st "github.com/ghts/ghts/shinhan/base"
 	xt "github.com/ghts/ghts/xing/base"
 
 	"fmt"
@@ -183,7 +183,7 @@ func C32_종료() (에러 error) {
 	}
 
 	// 강제 종료
-	for i:=0 ; i<10 ; i++ {
+	for i := 0; i < 10; i++ {
 		if 프로세스ID := 신한_C32_실행_중(); 프로세스ID > 0 {
 			lib.F프로세스_종료by프로세스ID(프로세스ID)
 			lib.F대기(lib.P1초)

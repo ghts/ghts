@@ -49,7 +49,7 @@ func F초기화() {
 	<-ch초기화
 
 	go func() {
-		for i:=0 ; i<10; i++ {
+		for i := 0; i < 10; i++ {
 			F콜백_동기식(lib.New콜백_신호(lib.P신호_C32_READY))
 			lib.F대기(lib.P1초)
 		}

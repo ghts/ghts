@@ -286,7 +286,7 @@ func C32_종료() (에러 error) {
 		return lib.New에러with출력("C32 종료 타임아웃")
 	}
 
-	for i:=0 ; i<100 ; i++ {
+	for i := 0; i < 100; i++ {
 		if C32_종료됨() {
 			return nil
 		}

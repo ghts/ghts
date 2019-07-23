@@ -40,8 +40,8 @@ package s32
 import "C"
 
 import (
-	"github.com/ghts/ghts/shinhan/base"
 	"github.com/ghts/ghts/lib"
+	"github.com/ghts/ghts/shinhan/base"
 	"github.com/go-ole/go-ole"
 
 	"bytes"

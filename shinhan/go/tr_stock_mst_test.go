@@ -34,8 +34,8 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package sh
 
 import (
-	st "github.com/ghts/ghts/shinhan/base"
 	"github.com/ghts/ghts/lib"
+	st "github.com/ghts/ghts/shinhan/base"
 	"strings"
 	"testing"
 )
