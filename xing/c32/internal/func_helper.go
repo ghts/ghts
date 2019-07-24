@@ -171,7 +171,7 @@ func f자료형_문자열_해석(g *xt.TR_DATA) (자료형_문자열 string, 에
 			//case xt.SizeCSPAT00800OutBlock2:
 			//	return xt.P자료형_CSPAT00800OutBlock2, nil
 		}
-	case xt.TR현물_당일_매매일지_수수료_t0150:
+	case xt.TR현물_당일_매매일지_t0150:
 		const 헤더_길이 = xt.SizeT0150OutBlock + 5
 		// Non-block 모드는 Occurs데이터 수량을 나타내는 5바이트 추가됨.
 		if 길이 == 0 {
@@ -180,16 +180,17 @@ func f자료형_문자열_해석(g *xt.TR_DATA) (자료형_문자열 string, 에
 			break
 		}
 
-		return xt.P자료형_T0150_현물_당일_매매일지_수수료_응답, nil
-	case xt.TR현물_전일_매매일지_수수료_t0151:
-		switch 길이 {
-		case 0:
+		return xt.P자료형_T0150_현물_당일_매매일지_응답, nil
+	case xt.TR현물_일자별_매매일지_t0151:
+		const 헤더_길이 = xt.SizeT0151OutBlock + 5
+		// Non-block 모드는 Occurs데이터 수량을 나타내는 5바이트 추가됨.
+		if 길이 == 0 {
 			return xt.P자료형_nil, nil
-		case xt.SizeT0151OutBlock:
-			return xt.P자료형_T0151OutBlock, nil
-		case xt.SizeT0151OutBlock1:
-			return xt.P자료형_T0151OutBlock1, nil
+		} else if 길이 < 헤더_길이 || (길이-헤더_길이)%xt.SizeT0151OutBlock1 != 0 {
+			break
 		}
+
+		return xt.P자료형_T0151_현물_일자별_매매일지_응답, nil
 	case xt.TR시간_조회_t0167:
 		return xt.P자료형_T0167OutBlock, nil
 	case xt.TR현물_체결_미체결_조회_t0425:

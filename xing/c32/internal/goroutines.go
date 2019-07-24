@@ -353,9 +353,12 @@ func f조회_및_주문_질의_처리(질의값 lib.I질의값) (식별번호 in
 	case xt.TR현물_취소_주문_CSPAT00800:
 		c데이터 = unsafe.Pointer(xt.NewCSPAT00800InBlock(질의값.(*lib.S질의값_취소_주문), 계좌_비밀번호))
 		길이 = xt.SizeCSPAT00800InBlock1
-	case xt.TR현물_당일_매매일지_수수료_t0150:
-		c데이터 = unsafe.Pointer(xt.NewT0150InBlock(질의값.(*xt.T0150_현물_당일_매매일지_수수료_질의값)))
+	case xt.TR현물_당일_매매일지_t0150:
+		c데이터 = unsafe.Pointer(xt.NewT0150InBlock(질의값.(*xt.T0150_현물_당일_매매일지_질의값)))
 		길이 = xt.SizeT0150InBlock
+	case xt.TR현물_일자별_매매일지_t0151:
+		c데이터 = unsafe.Pointer(xt.NewT0151InBlock(질의값.(*xt.T0151_현물_일자별_매매일지_질의값)))
+		길이 = xt.SizeT0151InBlock
 	case xt.TR시간_조회_t0167:
 		c데이터 = unsafe.Pointer(C.CString(""))
 		defer F메모리_해제(c데이터)

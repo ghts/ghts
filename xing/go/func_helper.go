@@ -175,8 +175,8 @@ func f접속유지_도우미() {
 func f에러_발생(TR코드, 코드, 내용 string) bool {
 	switch TR코드 {
 	case xt.TR현물_정상_주문_CSPAT00600,
-		xt.TR현물_당일_매매일지_수수료_t0150,
-		xt.TR현물_전일_매매일지_수수료_t0151,
+		xt.TR현물_당일_매매일지_t0150,
+		xt.TR현물_일자별_매매일지_t0151,
 		xt.TR시간_조회_t0167,
 		xt.TR현물_체결_미체결_조회_t0425,
 		xt.TR선물옵션_체결_미체결_조회_t0434,
@@ -335,7 +335,7 @@ func C32_재시작() (에러 error) {
 
 	defer xing_C32_재실행_시각.S값(lib.F지금())
 
-	lib.F문자열_출력("** C32 재시작 프로세스 시작 **")
+	lib.F문자열_출력("** C32 재시작 : %v **", time.Now().Format(lib.P간략한_시간_형식))
 
 	lib.F확인(C32_종료())
 	lib.F확인(f초기화_xing_C32())

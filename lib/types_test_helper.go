@@ -81,10 +81,17 @@ func (s *S모의_테스트) S모의_테스트_리셋()                          
 type S예외처리 struct {
 	M에러    *error
 	M함수    func()
+	M함수_항상 func()
 	M출력_숨김 bool
 }
 
 func (s S예외처리) S실행() {
+	defer func() {
+		if s.M함수_항상 != nil {
+			s.M함수_항상()
+		}
+	}()
+
 	패닉_복원값 := recover()
 
 	var 에러 error

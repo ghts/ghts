@@ -39,7 +39,7 @@ import (
 	"github.com/ghts/ghts/lib"
 )
 
-type T0150_현물_당일_매매일지_수수료_질의값 struct {
+type T0150_현물_당일_매매일지_질의값 struct {
 	*lib.S질의값_기본형
 	M계좌번호     string
 	M연속키_매매구분 string
@@ -48,12 +48,12 @@ type T0150_현물_당일_매매일지_수수료_질의값 struct {
 	M연속키_매체   string
 }
 
-type T0150_현물_당일_매매일지_수수료_응답 struct {
-	M헤더     *T0150_현물_당일_매매일지_수수료_응답_헤더
-	M반복값_모음 []*T0150_현물_당일_매매일지_수수료_응답_반복값
+type T0150_현물_당일_매매일지_응답 struct {
+	M헤더     *T0150_현물_당일_매매일지_응답_헤더
+	M반복값_모음 []*T0150_현물_당일_매매일지_응답_반복값
 }
 
-type T0150_현물_당일_매매일지_수수료_응답_헤더 struct {
+type T0150_현물_당일_매매일지_응답_헤더 struct {
 	M매도_수량   int64
 	M매도_약정금액 int64
 	M매도_수수료  int64
@@ -79,20 +79,20 @@ type T0150_현물_당일_매매일지_수수료_응답_헤더 struct {
 	CTS_매체   string
 }
 
-type T0150_현물_당일_매매일지_수수료_응답_반복값 struct {
+type T0150_현물_당일_매매일지_응답_반복값 struct {
 	M매도_매수_구분 lib.T매도_매수_구분
 	M종목코드     string
 	M수량       int64
 	M단가       int64
 	M약정금액     int64
-	M수수료      int64
-	M거래세      int64
-	M농특세      int64
-	M정산금액     int64
-	M매체       T통신매체구분
+	//M수수료      int64
+	M거래세  int64
+	M농특세  int64
+	M정산금액 int64
+	M매체   T통신매체구분
 }
 
-func NewT0150InBlock(질의값 *T0150_현물_당일_매매일지_수수료_질의값) (g *T0150InBlock) {
+func NewT0150InBlock(질의값 *T0150_현물_당일_매매일지_질의값) (g *T0150InBlock) {
 	g = new(T0150InBlock)
 	lib.F바이트_복사_문자열(g.Accno[:], 질의값.M계좌번호)
 	lib.F바이트_복사_문자열(g.Medosu[:], 질의값.M연속키_매매구분)
@@ -105,26 +105,26 @@ func NewT0150InBlock(질의값 *T0150_현물_당일_매매일지_수수료_질�
 	return g
 }
 
-func NewT0150_현물_당일_매매일지_수수료_응답(b []byte) (값 *T0150_현물_당일_매매일지_수수료_응답, 에러 error) {
+func NewT0150_현물_당일_매매일지_응답(b []byte) (값 *T0150_현물_당일_매매일지_응답, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
 
 	const 헤더_길이 = SizeT0150OutBlock + 5
 	lib.F조건부_패닉(len(b) < 헤더_길이, "예상하지 못한 길이 : '%v'", len(b))
 	lib.F조건부_패닉((len(b)-헤더_길이)%SizeT0150OutBlock1 != 0, "예상하지 못한 길이 : '%v'", len(b))
-	값 = new(T0150_현물_당일_매매일지_수수료_응답)
+	값 = new(T0150_현물_당일_매매일지_응답)
 
-	값.M헤더, 에러 = NewT0150_현물_당일_매매일지_수수료_응답_헤더(b[:SizeT0150OutBlock])
+	값.M헤더, 에러 = NewT0150_현물_당일_매매일지_응답_헤더(b[:SizeT0150OutBlock])
 	lib.F확인(에러)
 
 	b = b[SizeT0150OutBlock+5:]
 
-	값.M반복값_모음, 에러 = NewT0150_현물_당일_매매일지_수수료_응답_반복값_모음(b)
+	값.M반복값_모음, 에러 = NewT0150_현물_당일_매매일지_응답_반복값_모음(b)
 	lib.F확인(에러)
 
 	return 값, nil
 }
 
-func NewT0150_현물_당일_매매일지_수수료_응답_헤더(b []byte) (값 *T0150_현물_당일_매매일지_수수료_응답_헤더, 에러 error) {
+func NewT0150_현물_당일_매매일지_응답_헤더(b []byte) (값 *T0150_현물_당일_매매일지_응답_헤더, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
 
 	lib.F조건부_패닉(len(b) != SizeT0150OutBlock, "예상하지 못한 길이 : '%v", len(b))
@@ -132,7 +132,7 @@ func NewT0150_현물_당일_매매일지_수수료_응답_헤더(b []byte) (값 
 	g := new(T0150OutBlock)
 	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
 
-	값 = new(T0150_현물_당일_매매일지_수수료_응답_헤더)
+	값 = new(T0150_현물_당일_매매일지_응답_헤더)
 	값.M매도_수량 = lib.F2정수64_단순형(g.Mdqty)
 	값.M매도_약정금액 = lib.F2정수64_단순형(g.Mdamt)
 	값.M매도_수수료 = lib.F2정수64_단순형(g.Mdfee)
@@ -160,7 +160,7 @@ func NewT0150_현물_당일_매매일지_수수료_응답_헤더(b []byte) (값 
 	return 값, nil
 }
 
-func NewT0150_현물_당일_매매일지_수수료_응답_반복값_모음(b []byte) (값_모음 []*T0150_현물_당일_매매일지_수수료_응답_반복값, 에러 error) {
+func NewT0150_현물_당일_매매일지_응답_반복값_모음(b []byte) (값_모음 []*T0150_현물_당일_매매일지_응답_반복값, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 값_모음 = nil }}.S실행()
 
 	나머지 := len(b) % SizeT0150OutBlock1
@@ -170,7 +170,7 @@ func NewT0150_현물_당일_매매일지_수수료_응답_반복값_모음(b []b
 	수량 := len(b) / SizeT0150OutBlock1
 	g_모음 := make([]*T0150OutBlock1, 수량, 수량)
 
-	값_모음 = make([]*T0150_현물_당일_매매일지_수수료_응답_반복값, 0)
+	값_모음 = make([]*T0150_현물_당일_매매일지_응답_반복값, 0)
 
 	for _, g := range g_모음 {
 		g = new(T0150OutBlock1)
@@ -183,13 +183,13 @@ func NewT0150_현물_당일_매매일지_수수료_응답_반복값_모음(b []b
 			continue
 		}
 
-		값 := new(T0150_현물_당일_매매일지_수수료_응답_반복값)
+		값 := new(T0150_현물_당일_매매일지_응답_반복값)
 		값.M매도_매수_구분 = lib.T매도_매수_구분(0).F해석(g.Medosu)
 		값.M종목코드 = lib.F2문자열_공백제거(g.Expcode)
 		값.M수량 = lib.F2정수64_단순형(g.Qty)
 		값.M단가 = lib.F2정수64_단순형(g.Price)
 		값.M약정금액 = lib.F2정수64_단순형(g.Amt)
-		값.M수수료 = lib.F2정수64_단순형(g.Fee)
+		//값.M수수료 = lib.F2정수64_단순형(g.Fee)
 		값.M거래세 = lib.F2정수64_단순형(g.Tax)
 		값.M농특세 = lib.F2정수64_단순형(g.Argtax)
 		값.M정산금액 = lib.F2정수64_단순형(g.Adjamt)
