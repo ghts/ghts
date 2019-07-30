@@ -768,7 +768,7 @@ func CSV읽기(파일명 string, 파일_잠금 sync.Locker) (레코드_모음 []
 		defer 잠금.RUnlock()
 	default:
 		파일_잠금.Lock()
-		파일_잠금.Unlock()
+		defer 파일_잠금.Unlock()
 	}
 
 	파일 := F확인(os.Open(파일명)).(*os.File)
