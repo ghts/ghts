@@ -1,4 +1,5 @@
-/* Copyright (C) 2015-2019 김운하(UnHa Kim)  unha.kim.ghts@gmail.com
+'''
+Copyright (C) 2015-2019 김운하(UnHa Kim)  < unha.kim.ghts at gmail dot com >
 
 이 파일은 GHTS의 일부입니다.
 
@@ -15,7 +16,7 @@ GNU LGPL 2.1판은 이 프로그램과 함께 제공됩니다.
 (자유 소프트웨어 재단 : Free Software Foundation, Inc.,
 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA)
 
-Copyright (C) 2015-2019년 UnHa Kim (unha.kim.ghts@gmail.com)
+Copyright (C) 2015-2019년 UnHa Kim (< unha.kim.ghts at gmail dot com >)
 
 This file is part of GHTS.
 
@@ -29,38 +30,42 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License
-along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
+along with GHTS.  If not, see <http://www.gnu.org/licenses/>.
+'''
 
-package s32
+import win32com.client
 
-import (
-	"github.com/ghts/ghts/lib"
-	"runtime"
+class C신한Indi():
+    def __init__(self):
+        super.__init__()
 
-	"path/filepath"
-	"reflect"
-)
+        # 일반 TR OCX
+        self.IndiTR = win32com.client.Dispatch("GIEXPERTCONTROL.GiExpertControlCtrl.1")
 
-var (
-	신한API_조회, 신한API_실시간 *S신한API
+        #
+        self.IndiTR.ReceiveData.connect(self.ReceiveData)
+        self.IndiTR.ReceiveSysMsg.connect(self.ReceiveSysMsg)
+        self.질의ID_저장소 = {} # TR 관리를 위해 사전 변수를 하나 생성합니다
 
-	소켓REP_TR수신   = lib.NewRawNano소켓REP_단순형(lib.P주소_신한_C함수_호출)
-	소켓PUB_실시간_정보 = lib.F확인(lib.NewNano소켓PUB(lib.P주소_신한_실시간)).(lib.I소켓)
+    def ReceiveData(self, 질의ID):
+        # rqid를 통해서 TR코드를 가져온다.
+        TR코드 = self.질의ID_저장소[질의ID]
 
-	소켓REQ_저장소 = lib.New소켓_저장소(20, func() lib.I소켓_질의 {
-		return lib.NewNano소켓REQ_단순형(lib.P주소_신한_C함수_콜백, lib.P30초)
-	})
+        if TR코드 == "stock_mst":
+            수량 = self.IndiTR.GetMultiRowCount()
+            print(수량)
 
-	ch콜백    = make(chan lib.I콜백, 100)
-	Ch수신    = make(chan *lib.S채널_질의_API, lib.F조건부_정수(runtime.NumCPU() > 4, runtime.NumCPU(), 4))
-	Ch질의    = make(chan *lib.S채널_질의_API, lib.F조건부_정수(runtime.NumCPU() > 4, runtime.NumCPU(), 4))
-	Ch메인_종료 = make(chan lib.T신호, 1)
-)
+            데이터 = [][]
 
-// 초기화 이후에는 사실상 읽기 전용이어서, 다중 사용에 문제가 없는 값들.
-var (
-	설정파일_디렉토리 = filepath.Join(lib.GOPATH(), "src", reflect.TypeOf(S신한API{}).PkgPath())
-	설정파일_경로   = filepath.Join(설정파일_디렉토리, "config.ini")
-	계좌번호_모음   []string
-	계좌_비밀번호   string
-)
+            for i in range(수량):
+                for j in range(14):
+                    데이터[i][j] = self.IndiTR.GetMultiData(i, j)
+
+            print(데이터)
+
+    def ReceiveSysMsg(self, 메시지ID):
+        print("시스템 메시지 = ", 메시지ID)
+
+if __name__ == "__main__":
+    신한Indi = C신한Indi()
+    신한Indi.

@@ -72,7 +72,7 @@ func (s *S신한API) InvokeVariant(Id int, 인수_모음 ...interface{}) (결과
 	결과값 = new(ole.VARIANT)
 	ole.VariantInit(결과값)
 
-	lib.F문자열_출력("DispId : '%v'", Id)
+	lib.F문자열_출력("DispId : '%x'", Id)
 
 	hResult := C.IDispatchInvoke(
 		unsafe.Pointer(s.C오브젝트_포인터),
