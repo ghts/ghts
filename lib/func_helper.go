@@ -37,6 +37,7 @@ import (
 	"bytes"
 	"encoding/csv"
 	"encoding/gob"
+	"encoding/json"
 	"errors"
 	"io"
 	"io/ioutil"
@@ -726,6 +727,14 @@ func F파일에서_값_읽기(값_포인터 interface{}, 파일명 string, 파�
 	}
 
 	return nil
+}
+
+func JSON쓰기(값 interface{}, 파일명 string) error {
+	if 바이트_변환값, 에러 := json.Marshal(값); 에러 != nil {
+		return 에러
+	} else {
+		return ioutil.WriteFile(파일명, 바이트_변환값, 0644)
+	}
 }
 
 func CSV쓰기(레코드_모음 [][]string, 파일명 string, 파일_잠금 sync.Locker) (에러 error) {

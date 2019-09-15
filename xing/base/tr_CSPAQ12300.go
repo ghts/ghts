@@ -238,7 +238,7 @@ func NewCSPAQ12300_현물계좌_잔고내역_조회_응답_헤더1(b []byte) (�
 
 	값 = new(CSPAQ12300_현물계좌_잔고내역_응답1)
 	값.M레코드_수량 = lib.F2정수64_단순형(g.RecCnt)
-	값.M계좌번호 = lib.F2문자열_공백제거(g.AcntNo)
+	값.M계좌번호 = lib.F2문자열_앞뒤_공백제거(g.AcntNo)
 	값.M잔고생성_구분 = lib.F2문자열(g.BalCreTp)
 	값.M수수료적용_구분 = lib.F2문자열(g.CmsnAppTpCode)
 	값.D2잔고기준조회_구분 = lib.F2문자열(g.D2balBaseQryTp)
@@ -348,7 +348,7 @@ func NewCSPAQ12300_현물계좌_잔고내역_조회_응답_반복값_모음(b []
 		lib.F확인(binary.Read(버퍼, binary.BigEndian, g))
 
 		값 := new(CSPAQ12300_현물계좌_잔고내역_응답_반복값)
-		값.M종목코드 = strings.Replace(lib.F2문자열_공백제거(g.IsuNo), "A", "", 1)
+		값.M종목코드 = strings.Replace(lib.F2문자열_앞뒤_공백제거(g.IsuNo), "A", "", 1)
 		값.M종목명 = lib.F2문자열_EUC_KR_공백제거(g.IsuNm)
 		값.M유가증권잔고유형코드 = lib.F2문자열(g.SecBalPtnCode)
 		값.M유가증권잔고유형명 = lib.F2문자열_EUC_KR_공백제거(g.SecBalPtnNm)
@@ -363,7 +363,7 @@ func NewCSPAQ12300_현물계좌_잔고내역_조회_응답_반복값_모음(b []
 		값.M현재가 = lib.F2실수_소숫점_추가_단순형(g.NowPrc, 2)
 		값.M신용금액 = lib.F2정수64_단순형(g.CrdtAmt)
 
-		if lib.F2문자열_공백제거(g.DueDt) != "" {
+		if lib.F2문자열_앞뒤_공백제거(g.DueDt) != "" {
 			lib.F체크포인트(lib.F2문자열(g.DueDt))
 			값.M만기일 = lib.F2포맷된_일자_단순형_공백은_초기값("??", g.DueDt)
 		}
@@ -373,7 +373,7 @@ func NewCSPAQ12300_현물계좌_잔고내역_조회_응답_반복값_모음(b []
 		값.M전일매수체결가 = lib.F2실수_소숫점_추가_단순형(g.PrdayBuyExecPrc, 2)
 		값.M전일매수수량 = lib.F2정수64_단순형(g.PrdayBuyQty)
 
-		if lib.F2문자열_공백제거(g.LoanDt) != "" {
+		if lib.F2문자열_앞뒤_공백제거(g.LoanDt) != "" {
 			lib.F체크포인트(lib.F2문자열(g.LoanDt))
 			값.M대출일 = lib.F2포맷된_일자_단순형("??", g.LoanDt)
 		}

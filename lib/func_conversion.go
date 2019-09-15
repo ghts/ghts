@@ -328,7 +328,7 @@ func F2문자열(값_모음 ...interface{}) string {
 	}
 }
 
-func F2문자열_공백제거(값 interface{}) string {
+func F2문자열_앞뒤_공백제거(값 interface{}) string {
 	return strings.TrimSpace(F2문자열(값))
 }
 
@@ -390,7 +390,7 @@ func F2정수(값 interface{}) (int, error) {
 
 // defer(), recover()로 패닉에 대처할 수 있는 경우에만 사용할 것.
 func F2정수_단순형(값 interface{}) int {
-	if F2문자열_공백제거(값) == "" {
+	if F2문자열_앞뒤_공백제거(값) == "" {
 		return 0
 	}
 
@@ -427,7 +427,7 @@ func F2정수64(값 interface{}) (int64, error) {
 
 // defer(), recover()로 패닉에 대처할 수 있는 경우에만 사용할 것.
 func F2정수64_단순형(값 interface{}) int64 {
-	if F2문자열_공백제거(값) == "" {
+	if F2문자열_앞뒤_공백제거(값) == "" {
 		return 0
 	}
 
@@ -509,7 +509,7 @@ func F2실수_단순형(값 interface{}) float64 {
 }
 
 func F2실수_단순형_공백은_0(값 interface{}) float64 {
-	if F2문자열_공백제거(값) == "" {
+	if F2문자열_앞뒤_공백제거(값) == "" {
 		return 0.0
 	}
 
@@ -621,7 +621,7 @@ func F2포맷된_시각_단순형(포맷 string, 값 interface{}) time.Time {
 }
 
 func F2포맷된_시각_단순형_공백은_초기값(포맷 string, 값 interface{}) time.Time {
-	if F2문자열_공백제거(값) == "" {
+	if F2문자열_앞뒤_공백제거(값) == "" {
 		return time.Time{}
 	}
 
@@ -650,7 +650,7 @@ func F2포맷된_일자_단순형(포맷 string, 값 interface{}) time.Time {
 }
 
 func F2포맷된_일자_단순형_공백은_초기값(포맷 string, 값 interface{}) time.Time {
-	if F2문자열_공백제거(값) == "" {
+	if F2문자열_앞뒤_공백제거(값) == "" {
 		return time.Time{}
 	}
 
@@ -678,7 +678,7 @@ func F2일자별_시각_단순형(일자 time.Time, 포맷 string, 값 interface
 }
 
 func F2일자별_시각_단순형_공백은_초기값(일자 time.Time, 포맷 string, 값 interface{}) time.Time {
-	if F2문자열_공백제거(값) == "" {
+	if F2문자열_앞뒤_공백제거(값) == "" {
 		return time.Time{}
 	}
 
@@ -694,7 +694,7 @@ func F2금일_시각_단순형(포맷 string, 값 interface{}) time.Time {
 }
 
 func F2금일_시각_단순형_공백은_초기값(포맷 string, 값 interface{}) time.Time {
-	if F2문자열_공백제거(값) == "" {
+	if F2문자열_앞뒤_공백제거(값) == "" {
 		return time.Time{}
 	}
 

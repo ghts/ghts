@@ -172,7 +172,7 @@ func newCFOAQ00600_선물옵션_계좌주문체결내역_응답1(b []byte) (값 
 
 	값 = new(CFOAQ00600_선물옵션_계좌주문체결내역_응답1)
 	값.M레코드갯수 = lib.F2정수64_단순형(g.RecCnt)
-	값.M계좌번호 = lib.F2문자열_공백제거(g.AcntNo)
+	값.M계좌번호 = lib.F2문자열_앞뒤_공백제거(g.AcntNo)
 	값.M조회_시작일 = lib.F2포맷된_일자_단순형("20060102", g.QrySrtDt)
 	값.M조회_종료일 = lib.F2포맷된_일자_단순형("20060102", g.QryEndDt)
 	값.M선물옵션분류 = CFOAQ00600_선물옵션분류(lib.F2정수_단순형(g.FnoClssCode))
@@ -234,7 +234,7 @@ func newCFOAQ00600_선물옵션_계좌주문체결내역_반복값(b []byte) (�
 		값.M주문시각 = lib.F2일자별_시각_단순형(주문일, "150405.999", 주문시각[:6]+"."+주문시각[6:])
 		값.M주문번호 = lib.F2정수64_단순형(g.OrdNo)
 		값.M원주문번호 = lib.F2정수64_단순형(g.OrgOrdNo)
-		값.M종목코드 = lib.F2문자열_공백제거(g.FnoIsuNo)
+		값.M종목코드 = lib.F2문자열_앞뒤_공백제거(g.FnoIsuNo)
 		값.M종목명 = lib.F2문자열_EUC_KR_공백제거(g.IsuNm)
 
 		switch lib.F2문자열_EUC_KR_공백제거(g.BnsTpNm) {
@@ -292,7 +292,7 @@ func newCFOAQ00600_선물옵션_계좌주문체결내역_반복값(b []byte) (�
 		값.M체결번호 = lib.F2정수64_단순형(g.ExecNo)
 		값.M매매손익금액 = lib.F2정수64_단순형(g.BnsplAmt)
 		값.M미체결수량 = lib.F2정수64_단순형(g.UnercQty)
-		값.M사용자ID = lib.F2문자열_공백제거(g.UserId)
+		값.M사용자ID = lib.F2문자열_앞뒤_공백제거(g.UserId)
 		//값.M통신매체 = T통신매체구분(lib.F2정수_단순형(g.CommdaCode))
 
 		값_모음[i] = 값

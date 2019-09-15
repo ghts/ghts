@@ -99,7 +99,7 @@ func NewT0434_선물옵션_체결_미체결_조회_응답(b []byte) (값 *T0434_
 	버퍼 := bytes.NewBuffer(b)
 
 	값 = new(T0434_선물옵션_체결_미체결_조회_응답)
-	값.M연속키 = lib.F2문자열_공백제거(버퍼.Next(SizeT0434OutBlock))
+	값.M연속키 = lib.F2문자열_앞뒤_공백제거(버퍼.Next(SizeT0434OutBlock))
 
 	수량 := lib.F2정수_단순형(버퍼.Next(5))
 	lib.F조건부_패닉(버퍼.Len() != 수량*SizeT0434OutBlock1,
@@ -141,8 +141,8 @@ func newT0434_선물옵션_체결_미체결_반복값_모음(b []byte) (값_모�
 		값.M미체결_잔량 = lib.F2정수64_단순형(g.Ordrem)
 		값.M상태 = lib.F2문자열_EUC_KR_공백제거(g.Status)
 		값.M주문시각 = lib.F2일자별_시각_단순형(당일.G값(), "150405.99", 주문시간_문자열)
-		값.M종목코드 = lib.F2문자열_공백제거(g.Expcode)
-		값.M사유코드 = lib.F2문자열_공백제거(g.Rtcode)
+		값.M종목코드 = lib.F2문자열_앞뒤_공백제거(g.Expcode)
+		값.M사유코드 = lib.F2문자열_앞뒤_공백제거(g.Rtcode)
 		값.M처리순번 = lib.F2정수64_단순형(g.Sysprocseq)
 
 		switch lib.F2문자열_EUC_KR_공백제거(g.Ordgb) {

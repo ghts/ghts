@@ -176,7 +176,7 @@ func NewT0425_현물_체결_미체결_조회_응답_반복값_모음(b []byte) (
 
 		값 := new(T0425_현물_체결_미체결_조회_응답_반복값)
 		값.M주문_번호 = lib.F2정수64_단순형(g.Ordno)
-		값.M종목코드 = lib.F2문자열_공백제거(g.Expcode)
+		값.M종목코드 = lib.F2문자열_앞뒤_공백제거(g.Expcode)
 		값.M매매_구분 = lib.F2문자열_EUC_KR_공백제거(g.Medosu)
 		값.M주문_수량 = lib.F2정수64_단순형(g.Qty)
 		값.M주문_가격 = lib.F2정수64_단순형(g.Price)

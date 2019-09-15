@@ -113,7 +113,7 @@ func OnTrData_Go(TR데이터 *C.TR_DATA, 데이터_포인터 *C.uchar) {
 	raw값 := C.GoBytes(unsafe.Pointer(데이터_포인터), C.int(g.DataLength))
 	raw값 = f민감정보_삭제(raw값, 자료형_문자열)
 
-	TR코드 := lib.F2문자열_공백제거(g.TrCode)
+	TR코드 := lib.F2문자열_앞뒤_공백제거(g.TrCode)
 	추가_연속조회_필요_문자열 := lib.F2문자열(g.Cont)
 	추가_연속조회_필요 := false
 	연속키 := ""
@@ -123,7 +123,7 @@ func OnTrData_Go(TR데이터 *C.TR_DATA, 데이터_포인터 *C.uchar) {
 		추가_연속조회_필요 = false
 	case "1", "Y":
 		추가_연속조회_필요 = true
-		연속키 = lib.F2문자열_공백제거(g.ContKey)
+		연속키 = lib.F2문자열_앞뒤_공백제거(g.ContKey)
 	default:
 		panic(lib.New에러with출력("예상하지 못한 경우. '%v' '%v'", TR코드, 추가_연속조회_필요_문자열))
 	}
@@ -161,7 +161,7 @@ func OnMessageAndError_Go(MSG데이터 *C.MSG_DATA, 데이터_포인터 *C.char)
 	콜백값 := new(lib.S콜백_메시지_및_에러)
 	콜백값.S콜백_기본형 = lib.New콜백_기본형(lib.P콜백_메시지_및_에러)
 	콜백값.M식별번호 = int(g.RequestID)
-	콜백값.M코드 = lib.F2문자열_공백제거(g.MsgCode)
+	콜백값.M코드 = lib.F2문자열_앞뒤_공백제거(g.MsgCode)
 	콜백값.M내용 = lib.F2문자열_EUC_KR_공백제거(C.GoBytes(unsafe.Pointer(데이터_포인터), C.int(g.MsgLength)))
 	콜백값.M에러여부 = 에러여부
 
@@ -195,7 +195,7 @@ func OnRealtimeData_Go(REALTIME데이터 *C.REALTIME_DATA, 데이터_포인터 *
 
 	// KeyData, RegKey등이 불필요한 듯 해서 전송하지 않음. 필요하면 추가할 것.
 	raw값 := C.GoBytes(unsafe.Pointer(데이터_포인터), C.int(g.DataLength))
-	raw값 = f민감정보_삭제(raw값, lib.F2문자열_공백제거(g.TrCode))
+	raw값 = f민감정보_삭제(raw값, lib.F2문자열_앞뒤_공백제거(g.TrCode))
 	바이트_변환값 := lib.F확인(lib.New바이트_변환Raw(lib.F2문자열(g.TrCode), raw값, false)).(*lib.S바이트_변환)
 
 	소켓PUB_실시간_정보.S송신_검사(lib.Raw, 바이트_변환값)

@@ -66,6 +66,7 @@ const (
 	P10분    = 10 * time.Minute
 	P1시간    = time.Hour
 	P1일     = 24 * time.Hour
+	P1년	= 365 * P1일
 	P무기한    = 9999 * time.Hour
 
 	P에러_자료형 = "error"
