@@ -139,6 +139,8 @@ const (
 	SizeT3341InBlock        = int(unsafe.Sizeof(T3341InBlock{}))
 	SizeT3341OutBlock       = int(unsafe.Sizeof(T3341OutBlock{}))
 	SizeT3341OutBlock1      = int(unsafe.Sizeof(T3341OutBlock1{}))
+	SizeT8407InBlock        = int(unsafe.Sizeof(T8407InBlock{}))
+	SizeT8407OutBlock1      = int(unsafe.Sizeof(T8407OutBlock1{}))
 	SizeT8411InBlock        = int(unsafe.Sizeof(T8411InBlock{}))
 	SizeT8411OutBlock       = int(unsafe.Sizeof(T8411OutBlock{}))
 	SizeT8411OutBlock1      = int(unsafe.Sizeof(T8411OutBlock1{}))
@@ -239,6 +241,10 @@ const (
 	P자료형_T3341_재무순위_질의값                 = "T3341_재무순위_질의값"
 	P자료형_T3341OutBlock                  = "T3341OutBlock"
 	P자료형_T3341OutBlock1                 = "T3341OutBlock1"
+	P자료형_T8407_현물_멀티_현재가_조회_질의값         = "T8407_현물_멀티_현재가_조회_질의값"
+	P자료형_T8407_현물_멀티_현재가_조회_응답          = "T8407_현물_멀티_현재가_조회_응답"
+	P자료형_T8407_현물_멀티_현재가_조회_응답_반복값      = "T8407_현물_멀티_현재가_조회_응답_반복값"
+	P자료형_T8407OutBlock1                 = "T8407OutBlock1"
 	P자료형_T8411_현물_차트_틱_질의값              = "T8411_현물_차트_틱_질의값"
 	P자료형_T8411_현물_차트_틱_응답               = "T8411_현물_차트_틱_응답"
 	P자료형_T8411_현물_차트_틱_응답_헤더            = "T8411_현물_차트_틱_응답_헤더"
@@ -374,6 +380,7 @@ const (
 	TR_ETF_시간별_추이_t1902       = "t1902"
 	TR기업정보_요약_t3320           = "t3320"
 	TR재무순위_종합_t3341           = "t3341"
+	TR현물_멀티_현재가_조회_t8407      = "t8407"
 	TR현물_차트_틱_t8411           = "t8411"
 	TR현물_차트_분_t8412           = "t8412"
 	TR현물_차트_일주월_t8413         = "t8413"

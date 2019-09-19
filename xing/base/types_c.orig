@@ -208,6 +208,10 @@ type T3341InBlock C.T3341InBlock
 type T3341OutBlock C.T3341OutBlock
 type T3341OutBlock1 C.T3341OutBlock1
 
+// 현물 멀티 현재가 조회 (t8407)
+type T8407InBlock C.T8407InBlock
+type T8407OutBlock1 C.T8407OutBlock1
+
 // 현물 차트 틱 (t8411)
 type T8411InBlock C.T8411InBlock
 type T8411OutBlock C.T8411OutBlock

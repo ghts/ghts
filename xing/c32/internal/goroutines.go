@@ -425,6 +425,9 @@ func f조회_및_주문_질의_처리(질의값 lib.I질의값) (식별번호 in
 	case xt.TR재무순위_종합_t3341:
 		c데이터 = unsafe.Pointer(xt.NewT3341InBlock(질의값.(*xt.T3341_재무순위_질의값)))
 		길이 = xt.SizeT3341InBlock
+	case xt.TR현물_멀티_현재가_조회_t8407:
+		c데이터 = unsafe.Pointer(xt.NewT8407InBlock(질의값.(*xt.T8407_현물_멀티_현재가_조회_질의값)))
+		길이 = xt.SizeT8407InBlock
 	case xt.TR현물_차트_틱_t8411:
 		연속키 := lib.F2문자열_앞뒤_공백제거(질의값.(*xt.T8411_현물_차트_틱_질의값).M연속일자) +
 			lib.F2문자열_앞뒤_공백제거(질의값.(*xt.T8411_현물_차트_틱_질의값).M연속시간)

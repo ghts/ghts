@@ -414,6 +414,18 @@ func F바이트_변환값_해석(바이트_변환값 *lib.S바이트_변환) (�
 		s := new(T3341_재무순위_질의값)
 		lib.F확인(바이트_변환값.G값(s))
 		return s, nil
+	case P자료형_T8407_현물_멀티_현재가_조회_질의값:
+		s := new(T8407_현물_멀티_현재가_조회_질의값)
+		lib.F확인(바이트_변환값.G값(s))
+		return s, nil
+	//case P자료형_T8407_현물_멀티_현재가_조회_응답:
+	//	s := new(T8407_현물_멀티_현재가_조회_응답)
+	//	lib.F확인(바이트_변환값.G값(s))
+	//	return s, nil
+	case P자료형_T8407_현물_멀티_현재가_조회_응답_반복값:
+		s := new(T8407_현물_멀티_현재가_조회_응답_반복값)
+		lib.F확인(바이트_변환값.G값(s))
+		return s, nil
 	case P자료형_T8411_현물_차트_틱_질의값:
 		s := new(T8411_현물_차트_틱_질의값)
 		lib.F확인(바이트_변환값.G값(s))
@@ -612,6 +624,8 @@ func F바이트_변환값_해석_Raw(바이트_변환값 *lib.S바이트_변환)
 		return NewT3341_재무순위_응답_헤더(b)
 	case P자료형_T3341OutBlock1:
 		return NewT3341_재무순위_응답_반복값_모음(b)
+	case P자료형_T8407OutBlock1:
+		return NewT8407_현물_멀티_현재가_조회_응답_반복값_모음(b)
 	case P자료형_T8411OutBlock:
 		return NewT8411_현물_차트_틱_응답_헤더(b)
 	case P자료형_T8411OutBlock1:
