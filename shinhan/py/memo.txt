@@ -1,9 +1,0 @@
-COM 라이브러리 사용에 필요한 win32com 설치법.
-
-32비트용 python 3.7 설치.
-
-pip 업그레이드
-> pip install --upgrade pip
-
-win32com를 포함한 pywin32 설치
-> pip install --upgrade pywin32

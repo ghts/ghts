@@ -1,5 +1,0 @@
-- StartIndi/CloseIndi 메소드 : DONE
-- TR호출을 위한 메소드 호출 Flow 알아볼 것.
-- ReceiveData/ReceiveSysMsg 이벤트 구현
-
-
