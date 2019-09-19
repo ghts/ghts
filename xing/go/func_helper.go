@@ -44,10 +44,18 @@ import (
 )
 
 func F전일() time.Time {
+	if 전일 == nil {
+		F초기화()
+	}
+
 	return 전일.G값()
 }
 
 func F당일() time.Time {
+	if 당일 == nil {
+		F초기화()
+	}
+
 	return 당일.G값()
 }
 
