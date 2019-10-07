@@ -112,14 +112,27 @@ func f초기화_서버_접속(서버_구분 xt.T서버_구분) (에러 error) {
 }
 
 func F리소스_정리() {
-	F실시간_정보_모두_해지()
-	F로그아웃_및_접속해제()
-	F자원_해제()
-	F소켓_정리()
+	f실행(F실시간_정보_모두_해지, lib.P5초)
+	f실행(F로그아웃_및_접속해제, lib.P5초)
+	f실행(F자원_해제, lib.P5초)
+	f실행(F소켓_정리, lib.P20초)
 }
 
-func F소켓_정리() {
+func f실행(함수 func() error, 타임아웃 time.Duration) {
+	ch대기 := make(chan lib.T신호, 1)
+	ch타임아웃 := time.After(타임아웃)
+
+	go 함수()
+
+	select {
+	case <-ch대기:
+	case <- ch타임아웃:
+	}
+}
+
+func F소켓_정리()  error {
 	ch완료 := make(chan lib.T신호, 3)
+	ch타임아웃 := time.After(lib.P20초)
 
 	go func() {
 		for {
@@ -146,13 +159,20 @@ func F소켓_정리() {
 	go func() {
 		for i := 0; i < len(소켓REQ_저장소.M저장소); i++ {
 			소켓_질의 := <-소켓REQ_저장소.M저장소
-			소켓_질의.Close()
+			go 소켓_질의.Close()
 		}
 
 		ch완료 <- lib.P신호_OK
 	}()
 
-	for i := 0; i < 3; i++ {
-		<-ch완료
+	for i:=0 ; i<3 ; i++ {
+		select {
+		case <-ch완료:
+			continue
+		case <-ch타임아웃:
+			return lib.New에러with출력("타임아웃.")
+		}
 	}
+
+	return nil
 }

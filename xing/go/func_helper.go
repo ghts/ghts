@@ -44,18 +44,10 @@ import (
 )
 
 func F전일() time.Time {
-	if 전일 == nil {
-		F초기화()
-	}
-
 	return 전일.G값()
 }
 
 func F당일() time.Time {
-	if 당일 == nil {
-		F초기화()
-	}
-
 	return 당일.G값()
 }
 
@@ -350,7 +342,7 @@ func C32_재시작() (에러 error) {
 	lib.F확인(f초기화_xing_C32())
 	lib.F조건부_패닉(!f초기화_작동_확인(), "초기화 작동 확인 실패.")
 	lib.F확인(f종목모음_설정())
-	lib.F확인(f전일_당일_설정())
+	lib.F확인(F전일_당일_설정())
 
 	fmt.Println("** C32 재시작 완료  **")
 

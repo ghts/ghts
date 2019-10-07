@@ -455,11 +455,13 @@ func f데이터_해제(식별번호 int) {
 	C.etkReleaseRequestData(C.int(식별번호))
 }
 
-func F자원_해제() {
+func F자원_해제() error {
 	cgo잠금.Lock()
 	defer cgo잠금.Unlock()
 
 	C.freeResource(0)
+
+	return nil
 }
 
 func F메모리_해제(포인터 unsafe.Pointer) {
