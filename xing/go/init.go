@@ -82,14 +82,21 @@ func init() {
 }
 
 func F초기화() (에러 error) {
-	defer lib.S예외처리{M에러: &에러}.S실행()
+	if API초기화_완료.G값() {
+		return nil
+	}
+
+	defer func() {
+		lib.S예외처리{M에러: &에러}.S실행()
+		API초기화_완료.S값(true)
+	}()
 
 	f초기화_Go루틴()
 	lib.F확인(f초기화_xing_C32())
 	lib.F조건부_패닉(!f초기화_작동_확인(), "초기화 작동 확인 실패.")
 	lib.F확인(f초기화_TR전송_제한())
 	lib.F확인(f종목모음_설정())
-	lib.F확인(f전일_당일_설정())
+	lib.F확인(F전일_당일_설정())
 	f접속유지_실행()
 
 	fmt.Println("**     초기화 완료     **")
@@ -224,7 +231,7 @@ func tr동작_확인(ch완료 chan lib.T신호) {
 	}
 }
 
-func f전일_당일_설정() (에러 error) {
+func F전일_당일_설정() (에러 error) {
 	lib.S예외처리{M에러: &에러}.S실행()
 
 	const 수량 = 30
