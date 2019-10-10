@@ -351,7 +351,6 @@ func TR구분_String(v lib.TR구분) string {
 }
 
 const (
-	// 구현된 TR코드
 	TR선물옵션_주문체결내역조회_CFOAQ00600   = "CFOAQ00600"
 	TR선물옵션_정상주문_CFOAT00100       = "CFOAT00100"
 	TR선물옵션_정정주문_CFOAT00200       = "CFOAT00200"
@@ -359,7 +358,6 @@ const (
 	TR선물옵션_예탁금_증거금_조회_CFOBQ10500 = "CFOBQ10500"
 	TR선물옵션_미결제약정_현황_CFOFQ02400   = "CFOFQ02400"
 
-	TR계좌_거래_내역_CDPCQ04700       = "CDPCQ04700"
 	TR현물계좌_잔고내역_조회_CSPAQ12300   = "CSPAQ12300"
 	TR현물계좌_주문체결내역_조회_CSPAQ13700 = "CSPAQ13700"
 	TR현물_정상_주문_CSPAT00600       = "CSPAT00600"
