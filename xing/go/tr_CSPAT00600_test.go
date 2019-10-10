@@ -36,6 +36,7 @@ package xing
 import (
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/xing/base"
+	"strings"
 
 	"testing"
 	"time"
@@ -71,9 +72,11 @@ func TestCSPAT00600_현물_정상_주문(t *testing.T) {
 	계좌번호, 에러 := F계좌_번호(0)
 	lib.F테스트_에러없음(t, 에러)
 
+	계좌_상세명, 에러 := F계좌_상세명(계좌번호)
+	lib.F확인(에러)
+	lib.F테스트_거짓임(t, strings.Contains(계좌_상세명, "선물옵션"))	// 현물 계좌이어야 함.
+
 	질의값_매수 := xt.NewCSPAT00600_현물_정상_주문_질의값()
-	질의값_매수.M구분 = xt.TR주문
-	질의값_매수.M코드 = xt.TR현물_정상_주문_CSPAT00600
 	질의값_매수.M계좌번호 = 계좌번호
 	질의값_매수.M종목코드 = 종목.G코드()
 	질의값_매수.M주문수량 = 수량
@@ -140,8 +143,6 @@ func TestCSPAT00600_현물_정상_주문(t *testing.T) {
 	}
 
 	질의값_매도 := xt.NewCSPAT00600_현물_정상_주문_질의값()
-	질의값_매도.M구분 = xt.TR주문
-	질의값_매도.M코드 = xt.TR현물_정상_주문_CSPAT00600
 	질의값_매도.M계좌번호 = 계좌번호
 	질의값_매도.M종목코드 = 종목.G코드()
 	질의값_매도.M주문수량 = 수량
