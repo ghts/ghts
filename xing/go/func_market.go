@@ -326,6 +326,10 @@ func F한국증시_시간외_대량바스켓매매_거래시간임() bool {
 	return f한국증시_거래시간_도우미(15, 40, 18, 0)
 }
 
+func F한국증시_정규장_종료() bool {
+	return lib.F금일().After(F당일()) || lib.F지금().After(lib.F2금일_시각_단순형("1504", "1530"))
+}
+
 func F종목by코드(종목코드 string) (종목 *lib.S종목, 에러 error) {
 	if 종목, ok := 종목맵_전체[종목코드]; !ok {
 		return nil, lib.New에러("해당 종목코드가 존재하지 않습니다. '%v'", 종목코드)
