@@ -48,9 +48,14 @@ func (s s시간_정렬_도우미) Less(i, j int) bool {
 	return s.시각_모음[i].Before(s.시각_모음[j])
 }
 
-func F정렬_시각(시각_모음 []time.Time) []time.Time {
-	s := s시간_정렬_도우미{시각_모음}
-	sort.Sort(s)
+func F시각_정순_정렬(시각_모음 []time.Time) []time.Time {
+	sort.Sort(s시간_정렬_도우미{시각_모음})
+
+	return 시각_모음
+}
+
+func F시각_역순_정렬(시각_모음 []time.Time) []time.Time {
+	sort.Sort(sort.Reverse(s시간_정렬_도우미{시각_모음}))
 
 	return 시각_모음
 }
