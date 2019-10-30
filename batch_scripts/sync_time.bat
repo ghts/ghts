@@ -12,10 +12,11 @@ cd /d "%~dp0" && ( if exist "%temp%\getadmin.vbs" del "%temp%\getadmin.vbs" ) &&
 REM ************************************************
 REM * Activate Windows Time Service *
 REM ************************************************
-REM net stop w32time
 REM w32tm /unregister
 REM w32tm /register
-REM net start w32time
+sc config w32time start= auto
+net stop w32time
+net start w32time
 
 REM ************************************************
 REM * Actually sync time to NTP server
