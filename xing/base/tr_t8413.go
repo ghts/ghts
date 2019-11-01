@@ -53,7 +53,7 @@ type T8413_현물_차트_일주월_질의값 struct {
 
 type T8413_현물_차트_일주월_응답 struct {
 	M헤더     *T8413_현물_차트_일주월_응답_헤더
-	M반복값_모음 *T8413_S현물_차트_일주월_응답_반복값_모음
+	M반복값_모음 *T8413_현물_차트_일주월_응답_반복값_모음
 }
 
 func (s *T8413_현물_차트_일주월_응답) G헤더_TR데이터() I헤더_TR데이터 {
@@ -110,18 +110,18 @@ func (s *T8413_현물_차트_일주월_응답_반복값) G수정구분_모음() 
 
 // https://beego.me/docs/mvc/model/models.md
 func (s *T8413_현물_차트_일주월_응답_반복값) TableName() string {
-	return t8413
+	return "t8413"
 }
 
 func (s *T8413_현물_차트_일주월_응답_반복값) TableUnique() [][]string {
 	return [][]string{[]string{"symbol", "date"}}
 }
 
-type T8413_S현물_차트_일주월_응답_반복값_모음 struct {
+type T8413_현물_차트_일주월_응답_반복값_모음 struct {
 	M배열 []*T8413_현물_차트_일주월_응답_반복값
 }
 
-func (s *T8413_S현물_차트_일주월_응답_반복값_모음) G반복값_모음_TR데이터() I반복값_모음_TR데이터 {
+func (s *T8413_현물_차트_일주월_응답_반복값_모음) G반복값_모음_TR데이터() I반복값_모음_TR데이터 {
 	return s
 }
 
@@ -179,7 +179,7 @@ func NewT8413_현물_차트_일주월_응답_헤더(b []byte) (값 *T8413_현물
 	return 값, nil
 }
 
-func NewT8413_현물_차트_일주월_응답_반복값_모음(b []byte) (값 *T8413_S현물_차트_일주월_응답_반복값_모음, 에러 error) {
+func NewT8413_현물_차트_일주월_응답_반복값_모음(b []byte) (값 *T8413_현물_차트_일주월_응답_반복값_모음, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
 
 	나머지 := len(b) % SizeT8413OutBlock1
@@ -189,14 +189,14 @@ func NewT8413_현물_차트_일주월_응답_반복값_모음(b []byte) (값 *T8
 	수량 := len(b) / SizeT8413OutBlock1
 	g_모음 := make([]*T8413OutBlock1, 수량, 수량)
 
-	값 = new(T8413_S현물_차트_일주월_응답_반복값_모음)
-	값.M배열 = make([]*T8413_Value, 수량, 수량)
+	값 = new(T8413_현물_차트_일주월_응답_반복값_모음)
+	값.M배열 = make([]*T8413_현물_차트_일주월_응답_반복값, 수량, 수량)
 
 	for i, g := range g_모음 {
 		g = new(T8413OutBlock1)
 		lib.F확인(binary.Read(버퍼, binary.BigEndian, g))
 
-		s := new(T8413_Value)
+		s := new(T8413_현물_차트_일주월_응답_반복값)
 		s.M일자 = lib.F2포맷된_시각_단순형("20060102", lib.F2문자열_앞뒤_공백제거(g.Date))
 		s.M시가 = lib.F2정수64_단순형(g.Open)
 		s.M고가 = lib.F2정수64_단순형(g.High)

@@ -258,21 +258,14 @@ type I전송_권한 interface {
 	G획득() I전송_권한
 	S기록()
 	G남은_수량() int
+	S수량_간격_변경(수량 int, 간격 time.Duration)
 }
 
 func New전송_권한(TR코드 string, 수량 int, 간격 time.Duration) I전송_권한 {
 	s := new(s전송_권한)
 	s.tr코드 = TR코드
-	s.수량 = 수량
-	s.간격 = 간격 + P100밀리초
+	s.S수량_간격_변경(수량, 간격)
 	s.전송_기록_저장소 = list.New()
-
-	switch {
-	case 수량 > 10:
-		s.수량 -= 1
-	case 수량 > 100:
-		s.수량 -= 2
-	}
 
 	return s
 }
@@ -319,6 +312,18 @@ func (s *s전송_권한) G남은_수량() int {
 	s.s오래된_전송_기록_정리()
 
 	return s.수량 - s.전송_기록_저장소.Len()
+}
+
+func (s *s전송_권한) S수량_간격_변경(수량 int, 간격 time.Duration) {
+	s.수량 = 수량
+	s.간격 = 간격 + P100밀리초
+
+	switch {
+	case 수량 > 10:
+		s.수량 -= 1
+	case 수량 > 100:
+		s.수량 -= 2
+	}
 }
 
 func (s *s전송_권한) s오래된_전송_기록_정리() {

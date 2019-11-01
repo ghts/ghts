@@ -206,7 +206,7 @@ func F2바이트_모음(값 interface{}) []byte {
 	case [100]byte:
 		return 변환값[:]
 	default:
-		panic(New에러("예상하지 못한 자료형 : '%T'", 값))
+		panic(New에러("F2바이트_모음() 예상하지 못한 자료형 : '%T'", 값))
 		//return []byte{}
 	}
 }
@@ -740,7 +740,7 @@ func F2인터페이스_모음(변환_대상 interface{}) []interface{} {
 			인터페이스_모음 = append(인터페이스_모음, 값_모음[i])
 		}
 	default:
-		panic(New에러with출력("예상하지 못한 자료형. %T", 변환_대상))
+		panic(New에러with출력("F2인터페이스_모음() 예상하지 못한 자료형. %T", 변환_대상))
 		//return nil
 	}
 
@@ -1000,7 +1000,7 @@ func F바이트_변환값_해석(바이트_변환값 *S바이트_변환) (해석
 		return s, nil
 	}
 
-	return nil, New에러with출력("예상하지 못한 자료형. '%v'\n", 자료형_문자열)
+	return nil, New에러with출력("F바이트_변환값_해석() 예상하지 못한 자료형. '%v'\n", 자료형_문자열)
 }
 
 func F특수_공백문자_제거(문자열 string) string {

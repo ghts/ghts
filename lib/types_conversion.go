@@ -64,7 +64,7 @@ func (s s변환기) WriteExt(값 interface{}) []byte {
 		return F확인(값.(encoding.TextMarshaler).MarshalText()).([]byte)
 	}
 
-	panic(New에러("예상하지 못한 자료형. %T", 값))
+	panic(New에러("s변환기.WriteExt() 예상하지 못한 자료형. %T", 값))
 }
 
 func (s s변환기) ReadExt(포인터 interface{}, 바이트_모음 []byte) {
@@ -114,7 +114,7 @@ func (s s변환기) ConvertExt(값 interface{}) interface{} {
 		return string(s.WriteExt(값))
 	}
 
-	panic(New에러("예상하지 못한 자료형 : '%T'", 값))
+	panic(New에러("s변환기.ConvertExt() 예상하지 못한 자료형 : '%T'", 값))
 }
 
 func (s s변환기) UpdateExt(포인터 interface{}, 값 interface{}) {
@@ -127,7 +127,7 @@ func (s s변환기) UpdateExt(포인터 interface{}, 값 interface{}) {
 		return
 	}
 
-	panic(New에러("예상하지 못한 자료형. %v", s.자료형))
+	panic(New에러("s변환기.UpdateExt() 예상하지 못한 자료형. %v", s.자료형))
 }
 
 // 바이트 배열로 인코딩 된 M값
@@ -172,7 +172,7 @@ func (s *S바이트_변환) G값(값_포인터 interface{}) (에러 error) {
 		값_포인터 = s
 		return nil
 	case *error: // 에러는 구조체가 아닌 인터페이스이라서 특수하게 처리해 줌.
-		F조건부_패닉(s.자료형_문자열 != P에러_자료형, "예상하지 못한 자료형. %v", s.자료형_문자열)
+		F조건부_패닉(s.자료형_문자열 != P에러_자료형, "S바이트_변환.G값() 예상하지 못한 자료형. %v", s.자료형_문자열)
 
 		var 에러_문자열 string
 		F확인(F디코딩(s.변환_형식, s.값, &에러_문자열))

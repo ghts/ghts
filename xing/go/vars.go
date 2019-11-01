@@ -49,6 +49,7 @@ var (
 	})
 
 	ch질의        = make(chan *lib.S작업, 1000)
+	ch신호_접속유지_종료 = make(chan lib.T신호, 1)
 	ch신호_C32_시작 = make(chan lib.T신호_32비트_모듈, 1)
 	ch신호_C32_종료 = make(chan lib.T신호_32비트_모듈, 1)
 
@@ -56,7 +57,7 @@ var (
 
 	전송_제한_정보_모음      *xt.TR코드별_전송_제한_정보_모음
 	tr코드별_10분당_전송_제한 = make(map[string]lib.I전송_권한)
-	tr코드별_초당_전송_제한   = make(map[string]lib.I전송_권한)
+	tr코드별_초당_전송_제한 = make(map[string]lib.I전송_권한)
 
 	전일, 당일    lib.I안전한_시각
 	최근_영업일_모음 []time.Time

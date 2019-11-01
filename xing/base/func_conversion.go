@@ -479,11 +479,11 @@ func F바이트_변환값_해석(바이트_변환값 *lib.S바이트_변환) (�
 		lib.F확인(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T8413_현물_차트_일주월_응답_반복값:
-		s := new(T8413_Value)
+		s := new(T8413_현물_차트_일주월_응답_반복값)
 		lib.F확인(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T8413_S현물_차트_일주월_응답_반복값_모음:
-		s := new(T8413_S현물_차트_일주월_응답_반복값_모음)
+		s := new(T8413_현물_차트_일주월_응답_반복값_모음)
 		lib.F확인(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T8428_증시주변_자금추이_질의값:
@@ -647,6 +647,6 @@ func F바이트_변환값_해석_Raw(바이트_변환값 *lib.S바이트_변환)
 	case P자료형_T8436OutBlock:
 		return NewT8436_현물_종목조회_응답_반복값_모음(b)
 	default:
-		return nil, lib.New에러with출력("예상하지 못한 자료형. '%v'\n", 자료형_문자열)
+		return nil, lib.New에러with출력("F바이트_변환값_해석_Raw() 예상하지 못한 자료형. '%v'\n", 자료형_문자열)
 	}
 }

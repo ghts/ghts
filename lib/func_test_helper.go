@@ -185,7 +185,7 @@ func f테스트_에러없음(t testing.TB, 에러_후보_모음 ...interface{}) 
 			t.FailNow()
 		}
 	default:
-		panic(New에러("예상하지 못한 자료형. %T", 에러_후보_모음[len(에러_후보_모음)-1]))
+		panic(New에러("f테스트_에러없음() 예상하지 못한 자료형. %T", 에러_후보_모음[len(에러_후보_모음)-1]))
 	}
 
 	return f에러_제외한_값_추출(에러_후보_모음...)
@@ -463,7 +463,7 @@ func new에러(출력_여부 bool, 포맷_문자열or에러 interface{}, 추가_
 	case string:
 		포맷_문자열 = 값
 	default:
-		panic(New에러("예상하지 못한 자료형. '%T'", 포맷_문자열or에러))
+		panic(New에러("new에러() 예상하지 못한 자료형. '%T'", 포맷_문자열or에러))
 	}
 
 	포맷_문자열 = strings.TrimSpace(F호출경로_추가(포맷_문자열))
@@ -531,7 +531,7 @@ func F에러_출력(에러 interface{}, 추가_매개변수 ...interface{}) {
 	case string:
 		에러값 = New에러(값, 추가_매개변수)
 	default:
-		panic(New에러("예상하지 못한 자료형 : '%T'", 값))
+		panic(New에러("F에러_출력() 예상하지 못한 자료형 : '%T'", 값))
 	}
 
 	F문자열_출력_도우미(true, 에러값.Error())
@@ -703,7 +703,7 @@ func F마지막_에러값(값_모음 ...interface{}) error {
 	case nil:
 		return nil
 	default:
-		panic(New에러with출력("F마지막_에러값 : 예상하지 못한 자료형 : '%T'", 마지막_값))
+		panic(New에러with출력("F마지막_에러값() 예상하지 못한 자료형 : '%T'", 마지막_값))
 	}
 }
 

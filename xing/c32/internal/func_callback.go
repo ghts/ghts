@@ -83,7 +83,7 @@ func f콜백_동기식(콜백값 lib.I콜백) (에러 error) {
 	case lib.T신호:
 		lib.F조건부_패닉(값 != lib.P신호_OK, "예상하지 못한 신호값 : '%v'", 값)
 	default:
-		panic(lib.New에러("예상하지 못한 자료형 : '%T'", i값))
+		panic(lib.New에러("f콜백_동기식() 예상하지 못한 자료형 : '%T'", i값))
 	}
 
 	return nil

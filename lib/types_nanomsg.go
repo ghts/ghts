@@ -227,6 +227,7 @@ func (s *sNano소켓) G수신() (값 *S바이트_변환_모음, 에러 error) {
 		if 에러.Error() == "connection closed" {
 			return nil, nil
 		} else {
+			F에러_출력(에러)
 			return nil, 에러
 		}
 	} else {
