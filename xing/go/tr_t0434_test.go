@@ -41,6 +41,8 @@ import (
 )
 
 func TestT0434_선물옵션_체결_미체결_확인(t *testing.T) {
+	t.FailNow()
+
 	계좌번호 := lib.F확인(선물옵션_계좌번호()).(string)
 	종목코드 := 샘플_선물_종목코드()
 	체결_구분 := lib.P체결구분_전체

@@ -45,6 +45,8 @@ func TestCFOBQ10500_선물옵션_예탁금_증거금_조회_질의값(t *testing
 }
 
 func TestCFOBQ10500_선물옵션_예탁금_증거금_조회(t *testing.T) {
+	t.FailNow()
+
 	계좌번호 := lib.F확인(선물옵션_계좌번호()).(string)
 	계좌_상세명, 에러 := F계좌_상세명(계좌번호)
 	lib.F테스트_에러없음(t, 에러)

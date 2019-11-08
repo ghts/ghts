@@ -46,6 +46,8 @@ func TestCFOFQ02400_선물옵션_미결제약정_질의값(t *testing.T) {
 }
 
 func TestCFOFQ02400_선물옵션_미결제약정(t *testing.T) {
+	t.FailNow()
+
 	//등록시장_모음 := []xt.CFOFQ02400_등록시장{xt.CFOFQ02400_전체, xt.CFOFQ02400_KOSPI,
 	//	xt.CFOFQ02400_KOSDAQ, xt.CFOFQ02400_KSE, xt.CFOFQ02400_KOFEX}
 

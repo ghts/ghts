@@ -59,7 +59,7 @@ func TestT3320_F기업정보_요약(t *testing.T) {
 	lib.F테스트_참임(t, 값1.M주당액면가 > 0)
 	lib.F테스트_참임(t, 값1.M주식수 > 0)
 	lib.F테스트_다름(t, strings.TrimSpace(값1.M홈페이지), "")
-	lib.F테스트_다름(t, strings.TrimSpace(값1.M그룹명), "")
+	//lib.F테스트_다름(t, strings.TrimSpace(값1.M그룹명), "")
 	lib.F테스트_참임(t, 값1.M외국인_비중 > 0)
 	lib.F테스트_다름(t, lib.F정규식_검색(값1.M주담전화, []string{`[1-9]+`}), "")
 	lib.F테스트_참임(t, 값1.M자본금_억 > 0)
