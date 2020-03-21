@@ -34,15 +34,16 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package lib
 
 import (
-	"nanomsg.org/go-mangos"
-	"nanomsg.org/go-mangos/protocol/pair"
-	"nanomsg.org/go-mangos/protocol/pub"
-	"nanomsg.org/go-mangos/protocol/pull"
-	"nanomsg.org/go-mangos/protocol/push"
-	"nanomsg.org/go-mangos/protocol/rep"
-	"nanomsg.org/go-mangos/protocol/req"
-	"nanomsg.org/go-mangos/protocol/sub"
-	"nanomsg.org/go-mangos/transport/tcp"
+	"go.nanomsg.org/mangos/v3"
+	"go.nanomsg.org/mangos/v3/protocol/pair"
+	"go.nanomsg.org/mangos/v3/protocol/pub"
+	"go.nanomsg.org/mangos/v3/protocol/pull"
+	"go.nanomsg.org/mangos/v3/protocol/push"
+	"go.nanomsg.org/mangos/v3/protocol/rep"
+	"go.nanomsg.org/mangos/v3/protocol/req"
+	"go.nanomsg.org/mangos/v3/protocol/sub"
+	"go.nanomsg.org/mangos/v3/protocol/xrep"
+	_ "go.nanomsg.org/mangos/v3/transport/all"
 	"strings"
 	"time"
 )
@@ -65,6 +66,9 @@ func NewNano소켓(종류 T소켓_종류, 주소 string, 접속방식 T소켓_�
 		s.Socket, 에러 = req.NewSocket()
 	case P소켓_종류_REP:
 		s.Socket, 에러 = rep.NewSocket()
+	case P소켓_종류_XREP:
+		s.Socket, 에러 = xrep.NewSocket()
+		s.Socket.SetOption(mangos.OptionRaw, true)
 	case P소켓_종류_PUB:
 		s.Socket, 에러 = pub.NewSocket()
 	case P소켓_종류_SUB:
@@ -87,7 +91,6 @@ func NewNano소켓(종류 T소켓_종류, 주소 string, 접속방식 T소켓_�
 	}
 
 	s.S옵션(옵션_모음...)
-	s.Socket.AddTransport(tcp.NewTransport())
 
 	switch 접속방식 {
 	case P소켓_접속_CONNECT:
@@ -153,15 +156,14 @@ func NewNano소켓REP_단순형(주소 T주소, 옵션_모음 ...interface{}) I�
 	return F확인(NewNano소켓REP(주소, 옵션_모음...)).(I소켓)
 }
 
-func NewRawNano소켓REP(주소 T주소, 옵션_모음 ...interface{}) (소켓 I소켓Raw, 에러 error) {
-	옵션_모음 = append(옵션_모음, mangos.OptionRaw)
-	일반_소켓, 에러 := NewNano소켓(P소켓_종류_REP, 주소.G값(), P소켓_접속_BIND, 옵션_모음...)
+func NewNano소켓XREP(주소 T주소, 옵션_모음 ...interface{}) (소켓Raw I소켓Raw, 에러 error) {
+	소켓, 에러 := NewNano소켓(P소켓_종류_XREP, 주소.G값(), P소켓_접속_BIND, 옵션_모음...)
 
-	return 일반_소켓.(I소켓Raw), 에러
+	return 소켓.(I소켓Raw), 에러
 }
 
-func NewRawNano소켓REP_단순형(주소 T주소, 옵션_모음 ...interface{}) I소켓Raw {
-	소켓, 에러 := NewRawNano소켓REP(주소, 옵션_모음...)
+func NewNano소켓XREP_단순형(주소 T주소, 옵션_모음 ...interface{}) I소켓Raw {
+	소켓, 에러 := NewNano소켓XREP(주소, 옵션_모음...)
 	F확인(에러)
 
 	return 소켓
@@ -189,7 +191,11 @@ type sNano소켓 struct {
 func (s *sNano소켓) S송신(변환_형식 T변환, 값_모음 ...interface{}) (에러 error) {
 	defer S예외처리{M에러: &에러, M출력_숨김: true}.S실행()
 
-	F확인(s.Socket.SetOption(mangos.OptionSendDeadline, s.타임아웃))
+	F메모("소켓 타임아웃이 0초 이면 에러 발생.")
+
+	if s.타임아웃 != 0 {
+		F확인(s.Socket.SetOption(mangos.OptionSendDeadline, s.타임아웃))
+	}
 
 	매개체 := New바이트_변환_모음_단순형(변환_형식, 값_모음...)
 	바이트_모음 := F확인(매개체.MarshalBinary()).([]byte)
@@ -260,8 +266,12 @@ func (s *sNano소켓) G수신Raw() (값 *mangos.Message, 에러 error) {
 	defer S예외처리{M에러: &에러, M출력_숨김: true, M함수: func() {
 		값 = nil
 
-		if 에러 != nil && !strings.Contains(에러.Error(), "connection closed") {
+		if 에러 != nil &&
+			!strings.Contains(에러.Error(), "connection closed") &&
+			!strings.Contains(에러.Error(), "object closed") {
+			F체크포인트()
 			F에러_출력(에러)
+			F체크포인트()
 		}
 	}}.S실행()
 

@@ -178,17 +178,19 @@ func F로그아웃_및_접속해제() error {
 		lib.New에러("로그아웃 실패.")
 	}
 
-	cgo잠금.Lock()
-	접속해제_결과 := bool(C.etkDisconnect())
-	cgo잠금.Unlock()
+	lib.F메모("C.etkDisconnect() 에러 발생")
 
-	if !접속해제_결과 {
-		return lib.New에러("접속 해제 실패.")
-	}
+	//cgo잠금.Lock()
+	//접속해제_결과 := bool(C.etkDisconnect())
+	//cgo잠금.Unlock()
+	//
+	//if !접속해제_결과 {
+	//	return lib.New에러("접속 해제 실패.")
+	//}
 
-	for F접속됨() {
-		lib.F대기(lib.P300밀리초)
-	}
+	//for F접속됨() {
+	//	lib.F대기(lib.P300밀리초)
+	//}
 
 	return nil
 }

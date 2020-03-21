@@ -66,7 +66,7 @@ const (
 	P10분    = 10 * time.Minute
 	P1시간    = time.Hour
 	P1일     = 24 * time.Hour
-	P1년	= 365 * P1일
+	P1년     = 365 * P1일
 	P무기한    = 9999 * time.Hour
 
 	P에러_자료형 = "error"
@@ -949,6 +949,7 @@ type T소켓_종류 uint8
 const (
 	P소켓_종류_REQ = iota
 	P소켓_종류_REP
+	P소켓_종류_XREP
 	P소켓_종류_DEALER
 	P소켓_종류_ROUTER
 	P소켓_종류_PUB

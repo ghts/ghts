@@ -36,7 +36,7 @@ package xing
 import (
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/xing/base"
-	"nanomsg.org/go-mangos"
+	"go.nanomsg.org/mangos/v3"
 )
 
 func go_TR콜백_처리(ch초기화 chan lib.T신호) (에러 error) {

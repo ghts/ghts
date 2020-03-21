@@ -54,9 +54,16 @@ func F콜백(콜백값 lib.I콜백) (에러 error) {
 }
 
 func go콜백_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
-	defer lib.S예외처리{M에러: &에러, M함수: func() { ch종료 <- lib.P신호_종료 }}.S실행()
-
 	ch공통_종료 := lib.F공통_종료_채널()
+
+	defer lib.S예외처리{M에러: &에러, M함수: func() {
+		select {
+		case <-ch공통_종료:
+		default:
+			ch종료 <- lib.P신호_종료
+		}
+	}}.S실행()
+
 	ch초기화 <- lib.P신호_초기화
 
 	for {

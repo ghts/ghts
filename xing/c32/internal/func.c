@@ -258,8 +258,8 @@ BOOL bool2BOOL(bool value) {
 // Go언어의 cgo 관련 버그인 데, 사용상 큰 문제는 없어서 고칠 의향이 없는 듯 함.
 // 버그를 피해가기 위해서 인수을 추가함. (사용하지는 않음.)
 void freeResource(int dummy) {
-	resetHWND();
 	freeXingApi();
+	resetHWND();
 }
 
 //-------------------------------------------------//
@@ -293,8 +293,6 @@ bool etkDisconnect() {
     if (func == NULL) {
         return false;
     }
-
-    resetHWND();
 
     return BOOL2bool(func());
 }

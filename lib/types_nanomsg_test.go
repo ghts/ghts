@@ -92,3 +92,81 @@ func 서버_노드_Nano소켓(t I안전한_테스트, ch초기화 chan T신호, 
 
 	ch종료 <- 소켓
 }
+
+func TestNano소켓_RAW_REQ_REP(t *testing.T) {
+	t.Parallel()
+
+	주소 := F테스트용_임의_주소()
+	ch초기화 := make(chan T신호, 2)
+	ch종료 := make(chan T신호, 2)
+	테스트 := New안전한_테스트(t)
+
+	go raw_서버_노드_Nano소켓(테스트, ch초기화, ch종료, 주소)
+	<-ch초기화
+
+	go raw_클라이언트_노드_Nano소켓(테스트, ch초기화, ch종료, 주소)
+	<-ch초기화
+
+	for i := 0; i < 2; i++ {
+		<-ch종료
+	}
+}
+
+func raw_클라이언트_노드_Nano소켓(t I안전한_테스트, ch초기화, ch종료 chan T신호, 주소 T주소) {
+	ch초기화 <- P신호_초기화
+
+	//소켓REQ, 에러 := req.NewSocket() // NewNano소켓REQ(주소)
+	//t.G에러없음(에러)
+	//defer 소켓REQ.Close()
+	//
+	//t.G에러없음(소켓REQ.Dial(주소.G값()))
+	//
+	//메시지 := mangos.NewMessage(1)
+	//메시지.Body = F확인(New바이트_변환_모음_단순형(MsgPack, "DATE").MarshalBinary()).([]byte)
+	//
+	//t.G에러없음(소켓REQ.SendMsg(메시지))
+	//
+	//메시지, 에러 = 소켓REQ.RecvMsg()
+	//t.G에러없음(에러)
+	//
+	//바이트_변환_모음, 에러 := New바이트_변환_모음from바이트_배열(메시지.Body)
+	//t.G에러없음(에러)
+
+	소켓REQ, 에러 := NewNano소켓REQ(주소)
+	t.G에러없음(에러)
+	defer 소켓REQ.Close()
+
+	바이트_변환_모음, 에러 := 소켓REQ.G질의_응답(F임의_변환_형식(), "DATE")
+
+	var 일자 time.Time
+	t.G에러없음(바이트_변환_모음.G값(0, &일자))
+	t.G같음(일자.Format(P일자_형식), time.Now().Format(P일자_형식))
+
+	ch종료 <- P신호_OK
+}
+
+func raw_서버_노드_Nano소켓(t I안전한_테스트, ch초기화, ch종료 chan T신호, 주소 T주소) {
+	소켓_XREP, 에러 := NewNano소켓XREP(주소) // xrep.NewSocket()
+	t.G에러없음(에러)
+
+	defer 소켓_XREP.Close()
+
+	//t.G에러없음(소켓_XREP.Listen(주소.G값()))
+
+	ch초기화 <- P신호_초기화
+
+	메시지, 에러 := 소켓_XREP.G수신Raw() // .RecvMsg()
+	t.G에러없음(에러)
+
+	바이트_변환_모음, 에러 := New바이트_변환_모음from바이트_배열(메시지.Body)
+	t.G에러없음(에러)
+
+	var 문자열 string
+	t.G에러없음(바이트_변환_모음.G값(0, &문자열))
+	t.G같음(문자열, "DATE")
+
+	메시지.Body = F확인(New바이트_변환_모음_단순형(MsgPack, time.Now()).MarshalBinary()).([]byte)
+	t.G에러없음(소켓_XREP.S송신Raw(메시지))
+
+	ch종료 <- P신호_OK
+}

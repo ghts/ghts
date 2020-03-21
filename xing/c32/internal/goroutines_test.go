@@ -35,7 +35,7 @@ package x32
 
 import (
 	"github.com/ghts/ghts/lib"
-	"nanomsg.org/go-mangos"
+	"go.nanomsg.org/mangos/v3"
 
 	"testing"
 )
@@ -44,6 +44,7 @@ var 소켓REP_테스트용_TR수신, 소켓SUB_테스트용_콜백, 소켓SUB_�
 
 func TestP접속됨(t *testing.T) {
 	t.Parallel()
+
 	if !lib.F인터넷에_접속됨() {
 		t.SkipNow()
 	}

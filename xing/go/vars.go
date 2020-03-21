@@ -41,23 +41,23 @@ import (
 )
 
 var (
-	소켓REP_TR콜백   = lib.NewRawNano소켓REP_단순형(lib.P주소_Xing_C함수_콜백)
+	소켓REP_TR콜백   = lib.NewNano소켓XREP_단순형(lib.P주소_Xing_C함수_콜백)
 	소켓SUB_실시간_정보 = lib.NewNano소켓SUB_단순형(lib.P주소_Xing_실시간).(lib.I소켓Raw)
 
 	소켓REQ_저장소 = lib.New소켓_저장소(20, func() lib.I소켓_질의 {
 		return lib.NewNano소켓REQ_단순형(lib.P주소_Xing_C함수_호출, lib.P30초)
 	})
 
-	ch질의        = make(chan *lib.S작업, 1000)
+	ch질의         = make(chan *lib.S작업, 1000)
 	ch신호_접속유지_종료 = make(chan lib.T신호, 1)
-	ch신호_C32_시작 = make(chan lib.T신호_32비트_모듈, 1)
-	ch신호_C32_종료 = make(chan lib.T신호_32비트_모듈, 1)
+	ch신호_C32_시작  = make(chan lib.T신호_32비트_모듈, 1)
+	ch신호_C32_종료  = make(chan lib.T신호_32비트_모듈, 1)
 
 	대기소_C32 = newC32_콜백_대기_저장소()
 
 	전송_제한_정보_모음      *xt.TR코드별_전송_제한_정보_모음
 	tr코드별_10분당_전송_제한 = make(map[string]lib.I전송_권한)
-	tr코드별_초당_전송_제한 = make(map[string]lib.I전송_권한)
+	tr코드별_초당_전송_제한   = make(map[string]lib.I전송_권한)
 
 	전일, 당일    lib.I안전한_시각
 	최근_영업일_모음 []time.Time
