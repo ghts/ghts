@@ -74,7 +74,7 @@ func TestT3320_F기업정보_요약(t *testing.T) {
 	lib.F테스트_같음(t, strings.TrimSpace(값2.M종목코드), 종목코드)
 	lib.F테스트_다름(t, strings.TrimSpace(값2.M결산년월), "")
 	lib.F테스트_다름(t, strings.TrimSpace(값2.M결산구분), "")
-	lib.F테스트_참임(t, math.Abs(값2.PER) < 30, 값2.PER)
+	lib.F테스트_참임(t, math.Abs(값2.PER) < 100, 값2.PER)
 	//값2.EPS      = lib.F2실수_단순형(g.Eps)
 	lib.F테스트_참임(t, 값2.PBR > 0)
 	lib.F테스트_참임(t, math.Abs(값2.ROA) < 100, 값2.ROA)

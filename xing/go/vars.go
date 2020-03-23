@@ -41,8 +41,8 @@ import (
 )
 
 var (
-	소켓REP_TR콜백   = lib.NewNano소켓XREP_단순형(lib.P주소_Xing_C함수_콜백)
-	소켓SUB_실시간_정보 = lib.NewNano소켓SUB_단순형(lib.P주소_Xing_실시간).(lib.I소켓Raw)
+	소켓REP_TR콜백 = lib.NewNano소켓XREP_단순형(lib.P주소_Xing_C함수_콜백)
+	//소켓SUB_실시간_정보 lib.I소켓
 
 	소켓REQ_저장소 = lib.New소켓_저장소(20, func() lib.I소켓_질의 {
 		return lib.NewNano소켓REQ_단순형(lib.P주소_Xing_C함수_호출, lib.P30초)

@@ -228,6 +228,10 @@ func f인터넷에_접속됨(ch회신 chan<- bool, url string) {
 	ch회신 <- true
 }
 
+func F포트_열림_확인(주소 T주소) bool {
+	return !F포트_닫힘_확인(주소)
+}
+
 func F포트_닫힘_확인(주소 T주소) bool {
 	연결, 에러 := net.DialTimeout("tcp", 주소.G단축값(), P1초)
 
@@ -495,23 +499,23 @@ func F공통_종료_채널() chan T신호 {
 	return ch공통_종료_채널
 }
 
-func F공통_종료_채널_닫기() {
-	defer recover()
-
-	if !f공통_종료_채널_닫힘() {
-		예전_채널 := ch공통_종료_채널
-		ch공통_종료_채널 = make(chan T신호)
-		close(예전_채널)
-	}
-}
-
-func f공통_종료_채널_닫힘() bool {
+func F공통_종료_채널_닫힘() bool {
 	select {
 	case <-ch공통_종료_채널:
 		return true
 	default:
 		return false
 	}
+}
+
+func F공통_종료_채널_닫기() {
+	if !F공통_종료_채널_닫힘() {
+		close(ch공통_종료_채널)
+	}
+}
+
+func F공통_종료_채널_재설정() {
+	ch공통_종료_채널 = make(chan T신호)
 }
 
 func F파일_존재함(파일경로 string) bool {

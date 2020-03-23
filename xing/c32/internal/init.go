@@ -153,7 +153,13 @@ func F소켓_정리() error {
 		ch완료 <- lib.P신호_OK
 	}()
 
-	for i := 0; i < 3; i++ {
+	go func() {
+		소켓REQ_저장소.S정리()
+
+		ch완료 <- lib.P신호_OK
+	}()
+
+	for i := 0; i < 4; i++ {
 		select {
 		case <-ch완료:
 			continue

@@ -46,9 +46,9 @@ func TestCFOFQ02400_선물옵션_미결제약정_질의값(t *testing.T) {
 }
 
 func TestCFOFQ02400_선물옵션_미결제약정(t *testing.T) {
-	t.FailNow()
+	t.SkipNow()
 
-	//등록시장_모음 := []xt.CFOFQ02400_등록시장{xt.CFOFQ02400_전체, xt.CFOFQ02400_KOSPI,
+	//등록시장_`모음 := []xt.CFOFQ02400_등록시장{xt.CFOFQ02400_전체, xt.CFOFQ02400_KOSPI,
 	//	xt.CFOFQ02400_KOSDAQ, xt.CFOFQ02400_KSE, xt.CFOFQ02400_KOFEX}
 
 	계좌번호 := lib.F확인(F계좌_번호(1)).(string) // 선물옵션 계좌를 선택해야 함.

@@ -178,7 +178,7 @@ func F로그아웃_및_접속해제() error {
 		lib.New에러("로그아웃 실패.")
 	}
 
-	lib.F메모("C.etkDisconnect() 에러 발생")
+	lib.F메모("C.etkDisconnect() 에러 발생. 게시판 문의 후 답변 대기 중.")
 
 	//cgo잠금.Lock()
 	//접속해제_결과 := bool(C.etkDisconnect())

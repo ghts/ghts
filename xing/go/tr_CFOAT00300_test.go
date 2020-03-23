@@ -46,7 +46,7 @@ func TestCFOAT00300_선물옵션_취소주문_질의값(t *testing.T) {
 }
 
 func TestCFOAT00300_선물옵션_취소주문(t *testing.T) {
-	t.FailNow()
+	t.SkipNow()
 
 	if !F한국증시_정규시장_거래시간임() {
 		t.SkipNow()

@@ -58,6 +58,8 @@ type I소켓Raw interface {
 }
 
 func NewNano소켓(종류 T소켓_종류, 주소 string, 접속방식 T소켓_접속방식, 옵션_모음 ...interface{}) (소켓 I소켓, 에러 error) {
+	defer S예외처리{M에러: &에러, M함수: func() { 소켓 = nil }}.S실행()
+
 	s := new(sNano소켓)
 	s.종류 = 종류
 
@@ -105,12 +107,17 @@ func NewNano소켓(종류 T소켓_종류, 주소 string, 접속방식 T소켓_�
 				// 이런 경우에는 잠시 기다린 후 재시도 하면 해결됨.
 				time.Sleep(500 * time.Millisecond)
 				continue
+			case strings.Contains(에러.Error(), "connectex: No connection could be made because the target machine actively refused it."):
+				// SUB소켓 생성 시 종종 발생하는 원인을 모르는 에러.
+				// 이런 경우에는 잠시 기다린 후 재시도 하면 해결됨.
+				time.Sleep(500 * time.Millisecond)
+				continue
 			default:
 				panic(New에러(에러))
 			}
 		}
 	case P소켓_접속_BIND:
-		for i := 0; i < 10; i++ {
+		for i := 0; i < 20; i++ {
 			에러 = s.Socket.Listen(주소)
 
 			switch {
@@ -145,7 +152,12 @@ func NewNano소켓REQ(주소 T주소, 옵션_모음 ...interface{}) (I소켓_질
 }
 
 func NewNano소켓REQ_단순형(주소 T주소, 옵션_모음 ...interface{}) I소켓_질의 {
-	return F확인(NewNano소켓REQ(주소, 옵션_모음...)).(I소켓_질의)
+	if 소켓, 에러 := NewNano소켓REQ(주소, 옵션_모음...); 에러 != nil {
+		F에러_출력(에러)
+		return nil
+	} else {
+		return 소켓
+	}
 }
 
 func NewNano소켓REP(주소 T주소, 옵션_모음 ...interface{}) (I소켓, error) {
@@ -173,12 +185,17 @@ func NewNano소켓PUB(주소 T주소, 옵션_모음 ...interface{}) (소켓 I소
 	return NewNano소켓(P소켓_종류_PUB, 주소.G값(), P소켓_접속_BIND, 옵션_모음...)
 }
 
+func NewNano소켓PUB_단순형(주소 T주소, 옵션_모음 ...interface{}) I소켓 {
+	return F확인(NewNano소켓PUB(주소, 옵션_모음...)).(I소켓)
+}
+
+
 func NewNano소켓SUB(주소 T주소, 옵션_모음 ...interface{}) (소켓 I소켓, 에러 error) {
 	return NewNano소켓(P소켓_종류_SUB, 주소.G값(), P소켓_접속_CONNECT, 옵션_모음...)
 }
 
 func NewNano소켓SUB_단순형(주소 T주소, 옵션_모음 ...interface{}) I소켓 {
-	return F확인(NewNano소켓(P소켓_종류_SUB, 주소.G값(), P소켓_접속_CONNECT, 옵션_모음...)).(I소켓)
+	return F확인(NewNano소켓SUB(주소, 옵션_모음...)).(I소켓)
 }
 
 type sNano소켓 struct {
@@ -191,8 +208,7 @@ type sNano소켓 struct {
 func (s *sNano소켓) S송신(변환_형식 T변환, 값_모음 ...interface{}) (에러 error) {
 	defer S예외처리{M에러: &에러, M출력_숨김: true}.S실행()
 
-	F메모("소켓 타임아웃이 0초 이면 에러 발생.")
-
+	// 소켓 타임아웃이 0초 이면 에러 발생.
 	if s.타임아웃 != 0 {
 		F확인(s.Socket.SetOption(mangos.OptionSendDeadline, s.타임아웃))
 	}

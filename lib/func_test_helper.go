@@ -57,7 +57,7 @@ func F테스트_모드_시작() error {
 }
 
 func F테스트_모드_종료() error {
-	F공통_종료_채널_닫기()
+	close(F공통_종료_채널())
 	에러 := 테스트_모드.S값(false)
 	return 에러
 }

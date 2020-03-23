@@ -99,6 +99,6 @@ func TestF영업일_기준_전일_당일(t *testing.T) {
 	lib.F테스트_같음(t, 당일.Nanosecond(), 0)
 }
 
-func TestC32_재시작(t *testing.T) {
-	lib.F테스트_에러없음(t, C32_재시작())
-}
+//func TestC32_재시작(t *testing.T) {
+//	lib.F테스트_에러없음(t, C32_재시작())
+//}

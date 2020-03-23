@@ -106,7 +106,7 @@ func F2당일_시각_단순형(포맷 string, 값 interface{}) time.Time {
 	return lib.F확인(F2당일_시각(포맷, 값)).(time.Time)
 }
 
-func xing_C32_실행_중() (프로세스ID int) {
+func xing_C32_PID() (프로세스ID int) {
 	defer lib.S예외처리{M함수: func() { 프로세스ID = -1 }}.S실행()
 
 	프로세스_모음, 에러 := ps.Processes()
@@ -344,7 +344,6 @@ func C32_재시작() (에러 error) {
 	defer xing_C32_재실행_시각.S값(lib.F지금())
 
 	lib.F문자열_출력("** C32 재시작 : %v **", time.Now().Format(lib.P간략한_시간_형식))
-
 	lib.F확인(C32_종료())
 	lib.F대기(lib.P10초)	// 소켓이 정리될 시간을 줌.
 	lib.F확인(f초기화_xing_C32())
@@ -352,6 +351,7 @@ func C32_재시작() (에러 error) {
 	lib.F확인(f초기화_TR전송_제한())
 	lib.F확인(f종목모음_설정())
 	lib.F확인(F전일_당일_설정())
+
 	f접속유지_실행()
 
 	println("** C32 재시작 완료  **")
@@ -389,6 +389,10 @@ func f초당_전송_제한_확인(TR코드 string) lib.I전송_권한 {
 
 	switch {
 	case !존재함:
+		for 키, 값 := range tr코드별_초당_전송_제한 {
+			lib.F체크포인트(키, 값)
+		}
+
 		panic(lib.New에러("전송제한을 찾을 수 없음 : '%v'", TR코드))
 	case 전송_권한.TR코드() != TR코드:
 		panic("예상하지 못한 경우.")

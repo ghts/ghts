@@ -36,9 +36,9 @@ package xing
 import (
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/xing/base"
-	"runtime"
 
 	"fmt"
+	"runtime"
 	"time"
 )
 
@@ -91,8 +91,8 @@ func F초기화() (에러 error) {
 		API초기화_완료.S값(true)
 	}()
 
-	f초기화_Go루틴()
 	lib.F확인(f초기화_xing_C32())
+	f초기화_Go루틴()
 	lib.F조건부_패닉(!f초기화_작동_확인(), "초기화 작동 확인 실패.")
 	lib.F확인(f초기화_TR전송_제한())
 	lib.F확인(f종목모음_설정())
@@ -114,6 +114,18 @@ func f초기화_xing_C32() (에러 error) {
 
 	switch runtime.GOOS {
 	case "windows":
+		if !C32_종료됨() {
+			F질의(lib.New질의값_기본형(lib.TR종료, ""))
+		}
+
+		for i := 0; i < 100; i++ {
+			if C32_종료됨() {
+				break
+			}
+
+			lib.F대기(lib.P300밀리초)
+		}
+
 		lib.F확인(lib.F외부_프로세스_실행(xing_C32_경로))
 	default:
 		lib.F문자열_출력("*********************************************\n"+
@@ -125,7 +137,8 @@ func f초기화_xing_C32() (에러 error) {
 }
 
 func f초기화_Go루틴() {
-	고루틴_모음 := []func(chan lib.T신호) error{go_TR호출, go_TR콜백_처리, go_RT_주문처리결과}
+	lib.F메모("RT 루틴 일시 비활성화")
+	고루틴_모음 := []func(chan lib.T신호) error{go_TR호출_도우미_관리, go_TR콜백_처리} //, go_RT_주문처리결과}
 	ch초기화 := make(chan lib.T신호, len(고루틴_모음))
 
 	for _, 고루틴 := range 고루틴_모음 {
@@ -142,14 +155,6 @@ func f초기화_작동_확인() (작동_여부 bool) {
 
 	ch확인 := make(chan lib.T신호, 1)
 	ch타임아웃 := time.After(lib.P1분)
-
-	select {
-	case <-ch신호_C32_시작: // 서버 접속된 상태임.
-		//lib.F체크포인트("C32 시작 신호 수신")
-	case <-ch타임아웃:
-		lib.F체크포인트("C32 초기화 타임아웃")
-		return false
-	}
 
 	// C32 모듈의 소켓이 초기화 될 시간을 준다.
 	// 이게 없으면 제대로 작동하지 않으며, 필수적인 부분임. 삭제하지 말 것.
@@ -188,7 +193,7 @@ func tr수신_소켓_동작_확인(ch완료 chan lib.T신호) {
 				return
 		}
 
-		lib.F대기(lib.P100밀리초)
+		lib.F대기(lib.P500밀리초)
 	}
 }
 
@@ -200,16 +205,20 @@ func f접속_확인(ch완료 chan lib.T신호) {
 	}()
 
 	for i := 0; i < 10; i++ {
-		if 접속됨, 에러 := F접속됨(); 에러 != nil {
+		if 접속됨, 에러 := F접속됨(); 에러 == nil && 접속됨 {
+			break
+		} else if 에러 != nil {
 			lib.F에러_출력(에러)
-			lib.F대기(lib.P1초)
-			continue
-		} else if !접속됨 {
-			panic(lib.New에러("이 시점에 접속되어 있어야 함."))
 		}
 
-		return
+		lib.F대기(lib.P1초)
 	}
+
+	if 접속됨, 에러 := F접속됨(); 에러 != nil || !접속됨 {
+		panic(lib.New에러("이 시점에 접속되어 있어야 함."))
+	}
+
+	return
 }
 
 func tr동작_확인(ch완료 chan lib.T신호) {
@@ -272,7 +281,7 @@ func F전일_당일_설정() (에러 error) {
 }
 
 func C32_종료됨() bool {
-	프로세스ID := xing_C32_실행_중()
+	프로세스ID := xing_C32_PID()
 	포트_닫힘_C함수_호출 := lib.F포트_닫힘_확인(lib.P주소_Xing_C함수_호출)
 	포트_닫힘_실시간 := lib.F포트_닫힘_확인(lib.P주소_Xing_실시간)
 
@@ -311,6 +320,7 @@ func F리소스_정리() {
 	C32_종료()
 	lib.F공통_종료_채널_닫기()
 	lib.F패닉억제_호출(소켓REP_TR콜백.Close)
+	소켓REQ_저장소.S정리()
 }
 
 func f초기화_TR전송_제한() (에러 error) {
@@ -356,19 +366,37 @@ func f초기화_TR전송_제한() (에러 error) {
 		xt.TR지수선물_마스터_조회_t8432,
 		xt.TR현물_종목_조회_t8436}
 
-	응답 := F질의(lib.New질의값_문자열_모음(xt.TR코드별_전송_제한, "", TR코드_모음), lib.P5초)
-	lib.F확인(응답.G에러())
+	for {
+		응답 := F질의(lib.New질의값_문자열_모음(xt.TR코드별_전송_제한, "", TR코드_모음), lib.P5초)
+		lib.F확인(응답.G에러())
 
-	전송_제한_정보_모음 = new(xt.TR코드별_전송_제한_정보_모음)
-	lib.F확인(응답.G값(0, 전송_제한_정보_모음))
-	lib.F조건부_패닉(len(TR코드_모음) != len(전송_제한_정보_모음.M배열),
-		"서로 다른 길이 : '%v' '%v'", len(TR코드_모음), len(전송_제한_정보_모음.M배열))
+		전송_제한_정보_모음 = new(xt.TR코드별_전송_제한_정보_모음)
+		lib.F확인(응답.G값(0, 전송_제한_정보_모음))
+		lib.F조건부_패닉(len(TR코드_모음) != len(전송_제한_정보_모음.M배열),
+			"서로 다른 길이 : '%v' '%v'", len(TR코드_모음), len(전송_제한_정보_모음.M배열))
+
+		정상 := false
+		for _, 전송_제한_정보 := range 전송_제한_정보_모음.M배열 {
+			if 전송_제한_정보.M초당_전송_제한 > 0 {
+				정상 = true
+				break
+			}
+		}
+
+		if 정상 {
+			break
+		}
+
+		lib.F대기(lib.P1초)
+	}
 
 	for _, 전송_제한_정보 := range 전송_제한_정보_모음.M배열 {
 		TR코드 := 전송_제한_정보.TR코드
 
 		if 전송_제한_정보.M초당_전송_제한 > 0 {
 			if 전송_권한, 존재함 := tr코드별_초당_전송_제한[TR코드]; 존재함 {
+				if TR코드 == "t8436" { lib.F체크포인트(TR코드) }
+
 				전송_권한.S수량_간격_변경(전송_제한_정보.M초당_전송_제한, lib.P1초)
 				tr코드별_초당_전송_제한[TR코드] = 전송_권한
 			} else {

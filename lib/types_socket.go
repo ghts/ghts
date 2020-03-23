@@ -70,6 +70,9 @@ type s소켓_저장소 struct {
 
 func (s *s소켓_저장소) G소켓() I소켓_질의 {
 	select {
+	case <-F공통_종료_채널():
+		F체크포인트()
+		return nil
 	case 소켓 := <-s.M저장소:
 		return 소켓
 	default:
@@ -87,6 +90,13 @@ func (s *s소켓_저장소) S회수(소켓 I소켓_질의) {
 	case s.M저장소 <- 소켓:
 		return
 	default:
+		소켓.Close()
+	}
+}
+
+func (s *s소켓_저장소) S정리() {
+	for i:=0 ; i<len(s.M저장소) ; i++ {
+		소켓 := <- s.M저장소
 		소켓.Close()
 	}
 }

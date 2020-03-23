@@ -91,7 +91,6 @@ func go테스트용_TR콜백_수신(ch초기화 chan lib.T신호) {
 
 		select {
 		case <-ch종료:
-			lib.F체크포인트(lib.F지금())
 			return
 		default:
 			// ok

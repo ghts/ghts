@@ -64,6 +64,23 @@ func go콜백_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 		}
 	}}.S실행()
 
+	for {
+		if lib.F포트_열림_확인(lib.P주소_Xing_C함수_콜백) {
+			break
+		}
+
+		lib.F대기(lib.P500밀리초)
+	}
+
+	for {
+		if 소켓 := 소켓REQ_저장소.M생성함수(); 소켓 != nil {
+			소켓REQ_저장소.S회수(소켓)
+			break
+		}
+
+		lib.F대기(lib.P500밀리초)
+	}
+
 	ch초기화 <- lib.P신호_초기화
 
 	for {
@@ -81,6 +98,12 @@ func f콜백_동기식(콜백값 lib.I콜백) (에러 error) {
 
 	소켓REQ := 소켓REQ_저장소.G소켓()
 	defer 소켓REQ_저장소.S회수(소켓REQ)
+
+	//if 콜백값.G콜백().String() == "신호" {
+	//	lib.F체크포인트(콜백값.G콜백().String(), lib.T신호(콜백값.(*lib.S콜백_정수값).M정수값))
+	//} else {
+	//	lib.F체크포인트(콜백값.G콜백().String())
+	//}
 
 	i값 := 소켓REQ.G질의_응답_검사(lib.P변환형식_기본값, 콜백값).G해석값_단순형(0)
 
@@ -201,11 +224,13 @@ func OnRealtimeData_Go(REALTIME데이터 *C.REALTIME_DATA, 데이터_포인터 *
 	//binary.Read(버퍼, binary.LittleEndian, &g.Data)
 
 	// KeyData, RegKey등이 불필요한 듯 해서 전송하지 않음. 필요하면 추가할 것.
-	raw값 := C.GoBytes(unsafe.Pointer(데이터_포인터), C.int(g.DataLength))
-	raw값 = f민감정보_삭제(raw값, lib.F2문자열_앞뒤_공백제거(g.TrCode))
-	바이트_변환값 := lib.F확인(lib.New바이트_변환Raw(lib.F2문자열(g.TrCode), raw값, false)).(*lib.S바이트_변환)
+	lib.F메모("실시간 정보 전송 일시 비활성화")
+	//raw값 := C.GoBytes(unsafe.Pointer(데이터_포인터), C.int(g.DataLength))
+	//raw값 = f민감정보_삭제(raw값, lib.F2문자열_앞뒤_공백제거(g.TrCode))
+	//바이트_변환값 := lib.F확인(lib.New바이트_변환Raw(lib.F2문자열(g.TrCode), raw값, false)).(*lib.S바이트_변환)
 
-	소켓PUB_실시간_정보.S송신_검사(lib.Raw, 바이트_변환값)
+	lib.F메모("실시간 정보 전송 일시 비활성화")
+	//소켓PUB_실시간_정보.S송신_검사(lib.Raw, 바이트_변환값)
 }
 
 //export OnLogin_Go

@@ -37,7 +37,7 @@ import (
 	"github.com/ghts/ghts/lib"
 )
 
-func go_TR호출(ch초기화 chan lib.T신호) (에러 error) {
+func go_TR호출_도우미_관리(ch초기화 chan lib.T신호) (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
 	const 도우미_Go루틴_수량 = 10
@@ -67,6 +67,7 @@ func go_TR호출(ch초기화 chan lib.T신호) (에러 error) {
 			}
 
 			lib.F에러_출력(에러)
+
 			go go_TR호출_도우미(ch도우미_초기화, ch도우미_종료)
 			<-ch도우미_초기화
 		}
@@ -85,7 +86,7 @@ func go_TR호출_도우미(ch초기화 chan lib.T신호, ch도우미_종료 chan
 		case <-ch종료:
 			return nil
 		case 작업 := <-ch질의:
-			go 작업.S실행()
+			작업.S실행()
 		}
 	}
 }
