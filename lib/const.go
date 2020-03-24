@@ -994,6 +994,7 @@ const (
 	P콜백_링크_데이터
 	P콜백_실시간_차트_데이터
 	P콜백_신호
+	P콜백_소켓_테스트
 )
 
 func (p T콜백) String() string {
@@ -1012,6 +1013,8 @@ func (p T콜백) String() string {
 		return "실시간_차트_데이터"
 	case P콜백_신호:
 		return "신호"
+	case P콜백_소켓_테스트:
+		return "소켓_테스트"
 	default:
 		return F2문자열("예상하지 못한 콜백값 : '%v'", p)
 	}
