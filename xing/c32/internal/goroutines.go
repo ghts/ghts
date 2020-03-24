@@ -293,6 +293,8 @@ func f질의값_처리(질의 *lib.S채널_질의_API) {
 
 		f콜백_동기식(lib.New콜백_신호(lib.P신호_C32_종료))
 		lib.F공통_종료_채널_닫기()
+	case xt.TR초기화:
+		f초기화_XingAPI() // 모든 API 액세스를 단일 스레드에서 하기 위해서 여기에서 API 초기화를 실행함.
 	default:
 		panic(lib.New에러("예상하지 못한 TR구분값 : '%v'", int(질의.M질의값.TR구분())))
 	}

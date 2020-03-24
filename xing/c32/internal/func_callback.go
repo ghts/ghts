@@ -72,15 +72,6 @@ func go콜백_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 		lib.F대기(lib.P500밀리초)
 	}
 
-	for {
-		if 소켓 := 소켓REQ_저장소.M생성함수(); 소켓 != nil {
-			소켓REQ_저장소.S회수(소켓)
-			break
-		}
-
-		lib.F대기(lib.P500밀리초)
-	}
-
 	ch초기화 <- lib.P신호_초기화
 
 	for {
@@ -98,12 +89,6 @@ func f콜백_동기식(콜백값 lib.I콜백) (에러 error) {
 
 	소켓REQ := 소켓REQ_저장소.G소켓()
 	defer 소켓REQ_저장소.S회수(소켓REQ)
-
-	//if 콜백값.G콜백().String() == "신호" {
-	//	lib.F체크포인트(콜백값.G콜백().String(), lib.T신호(콜백값.(*lib.S콜백_정수값).M정수값))
-	//} else {
-	//	lib.F체크포인트(콜백값.G콜백().String())
-	//}
 
 	i값 := 소켓REQ.G질의_응답_검사(lib.P변환형식_기본값, 콜백값).G해석값_단순형(0)
 
