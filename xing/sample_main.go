@@ -6,7 +6,6 @@ import (
 	"os"
 )
 
-
 func main() {
 
 	xing.F초기화()
@@ -20,4 +19,3 @@ func main() {
 
 	go go시간_종료()
 }
-

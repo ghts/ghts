@@ -45,7 +45,9 @@ type T1902_ETF시간별_추이_응답 struct {
 	M반복값_모음 *T1902_ETF시간별_추이_응답_반복값_모음
 }
 
-func (s *T1902_ETF시간별_추이_응답) G헤더_TR데이터() I헤더_TR데이터 { return s.M헤더 }
+func (s *T1902_ETF시간별_추이_응답) G헤더_TR데이터() I헤더_TR데이터 {
+	return s.M헤더
+}
 
 func (s *T1902_ETF시간별_추이_응답) G반복값_TR데이터() I반복값_모음_TR데이터 {
 	return s.M반복값_모음

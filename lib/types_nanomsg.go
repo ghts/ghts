@@ -189,7 +189,6 @@ func NewNano소켓PUB_단순형(주소 T주소, 옵션_모음 ...interface{}) I�
 	return F확인(NewNano소켓PUB(주소, 옵션_모음...)).(I소켓)
 }
 
-
 func NewNano소켓SUB(주소 T주소, 옵션_모음 ...interface{}) (소켓 I소켓, 에러 error) {
 	return NewNano소켓(P소켓_종류_SUB, 주소.G값(), P소켓_접속_CONNECT, 옵션_모음...)
 }

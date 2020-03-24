@@ -72,7 +72,7 @@ func TestCSPAT00800_현물_취소_주문(t *testing.T) {
 
 	계좌_상세명, 에러 := F계좌_상세명(계좌번호)
 	lib.F확인(에러)
-	lib.F테스트_거짓임(t, strings.Contains(계좌_상세명, "선물옵션"))	// 현물 계좌이어야 함.
+	lib.F테스트_거짓임(t, strings.Contains(계좌_상세명, "선물옵션")) // 현물 계좌이어야 함.
 
 	질의값 := xt.NewCSPAT00600_현물_정상_주문_질의값()
 	질의값.M계좌번호 = 계좌번호
