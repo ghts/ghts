@@ -40,11 +40,15 @@ import (
 )
 
 func TestCFOBQ10500_선물옵션_예탁금_증거금_조회_질의값(t *testing.T) {
+	t.Parallel()
+
 	_, ok := interface{}(new(xt.CFOBQ10500_선물옵션_예탁금_증거금_조회_질의값)).(lib.I질의값)
 	lib.F테스트_참임(t, ok)
 }
 
 func TestCFOBQ10500_선물옵션_예탁금_증거금_조회(t *testing.T) {
+	t.Parallel()
+
 	t.SkipNow()
 
 	계좌번호 := lib.F확인(선물옵션_계좌번호()).(string)

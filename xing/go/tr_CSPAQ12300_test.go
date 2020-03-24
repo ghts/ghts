@@ -42,11 +42,15 @@ import (
 )
 
 func TestCSPAQ12300_현물계좌_잔고내역_질의값(t *testing.T) {
+	t.Parallel()
+
 	_, ok := interface{}(new(xt.CSPAQ12300_현물계좌_잔고내역_질의값)).(lib.I질의값)
 	lib.F테스트_참임(t, ok)
 }
 
 func TestCSPAQ12300_현물계좌_잔고내역_조회(t *testing.T) {
+	t.Parallel()
+
 	const 수량 = 5
 	const 가격_정상주문 = int64(0) // 현재가 주문은 가격이 0
 	const 호가_유형 = lib.P호가_시장가

@@ -58,6 +58,8 @@ import (
 //}
 
 func TestT8407_F현물_멀티_현재가_조회(t *testing.T) {
+	t.Parallel()
+
 	종목코드_모음 := lib.F종목코드_추출(lib.F샘플_종목_모음_전체(), 50)
 	종목코드_맵 := make(map[string]lib.S비어있음)
 	비어있는_값 := lib.S비어있음{}

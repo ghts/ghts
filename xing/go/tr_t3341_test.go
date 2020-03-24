@@ -42,6 +42,8 @@ import (
 )
 
 func TestT3341_재무_순위_종합(t *testing.T) {
+	t.Parallel()
+
 	시장구분_모음 := []lib.T시장구분{lib.P시장구분_전체, lib.P시장구분_코스피, lib.P시장구분_코스닥}
 	시장구분 := 시장구분_모음[lib.F임의_범위_이내_정수값(0, 2)]
 

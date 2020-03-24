@@ -41,6 +41,8 @@ import (
 )
 
 func TestT0434_선물옵션_체결_미체결_확인(t *testing.T) {
+	t.Parallel()
+
 	t.SkipNow()
 
 	계좌번호 := lib.F확인(선물옵션_계좌번호()).(string)

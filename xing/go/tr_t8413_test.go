@@ -41,6 +41,8 @@ import (
 )
 
 func TestT8413_현물_차트_일주월(t *testing.T) {
+	t.Parallel()
+
 	const 종목코드 = "069500" // 코덱스200
 	var 이전_일자 time.Time
 

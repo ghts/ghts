@@ -42,6 +42,8 @@ import (
 )
 
 func TestT1902_ETF_시간별_추이(t *testing.T) {
+	t.Parallel()
+
 	지금 := lib.F지금()
 
 	if 지금.Hour() >= 5 && 지금.Hour() < 9 {

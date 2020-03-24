@@ -133,6 +133,8 @@ func go루틴_콜백_처리_도우미(ch초기화 chan lib.T신호, ch도우미_
 				}
 			case lib.P콜백_링크_데이터, lib.P콜백_실시간_차트_데이터:
 				panic("TODO") // 변환값 := 값.(*S콜백_기본형)
+			case lib.P콜백_소켓_테스트:
+				// 아무 것도 안하고 OK 응답 보냄.
 			default:
 				panic(lib.New에러("예상하지 못한 콜백 구분값 : '%v'", 콜백값.G콜백()))
 			}

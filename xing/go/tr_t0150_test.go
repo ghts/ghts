@@ -39,6 +39,8 @@ import (
 )
 
 func TestT0150_현물_당일_매매일지(t *testing.T) {
+	t.Parallel()
+
 	계좌번호, 에러 := F계좌_번호(0)
 	lib.F테스트_에러없음(t, 에러)
 

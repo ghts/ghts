@@ -42,11 +42,15 @@ import (
 )
 
 func TestCSPAT00700_현물_정정_주문_질의값(t *testing.T) {
+	t.Parallel()
+
 	_, ok := interface{}(new(xt.CSPAT00700_현물_정정_주문_질의값)).(lib.I질의값)
 	lib.F테스트_참임(t, ok)
 }
 
 func TestCSPAT00700_현물_정정_주문(t *testing.T) {
+	t.Parallel()
+
 	if !F한국증시_정규시장_거래시간임() {
 		t.SkipNow()
 	}
