@@ -33,6 +33,12 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
 package x32
 
+// #include <stdio.h>
+// #include <stdbool.h>
+// #include <windows.h>
+// #include <winuser.h>
+// #include "./func.h"
+import "C"
 import (
 	"github.com/ghts/ghts/lib"
 	"golang.org/x/sys/windows"
@@ -40,6 +46,28 @@ import (
 	"syscall"
 	"unsafe"
 )
+
+//func F메시지_윈도우_생성() {
+//	lpszClassName, _ := syscall.UTF16PtrFromString("MessageOnlyWindow")
+//	타이틀, _ := syscall.UTF16PtrFromString("Simple Window.")
+//
+//	wcex := WNDCLASSEX{
+//		CbSize:        uint32(unsafe.Sizeof(WNDCLASSEX{})),
+//		LpfnWndProc:   syscall.NewCallback(WndProc),
+//		HInstance:     HINSTANCE(xing_api_dll),
+//		LpszClassName: lpszClassName}
+//
+//	RegisterClassEx(&wcex)
+//
+//	윈도우_핸들 := CreateWindowEx(
+//		0, lpszClassName, 타이틀,
+//		0, 0, 0, 0, 0,
+//		HWND_MESSAGE, 0, HINSTANCE(xing_api_dll), nil)
+//
+//	win32_메시지_윈도우 = uintptr(윈도우_핸들)
+//
+//	C.setHWND(unsafe.Pointer(win32_메시지_윈도우))
+//}
 
 func F윈도우_메시지_처리() {
 	var 윈도우_메시지 MSG
@@ -57,10 +85,120 @@ func F윈도우_메시지_처리() {
 	}
 }
 
+//func WndProc(hWnd HWND, msg uint32, wParam, lParam uintptr) uintptr {
+//	// 일단 C.WindowProc()을 사용함. 향후 Go언어로 대체.
+//	lResut := C.WindowProc(
+//		(C.HWND)(unsafe.Pointer(hWnd)),
+//		C.UINT(msg),
+//		C.WPARAM(wParam),
+//		C.LPARAM(lParam))
+//
+//	return uintptr(lResut)
+//
+//	//switch msg {
+//	//case XM_DISCONNECT:
+//	//	OnDisconnected_Go()
+//	//	return TRUE
+//	//case XM_RECEIVE_DATA:
+//	//	switch wParam {
+//	//	case RCV_TR_DATA:
+//	//		OnTrData_Go(lParam)
+//	//		return TRUE
+//	//	case RCV_MSG_DATA:
+//	//	case RCV_SYSTEM_ERROR:
+//	//		OnMessageAndError_Go(lParam)
+//	//		return TRUE
+//	//	case RCV_RELEASE:
+//	//		OnReleaseData_Go(lParam)
+//	//		return TRUE
+//	//	}
+//	//	return FALSE
+//	//case XM_RECEIVE_REAL_DATA:
+//	//	OnRealtimeData_Go(lParam)
+//	//	return TRUE
+//	//case XM_LOGIN:
+//	//	OnLogin_Go(wParam)
+//	//	return TRUE
+//	//case XM_LOGOUT:
+//	//	OnLogout_Go()
+//	//	return TRUE
+//	//case XM_TIMEOUT:
+//	//	OnTimeout_Go(lParam)
+//	//	return TRUE
+//	//case XM_RECEIVE_LINK_DATA:
+//	//	OnLinkData_Go()
+//	//	return TRUE
+//	//case XM_RECEIVE_REAL_DATA_CHART:
+//	//	OnRealtimeDataChart_Go()
+//	//	return TRUE
+//	//case WM_DESTROY:
+//	//	PostQuitMessage(0)
+//	//default:
+//	//	return DefWindowProc(hWnd, msg, wParam, lParam)
+//	//}
+//	//
+//	return FALSE
+//}
+
 // COPIED & MODIFED FROM 'https://github.com/lxn/win'
 
+// Window message constants
 const (
-	WM_QUIT = 18
+	WM_DESTROY = 2
+	WM_QUIT    = 18
+)
+
+// Predefined window handles
+const (
+	HWND_MESSAGE   = ^HWND(2) // -3
+)
+
+type HANDLE uintptr
+type HWND uintptr
+type HINSTANCE uintptr
+type HMENU uintptr
+type HICON uintptr
+type HCURSOR uintptr
+type HBRUSH uintptr
+type ATOM uint16
+
+type MSG struct {
+	HWnd    HWND
+	Message uint32
+	WParam  uintptr
+	LParam  uintptr
+	Time    uint32
+	Pt      POINT
+}
+
+type POINT struct {
+	X, Y int32
+}
+
+type WNDCLASSEX struct {
+	CbSize        uint32
+	Style         uint32
+	LpfnWndProc   uintptr
+	CbClsExtra    int32
+	CbWndExtra    int32
+	HInstance     HINSTANCE
+	HIcon         HICON
+	HCursor       HCURSOR
+	HbrBackground HBRUSH
+	LpszMenuName  *uint16
+	LpszClassName *uint16
+	HIconSm       HICON
+}
+
+var (
+	libuser32 = windows.NewLazySystemDLL("user32.dll")
+	dispatchMessage = libuser32.NewProc("DispatchMessageW")
+	peekMessage = libuser32.NewProc("PeekMessageW")
+	registerClassEx = libuser32.NewProc("RegisterClassExW")
+	createWindowEx  = libuser32.NewProc("CreateWindowExW")
+	postQuitMessage = libuser32.NewProc("PostQuitMessage")
+	destroyWindow   = libuser32.NewProc("DestroyWindow")
+	defWindowProc   = libuser32.NewProc("DefWindowProcW")
 )
 
 func PeekMessage(lpMsg *MSG, hWnd HWND, wMsgFilterMin, wMsgFilterMax, wRemoveMsg uint32) bool {
@@ -84,22 +222,58 @@ func DispatchMessage(msg *MSG) uintptr {
 	return ret
 }
 
-var libuser32 = windows.NewLazySystemDLL("user32.dll")
-var dispatchMessage = libuser32.NewProc("DispatchMessageW")
-var peekMessage = libuser32.NewProc("PeekMessageW")
+func RegisterClassEx(windowClass *WNDCLASSEX) ATOM {
+	ret, _, _ := syscall.Syscall(registerClassEx.Addr(), 1,
+		uintptr(unsafe.Pointer(windowClass)),
+		0,
+		0)
 
-type HANDLE uintptr
-type HWND HANDLE
-
-type MSG struct {
-	HWnd    HWND
-	Message uint32
-	WParam  uintptr
-	LParam  uintptr
-	Time    uint32
-	Pt      POINT
+	return ATOM(ret)
 }
 
-type POINT struct {
-	X, Y int32
+func CreateWindowEx(dwExStyle uint32, lpClassName, lpWindowName *uint16, dwStyle uint32, x, y, nWidth, nHeight int32, hWndParent HWND, hMenu HMENU, hInstance HINSTANCE, lpParam unsafe.Pointer) uintptr {
+	ret, _, _ := syscall.Syscall12(createWindowEx.Addr(), 12,
+		uintptr(dwExStyle),
+		uintptr(unsafe.Pointer(lpClassName)),
+		uintptr(unsafe.Pointer(lpWindowName)),
+		uintptr(dwStyle),
+		uintptr(x),
+		uintptr(y),
+		uintptr(nWidth),
+		uintptr(nHeight),
+		uintptr(hWndParent),
+		uintptr(hMenu),
+		uintptr(hInstance),
+		uintptr(lpParam))
+
+	return uintptr(ret)
 }
+
+func PostQuitMessage(exitCode int32) {
+	syscall.Syscall(postQuitMessage.Addr(), 1,
+		uintptr(exitCode),
+		0,
+		0)
+}
+
+func DestroyWindow(hWnd HWND) bool {
+	ret, _, _ := syscall.Syscall(destroyWindow.Addr(), 1,
+		uintptr(hWnd),
+		0,
+		0)
+
+	return ret != 0
+}
+
+func DefWindowProc(hWnd HWND, Msg uint32, wParam, lParam uintptr) uintptr {
+	ret, _, _ := syscall.Syscall6(defWindowProc.Addr(), 4,
+		uintptr(hWnd),
+		uintptr(Msg),
+		wParam,
+		lParam,
+		0,
+		0)
+
+	return ret
+}
+

@@ -39,38 +39,6 @@ import (
 	"testing"
 )
 
-func TestF함수_존재함(t *testing.T) {
-	t.Parallel()
-
-	lib.F테스트_참임(t, f함수_존재함(FuncConnect))
-	lib.F테스트_참임(t, f함수_존재함(FuncIsConnected))
-	lib.F테스트_참임(t, f함수_존재함(FuncDisconnect))
-	lib.F테스트_참임(t, f함수_존재함(FuncLogin))
-	lib.F테스트_참임(t, f함수_존재함(FuncRequest))
-	lib.F테스트_참임(t, f함수_존재함(FuncReleaseRequestData))
-	lib.F테스트_참임(t, f함수_존재함(FuncReleaseMessageData))
-	lib.F테스트_참임(t, f함수_존재함(FuncAdviseRealData))
-	lib.F테스트_참임(t, f함수_존재함(FuncUnadviseRealData))
-	lib.F테스트_참임(t, f함수_존재함(FuncUnadviseWindow))
-	lib.F테스트_참임(t, f함수_존재함(FuncGetAccountListCount))
-	lib.F테스트_참임(t, f함수_존재함(FuncGetAccountList))
-	lib.F테스트_참임(t, f함수_존재함(FuncGetAccountName))
-	lib.F테스트_참임(t, f함수_존재함(FuncGetAcctDetailName))
-	lib.F테스트_참임(t, f함수_존재함(FuncGetAcctNickName))
-	lib.F테스트_참임(t, f함수_존재함(FuncGetServerName))
-	lib.F테스트_참임(t, f함수_존재함(FuncGetLastError))
-	lib.F테스트_참임(t, f함수_존재함(FuncGetErrorMessage))
-	lib.F테스트_참임(t, f함수_존재함(FuncGetTRCountPerSec))
-	lib.F테스트_참임(t, f함수_존재함(FuncGetTRCountBaseSec))
-	lib.F테스트_참임(t, f함수_존재함(FuncGetTRCountLimit))
-	lib.F테스트_참임(t, f함수_존재함(FuncRequestService))
-	lib.F테스트_참임(t, f함수_존재함(FuncRemoveService))
-	lib.F테스트_참임(t, f함수_존재함(FuncRequestLinkToHTS))
-	lib.F테스트_참임(t, f함수_존재함(FuncAdviseLinkFromHTS))
-	lib.F테스트_참임(t, f함수_존재함(FuncUnadviseLinkFromHTS))
-	lib.F테스트_참임(t, f함수_존재함(FuncDecompress))
-}
-
 func TestC컴파일러_의존성_확인(t *testing.T) {
 	t.Parallel()
 

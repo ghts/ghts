@@ -34,49 +34,34 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
 package x32
 
-const xing_dll = "xingAPI.dll"
-const pBufferSize = 512
+const (
+	xing_dll = "xingAPI.dll"
+	pBufferSize = 512
+	WM_USER = 0x0400
+)
+
 
 const (
-	pXM_INIT                    = 1024
-	pXM_DISCONNECT              = pXM_INIT + 1
-	pXM_RECEIVE_DATA            = pXM_INIT + 3
-	pXM_RECEIVE_REAL_DATA       = pXM_INIT + 4
-	pXM_LOGIN                   = pXM_INIT + 5
-	pXM_LOGOUT                  = pXM_INIT + 6
-	pXM_TIMEOUT                 = pXM_INIT + 7
-	pXM_RECEIVE_LINK_DATA       = pXM_INIT + 8
-	pXM_RECEIVE_REAL_DATA_CHART = pXM_INIT + 10
+	XM_INIT                    = 1024
+	XM_DISCONNECT              = XM_INIT + 1
+	XM_RECEIVE_DATA            = XM_INIT + 3
+	XM_RECEIVE_REAL_DATA       = XM_INIT + 4
+	XM_LOGIN                   = XM_INIT + 5
+	XM_LOGOUT                  = XM_INIT + 6
+	XM_TIMEOUT                 = XM_INIT + 7
+	XM_RECEIVE_LINK_DATA       = XM_INIT + 8
+	XM_RECEIVE_REAL_DATA_CHART = XM_INIT + 10
 )
 
 const (
-	// 함수 이름 (대소문자를 가리므로, 미묘한 에러 발생하기 쉽다.)
-	FuncConnect             = "ETK_Connect"
-	FuncIsConnected         = "ETK_IsConnected"
-	FuncDisconnect          = "ETK_Disconnect"
-	FuncLogin               = "ETK_Login"
-	FuncRequest             = "ETK_Request"
-	FuncReleaseRequestData  = "ETK_ReleaseRequestData"
-	FuncReleaseMessageData  = "ETK_ReleaseMessageData"
-	FuncAdviseRealData      = "ETK_AdviseRealData"
-	FuncUnadviseRealData    = "ETK_UnadviseRealData"
-	FuncUnadviseWindow      = "ETK_UnadviseWindow"
-	FuncGetAccountListCount = "ETK_GetAccountListCount"
-	FuncGetAccountList      = "ETK_GetAccountList"
-	FuncGetAccountName      = "ETK_GetAccountName"
-	FuncGetAcctDetailName   = "ETK_GetAcctDetailName"
-	FuncGetAcctNickName     = "ETK_GetAcctNickname"
-	FuncGetServerName       = "ETK_GetServerName"
-	FuncGetLastError        = "ETK_GetLastError"
-	FuncGetErrorMessage     = "ETK_GetErrorMessage"
-	FuncGetTRCountPerSec    = "ETK_GetTRCountPerSec"
-	FuncGetTRCountBaseSec   = "ETK_GetTRCountBaseSec"
-	FuncGetTRCountRequest   = "ETK_GetTRCountRequest"
-	FuncGetTRCountLimit     = "ETK_GetTRCountLimit"
-	FuncRequestService      = "ETK_RequestService"
-	FuncRemoveService       = "ETK_RemoveService"
-	FuncRequestLinkToHTS    = "ETK_RequestLinkToHTS"
-	FuncAdviseLinkFromHTS   = "ETK_AdviseLinkFromHTS"
-	FuncUnadviseLinkFromHTS = "ETK_UnAdviseLinkFromHTS"
-	FuncDecompress          = "ETK_Decompress"
+	RCV_TR_DATA      = 1
+	RCV_MSG_DATA     = 2
+	RCV_SYSTEM_ERROR = 3
+	RCV_RELEASE      = 4
 )
+
+const (
+	FALSE = 0
+	TRUE  = 1
+)
+

@@ -150,6 +150,8 @@ func OnTrData_Go(TR데이터 *C.TR_DATA, 데이터_포인터 *C.uchar) {
 
 //export OnMessageAndError_Go
 func OnMessageAndError_Go(MSG데이터 *C.MSG_DATA, 데이터_포인터 *C.char) {
+	defer F메시지_해제(uintptr(unsafe.Pointer(MSG데이터)))
+
 	c데이터 := C.GoBytes(unsafe.Pointer(MSG데이터), C.int(xt.Sizeof_C_MSG_DATA))
 	버퍼 := bytes.NewBuffer(c데이터)
 	g := new(xt.MSG_DATA)
@@ -187,7 +189,7 @@ func OnMessageAndError_Go(MSG데이터 *C.MSG_DATA, 데이터_포인터 *C.char)
 
 //export OnReleaseData_Go
 func OnReleaseData_Go(식별번호 C.int) {
-	f데이터_해제(int(식별번호))
+	F데이터_해제(int(식별번호))
 	F콜백(lib.New콜백_TR완료(int(식별번호)))
 }
 

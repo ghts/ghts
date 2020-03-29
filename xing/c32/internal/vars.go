@@ -40,9 +40,46 @@ import (
 	"reflect"
 	"runtime"
 	"sync"
+	"syscall"
 )
 
 // 전역 변수는 항상 동시 액세스로 인한 오류의 위험이 있어서 한 군데 몰아서 관리함.
+
+var (
+	xing_api_dll  syscall.Handle
+	win32_메시지_윈도우 uintptr
+
+	// 압축 해제용 버퍼 메모리 포인터.
+	버퍼_t8411 uintptr = 0
+	버퍼_t8412 uintptr = 0
+	버퍼_t8413 uintptr = 0
+
+	// Xing API 함수 포인터
+	etkConnect              uintptr
+	etkIsConnected          uintptr
+	etkLogin                uintptr
+	etkLogout               uintptr
+	etkDisconnect           uintptr
+	etkRequest              uintptr
+	etkAdviseRealData       uintptr
+	etkUnadviseRealData     uintptr
+	etkUnadviseWindow       uintptr
+	etkGetAccountListCount  uintptr
+	etkGetAccountList       uintptr
+	etkGetAccountName       uintptr
+	etkGetAccountDetailName uintptr
+	etkGetAccountNickName   uintptr
+	etkGetServerName        uintptr
+	etkGetLastError         uintptr
+	etkGetErrorMessage      uintptr
+	etkGetTRCountPerSec     uintptr
+	etkGetTRCountBaseSec    uintptr
+	etkGetTRCountLimit      uintptr
+	etkGetTRCountRequest    uintptr
+	etkReleaseRequestData   uintptr
+	etkReleaseMessageData   uintptr
+	etkDecompress           uintptr
+)
 
 // 다중 사용에 안전한 값들.
 var (

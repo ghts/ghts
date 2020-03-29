@@ -120,10 +120,11 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 // 도우미 함수
 //-------------------------------------------------//
 
+
+static HINSTANCE xing_api_dll = NULL;
+
 // xingAPI.dll 로드 및 반환
 HINSTANCE _XingApiDLL(bool reset) {
-	static HINSTANCE xing_api_dll = NULL;
-
     switch (reset) {
     case true:
         if (xing_api_dll != NULL) {
@@ -142,16 +143,12 @@ HINSTANCE _XingApiDLL(bool reset) {
 }
 
 HINSTANCE XingApiDLL() {
-    return _XingApiDLL(false);
+    return xing_api_dll;
+//    return _XingApiDLL(false);
 }
 
-void freeXingApi() {
-    _XingApiDLL(true);
-}
-
-void initXingApi() {
-    freeXingApi();
-    XingApiDLL();
+void setXingApiDLL(void *ptr) {
+    xing_api_dll = (HINSTANCE)ptr;
 }
 
 // 함수 포인터
@@ -258,7 +255,6 @@ BOOL bool2BOOL(bool value) {
 // Go언어의 cgo 관련 버그인 데, 사용상 큰 문제는 없어서 고칠 의향이 없는 듯 함.
 // 버그를 피해가기 위해서 인수을 추가함. (사용하지는 않음.)
 void freeResource(int dummy) {
-	freeXingApi();
 	resetHWND();
 }
 
@@ -266,293 +262,6 @@ void freeResource(int dummy) {
 // XingAPI 관련 함수
 //-------------------------------------------------//
 // 실패시 ETK_GetLastError() 로 실패코드를 얻을 수 있습니다.
-bool etkConnect(const char* ServerAddress, int PortNo) {
-    ETK_Connect func = (ETK_Connect)etkFunc("ETK_Connect");
-    if (func == NULL) {
-    	return false;
-    }
-
-   	BOOL value = func(getHWND(), ServerAddress, PortNo, WM_USER, -1, -1);
-   	//BOOL value = func(getHWND(), ServerAddress, PortNo, WM_USER, -1, 512);
-
-    return BOOL2bool(value);
-}
-
-bool etkIsConnected() {
-    F_BOOL func = (F_BOOL)etkFunc("ETK_IsConnected");
-    if (func == NULL) {
-        return false;
-    }
-
-    return BOOL2bool(func());
-}
-
-bool etkDisconnect() {
-    F_BOOL func = (F_BOOL)etkFunc("ETK_Disconnect");
-
-    if (func == NULL) {
-        return false;
-    }
-
-    return BOOL2bool(func());
-}
-
-// 해당 함수 호출 시 반홖값으로 로그인 성공/실패를 받을 수 있는 것이 아니라
-// 로그인 결과는 hWnd에 등록한 윈도우로 Message(XM_LOGIN)가 옵니다.
-// Login 이 성공한 후에 프로그램 종료할 경우엔 ETK_Logout() 을 호출하여야 합니다.
-bool etkLogin(const char* ID, const char* Password, const char* CertPwd) {
-    ETK_Login func = (ETK_Login)etkFunc("ETK_Login");
-    if (func == NULL) {
-        printf("NULL func.");
-        return false;
-    }
-
-    BOOL value = func(getHWND(), ID, Password, CertPwd, 0, 0);
-    return BOOL2bool(value);
-}
-
-bool etkLogout() {
-    ETK_Logout func = (ETK_Logout)etkFunc("ETK_Logout");
-    if (func == NULL) {
-        return false;
-    }
-
-    BOOL value = func(getHWND());
-    return BOOL2bool(value);
-}
-
-// 0보다 작을 경우엔 실패이며 성공할 경우에는 0 또는 0보다 큰 Request ID를 반환합니다.
-// 조회TR에 대한 수신데이터는 XM_RECEIVE_DATA 메시지로 전송됩니다.
-int etkRequest(const char* TrCode, void* Data, int DataSize, bool Next,
-    const char* ContinueKey, int TimeOutSecond) {
-    ETK_Request func = (ETK_Request)etkFunc("ETK_Request");
-    if (func == NULL) {
-        return false;
-    }
-
-    return func(getHWND(), TrCode, Data, DataSize, bool2BOOL(Next), ContinueKey, TimeOutSecond);
-}
-
-// 수신 데이터를 삭제하고 Request ID를 해제합니다.
-void etkReleaseRequestData(int RequestID) {
-    ETK_ReleaseRequestData func = (ETK_ReleaseRequestData)etkFunc("ETK_ReleaseRequestData");
-    if (func != NULL) {
-        func(RequestID);
-    }
-}
-
-// 수신 메시지를 삭제합니다.
-void etkReleaseMessageData(MSG_DATA* msgData) {
-    ETK_ReleaseMessageData func = (ETK_ReleaseMessageData)etkFunc("ETK_ReleaseMessageData");
-    if (func != NULL) {
-        func((LPARAM)msgData);
-    }
-}
-
-// 실시간 데이터를 요청합니다.
-// 수신데이터는 XM_RECEIVE_REAL_DATA 메시지로 전송됩니다.
-// ETK_UnadviseRealData() 를 요청하기 젂까지 실시간 데이터가 수신됩니다.
-// 한번 요청시에 여러 데이터를 요청할 수 있습니다.
-// 예를 들면 078020 종목과 005930 종목을 요청할 경우 등록 데이터는 "078020005930" 이며 데이터 사이즈는 6 입니다.
-// ※ 실시갂 데이터는 TR에 Attribute가 설정되어 있어도, 젂송시엔 Attribute를 적용하지 않으며  수 싞시에맊 적용됩니다.
-bool etkAdviseRealData(const char* TrCode, const char* Data, int DataUnitLen) {
-    ETK_AdviseRealData func = (ETK_AdviseRealData)etkFunc("ETK_AdviseRealData");
-    if (func == NULL) {
-        return false;
-    }
-
-    BOOL value = func(getHWND(), TrCode, Data, DataUnitLen);
-
-    //printf("%s Done.\n", TrCode);
-
-    return BOOL2bool(value);
-}
-
-// 등록된 실시간 TR을 해제합니다.
-// 한번 해제 시에 여러 데이터를 해제할 수 있습니다.
-// 예를 들면 078020 종목과 005930 종목을 해제할 경우 입력데이터는 "078020005930" 이며  데이터 사이즈는 6 입니다.
-// 등록할 때 A 종목과 B 종목을 한번에 등록하고 C 종목과 D 종목을 한번에 등록하였어도
-// 해제할 때는 A, C 종목을 한번에 해제 가능하며 각각 해제도 가능합니다.
-// ※ 실시갂 데이터는 TR에 Attribute가 설정되어 있어도, 전송시엔 Attribute를 적용하지 않으며  수시 시에만 적용됩니다.
-bool etkUnadviseRealData(const char* TrCode, const char* Data, int DataUnitLen) {
-    ETK_UnadviseRealData func = (ETK_UnadviseRealData)etkFunc("ETK_UnadviseRealData");
-    if (func == NULL) {
-        return false;
-    }
-
-    BOOL value = func(getHWND(), TrCode, Data, DataUnitLen);
-    return BOOL2bool(value);
-}
-
-// 윈도우에 등록된 실시갂 데이터를 모두 해제합니다.
-bool etkUnadviseWindow() {
-    ETK_UnadviseWindow func = (ETK_UnadviseWindow)etkFunc("ETK_UnadviseWindow");
-    if (func == NULL) {
-        return false;
-    }
-
-    BOOL value = func(getHWND());
-    return BOOL2bool(value);
-}
-
-// 계좌 수량을 취득합니다.
-int etkGetAccountListCount() {
-    F_INT func = (F_INT)etkFunc("ETK_GetAccountListCount");
-    if (func == NULL) {
-        return false;
-    }
-
-    return func();
-}
-
-// 계좌번호를 취득합니다.
-// 받아올 계좌의 Index. 0 <= Index < ETK_GetAccountListCount().
-// Buffer : 버퍼. 최소 12 바이트는 할당되어 있어야 합니다
-bool etkGetAccountNo(int Index, char* Buffer , int BufferSize) {
-    if (BufferSize < 12) {
-        printf("C.etkGetAccountNo() : BufferSize too small. %d", BufferSize);
-        return false;
-    }
-
-    ETK_GetAccountList func = (ETK_GetAccountList)etkFunc("ETK_GetAccountList");
-    if (func == NULL) {
-        return NULL;
-    }
-
-    memset(Buffer, 0, BufferSize);
-    return BOOL2bool(func(Index, Buffer, BufferSize));
-}
-
-// 계좌명을 취득합니다.
-// Buffer : 버퍼. 최소 41바이트가 할당되어 있어야 합니다.
-void etkGetAccountName(char* AccountNo, char* Buffer , int BufferSize) {
-    if (BufferSize < 41) {
-        printf("C.etkGetAccountName() : BufferSize too small. %d", BufferSize);
-        return;
-    }
-
-    ETK_GetAccountName func = (ETK_GetAccountName)etkFunc("ETK_GetAccountName");
-    if (func == NULL) {
-        return;
-    }
-
-    memset(Buffer, 0, BufferSize);
-    func((LPCTSTR)AccountNo, (LPSTR)Buffer, BufferSize);
-}
-
-// 계좌 상세명을 취득합니다.
-// Buffer : 버퍼. 최소 41바이트가 할당되어 있어야 합니다.
-void etkGetAccountDetailName(char* AccountNo, char* Buffer, int BufferSize) {
-    if (BufferSize < 41) {
-        printf("C.etkGetAccountDetailName() : BufferSize too small. %d", BufferSize);
-        return;
-    }
-
-    ETK_GetAcctDetailName func = (ETK_GetAcctDetailName)etkFunc("ETK_GetAcctDetailName");
-    if (func == NULL) {
-        return;
-    }
-
-    memset(Buffer, 0, BufferSize);
-    func((LPCTSTR)AccountNo, (LPSTR)Buffer, BufferSize);
-}
-
-//  계좌 별명을 취득합니다.
-void etkGetAccountNickName(char* AccountNo, char* Buffer , int BufferSize) {
-    if (BufferSize < 41) {
-        printf("C.etkGetAccountNickName() : BufferSize too small. %d", BufferSize);
-        return;
-    }
-
-    ETK_GetAcctNickName func = (ETK_GetAcctNickName)etkFunc("ETK_GetAcctNickname");
-    if (func == NULL) {
-        return;
-    }
-
-    memset(Buffer, 0, BufferSize);
-    func((LPCTSTR)AccountNo, (LPSTR)Buffer, BufferSize);
-}
-
-//  접속한 서버의 서버명을 취득합니다
-void etkGetServerName(char* Buffer, int BufferSize) {
-    if (BufferSize < 51) {
-        printf("C.etkGetServerName() : BufferSize too small. %d", BufferSize);
-        return;
-    }
-
-    ETK_GetServerName func = (ETK_GetServerName)etkFunc("ETK_GetServerName");
-    if (func == NULL) {
-        return;
-    }
-
-    memset(Buffer, 0, BufferSize);
-    func(Buffer);
-}
-
-int etkGetLastError(int Dummy) {
-    F_INT func = (F_INT)etkFunc("ETK_GetLastError");
-    if (func == NULL) {
-        return 0;
-    }
-
-    return func();
-}
-
-// Error Code에 대한 Message를 취득합니다.
-int etkGetErrorMessage(int ErrorCode, char* Buffer, int BufferSize) {
-    if (BufferSize < 512) {
-        printf("C.etkGetErrorMessage() : BufferSize too small. %d", BufferSize);
-        return 0;
-    }
-
-    ETK_GetErrorMessage func = (ETK_GetErrorMessage)etkFunc("ETK_GetErrorMessage");
-    if (func == NULL) {
-        return 0;
-    }
-
-    memset(Buffer, 0, BufferSize);
-    return func(ErrorCode, Buffer, BufferSize);
-}
-
-// TR의 초당 전송 가능 횟수를 취득합니다.
-int etkGetTRCountPerSec(char* TrCode) {
-    ETK_GetTRCountPerSec func = (ETK_GetTRCountPerSec)etkFunc("ETK_GetTRCountPerSec");
-    if (func == NULL) {
-        return 0;
-    }
-
-    return func((LPCTSTR)TrCode);
-}
-
-// TR의 초 베이스를 취득합니다.
-int etkGetTRCountBaseSec(char* TrCode) {
-    ETK_GetTRCountBaseSec func = (ETK_GetTRCountBaseSec)etkFunc("ETK_GetTRCountBaseSec");
-    if (func == NULL) {
-        return 0;
-    }
-
-    return func((LPCTSTR)TrCode);
-}
-
-// 10분 동안 전송한 TR수량을 취득합니다.
-int etkGetTRCountRequest(char* TrCode) {
-    ETK_GetTRCountRequest func = (ETK_GetTRCountRequest)etkFunc("ETK_GetTRCountRequest");
-    if (func == NULL) {
-        return 0;
-    }
-
-    return func((LPCTSTR)TrCode);
-}
-
-// TR의 10분당 전송 가능 횟수를 취득합니다.
-int etkGetTRCountLimit(char* TrCode) {
-    ETK_GetTRCountLimit func = (ETK_GetTRCountLimit)etkFunc("ETK_GetTRCountLimit");
-    if (func == NULL) {
-        return 0;
-    }
-
-    return func((LPCTSTR)TrCode);
-}
 
 //int etkRequestService(HWND hWnd, LPCTSTR pszCode, LPCTSTR pszData);
 //int etkRemoveService(HWND hWnd, LPCTSTR pszCode, LPCTSTR pszData);

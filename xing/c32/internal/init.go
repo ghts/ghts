@@ -112,61 +112,31 @@ func f초기화_서버_접속(서버_구분 xt.T서버_구분) (에러 error) {
 }
 
 func F리소스_정리() {
-	F실시간_정보_모두_해지()
+	F실시간_정보_일괄_해지()
 	F로그아웃_및_접속해제()
 	F소켓_정리()
 	F자원_해제()
 }
 
 func F소켓_정리() error {
-	ch완료 := make(chan lib.T신호, 3)
-	ch타임아웃 := time.After(lib.P20초)
+	소켓REQ_저장소.S정리()
 
-	go func() {
-		for {
-			lib.F패닉억제_호출(소켓REP_TR수신.Close)
-			if lib.F포트_닫힘_확인(lib.P주소_Xing_C함수_호출) {
-				break
-			}
-		}
+	lib.F패닉억제_호출(소켓REP_TR수신.Close)
+	lib.F패닉억제_호출(소켓PUB_실시간_정보.Close)
 
-		ch완료 <- lib.P신호_OK
-	}()
-
-	go func() {
-		for {
-			lib.F패닉억제_호출(소켓PUB_실시간_정보.Close)
-			if lib.F포트_닫힘_확인(lib.P주소_Xing_실시간) {
-				break
-			}
-		}
-
-		ch완료 <- lib.P신호_OK
-	}()
-
-	go func() {
-		for i := 0; i < len(소켓REQ_저장소.M저장소); i++ {
-			소켓_질의 := <-소켓REQ_저장소.M저장소
-			go 소켓_질의.Close()
-		}
-
-		ch완료 <- lib.P신호_OK
-	}()
-
-	go func() {
-		소켓REQ_저장소.S정리()
-
-		ch완료 <- lib.P신호_OK
-	}()
-
-	for i := 0; i < 4; i++ {
-		select {
-		case <-ch완료:
-			continue
-		case <-ch타임아웃:
-			return lib.New에러with출력("타임아웃.")
+	for {
+		if lib.F포트_닫힘_확인(lib.P주소_Xing_C함수_호출) {
+			break
 		}
 	}
+
+	for {
+		if lib.F포트_닫힘_확인(lib.P주소_Xing_실시간) {
+			break
+		}
+	}
+
+	lib.F대기(lib.P3초)	// 소켓이 정리될 시간적 여유를 둠.
 
 	return nil
 }
