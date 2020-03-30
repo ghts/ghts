@@ -730,9 +730,8 @@ func F자원_해제() error {
 	화면_출력_장치 := lib.F화면_출력_중지()
 	defer lib.F화면_출력_재개(화면_출력_장치)
 
+	DestroyWindow(uintptr(unsafe.Pointer(C.getHWND())))
 	syscall.FreeLibrary(xing_api_dll)
-
-	C.freeResource(0)
 
 	return nil
 }

@@ -85,60 +85,51 @@ func F윈도우_메시지_처리() {
 	}
 }
 
-//func WndProc(hWnd HWND, msg uint32, wParam, lParam uintptr) uintptr {
-//	// 일단 C.WindowProc()을 사용함. 향후 Go언어로 대체.
-//	lResut := C.WindowProc(
-//		(C.HWND)(unsafe.Pointer(hWnd)),
-//		C.UINT(msg),
-//		C.WPARAM(wParam),
-//		C.LPARAM(lParam))
-//
-//	return uintptr(lResut)
-//
-//	//switch msg {
-//	//case XM_DISCONNECT:
-//	//	OnDisconnected_Go()
-//	//	return TRUE
-//	//case XM_RECEIVE_DATA:
-//	//	switch wParam {
-//	//	case RCV_TR_DATA:
-//	//		OnTrData_Go(lParam)
-//	//		return TRUE
-//	//	case RCV_MSG_DATA:
-//	//	case RCV_SYSTEM_ERROR:
-//	//		OnMessageAndError_Go(lParam)
-//	//		return TRUE
-//	//	case RCV_RELEASE:
-//	//		OnReleaseData_Go(lParam)
-//	//		return TRUE
-//	//	}
-//	//	return FALSE
-//	//case XM_RECEIVE_REAL_DATA:
-//	//	OnRealtimeData_Go(lParam)
-//	//	return TRUE
-//	//case XM_LOGIN:
-//	//	OnLogin_Go(wParam)
-//	//	return TRUE
-//	//case XM_LOGOUT:
-//	//	OnLogout_Go()
-//	//	return TRUE
-//	//case XM_TIMEOUT:
-//	//	OnTimeout_Go(lParam)
-//	//	return TRUE
-//	//case XM_RECEIVE_LINK_DATA:
-//	//	OnLinkData_Go()
-//	//	return TRUE
-//	//case XM_RECEIVE_REAL_DATA_CHART:
-//	//	OnRealtimeDataChart_Go()
-//	//	return TRUE
-//	//case WM_DESTROY:
-//	//	PostQuitMessage(0)
-//	//default:
-//	//	return DefWindowProc(hWnd, msg, wParam, lParam)
-//	//}
-//	//
-//	return FALSE
-//}
+func WndProc(hWnd HWND, msg uint32, wParam, lParam uintptr) uintptr {
+	switch msg {
+	case XM_DISCONNECT:
+		OnDisconnected_Go()
+		return TRUE
+	case XM_RECEIVE_DATA:
+		switch wParam {
+		case RCV_TR_DATA:
+			OnTrData_Go((*C.TR_DATA)(unsafe.Pointer(lParam)))
+			return TRUE
+		case RCV_MSG_DATA,
+			RCV_SYSTEM_ERROR:
+			OnMessageAndError_Go((*C.MSG_DATA)(unsafe.Pointer(lParam)))
+			return TRUE
+		case RCV_RELEASE:
+			OnReleaseData_Go(C.int(lParam))
+			return TRUE
+		}
+		return FALSE
+	case XM_RECEIVE_REAL_DATA:
+		OnRealtimeData_Go((*C.REALTIME_DATA)(unsafe.Pointer(lParam)))
+		return TRUE
+	case XM_LOGIN:
+		OnLogin_Go((*C.char)(unsafe.Pointer(wParam)))
+		return TRUE
+	case XM_LOGOUT:
+		OnLogout_Go()
+		return TRUE
+	case XM_TIMEOUT:
+		OnTimeout_Go(C.int(lParam))
+		return TRUE
+	case XM_RECEIVE_LINK_DATA:
+		OnLinkData_Go()
+		return TRUE
+	case XM_RECEIVE_REAL_DATA_CHART:
+		OnRealtimeDataChart_Go()
+		return TRUE
+	case WM_DESTROY:
+		PostQuitMessage(0)
+		return TRUE
+	default:
+		DefWindowProc(hWnd, msg, wParam, lParam)
+		return TRUE
+	}
+}
 
 // COPIED & MODIFED FROM 'https://github.com/lxn/win'
 
@@ -256,9 +247,9 @@ func PostQuitMessage(exitCode int32) {
 		0)
 }
 
-func DestroyWindow(hWnd HWND) bool {
+func DestroyWindow(hWnd uintptr) bool {
 	ret, _, _ := syscall.Syscall(destroyWindow.Addr(), 1,
-		uintptr(hWnd),
+		hWnd,
 		0,
 		0)
 

@@ -106,7 +106,7 @@ func f콜백_동기식(콜백값 lib.I콜백) (에러 error) {
 }
 
 //export OnTrData_Go
-func OnTrData_Go(TR데이터 *C.TR_DATA) { //, 데이터_포인터 *C.uchar) {
+func OnTrData_Go(TR데이터 *C.TR_DATA) {
 	c데이터 := C.GoBytes(unsafe.Pointer(TR데이터), C.int(xt.Sizeof_C_TR_DATA))
 	버퍼 := bytes.NewBuffer(c데이터)
 	g := new(xt.TR_DATA)
@@ -178,7 +178,7 @@ func OnTrData_Go(TR데이터 *C.TR_DATA) { //, 데이터_포인터 *C.uchar) {
 }
 
 //export OnMessageAndError_Go
-func OnMessageAndError_Go(MSG데이터 *C.MSG_DATA) { // }, 데이터_포인터 *C.char) {
+func OnMessageAndError_Go(MSG데이터 *C.MSG_DATA) {
 	defer F메시지_해제(uintptr(unsafe.Pointer(MSG데이터)))
 
 	c데이터 := C.GoBytes(unsafe.Pointer(MSG데이터), C.int(xt.Sizeof_C_MSG_DATA))
@@ -299,4 +299,15 @@ func Decompress_Go(CompressedData, Buffer *C.char, CompressedDataLen C.int) C.in
 		int32(CompressedDataLen))
 
 	return C.int(압축_해제된_데이터_길이)
+}
+
+//export WindowProc_Go
+func WindowProc_Go(hWnd C.HWND, uMsg C.UINT, wParam C.WPARAM, lParam C.LPARAM) C.LRESULT {
+	결과 := WndProc(
+		HWND(unsafe.Pointer(hWnd)),
+		uint32(uMsg),
+		uintptr(wParam),
+		uintptr(lParam))
+
+	return C.LRESULT(결과)
 }

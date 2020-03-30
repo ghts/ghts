@@ -45,6 +45,3 @@ void setXingApiDLL(void *ptr);
 
 // 윈도우 핸들
 HWND getHWND();
-
-bool etkFuncExist(char* funcName);
-void freeResource(int dummy);
