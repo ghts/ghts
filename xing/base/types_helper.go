@@ -33,6 +33,44 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
 package xt
 
+type TR_DATA struct {
+	RequestID           int32
+	DataLength          int32
+	TotalDataBufferSize int32
+	ElapsedTime         int32
+	DataMode            int32
+	TrCode              [10]byte
+	X_TrCode            [1]byte
+	Cont                [1]byte
+	ContKey             [18]byte
+	X_ContKey           [1]byte
+	None                [31]byte
+	BlockName           [16]byte
+	X_BlockName         [1]byte
+	Data                *byte
+}
+
+type MSG_DATA struct {
+	RequestID   int32
+	SystemError int32
+	MsgCode     [5]byte
+	X_MsgCode   [1]byte
+	MsgLength   int32
+	MsgData     *byte
+}
+
+type REALTIME_DATA struct {
+	TrCode     [3]byte
+	X_TrCode   [1]byte
+	KeyLength  int32
+	KeyData    [32]byte
+	X_KeyData  [1]byte
+	RegKey     [32]byte
+	X_RegKey   [1]byte
+	DataLength int32
+	Data       *byte
+}
+
 type TR코드별_전송_제한_정보 struct {
 	TR코드         string
 	M초당_전송_제한    int

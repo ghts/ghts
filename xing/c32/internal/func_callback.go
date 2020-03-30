@@ -35,18 +35,19 @@ package x32
 
 // #cgo CFLAGS: -Wall
 // #include <windows.h>
-// #include "../../base/types_c.h"
+// #include "./func.h"
 import "C"
 
 import (
-	"github.com/ghts/ghts/lib"
-	"github.com/ghts/ghts/xing/base"
-
 	"bytes"
 	"encoding/binary"
 	"fmt"
+	"github.com/ghts/ghts/lib"
+	"github.com/ghts/ghts/xing/base"
 	"unsafe"
 )
+
+// #include "../../base/types_c.h"
 
 func F콜백(콜백값 lib.I콜백) (에러 error) {
 	ch콜백 <- 콜백값
@@ -105,12 +106,11 @@ func f콜백_동기식(콜백값 lib.I콜백) (에러 error) {
 }
 
 //export OnTrData_Go
-func OnTrData_Go(TR데이터 *C.TR_DATA, 데이터_포인터 *C.uchar) {
+func OnTrData_Go(TR데이터 *C.TR_DATA) { //, 데이터_포인터 *C.uchar) {
 	c데이터 := C.GoBytes(unsafe.Pointer(TR데이터), C.int(xt.Sizeof_C_TR_DATA))
 	버퍼 := bytes.NewBuffer(c데이터)
 	g := new(xt.TR_DATA)
 
-	// 데이터 포인터는 제대로 전달되지 않기에, 별도 인수로 전달 받음.
 	binary.Read(버퍼, binary.LittleEndian, &g.RequestID)
 	binary.Read(버퍼, binary.LittleEndian, &g.DataLength)
 	binary.Read(버퍼, binary.LittleEndian, &g.TotalDataBufferSize)
@@ -123,11 +123,38 @@ func OnTrData_Go(TR데이터 *C.TR_DATA, 데이터_포인터 *C.uchar) {
 	binary.Read(버퍼, binary.LittleEndian, &g.X_ContKey)
 	binary.Read(버퍼, binary.LittleEndian, &g.None)
 	binary.Read(버퍼, binary.LittleEndian, &g.BlockName)
+	//binary.Read(버퍼, binary.LittleEndian, &g.X_BlockName)
+	//binary.Read(버퍼, binary.LittleEndian, &g.Data)	// 값이 제대로 전달되지 않음.
+
+	// t8411, t8412, t8413 반복값은 압축되어 있음. 압축해제가 필요.
+
+
+	lib.F체크포인트(lib.F2문자열(g.BlockName))
+
+	var raw값 []byte
+
+	switch lib.F2문자열(g.BlockName) {
+	case "t8411OutBlock1":
+		길이 := F압축_해제(uintptr(unsafe.Pointer(C.getDataPtr(TR데이터))), 버퍼_t8411, g.DataLength)
+		raw값 = C.GoBytes(unsafe.Pointer(버퍼_t8411), C.int(길이))
+		g.DataLength = int32(길이)
+	case "t8412OutBlock1":
+		lib.F체크포인트()
+		길이 := F압축_해제(uintptr(unsafe.Pointer(C.getDataPtr(TR데이터))), 버퍼_t8412, g.DataLength)
+		lib.F체크포인트()
+		raw값 = C.GoBytes(unsafe.Pointer(버퍼_t8412), C.int(길이))
+		lib.F체크포인트()
+		g.DataLength = int32(길이)
+		lib.F체크포인트()
+	case "t8413OutBlock1":
+		길이 := F압축_해제(uintptr(unsafe.Pointer(C.getDataPtr(TR데이터))), 버퍼_t8413, g.DataLength)
+		raw값 = C.GoBytes(unsafe.Pointer(버퍼_t8413), C.int(길이))
+		g.DataLength = int32(길이)
+	default:
+		raw값 = C.GoBytes(unsafe.Pointer(C.getDataPtr(TR데이터)), C.int(g.DataLength))
+	}
 
 	자료형_문자열 := lib.F확인(f자료형_문자열_해석(g)).(string)
-	raw값 := C.GoBytes(unsafe.Pointer(데이터_포인터), C.int(g.DataLength))
-	raw값 = f민감정보_삭제(raw값, 자료형_문자열)
-
 	TR코드 := lib.F2문자열_앞뒤_공백제거(g.TrCode)
 	추가_연속조회_필요_문자열 := lib.F2문자열(g.Cont)
 	추가_연속조회_필요 := false
@@ -143,26 +170,27 @@ func OnTrData_Go(TR데이터 *C.TR_DATA, 데이터_포인터 *C.uchar) {
 		panic(lib.New에러with출력("예상하지 못한 경우. '%v' '%v'", TR코드, 추가_연속조회_필요_문자열))
 	}
 
+	raw값 = f민감정보_삭제(raw값, 자료형_문자열)
 	바이트_변환값 := lib.F확인(lib.New바이트_변환Raw(자료형_문자열, raw값, true)).(*lib.S바이트_변환)
 	콜백값 := lib.New콜백_TR데이터(int(g.RequestID), 바이트_변환값, TR코드, 추가_연속조회_필요, 연속키)
+
 	F콜백(콜백값)
 }
 
 //export OnMessageAndError_Go
-func OnMessageAndError_Go(MSG데이터 *C.MSG_DATA, 데이터_포인터 *C.char) {
+func OnMessageAndError_Go(MSG데이터 *C.MSG_DATA) { // }, 데이터_포인터 *C.char) {
 	defer F메시지_해제(uintptr(unsafe.Pointer(MSG데이터)))
 
 	c데이터 := C.GoBytes(unsafe.Pointer(MSG데이터), C.int(xt.Sizeof_C_MSG_DATA))
 	버퍼 := bytes.NewBuffer(c데이터)
 	g := new(xt.MSG_DATA)
 
-	// 데이터 포인터는 제대로 전달되지 않는 듯 해서 별도 인수로 전달 받음.
 	binary.Read(버퍼, binary.LittleEndian, &g.RequestID)
 	binary.Read(버퍼, binary.LittleEndian, &g.SystemError)
 	binary.Read(버퍼, binary.LittleEndian, &g.MsgCode)
 	binary.Read(버퍼, binary.LittleEndian, &g.X_MsgCode)
 	binary.Read(버퍼, binary.LittleEndian, &g.MsgLength)
-	//binary.Read(버퍼, binary.LittleEndian, &g.MsgData)
+	//binary.Read(버퍼, binary.LittleEndian, &g.MsgData)	// 값이 제대로 전달되지 않음.
 
 	var 에러여부 bool
 
@@ -179,7 +207,7 @@ func OnMessageAndError_Go(MSG데이터 *C.MSG_DATA, 데이터_포인터 *C.char)
 	콜백값.S콜백_기본형 = lib.New콜백_기본형(lib.P콜백_메시지_및_에러)
 	콜백값.M식별번호 = int(g.RequestID)
 	콜백값.M코드 = lib.F2문자열_앞뒤_공백제거(g.MsgCode)
-	콜백값.M내용 = lib.F2문자열_EUC_KR_공백제거(C.GoBytes(unsafe.Pointer(데이터_포인터), C.int(g.MsgLength)))
+	콜백값.M내용 = lib.F2문자열_EUC_KR_공백제거(C.GoBytes(C.getMsgPtr(MSG데이터), C.int(g.MsgLength)))
 	콜백값.M에러여부 = 에러여부
 
 	lib.F조건부_실행(에러여부, lib.F체크포인트, 콜백값)
@@ -194,7 +222,7 @@ func OnReleaseData_Go(식별번호 C.int) {
 }
 
 //export OnRealtimeData_Go
-func OnRealtimeData_Go(REALTIME데이터 *C.REALTIME_DATA, 데이터_포인터 *C.char) {
+func OnRealtimeData_Go(REALTIME데이터 *C.REALTIME_DATA) {
 	c데이터 := C.GoBytes(unsafe.Pointer(REALTIME데이터), C.int(xt.Sizeof_C_REALTIME_DATA))
 	버퍼 := bytes.NewBuffer(c데이터)
 	g := new(xt.REALTIME_DATA)
@@ -208,14 +236,13 @@ func OnRealtimeData_Go(REALTIME데이터 *C.REALTIME_DATA, 데이터_포인터 *
 	binary.Read(버퍼, binary.LittleEndian, &g.RegKey)
 	binary.Read(버퍼, binary.LittleEndian, &g.X_RegKey)
 	binary.Read(버퍼, binary.LittleEndian, &g.DataLength)
-	//binary.Read(버퍼, binary.LittleEndian, &g.Data)
-
+	//binary.Read(버퍼, binary.LittleEndian, &g.Data)	// 값이 제대로 전달되지 않음.
 	// KeyData, RegKey등이 불필요한 듯 해서 전송하지 않음. 필요하면 추가할 것.
+
 	lib.F메모("실시간 정보 전송 일시 비활성화")
-	//raw값 := C.GoBytes(unsafe.Pointer(데이터_포인터), C.int(g.DataLength))
+	//raw값 := C.GoBytes(C.getRealtimeDataPtr(REALTIME데이터), C.int(g.DataLength))
 	//raw값 = f민감정보_삭제(raw값, lib.F2문자열_앞뒤_공백제거(g.TrCode))
 	//바이트_변환값 := lib.F확인(lib.New바이트_변환Raw(lib.F2문자열(g.TrCode), raw값, false)).(*lib.S바이트_변환)
-
 	lib.F메모("실시간 정보 전송 일시 비활성화")
 	//소켓PUB_실시간_정보.S송신_검사(lib.Raw, 바이트_변환값)
 }
@@ -262,4 +289,14 @@ func OnLinkData_Go() {
 //export OnRealtimeDataChart_Go
 func OnRealtimeDataChart_Go() {
 	F콜백(lib.New콜백_기본형(lib.P콜백_실시간_차트_데이터)) // TODO
+}
+
+//export Decompress_Go
+func Decompress_Go(CompressedData, Buffer *C.char, CompressedDataLen C.int) C.int {
+	압축_해제된_데이터_길이 := F압축_해제(
+		uintptr(unsafe.Pointer(CompressedData)),
+		uintptr(unsafe.Pointer(Buffer)),
+		int32(CompressedDataLen))
+
+	return C.int(압축_해제된_데이터_길이)
 }

@@ -35,46 +35,16 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 #include <windef.h>
 #include "../../base/types_c.h"
 
+// 포인터 추출
+void *getDataPtr(TR_DATA *trData);
+void *getMsgPtr(MSG_DATA *msgData);
+void *getRealtimeDataPtr(REALTIME_DATA *realtimeData);
+
 // DLL 핸들
-HINSTANCE XingApiDLL();
 void setXingApiDLL(void *ptr);
 
 // 윈도우 핸들
 HWND getHWND();
-
-// 윈도우 메시지 처리
-void ProcessWindowsMessage(int dummy);
-
-// XingAPI 호출 대행 함수들
-//bool etkConnect(const char* ServerAddress, int PortNo);
-//bool etkIsConnected();
-//bool etkDisconnect();
-//bool etkLogin(const char* ID, const char* Password, const char* CertPwd);
-//bool etkLogout();
-//int etkRequest(const char* TrCode, void* Data, int DataSize, bool Next, const char* ContinueKey, int TimeOutSecond);
-//void etkReleaseRequestData(int RequestID);
-//void etkReleaseMessageData(MSG_DATA* msg_data);
-//bool etkAdviseRealData(const char* TrCode, const char* Data, int DataUnitLen);
-//bool etkUnadviseRealData(const char* TrCode, const char* Data, int DataUnitLen);
-//bool etkUnadviseWindow();
-//int etkGetAccountListCount();
-//bool etkGetAccountNo(int Index, char* Buffer, int BufferSize);
-//void etkGetAccountName(const char* AccountNo, char* Buffer, int BufferSize);
-//void etkGetAccountDetailName(const char* AccountNo, char* Buffer, int BufferSize);
-//void etkGetAccountNickName(const char* AccountNo, char* Buffer, int BufferSize);
-//void etkGetServerName(char* Buffer, int BufferSize);
-//int etkGetLastError(int Dummy);
-//int etkGetErrorMessage(int ErrorCode, char* Buffer, int BufferSize);
-//int etkGetTRCountPerSec(const char* pszCode);
-//int etkGetTRCountBaseSec(const char* pszCode);
-//int etkGetTRCountRequest(const char* pszCode);
-//int etkGetTRCountLimit(const char* pszCode);
-//int etkRequestService(HWND hWnd, LPCTSTR pszCode, LPCTSTR pszData);
-//int etkRemoveService(HWND hWnd, LPCTSTR pszCode, LPCTSTR pszData);
-//int etkRequestLinkToHTS(HWND hWnd, LPCTSTR pszLinkKey, LPCTSTR pszData, LPCTSTR pszFiller);
-//void etkAdviseLinkFromHTS(HWND hWnd);
-//void etkUnadviseLinkFromHTS();
-int etkDecompress(char* CompressedData, char* Buffer, int CompressedDataLen);
 
 bool etkFuncExist(char* funcName);
 void freeResource(int dummy);

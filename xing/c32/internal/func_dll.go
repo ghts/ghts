@@ -698,7 +698,7 @@ func F메시지_해제(메시지_포인터 uintptr) {
 	}
 }
 
-func F압축_해제(압축된_원본_데이터 uintptr, 버퍼 uintptr, 원본_데이터_길이 int32) (int, syscall.Errno) {
+func F압축_해제(압축된_원본_데이터, 버퍼 uintptr, 원본_데이터_길이 int32) int {
 	cgo잠금.Lock()
 	defer cgo잠금.Unlock()
 
@@ -707,7 +707,11 @@ func F압축_해제(압축된_원본_데이터 uintptr, 버퍼 uintptr, 원본_�
 		버퍼,
 		uintptr(원본_데이터_길이))
 
-	return int(압축_해제된_데이터_길이), 에러_번호
+	if 에러_번호 != 0 {
+		lib.New에러with출력("F압축_해제() 에러 발생. 에러 코드 : '%v'", 에러_번호)
+	}
+
+	return int(압축_해제된_데이터_길이)
 }
 
 func F메모리_해제(포인터 unsafe.Pointer) {

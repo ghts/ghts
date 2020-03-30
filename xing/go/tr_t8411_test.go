@@ -35,7 +35,7 @@ package xing
 
 import (
 	"github.com/ghts/ghts/lib"
-	"github.com/ghts/ghts/xing/base"
+	xt "github.com/ghts/ghts/xing/base"
 	"testing"
 	"time"
 )
@@ -48,6 +48,7 @@ func TestT8411_F현물_차트_분틱(t *testing.T) {
 
 	시작일자 := F전일().AddDate(0, -1, 0)
 	종료일자 := F전일()
+
 	값_모음, 에러 := TrT8411_현물_차트_틱(종목코드, 시작일자, 종료일자, 3000)
 	lib.F테스트_에러없음(t, 에러)
 

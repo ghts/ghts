@@ -44,9 +44,9 @@ import "C"
 // 기본 구조체
 //------------------------------------------------------------------------------
 
-type TR_DATA C.TR_DATA_UNPACKED
-type MSG_DATA C.MSG_DATA_UNPACKED
-type REALTIME_DATA C.REALTIME_DATA_UNPACKED
+//type TR_DATA C.TR_DATA_UNPACKED
+//type MSG_DATA C.MSG_DATA_UNPACKED
+//type REALTIME_DATA C.REALTIME_DATA_UNPACKED
 
 //------------------------------------------------------------------------------
 // 주식 주문 관련 TR 구조체

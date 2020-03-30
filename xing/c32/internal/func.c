@@ -38,12 +38,9 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 #include "const.h"
 #include "_cgo_export.h"
 
-int etkDecompress(char* CompressedData, char* Buffer, int CompressedDataLen);
-
-// 압축 해제용 버퍼 메모리 미리 배정. 압축 해제시 최대 2000건 수신
-T8411OutBlock1 b8411[2000];
-T8412OutBlock1 b8412[2000];
-T8413OutBlock1 b8413[2000];
+void *getDataPtr(TR_DATA *trData) { return (void *)trData->Data; }
+void *getMsgPtr(MSG_DATA *msgData) { return (void *)msgData->MsgData; }
+void *getRealtimeDataPtr(REALTIME_DATA *realtimeData) { return (void *)realtimeData->Data; }
 
 //---------------------------------------------------------------------------//
 // 윈도우 메시지 처리 함수.
@@ -51,10 +48,6 @@ T8413OutBlock1 b8413[2000];
 // 서버에 접속할 때 등록한 HWND의 lpfnWndProc에서 메시지 처리함수로 WindowProc를 등록했으므로,
 // 윈도우 메시지가 처리 될 때 WindowProc가 호출된 후 메시지가 전달됨.
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-    TR_DATA *trData;
-    MSG_DATA *msgData;
-    REALTIME_DATA *realtimeData;
-
     switch (uMsg) {
     case XM_DISCONNECT:
         OnDisconnected_Go();
@@ -62,27 +55,11 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
     case XM_RECEIVE_DATA:
         switch (wParam) {
         case RCV_TR_DATA:
-            trData = (TR_DATA*)lParam;
-            unsigned char* pData = trData->Data;    // 데이터 포인터.
-
-            // t8411, t8412, t8413 반복값은 압축되어 있음. 압축해제가 필요.
-            if (strcmp(trData->BlockName, "t8411OutBlock1") == 0) {
-                trData->DataLength = etkDecompress((char *)trData->Data, (char *)&b8411[0], trData->DataLength);
-                pData = (unsigned char*)&b8411[0];
-            } else if (strcmp(trData->BlockName, "t8412OutBlock1") == 0) {
-                trData->DataLength = etkDecompress((char *)trData->Data, (char *)&b8412[0], trData->DataLength);
-                pData = (unsigned char*)&b8412[0];
-            } else if (strcmp(trData->BlockName, "t8413OutBlock1") == 0) {
-                trData->DataLength = etkDecompress((char *)trData->Data, (char *)&b8413[0], trData->DataLength);
-                pData = (unsigned char*)&b8413[0];
-            }
-
-            OnTrData_Go(trData, pData);
+            OnTrData_Go((TR_DATA*)lParam);
             return TRUE;
         case RCV_MSG_DATA:
         case RCV_SYSTEM_ERROR:
-            msgData = (MSG_DATA*)lParam;
-            OnMessageAndError_Go(msgData, msgData->MsgData);
+            OnMessageAndError_Go((MSG_DATA*)lParam);
             return TRUE;
         case RCV_RELEASE:
             OnReleaseData_Go((int)lParam);
@@ -91,11 +68,10 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 
         return FALSE;
     case XM_RECEIVE_REAL_DATA:
-        realtimeData = (REALTIME_DATA*)lParam;
-        OnRealtimeData_Go(realtimeData, realtimeData->Data);
+        OnRealtimeData_Go((REALTIME_DATA*)lParam);
         return TRUE;
     case XM_LOGIN:
-        OnLogin_Go((char*)wParam);  //, (char*)lParam);
+        OnLogin_Go((char*)wParam);
         return TRUE;
     case XM_LOGOUT:
         OnLogout_Go();
@@ -119,8 +95,6 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 //-------------------------------------------------//
 // 도우미 함수
 //-------------------------------------------------//
-
-
 static HINSTANCE xing_api_dll = NULL;
 
 // xingAPI.dll 로드 및 반환
@@ -149,27 +123,6 @@ HINSTANCE XingApiDLL() {
 
 void setXingApiDLL(void *ptr) {
     xing_api_dll = (HINSTANCE)ptr;
-}
-
-// 함수 포인터
-FARPROC etkFunc(char* name) {
-    FARPROC func = GetProcAddress(XingApiDLL(), name);
-
-    if (func == NULL) {
-        printf("Function %s not found.", name);
-    }
-
-    return func;
-}
-
-bool etkFuncExist(char* name) {
-    FARPROC func = etkFunc(name);
-
-    if (func == NULL) {
-        return false;
-    }
-
-    return true;
 }
 
 // 메시지 전달 윈도우
@@ -256,25 +209,4 @@ BOOL bool2BOOL(bool value) {
 // 버그를 피해가기 위해서 인수을 추가함. (사용하지는 않음.)
 void freeResource(int dummy) {
 	resetHWND();
-}
-
-//-------------------------------------------------//
-// XingAPI 관련 함수
-//-------------------------------------------------//
-// 실패시 ETK_GetLastError() 로 실패코드를 얻을 수 있습니다.
-
-//int etkRequestService(HWND hWnd, LPCTSTR pszCode, LPCTSTR pszData);
-//int etkRemoveService(HWND hWnd, LPCTSTR pszCode, LPCTSTR pszData);
-//int etkRequestLinkToHTS(HWND hWnd, LPCTSTR pszLinkKey, LPCTSTR pszData, LPCTSTR pszFiller);
-//void etkAdviseLinkFromHTS(HWND hWnd);
-//void etkUnadviseLinkFromHTS();
-
-// t8411 TR 처럼 압축데이터 수신이 가능한 TR에 압축 해제용으로 사용합니다. 압축을 해제한 데이터의 길이
-int etkDecompress(char* CompressedData, char* Buffer, int CompressedDataLen) {
-    ETK_Decompress func = (ETK_Decompress)etkFunc("ETK_Decompress");
-    if (func == NULL) {
-        return 0;
-    }
-
-    return func((LPCTSTR)CompressedData, (LPCTSTR)Buffer, CompressedDataLen);
 }
