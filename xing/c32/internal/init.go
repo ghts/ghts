@@ -128,8 +128,6 @@ func F리소스_정리() {
 	case <-ch타임아웃:
 		lib.F체크포인트("종료 타임아웃")
 	}
-
-	return nil
 }
 
 func F소켓_정리() error {
