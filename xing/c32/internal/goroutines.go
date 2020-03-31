@@ -548,14 +548,14 @@ func F종료_질의_처리(질의 *lib.S채널_질의_API) {
 	F콜백(lib.New콜백_신호(lib.P신호_C32_종료))
 	F실시간_정보_일괄_해지()
 	F로그아웃_및_접속해제()
-	lib.F대기(lib.P3초)	// 로그아웃 처리될 시간 부여
+	lib.F대기(lib.P3초) // 로그아웃 처리될 시간 부여
 	lib.F공통_종료_채널_닫기()
 	PostQuitMessage(0)
 	DestroyWindow(win32_메시지_윈도우)
 	syscall.FreeLibrary(xing_api_dll)
 	F소켓_정리()
-	lib.F대기(lib.P3초)	// 소켓 정리될 시간적 여유 부여.
-	
+	lib.F대기(lib.P3초) // 소켓 정리될 시간적 여유 부여.
+
 	select {
 	case 질의.Ch회신값 <- lib.P신호_C32_종료:
 	default:

@@ -131,7 +131,7 @@ const (
 
 // Predefined window handles
 const (
-	HWND_MESSAGE   = ^HWND(2) // -3
+	HWND_MESSAGE = ^HWND(2) // -3
 )
 
 type HANDLE uintptr
@@ -172,9 +172,9 @@ type WNDCLASSEX struct {
 }
 
 var (
-	libuser32 = windows.NewLazySystemDLL("user32.dll")
+	libuser32       = windows.NewLazySystemDLL("user32.dll")
 	dispatchMessage = libuser32.NewProc("DispatchMessageW")
-	peekMessage = libuser32.NewProc("PeekMessageW")
+	peekMessage     = libuser32.NewProc("PeekMessageW")
 	registerClassEx = libuser32.NewProc("RegisterClassExW")
 	createWindowEx  = libuser32.NewProc("CreateWindowExW")
 	postQuitMessage = libuser32.NewProc("PostQuitMessage")
@@ -257,4 +257,3 @@ func DefWindowProc(hWnd HWND, Msg uint32, wParam, lParam uintptr) uintptr {
 
 	return ret
 }
-

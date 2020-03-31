@@ -244,7 +244,7 @@ func OnRealtimeData(REALTIME데이터 unsafe.Pointer) {
 	소켓PUB_실시간_정보.S송신_검사(lib.Raw, 바이트_변환값)
 }
 
-func OnLogin(wParam unsafe.Pointer ) {
+func OnLogin(wParam unsafe.Pointer) {
 	코드 := go문자열(wParam)
 	정수, 에러 := lib.F2정수(코드)
 	로그인_성공_여부 := 에러 == nil && 정수 == 0

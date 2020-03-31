@@ -281,7 +281,7 @@ func F로그아웃_및_접속해제() (에러 error) {
 
 	_, _, 에러_번호 := syscall.Syscall(etkLogout, 1,
 		win32_메시지_윈도우,
-		0,0)
+		0, 0)
 
 	if 에러_번호 != 0 {
 		return lib.New에러with출력("로그아웃 에러 : '%v'", 에러_번호)
@@ -536,7 +536,7 @@ func F에러_코드() int {
 	cgo잠금.Lock()
 	defer cgo잠금.Unlock()
 
-	에러_코드, _, 에러_번호 := syscall.Syscall(etkGetLastError, 0, 0,0,0)
+	에러_코드, _, 에러_번호 := syscall.Syscall(etkGetLastError, 0, 0, 0, 0)
 
 	if 에러_번호 != 0 {
 		lib.New에러with출력("F에러_코드() 에러 발생. 에러 코드 : '%v'", 에러_번호)
@@ -714,7 +714,6 @@ func c문자열(go문자열 string) *C.char {
 func go문자열(c문자열_포인터 unsafe.Pointer) string {
 	return C.GoString((*C.char)(c문자열_포인터))
 }
-
 
 func go바이트_모음(c데이터 unsafe.Pointer, 길이 int) []byte {
 	return C.GoBytes(c데이터, C.int(길이))

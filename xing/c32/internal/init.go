@@ -150,7 +150,7 @@ func F소켓_정리() error {
 		}
 	}
 
-	lib.F대기(lib.P3초)	// 소켓이 정리될 시간적 여유를 둠.
+	lib.F대기(lib.P3초) // 소켓이 정리될 시간적 여유를 둠.
 
 	return nil
 }

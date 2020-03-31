@@ -35,11 +35,10 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package x32
 
 const (
-	xing_dll = "xingAPI.dll"
+	xing_dll    = "xingAPI.dll"
 	pBufferSize = 512
-	WM_USER = 0x0400
+	WM_USER     = 0x0400
 )
-
 
 const (
 	XM_INIT                    = 1024
@@ -64,4 +63,3 @@ const (
 	FALSE = 0
 	TRUE  = 1
 )
-
