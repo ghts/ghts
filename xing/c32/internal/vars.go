@@ -49,11 +49,6 @@ var (
 	xing_api_dll  syscall.Handle
 	win32_메시지_윈도우 uintptr
 
-	// 압축 해제용 버퍼 메모리 포인터.
-	버퍼_t8411 uintptr = 0
-	버퍼_t8412 uintptr = 0
-	버퍼_t8413 uintptr = 0
-
 	// Xing API 함수 포인터
 	etkConnect              uintptr
 	etkIsConnected          uintptr

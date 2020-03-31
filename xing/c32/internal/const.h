@@ -5,7 +5,7 @@
 * LICENSING TERM follows that of original code.
 */
 
-#include <windows.h>
+#include <winuser.h>
 
 //------------------------------------------------------------------------------
 // 메시지 정의

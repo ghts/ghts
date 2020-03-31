@@ -158,16 +158,16 @@ func NewCSPAT00700_현물_정정_주문_응답1(b []byte) (s *CSPAT00700_현물_
 	s = new(CSPAT00700_현물_정정_주문_응답1)
 	s.M레코드_수량 = lib.F2정수_단순형(g.RecCnt)
 	s.M원_주문번호 = lib.F2정수64_단순형(g.OrgOrdNo)
-	s.M계좌번호 = lib.F2문자열_앞뒤_공백제거(g.AcntNo)
-	//s.M계좌_비밀번호 = lib.F2문자열_앞뒤_공백제거(g.InptPwd)
-	s.M종목코드 = lib.F2문자열_앞뒤_공백제거(g.IsuNo)
+	s.M계좌번호 = lib.F2문자열_공백제거(g.AcntNo)
+	//s.M계좌_비밀번호 = lib.F2문자열_공백제거(g.InptPwd)
+	s.M종목코드 = lib.F2문자열_공백제거(g.IsuNo)
 	s.M주문수량 = lib.F2정수64_단순형(g.OrdQty)
 	s.M호가유형 = F2호가유형(T호가유형(lib.F2정수_단순형(g.OrdprcPtnCode)))
 	s.M주문조건 = lib.T주문조건(lib.F2정수_단순형(g.OrdCndiTpCode))
 	s.M주문가격 = lib.F2정수64_단순형(g.OrdPrc)
-	s.M통신매체_코드 = lib.F2문자열_앞뒤_공백제거(g.CommdaCode)
-	s.M전략코드 = lib.F2문자열_앞뒤_공백제거(g.StrtgCode)
-	s.M그룹ID = lib.F2문자열_앞뒤_공백제거(g.GrpId)
+	s.M통신매체_코드 = lib.F2문자열_공백제거(g.CommdaCode)
+	s.M전략코드 = lib.F2문자열_공백제거(g.StrtgCode)
+	s.M그룹ID = lib.F2문자열_공백제거(g.GrpId)
 	s.M주문회차 = lib.F2정수64_단순형(g.OrdSeqNo)
 	s.M포트폴리오_번호 = lib.F2정수64_단순형(g.PtflNo)
 	s.M바스켓_번호 = lib.F2정수64_단순형(g.BskNo)
@@ -186,13 +186,13 @@ func NewCSPAT00700_현물_정정_주문_응답2(b []byte) (s *CSPAT00700_현물_
 	g := new(CSPAT00700OutBlock2)
 	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
 
-	if lib.F2문자열_앞뒤_공백제거(g.OrdNo) == "" { // 주문 에러발생시 공백 문자열이 수신됨.
+	if lib.F2문자열_공백제거(g.OrdNo) == "" { // 주문 에러발생시 공백 문자열이 수신됨.
 		return nil, lib.New에러("NewCSPAT00700_현물_정정_주문_응답2() : 주문번호 생성 에러.")
 	}
 
-	시각_문자열 := lib.F2문자열_앞뒤_공백제거(g.OrdTime)
+	시각_문자열 := lib.F2문자열_공백제거(g.OrdTime)
 	if 시각_문자열 != "" {
-		시각_문자열 = lib.F문자열_삽입(lib.F2문자열_앞뒤_공백제거(g.OrdTime), ".", 6)
+		시각_문자열 = lib.F문자열_삽입(lib.F2문자열_공백제거(g.OrdTime), ".", 6)
 	}
 
 	if lib.F2문자열(g.LoanDt) == "00000000" {
@@ -205,14 +205,14 @@ func NewCSPAT00700_현물_정정_주문_응답2(b []byte) (s *CSPAT00700_현물_
 	s.M모_주문번호 = lib.F2정수64_단순형(g.PrntOrdNo)
 	s.M주문시각 = lib.F2금일_시각_단순형_공백은_초기값("150405.999999", 시각_문자열)
 	s.M주문시장_코드 = T주문시장구분(lib.F2정수64_단순형(g.OrdMktCode))
-	s.M주문유형_코드 = lib.F2문자열_앞뒤_공백제거(g.OrdPtnCode)
-	s.M종목코드 = lib.F2문자열_앞뒤_공백제거(g.ShtnIsuNo) // 단축종목번호
-	s.M공매도_호가구분 = lib.F2문자열_앞뒤_공백제거(g.StslOrdprcTpCode)
+	s.M주문유형_코드 = lib.F2문자열_공백제거(g.OrdPtnCode)
+	s.M종목코드 = lib.F2문자열_공백제거(g.ShtnIsuNo) // 단축종목번호
+	s.M공매도_호가구분 = lib.F2문자열_공백제거(g.StslOrdprcTpCode)
 	s.M공매도_가능 = lib.F문자열_비교(g.StslAbleYn, "Y", true)
 	s.M신용거래_구분 = F2신용거래_구분(T신용거래_구분(lib.F2정수_단순형(g.MgntrnCode)))
 	s.M대출일 = lib.F2포맷된_일자_단순형_공백은_초기값("20060102", g.LoanDt)
-	s.M반대매매주문_구분 = lib.F2문자열_앞뒤_공백제거(g.CvrgOrdTp)
-	s.M관리사원_번호 = lib.F2문자열_앞뒤_공백제거(g.MgempNo)
+	s.M반대매매주문_구분 = lib.F2문자열_공백제거(g.CvrgOrdTp)
+	s.M관리사원_번호 = lib.F2문자열_공백제거(g.MgempNo)
 	s.M주문금액 = lib.F2정수64_단순형(g.OrdAmt)
 	s.M매도_매수_구분 = lib.T매도_매수_구분(lib.F2정수_단순형(g.BnsTpCode))
 	s.M예비_주문번호 = lib.F2정수64_단순형(g.SpareOrdNo)
@@ -221,8 +221,8 @@ func NewCSPAT00700_현물_정정_주문_응답2(b []byte) (s *CSPAT00700_현물_
 	s.M현금_주문금액 = lib.F2정수64_단순형(g.MnyOrdAmt)
 	s.M대용_주문금액 = lib.F2정수64_단순형(g.SubstOrdAmt)
 	s.M재사용_주문금액 = lib.F2정수64_단순형(g.RuseOrdAmt)
-	s.M계좌명 = lib.F2문자열_앞뒤_공백제거(g.AcntNm)
-	s.M종목명 = lib.F2문자열_앞뒤_공백제거(g.IsuNm)
+	s.M계좌명 = lib.F2문자열_공백제거(g.AcntNm)
+	s.M종목명 = lib.F2문자열_공백제거(g.IsuNm)
 
 	if strings.HasPrefix(s.M종목코드, "A") {
 		s.M종목코드 = s.M종목코드[1:]

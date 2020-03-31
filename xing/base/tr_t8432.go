@@ -78,8 +78,8 @@ func NewT8432_증시주변자금추이_응답_반복값_모음(b []byte) (값_�
 
 		s := new(T8432_지수선물_마스터_조회_반복값)
 		s.M종목명 = lib.F2문자열_EUC_KR_공백제거(g.Hname)
-		s.M종목코드 = lib.F2문자열_앞뒤_공백제거(g.Shcode)
-		s.M확장코드 = lib.F2문자열_앞뒤_공백제거(g.Expcode)
+		s.M종목코드 = lib.F2문자열_공백제거(g.Shcode)
+		s.M확장코드 = lib.F2문자열_공백제거(g.Expcode)
 		s.M상한가 = lib.F2실수_소숫점_추가_단순형(g.Uplmtprice, 2)
 		s.M하한가 = lib.F2실수_소숫점_추가_단순형(g.Dnlmtprice, 2)
 		s.M전일종가 = lib.F2실수_소숫점_추가_단순형(g.Jnilclose, 2)

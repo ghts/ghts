@@ -175,7 +175,7 @@ func newCFOFQ02400_선물옵션_미결제약정_응답1(b []byte) (값 *CFOFQ024
 
 	값 = new(CFOFQ02400_선물옵션_미결제약정_응답1)
 	값.M레코드수량 = lib.F2정수64_단순형(g.RecCnt)
-	값.M계좌번호 = lib.F2문자열_앞뒤_공백제거(g.AcntNo)
+	값.M계좌번호 = lib.F2문자열_공백제거(g.AcntNo)
 	값.M등록시장 = CFOFQ02400_등록시장(lib.F2정수_단순형(g.RegMktCode))
 	값.M매수일자 = lib.F2포맷된_일자_단순형("20060102", g.BuyDt)
 
@@ -267,7 +267,7 @@ func newCFOFQ02400_선물옵션_미결제약정_반복값2_모음(b []byte) (값
 		lib.F확인(binary.Read(버퍼, binary.BigEndian, g))
 
 		값 := new(CFOFQ02400_선물옵션_미결제약정_반복값2)
-		값.M종목코드 = lib.F2문자열_앞뒤_공백제거(g.IsuNo)
+		값.M종목코드 = lib.F2문자열_공백제거(g.IsuNo)
 		값.M종목명 = lib.F2문자열_EUC_KR_공백제거(g.IsuNm)
 		값.M매도_매수_구분 = lib.T매도_매수_구분(lib.F2정수_단순형(g.BnsTpCode))
 		값.M잔고수량 = lib.F2정수64_단순형(g.BalQty)

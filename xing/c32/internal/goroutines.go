@@ -33,7 +33,6 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
 package x32
 
-import "C"
 import (
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/xing/base"
@@ -229,6 +228,7 @@ func go함수_호출_도우미(ch초기화, ch종료 chan lib.T신호) {
 	defer runtime.UnlockOSThread()
 
 	f초기화_XingAPI() // 모든 API 액세스를 단일 스레드에서 하기 위해서 여기에서 API 초기화를 실행함.
+	F메시지_윈도우_생성()
 
 	ch초기화 <- lib.P신호_초기화
 
@@ -295,6 +295,7 @@ func f질의값_처리(질의 *lib.S채널_질의_API) {
 		lib.F공통_종료_채널_닫기()
 	case xt.TR초기화:
 		f초기화_XingAPI() // 모든 API 액세스를 단일 스레드에서 하기 위해서 여기에서 API 초기화를 실행함.
+		F메시지_윈도우_생성()
 	default:
 		panic(lib.New에러("예상하지 못한 TR구분값 : '%v'", int(질의.M질의값.TR구분())))
 	}
@@ -374,8 +375,8 @@ func f조회_및_주문_질의_처리(질의값 lib.I질의값) (식별번호 in
 		c데이터 = unsafe.Pointer(xt.NewT0151InBlock(질의값.(*xt.T0151_현물_일자별_매매일지_질의값)))
 		길이 = xt.SizeT0151InBlock
 	case xt.TR시간_조회_t0167:
-		c데이터 = unsafe.Pointer(C.CString(""))
-		defer F메모리_해제(c데이터)
+		c데이터 = unsafe.Pointer(c문자열(""))
+		defer F메모리_해제(unsafe.Pointer(c데이터))
 		길이 = 0
 	case xt.TR현물_체결_미체결_조회_t0425:
 		c데이터 = unsafe.Pointer(xt.NewT0425InBlock(질의값.(*xt.T0425_현물_체결_미체결_조회_질의값), 계좌_비밀번호))
@@ -390,7 +391,7 @@ func f조회_및_주문_질의_처리(질의값 lib.I질의값) (식별번호 in
 		c데이터 = unsafe.Pointer(xt.NewT1102InBlock(질의값.(*lib.S질의값_단일_종목)))
 		길이 = xt.SizeT1102InBlock
 	case xt.TR현물_기간별_조회_t1305:
-		연속키 := lib.F2문자열_앞뒤_공백제거(질의값.(*xt.T1305_현물_기간별_조회_질의값).M연속키)
+		연속키 := lib.F2문자열_공백제거(질의값.(*xt.T1305_현물_기간별_조회_질의값).M연속키)
 		if 연속키 != "" {
 			연속_조회_여부 = true
 			연속_조회_키 = 연속키
@@ -399,7 +400,7 @@ func f조회_및_주문_질의_처리(질의값 lib.I질의값) (식별번호 in
 		c데이터 = unsafe.Pointer(xt.NewT1305InBlock(질의값.(*xt.T1305_현물_기간별_조회_질의값)))
 		길이 = xt.SizeT1305InBlock
 	case xt.TR현물_당일_전일_분틱_조회_t1310:
-		연속키 := lib.F2문자열_앞뒤_공백제거(질의값.(*xt.T1310_현물_전일당일분틱조회_질의값).M연속키)
+		연속키 := lib.F2문자열_공백제거(질의값.(*xt.T1310_현물_전일당일분틱조회_질의값).M연속키)
 		if 연속키 != "" {
 			연속_조회_여부 = true
 			연속_조회_키 = 연속키
@@ -408,7 +409,7 @@ func f조회_및_주문_질의_처리(질의값 lib.I질의값) (식별번호 in
 		c데이터 = unsafe.Pointer(xt.NewT1310InBlock(질의값.(*xt.T1310_현물_전일당일분틱조회_질의값)))
 		길이 = xt.SizeT1310InBlock
 	case xt.TR관리_불성실_투자유의_조회_t1404:
-		연속키 := lib.F2문자열_앞뒤_공백제거(질의값.(*xt.T1404_관리종목_조회_질의값).M연속키)
+		연속키 := lib.F2문자열_공백제거(질의값.(*xt.T1404_관리종목_조회_질의값).M연속키)
 		if 연속키 != "" {
 			연속_조회_여부 = true
 			연속_조회_키 = 연속키
@@ -417,7 +418,7 @@ func f조회_및_주문_질의_처리(질의값 lib.I질의값) (식별번호 in
 		c데이터 = unsafe.Pointer(xt.NewT1404InBlock(질의값.(*xt.T1404_관리종목_조회_질의값)))
 		길이 = xt.SizeT1404InBlock
 	case xt.TR투자경고_매매정지_정리매매_조회_t1405:
-		연속키 := lib.F2문자열_앞뒤_공백제거(질의값.(*xt.T1405_투자경고_조회_질의값).M연속키)
+		연속키 := lib.F2문자열_공백제거(질의값.(*xt.T1405_투자경고_조회_질의값).M연속키)
 		if 연속키 != "" {
 			연속_조회_여부 = true
 			연속_조회_키 = 연속키
@@ -426,7 +427,7 @@ func f조회_및_주문_질의_처리(질의값 lib.I질의값) (식별번호 in
 		c데이터 = unsafe.Pointer(xt.NewT1405InBlock(질의값.(*xt.T1405_투자경고_조회_질의값)))
 		길이 = xt.SizeT1405InBlock
 	case xt.TR_ETF_시간별_추이_t1902:
-		연속키 := lib.F2문자열_앞뒤_공백제거(질의값.(*lib.S질의값_단일종목_연속키).M연속키)
+		연속키 := lib.F2문자열_공백제거(질의값.(*lib.S질의값_단일종목_연속키).M연속키)
 		if 연속키 != "" {
 			연속_조회_여부 = true
 			연속_조회_키 = 연속키
@@ -443,8 +444,8 @@ func f조회_및_주문_질의_처리(질의값 lib.I질의값) (식별번호 in
 		c데이터 = unsafe.Pointer(xt.NewT8407InBlock(질의값.(*xt.T8407_현물_멀티_현재가_조회_질의값)))
 		길이 = xt.SizeT8407InBlock
 	case xt.TR현물_차트_틱_t8411:
-		연속키 := lib.F2문자열_앞뒤_공백제거(질의값.(*xt.T8411_현물_차트_틱_질의값).M연속일자) +
-			lib.F2문자열_앞뒤_공백제거(질의값.(*xt.T8411_현물_차트_틱_질의값).M연속시간)
+		연속키 := lib.F2문자열_공백제거(질의값.(*xt.T8411_현물_차트_틱_질의값).M연속일자) +
+			lib.F2문자열_공백제거(질의값.(*xt.T8411_현물_차트_틱_질의값).M연속시간)
 
 		if 연속키 != "" {
 			연속_조회_여부 = true
@@ -454,8 +455,8 @@ func f조회_및_주문_질의_처리(질의값 lib.I질의값) (식별번호 in
 		c데이터 = unsafe.Pointer(xt.NewT8411InBlock(질의값.(*xt.T8411_현물_차트_틱_질의값)))
 		길이 = xt.SizeT8411InBlock
 	case xt.TR현물_차트_분_t8412:
-		연속키 := lib.F2문자열_앞뒤_공백제거(질의값.(*xt.T8412_현물_차트_분_질의값).M연속일자) +
-			lib.F2문자열_앞뒤_공백제거(질의값.(*xt.T8412_현물_차트_분_질의값).M연속시간)
+		연속키 := lib.F2문자열_공백제거(질의값.(*xt.T8412_현물_차트_분_질의값).M연속일자) +
+			lib.F2문자열_공백제거(질의값.(*xt.T8412_현물_차트_분_질의값).M연속시간)
 
 		if 연속키 != "" {
 			연속_조회_여부 = true
@@ -465,7 +466,7 @@ func f조회_및_주문_질의_처리(질의값 lib.I질의값) (식별번호 in
 		c데이터 = unsafe.Pointer(xt.NewT8412InBlock(질의값.(*xt.T8412_현물_차트_분_질의값)))
 		길이 = xt.SizeT8412InBlock
 	case xt.TR현물_차트_일주월_t8413:
-		연속키 := lib.F2문자열_앞뒤_공백제거(질의값.(*xt.T8413_현물_차트_일주월_질의값).M연속일자)
+		연속키 := lib.F2문자열_공백제거(질의값.(*xt.T8413_현물_차트_일주월_질의값).M연속일자)
 
 		if 연속키 != "" {
 			연속_조회_여부 = true
@@ -475,7 +476,7 @@ func f조회_및_주문_질의_처리(질의값 lib.I질의값) (식별번호 in
 		c데이터 = unsafe.Pointer(xt.NewT8413InBlock(질의값.(*xt.T8413_현물_차트_일주월_질의값)))
 		길이 = xt.SizeT8413InBlock
 	case xt.TR증시_주변_자금_추이_t8428:
-		연속키 := lib.F2문자열_앞뒤_공백제거(질의값.(*xt.T8428_증시주변_자금추이_질의값).M연속키)
+		연속키 := lib.F2문자열_공백제거(질의값.(*xt.T8428_증시주변_자금추이_질의값).M연속키)
 		if 연속키 != "" {
 			연속_조회_여부 = true
 			연속_조회_키 = 연속키

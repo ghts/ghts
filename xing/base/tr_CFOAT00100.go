@@ -134,8 +134,8 @@ func newCFOAT00100_선물옵션_정상주문_응답1(b []byte) (값 *CFOAT00100_
 	값 = new(CFOAT00100_선물옵션_정상주문_응답1)
 	값.M레코드갯수 = lib.F2정수_단순형(g.RecCnt)
 	//값.M주문시장 = T주문시장구분(lib.F2정수_단순형(g.OrdMktCode))	// 해당 필드는 운영/모의투자 서버 동일하게 값이 40으로 고정되어 있습니다.
-	값.M계좌번호 = lib.F2문자열_앞뒤_공백제거(g.AcntNo)
-	값.M종목코드 = lib.F2문자열_앞뒤_공백제거(g.FnoIsuNo)
+	값.M계좌번호 = lib.F2문자열_공백제거(g.AcntNo)
+	값.M종목코드 = lib.F2문자열_공백제거(g.FnoIsuNo)
 	값.M매매구분 = lib.T매도_매수_구분(lib.F2정수_단순형(g.BnsTpCode))
 	//값.M주문유형 = T주문유형(lib.F2정수_단순형(g.FnoOrdPtnCode))
 	값.M호가유형 = T호가유형(lib.F2정수_단순형(g.FnoOrdprcPtnCode))
@@ -149,9 +149,9 @@ func newCFOAT00100_선물옵션_정상주문_응답1(b []byte) (값 *CFOAT00100_
 	//값.M바스켓번호 = lib.F2정수64_단순형(g.BskNo)
 	//값.M트렌치번호 = lib.F2정수64_단순형(g.TrchNo)
 	//값.M항목번호 = lib.F2정수64_단순형(g.ItemNo)
-	//값.M운용지시번호 = lib.F2문자열_앞뒤_공백제거(g.OpDrtnNo)
-	//값.M관리사원번호 = lib.F2문자열_앞뒤_공백제거(g.MgempNo)
-	//값.M펀드ID = lib.F2문자열_앞뒤_공백제거(g.FundId)
+	//값.M운용지시번호 = lib.F2문자열_공백제거(g.OpDrtnNo)
+	//값.M관리사원번호 = lib.F2문자열_공백제거(g.MgempNo)
+	//값.M펀드ID = lib.F2문자열_공백제거(g.FundId)
 	//값.M펀드주문번호 = lib.F2정수64_단순형(g.FundOrdNo)
 
 	return 값, nil

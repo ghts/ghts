@@ -35,10 +35,7 @@ package x32
 
 // #cgo CFLAGS: -Wall
 // #include <stdlib.h>
-// #include <windef.h>
-// #include "./func.h"
 import "C"
-
 import (
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/xing/base"
@@ -77,15 +74,8 @@ func f초기화_XingAPI() {
 	xing_api_dll, 에러 := syscall.LoadLibrary("xingAPI.dll")
 	lib.F확인(에러)
 
-	C.setXingApiDLL(unsafe.Pointer(xing_api_dll))
-
 	// 원래 디렉토리로 이동
 	lib.F확인(os.Chdir(원래_디렉토리))
-
-	// Xing API에 필요한 버퍼
-	버퍼_t8411 = uintptr(C.malloc(2000 * C.uint(xt.SizeT8411OutBlock1)))
-	버퍼_t8412 = uintptr(C.malloc(2000 * C.uint(xt.SizeT8412OutBlock1)))
-	버퍼_t8413 = uintptr(C.malloc(2000 * C.uint(xt.SizeT8413OutBlock1)))
 
 	// Xing API 함수 포인터
 	etkConnect, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_Connect")
@@ -166,7 +156,7 @@ func F접속(서버_구분 xt.T서버_구분) bool {
 		return true
 	}
 
-	var c서버_이름 *C.char
+	var 서버_이름 string
 	var 포트_번호 int
 
 	switch 서버_구분 {
@@ -175,24 +165,25 @@ func F접속(서버_구분 xt.T서버_구분) bool {
 			panic("테스트 모드에서 실서버 접속 시도.")
 		}
 
-		c서버_이름 = C.CString("hts.ebestsec.co.kr")
+		서버_이름 = "hts.ebestsec.co.kr"
 		포트_번호 = 20001
 	case xt.P서버_모의투자:
 		if !lib.F테스트_모드_실행_중() {
 			panic("실제 운용 모드에서 모의투자서버 접속 시도.")
 		}
 
-		c서버_이름 = C.CString("demo.ebestsec.co.kr")
+		서버_이름 = "demo.ebestsec.co.kr"
 		포트_번호 = 20001
 	case xt.P서버_XingACE:
 		if !lib.F테스트_모드_실행_중() {
 			panic("실제 운용 모드에서 XingACE 가상거래소 접속 시도.")
 		}
 
-		c서버_이름 = C.CString("127.0.0.1")
+		서버_이름 = "127.0.0.1"
 		포트_번호 = 0
 	}
 
+	c서버_이름 := c문자열(서버_이름)
 	defer F메모리_해제(unsafe.Pointer(c서버_이름))
 
 	cgo잠금.Lock()
@@ -201,7 +192,7 @@ func F접속(서버_구분 xt.T서버_구분) bool {
 	마이너스_일 := -1
 
 	참거짓, _, 에러_번호 := syscall.Syscall6(etkConnect, 6,
-		uintptr(unsafe.Pointer(C.getHWND())),
+		win32_메시지_윈도우,
 		uintptr(unsafe.Pointer(c서버_이름)),
 		uintptr(포트_번호),
 		WM_USER,
@@ -248,16 +239,16 @@ func F로그인() (로그인_결과 bool) {
 	섹션 := lib.F확인(cfg파일.GetSection("XingAPI_LogIn_Info")).(*ini.Section)
 
 	키_ID := lib.F확인(섹션.GetKey("ID")).(*ini.Key)
-	c아이디 := C.CString(키_ID.String())
+	c아이디 := c문자열(키_ID.String())
 	defer F메모리_해제(unsafe.Pointer(c아이디))
 
 	키_PWD := lib.F확인(섹션.GetKey("PWD")).(*ini.Key)
-	c암호 := C.CString(키_PWD.String())
+	c암호 := c문자열(키_PWD.String())
 	defer F메모리_해제(unsafe.Pointer(c암호))
 
 	키_CertPWD := lib.F확인(섹션.GetKey("CertPWD")).(*ini.Key)
 	공인인증서_암호 := lib.F조건부_값(lib.F테스트_모드_실행_중(), "", 키_CertPWD.String()).(string)
-	c공인인증서_암호 := C.CString(공인인증서_암호)
+	c공인인증서_암호 := c문자열(공인인증서_암호)
 	defer F메모리_해제(unsafe.Pointer(c공인인증서_암호))
 
 	계좌_비밀번호 = 키_PWD.String()
@@ -266,7 +257,7 @@ func F로그인() (로그인_결과 bool) {
 	defer cgo잠금.Unlock()
 
 	참거짓, _, 에러_번호 := syscall.Syscall6(etkLogin, 6,
-		uintptr(unsafe.Pointer(C.getHWND())),
+		win32_메시지_윈도우,
 		uintptr(unsafe.Pointer(c아이디)),
 		uintptr(unsafe.Pointer(c암호)),
 		uintptr(unsafe.Pointer(c공인인증서_암호)),
@@ -287,7 +278,7 @@ func F로그아웃_및_접속해제() error {
 	defer cgo잠금.Unlock()
 
 	_, _, 에러_번호 := syscall.Syscall(etkLogout, 1,
-		uintptr(unsafe.Pointer(C.getHWND())),
+		win32_메시지_윈도우,
 		0,0)
 
 	if 에러_번호 != 0 {
@@ -308,17 +299,17 @@ func F로그아웃_및_접속해제() error {
 func F질의(TR코드 string, c데이터 unsafe.Pointer, 길이 int,
 	연속_조회_여부 bool, 연속키 string, 타임아웃 time.Duration) int {
 
-	cTR코드 := C.CString(TR코드)
+	cTR코드 := c문자열(TR코드)
 	defer F메모리_해제(unsafe.Pointer(cTR코드))
 
-	c연속_조회_키 := C.CString(연속키)
+	c연속_조회_키 := c문자열(연속키)
 	defer F메모리_해제(unsafe.Pointer(c연속_조회_키))
 
 	cgo잠금.Lock()
 	defer cgo잠금.Unlock()
 
 	질의ID, _, 에러_번호 := syscall.Syscall9(etkRequest, 7,
-		uintptr(unsafe.Pointer(C.getHWND())),
+		win32_메시지_윈도우,
 		uintptr(unsafe.Pointer(cTR코드)),
 		uintptr(c데이터),
 		uintptr(길이),
@@ -335,17 +326,17 @@ func F질의(TR코드 string, c데이터 unsafe.Pointer, 길이 int,
 }
 
 func F실시간_정보_구독(TR코드 string, 전체_종목코드 string, 단위_길이 int) error {
-	cTR코드 := C.CString(TR코드)
+	cTR코드 := c문자열(TR코드)
 	defer F메모리_해제(unsafe.Pointer(cTR코드))
 
-	c전체_종목코드 := C.CString(전체_종목코드)
+	c전체_종목코드 := c문자열(전체_종목코드)
 	defer F메모리_해제(unsafe.Pointer(c전체_종목코드))
 
 	cgo잠금.Lock()
 	defer cgo잠금.Unlock()
 
 	참거짓, _, 에러_번호 := syscall.Syscall6(etkAdviseRealData, 4,
-		uintptr(unsafe.Pointer(C.getHWND())),
+		win32_메시지_윈도우,
 		uintptr(unsafe.Pointer(cTR코드)),
 		uintptr(unsafe.Pointer(c전체_종목코드)),
 		uintptr(단위_길이),
@@ -359,17 +350,17 @@ func F실시간_정보_구독(TR코드 string, 전체_종목코드 string, 단�
 }
 
 func F실시간_정보_해지(TR코드 string, 전체_종목코드 string, 단위_길이 int) error {
-	cTR코드 := C.CString(TR코드)
+	cTR코드 := c문자열(TR코드)
 	defer F메모리_해제(unsafe.Pointer(cTR코드))
 
-	c전체_종목코드 := C.CString(전체_종목코드)
+	c전체_종목코드 := c문자열(전체_종목코드)
 	defer F메모리_해제(unsafe.Pointer(c전체_종목코드))
 
 	cgo잠금.Lock()
 	defer cgo잠금.Unlock()
 
 	참거짓, _, 에러_번호 := syscall.Syscall6(etkUnadviseRealData, 4,
-		uintptr(unsafe.Pointer(C.getHWND())),
+		win32_메시지_윈도우,
 		uintptr(unsafe.Pointer(cTR코드)),
 		uintptr(unsafe.Pointer(c전체_종목코드)),
 		uintptr(단위_길이),
@@ -387,7 +378,7 @@ func F실시간_정보_일괄_해지() error {
 	defer cgo잠금.Unlock()
 
 	참거짓, _, 에러_번호 := syscall.Syscall(etkUnadviseWindow, 1,
-		uintptr(unsafe.Pointer(C.getHWND())),
+		win32_메시지_윈도우,
 		0, 0)
 
 	if 에러_번호 != 0 || 참거짓 == FALSE {
@@ -414,7 +405,7 @@ func F계좌_번호(인덱스 int) string {
 	버퍼_초기값 := "            " // 12자리 공백문자열
 	버퍼_길이 := len(버퍼_초기값)
 
-	c버퍼 := C.CString(버퍼_초기값)
+	c버퍼 := c문자열(버퍼_초기값)
 	defer F메모리_해제(unsafe.Pointer(c버퍼))
 
 	cgo잠금.Lock()
@@ -431,7 +422,7 @@ func F계좌_번호(인덱스 int) string {
 		lib.New에러with출력("F계좌_번호() 호출 결과 FALSE.")
 	}
 
-	return string(bytes.Trim(C.GoBytes(unsafe.Pointer(c버퍼), C.int(버퍼_길이)), "\x00"))
+	return string(bytes.Trim(go바이트_모음(unsafe.Pointer(c버퍼), 버퍼_길이), "\x00"))
 }
 
 func F계좌번호_모음() []string {
@@ -449,10 +440,10 @@ func F계좌_이름(계좌_번호 string) string {
 	버퍼_초기값 := "                                         "
 	버퍼_길이 := len(버퍼_초기값)
 
-	c버퍼 := C.CString(버퍼_초기값)
+	c버퍼 := c문자열(버퍼_초기값)
 	defer F메모리_해제(unsafe.Pointer(c버퍼))
 
-	c계좌번호 := C.CString(계좌_번호)
+	c계좌번호 := c문자열(계좌_번호)
 	defer F메모리_해제(unsafe.Pointer(c계좌번호))
 
 	cgo잠금.Lock()
@@ -467,17 +458,17 @@ func F계좌_이름(계좌_번호 string) string {
 		lib.New에러with출력("F계좌_이름() 에러 발생. 에러 코드 : '%v'", 에러_번호)
 	}
 
-	return lib.F2문자열_EUC_KR_공백제거(C.GoBytes(unsafe.Pointer(c버퍼), C.int(버퍼_길이)))
+	return lib.F2문자열_EUC_KR_공백제거(go바이트_모음(unsafe.Pointer(c버퍼), 버퍼_길이))
 }
 
 func F계좌_상세명(계좌_번호 string) string {
 	버퍼_초기값 := "                                         "
 	버퍼_길이 := len(버퍼_초기값)
 
-	c버퍼 := C.CString(버퍼_초기값)
+	c버퍼 := c문자열(버퍼_초기값)
 	defer F메모리_해제(unsafe.Pointer(c버퍼))
 
-	c계좌번호 := C.CString(계좌_번호)
+	c계좌번호 := c문자열(계좌_번호)
 	defer F메모리_해제(unsafe.Pointer(c계좌번호))
 
 	cgo잠금.Lock()
@@ -492,17 +483,17 @@ func F계좌_상세명(계좌_번호 string) string {
 		lib.New에러with출력("F계좌_상세명() 에러 발생. 에러 코드 : '%v'", 에러_번호)
 	}
 
-	return lib.F2문자열_EUC_KR_공백제거(C.GoBytes(unsafe.Pointer(c버퍼), C.int(버퍼_길이)))
+	return lib.F2문자열_EUC_KR_공백제거(go바이트_모음(unsafe.Pointer(c버퍼), 버퍼_길이))
 }
 
 func F계좌_별명(계좌_번호 string) string {
 	버퍼_초기값 := "                                                     "
 	버퍼_길이 := len(버퍼_초기값)
 
-	c버퍼 := C.CString(버퍼_초기값)
+	c버퍼 := c문자열(버퍼_초기값)
 	defer F메모리_해제(unsafe.Pointer(c버퍼))
 
-	c계좌번호 := C.CString(계좌_번호)
+	c계좌번호 := c문자열(계좌_번호)
 	defer F메모리_해제(unsafe.Pointer(c계좌번호))
 
 	cgo잠금.Lock()
@@ -517,12 +508,12 @@ func F계좌_별명(계좌_번호 string) string {
 		lib.New에러with출력("F계좌_별명() 에러 발생. 에러 코드 : '%v'", 에러_번호)
 	}
 
-	return lib.F2문자열_EUC_KR_공백제거(C.GoBytes(unsafe.Pointer(c버퍼), C.int(버퍼_길이)))
+	return lib.F2문자열_EUC_KR_공백제거(go바이트_모음(unsafe.Pointer(c버퍼), 버퍼_길이))
 }
 
 func F서버_이름() string {
 	버퍼 := "                                                   "
-	c버퍼 := C.CString(버퍼)
+	c버퍼 := c문자열(버퍼)
 	defer F메모리_해제(unsafe.Pointer(c버퍼))
 
 	cgo잠금.Lock()
@@ -536,7 +527,7 @@ func F서버_이름() string {
 		lib.New에러with출력("F서버_이름() 에러 발생. 에러 코드 : '%v'", 에러_번호)
 	}
 
-	return lib.F2문자열_EUC_KR_공백제거(C.GoBytes(unsafe.Pointer(c버퍼), C.int(len(버퍼))))
+	return lib.F2문자열_EUC_KR_공백제거(go바이트_모음(unsafe.Pointer(c버퍼), len(버퍼)))
 }
 
 func F에러_코드() int {
@@ -561,7 +552,7 @@ func F에러_메시지(에러_코드 int) string {
 	버퍼 := go버퍼.String()
 	버퍼_길이 := len(버퍼)
 
-	c버퍼 := C.CString(버퍼)
+	c버퍼 := c문자열(버퍼)
 	defer F메모리_해제(unsafe.Pointer(c버퍼))
 
 	cgo잠금.Lock()
@@ -579,7 +570,7 @@ func F에러_메시지(에러_코드 int) string {
 		return ""
 	}
 
-	return lib.F2문자열_EUC_KR_공백제거(C.GoBytes(unsafe.Pointer(c버퍼), C.int(에러_메시지_길이)))
+	return lib.F2문자열_EUC_KR_공백제거(go바이트_모음(unsafe.Pointer(c버퍼), int(에러_메시지_길이)))
 }
 
 func TR코드별_전송_제한(TR코드_모음 []string) (정보_모음 *xt.TR코드별_전송_제한_정보_모음) {
@@ -601,7 +592,7 @@ func TR코드별_전송_제한(TR코드_모음 []string) (정보_모음 *xt.TR�
 }
 
 func F초당_TR쿼터(TR코드 string) int {
-	cTR코드 := C.CString(TR코드)
+	cTR코드 := c문자열(TR코드)
 	defer F메모리_해제(unsafe.Pointer(cTR코드))
 
 	cgo잠금.Lock()
@@ -619,7 +610,7 @@ func F초당_TR쿼터(TR코드 string) int {
 }
 
 func F초당_TR쿼터_역수(TR코드 string) int {
-	cTR코드 := C.CString(TR코드)
+	cTR코드 := c문자열(TR코드)
 	defer F메모리_해제(unsafe.Pointer(cTR코드))
 
 	cgo잠금.Lock()
@@ -637,7 +628,7 @@ func F초당_TR쿼터_역수(TR코드 string) int {
 }
 
 func F10분당_TR쿼터(TR코드 string) int {
-	cTR코드 := C.CString(TR코드)
+	cTR코드 := c문자열(TR코드)
 	defer F메모리_해제(unsafe.Pointer(cTR코드))
 
 	cgo잠금.Lock()
@@ -655,7 +646,7 @@ func F10분당_TR쿼터(TR코드 string) int {
 }
 
 func F10분간_요청한_TR수량(TR코드 string) int {
-	cTR코드 := C.CString(TR코드)
+	cTR코드 := c문자열(TR코드)
 	defer F메모리_해제(unsafe.Pointer(cTR코드))
 
 	cgo잠금.Lock()
@@ -685,12 +676,12 @@ func F데이터_해제(식별번호 int) {
 	}
 }
 
-func F메시지_해제(메시지_포인터 uintptr) {
+func F메시지_해제(메시지_포인터 unsafe.Pointer) {
 	cgo잠금.Lock()
 	defer cgo잠금.Unlock()
 
 	_, _, 에러_번호 := syscall.Syscall(etkReleaseMessageData, 1,
-		메시지_포인터,
+		uintptr(메시지_포인터),
 		0, 0)
 
 	if 에러_번호 != 0 {
@@ -698,13 +689,13 @@ func F메시지_해제(메시지_포인터 uintptr) {
 	}
 }
 
-func F압축_해제(압축된_원본_데이터, 버퍼 uintptr, 원본_데이터_길이 int32) int {
+func F압축_해제(압축된_원본_데이터 unsafe.Pointer, 버퍼 *byte, 원본_데이터_길이 int32) int {
 	cgo잠금.Lock()
 	defer cgo잠금.Unlock()
 
 	압축_해제된_데이터_길이, _, 에러_번호 := syscall.Syscall(etkDecompress, 3,
-		압축된_원본_데이터,
-		버퍼,
+		uintptr(압축된_원본_데이터),
+		uintptr(unsafe.Pointer(버퍼)),
 		uintptr(원본_데이터_길이))
 
 	if 에러_번호 != 0 {
@@ -712,6 +703,19 @@ func F압축_해제(압축된_원본_데이터, 버퍼 uintptr, 원본_데이터
 	}
 
 	return int(압축_해제된_데이터_길이)
+}
+
+func c문자열(go문자열 string) *C.char {
+	return C.CString(go문자열)
+}
+
+func go문자열(c문자열_포인터 unsafe.Pointer) string {
+	return C.GoString((*C.char)(c문자열_포인터))
+}
+
+
+func go바이트_모음(c데이터 unsafe.Pointer, 길이 int) []byte {
+	return C.GoBytes(c데이터, C.int(길이))
 }
 
 func F메모리_해제(포인터 unsafe.Pointer) {
@@ -730,7 +734,7 @@ func F자원_해제() error {
 	화면_출력_장치 := lib.F화면_출력_중지()
 	defer lib.F화면_출력_재개(화면_출력_장치)
 
-	DestroyWindow(uintptr(unsafe.Pointer(C.getHWND())))
+	DestroyWindow(win32_메시지_윈도우)
 	syscall.FreeLibrary(xing_api_dll)
 
 	return nil

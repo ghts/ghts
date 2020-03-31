@@ -33,10 +33,6 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
 package x32
 
-// #cgo CFLAGS: -Wall
-// #include "./func.h"
-import "C"
-
 import (
 	"fmt"
 	"github.com/ghts/ghts/lib"

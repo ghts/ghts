@@ -438,7 +438,7 @@ func f초기화_TR전송_제한() (에러 error) {
 //
 //	lib.F조건부_패닉(xt.Sizeof_C_TR_DATA != C.sizeof_TR_DATA, "C.TR_DATA 크기 불일치 ", xt.Sizeof_C_TR_DATA, C.sizeof_TR_DATA)
 //	lib.F조건부_패닉(xt.Sizeof_C_MSG_DATA != C.sizeof_MSG_DATA, "C.MSG_DATA 크기 불일치 ")
-//	lib.F조건부_패닉(xt.Sizeof_C_REALTIME_DATA != C.sizeof_REALTIME_DATA, "C.REALTIME_DATA 크기 불일치 ")
+//	lib.F조건부_패닉(xt.Sizeof_REALTIME_DATA != C.sizeof_REALTIME_DATA, "C.REALTIME_DATA 크기 불일치 ")
 //	lib.F조건부_패닉(unsafe.Sizeof(xt.TR_DATA{}) != unsafe.Sizeof(C.TR_DATA_UNPACKED{}), "TR_DATA 크기 불일치")
 //	lib.F조건부_패닉(unsafe.Sizeof(xt.REALTIME_DATA{}) != unsafe.Sizeof(C.REALTIME_DATA_UNPACKED{}), "REALTIME_DATA_UNPACKED 크기 불일치")
 //	lib.F조건부_패닉(unsafe.Sizeof(xt.MSG_DATA{}) != unsafe.Sizeof(C.MSG_DATA_UNPACKED{}), "MSG_DATA_UNPACKED 크기 불일치")

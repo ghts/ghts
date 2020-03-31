@@ -33,41 +33,32 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
 package x32
 
-// #include <stdio.h>
-// #include <stdbool.h>
-// #include <windows.h>
-// #include <winuser.h>
-// #include "./func.h"
-import "C"
 import (
 	"github.com/ghts/ghts/lib"
 	"golang.org/x/sys/windows"
-
 	"syscall"
 	"unsafe"
 )
 
-//func F메시지_윈도우_생성() {
-//	lpszClassName, _ := syscall.UTF16PtrFromString("MessageOnlyWindow")
-//	타이틀, _ := syscall.UTF16PtrFromString("Simple Window.")
-//
-//	wcex := WNDCLASSEX{
-//		CbSize:        uint32(unsafe.Sizeof(WNDCLASSEX{})),
-//		LpfnWndProc:   syscall.NewCallback(WndProc),
-//		HInstance:     HINSTANCE(xing_api_dll),
-//		LpszClassName: lpszClassName}
-//
-//	RegisterClassEx(&wcex)
-//
-//	윈도우_핸들 := CreateWindowEx(
-//		0, lpszClassName, 타이틀,
-//		0, 0, 0, 0, 0,
-//		HWND_MESSAGE, 0, HINSTANCE(xing_api_dll), nil)
-//
-//	win32_메시지_윈도우 = uintptr(윈도우_핸들)
-//
-//	C.setHWND(unsafe.Pointer(win32_메시지_윈도우))
-//}
+func F메시지_윈도우_생성() {
+	lpszClassName, _ := syscall.UTF16PtrFromString("MessageOnlyWindow")
+	타이틀, _ := syscall.UTF16PtrFromString("Simple Window.")
+
+	wcex := WNDCLASSEX{
+		CbSize:        uint32(unsafe.Sizeof(WNDCLASSEX{})),
+		LpfnWndProc:   syscall.NewCallback(WndProc),
+		HInstance:     HINSTANCE(xing_api_dll),
+		LpszClassName: lpszClassName}
+
+	RegisterClassEx(&wcex)
+
+	윈도우_핸들 := CreateWindowEx(
+		0, lpszClassName, 타이틀,
+		0, 0, 0, 0, 0,
+		HWND_MESSAGE, 0, HINSTANCE(xing_api_dll), nil)
+
+	win32_메시지_윈도우 = uintptr(윈도우_핸들)
+}
 
 func F윈도우_메시지_처리() {
 	var 윈도우_메시지 MSG
@@ -93,28 +84,28 @@ func WndProc(hWnd HWND, msg uint32, wParam, lParam uintptr) uintptr {
 	case XM_RECEIVE_DATA:
 		switch wParam {
 		case RCV_TR_DATA:
-			OnTrData_Go((*C.TR_DATA)(unsafe.Pointer(lParam)))
+			OnTrData(unsafe.Pointer(lParam))
 			return TRUE
 		case RCV_MSG_DATA,
 			RCV_SYSTEM_ERROR:
-			OnMessageAndError_Go((*C.MSG_DATA)(unsafe.Pointer(lParam)))
+			OnMessageAndError(unsafe.Pointer(lParam))
 			return TRUE
 		case RCV_RELEASE:
-			OnReleaseData_Go(C.int(lParam))
+			OnReleaseData(int(lParam))
 			return TRUE
 		}
 		return FALSE
 	case XM_RECEIVE_REAL_DATA:
-		OnRealtimeData_Go((*C.REALTIME_DATA)(unsafe.Pointer(lParam)))
+		OnRealtimeData(unsafe.Pointer(lParam))
 		return TRUE
 	case XM_LOGIN:
-		OnLogin_Go((*C.char)(unsafe.Pointer(wParam)))
+		OnLogin(unsafe.Pointer(wParam))
 		return TRUE
 	case XM_LOGOUT:
 		OnLogout_Go()
 		return TRUE
 	case XM_TIMEOUT:
-		OnTimeout_Go(C.int(lParam))
+		OnTimeout_Go(int(lParam))
 		return TRUE
 	case XM_RECEIVE_LINK_DATA:
 		OnLinkData_Go()
@@ -125,10 +116,9 @@ func WndProc(hWnd HWND, msg uint32, wParam, lParam uintptr) uintptr {
 	case WM_DESTROY:
 		PostQuitMessage(0)
 		return TRUE
-	default:
-		DefWindowProc(hWnd, msg, wParam, lParam)
-		return TRUE
 	}
+
+	return DefWindowProc(hWnd, msg, wParam, lParam)
 }
 
 // COPIED & MODIFED FROM 'https://github.com/lxn/win'

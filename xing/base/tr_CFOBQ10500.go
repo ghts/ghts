@@ -154,7 +154,7 @@ func newCFOBQ10500_선물옵션_예탁금_증거금_조회_응답1(b []byte) (�
 
 	값 = new(CFOBQ10500_선물옵션_예탁금_증거금_조회_응답1)
 	값.M레코드수량 = lib.F2정수64_단순형(g.RecCnt)
-	값.M계좌번호 = lib.F2문자열_앞뒤_공백제거(g.AcntNo)
+	값.M계좌번호 = lib.F2문자열_공백제거(g.AcntNo)
 
 	return 값, nil
 }

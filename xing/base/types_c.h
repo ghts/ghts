@@ -15,73 +15,8 @@
 
 # include <windef.h>
 
-//------------------------------------------------------------------------------
-// XingAPI DLL 함수
-//------------------------------------------------------------------------------
-typedef BOOL (__stdcall *F_BOOL)(); // ETK_IsConnected, ETK_Disconnnect, ETK_Logout 대체
-typedef int (__stdcall *F_INT)();   // ETK_GetAccountListCount, ETK_GetLastError 대체
-typedef BOOL (__stdcall *ETK_Connect)(HWND  hWnd, const char* pszSvr, int nPort, int nStartMsgID, int nTimeOut, int nSendMaxPacketSize);
-typedef BOOL (__stdcall *ETK_Login)(HWND  hWnd, const char* pszID, const char* pszPwd, const char* pszCertPwd, int nType, BOOL bShowCertErrDlg);
-typedef BOOL (__stdcall *ETK_Logout)(HWND hWnd);
-typedef int (__stdcall *ETK_Request)(HWND hParentWnd, const char* pszTrCode, void* lpData, int nDataSize, BOOL bNext, const char* pszContinueKey, int nTimeOut);
-typedef void (__stdcall *ETK_ReleaseRequestData)(int nRequestID);
-typedef void (__stdcall *ETK_ReleaseMessageData)(LPARAM  lp);
-typedef BOOL (__stdcall *ETK_AdviseRealData)(HWND  hWnd, const char* pszTrCode, const char* pszData, int nDataUnitLen);
-typedef BOOL (__stdcall *ETK_UnadviseRealData)(HWND  hWnd, const char* pszTrCode, const char* pszData, int nDataUnitLen);
-typedef BOOL (__stdcall *ETK_UnadviseWindow)(HWND  hWnd);
-typedef BOOL (__stdcall *ETK_GetAccountList)(int nIndex, char* pszAcc, int nAccSize);
-typedef void (__stdcall *ETK_GetAccountName)(LPCTSTR pszAcc, LPSTR pszAccName, int nAccNameSize);
-typedef void (__stdcall *ETK_GetAcctDetailName)(LPCTSTR pszAcc, LPSTR pszAccName, int nAccNameSize);
-typedef void (__stdcall *ETK_GetAcctNickName)(LPCTSTR pszAcc, LPSTR pszAccName, int nAccNameSize);
-typedef void (__stdcall *ETK_GetServerName)(char* pszName);
-typedef int (__stdcall *ETK_GetErrorMessage)(int nErrorCode, char* pszMsg, int nMsgSize);
-typedef int (__stdcall *ETK_GetTRCountPerSec)(LPCTSTR pszCode);
-typedef int (__stdcall *ETK_GetTRCountBaseSec)(LPCTSTR pszCode);
-typedef int (__stdcall *ETK_GetTRCountRequest)(LPCTSTR pszCode);
-typedef int (__stdcall *ETK_GetTRCountLimit)(LPCTSTR pszCode);
-//typedef int (__stdcall *ETK_RequestService)(HWND hWnd, LPCTSTR pszCode, LPCTSTR pszData);
-//typedef int (__stdcall *ETK_RemoveService)(HWND hWnd, LPCTSTR pszCode, LPCTSTR pszData);
-//typedef int (__stdcall *ETK_RequestLinkToHTS)(HWND hWnd, LPCTSTR pszLinkKey, LPCTSTR pszData, LPCTSTR pszFiller);
-//typedef void (__stdcall *ETK_AdviseLinkFromHTS)(HWND hWnd);
-//typedef void (__stdcall *ETK_UnadviseLinkFromHTS)();
-typedef int (__stdcall *ETK_Decompress)(LPCTSTR pszSrc, LPCTSTR pszDest, int nSrcLen);
-
-// Go언어에서 읽을 수 있게 기본 메모리 저장 방식을 사용하는 구조체.
-// 내용은 기본 구조체와 동일하지만, '#pragma pack(pop)'가 적용되지 않았다.
-typedef struct {    // 조회TR 수신 패킷
-	int					RequestID;                  // Request ID
-	int					DataLength;				    // 받은 데이터 크기
-	int					TotalDataBufferSize;		// lpData에 할당된 크기
-	int					ElapsedTime;				// 전송에서 수신까지 걸린시간(1/1000초)
-	int					DataMode;					// 1:BLOCK MODE, 2:NON-BLOCK MODE
-	char TrCode[10]; char _TrCode[1];			    // TR Code
-	char				Cont[1];       			    // 다음조회 없음 : '0', 'N', 다음조회 있음 : '1', '2'
-	char ContKey[18]; char _ContKey[1];		        // 연속키. Header타입이 B인 경우 이 값이 다음 조회 시 Key가 됨.
-	char				None[31];                   // 사용자 데이터 (사용 안 함) 62
-	char BlockName[16]; char _BlockName[1];        // Block 명, Block Mode 일때만 사용  17
-	unsigned char*		Data;                       // 수신된 TR 데이터
-} TR_DATA_UNPACKED;
-
-typedef struct {    // 메시지 수신 패킷.
-	int					RequestID;						// Request ID
-	int					SystemError;				// 0:일반메시지, 1:시스템 에러 메시지
-	char MsgCode[5]; char _MsgCode[1];             // 메시지 코드
-	int					MsgLength;					// 메시지 데이터 길이
-	char*		        MsgData;			// 메시지 데이터
-} MSG_DATA_UNPACKED;
-
-typedef struct {    // 실시간TR 수신 패킷
-	char TrCode[3]; char _TrCode[1];		    // TR Code
-	int					KeyLength;                 // 뭐지??
-	char KeyData[32]; char _KeyData[1];         // 뭐지??
-	char RegKey[32]; char _RegKey[1];          // 뭐지??
-	int					DataLength;                // 받은 데이터 크기
-	char*				Data;                    // 실시간 데이터
-} REALTIME_DATA_UNPACKED;
-
-// C 구조체 메모리 저장방식을 1바이트 단위로 설정.
-// 이로 인해 기본 구조체는 UNPACKED로 변환해야만 Go언어에서 읽을 수 있음.
-// 이후에 '#pragma pack(pop)'으로 원래대로 되돌려야 함.
+// '#pragma pack()'으로 지정된 PACKED C구조체는 Go언어에서 직접 사용할 수 없음.
+// binary.Read()를 이용해서 Go 구조체로 읽어들인 후 사용할 수 있음.
 #pragma pack(push, 1)
 
 //------------------------------------------------------------------------------
