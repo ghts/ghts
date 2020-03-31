@@ -36,7 +36,7 @@ package x32
 import (
 	"fmt"
 	"github.com/ghts/ghts/lib"
-	"github.com/ghts/ghts/xing/base"
+	xt "github.com/ghts/ghts/xing/base"
 	"time"
 )
 
@@ -108,10 +108,28 @@ func f초기화_서버_접속(서버_구분 xt.T서버_구분) (에러 error) {
 }
 
 func F리소스_정리() {
-	F실시간_정보_일괄_해지()
-	F로그아웃_및_접속해제()
-	F소켓_정리()
-	F자원_해제()
+	defer lib.S예외처리{}.S실행()
+
+	질의 := new(lib.S채널_질의_API)
+	질의.M질의값 = lib.New질의값_기본형(xt.TR종료, "")
+	질의.Ch회신값 = make(chan interface{}, 1)
+	질의.Ch에러 = make(chan error, 1)
+
+	Ch질의 <- 질의
+
+	lib.F체크포인트()
+
+	ch타임아웃 := time.After(lib.P20초)
+
+	select {
+	case <-질의.Ch회신값:
+	case 에러 := <-질의.Ch에러:
+		lib.F체크포인트(에러)
+	case <-ch타임아웃:
+		lib.F체크포인트("종료 타임아웃")
+	}
+
+	return nil
 }
 
 func F소켓_정리() error {

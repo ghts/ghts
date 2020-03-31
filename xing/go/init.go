@@ -310,7 +310,7 @@ func C32_종료() (에러 error) {
 			return nil
 		}
 
-		lib.F대기(lib.P300밀리초)
+		lib.F대기(lib.P1초)
 	}
 
 	return lib.New에러with출력("C32 종료 실패")

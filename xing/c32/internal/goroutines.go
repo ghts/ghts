@@ -39,6 +39,7 @@ import (
 	"go.nanomsg.org/mangos/v3"
 	"runtime"
 	"strings"
+	"syscall"
 	"unsafe"
 )
 
@@ -239,11 +240,8 @@ func go함수_호출_도우미(ch초기화, ch종료 chan lib.T신호) {
 		case <-ch공통_종료:
 			return
 		default:
-			// PASS
+			F윈도우_메시지_처리()
 		}
-
-		F윈도우_메시지_처리()
-		lib.F실행권한_양보()
 	}
 }
 
@@ -288,11 +286,7 @@ func f질의값_처리(질의 *lib.S채널_질의_API) {
 	case xt.TR소켓_테스트:
 		질의.Ch회신값 <- lib.P신호_OK
 	case xt.TR종료:
-		질의.Ch회신값 <- lib.P신호_C32_종료
-		lib.F대기(lib.P1초)
-
-		f콜백_동기식(lib.New콜백_신호(lib.P신호_C32_종료))
-		lib.F공통_종료_채널_닫기()
+		F종료_질의_처리(질의)
 	case xt.TR초기화:
 		f초기화_XingAPI() // 모든 API 액세스를 단일 스레드에서 하기 위해서 여기에서 API 초기화를 실행함.
 		F메시지_윈도우_생성()
@@ -548,4 +542,22 @@ func f접속_처리(서버_구분 xt.T서버_구분) bool {
 	}
 
 	return true // 로그인 콜백 함수가 실행될 때까지 기다림.
+}
+
+func F종료_질의_처리(질의 *lib.S채널_질의_API) {
+	F콜백(lib.New콜백_신호(lib.P신호_C32_종료))
+	F실시간_정보_일괄_해지()
+	F로그아웃_및_접속해제()
+	lib.F대기(lib.P3초)	// 로그아웃 처리될 시간 부여
+	lib.F공통_종료_채널_닫기()
+	PostQuitMessage(0)
+	DestroyWindow(win32_메시지_윈도우)
+	syscall.FreeLibrary(xing_api_dll)
+	F소켓_정리()
+	lib.F대기(lib.P3초)	// 소켓 정리될 시간적 여유 부여.
+	
+	select {
+	case 질의.Ch회신값 <- lib.P신호_C32_종료:
+	default:
+	}
 }

@@ -273,7 +273,9 @@ func F로그인() (로그인_결과 bool) {
 	return true
 }
 
-func F로그아웃_및_접속해제() error {
+func F로그아웃_및_접속해제() (에러 error) {
+	defer lib.S예외처리{M에러: &에러}.S실행()
+
 	cgo잠금.Lock()
 	defer cgo잠금.Unlock()
 
@@ -285,7 +287,7 @@ func F로그아웃_및_접속해제() error {
 		return lib.New에러with출력("로그아웃 에러 : '%v'", 에러_번호)
 	}
 
-	lib.F메모("C.etkDisconnect() 에러 발생. 게시판 문의 후 답변 대기 중.")
+	lib.F메모("ETK_Disconnect() 에러 발생.")
 
 	//_, _, 에러_번호 = syscall.Syscall(etkDisconnect, 0, 0, 0,0)
 	//
@@ -723,19 +725,4 @@ func F메모리_해제(포인터 unsafe.Pointer) {
 	defer cgo잠금.Unlock()
 
 	C.free(포인터)
-}
-
-func F자원_해제() error {
-	defer lib.S예외처리{}.S실행()
-
-	cgo잠금.Lock()
-	defer cgo잠금.Unlock()
-
-	화면_출력_장치 := lib.F화면_출력_중지()
-	defer lib.F화면_출력_재개(화면_출력_장치)
-
-	DestroyWindow(win32_메시지_윈도우)
-	syscall.FreeLibrary(xing_api_dll)
-
-	return nil
 }
