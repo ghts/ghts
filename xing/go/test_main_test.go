@@ -1,4 +1,4 @@
-/* Copyright (C) 2015-2019 김운하(UnHa Kim)  < unha.kim.ghts at gmail dot com >
+/* Copyright (C) 2015-2020 김운하(UnHa Kim)  < unha.kim.ghts at gmail dot com >
 
 이 파일은 GHTS의 일부입니다.
 
