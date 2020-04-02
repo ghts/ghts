@@ -38,7 +38,9 @@ import (
 	"encoding/binary"
 	"fmt"
 	"github.com/ghts/ghts/lib"
+	"github.com/ghts/ghts/lib/c"
 	"github.com/ghts/ghts/xing/base"
+	"strings"
 	"unsafe"
 )
 
@@ -50,12 +52,29 @@ func F콜백(콜백값 lib.I콜백) (에러 error) {
 func go콜백_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 	ch공통_종료 := lib.F공통_종료_채널()
 
+	defer func() {
+		select {
+		case <-ch공통_종료:
+			Ch콜백_도우미_종료 <- lib.P신호_종료
+		default:
+		}
+	}()
+
 	defer lib.S예외처리{M에러: &에러, M함수: func() {
 		select {
 		case <-ch공통_종료:
+			에러 = nil
+			return
 		default:
-			ch종료 <- lib.P신호_종료
 		}
+
+		if 에러 != nil &&
+			!strings.Contains(에러.Error(), "connection closed") &&
+			!strings.Contains(에러.Error(), "object closed") {
+			lib.F에러_출력(에러)
+		}
+
+		ch종료 <- lib.P신호_종료
 	}}.S실행()
 
 	for {
@@ -99,7 +118,7 @@ func f콜백_동기식(콜백값 lib.I콜백) (에러 error) {
 }
 
 func OnTrData(TR데이터 unsafe.Pointer) {
-	c데이터 := go바이트_모음(TR데이터, xt.Sizeof_TR_DATA)
+	c데이터 := c.F2Go바이트_모음(TR데이터, xt.Sizeof_TR_DATA)
 	버퍼 := bytes.NewBuffer(c데이터)
 	g := new(xt.TR_DATA)
 
@@ -130,20 +149,20 @@ func OnTrData(TR데이터 unsafe.Pointer) {
 	case "t8411OutBlock1":
 		버퍼 := make([]byte, xt.SizeT8411OutBlock1*2000)
 		길이 := F압축_해제(unsafe.Pointer(g.Data), &버퍼[0], g.DataLength)
-		raw값 = go바이트_모음(unsafe.Pointer(&버퍼[0]), 길이)
+		raw값 = c.F2Go바이트_모음(unsafe.Pointer(&버퍼[0]), 길이)
 		g.DataLength = int32(길이)
 	case "t8412OutBlock1":
 		버퍼 := make([]byte, xt.SizeT8412OutBlock1*2000)
 		길이 := F압축_해제(unsafe.Pointer(g.Data), &버퍼[0], g.DataLength)
-		raw값 = go바이트_모음(unsafe.Pointer(&버퍼[0]), 길이)
+		raw값 = c.F2Go바이트_모음(unsafe.Pointer(&버퍼[0]), 길이)
 		g.DataLength = int32(길이)
 	case "t8413OutBlock1":
 		버퍼 := make([]byte, xt.SizeT8413OutBlock1*2000)
 		길이 := F압축_해제(unsafe.Pointer(g.Data), &버퍼[0], g.DataLength)
-		raw값 = go바이트_모음(unsafe.Pointer(&버퍼[0]), 길이)
+		raw값 = c.F2Go바이트_모음(unsafe.Pointer(&버퍼[0]), 길이)
 		g.DataLength = int32(길이)
 	default:
-		raw값 = go바이트_모음(unsafe.Pointer(g.Data), int(g.DataLength))
+		raw값 = c.F2Go바이트_모음(unsafe.Pointer(g.Data), int(g.DataLength))
 	}
 
 	자료형_문자열 := lib.F확인(f자료형_문자열_해석(g)).(string)
@@ -172,7 +191,7 @@ func OnTrData(TR데이터 unsafe.Pointer) {
 func OnMessageAndError(MSG데이터 unsafe.Pointer) {
 	defer F메시지_해제(MSG데이터)
 
-	c데이터 := go바이트_모음(MSG데이터, xt.Sizeof_MSG_DATA)
+	c데이터 := c.F2Go바이트_모음(MSG데이터, xt.Sizeof_MSG_DATA)
 	버퍼 := bytes.NewBuffer(c데이터)
 	g := new(xt.MSG_DATA)
 
@@ -203,7 +222,7 @@ func OnMessageAndError(MSG데이터 unsafe.Pointer) {
 	콜백값.S콜백_기본형 = lib.New콜백_기본형(lib.P콜백_메시지_및_에러)
 	콜백값.M식별번호 = int(g.RequestID)
 	콜백값.M코드 = lib.F2문자열_공백제거(g.MsgCode)
-	콜백값.M내용 = lib.F2문자열_EUC_KR_공백제거(go바이트_모음(unsafe.Pointer(g.MsgData), int(g.MsgLength)))
+	콜백값.M내용 = lib.F2문자열_EUC_KR_공백제거(c.F2Go바이트_모음(unsafe.Pointer(g.MsgData), int(g.MsgLength)))
 	콜백값.M에러여부 = 에러여부
 
 	lib.F조건부_실행(에러여부, lib.F체크포인트, 콜백값)
@@ -217,7 +236,7 @@ func OnReleaseData(식별번호 int) {
 }
 
 func OnRealtimeData(REALTIME데이터 unsafe.Pointer) {
-	c데이터 := go바이트_모음(REALTIME데이터, xt.Sizeof_REALTIME_DATA)
+	c데이터 := c.F2Go바이트_모음(REALTIME데이터, xt.Sizeof_REALTIME_DATA)
 	버퍼 := bytes.NewBuffer(c데이터)
 	g := new(xt.REALTIME_DATA)
 
@@ -237,7 +256,7 @@ func OnRealtimeData(REALTIME데이터 unsafe.Pointer) {
 	g.Data = uintptr(주소값)
 
 	// KeyData, RegKey등이 불필요한 듯 해서 전송 안 함. 필요하면 추가할 것.
-	raw값 := go바이트_모음(unsafe.Pointer(g.Data), int(g.DataLength))
+	raw값 := c.F2Go바이트_모음(unsafe.Pointer(g.Data), int(g.DataLength))
 	raw값 = f민감정보_삭제(raw값, lib.F2문자열_공백제거(g.TrCode))
 	바이트_변환값 := lib.F확인(lib.New바이트_변환Raw(lib.F2문자열(g.TrCode), raw값, false)).(*lib.S바이트_변환)
 
@@ -245,7 +264,7 @@ func OnRealtimeData(REALTIME데이터 unsafe.Pointer) {
 }
 
 func OnLogin(wParam unsafe.Pointer) {
-	코드 := go문자열(wParam)
+	코드 := c.F2Go문자열(wParam)
 	정수, 에러 := lib.F2정수(코드)
 	로그인_성공_여부 := 에러 == nil && 정수 == 0
 
@@ -263,10 +282,12 @@ func OnLogin(wParam unsafe.Pointer) {
 }
 
 func OnLogout_Go() {
+	lib.F체크포인트("OnLogout.")
 	// XingAPI가 신호를 보내오지 않음.  여기에 기능을 구현해 봤자 소용없음.
 }
 
 func OnDisconnected_Go() {
+	lib.F체크포인트("OnDisconnected.")
 	// XingAPI가 신호를 보내오지 않음.  여기에 기능을 구현해 봤자 소용없음.
 }
 

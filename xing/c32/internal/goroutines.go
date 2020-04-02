@@ -35,6 +35,8 @@ package x32
 
 import (
 	"github.com/ghts/ghts/lib"
+	"github.com/ghts/ghts/lib/c"
+	"github.com/ghts/ghts/lib/w32"
 	"github.com/ghts/ghts/xing/base"
 	"go.nanomsg.org/mangos/v3"
 	"runtime"
@@ -46,12 +48,12 @@ import (
 func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
-	전달_도우미_수량 := runtime.NumCPU() / 2
+	전달_도우미_수량 = runtime.NumCPU() / 2
 	if 전달_도우미_수량 < 2 {
 		전달_도우미_수량 = 2
 	}
 
-	콜백_도우미_수량 := runtime.NumCPU() / 2
+	콜백_도우미_수량 = runtime.NumCPU() / 2
 	if 콜백_도우미_수량 < 2 {
 		콜백_도우미_수량 = 2
 	}
@@ -94,22 +96,51 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 		<-ch콜백_도우미_초기화
 	}
 
-	ch종료 := lib.F공통_종료_채널()
+	ch공통_종료 := lib.F공통_종료_채널()
+
+	defer func() {
+		select {
+		case <-ch공통_종료:
+			Ch모니터링_루틴_종료 <- lib.P신호_종료
+		default:
+		}
+	}()
+
 	ch초기화 <- lib.P신호_초기화
 
 	// 종료 되는 Go루틴 재생성.
 	for {
 		select {
-		case <-ch종료:
+		case <-ch공통_종료:
 			return nil
 		case <-ch수신_도우미_종료:
-			go go수신_도우미(ch수신_도우미_초기화, ch수신_도우미_종료)
+			select {
+			case <-ch공통_종료:
+				return nil
+			default:
+				go go수신_도우미(ch수신_도우미_초기화, ch수신_도우미_종료)
+			}
 		case <-ch전달_도우미_종료:
-			go go전달_도우미(ch전달_도우미_초기화, ch전달_도우미_종료)
+			select {
+			case <-ch공통_종료:
+				return nil
+			default:
+				go go전달_도우미(ch전달_도우미_초기화, ch전달_도우미_종료)
+			}
 		case <-ch호출_도우미_종료:
-			go go함수_호출_도우미(ch호출_도우미_초기화, ch호출_도우미_종료)
+			select {
+			case <-ch공통_종료:
+				return nil
+			default:
+				go go함수_호출_도우미(ch호출_도우미_초기화, ch호출_도우미_종료)
+			}
 		case <-ch콜백_도우미_종료:
-			go go콜백_도우미(ch콜백_도우미_초기화, ch콜백_도우미_종료)
+			select {
+			case <-ch공통_종료:
+				return nil
+			default:
+				go go콜백_도우미(ch콜백_도우미_초기화, ch콜백_도우미_종료)
+			}
 		}
 	}
 }
@@ -119,8 +150,21 @@ func go수신_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 	var 수신_메시지 *mangos.Message
 	ch공통_종료 := lib.F공통_종료_채널()
 
+	defer func() {
+		select {
+		case <-ch공통_종료:
+			Ch수신_도우미_종료 <- lib.P신호_종료
+		default:
+		}
+	}()
+
 	defer lib.S예외처리{M에러: &에러, M출력_숨김: true, M함수: func() {
-		lib.F조건부_실행(수신_메시지 != nil, 소켓REP_TR수신.S회신Raw, 수신_메시지, lib.JSON, 에러)
+		select {
+		case <-ch공통_종료:
+			에러 = nil
+			return
+		default:
+		}
 
 		if 에러 != nil &&
 			!strings.Contains(에러.Error(), "connection closed") &&
@@ -128,11 +172,9 @@ func go수신_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 			lib.F에러_출력(에러)
 		}
 
-		select {
-		case <-ch공통_종료:
-		default:
-			ch종료 <- lib.P신호_종료
-		}
+		lib.F조건부_실행(수신_메시지 != nil, 소켓REP_TR수신.S회신Raw, 수신_메시지, lib.JSON, 에러)
+
+		ch종료 <- lib.P신호_종료
 	}}.S실행()
 
 	ch초기화 <- lib.P신호_초기화
@@ -153,8 +195,6 @@ func go수신_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 				lib.F에러_출력(에러)
 			}
 		}
-
-		lib.F실행권한_양보() // Go언어가 for반복문에서 태스트 전환이 잘 안 되는 경우가 있으므로, 수동으로 태스트 전환.
 	}
 }
 
@@ -163,14 +203,31 @@ func go전달_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 	var 수신_메시지 *mangos.Message
 	ch공통_종료 := lib.F공통_종료_채널()
 
-	defer lib.S예외처리{M에러: &에러, M함수: func() {
-		lib.F조건부_실행(수신_메시지 != nil, 소켓REP_TR수신.S회신Raw, 수신_메시지, lib.JSON, 에러)
-
+	defer func() {
 		select {
 		case <-ch공통_종료:
+			Ch전달_도우미_종료 <- lib.P신호_종료
 		default:
-			ch종료 <- lib.P신호_종료
 		}
+	}()
+
+	defer lib.S예외처리{M에러: &에러, M함수: func() {
+		select {
+		case <-ch공통_종료:
+			에러 = nil
+			return
+		default:
+		}
+
+		if 에러 != nil &&
+			!strings.Contains(에러.Error(), "connection closed") &&
+			!strings.Contains(에러.Error(), "object closed") {
+			lib.F에러_출력(에러)
+		}
+
+		lib.F조건부_실행(수신_메시지 != nil, 소켓REP_TR수신.S회신Raw, 수신_메시지, lib.JSON, 에러)
+
+		ch종료 <- lib.P신호_종료
 	}}.S실행()
 
 	var 수신값 *lib.S바이트_변환_모음
@@ -208,7 +265,6 @@ func go전달_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 				return nil
 			}
 		default:
-			lib.F실행권한_양보() // Go언어가 for반복문에서 태스트 전환이 잘 안 되는 경우가 있으므로, 수동으로 태스트 전환.
 		}
 	}
 }
@@ -217,9 +273,18 @@ func go전달_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 func go함수_호출_도우미(ch초기화, ch종료 chan lib.T신호) {
 	ch공통_종료 := lib.F공통_종료_채널()
 
+	defer func() {
+		select {
+		case <-ch공통_종료:
+			Ch함수_호출_도우미_종료 <- lib.P신호_종료
+		default:
+		}
+	}()
+
 	defer lib.S예외처리{M함수: func() {
 		select {
 		case <-ch공통_종료:
+			return
 		default:
 			ch종료 <- lib.P신호_종료
 		}
@@ -278,7 +343,7 @@ func f질의값_처리(질의 *lib.S채널_질의_API) {
 	case xt.TR계좌_이름:
 		질의.Ch회신값 <- F계좌_이름(질의.M질의값.(*lib.S질의값_문자열).M문자열)
 	case xt.TR계좌_상세명:
-		질의.Ch회신값 <- F계좌_상세명(질의.M질의값.(*lib.S질의값_문자열).M문자열)
+		F계좌_상세명(질의)
 	case xt.TR계좌_별명:
 		질의.Ch회신값 <- F계좌_별명(질의.M질의값.(*lib.S질의값_문자열).M문자열)
 	case xt.TR코드별_전송_제한:
@@ -301,7 +366,7 @@ func f조회_및_주문_질의_처리(질의값 lib.I질의값) (식별번호 in
 	lib.F조건부_패닉(!F접속됨(), "XingAPI에 접속되어 있지 않습니다.")
 
 	var c데이터 unsafe.Pointer
-	defer lib.F조건부_실행(c데이터 != nil, F메모리_해제, c데이터)
+	defer lib.F조건부_실행(c데이터 != nil, c.F메모리_해제, c데이터)
 
 	var 길이 int
 	연속_조회_여부 := false
@@ -369,8 +434,8 @@ func f조회_및_주문_질의_처리(질의값 lib.I질의값) (식별번호 in
 		c데이터 = unsafe.Pointer(xt.NewT0151InBlock(질의값.(*xt.T0151_현물_일자별_매매일지_질의값)))
 		길이 = xt.SizeT0151InBlock
 	case xt.TR시간_조회_t0167:
-		c데이터 = unsafe.Pointer(c문자열(""))
-		defer F메모리_해제(unsafe.Pointer(c데이터))
+		c데이터 = unsafe.Pointer(c.F2C문자열(""))
+		defer c.F메모리_해제(unsafe.Pointer(c데이터))
 		길이 = 0
 	case xt.TR현물_체결_미체결_조회_t0425:
 		c데이터 = unsafe.Pointer(xt.NewT0425InBlock(질의값.(*xt.T0425_현물_체결_미체결_조회_질의값), 계좌_비밀번호))
@@ -545,19 +610,13 @@ func f접속_처리(서버_구분 xt.T서버_구분) bool {
 }
 
 func F종료_질의_처리(질의 *lib.S채널_질의_API) {
-	F콜백(lib.New콜백_신호(lib.P신호_C32_종료))
+	질의.Ch회신값 <- lib.P신호_OK
+	f콜백_동기식(lib.New콜백_신호(lib.P신호_C32_종료))
 	F실시간_정보_일괄_해지()
 	F로그아웃_및_접속해제()
-	lib.F대기(lib.P3초) // 로그아웃 처리될 시간 부여
-	lib.F공통_종료_채널_닫기()
-	PostQuitMessage(0)
-	DestroyWindow(win32_메시지_윈도우)
+	F소켓_정리() // F공통_종료_채널_닫기() 포함.
+	lib.F대기(lib.P10초)
+	w32.PostQuitMessage(0)
+	w32.DestroyWindow(win32_메시지_윈도우)
 	syscall.FreeLibrary(xing_api_dll)
-	F소켓_정리()
-	lib.F대기(lib.P3초) // 소켓 정리될 시간적 여유 부여.
-
-	select {
-	case 질의.Ch회신값 <- lib.P신호_C32_종료:
-	default:
-	}
 }

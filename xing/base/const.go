@@ -279,77 +279,6 @@ const (
 	P자료형_T8436OutBlock                  = "T8436OutBlock"
 )
 
-// TR 및 응답 종류
-const (
-	TR조회 lib.TR구분 = iota
-	TR주문
-	TR실시간_정보_구독
-	TR실시간_정보_해지
-	TR실시간_정보_일괄_해지
-	TR접속
-	TR접속됨
-	TR접속_해제
-	TR초기화
-	TR종료
-
-	// Xing API에서 사용되는 것들
-	TR서버_이름
-	TR에러_코드
-	TR에러_메시지
-	TR코드별_전송_제한
-	TR계좌_수량
-	TR계좌번호_모음
-	TR계좌_이름
-	TR계좌_상세명
-	TR계좌_별명
-	TR소켓_테스트
-)
-
-func TR구분_String(v lib.TR구분) string {
-	switch v {
-	case TR조회:
-		return "TR조회"
-	case TR주문:
-		return "TR주문"
-	case TR실시간_정보_구독:
-		return "TR실시간_정보_구독"
-	case TR실시간_정보_해지:
-		return "TR실시간_정보_해지"
-	case TR실시간_정보_일괄_해지:
-		return "TR실시간_정보_일괄_해지"
-	case TR접속:
-		return "TR접속"
-	case TR접속됨:
-		return "TR접속됨"
-	case TR접속_해제:
-		return "TR접속_해제"
-	case TR초기화:
-		return "TR초기화"
-	case TR종료:
-		return "TR종료"
-	case TR서버_이름:
-		return "서버_이름"
-	case TR에러_코드:
-		return "에러_코드"
-	case TR에러_메시지:
-		return "에러_메시지"
-	case TR코드별_전송_제한:
-		return "TR코드별_전송_제한"
-	case TR계좌_수량:
-		return "계좌_수량"
-	case TR계좌번호_모음:
-		return "계좌_번호"
-	case TR계좌_이름:
-		return "계좌_이름"
-	case TR계좌_상세명:
-		return "계좌_상세명"
-	case TR소켓_테스트:
-		return "신호"
-	default:
-		return lib.F2문자열("예상하지 못한 M값 : '%v'", v)
-	}
-}
-
 const (
 	TR선물옵션_주문체결내역조회_CFOAQ00600   = "CFOAQ00600"
 	TR선물옵션_정상주문_CFOAT00100       = "CFOAT00100"
@@ -426,6 +355,77 @@ const (
 	RT실시간_뉴스_제목_패킷   = "NWS"
 	RT업종별_투자자별_매매_현황 = "BM_"
 )
+
+// TR 및 응답 종류
+const (
+	TR조회 lib.TR구분 = iota
+	TR주문
+	TR실시간_정보_구독
+	TR실시간_정보_해지
+	TR실시간_정보_일괄_해지
+	TR접속
+	TR접속됨
+	TR접속_해제
+	TR초기화
+	TR종료
+
+	// Xing API에서 사용되는 것들
+	TR서버_이름
+	TR에러_코드
+	TR에러_메시지
+	TR코드별_전송_제한
+	TR계좌_수량
+	TR계좌번호_모음
+	TR계좌_이름
+	TR계좌_상세명
+	TR계좌_별명
+	TR소켓_테스트
+)
+
+func TR구분_String(v lib.TR구분) string {
+	switch v {
+	case TR조회:
+		return "TR조회"
+	case TR주문:
+		return "TR주문"
+	case TR실시간_정보_구독:
+		return "TR실시간_정보_구독"
+	case TR실시간_정보_해지:
+		return "TR실시간_정보_해지"
+	case TR실시간_정보_일괄_해지:
+		return "TR실시간_정보_일괄_해지"
+	case TR접속:
+		return "TR접속"
+	case TR접속됨:
+		return "TR접속됨"
+	case TR접속_해제:
+		return "TR접속_해제"
+	case TR초기화:
+		return "TR초기화"
+	case TR종료:
+		return "TR종료"
+	case TR서버_이름:
+		return "서버_이름"
+	case TR에러_코드:
+		return "에러_코드"
+	case TR에러_메시지:
+		return "에러_메시지"
+	case TR코드별_전송_제한:
+		return "TR코드별_전송_제한"
+	case TR계좌_수량:
+		return "계좌_수량"
+	case TR계좌번호_모음:
+		return "계좌_번호"
+	case TR계좌_이름:
+		return "계좌_이름"
+	case TR계좌_상세명:
+		return "계좌_상세명"
+	case TR소켓_테스트:
+		return "신호"
+	default:
+		return lib.F2문자열("예상하지 못한 M값 : '%v'", v)
+	}
+}
 
 const (
 	P주문_응답_신규_주문 T주문_응답_구분 = iota

@@ -27,17 +27,14 @@ package main
 
 import (
 	"github.com/ghts/ghts/lib"
-	"github.com/ghts/ghts/xing/base"
-	c32 "github.com/ghts/ghts/xing/c32/internal"
+	xt "github.com/ghts/ghts/xing/base"
+	x32 "github.com/ghts/ghts/xing/c32/internal"
 )
 
 func main() {
-	defer c32.F리소스_정리()
-
 	lib.F메모("당분간 main()에서도 테스트 모드로 작동하도록 함.")
-	lib.F메모("코맨드 프롬프트에서 실행 인수로 테스트 모드 여부를 선택할 수 있도록 할 것.")
 
 	lib.F테스트_모드_시작()
-	c32.F초기화(xt.P서버_모의투자)
-	<-lib.F공통_종료_채널()
+	x32.F초기화(xt.P서버_모의투자)
+	x32.F종료_대기()
 }

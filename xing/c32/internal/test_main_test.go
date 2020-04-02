@@ -65,41 +65,54 @@ func f테스트_준비() {
 
 func f테스트_정리() {
 	lib.F테스트_모드_종료()
-	F리소스_정리()
+	f종료_질의_송신()
+	F종료_대기()
 
-	// 'go테스트용_TR콜백_수신' 정리
-	소켓REQ, _ := lib.NewNano소켓REQ(lib.P주소_Xing_C함수_콜백)
-	소켓REQ.S송신(lib.MsgPack, "")
-	소켓REQ.Close()
-
-	lib.F대기(lib.P1초) // go루틴 종료에 필요한 대기 시간
-}
-
-func go테스트용_TR콜백_수신(ch초기화 chan lib.T신호) {
-	소켓REP_TR콜백 := lib.NewNano소켓REP_단순형(lib.P주소_Xing_C함수_콜백)
-	defer 소켓REP_TR콜백.Close()
-
-	ch초기화 <- lib.P신호_초기화
-	ch종료 := lib.F공통_종료_채널()
+	// go테스트용_TR콜백_종료
+	lib.F패닉억제_호출(소켓REP_테스트용_TR콜백.Close)
 
 	for {
-		값, 에러 := 소켓REP_TR콜백.G수신()
+		if lib.F포트_닫힘_확인(lib.P주소_Xing_C함수_콜백) {
+			break
+		}
+	}
+
+	<-Ch테스트용_TR콜백_종료
+
+	lib.F체크포인트()
+}
+
+var 소켓REP_테스트용_TR콜백 lib.I소켓
+var Ch테스트용_TR콜백_종료 = make(chan lib.T신호, 1)
+
+func go테스트용_TR콜백_수신(ch초기화 chan lib.T신호) {
+	ch공통_종료 := lib.F공통_종료_채널()
+	defer func() {
+		select {
+		case <-ch공통_종료:
+			Ch테스트용_TR콜백_종료 <- lib.P신호_종료
+		default:
+		}
+	}()
+
+	소켓REP_테스트용_TR콜백 = lib.NewNano소켓REP_단순형(lib.P주소_Xing_C함수_콜백)
+	defer 소켓REP_테스트용_TR콜백.Close()
+
+	ch초기화 <- lib.P신호_초기화
+
+	for {
+		값, 에러 := 소켓REP_테스트용_TR콜백.G수신()
 		if 에러 != nil {
 			lib.F에러_출력(에러)
 			continue
 		}
 
 		select {
-		case <-ch종료:
+		case <-ch공통_종료:
 			return
 		default:
-			// ok
 		}
 
-		소켓REP_TR콜백.S송신(값.G변환_형식(0), lib.P신호_OK)
+		소켓REP_테스트용_TR콜백.S송신(값.G변환_형식(0), lib.P신호_OK)
 	}
-
-	lib.F메모("프로세스 종료 시 이유를 알 수 없는 메모리 에러 발생")
-
-	lib.F화면_출력_중지()
 }

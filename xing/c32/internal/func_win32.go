@@ -35,7 +35,7 @@ package x32
 
 import (
 	"github.com/ghts/ghts/lib"
-	"golang.org/x/sys/windows"
+	"github.com/ghts/ghts/lib/w32"
 	"syscall"
 	"unsafe"
 )
@@ -44,41 +44,42 @@ func F메시지_윈도우_생성() {
 	lpszClassName, _ := syscall.UTF16PtrFromString("MessageOnlyWindow")
 	타이틀, _ := syscall.UTF16PtrFromString("Simple Window.")
 
-	wcex := WNDCLASSEX{
-		CbSize:        uint32(unsafe.Sizeof(WNDCLASSEX{})),
+	wcex := w32.WNDCLASSEX{
+		CbSize:        uint32(unsafe.Sizeof(w32.WNDCLASSEX{})),
 		LpfnWndProc:   syscall.NewCallback(WndProc),
-		HInstance:     HINSTANCE(xing_api_dll),
+		HInstance:     w32.HINSTANCE(xing_api_dll),
 		LpszClassName: lpszClassName}
 
-	RegisterClassEx(&wcex)
+	w32.RegisterClassEx(&wcex)
 
-	윈도우_핸들 := CreateWindowEx(
+	윈도우_핸들 := w32.CreateWindowEx(
 		0, lpszClassName, 타이틀,
 		0, 0, 0, 0, 0,
-		HWND_MESSAGE, 0, HINSTANCE(xing_api_dll), nil)
+		w32.HWND_MESSAGE, 0, w32.HINSTANCE(xing_api_dll), nil)
 
 	win32_메시지_윈도우 = uintptr(윈도우_핸들)
 }
 
 func F윈도우_메시지_처리() {
-	var 윈도우_메시지 MSG
+	var 윈도우_메시지 w32.MSG
 
 	for {
 		switch {
-		case !PeekMessage(&윈도우_메시지, 0, 0, 0, 1):
+		case !w32.PeekMessage(&윈도우_메시지, 0, 0, 0, 1):
 			return
-		case 윈도우_메시지.Message == WM_QUIT:
+		case 윈도우_메시지.Message == w32.WM_QUIT:
 			lib.F공통_종료_채널_닫기()
 			return
 		}
 
-		DispatchMessage(&윈도우_메시지)
+		w32.DispatchMessage(&윈도우_메시지)
 	}
 }
 
-func WndProc(hWnd HWND, msg uint32, wParam, lParam uintptr) uintptr {
+func WndProc(hWnd w32.HWND, msg uint32, wParam, lParam uintptr) uintptr {
 	switch msg {
 	case XM_DISCONNECT:
+		lib.F체크포인트()
 		OnDisconnected_Go()
 		return TRUE
 	case XM_RECEIVE_DATA:
@@ -113,147 +114,10 @@ func WndProc(hWnd HWND, msg uint32, wParam, lParam uintptr) uintptr {
 	case XM_RECEIVE_REAL_DATA_CHART:
 		OnRealtimeDataChart_Go()
 		return TRUE
-	case WM_DESTROY:
-		PostQuitMessage(0)
+	case w32.WM_DESTROY:
+		w32.PostQuitMessage(0)
 		return TRUE
 	}
 
-	return DefWindowProc(hWnd, msg, wParam, lParam)
-}
-
-// COPIED & MODIFED FROM 'https://github.com/lxn/win'
-
-// Window message constants
-const (
-	WM_DESTROY = 2
-	WM_QUIT    = 18
-)
-
-// Predefined window handles
-const (
-	HWND_MESSAGE = ^HWND(2) // -3
-)
-
-type HANDLE uintptr
-type HWND uintptr
-type HINSTANCE uintptr
-type HMENU uintptr
-type HICON uintptr
-type HCURSOR uintptr
-type HBRUSH uintptr
-type ATOM uint16
-
-type MSG struct {
-	HWnd    HWND
-	Message uint32
-	WParam  uintptr
-	LParam  uintptr
-	Time    uint32
-	Pt      POINT
-}
-
-type POINT struct {
-	X, Y int32
-}
-
-type WNDCLASSEX struct {
-	CbSize        uint32
-	Style         uint32
-	LpfnWndProc   uintptr
-	CbClsExtra    int32
-	CbWndExtra    int32
-	HInstance     HINSTANCE
-	HIcon         HICON
-	HCursor       HCURSOR
-	HbrBackground HBRUSH
-	LpszMenuName  *uint16
-	LpszClassName *uint16
-	HIconSm       HICON
-}
-
-var (
-	libuser32       = windows.NewLazySystemDLL("user32.dll")
-	dispatchMessage = libuser32.NewProc("DispatchMessageW")
-	peekMessage     = libuser32.NewProc("PeekMessageW")
-	registerClassEx = libuser32.NewProc("RegisterClassExW")
-	createWindowEx  = libuser32.NewProc("CreateWindowExW")
-	postQuitMessage = libuser32.NewProc("PostQuitMessage")
-	destroyWindow   = libuser32.NewProc("DestroyWindow")
-	defWindowProc   = libuser32.NewProc("DefWindowProcW")
-)
-
-func PeekMessage(lpMsg *MSG, hWnd HWND, wMsgFilterMin, wMsgFilterMax, wRemoveMsg uint32) bool {
-	ret, _, _ := syscall.Syscall6(peekMessage.Addr(), 5,
-		uintptr(unsafe.Pointer(lpMsg)),
-		uintptr(hWnd),
-		uintptr(wMsgFilterMin),
-		uintptr(wMsgFilterMax),
-		uintptr(wRemoveMsg),
-		0)
-
-	return ret != 0
-}
-
-func DispatchMessage(msg *MSG) uintptr {
-	ret, _, _ := syscall.Syscall(dispatchMessage.Addr(), 1,
-		uintptr(unsafe.Pointer(msg)),
-		0,
-		0)
-
-	return ret
-}
-
-func RegisterClassEx(windowClass *WNDCLASSEX) ATOM {
-	ret, _, _ := syscall.Syscall(registerClassEx.Addr(), 1,
-		uintptr(unsafe.Pointer(windowClass)),
-		0,
-		0)
-
-	return ATOM(ret)
-}
-
-func CreateWindowEx(dwExStyle uint32, lpClassName, lpWindowName *uint16, dwStyle uint32, x, y, nWidth, nHeight int32, hWndParent HWND, hMenu HMENU, hInstance HINSTANCE, lpParam unsafe.Pointer) uintptr {
-	ret, _, _ := syscall.Syscall12(createWindowEx.Addr(), 12,
-		uintptr(dwExStyle),
-		uintptr(unsafe.Pointer(lpClassName)),
-		uintptr(unsafe.Pointer(lpWindowName)),
-		uintptr(dwStyle),
-		uintptr(x),
-		uintptr(y),
-		uintptr(nWidth),
-		uintptr(nHeight),
-		uintptr(hWndParent),
-		uintptr(hMenu),
-		uintptr(hInstance),
-		uintptr(lpParam))
-
-	return uintptr(ret)
-}
-
-func PostQuitMessage(exitCode int32) {
-	syscall.Syscall(postQuitMessage.Addr(), 1,
-		uintptr(exitCode),
-		0,
-		0)
-}
-
-func DestroyWindow(hWnd uintptr) bool {
-	ret, _, _ := syscall.Syscall(destroyWindow.Addr(), 1,
-		hWnd,
-		0,
-		0)
-
-	return ret != 0
-}
-
-func DefWindowProc(hWnd HWND, Msg uint32, wParam, lParam uintptr) uintptr {
-	ret, _, _ := syscall.Syscall6(defWindowProc.Addr(), 4,
-		uintptr(hWnd),
-		uintptr(Msg),
-		wParam,
-		lParam,
-		0,
-		0)
-
-	return ret
+	return w32.DefWindowProc(hWnd, msg, wParam, lParam)
 }

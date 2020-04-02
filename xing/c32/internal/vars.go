@@ -93,6 +93,15 @@ var (
 	Ch수신  = make(chan *mangos.Message, 10000)
 	Ch질의  = make(chan *lib.S채널_질의_API, lib.F조건부_정수(runtime.NumCPU() > 4, runtime.NumCPU(), 4))
 
+	전달_도우미_수량 int
+	콜백_도우미_수량 int
+
+	Ch모니터링_루틴_종료   = make(chan lib.T신호, 1)
+	Ch수신_도우미_종료    = make(chan lib.T신호, 1)
+	Ch전달_도우미_종료    = make(chan lib.T신호, 100)
+	Ch콜백_도우미_종료    = make(chan lib.T신호, 100)
+	Ch함수_호출_도우미_종료 = make(chan lib.T신호, 1)
+
 	TR_수신_중    = lib.New안전한_bool(false)
 	API_초기화_완료 = lib.New안전한_bool(false)
 )

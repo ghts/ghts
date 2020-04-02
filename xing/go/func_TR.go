@@ -1567,11 +1567,15 @@ func F계좌_이름(계좌_번호 string) (계좌_이름 string, 에러 error) {
 	return 계좌_이름, nil
 }
 
+// No mapping for the Unicode character exists in the target multi-byte code page.
 func F계좌_상세명(계좌_번호 string) (계좌_상세명 string, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 계좌_상세명 = "" }}.S실행()
 
+	lib.F체크포인트()
 	회신_메시지 := F질의(lib.New질의값_문자열(xt.TR계좌_상세명, "", 계좌_번호))
+	lib.F체크포인트()
 	계좌_상세명 = lib.F확인(회신_메시지.G해석값(0)).(string)
+	lib.F체크포인트()
 
 	return 계좌_상세명, nil
 }

@@ -33,11 +33,9 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
 package x32
 
-// #cgo CFLAGS: -Wall
-// #include <stdlib.h>
-import "C"
 import (
 	"github.com/ghts/ghts/lib"
+	"github.com/ghts/ghts/lib/c"
 	"github.com/ghts/ghts/xing/base"
 	"gopkg.in/ini.v1"
 	"syscall"
@@ -183,8 +181,8 @@ func F접속(서버_구분 xt.T서버_구분) bool {
 		포트_번호 = 0
 	}
 
-	c서버_이름 := c문자열(서버_이름)
-	defer F메모리_해제(unsafe.Pointer(c서버_이름))
+	c서버_이름 := c.F2C문자열(서버_이름)
+	defer c.F메모리_해제(unsafe.Pointer(c서버_이름))
 
 	cgo잠금.Lock()
 	defer cgo잠금.Unlock()
@@ -239,17 +237,17 @@ func F로그인() (로그인_결과 bool) {
 	섹션 := lib.F확인(cfg파일.GetSection("XingAPI_LogIn_Info")).(*ini.Section)
 
 	키_ID := lib.F확인(섹션.GetKey("ID")).(*ini.Key)
-	c아이디 := c문자열(키_ID.String())
-	defer F메모리_해제(unsafe.Pointer(c아이디))
+	c아이디 := c.F2C문자열(키_ID.String())
+	defer c.F메모리_해제(unsafe.Pointer(c아이디))
 
 	키_PWD := lib.F확인(섹션.GetKey("PWD")).(*ini.Key)
-	c암호 := c문자열(키_PWD.String())
-	defer F메모리_해제(unsafe.Pointer(c암호))
+	c암호 := c.F2C문자열(키_PWD.String())
+	defer c.F메모리_해제(unsafe.Pointer(c암호))
 
 	키_CertPWD := lib.F확인(섹션.GetKey("CertPWD")).(*ini.Key)
 	공인인증서_암호 := lib.F조건부_값(lib.F테스트_모드_실행_중(), "", 키_CertPWD.String()).(string)
-	c공인인증서_암호 := c문자열(공인인증서_암호)
-	defer F메모리_해제(unsafe.Pointer(c공인인증서_암호))
+	c공인인증서_암호 := c.F2C문자열(공인인증서_암호)
+	defer c.F메모리_해제(unsafe.Pointer(c공인인증서_암호))
 
 	계좌_비밀번호 = 키_PWD.String()
 
@@ -301,11 +299,11 @@ func F로그아웃_및_접속해제() (에러 error) {
 func F질의(TR코드 string, c데이터 unsafe.Pointer, 길이 int,
 	연속_조회_여부 bool, 연속키 string, 타임아웃 time.Duration) int {
 
-	cTR코드 := c문자열(TR코드)
-	defer F메모리_해제(unsafe.Pointer(cTR코드))
+	cTR코드 := c.F2C문자열(TR코드)
+	defer c.F메모리_해제(unsafe.Pointer(cTR코드))
 
-	c연속_조회_키 := c문자열(연속키)
-	defer F메모리_해제(unsafe.Pointer(c연속_조회_키))
+	c연속_조회_키 := c.F2C문자열(연속키)
+	defer c.F메모리_해제(unsafe.Pointer(c연속_조회_키))
 
 	cgo잠금.Lock()
 	defer cgo잠금.Unlock()
@@ -328,11 +326,11 @@ func F질의(TR코드 string, c데이터 unsafe.Pointer, 길이 int,
 }
 
 func F실시간_정보_구독(TR코드 string, 전체_종목코드 string, 단위_길이 int) error {
-	cTR코드 := c문자열(TR코드)
-	defer F메모리_해제(unsafe.Pointer(cTR코드))
+	cTR코드 := c.F2C문자열(TR코드)
+	defer c.F메모리_해제(unsafe.Pointer(cTR코드))
 
-	c전체_종목코드 := c문자열(전체_종목코드)
-	defer F메모리_해제(unsafe.Pointer(c전체_종목코드))
+	c전체_종목코드 := c.F2C문자열(전체_종목코드)
+	defer c.F메모리_해제(unsafe.Pointer(c전체_종목코드))
 
 	cgo잠금.Lock()
 	defer cgo잠금.Unlock()
@@ -352,11 +350,11 @@ func F실시간_정보_구독(TR코드 string, 전체_종목코드 string, 단�
 }
 
 func F실시간_정보_해지(TR코드 string, 전체_종목코드 string, 단위_길이 int) error {
-	cTR코드 := c문자열(TR코드)
-	defer F메모리_해제(unsafe.Pointer(cTR코드))
+	cTR코드 := c.F2C문자열(TR코드)
+	defer c.F메모리_해제(unsafe.Pointer(cTR코드))
 
-	c전체_종목코드 := c문자열(전체_종목코드)
-	defer F메모리_해제(unsafe.Pointer(c전체_종목코드))
+	c전체_종목코드 := c.F2C문자열(전체_종목코드)
+	defer c.F메모리_해제(unsafe.Pointer(c전체_종목코드))
 
 	cgo잠금.Lock()
 	defer cgo잠금.Unlock()
@@ -407,8 +405,8 @@ func F계좌_번호(인덱스 int) string {
 	버퍼_초기값 := "            " // 12자리 공백문자열
 	버퍼_길이 := len(버퍼_초기값)
 
-	c버퍼 := c문자열(버퍼_초기값)
-	defer F메모리_해제(unsafe.Pointer(c버퍼))
+	c버퍼 := c.F2C문자열(버퍼_초기값)
+	defer c.F메모리_해제(unsafe.Pointer(c버퍼))
 
 	cgo잠금.Lock()
 	defer cgo잠금.Unlock()
@@ -424,7 +422,7 @@ func F계좌_번호(인덱스 int) string {
 		lib.New에러with출력("F계좌_번호() 호출 결과 FALSE.")
 	}
 
-	return string(bytes.Trim(go바이트_모음(unsafe.Pointer(c버퍼), 버퍼_길이), "\x00"))
+	return string(bytes.Trim(c.F2Go바이트_모음(unsafe.Pointer(c버퍼), 버퍼_길이), "\x00"))
 }
 
 func F계좌번호_모음() []string {
@@ -442,11 +440,11 @@ func F계좌_이름(계좌_번호 string) string {
 	버퍼_초기값 := "                                         "
 	버퍼_길이 := len(버퍼_초기값)
 
-	c버퍼 := c문자열(버퍼_초기값)
-	defer F메모리_해제(unsafe.Pointer(c버퍼))
+	c버퍼 := c.F2C문자열(버퍼_초기값)
+	defer c.F메모리_해제(unsafe.Pointer(c버퍼))
 
-	c계좌번호 := c문자열(계좌_번호)
-	defer F메모리_해제(unsafe.Pointer(c계좌번호))
+	c계좌번호 := c.F2C문자열(계좌_번호)
+	defer c.F메모리_해제(unsafe.Pointer(c계좌번호))
 
 	cgo잠금.Lock()
 	defer cgo잠금.Unlock()
@@ -460,18 +458,23 @@ func F계좌_이름(계좌_번호 string) string {
 		lib.New에러with출력("F계좌_이름() 에러 발생. 에러 코드 : '%v'", 에러_번호)
 	}
 
-	return lib.F2문자열_EUC_KR_공백제거(go바이트_모음(unsafe.Pointer(c버퍼), 버퍼_길이))
+	return lib.F2문자열_EUC_KR_공백제거(c.F2Go바이트_모음(unsafe.Pointer(c버퍼), 버퍼_길이))
 }
 
-func F계좌_상세명(계좌_번호 string) string {
+func F계좌_상세명(질의 *lib.S채널_질의_API) {
+	계좌_번호 := 질의.M질의값.(*lib.S질의값_문자열).M문자열
 	버퍼_초기값 := "                                         "
 	버퍼_길이 := len(버퍼_초기값)
+	c버퍼 := c.F2C문자열(버퍼_초기값)
+	defer c.F메모리_해제(unsafe.Pointer(c버퍼))
 
-	c버퍼 := c문자열(버퍼_초기값)
-	defer F메모리_해제(unsafe.Pointer(c버퍼))
+	c계좌번호 := c.F2C문자열(계좌_번호)
+	defer c.F메모리_해제(unsafe.Pointer(c계좌번호))
 
-	c계좌번호 := c문자열(계좌_번호)
-	defer F메모리_해제(unsafe.Pointer(c계좌번호))
+	lib.F체크포인트(계좌_번호)
+	lib.F체크포인트(c계좌번호)
+	lib.F체크포인트(c.F2Go문자열(unsafe.Pointer(c계좌번호)))
+	lib.F체크포인트(c.F2Go바이트_모음(unsafe.Pointer(c계좌번호), len(계좌_번호)+10))
 
 	cgo잠금.Lock()
 	defer cgo잠금.Unlock()
@@ -482,21 +485,21 @@ func F계좌_상세명(계좌_번호 string) string {
 		uintptr(버퍼_길이))
 
 	if 에러_번호 != 0 {
-		lib.New에러with출력("F계좌_상세명() 에러 발생. 에러 코드 : '%v'", 에러_번호)
+		질의.Ch에러 <- lib.New에러("F계좌_상세명() 에러 발생.\n'%v'", 에러_번호)
 	}
 
-	return lib.F2문자열_EUC_KR_공백제거(go바이트_모음(unsafe.Pointer(c버퍼), 버퍼_길이))
+	질의.Ch회신값 <- lib.F2문자열_EUC_KR_공백제거(c.F2Go바이트_모음(unsafe.Pointer(c버퍼), 버퍼_길이))
 }
 
 func F계좌_별명(계좌_번호 string) string {
 	버퍼_초기값 := "                                                     "
 	버퍼_길이 := len(버퍼_초기값)
 
-	c버퍼 := c문자열(버퍼_초기값)
-	defer F메모리_해제(unsafe.Pointer(c버퍼))
+	c버퍼 := c.F2C문자열(버퍼_초기값)
+	defer c.F메모리_해제(unsafe.Pointer(c버퍼))
 
-	c계좌번호 := c문자열(계좌_번호)
-	defer F메모리_해제(unsafe.Pointer(c계좌번호))
+	c계좌번호 := c.F2C문자열(계좌_번호)
+	defer c.F메모리_해제(unsafe.Pointer(c계좌번호))
 
 	cgo잠금.Lock()
 	defer cgo잠금.Unlock()
@@ -510,13 +513,13 @@ func F계좌_별명(계좌_번호 string) string {
 		lib.New에러with출력("F계좌_별명() 에러 발생. 에러 코드 : '%v'", 에러_번호)
 	}
 
-	return lib.F2문자열_EUC_KR_공백제거(go바이트_모음(unsafe.Pointer(c버퍼), 버퍼_길이))
+	return lib.F2문자열_EUC_KR_공백제거(c.F2Go바이트_모음(unsafe.Pointer(c버퍼), 버퍼_길이))
 }
 
 func F서버_이름() string {
 	버퍼 := "                                                   "
-	c버퍼 := c문자열(버퍼)
-	defer F메모리_해제(unsafe.Pointer(c버퍼))
+	c버퍼 := c.F2C문자열(버퍼)
+	defer c.F메모리_해제(unsafe.Pointer(c버퍼))
 
 	cgo잠금.Lock()
 	defer cgo잠금.Unlock()
@@ -529,7 +532,7 @@ func F서버_이름() string {
 		lib.New에러with출력("F서버_이름() 에러 발생. 에러 코드 : '%v'", 에러_번호)
 	}
 
-	return lib.F2문자열_EUC_KR_공백제거(go바이트_모음(unsafe.Pointer(c버퍼), len(버퍼)))
+	return lib.F2문자열_EUC_KR_공백제거(c.F2Go바이트_모음(unsafe.Pointer(c버퍼), len(버퍼)))
 }
 
 func F에러_코드() int {
@@ -554,8 +557,8 @@ func F에러_메시지(에러_코드 int) string {
 	버퍼 := go버퍼.String()
 	버퍼_길이 := len(버퍼)
 
-	c버퍼 := c문자열(버퍼)
-	defer F메모리_해제(unsafe.Pointer(c버퍼))
+	c버퍼 := c.F2C문자열(버퍼)
+	defer c.F메모리_해제(unsafe.Pointer(c버퍼))
 
 	cgo잠금.Lock()
 	defer cgo잠금.Unlock()
@@ -572,7 +575,7 @@ func F에러_메시지(에러_코드 int) string {
 		return ""
 	}
 
-	return lib.F2문자열_EUC_KR_공백제거(go바이트_모음(unsafe.Pointer(c버퍼), int(에러_메시지_길이)))
+	return lib.F2문자열_EUC_KR_공백제거(c.F2Go바이트_모음(unsafe.Pointer(c버퍼), int(에러_메시지_길이)))
 }
 
 func TR코드별_전송_제한(TR코드_모음 []string) (정보_모음 *xt.TR코드별_전송_제한_정보_모음) {
@@ -594,8 +597,8 @@ func TR코드별_전송_제한(TR코드_모음 []string) (정보_모음 *xt.TR�
 }
 
 func F초당_TR쿼터(TR코드 string) int {
-	cTR코드 := c문자열(TR코드)
-	defer F메모리_해제(unsafe.Pointer(cTR코드))
+	cTR코드 := c.F2C문자열(TR코드)
+	defer c.F메모리_해제(unsafe.Pointer(cTR코드))
 
 	cgo잠금.Lock()
 	defer cgo잠금.Unlock()
@@ -612,8 +615,8 @@ func F초당_TR쿼터(TR코드 string) int {
 }
 
 func F초당_TR쿼터_역수(TR코드 string) int {
-	cTR코드 := c문자열(TR코드)
-	defer F메모리_해제(unsafe.Pointer(cTR코드))
+	cTR코드 := c.F2C문자열(TR코드)
+	defer c.F메모리_해제(unsafe.Pointer(cTR코드))
 
 	cgo잠금.Lock()
 	defer cgo잠금.Unlock()
@@ -630,8 +633,8 @@ func F초당_TR쿼터_역수(TR코드 string) int {
 }
 
 func F10분당_TR쿼터(TR코드 string) int {
-	cTR코드 := c문자열(TR코드)
-	defer F메모리_해제(unsafe.Pointer(cTR코드))
+	cTR코드 := c.F2C문자열(TR코드)
+	defer c.F메모리_해제(unsafe.Pointer(cTR코드))
 
 	cgo잠금.Lock()
 	defer cgo잠금.Unlock()
@@ -648,8 +651,8 @@ func F10분당_TR쿼터(TR코드 string) int {
 }
 
 func F10분간_요청한_TR수량(TR코드 string) int {
-	cTR코드 := c문자열(TR코드)
-	defer F메모리_해제(unsafe.Pointer(cTR코드))
+	cTR코드 := c.F2C문자열(TR코드)
+	defer c.F메모리_해제(unsafe.Pointer(cTR코드))
 
 	cgo잠금.Lock()
 	defer cgo잠금.Unlock()
@@ -705,23 +708,4 @@ func F압축_해제(압축된_원본_데이터 unsafe.Pointer, 버퍼 *byte, 원
 	}
 
 	return int(압축_해제된_데이터_길이)
-}
-
-func c문자열(go문자열 string) *C.char {
-	return C.CString(go문자열)
-}
-
-func go문자열(c문자열_포인터 unsafe.Pointer) string {
-	return C.GoString((*C.char)(c문자열_포인터))
-}
-
-func go바이트_모음(c데이터 unsafe.Pointer, 길이 int) []byte {
-	return C.GoBytes(c데이터, C.int(길이))
-}
-
-func F메모리_해제(포인터 unsafe.Pointer) {
-	cgo잠금.Lock()
-	defer cgo잠금.Unlock()
-
-	C.free(포인터)
 }

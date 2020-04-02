@@ -107,7 +107,7 @@ func f초기화_서버_접속(서버_구분 xt.T서버_구분) (에러 error) {
 	return nil
 }
 
-func F리소스_정리() {
+func f종료_질의_송신() {
 	defer lib.S예외처리{}.S실행()
 
 	질의 := new(lib.S채널_질의_API)
@@ -117,20 +117,40 @@ func F리소스_정리() {
 
 	Ch질의 <- 질의
 
-	lib.F체크포인트()
-
-	ch타임아웃 := time.After(lib.P20초)
-
 	select {
 	case <-질의.Ch회신값:
 	case 에러 := <-질의.Ch에러:
 		lib.F체크포인트(에러)
-	case <-ch타임아웃:
-		lib.F체크포인트("종료 타임아웃")
 	}
 }
 
+func F종료_대기() {
+	lib.F체크포인트()
+	<-Ch모니터링_루틴_종료
+	lib.F체크포인트()
+	<-Ch수신_도우미_종료
+	lib.F체크포인트()
+	<-Ch함수_호출_도우미_종료
+	lib.F체크포인트()
+
+	for i := 0; i < 전달_도우미_수량; i++ {
+		lib.F체크포인트(i)
+		<-Ch전달_도우미_종료
+	}
+
+	for i := 0; i < 콜백_도우미_수량; i++ {
+		lib.F체크포인트(i)
+		<-Ch콜백_도우미_종료
+	}
+
+	lib.F체크포인트()
+
+	lib.F메모("nanomsg mangos가 제대로 정리되지 않은 상태에서 강제 종료되면서 에러 메시지 발생.")
+}
+
 func F소켓_정리() error {
+	lib.F공통_종료_채널_닫기()
+
 	소켓REQ_저장소.S정리()
 
 	lib.F패닉억제_호출(소켓REP_TR수신.Close)
