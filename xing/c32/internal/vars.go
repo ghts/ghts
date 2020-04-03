@@ -46,8 +46,8 @@ import (
 // 전역 변수는 항상 동시 액세스로 인한 오류의 위험이 있어서 한 군데 몰아서 관리함.
 
 var (
-	xing_api_dll  syscall.Handle
-	win32_메시지_윈도우 uintptr
+	xing_api_dll syscall.Handle
+	메시지_윈도우      uintptr
 
 	// Xing API 함수 포인터
 	etkConnect              uintptr

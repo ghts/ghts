@@ -192,7 +192,7 @@ func F접속(서버_구분 xt.T서버_구분) error {
 	마이너스_일 := -1
 
 	참거짓, _, 에러_번호 := syscall.Syscall6(etkConnect, 6,
-		win32_메시지_윈도우,
+		메시지_윈도우,
 		uintptr(unsafe.Pointer(c서버_이름)),
 		uintptr(포트_번호),
 		WM_USER,
@@ -271,7 +271,7 @@ func F로그인() (에러 error) {
 	defer api_호출_잠금.Unlock()
 
 	참거짓, _, 에러_번호 := syscall.Syscall6(etkLogin, 6,
-		win32_메시지_윈도우,
+		메시지_윈도우,
 		uintptr(unsafe.Pointer(c아이디)),
 		uintptr(unsafe.Pointer(c암호)),
 		uintptr(unsafe.Pointer(c공인인증서_암호)),
@@ -295,7 +295,7 @@ func F로그아웃_및_접속해제() (에러 error) {
 	defer api_호출_잠금.Unlock()
 
 	_, _, 에러_번호 := syscall.Syscall(etkLogout, 1,
-		win32_메시지_윈도우,
+		메시지_윈도우,
 		0, 0)
 
 	if 에러_번호 != 0 {
@@ -326,7 +326,7 @@ func F질의(TR코드 string, c데이터 unsafe.Pointer, 길이 int,
 	defer api_호출_잠금.Unlock()
 
 	질의ID, _, 에러_번호 := syscall.Syscall9(etkRequest, 7,
-		win32_메시지_윈도우,
+		메시지_윈도우,
 		uintptr(unsafe.Pointer(cTR코드)),
 		uintptr(c데이터),
 		uintptr(길이),
@@ -353,7 +353,7 @@ func F실시간_정보_구독(TR코드 string, 전체_종목코드 string, 단�
 	defer api_호출_잠금.Unlock()
 
 	참거짓, _, 에러_번호 := syscall.Syscall6(etkAdviseRealData, 4,
-		win32_메시지_윈도우,
+		메시지_윈도우,
 		uintptr(unsafe.Pointer(cTR코드)),
 		uintptr(unsafe.Pointer(c전체_종목코드)),
 		uintptr(단위_길이),
@@ -377,7 +377,7 @@ func F실시간_정보_해지(TR코드 string, 전체_종목코드 string, 단�
 	defer api_호출_잠금.Unlock()
 
 	참거짓, _, 에러_번호 := syscall.Syscall6(etkUnadviseRealData, 4,
-		win32_메시지_윈도우,
+		메시지_윈도우,
 		uintptr(unsafe.Pointer(cTR코드)),
 		uintptr(unsafe.Pointer(c전체_종목코드)),
 		uintptr(단위_길이),
@@ -406,7 +406,7 @@ func f실시간_정보_일괄_해지() error {
 	defer api_호출_잠금.Unlock()
 
 	참거짓, _, 에러_번호 := syscall.Syscall(etkUnadviseWindow, 1,
-		win32_메시지_윈도우,
+		메시지_윈도우,
 		0, 0)
 
 	switch {

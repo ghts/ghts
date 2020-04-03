@@ -7,10 +7,10 @@ import (
 	"unsafe"
 )
 
-func PeekMessage(lpMsg *MSG, hWnd HWND, wMsgFilterMin, wMsgFilterMax, wRemoveMsg uint32) bool {
+func PeekMessage(lpMsg *MSG, hWnd uintptr, wMsgFilterMin, wMsgFilterMax, wRemoveMsg uint32) bool {
 	ret, _, _ := syscall.Syscall6(peekMessage.Addr(), 5,
 		uintptr(unsafe.Pointer(lpMsg)),
-		uintptr(hWnd),
+		hWnd,
 		uintptr(wMsgFilterMin),
 		uintptr(wMsgFilterMax),
 		uintptr(wRemoveMsg),

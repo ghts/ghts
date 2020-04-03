@@ -45,8 +45,6 @@ func F메시지_윈도우_생성() {
 	타이틀, _ := syscall.UTF16PtrFromString("Simple Window.")
 	hInstance := w32.GetModuleHandle(nil)
 
-	lib.F체크포인트(hInstance)
-
 	wcex := w32.WNDCLASSEX{
 		CbSize:        uint32(unsafe.Sizeof(w32.WNDCLASSEX{})),
 		LpfnWndProc:   syscall.NewCallback(WndProc),
@@ -58,9 +56,9 @@ func F메시지_윈도우_생성() {
 	윈도우_핸들 := w32.CreateWindowEx(
 		0, lpszClassName, 타이틀,
 		0, 0, 0, 0, 0,
-		w32.HWND_MESSAGE, 0, w32.HINSTANCE(xing_api_dll), nil)
+		w32.HWND_MESSAGE, 0,hInstance, nil)
 
-	win32_메시지_윈도우 = uintptr(윈도우_핸들)
+	메시지_윈도우 = uintptr(윈도우_핸들)
 }
 
 func F윈도우_메시지_처리() {

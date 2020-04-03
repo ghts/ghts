@@ -627,6 +627,6 @@ func F종료_질의_처리(질의 *lib.S채널_질의_API) {
 	F소켓_정리() // F공통_종료_채널_닫기() 포함.
 	lib.F대기(lib.P3초)
 	w32.PostQuitMessage(0)
-	w32.DestroyWindow(win32_메시지_윈도우)
+	w32.DestroyWindow(메시지_윈도우)
 	syscall.FreeLibrary(xing_api_dll)
 }
