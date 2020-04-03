@@ -64,7 +64,7 @@ func f초기화_서버_접속(서버_구분 xt.T서버_구분) (에러 error) {
 	lib.F조건부_패닉(!lib.F인터넷에_접속됨(), "서버 접속이 불가 : 인터넷 접속을 확인하십시오.")
 
 	질의 := new(lib.S채널_질의_API)
-	질의.M질의값 =  lib.New질의값_정수(lib.TR접속, "", int(서버_구분))
+	질의.M질의값 = lib.New질의값_정수(lib.TR접속, "", int(서버_구분))
 	질의.Ch회신값 = make(chan interface{})
 	질의.Ch에러 = make(chan error)
 

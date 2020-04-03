@@ -31,18 +31,26 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package x32
+#include <windows.h>
 
-import (
-	"github.com/ghts/ghts/lib"
+void *XingApiDll();
+void FreeXingApiDll();
+void GetAcctDetailName(void *AccountNo, void *Buffer, int BufferSize);
 
-	"testing"
-)
-
-func TestC컴파일러_의존성_확인(t *testing.T) {
-	t.Parallel()
-
-	lib.F테스트_참임(t,
-		lib.F파일_존재함(`C:\Rtools\mingw_32\bin\gcc.exe`) ||
-			lib.F파일_존재함(`C:\Rtools\mingw32\bin\gcc.exe`))
-}
+//------------------------------------------------------------------------------
+// GCC를 사용하기 위해서 필요한 부분.
+//------------------------------------------------------------------------------
+//#ifndef MSGFLT_ALLOW
+//
+//typedef struct tagCHANGEFILTERSTRUCT {
+//	DWORD cbSize;
+//	DWORD ExtStatus;
+//} CHANGEFILTERSTRUCT, *PCHANGEFILTERSTRUCT;
+//
+//typedef BOOL WINAPI ChangeWindowMessageFilterEx(HWND hWnd, UINT message, DWORD action, PCHANGEFILTERSTRUCT pChangeFilterStruct);
+//
+//const DWORD MSGFLT_ALLOW = 1;
+//const DWORD MSGFLT_DISALLOW = 2;
+//const DWORD MSGFLT_RESET = 0;
+//#endif
+//------------------------------------------------------------------------------

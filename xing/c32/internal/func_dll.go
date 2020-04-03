@@ -33,6 +33,8 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
 package x32
 
+// #include "func_C.h"
+import "C"
 import (
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/lib/c"
@@ -69,8 +71,9 @@ func f초기화_XingAPI() {
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
-	xing_api_dll, 에러 := syscall.LoadLibrary("xingAPI.dll")
-	lib.F확인(에러)
+	xing_api_dll = syscall.Handle(uintptr(C.XingApiDll()))
+	//xing_api_dll, 에러 := syscall.LoadLibrary("xingAPI.dll")
+	//lib.F확인(에러)
 
 	// 원래 디렉토리로 이동
 	lib.F확인(os.Chdir(원래_디렉토리))
@@ -112,8 +115,9 @@ func f초기화_XingAPI() {
 	etkGetAccountName, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_GetAccountName")
 	lib.F확인(에러)
 
-	etkGetAccountDetailName, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_GetAcctDetailName")
-	lib.F확인(에러)
+	// syscall 방식은 에러 발생. cgo 방식은 정상 작동.
+	//etkGetAccountDetailName, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_GetAcctDetailName")
+	//lib.F확인(에러)
 
 	etkGetAccountNickName, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_GetAcctNickname")
 	lib.F확인(에러)
@@ -302,7 +306,7 @@ func F로그아웃_및_접속해제() (에러 error) {
 		return lib.New에러with출력("로그아웃 에러 : '%v'", 에러_번호)
 	}
 
-	lib.F메모("ETK_Disconnect() 에러 발생.")
+	lib.F메모("ETK_Disconnect() 에러 발생. syscall, cgo 둘 다 마찬가지.")
 
 	//_, _, 에러_번호 = syscall.Syscall(etkDisconnect, 0, 0, 0,0)
 	//
@@ -516,40 +520,24 @@ func F계좌_이름(질의 *lib.S채널_질의_API) {
 }
 
 func F계좌_상세명(질의 *lib.S채널_질의_API) {
-	var 버퍼_배열 [41]byte // 버퍼 길이 41로 고정
-	버퍼 := 버퍼_배열[:]     // 배열 -> 슬라이스
-	버퍼_길이 := len(버퍼)
-	공백_문자_바이트 := []byte(" ")[0]
-
-	for i := 0; i < 버퍼_길이; i++ {
-		버퍼[i] = 공백_문자_바이트
-	}
+	defer lib.S예외처리{M함수: func() {
+		질의.Ch에러 <- lib.New에러("F계좌_상세명() 에러 발생.")
+	}}.S실행()
 
 	계좌_번호 := 질의.M질의값.(*lib.S질의값_문자열).M문자열
 	c계좌번호 := c.F2C문자열(계좌_번호)
 	defer c.F메모리_해제(unsafe.Pointer(c계좌번호))
 
-	// 유니코드 매핑 에러가 발생해서, 메모리 내용을 확인하는 중.
-	lib.F체크포인트(계좌_번호)
-	lib.F체크포인트(*c계좌번호)
-	lib.F체크포인트(c.F2Go바이트_모음(unsafe.Pointer(c계좌번호), len(계좌_번호)+10))
+	var 버퍼_배열 [41]byte // 버퍼 길이 41로 고정
+	버퍼_길이 := len(버퍼_배열)
 
-	api_호출_잠금.Lock()
-	defer api_호출_잠금.Unlock()
+	C.GetAcctDetailName(
+		unsafe.Pointer(c계좌번호),
+		unsafe.Pointer(&버퍼_배열[0]),
+		C.int(버퍼_길이))
 
-	_, _, 에러_번호 := syscall.Syscall(etkGetAccountDetailName, 3,
-		uintptr(unsafe.Pointer(c계좌번호)),
-		uintptr(unsafe.Pointer(&버퍼[0])),
-		uintptr(버퍼_길이))
-
-	lib.F체크포인트(uintptr(에러_번호), 에러_번호.Error())
-
-	switch 에러_번호 {
-	case 0:
-		질의.Ch회신값 <- lib.F2문자열_EUC_KR_공백제거(c.F2Go바이트_모음(unsafe.Pointer(&버퍼[0]), 버퍼_길이))
-	default:
-		질의.Ch에러 <- lib.New에러("F계좌_상세명() 에러 발생.\n'%v'", 에러_번호)
-	}
+	계좌_상세명 := lib.F2문자열_EUC_KR_공백제거(버퍼_배열[:])
+	질의.Ch회신값 <- 계좌_상세명
 }
 
 func F계좌_별명(질의 *lib.S채널_질의_API) {
@@ -775,4 +763,8 @@ func F압축_해제(압축된_원본_데이터 unsafe.Pointer, 버퍼 *byte, 원
 	}
 
 	return int(압축_해제된_데이터_길이)
+}
+
+func FreeLibrary() {
+	C.FreeXingApiDll()
 }

@@ -56,7 +56,7 @@ func F메시지_윈도우_생성() {
 	윈도우_핸들 := w32.CreateWindowEx(
 		0, lpszClassName, 타이틀,
 		0, 0, 0, 0, 0,
-		w32.HWND_MESSAGE, 0,hInstance, nil)
+		w32.HWND_MESSAGE, 0, hInstance, nil)
 
 	메시지_윈도우 = uintptr(윈도우_핸들)
 }

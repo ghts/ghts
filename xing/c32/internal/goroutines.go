@@ -41,7 +41,6 @@ import (
 	"go.nanomsg.org/mangos/v3"
 	"runtime"
 	"strings"
-	"syscall"
 	"unsafe"
 )
 
@@ -358,14 +357,14 @@ func f질의값_처리(질의 *lib.S채널_질의_API) {
 
 func F조회_및_주문_질의_처리(질의 *lib.S채널_질의_API) { // 질의값 lib.I질의값) (식별번호 int, 에러 error) {
 	접속됨, 에러 := f접속됨()
-	
+
 	switch {
 	case 에러 != nil:
 		질의.Ch에러 <- 에러
 		return
 	case !접속됨:
 		질의.Ch에러 <- lib.New에러("F조회_및_주문_질의_처리() : XingAPI에 접속되어 있지 않습니다.")
-		return 
+		return
 	}
 
 	var c데이터 unsafe.Pointer
@@ -594,9 +593,9 @@ func F실시간_정보_구독_해지_처리(질의 *lib.S채널_질의_API) {
 		전체_종목코드 = ""
 		단위_길이 = 0
 	}
-	
+
 	에러 := 함수(질의값.TR코드(), 전체_종목코드, 단위_길이)
-	
+
 	if 에러 == nil {
 		질의.Ch회신값 <- lib.P신호_OK
 	} else {
@@ -606,7 +605,7 @@ func F실시간_정보_구독_해지_처리(질의 *lib.S채널_질의_API) {
 
 func F접속_처리(질의 *lib.S채널_질의_API) {
 	서버_구분 := xt.T서버_구분(질의.M질의값.(*lib.S질의값_정수).M정수값)
-	
+
 	접속_처리_잠금.Lock()
 	defer 접속_처리_잠금.Unlock()
 
@@ -628,5 +627,5 @@ func F종료_질의_처리(질의 *lib.S채널_질의_API) {
 	lib.F대기(lib.P3초)
 	w32.PostQuitMessage(0)
 	w32.DestroyWindow(메시지_윈도우)
-	syscall.FreeLibrary(xing_api_dll)
+	FreeLibrary() //syscall.FreeLibrary(xing_api_dll)
 }

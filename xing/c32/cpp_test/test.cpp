@@ -68,7 +68,7 @@ BOOL Initialization() {
     std::cout<<"CreateMessageWindow()\n";
 
     // X-ing API 초기화
-    if (g_iXingAPI.Init() == FALSE) {
+    if (g_iXingAPI.Init("C:\\eBEST\\xingAPI") == FALSE) {
         std::cout<<"Xing API initialization failed.\n";
         return FALSE;
     }

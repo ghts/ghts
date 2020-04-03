@@ -31,18 +31,46 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package x32
+#include <windows.h>
+#include <stdio.h>
+//#include "func_C.h"
 
-import (
-	"github.com/ghts/ghts/lib"
+typedef void (__stdcall *ETK_GetAcctDetailName)(const char* pszAcc, char* pszAccName, int nAccNameSize);
 
-	"testing"
-)
+HMODULE hModule = NULL;
+ETK_GetAcctDetailName etkGetAcctDetailName = NULL;
 
-func TestC컴파일러_의존성_확인(t *testing.T) {
-	t.Parallel()
+void *XingApiDll() {
+    if (hModule == NULL) {
+        hModule = LoadLibrary(TEXT("XingAPI.dll"));
+    }
 
-	lib.F테스트_참임(t,
-		lib.F파일_존재함(`C:\Rtools\mingw_32\bin\gcc.exe`) ||
-			lib.F파일_존재함(`C:\Rtools\mingw32\bin\gcc.exe`))
+    return (void *)hModule;
+}
+
+void FreeXingApiDll() {
+    if (hModule != NULL) {
+        FreeLibrary(hModule);
+    }
+}
+
+BOOL GetAcctDetailName(void *AccountNo, void *Buffer, int BufferSize) {
+    memset(Buffer, 0, BufferSize);
+
+    if (BufferSize < 41) {
+        printf("C.GetAcctDetailName() : BufferSize too small. %d\n", BufferSize);
+        return FALSE;
+    }
+
+    if (etkGetAcctDetailName == NULL) {
+        FARPROC proc = GetProcAddress(hModule, "ETK_GetAcctDetailName");
+        if (proc == NULL) {
+            printf("'ETK_GetAcctDetailName' not found.");
+            return FALSE;
+        }
+
+        etkGetAcctDetailName = (ETK_GetAcctDetailName)(proc);
+    }
+
+    etkGetAcctDetailName((LPCTSTR)AccountNo, (LPSTR)Buffer, BufferSize);
 }
