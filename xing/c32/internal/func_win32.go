@@ -68,7 +68,7 @@ func F윈도우_메시지_처리() {
 		case !w32.PeekMessage(&윈도우_메시지, 0, 0, 0, 1):
 			return
 		case 윈도우_메시지.Message == w32.WM_QUIT:
-			lib.F공통_종료_채널_닫기()
+			f종료_질의_송신()
 			return
 		}
 

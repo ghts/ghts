@@ -35,12 +35,8 @@ package x32
 
 import (
 	"github.com/ghts/ghts/lib"
-	"go.nanomsg.org/mangos/v3"
-
 	"testing"
 )
-
-var 소켓REP_테스트용_TR수신, 소켓SUB_테스트용_콜백, 소켓SUB_테스트용_실시간정보 mangos.Socket
 
 func TestP접속됨(t *testing.T) {
 	t.Parallel()
@@ -55,34 +51,15 @@ func TestP접속됨(t *testing.T) {
 	defer 소켓REQ.Close()
 
 	질의값 := lib.New질의값_기본형(lib.TR접속됨, "")
+
 	응답 := 소켓REQ.G질의_응답_검사(lib.P변환형식_기본값, 질의값)
 	lib.F테스트_에러없음(t, 응답.G에러())
 	lib.F테스트_같음(t, 응답.G수량(), 1)
-	lib.F테스트_같음(t, 응답.G해석값_단순형(0).(bool), F접속됨())
-}
 
-// 초기화 중 접속이 되므로,개발 과정에서만 사용됨.
-//func TestP접속(t *testing.T) {
-//	소켓_질의, 에러 := lib.New소켓_질의(lib.P주소_Xing_C함수_호출, lib.F임의_변환_형식(), lib.P30초)
-//	lib.F테스트_에러없음(t, 에러)
-//
-//	질의값 := xt.New호출_인수_기본형(xt.P함수_접속)
-//	응답 := 소켓_질의.S질의(질의값).G응답()
-//	lib.F테스트_에러없음(t, 응답.G에러())
-//	lib.F테스트_같음(t, 응답.G수량(), 1)
-//
-//	해석값, 에러 := 응답.G해석값(0)
-//	lib.F테스트_에러없음(t, 에러)
-//
-//	switch 해석값.(type) {
-//	case bool:
-//		var 로그인_됨 bool
-//		lib.F테스트_에러없음(t, 응답.G값(0, &로그인_됨))
-//		lib.F테스트_참임(t, 로그인_됨)
-//	case error:
-//		var 에러 error
-//		lib.F테스트_에러없음(t, 응답.G값(0, &에러))
-//		lib.F에러_출력(에러)
-//		t.Fail()
-//	}
-//}
+	접속됨, 에러 := f접속됨()
+	lib.F테스트_에러없음(t, 에러)
+
+	참거짓, ok := 응답.G해석값_단순형(0).(bool)
+	lib.F테스트_참임(t, ok)
+	lib.F테스트_같음(t, 참거짓, 접속됨)
+}

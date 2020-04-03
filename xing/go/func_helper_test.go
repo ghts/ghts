@@ -76,6 +76,7 @@ func TestF계좌_관련_함수(t *testing.T) {
 		lib.F테스트_에러없음(t, 에러)
 		lib.F테스트_참임(t, len(계좌_이름) > 0)
 
+		lib.F메모("F계좌_상세명() 에러 발생. 'No mapping for the Unicode character exists in the target multi-byte code page.'")
 		계좌_상세명, 에러 := F계좌_상세명(계좌_번호)
 		lib.F테스트_에러없음(t, 에러)
 		lib.F테스트_참임(t, len(계좌_상세명) > 0)

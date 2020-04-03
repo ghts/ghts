@@ -85,8 +85,8 @@ var (
 		return lib.NewNano소켓REQ_단순형(lib.P주소_Xing_C함수_콜백, lib.P30초)
 	})
 
-	접속_처리_잠금 sync.Mutex
-	cgo잠금    sync.Mutex
+	접속_처리_잠금  sync.Mutex
+	api_호출_잠금 sync.Mutex
 
 	ch로그인 = make(chan bool, 1)
 	ch콜백  = make(chan lib.I콜백, 100)

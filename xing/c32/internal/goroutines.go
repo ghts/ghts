@@ -260,7 +260,7 @@ func go전달_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 			case 회신값 := <-질의.Ch회신값:
 				소켓REP_TR수신.S회신Raw(수신_메시지, 수신값.G변환_형식(0), 회신값)
 			case 에러 := <-질의.Ch에러:
-				소켓REP_TR수신.S회신Raw(수신_메시지, lib.JSON, lib.New에러with출력(에러))
+				소켓REP_TR수신.S회신Raw(수신_메시지, lib.JSON, 에러)
 			case <-ch공통_종료:
 				return nil
 			}
@@ -317,53 +317,56 @@ func f질의값_처리(질의 *lib.S채널_질의_API) {
 
 	switch 질의.M질의값.TR구분() {
 	case xt.TR조회, xt.TR주문:
-		식별번호 := lib.F확인(f조회_및_주문_질의_처리(질의.M질의값)).(int)
-		질의.Ch회신값 <- 식별번호
+		F조회_및_주문_질의_처리(질의)
 	case xt.TR실시간_정보_구독, xt.TR실시간_정보_해지:
-		lib.F확인(f실시간_정보_구독_해지_처리(질의.M질의값))
-		질의.Ch회신값 <- lib.P신호_OK
+		F실시간_정보_구독_해지_처리(질의)
 	case xt.TR실시간_정보_일괄_해지:
-		lib.F확인(F실시간_정보_일괄_해지())
-		질의.Ch회신값 <- lib.P신호_OK
+		F실시간_정보_일괄_해지(질의)
 	case xt.TR접속:
-		서버_구분 := xt.T서버_구분(질의.M질의값.(*lib.S질의값_정수).M정수값)
-		질의.Ch회신값 <- f접속_처리(서버_구분)
+		F접속_처리(질의)
 	case xt.TR접속됨:
-		질의.Ch회신값 <- F접속됨()
+		F접속됨(질의)
 	case xt.TR서버_이름:
-		질의.Ch회신값 <- F서버_이름()
+		F서버_이름(질의)
 	case xt.TR에러_코드:
-		질의.Ch회신값 <- F에러_코드()
+		F에러_코드(질의)
 	case xt.TR에러_메시지:
-		질의.Ch회신값 <- F에러_메시지(질의.M질의값.(*lib.S질의값_정수).M정수값)
+		F에러_메시지(질의)
 	case xt.TR계좌_수량:
-		질의.Ch회신값 <- F계좌_수량()
+		F계좌_수량(질의)
 	case xt.TR계좌번호_모음:
-		질의.Ch회신값 <- F계좌번호_모음()
+		F계좌번호_모음(질의)
 	case xt.TR계좌_이름:
-		질의.Ch회신값 <- F계좌_이름(질의.M질의값.(*lib.S질의값_문자열).M문자열)
+		F계좌_이름(질의)
 	case xt.TR계좌_상세명:
 		F계좌_상세명(질의)
 	case xt.TR계좌_별명:
-		질의.Ch회신값 <- F계좌_별명(질의.M질의값.(*lib.S질의값_문자열).M문자열)
+		F계좌_별명(질의)
 	case xt.TR코드별_전송_제한:
-		질의.Ch회신값 <- TR코드별_전송_제한(질의.M질의값.(*lib.S질의값_문자열_모음).M문자열_모음)
+		TR코드별_전송_제한(질의)
 	case xt.TR소켓_테스트:
 		질의.Ch회신값 <- lib.P신호_OK
 	case xt.TR종료:
 		F종료_질의_처리(질의)
-	case xt.TR초기화:
-		f초기화_XingAPI() // 모든 API 액세스를 단일 스레드에서 하기 위해서 여기에서 API 초기화를 실행함.
-		F메시지_윈도우_생성()
+	//case xt.TR초기화:
+	//	f초기화_XingAPI() // 모든 API 액세스를 단일 스레드에서 하기 위해서 여기에서 API 초기화를 실행함.
+	//	F메시지_윈도우_생성()
 	default:
 		panic(lib.New에러("예상하지 못한 TR구분값 : '%v'", int(질의.M질의값.TR구분())))
 	}
 }
 
-func f조회_및_주문_질의_처리(질의값 lib.I질의값) (식별번호 int, 에러 error) {
-	defer lib.S예외처리{M에러: &에러, M함수: func() { 식별번호 = 0 }}.S실행()
-
-	lib.F조건부_패닉(!F접속됨(), "XingAPI에 접속되어 있지 않습니다.")
+func F조회_및_주문_질의_처리(질의 *lib.S채널_질의_API) { // 질의값 lib.I질의값) (식별번호 int, 에러 error) {
+	접속됨, 에러 := f접속됨()
+	
+	switch {
+	case 에러 != nil:
+		질의.Ch에러 <- 에러
+		return
+	case !접속됨:
+		질의.Ch에러 <- lib.New에러("F조회_및_주문_질의_처리() : XingAPI에 접속되어 있지 않습니다.")
+		return 
+	}
 
 	var c데이터 unsafe.Pointer
 	defer lib.F조건부_실행(c데이터 != nil, c.F메모리_해제, c데이터)
@@ -371,6 +374,7 @@ func f조회_및_주문_질의_처리(질의값 lib.I질의값) (식별번호 in
 	var 길이 int
 	연속_조회_여부 := false
 	연속_조회_키 := ""
+	질의값 := 질의.M질의값
 	TR코드 := 질의값.(lib.I질의값).TR코드()
 
 	switch TR코드 {
@@ -555,21 +559,22 @@ func f조회_및_주문_질의_처리(질의값 lib.I질의값) (식별번호 in
 
 	lib.F조건부_패닉(c데이터 == nil, "c데이터 설정 실패.")
 
-	식별번호 = F질의(TR코드, c데이터, 길이, 연속_조회_여부, 연속_조회_키, lib.P30초)
+	식별번호 := F질의(TR코드, c데이터, 길이, 연속_조회_여부, 연속_조회_키, lib.P30초)
 
-	if 식별번호 < 0 {
-		return 0, lib.New에러("TR호출 실패. 반환된 식별번호가 음수임. '%v' '%v'", 식별번호, TR코드)
+	switch {
+	case 식별번호 < 0:
+		질의.Ch에러 <- lib.New에러("TR호출 실패. 반환된 식별번호가 음수임. '%v' '%v'", TR코드, 식별번호)
+	default:
+		질의.Ch회신값 <- 식별번호
 	}
-
-	return 식별번호, nil
 }
 
-func f실시간_정보_구독_해지_처리(질의값 lib.I질의값) (에러 error) {
-	defer lib.S예외처리{M에러: &에러}.S실행()
-
+func F실시간_정보_구독_해지_처리(질의 *lib.S채널_질의_API) {
 	var 함수 func(string, string, int) error
 	var 전체_종목코드 string
 	var 단위_길이 int
+
+	질의값 := 질의.M질의값
 
 	switch 질의값.TR구분() {
 	case xt.TR실시간_정보_구독:
@@ -589,33 +594,38 @@ func f실시간_정보_구독_해지_처리(질의값 lib.I질의값) (에러 er
 		전체_종목코드 = ""
 		단위_길이 = 0
 	}
-
-	return 함수(질의값.TR코드(), 전체_종목코드, 단위_길이)
+	
+	에러 := 함수(질의값.TR코드(), 전체_종목코드, 단위_길이)
+	
+	if 에러 == nil {
+		질의.Ch회신값 <- lib.P신호_OK
+	} else {
+		질의.Ch에러 <- 에러
+	}
 }
 
-func f접속_처리(서버_구분 xt.T서버_구분) bool {
-	defer lib.S예외처리{}.S실행()
-
+func F접속_처리(질의 *lib.S채널_질의_API) {
+	서버_구분 := xt.T서버_구분(질의.M질의값.(*lib.S질의값_정수).M정수값)
+	
 	접속_처리_잠금.Lock()
 	defer 접속_처리_잠금.Unlock()
 
-	switch {
-	case !F접속(서버_구분):
-		return false
-	case !F로그인():
-		return false
+	if 에러_접속 := F접속(서버_구분); 에러_접속 != nil {
+		질의.Ch에러 <- 에러_접속
+	} else if 에러_로그인 := F로그인(); 에러_로그인 != nil {
+		질의.Ch에러 <- 에러_로그인
+	} else {
+		질의.Ch회신값 <- lib.P신호_OK
 	}
-
-	return true // 로그인 콜백 함수가 실행될 때까지 기다림.
 }
 
 func F종료_질의_처리(질의 *lib.S채널_질의_API) {
 	질의.Ch회신값 <- lib.P신호_OK
 	f콜백_동기식(lib.New콜백_신호(lib.P신호_C32_종료))
-	F실시간_정보_일괄_해지()
+	f실시간_정보_일괄_해지()
 	F로그아웃_및_접속해제()
 	F소켓_정리() // F공통_종료_채널_닫기() 포함.
-	lib.F대기(lib.P10초)
+	lib.F대기(lib.P3초)
 	w32.PostQuitMessage(0)
 	w32.DestroyWindow(win32_메시지_윈도우)
 	syscall.FreeLibrary(xing_api_dll)
