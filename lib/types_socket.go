@@ -71,7 +71,6 @@ type s소켓_저장소 struct {
 func (s *s소켓_저장소) G소켓() I소켓_질의 {
 	select {
 	case <-F공통_종료_채널():
-		F체크포인트()
 		return nil
 	case 소켓 := <-s.M저장소:
 		return 소켓
@@ -84,6 +83,10 @@ func (s *s소켓_저장소) G소켓() I소켓_질의 {
 }
 
 func (s *s소켓_저장소) S회수(소켓 I소켓_질의) {
+	if 소켓 == nil {
+		return
+	}
+
 	소켓.S타임아웃(P30초)
 
 	select {
