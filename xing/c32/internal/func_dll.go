@@ -153,7 +153,7 @@ func F접속(서버_구분 xt.T서버_구분) error {
 	if 접속됨, 에러 := f접속됨(); 에러 != nil {
 		return 에러
 	} else if 접속됨 {
-		return nil	// 이미 접속됨.
+		return nil // 이미 접속됨.
 	}
 
 	var 서버_이름 string
@@ -233,7 +233,7 @@ func f접속됨() (bool, error) {
 }
 
 func F로그인() (에러 error) {
-	defer lib.S예외처리{M에러 : &에러}.S실행()
+	defer lib.S예외처리{M에러: &에러}.S실행()
 
 	if lib.F파일_없음(설정파일_경로) {
 		버퍼 := new(bytes.Buffer)
@@ -467,7 +467,7 @@ func f계좌_번호(인덱스 int) (string, error) {
 	return string(bytes.Trim(c.F2Go바이트_모음(unsafe.Pointer(c버퍼), 버퍼_길이), "\x00")), nil
 }
 
-func F계좌번호_모음(질의 *lib.S채널_질의_API)  {
+func F계좌번호_모음(질의 *lib.S채널_질의_API) {
 	수량, 에러 := f계좌_수량()
 	if 에러 != nil {
 		질의.Ch에러 <- 에러
@@ -516,39 +516,38 @@ func F계좌_이름(질의 *lib.S채널_질의_API) {
 }
 
 func F계좌_상세명(질의 *lib.S채널_질의_API) {
+	var 버퍼_배열 [41]byte // 버퍼 길이 41로 고정
+	버퍼 := 버퍼_배열[:]     // 배열 -> 슬라이스
+	버퍼_길이 := len(버퍼)
+	공백_문자_바이트 := []byte(" ")[0]
+
+	for i := 0; i < 버퍼_길이; i++ {
+		버퍼[i] = 공백_문자_바이트
+	}
+
 	계좌_번호 := 질의.M질의값.(*lib.S질의값_문자열).M문자열
-	버퍼_초기값 := "                                           "
-	버퍼_길이 := len(버퍼_초기값)
-
-	lib.F조건부_패닉(버퍼_길이<41, "버퍼 길이는 최소한 41이상이어야 합니다. '%v'", 버퍼_길이)
-	lib.F체크포인트(버퍼_길이)
-
-	c버퍼 := c.F2C문자열(버퍼_초기값)
-	defer c.F메모리_해제(unsafe.Pointer(c버퍼))
-
 	c계좌번호 := c.F2C문자열(계좌_번호)
 	defer c.F메모리_해제(unsafe.Pointer(c계좌번호))
 
+	// 유니코드 매핑 에러가 발생해서, 메모리 내용을 확인하는 중.
 	lib.F체크포인트(계좌_번호)
 	lib.F체크포인트(c계좌번호)
 	lib.F체크포인트(c.F2Go문자열(unsafe.Pointer(c계좌번호)))
 	lib.F체크포인트(c.F2Go바이트_모음(unsafe.Pointer(c계좌번호), len(계좌_번호)+10))
-
-	lib.F체크포인트(c.F2Go바이트_모음(unsafe.Pointer(c버퍼), 버퍼_길이))
 
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
 	_, _, 에러_번호 := syscall.Syscall(etkGetAccountDetailName, 3,
 		uintptr(unsafe.Pointer(c계좌번호)),
-		uintptr(unsafe.Pointer(c버퍼)),
+		uintptr(unsafe.Pointer(&버퍼[0])),
 		uintptr(버퍼_길이))
 
 	lib.F체크포인트(uintptr(에러_번호), 에러_번호.Error())
 
 	switch 에러_번호 {
 	case 0:
-		질의.Ch회신값 <- lib.F2문자열_EUC_KR_공백제거(c.F2Go바이트_모음(unsafe.Pointer(c버퍼), 버퍼_길이))
+		질의.Ch회신값 <- lib.F2문자열_EUC_KR_공백제거(c.F2Go바이트_모음(unsafe.Pointer(&버퍼[0]), 버퍼_길이))
 	default:
 		질의.Ch에러 <- lib.New에러("F계좌_상세명() 에러 발생.\n'%v'", 에러_번호)
 	}
