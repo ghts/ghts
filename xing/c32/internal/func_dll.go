@@ -531,8 +531,7 @@ func F계좌_상세명(질의 *lib.S채널_질의_API) {
 
 	// 유니코드 매핑 에러가 발생해서, 메모리 내용을 확인하는 중.
 	lib.F체크포인트(계좌_번호)
-	lib.F체크포인트(c계좌번호)
-	lib.F체크포인트(c.F2Go문자열(unsafe.Pointer(c계좌번호)))
+	lib.F체크포인트(*c계좌번호)
 	lib.F체크포인트(c.F2Go바이트_모음(unsafe.Pointer(c계좌번호), len(계좌_번호)+10))
 
 	api_호출_잠금.Lock()

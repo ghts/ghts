@@ -5,6 +5,7 @@ package w32
 type HANDLE uintptr
 type HWND uintptr
 type HINSTANCE uintptr
+type HMODULE uintptr
 type HMENU uintptr
 type HICON uintptr
 type HCURSOR uintptr

@@ -43,11 +43,14 @@ import (
 func F메시지_윈도우_생성() {
 	lpszClassName, _ := syscall.UTF16PtrFromString("MessageOnlyWindow")
 	타이틀, _ := syscall.UTF16PtrFromString("Simple Window.")
+	hInstance := w32.GetModuleHandle(nil)
+
+	lib.F체크포인트(hInstance)
 
 	wcex := w32.WNDCLASSEX{
 		CbSize:        uint32(unsafe.Sizeof(w32.WNDCLASSEX{})),
 		LpfnWndProc:   syscall.NewCallback(WndProc),
-		HInstance:     w32.HINSTANCE(xing_api_dll),
+		HInstance:     hInstance,
 		LpszClassName: lpszClassName}
 
 	w32.RegisterClassEx(&wcex)

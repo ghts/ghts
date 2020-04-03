@@ -83,3 +83,20 @@ func DefWindowProc(hWnd HWND, Msg uint32, wParam, lParam uintptr) uintptr {
 
 	return ret
 }
+
+func GetModuleHandle(lpModuleName *uint16) HINSTANCE {
+	var pLpModuleName uintptr
+
+	if lpModuleName == nil {
+		pLpModuleName = 0
+	} else {
+		pLpModuleName = uintptr(unsafe.Pointer(lpModuleName))
+	}
+
+	ret, _, _ := syscall.Syscall(getModuleHandle.Addr(), 1,
+		pLpModuleName,
+		0,
+		0)
+
+	return HINSTANCE(ret)
+}

@@ -13,4 +13,7 @@ var (
 	postQuitMessage = libuser32.NewProc("PostQuitMessage")
 	destroyWindow   = libuser32.NewProc("DestroyWindow")
 	defWindowProc   = libuser32.NewProc("DefWindowProcW")
+
+	libkernel32 = windows.NewLazySystemDLL("kernel32.dll")
+	getModuleHandle = libkernel32.NewProc("GetModuleHandleW")
 )
