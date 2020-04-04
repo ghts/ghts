@@ -281,24 +281,24 @@ func OnLogin(wParam unsafe.Pointer) {
 	}
 }
 
-func OnLogout_Go() {
+func OnLogout() {
 	lib.F체크포인트("OnLogout.")
 	// XingAPI가 신호를 보내오지 않음.  여기에 기능을 구현해 봤자 소용없음.
 }
 
-func OnDisconnected_Go() {
+func OnDisconnected() {
 	lib.F체크포인트("OnDisconnected.")
 	// XingAPI가 신호를 보내오지 않음.  여기에 기능을 구현해 봤자 소용없음.
 }
 
-func OnTimeout_Go(c int) {
+func OnTimeout(c int) {
 	F콜백(lib.New콜백_타임아웃(c))
 }
 
-func OnLinkData_Go() {
+func OnLinkData() {
 	F콜백(lib.New콜백_기본형(lib.P콜백_링크_데이터)) // TODO
 }
 
-func OnRealtimeDataChart_Go() {
+func OnRealtimeDataChart() {
 	F콜백(lib.New콜백_기본형(lib.P콜백_실시간_차트_데이터)) // TODO
 }

@@ -81,7 +81,7 @@ func WndProc(hWnd w32.HWND, msg uint32, wParam, lParam uintptr) uintptr {
 	switch msg {
 	case XM_DISCONNECT:
 		lib.F체크포인트()
-		OnDisconnected_Go()
+		OnDisconnected()
 		return TRUE
 	case XM_RECEIVE_DATA:
 		switch wParam {
@@ -104,16 +104,16 @@ func WndProc(hWnd w32.HWND, msg uint32, wParam, lParam uintptr) uintptr {
 		OnLogin(unsafe.Pointer(wParam))
 		return TRUE
 	case XM_LOGOUT:
-		OnLogout_Go()
+		OnLogout()
 		return TRUE
 	case XM_TIMEOUT:
-		OnTimeout_Go(int(lParam))
+		OnTimeout(int(lParam))
 		return TRUE
 	case XM_RECEIVE_LINK_DATA:
-		OnLinkData_Go()
+		OnLinkData()
 		return TRUE
 	case XM_RECEIVE_REAL_DATA_CHART:
-		OnRealtimeDataChart_Go()
+		OnRealtimeDataChart()
 		return TRUE
 	case w32.WM_DESTROY:
 		w32.PostQuitMessage(0)
