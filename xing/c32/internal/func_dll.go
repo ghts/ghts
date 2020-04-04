@@ -531,6 +531,7 @@ func F계좌_상세명(질의 *lib.S채널_질의_API) {
 	var 버퍼_배열 [41]byte // 버퍼 길이 41로 고정
 	버퍼_길이 := len(버퍼_배열)
 
+	// syscall 방식 호출은 에러 발생
 	C.GetAcctDetailName(
 		unsafe.Pointer(c계좌번호),
 		unsafe.Pointer(&버퍼_배열[0]),

@@ -62,7 +62,7 @@ var (
 	etkGetAccountListCount  uintptr
 	etkGetAccountList       uintptr
 	etkGetAccountName       uintptr
-	etkGetAccountDetailName uintptr
+	//etkGetAccountDetailName uintptr		// syscall 방식은 에러 발생. cgo 방식은 정상 작동.
 	etkGetAccountNickName   uintptr
 	etkGetServerName        uintptr
 	etkGetLastError         uintptr
