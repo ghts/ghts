@@ -627,5 +627,8 @@ func F종료_질의_처리(질의 *lib.S채널_질의_API) {
 	lib.F대기(lib.P3초)
 	w32.PostQuitMessage(0)
 	w32.DestroyWindow(메시지_윈도우)
-	FreeLibrary() //syscall.FreeLibrary(xing_api_dll)
+
+	// syscall, cgo 모두 에러 발생.
+	//syscall.FreeLibrary(xing_api_dll)
+	//FreeLibrary()
 }

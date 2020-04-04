@@ -91,8 +91,9 @@ func f초기화_XingAPI() {
 	etkLogout, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_Logout")
 	lib.F확인(에러)
 
-	etkDisconnect, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_Disconnect")
-	lib.F확인(에러)
+	// syscall, cgo 방식 모두 에러 발생.
+	//etkDisconnect, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_Disconnect")
+	//lib.F확인(에러)
 
 	etkRequest, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_Request")
 	lib.F확인(에러)
@@ -766,6 +767,6 @@ func F압축_해제(압축된_원본_데이터 unsafe.Pointer, 버퍼 *byte, 원
 	return int(압축_해제된_데이터_길이)
 }
 
-func FreeLibrary() {
-	C.FreeXingApiDll()
-}
+//func FreeLibrary() {
+//	C.FreeXingApiDll()
+//}

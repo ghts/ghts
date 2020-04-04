@@ -54,7 +54,7 @@ var (
 	etkIsConnected          uintptr
 	etkLogin                uintptr
 	etkLogout               uintptr
-	etkDisconnect           uintptr
+	//etkDisconnect           uintptr	// syscall, cgo 방식 모두 에러 발생.
 	etkRequest              uintptr
 	etkAdviseRealData       uintptr
 	etkUnadviseRealData     uintptr
