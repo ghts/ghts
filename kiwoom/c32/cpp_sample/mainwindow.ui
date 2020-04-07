@@ -6,34 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>385</width>
-    <height>197</height>
+    <width>800</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralWidget">
-   <widget class="QAxWidget" name="kiwoom">
-    <property name="control" stdset="0">
-     <string>{a1574a0d-6bfa-4bd7-9020-ded88711818d}</string>
-    </property>
-    <property name="geometry" stdset="0">
-     <rect>
-      <x>20</x>
-      <y>10</y>
-      <width>80</width>
-      <height>70</height>
-     </rect>
-    </property>
-   </widget>
+  <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="lblMessage">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>20</x>
       <y>10</y>
-      <width>361</width>
-      <height>171</height>
+      <width>761</width>
+      <height>531</height>
      </rect>
     </property>
     <property name="text">
@@ -42,16 +29,6 @@
    </widget>
   </widget>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>QAxWidget</class>
-   <extends>QWidget</extends>
-   <header>qaxwidget.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
- <slots>
-  <slot>appendMessage(QString)</slot>
- </slots>
 </ui>

@@ -1,70 +1,86 @@
-#include "mainwindow.hpp"
-#include "ui_mainwindow.h"
-#include "KiwoomApiWrapper.hpp"
-#include <QString>
+#include "MainWindow.hpp"
+#include "ui_MainWindow.h"
 
-KiwoomApiWrapper *kiwoomApiWrapper;
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
-
-    kiwoomApiWrapper = new KiwoomApiWrapper(this, ui->kiwoom);
-
-    connect(kiwoomApiWrapper, SIGNAL(sendMessage(QString)), this, SLOT(printMessage(QString)));
-
-    int connectCallResult = kiwoomApiWrapper->CommConnect();
-
-    if (connectCallResult == 0) {
-        printMessage("CommConnecet() OK");
-    } else if (connectCallResult < 0) {
-        printMessage("CommConnect() Error");
-    } else {
-        printMessage("CommConnect() Unexpected value.");
-    }
+    kiwoom = new KHOpenAPILib::KHOpenAPI(this, Qt::Widget);
+    connectSignalSlot();
+    commConnect();
 }
 
 MainWindow::~MainWindow() {
     delete ui;
 }
 
-void MainWindow::on_kiwoom_OnEventConnect(int nErrCode) {
-    kiwoomApiWrapper->OnEventConnect(nErrCode);
+void MainWindow::connectSignalSlot() {
+    connect(kiwoom, SIGNAL(OnEventConnect(int)), this, SLOT(OnEventConnectHandler(int)));
+    connect(kiwoom, SIGNAL(OnReceiveChejanData(QString, int, QString)), this, SLOT(OnReceiveChejanDataHandler(QString, int, QString)));
+    connect(kiwoom, SIGNAL(OnReceiveConditionVer(int, QString)), this, SLOT(OnReceiveConditionVerHandler(int, QString)));
+    connect(kiwoom, SIGNAL(OnReceiveInvestRealData(QString)), this, SLOT(OnReceiveInvestRealDataHandler(QString)));
+    connect(kiwoom, SIGNAL(OnReceiveMsg(QString, QString, QString, QString)), this, SLOT(OnReceiveMsgHandler(QString, QString, QString, QString)));
+    connect(kiwoom, SIGNAL(OnReceiveRealCondition(QString, QString, QString, QString)), this, SLOT(OnReceiveRealConditionHandler(QString, QString, QString, QString)));
+    connect(kiwoom, SIGNAL(OnReceiveRealData(QString, QString, QString)), this, SLOT(OnReceiveRealDataHandler(QString, QString, QString)));
+    connect(kiwoom, SIGNAL(OnReceiveTrCondition(QString, QString, QString, int, int)), this, SLOT(OnReceiveTrConditionHandler(QString, QString, QString, int, int)));
+    connect(kiwoom, SIGNAL(OnReceiveTrData(QString, QString, QString, QString, QString, int, QString, QString, QString)), this, SLOT(OnReceiveTrDataHandler(QString, QString, QString, QString, QString, int, QString, QString, QString)));
 }
 
-void MainWindow::on_kiwoom_OnReceiveChejanData(const QString &sGubun, int nItemCnt, const QString &sFIdList) {
-    kiwoomApiWrapper->OnReceiveChejanData(sGubun, nItemCnt, sFIdList);
+bool MainWindow::commConnect() {
+    int result = kiwoom->CommConnect();
+
+    if (result == 0) {
+        printMessage("CommConnecet() OK");
+    } else if (result < 0) {
+        printMessage("CommConnect() Error");
+    } else {
+        printMessage("CommConnect() Unexpected value.");
+    }
+
+    return (result == 0);
 }
 
-void MainWindow::on_kiwoom_OnReceiveConditionVer(int lRet, const QString &sMsg) {
-    kiwoomApiWrapper->OnReceiveConditionVer(lRet, sMsg);
-}
-
-void MainWindow::on_kiwoom_OnReceiveInvestRealData(const QString &sRealKey) {
-    kiwoomApiWrapper->OnReceiveInvestRealData(sRealKey);
-}
-
-void MainWindow::on_kiwoom_OnReceiveMsg(const QString &sScrNo, const QString &sRQName, const QString &sTrCode, const QString &sMsg) {
-    kiwoomApiWrapper->OnReceiveMsg(sScrNo, sRQName, sTrCode, sMsg);
-}
-
-void MainWindow::on_kiwoom_OnReceiveRealCondition(const QString &sTrCode, const QString &strType, const QString &strConditionName, const QString &strConditionIndex) {
-    kiwoomApiWrapper->OnReceiveRealCondition(sTrCode, strType, strConditionName, strConditionIndex);
-}
-
-void MainWindow::on_kiwoom_OnReceiveRealData(const QString &sRealKey, const QString &sRealType, const QString &sRealData) {
-    kiwoomApiWrapper->OnReceiveRealData(sRealKey, sRealType, sRealData);
-}
-
-void MainWindow::on_kiwoom_OnReceiveTrCondition(const QString &sScrNo, const QString &strCodeList, const QString &strConditionName, int nIndex, int nNext) {
-    kiwoomApiWrapper->OnReceiveTrCondition(sScrNo, strCodeList, strConditionName, nIndex, nNext);
-}
-
-void MainWindow::on_kiwoom_OnReceiveTrData(const QString &sScrNo, const QString &sRQName, const QString &sTrCode, const QString &sRecordName, const QString &sPrevNext, int nDataLength, const QString &sErrorCode, const QString &sMessage, const QString &sSplmMsg) {
-    kiwoomApiWrapper->OnReceiveTrData(sScrNo, sRQName, sTrCode, sRecordName, sPrevNext, nDataLength, sErrorCode, sMessage, sSplmMsg);
-}
-
-// 헬퍼 슬롯
 void MainWindow::printMessage(QString string) {
     QString msg = ui->lblMessage->text();
     ui->lblMessage->setText(msg.append(string) + "\n");
+}
+
+void MainWindow::OnEventConnectHandler(int nErrCode) {
+    if (nErrCode == 0) {
+        printMessage("Login Success.");
+    } else if (nErrCode < 0) {
+        printMessage("Login Failed.");
+    }
+}
+
+void MainWindow::OnReceiveChejanDataHandler(QString sGubun, int nItemCnt, QString sFIdList) {
+    printMessage("TODO : OnReceiveChejanDataHandler()");
+}
+
+void MainWindow::OnReceiveConditionVerHandler(int lRet, QString sMsg) {
+    printMessage("TODO : OnReceiveConditionVerHandler()");
+}
+
+void MainWindow::OnReceiveInvestRealDataHandler(QString sRealKey) {
+    printMessage("TODO : OnReceiveInvestRealDataHandler()");
+}
+
+void MainWindow::OnReceiveMsgHandler(QString sScrNo, QString sRQName, QString sTrCode, QString sMsg) {
+    printMessage("TODO : OnReceiveMsgHandler()");
+}
+
+void MainWindow::OnReceiveRealConditionHandler(QString sTrCode, QString strType, QString strConditionName, QString strConditionIndex) {
+    printMessage("TODO : OnReceiveRealConditionHandler()");
+}
+
+void MainWindow::OnReceiveRealDataHandler(QString sRealKey, QString sRealType, QString sRealData) {
+    printMessage("TODO : OnReceiveRealDataHandler()");
+}
+
+void MainWindow::OnReceiveTrConditionHandler(QString sScrNo, QString strCodeList, QString strConditionName, int nIndex, int nNext) {
+    printMessage("TODO : OnReceiveTrConditionHandler()");
+}
+
+void MainWindow::OnReceiveTrDataHandler(QString sScrNo, QString sRQName, QString sTrCode, QString sRecordName, QString sPrevNext, int nDataLength, QString sErrorCode, QString sMessage, QString sSplmMsg) {
+    printMessage("TODO : OnReceiveTrDataHandler()");
 }
