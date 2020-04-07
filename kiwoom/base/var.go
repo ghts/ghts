@@ -1,4 +1,4 @@
-package base
+package kw
 
 import (
 	ole "github.com/go-ole/go-ole"
