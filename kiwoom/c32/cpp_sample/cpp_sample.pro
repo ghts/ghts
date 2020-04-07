@@ -21,6 +21,7 @@ SOURCES += \
     mainwindow.cpp
 
 HEADERS += \
+    KiwoomApiWrapper.hpp \
     mainwindow.hpp
 
 FORMS += \

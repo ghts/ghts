@@ -51,4 +51,7 @@
  </customwidgets>
  <resources/>
  <connections/>
+ <slots>
+  <slot>appendMessage(QString)</slot>
+ </slots>
 </ui>
