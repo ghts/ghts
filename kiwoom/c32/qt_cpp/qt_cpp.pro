@@ -25,7 +25,7 @@ HEADERS += \
     KiwoomApi.hpp \
     KiwoomApiWrapper.hpp \
     MainWindow.hpp \
-    PostConnectEvent.hpp \
+    PostMessageTask.hpp \
     WinMsg.hpp \
     WinMsgHandler.hpp
 

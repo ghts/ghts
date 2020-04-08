@@ -12,3 +12,8 @@ const (
 const (
 	HWND_MESSAGE = ^HWND(2) // -3
 )
+
+// Window message constants
+const (
+	WM_USER = 1024
+)

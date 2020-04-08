@@ -31,18 +31,31 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-
 package main
 
 import "C"
+import (
+	"github.com/ghts/ghts/lib/w32"
+	"unsafe"
+)
+
+var hWnd w32.HWND
+
+const KWM_CONNECT = w32.WM_USER + 100
 
 func main() {}
 
 //export InitDLL
-func InitDLL() {
+func InitDLL(_hWnd unsafe.Pointer) {
+	println("InitDLL() 1")
+	hWnd = w32.HWND(_hWnd)
+	println("InitDLL() 2")
 
+	go F접속()
 }
 
 func F접속() {
-
+	println("SendMessage 1")
+	w32.SendMessage(hWnd, KWM_CONNECT, 0,0)
+	println("SendMessage 2")
 }

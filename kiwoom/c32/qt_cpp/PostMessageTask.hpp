@@ -7,13 +7,13 @@
 #include <qt_windows.h>
 #include <WinMsg.hpp>
 
-class PostConnectEvent : public QObject {
+class PostMessageTask : public QObject {
     Q_OBJECT
 public:
-    PostConnectEvent(QObject *parent = 0, WId wId = 0) : QObject(parent) {
+    PostMessageTask(QObject *parent = 0, WId wId = 0) : QObject(parent) {
         this->wId = wId;
     }
-    virtual ~PostConnectEvent() {};
+    virtual ~PostMessageTask() {};
 
 public slots:
     void run() {
@@ -22,10 +22,10 @@ public slots:
 
         if (result == FALSE) {
             qDebug("PostMessage() Error.");
-            emit postDebugMessage("PostMessage Error.");
+            emit postDebugMessage("PostMessage() Error.");
         } else {
             qDebug("PostMessage() OK.");
-            emit postDebugMessage("PostMessage OK.");
+            emit postDebugMessage("PostMessage() OK.");
         }
     }
 

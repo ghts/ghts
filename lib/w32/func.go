@@ -100,3 +100,27 @@ func GetModuleHandle(lpModuleName *uint16) HINSTANCE {
 
 	return HINSTANCE(ret)
 }
+
+func SendMessage(hWnd HWND, msg uint32, wParam, lParam uintptr) uintptr {
+	ret, _, _ := syscall.Syscall6(sendMessage.Addr(), 4,
+		uintptr(hWnd),
+		uintptr(msg),
+		wParam,
+		lParam,
+		0,
+		0)
+
+	return ret
+}
+
+func PostMessage(hWnd HWND, msg uint32, wParam, lParam uintptr) uintptr {
+	ret, _, _ := syscall.Syscall6(postMessage.Addr(), 4,
+		uintptr(hWnd),
+		uintptr(msg),
+		wParam,
+		lParam,
+		0,
+		0)
+
+	return ret
+}
