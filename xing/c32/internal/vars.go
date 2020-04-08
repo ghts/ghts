@@ -89,9 +89,9 @@ var (
 	api_호출_잠금 sync.Mutex
 
 	ch로그인 = make(chan bool, 1)
-	ch콜백  = make(chan lib.I콜백, 100)
-	Ch수신  = make(chan *mangos.Message, 10000)
+	Ch수신  = make(chan *mangos.Message, 1000)
 	Ch질의  = make(chan *lib.S채널_질의_API, lib.F조건부_정수(runtime.NumCPU() > 4, runtime.NumCPU(), 4))
+	ch콜백  = make(chan lib.I콜백, 100)
 
 	전달_도우미_수량 int
 	콜백_도우미_수량 int

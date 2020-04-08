@@ -34,14 +34,14 @@ int KiwoomApiWrapper::CommConnect() {
 
 void KiwoomApiWrapper::OnEventConnectHandler(int nErrCode) {
     if (nErrCode == 0) {
-        qDebug("Login OK.");
-        emit postDebugMessage("Login OK.");
+        qDebug("Login Success.");
+        emit postDebugMessage("Login Success.");
     } else if (nErrCode < 0) {
-        qDebug("Login Error.");
-        emit postDebugMessage("Login Error.");
+        qDebug("Login Failure.");
+        emit postDebugMessage("Login Failure.");
     } else if (nErrCode > 0) {
-        qDebug("Login Error. Unexpected plus value.");
-        emit postDebugMessage("Login Error. Unexpected plus value.");
+        qDebug("Login Failure. Unexpected plus value.");
+        emit postDebugMessage("Login Failure. Unexpected plus value.");
     }
 }
 
