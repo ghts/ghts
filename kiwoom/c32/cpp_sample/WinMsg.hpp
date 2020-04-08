@@ -1,0 +1,6 @@
+#ifndef CONSTWINMSG_HPP
+#define CONSTWINMSG_HPP
+
+#define KWM_CONNECT WM_USER+100
+
+#endif // CONSTWINMSG_HPP
