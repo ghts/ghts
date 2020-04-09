@@ -14,11 +14,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-public slots:
-    void printDebugMessage(QString message);
-
 private:
     Ui::MainWindow *ui;
-
 };
 #endif // MAINWINDOW_HPP

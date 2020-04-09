@@ -38,44 +38,95 @@ GNU GPL v2는 이 프로그램과 함께 제공됩니다.
 package k32
 
 import (
-	"github.com/ghts/ghts/lib"
+	"bytes"
+	"fmt"
 	"github.com/ghts/ghts/lib/w32"
-	"go.nanomsg.org/mangos/v3"
-	"sync"
+	"golang.org/x/text/encoding/korean"
+	"golang.org/x/text/transform"
+	"path/filepath"
+	"runtime"
+	"strconv"
+	"strings"
 )
 
-var (
-	메인_윈도우 w32.HWND
+func F체크(값_모음 ...interface{}) {
+	버퍼 := new(bytes.Buffer)
 
-	소켓REP_TR수신   = lib.NewNano소켓XREP_단순형(lib.P주소_키움_C함수_호출)
-	소켓PUB_실시간_정보 = lib.NewNano소켓PUB_단순형(lib.P주소_키움_실시간)
+	if len(값_모음) == 0 {
+		버퍼.WriteString("Check Point")
+	} else {
+		버퍼.WriteString(f변수값_문자열(값_모음...))
+	}
 
-	소켓REQ_저장소 = lib.New소켓_저장소(20, func() lib.I소켓_질의 {
-		return lib.NewNano소켓REQ_단순형(lib.P주소_키움_C함수_콜백, lib.P30초)
-	})
+	버퍼.WriteString(" ")
+	버퍼.WriteString(f소스코드_위치(1))
 
-	접속_처리_잠금  sync.Mutex
-	api_호출_잠금 sync.Mutex
+	println(버퍼.String())
+}
 
-	Ch로그인 = make(chan bool, 1)
-	Ch수신  = make(chan *mangos.Message, 1000)
-	Ch질의  = make(chan *lib.S채널_질의_API, 100)
-	ch콜백  = make(chan lib.I콜백, 100)
+func f문자열_인코딩_변환(UTF8문자열 string) string {
+	EUC_KR문자열, _, _ := transform.String(korean.EUCKR.NewDecoder(), UTF8문자열)
 
-	전달_도우미_수량 int
-	콜백_도우미_수량 int
+	return EUC_KR문자열
+}
 
-	Ch모니터링_루틴_종료   = make(chan lib.T신호, 1)
-	Ch수신_도우미_종료    = make(chan lib.T신호, 1)
-	Ch전달_도우미_종료    = make(chan lib.T신호, 100)
-	Ch콜백_도우미_종료    = make(chan lib.T신호, 100)
-	Ch함수_호출_도우미_종료 = make(chan lib.T신호, 1)
-)
+func f소스코드_위치(건너뛰는_단계 int) string {
+	건너뛰는_단계++ // 이 메소드를 호출한 함수를 기준으로 0이 되게 하기 위함.
 
-// 초기화 이후에는 사실상 읽기 전용이어서, 다중 사용에 문제가 없는 값들.
-var (
-	//설정파일_디렉토리 = filepath.Join(lib.GOPATH(), "src", reflect.TypeOf(S콜백_대기_저장소{}).PkgPath())
-	//설정파일_경로   = filepath.Join(설정파일_디렉토리, "config.ini")
-	계좌번호_모음   []string
-	계좌_비밀번호   string
-)
+	_, 파일_경로, 행_번호, _ := runtime.Caller(건너뛰는_단계)
+
+	var 파일명 string
+	시작점 := strings.Index(파일_경로, "github.com")
+	if 시작점 >= 0 && 시작점 < len(파일_경로) {
+		파일명 = 파일_경로[시작점:]
+	} else {
+		파일명 = filepath.Base(파일_경로)
+	}
+
+	return 파일명 + ":" + strconv.Itoa(행_번호)
+}
+
+func f변수값_문자열(값_모음 ...interface{}) string {
+	버퍼 := new(bytes.Buffer)
+
+	for i, _ := range 값_모음 {
+		if i == 0 {
+			버퍼.WriteString("'%v'")
+		} else {
+			버퍼.WriteString(", '%v'")
+		}
+	}
+
+	return fmt.Sprintf(버퍼.String(), 값_모음...)
+}
+
+func F윈도우_핸들_설정(hWnd w32.HWND) {
+	메인_윈도우 = hWnd
+}
+
+func F접속() {
+	F체크("SendMessage 1")
+	w32.SendMessage(메인_윈도우, KM_CONNECT, 0,0)
+	F체크("SendMessage 2")
+
+	//질의 := new(lib.S채널_질의_API)
+	//질의.M질의값 = lib.New질의값_기본형(lib.TR접속, "")
+	//질의.Ch회신값 = make(chan interface{}, 0)
+	//질의.Ch에러 = make(chan error, 0)
+	//
+	//F체크("접속 질의 준비 완료.")
+	//
+	//Ch질의 <- 질의
+	//
+	//F체크("접속 채널 질의 전송 완료.")
+	//
+	//select {
+	//case <-질의.Ch회신값:
+	//case 에러 := <-질의.Ch에러:
+	//	F체크("접속 질의 에러 발생.")
+	//	println(에러.Error())
+	//case <-lib.F공통_종료_채널():
+	//	return
+	//}
+}
+

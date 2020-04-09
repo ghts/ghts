@@ -1,4 +1,6 @@
-#include <KiwoomApiWrapper.hpp>
+#include "KiwoomApiWrapper.hpp"
+#include "func.hpp"
+#include <QDebug>
 
 void KiwoomApiWrapper::connectEventSignalSlot() {
     connect(kiwoom, SIGNAL(OnEventConnect(int)), this,  SLOT(OnEventConnectHandler(int)));
@@ -20,78 +22,67 @@ int KiwoomApiWrapper::CommConnect() {
 
     if (result == 0) {
         qDebug("CommConnect() OK");
-        emit postDebugMessage("CommConnect() OK");
     } else if (result < 0) {
         qDebug("CommConnect() Error");
-        emit postDebugMessage("CommConnect() Error");
     } else {
         qDebug("CommConnect() Error. Unexpected value.");
-        emit postDebugMessage("CommConnect() Error. Unexpected value.");
     }
 
     return result;
 }
 
 void KiwoomApiWrapper::OnEventConnectHandler(int nErrCode) {
-    if (nErrCode == 0) {
-        qDebug("Login Success.");
-        emit postDebugMessage("Login Success.");
-    } else if (nErrCode < 0) {
-        qDebug("Login Failure.");
-        emit postDebugMessage("Login Failure.");
-    } else if (nErrCode > 0) {
-        qDebug("Login Failure. Unexpected plus value.");
-        emit postDebugMessage("Login Failure. Unexpected plus value.");
-    }
+    qDebug() << "Login" << OK_ERR(nErrCode == 0);
+    NotifyLoginResult(nErrCode == 0);
 }
 
 void KiwoomApiWrapper::OnReceiveChejanDataHandler(QString sGubun, int nItemCnt, QString sFIdList) {
-    emit postDebugMessage("TODO : OnReceiveChejanDataHandler()");
+    qDebug("TODO : OnReceiveChejanDataHandler()");
 }
 
 
 void KiwoomApiWrapper::OnReceiveConditionVerHandler(int lRet, QString sMsg) {
-    emit postDebugMessage("TODO : OnReceiveConditionVerHandler()");
+    qDebug("TODO : OnReceiveConditionVerHandler()");
 }
 
 
 void KiwoomApiWrapper::OnReceiveInvestRealDataHandler(QString sRealKey) {
-    emit postDebugMessage("TODO : OnReceiveInvestRealDataHandler()");
+    qDebug("TODO : OnReceiveInvestRealDataHandler()");
 }
 
 
 void KiwoomApiWrapper::OnReceiveMsgHandler(QString sScrNo, QString sRQName, QString sTrCode, QString sMsg) {
-    emit postDebugMessage("TODO : OnReceiveMsgHandler()");
+    qDebug("TODO : OnReceiveMsgHandler()");
 }
 
 
 void KiwoomApiWrapper::OnReceiveRealConditionHandler(QString sTrCode, QString strType, QString strConditionName, QString strConditionIndex) {
-    emit postDebugMessage("TODO : OnReceiveRealConditionHandler()");
+    qDebug("TODO : OnReceiveRealConditionHandler()");
 }
 
 
 void KiwoomApiWrapper::OnReceiveRealDataHandler(QString sRealKey, QString sRealType, QString sRealData) {
-    emit postDebugMessage("TODO : OnReceiveRealDataHandler()");
+    qDebug("TODO : OnReceiveRealDataHandler()");
 }
 
 
 void KiwoomApiWrapper::OnReceiveTrConditionHandler(QString sScrNo, QString strCodeList, QString strConditionName, int nIndex, int nNext) {
-    emit postDebugMessage("TODO : OnReceiveTrConditionHandler()");
+    qDebug("TODO : OnReceiveTrConditionHandler()");
 }
 
 
 void KiwoomApiWrapper::OnReceiveTrDataHandler(QString sScrNo, QString sRQName, QString sTrCode, QString sRecordName, QString sPrevNext, int nDataLength, QString sErrorCode, QString sMessage, QString sSplmMsg) {
-    emit postDebugMessage("TODO : OnReceiveTrDataHandler()");
+    qDebug("TODO : OnReceiveTrDataHandler()");
 }
 
 void KiwoomApiWrapper::exceptionHandler(int code, QString source, QString disc, QString help) {
-    emit postDebugMessage("TODO : exceptionHandler()");
+    qDebug("TODO : exceptionHandler()");
 }
 
 void KiwoomApiWrapper::propertyChangedHandler(QString name) {
-    emit postDebugMessage("TODO : propertyChangedHandler()");
+    qDebug("TODO : propertyChangedHandler()");
 }
 
 void KiwoomApiWrapper::signalHandler(QString name, int argc, void* argv) {
-    emit postDebugMessage("TODO : signalHandler()");
+    qDebug("TODO : signalHandler()");
 }

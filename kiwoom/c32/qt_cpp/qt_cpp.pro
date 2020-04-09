@@ -18,6 +18,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     KiwoomApi.cpp \
     KiwoomApiWrapper.cpp \
+    func.cpp \
     main.cpp \
     MainWindow.cpp
 
@@ -27,7 +28,9 @@ HEADERS += \
     MainWindow.hpp \
     PostMessageTask.hpp \
     WinMsg.hpp \
-    WinMsgHandler.hpp
+    WinMsgHandler.hpp \
+    func.hpp \
+    var.hpp
 
 FORMS += \
     MainWindow.ui

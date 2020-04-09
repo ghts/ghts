@@ -1,7 +1,5 @@
 /* Copyright(C) 2015-2020년 김운하(UnHa Kim)  < unha.kim.ghts at gmail dot com >
 
-이 파일은 GHTS의 일부입니다.
-
 키움증권 API는 OCX규격으로 작성되어 있는 데,
 OCX규격은 Go언어로 직접 사용하기에 기술적 난이도가 높아서,
 손쉽게 다룰 수 있게 도와주는 Qt 라이브러리의 오픈소스 버전을 사용하였습니다.
@@ -15,11 +13,8 @@ GHTS의 대부분에서 사용하고 있는 GNU LGPL v 2.1보다
 
 키움증권 API 호출 모듈에 적용된 GPL v2이 LGPL v2보다 더 엄격하긴 합니다만,
 키움증권 API 호출 모듈을 애초 의도된 사용법대로 '소켓을 통해서 호출'하여 사용하는 경우에는
-키움증권 API 호출 모듈과 소켓을 통해서 분리된 모듈, 즉, 사용자가 작성한 소스코드는
-GPL v2의 소스코드 공개 의무가 적용되지 않습니다.
-(GPL v2는 단일 소프트웨어에 대한 소스코드 공개를 강제합니다만,
-소켓을 통해서 특정 기능을 사용하는 것은
-GPL v2에서 규정하는 '하나의 단일 소프트웨어' 범주에 포함되지 않기에 가능합니다.)
+GPL v2에서 규정하는 '하나의 단일 소프트웨어' 규정에 포함되지 않기에
+사용자가 작성한 소스코드는 GPL v2의 소스코드 공개 의무가 적용되지 않습니다.
 
 다만, 키움증권 API 호출 모듈 그 자체를 수정하거나 타인에게 배포할 경우,
 GPL v2 규정에 따른 소스코드 공개 의무가 발생할 수 있습니다.
@@ -37,14 +32,15 @@ GPL v2 규정에 따른 소스코드 공개 의무가 발생할 수 있습니다
 GNU GPL v2는 이 프로그램과 함께 제공됩니다.
 
 만약, 이 문서가 누락되어 있다면 자유 소프트웨어 재단으로 문의하시기 바랍니다.
-
 (자유 소프트웨어 재단 : Free Software Foundation, Inc.,
 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA) */
 
 package k32
 
 import (
+	kt "github.com/ghts/ghts/kiwoom/base"
 	"github.com/ghts/ghts/lib"
+	"github.com/ghts/ghts/lib/w32"
 	xt "github.com/ghts/ghts/xing/base"
 	"go.nanomsg.org/mangos/v3"
 	"runtime"
@@ -58,12 +54,12 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 	if 전달_도우미_수량 < 2 {
 		전달_도우미_수량 = 2
 	}
-
+	
 	콜백_도우미_수량 = runtime.NumCPU() / 2
 	if 콜백_도우미_수량 < 2 {
 		콜백_도우미_수량 = 2
 	}
-
+	
 	ch수신_도우미_초기화 := make(chan lib.T신호)
 	ch수신_도우미_종료 := make(chan lib.T신호)
 
@@ -78,16 +74,16 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 
 	// Go루틴 생성
 	go go수신_도우미(ch수신_도우미_초기화, ch수신_도우미_종료)
-
+	
 	for i := 0; i < 전달_도우미_수량; i++ {
 		go go전달_도우미(ch전달_도우미_초기화, ch전달_도우미_종료)
 	}
-
+	
 	go go함수_호출_도우미(ch호출_도우미_초기화, ch호출_도우미_종료)
-
-	for i := 0; i < 콜백_도우미_수량; i++ {
-		go go콜백_도우미(ch콜백_도우미_초기화, ch콜백_도우미_종료)
-	}
+	
+	//for i := 0; i < 콜백_도우미_수량; i++ {
+	//	go go콜백_도우미(ch콜백_도우미_초기화, ch콜백_도우미_종료)
+	//}
 
 	// Go루틴 초기화 대기
 	<-ch수신_도우미_초기화
@@ -97,10 +93,12 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 	}
 
 	<-ch호출_도우미_초기화
-
-	for i := 0; i < 콜백_도우미_수량; i++ {
-		<-ch콜백_도우미_초기화
-	}
+	
+	//for i := 0; i < 콜백_도우미_수량; i++ {
+	//	F체크(i)
+	//
+	//	<-ch콜백_도우미_초기화
+	//}
 
 	ch공통_종료 := lib.F공통_종료_채널()
 
@@ -111,41 +109,54 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 		default:
 		}
 	}()
-
+	
 	ch초기화 <- lib.P신호_초기화
 
+	F체크("Goroutines initialization complete.")
+	
 	// 종료 되는 Go루틴 재생성.
 	for {
 		select {
 		case <-ch공통_종료:
 			return nil
 		case <-ch수신_도우미_종료:
+			F체크()
 			select {
 			case <-ch공통_종료:
 				return nil
 			default:
+				F체크()
 				go go수신_도우미(ch수신_도우미_초기화, ch수신_도우미_종료)
+				F체크()
 			}
 		case <-ch전달_도우미_종료:
+			F체크()
 			select {
 			case <-ch공통_종료:
 				return nil
 			default:
+				F체크()
 				go go전달_도우미(ch전달_도우미_초기화, ch전달_도우미_종료)
+				F체크()
+				
 			}
 		case <-ch호출_도우미_종료:
 			select {
 			case <-ch공통_종료:
 				return nil
 			default:
+				F체크()
 				go go함수_호출_도우미(ch호출_도우미_초기화, ch호출_도우미_종료)
+				F체크()
 			}
 		case <-ch콜백_도우미_종료:
 			select {
 			case <-ch공통_종료:
 				return nil
 			default:
+				F체크()
 				go go콜백_도우미(ch콜백_도우미_초기화, ch콜백_도우미_종료)
+				F체크()				
 			}
 		}
 	}
@@ -301,9 +312,6 @@ func go함수_호출_도우미(ch초기화, ch종료 chan lib.T신호) {
 	runtime.LockOSThread()
 	defer runtime.UnlockOSThread()
 
-	f초기화_XingAPI() // 모든 API 액세스를 단일 스레드에서 하기 위해서 여기에서 API 초기화를 실행함.
-	F메시지_윈도우_생성()
-
 	ch초기화 <- lib.P신호_초기화
 
 	for {
@@ -312,8 +320,6 @@ func go함수_호출_도우미(ch초기화, ch종료 chan lib.T신호) {
 			f질의값_처리(질의)
 		case <-ch공통_종료:
 			return
-		default:
-			F윈도우_메시지_처리()
 		}
 	}
 }
@@ -384,4 +390,76 @@ func f콜백_동기식(콜백값 lib.I콜백) (에러 error) {
 	}
 
 	return nil
+}
+
+
+func f질의값_처리(질의 *lib.S채널_질의_API) {
+	var 에러 error
+
+	F체크("f질의값_처리()")
+
+	defer lib.S예외처리{M에러: &에러, M함수: func() { 질의.Ch에러 <- 에러 }}.S실행()
+
+	F체크(질의.M질의값.TR구분())
+
+	switch 질의.M질의값.TR구분() {
+	case kt.TR조회, kt.TR주문:
+		F체크("TODO")
+		// F조회_및_주문_질의_처리(질의)
+	case kt.TR실시간_정보_구독, kt.TR실시간_정보_해지:
+		F체크("TODO")
+		// F실시간_정보_구독_해지_처리(질의)
+	case kt.TR실시간_정보_일괄_해지:
+		F체크("TODO")
+		// F실시간_정보_일괄_해지(질의)
+	case kt.TR접속:
+		F접속_처리(질의)
+	case kt.TR접속됨:
+		F체크("TODO")
+		// F접속됨(질의)
+	case kt.TR서버_이름:
+		F체크("TODO")
+		// F서버_이름(질의)
+	case kt.TR에러_코드:
+		F체크("TODO")
+		// F에러_코드(질의)
+	case kt.TR에러_메시지:
+		F체크("TODO")
+		// F에러_메시지(질의)
+	case kt.TR계좌_수량:
+		F체크("TODO")
+		// F계좌_수량(질의)
+	case kt.TR계좌번호_모음:
+		F체크("TODO")
+		// F계좌번호_모음(질의)
+	case kt.TR계좌_이름:
+		F체크("TODO")
+		// F계좌_이름(질의)
+	case kt.TR계좌_상세명:
+		F체크("TODO")
+		// F계좌_상세명(질의)
+	case kt.TR계좌_별명:
+		F체크("TODO")
+		// F계좌_별명(질의)
+	case kt.TR코드별_전송_제한:
+		F체크("TODO")
+		// TR코드별_전송_제한(질의)
+	case kt.TR소켓_테스트:
+		F체크("TODO")
+		// 질의.Ch회신값 <- lib.P신호_OK
+	case kt.TR종료:
+		F체크("TODO")
+		// F종료_질의_처리(질의)
+	//case kt.TR초기화:
+	//	f초기화_XingAPI() // 모든 API 액세스를 단일 스레드에서 하기 위해서 여기에서 API 초기화를 실행함.
+	//	F메시지_윈도우_생성()
+	default:
+		panic(lib.New에러("예상하지 못한 TR구분값 : '%v'", int(질의.M질의값.TR구분())))
+	}
+}
+
+func F접속_처리(질의 *lib.S채널_질의_API) {
+	F체크("F접속_처리() 1")
+	w32.SendMessage(메인_윈도우, KM_CONNECT, 0,0)
+	F체크("F접속_처리() 2")
 }

@@ -3,6 +3,8 @@
 
 #include "KiwoomApi.hpp"
 
+// dumpcpp로 자동 생성된 KiwoomApi.[c/h] 파일을 건드리지 않고,
+// 이벤트 처리를 위해서는 시그널/슬롯을 설정하는 래퍼.
 class KiwoomApiWrapper : public QObject {
     Q_OBJECT
 
@@ -85,9 +87,6 @@ public slots:
     void exceptionHandler(int code, QString source, QString disc, QString help);
     void propertyChangedHandler(QString name);
     void signalHandler(QString name, int argc, void* argv);
-
-signals:
-    void postDebugMessage(QString debugMessage);
 
 private:
     KHOpenAPILib::KHOpenAPI *kiwoom;

@@ -69,7 +69,9 @@ extern "C" {
 #endif
 
 
-extern void InitDLL(void* p0);
+extern GoUint8 InitGoDLL(void* p0);
+
+extern void NotifyLoginResult(GoUint8 p0);
 
 #ifdef __cplusplus
 }
