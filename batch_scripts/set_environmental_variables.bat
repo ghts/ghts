@@ -16,9 +16,9 @@ IF NOT DEFINED GOARCH (
 )
 
 IF /I "%GOARCH%"=="amd64" (
-    SET GCC_PATH=C:\Rtools\mingw_64
+    SET GCC_PATH=C:\msys64\mingw_64
 ) ELSE (
-    SET GCC_PATH=C:\Rtools\mingw_32
+    SET GCC_PATH=C:\msys64\mingw_32
 )
 
 SET CGO_ENABLED=1
