@@ -19,21 +19,18 @@ SOURCES += \
     KiwoomApi.cpp \
     KiwoomApiWrapper.cpp \
     func.cpp \
-    main.cpp \
-    MainWindow.cpp
+    main.cpp
 
 HEADERS += \
     KiwoomApi.hpp \
     KiwoomApiWrapper.hpp \
-    MainWindow.hpp \
     PostMessageTask.hpp \
     WinMsg.hpp \
     WinMsgHandler.hpp \
     func.hpp \
     var.hpp
 
-FORMS += \
-    MainWindow.ui
+FORMS +=
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

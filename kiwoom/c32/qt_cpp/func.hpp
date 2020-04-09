@@ -1,9 +1,9 @@
 #ifndef FUNC_HPP
 #define FUNC_HPP
 
-#include "MainWindow.hpp"
+#include <QWidget>
 
-#define OK_ERR(condition) (condition ? " OK.\n" : " Error.\n");
+#define OK_ERR(condition) (condition ? " OK." : " Error.");
 
 QString OkErr(bool condition);
 bool LoadDLL();
