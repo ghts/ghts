@@ -233,9 +233,7 @@ func go전달_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 	var i질의값 interface{}
 	var ok bool
 
-	질의 := new(lib.S채널_질의_API)
-	질의.Ch회신값 = make(chan interface{}, 0)
-	질의.Ch에러 = make(chan error, 0)
+	질의 := lib.New채널_질의_API(nil)
 
 	ch초기화 <- lib.P신호_초기화
 
