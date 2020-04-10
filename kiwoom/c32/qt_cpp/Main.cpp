@@ -9,8 +9,7 @@
 
 void connectKiwoomEventSignalSlot(KHOpenAPILib::KHOpenAPI*, KiwoomEvents*);
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
     QWidget w;  // HWND를 제공하는 Win32 MSG 통로.
 

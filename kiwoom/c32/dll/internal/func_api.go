@@ -38,49 +38,30 @@ GNU GPL v2는 이 프로그램과 함께 제공됩니다.
 package k32
 
 import (
+	kt "github.com/ghts/ghts/kiwoom/base"
 	"github.com/ghts/ghts/lib"
-	"github.com/ghts/ghts/lib/w32"
-	"go.nanomsg.org/mangos/v3"
-	"sync"
 )
 
-var (
-	메인_윈도우 w32.HWND
+func F접속() {
+	F체크("F접속()")
 
-	소켓REP_TR수신   = lib.NewNano소켓XREP_단순형(lib.P주소_키움_C함수_호출)
-	소켓PUB_실시간_정보 = lib.NewNano소켓PUB_단순형(lib.P주소_키움_실시간)
+	질의 := lib.New채널_질의_API(lib.New질의값_기본형(kt.TR접속, ""))
+	F체크("F접속() 채널 질의 준비 완료")
 
-	소켓REQ_저장소 = lib.New소켓_저장소(20, func() lib.I소켓_질의 {
-		return lib.NewNano소켓REQ_단순형(lib.P주소_키움_C함수_콜백, lib.P30초)
-	})
+	Ch질의 <- 질의
+	F체크("F접속() 채널 질의 송신 완료")
 
-	접속_처리_잠금  sync.Mutex
-	api_호출_잠금 sync.Mutex
+	select {
+	case 회신값 := <-질의.Ch회신값:
+		if 참거짓, ok := 회신값.(bool); !ok {
+			F체크(lib.F2문자열("예상하지 못한 자료형 : '%T'", 회신값))
+		} else {
+			F체크(lib.F2문자열("F접속() 호출 반환값 : '%v'", 참거짓))
+		}
+	case 에러 := <-질의.Ch에러:
+		F체크(lib.F2문자열("F접속() 에러 : '%v'.", 에러.Error()))
+	case <-lib.F공통_종료_채널():
+		return
+	}
+}
 
-	Ch작업  = make(chan *lib.S작업, 100)
-	Ch로그인 = make(chan bool, 1)
-	Ch수신  = make(chan *mangos.Message, 1000)
-	Ch질의  = make(chan *lib.S채널_질의_API, 100)
-	ch콜백  = make(chan lib.I콜백, 100)
-	Ch디버깅_메시지 = make(chan string, 1000)
-
-	전달_도우미_수량 int
-	콜백_도우미_수량 int
-
-	Ch모니터링_루틴_종료   = make(chan lib.T신호, 1)
-	Ch수신_도우미_종료    = make(chan lib.T신호, 1)
-	Ch전달_도우미_종료    = make(chan lib.T신호, 100)
-	Ch콜백_도우미_종료    = make(chan lib.T신호, 100)
-	Ch함수_호출_도우미_종료 = make(chan lib.T신호, 1)
-
-	메시지_일련번호_생성기 = lib.New안전한_일련번호()
-	S메시지_보관소     = New윈도우_메시지_보관소()
-)
-
-// 초기화 이후에는 사실상 읽기 전용이어서, 다중 사용에 문제가 없는 값들.
-var (
-	//설정파일_디렉토리 = filepath.Join(lib.GOPATH(), "src", reflect.TypeOf(S콜백_대기_저장소{}).PkgPath())
-	//설정파일_경로   = filepath.Join(설정파일_디렉토리, "config.ini")
-	계좌번호_모음 []string
-	계좌_비밀번호 string
-)

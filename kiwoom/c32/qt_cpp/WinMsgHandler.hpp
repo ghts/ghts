@@ -4,12 +4,6 @@
 #include <QAbstractNativeEventFilter>
 #include "Kiwoom.hpp"
 
-//#include "WinMsg.hpp"
-//#include "Func.hpp"
-//#include <qt_windows.h>
-//#include <QDebug>
-
-
 class WinMsgHandler : public QAbstractNativeEventFilter {
 public:
     virtual bool nativeEventFilter(const QByteArray &eventType, void *message, long *result) Q_DECL_OVERRIDE;

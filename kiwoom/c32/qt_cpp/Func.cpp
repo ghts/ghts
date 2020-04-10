@@ -1,4 +1,5 @@
 #include "Func.hpp"
+#include "Callback.h"
 
 #include <QDebug>
 
@@ -65,4 +66,3 @@ void Confirm(uint serialNo, QString qString) {
 
     delete[] buffer;
 }
-

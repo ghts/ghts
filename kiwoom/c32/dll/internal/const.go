@@ -37,14 +37,19 @@ GNU GPL v2는 이 프로그램과 함께 제공됩니다.
 
 package k32
 
-import "github.com/ghts/ghts/lib/w32"
+import (
+	"github.com/ghts/ghts/lib/w32"
+)
 
 const (
 	KM_INIT       = w32.WM_USER + 100
 	KM_CONNECT    = KM_INIT + 1
 	KM_LOGIN_INFO = KM_INIT + 4
+
+	KM_PRINT_DEBUG_MSG = KM_INIT + 300
 )
 
 const (
 	FALSE = 0
 )
+

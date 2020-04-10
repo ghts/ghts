@@ -41,12 +41,14 @@ import "C"
 import (
 	kt "github.com/ghts/ghts/kiwoom/base"
 	"github.com/ghts/ghts/lib"
+	"github.com/ghts/ghts/lib/c"
 	"github.com/ghts/ghts/lib/w32"
 	xt "github.com/ghts/ghts/xing/base"
 	"go.nanomsg.org/mangos/v3"
 	"runtime"
 	"strings"
 	"time"
+	"unsafe"
 )
 
 func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
@@ -62,6 +64,9 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 		콜백_도우미_수량 = 2
 	}
 
+	ch디버깅_메시지_출력_도우미_초기화 := make(chan lib.T신호)
+	ch디버깅_메시지_출력_도우미_종료 := make(chan lib.T신호)
+
 	ch수신_도우미_초기화 := make(chan lib.T신호)
 	ch수신_도우미_종료 := make(chan lib.T신호)
 
@@ -75,6 +80,8 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 	ch콜백_도우미_종료 := make(chan lib.T신호)
 
 	// Go루틴 생성
+	go go디버깅_메시지_출력_도우미(ch디버깅_메시지_출력_도우미_초기화, ch디버깅_메시지_출력_도우미_종료)
+
 	go go수신_도우미(ch수신_도우미_초기화, ch수신_도우미_종료)
 
 	for i := 0; i < 전달_도우미_수량; i++ {
@@ -88,6 +95,8 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 	//}
 
 	// Go루틴 초기화 대기
+	<-ch디버깅_메시지_출력_도우미_초기화
+
 	<-ch수신_도우미_초기화
 
 	for i := 0; i < 전달_도우미_수량; i++ {
@@ -160,6 +169,28 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 				go go콜백_도우미(ch콜백_도우미_초기화, ch콜백_도우미_종료)
 				F체크()
 			}
+		}
+	}
+}
+
+func go디버깅_메시지_출력_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
+
+	ch공통_종료 := lib.F공통_종료_채널()
+
+	ch초기화 <- lib.P신호_OK
+
+	for {
+		select {
+		case <-ch공통_종료:
+			에러 = nil
+			return
+		case 디버깅_메시지 := <- Ch디버깅_메시지:
+			func() {	// 메모리 관리를 위한 defer문 사용을 위해서 임시 함수 생성.
+				c문자열 := c.F2C문자열(디버깅_메시지)
+				defer c.F메모리_해제(unsafe.Pointer(c문자열))
+
+				w32.SendMessage(메인_윈도우, KM_PRINT_DEBUG_MSG, 0, uintptr(unsafe.Pointer(c문자열)))
+			}()
 		}
 	}
 }
@@ -253,9 +284,8 @@ func go전달_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 	var i질의값 interface{}
 	var ok bool
 
-	질의 := new(lib.S채널_질의_API)
-	질의.Ch회신값 = make(chan interface{}, 0)
-	질의.Ch에러 = make(chan error, 0)
+
+	질의 := lib.New채널_질의_API(nil)
 
 	ch초기화 <- lib.P신호_초기화
 
@@ -397,7 +427,7 @@ func f콜백_동기식(콜백값 lib.I콜백) (에러 error) {
 func f질의값_처리(질의 *lib.S채널_질의_API) {
 	var 에러 error
 
-	F체크("Query processing")
+	F체크("f질의값_처리()")
 
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 질의.Ch에러 <- 에러 }}.S실행()
 
@@ -418,33 +448,9 @@ func f질의값_처리(질의 *lib.S채널_질의_API) {
 	case kt.TR접속됨:
 		F체크("TODO")
 		// F접속됨(질의)
-	case kt.TR서버_이름:
+	case kt.TR로그인_정보:
 		F체크("TODO")
-		// F서버_이름(질의)
-	case kt.TR에러_코드:
-		F체크("TODO")
-		// F에러_코드(질의)
-	case kt.TR에러_메시지:
-		F체크("TODO")
-		// F에러_메시지(질의)
-	case kt.TR계좌_수량:
-		F체크("TODO")
-		// F계좌_수량(질의)
-	case kt.TR계좌번호_모음:
-		F체크("TODO")
-		// F계좌번호_모음(질의)
-	case kt.TR계좌_이름:
-		F체크("TODO")
-		// F계좌_이름(질의)
-	case kt.TR계좌_상세명:
-		F체크("TODO")
-		// F계좌_상세명(질의)
-	case kt.TR계좌_별명:
-		F체크("TODO")
-		// F계좌_별명(질의)
-	case kt.TR코드별_전송_제한:
-		F체크("TODO")
-		// TR코드별_전송_제한(질의)
+
 	case kt.TR소켓_테스트:
 		F체크("TODO")
 		// 질의.Ch회신값 <- lib.P신호_OK
@@ -466,23 +472,16 @@ func F접속_처리(질의 *lib.S채널_질의_API) {
 		M보관_시점:    time.Now()}
 
 	S메시지_보관소.S보관(보관_항목)
-	F체크("Connect MSG prepared.")
+	F체크("F접속_처리() MSG 보관.")
 
-	F안전한_PostMessage(KM_CONNECT, 보관_항목.M메시지_일련번호, 0)
-	F체크("Connect MSG posted.")
+	f안전한_PostMessage(KM_CONNECT, 보관_항목.M메시지_일련번호, 0)
+	F체크("F접속_처리() MSG Post.")
 
 	회신_문자열 := <-보관_항목.Ch회신
-	F체크(lib.F2문자열("Connect MSG confirmed : '%v'", 회신_문자열))
+	F체크(lib.F2문자열("F접속_처리() 호출 확인 : '%v' '%v'", 회신_문자열, (회신_문자열 == "0")))
+
+	// 호출 성공 여부 반환 (0:성공, 그 외 실패)
+	질의.Ch회신값 <- (회신_문자열 == "0")
 }
 
-func F안전한_PostMessage(uMsg uint32, wParam, lParam uintptr) {
-	for {
-		결과 := w32.PostMessage(메인_윈도우, uMsg, wParam, lParam)
 
-		F체크("PostMessage HRESULT", 결과)
-
-		if 결과 != FALSE {
-			return
-		}
-	}
-}

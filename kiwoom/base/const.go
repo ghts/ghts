@@ -59,16 +59,8 @@ const (
 	TR초기화
 	TR종료
 
-	// Xing API에서 사용되는 것들
-	TR서버_이름
-	TR에러_코드
-	TR에러_메시지
-	TR코드별_전송_제한
-	TR계좌_수량
-	TR계좌번호_모음
-	TR계좌_이름
-	TR계좌_상세명
-	TR계좌_별명
+	// Kiwoom API에서 사용되는 것들
+	TR로그인_정보
 	TR소켓_테스트
 )
 
@@ -94,25 +86,62 @@ func TR구분_String(v lib.TR구분) string {
 		return "TR초기화"
 	case TR종료:
 		return "TR종료"
-	case TR서버_이름:
-		return "서버_이름"
-	case TR에러_코드:
-		return "에러_코드"
-	case TR에러_메시지:
-		return "에러_메시지"
-	case TR코드별_전송_제한:
-		return "TR코드별_전송_제한"
-	case TR계좌_수량:
-		return "계좌_수량"
-	case TR계좌번호_모음:
-		return "계좌_번호"
-	case TR계좌_이름:
-		return "계좌_이름"
-	case TR계좌_상세명:
-		return "계좌_상세명"
+	case TR로그인_정보:
+		return "로그인_정보"
 	case TR소켓_테스트:
 		return "신호"
 	default:
 		return lib.F2문자열("예상하지 못한 M값 : '%v'", v)
 	}
+}
+
+type T로그인_정보_구분 uint8
+
+const (
+	P전체_계좌_수량 T로그인_정보_구분 = iota
+	P전체_계좌_번호
+	P사용자_ID
+	P사용자_이름
+	P키보드_보안_상태 // 0:정상, 1:해지
+	P방화벽_상태    // 0:미설정, 1:설정, 2:해지
+)
+
+func (t T로그인_정보_구분) String() string {
+	switch t {
+	case P전체_계좌_수량:
+		return "ACCOUNT_CNT"
+	case P전체_계좌_번호:
+		return "ACCNO"
+	case P사용자_ID:
+		return "USER_ID"
+	case P사용자_이름:
+		return "USER_NAME"
+	case P키보드_보안_상태:
+		return "KEY_BSECGB"
+	case P방화벽_상태:
+		return "FIREW_SECGB:"
+	}
+
+	return lib.F2문자열("예상하지 못한 로그인 정보 구분값 : '%v'", int(t))
+}
+
+type T방화벽_상태 uint8
+
+const (
+	P방화벽_미설정 = iota
+	P방화벽_설정
+	P방화벽_해지
+)
+
+func (t T방화벽_상태) String() string {
+	switch t {
+	case P방화벽_미설정:
+		return "미설정"
+	case P방화벽_설정:
+		return "설정"
+	case P방화벽_해지:
+		return "해지"
+	}
+
+	return lib.F2문자열("예상하지 못한 방화벽 상태 구분값 : '%v'", int(t))
 }

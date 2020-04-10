@@ -37,89 +37,24 @@ GNU GPL v2는 이 프로그램과 함께 제공됩니다.
 
 package k32
 
-import (
-	"bytes"
-	"fmt"
-	"github.com/ghts/ghts/lib"
-	"github.com/ghts/ghts/lib/w32"
-	"path/filepath"
-	"runtime"
-	"strconv"
-	"strings"
-)
+import "github.com/ghts/ghts/lib/w32"
 
 func F메시지_일련번호() uintptr {
 	return uintptr(메시지_일련번호_생성기.G값())
-}
-
-func F체크(값_모음 ...interface{}) {
-	버퍼 := new(bytes.Buffer)
-
-	if len(값_모음) == 0 {
-		버퍼.WriteString("Check Point")
-	} else {
-		버퍼.WriteString(f변수값_문자열(값_모음...))
-	}
-
-	버퍼.WriteString(" ")
-	버퍼.WriteString(f소스코드_위치(1))
-
-	println(버퍼.String())
-}
-
-func f소스코드_위치(건너뛰는_단계 int) string {
-	건너뛰는_단계++ // 이 메소드를 호출한 함수를 기준으로 0이 되게 하기 위함.
-
-	_, 파일_경로, 행_번호, _ := runtime.Caller(건너뛰는_단계)
-
-	var 파일명 string
-	시작점 := strings.Index(파일_경로, "github.com")
-	if 시작점 >= 0 && 시작점 < len(파일_경로) {
-		파일명 = 파일_경로[시작점:]
-	} else {
-		파일명 = filepath.Base(파일_경로)
-	}
-
-	return 파일명 + ":" + strconv.Itoa(행_번호)
-}
-
-func f변수값_문자열(값_모음 ...interface{}) string {
-	버퍼 := new(bytes.Buffer)
-
-	for i, _ := range 값_모음 {
-		if i == 0 {
-			버퍼.WriteString("'%v'")
-		} else {
-			버퍼.WriteString(", '%v'")
-		}
-	}
-
-	return fmt.Sprintf(버퍼.String(), 값_모음...)
 }
 
 func F윈도우_핸들_설정(hWnd w32.HWND) {
 	메인_윈도우 = hWnd
 }
 
-func F접속() {
-	F체크("Connect query preparation start.")
+func f안전한_PostMessage(uMsg uint32, wParam, lParam uintptr) {
+	for {
+		결과 := w32.PostMessage(메인_윈도우, uMsg, wParam, lParam)
 
-	질의 := new(lib.S채널_질의_API)
-	질의.M질의값 = lib.New질의값_기본형(lib.TR접속, "")
-	질의.Ch회신값 = make(chan interface{}, 0)
-	질의.Ch에러 = make(chan error, 0)
-	F체크("Connect query ready.")
+		F체크("PostMessage HRESULT", 결과)
 
-	Ch질의 <- 질의
-	F체크("Connect query sent.")
-
-	select {
-	case <-질의.Ch회신값:
-		F체크("Connect query called.")
-	case 에러 := <-질의.Ch에러:
-		F체크("Connect query error.")
-		println(에러.Error())
-	case <-lib.F공통_종료_채널():
-		return
+		if 결과 != FALSE {
+			return
+		}
 	}
 }

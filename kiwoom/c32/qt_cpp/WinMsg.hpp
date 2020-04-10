@@ -5,4 +5,6 @@
 #define KM_CONNECT KM_INIT+1
 #define KM_LOGIN_INFO KM_INIT+4
 
+#define KM_PRINT_DEBUG_MSG KM_INIT + 300
+
 #endif // CONSTWINMSG_HPP

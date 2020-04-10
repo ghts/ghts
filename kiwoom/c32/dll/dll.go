@@ -56,7 +56,7 @@ func Init(_hWnd unsafe.Pointer) (반환값 bool) {
 	ch초기화 := make(chan lib.T신호, 1)
 	go k32.Go루틴_관리(ch초기화)
 	<-ch초기화
-
+	
 	go k32.F접속()
 
 	return true
@@ -69,15 +69,20 @@ func Init(_hWnd unsafe.Pointer) (반환값 bool) {
 //export Confirm
 func Confirm(일련번호 C.uint, c문자열 *C.char) {
 	문자열 := C.GoString(c문자열)
-	k32.F체크(lib.F2문자열("Confirm value : '%v'", 문자열))
+	k32.F체크(lib.F2문자열("호출 확인 반환값 : '%v'", 문자열))
 
 	k32.S메시지_보관소.S회신(uintptr(일련번호), 문자열)
-	k32.F체크(lib.F2문자열("Confirm notification sent : '%v'", 일련번호))
+	k32.F체크(lib.F2문자열("호출 확인 반환값 전달 : '%v'", 일련번호))
 }
 
 //export OnEventConnect
 func OnEventConnect(로그인_여부 bool) {
 	k32.F체크("OnEventConnect()")
 	k32.Ch로그인 <- 로그인_여부
-	k32.F체크("OnEventConnect() Login result submitted.")
+	k32.F체크("OnEventConnect() 로그인 결과 전달됨.")
+}
+
+//export RunTest
+func RunTest() {
+	go k32.F로그인_정보_테스트()
 }
