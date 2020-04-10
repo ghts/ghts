@@ -40,14 +40,18 @@ package k32
 import (
 	"bytes"
 	"fmt"
+	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/lib/w32"
-	"golang.org/x/text/encoding/korean"
-	"golang.org/x/text/transform"
+	"golang.org/x/text/encoding/unicode"
 	"path/filepath"
 	"runtime"
 	"strconv"
 	"strings"
 )
+
+func F메시지_일련번호() uintptr {
+	return uintptr(메시지_일련번호_생성기.G값())
+}
 
 func F체크(값_모음 ...interface{}) {
 	버퍼 := new(bytes.Buffer)
@@ -64,10 +68,10 @@ func F체크(값_모음 ...interface{}) {
 	println(버퍼.String())
 }
 
-func f문자열_인코딩_변환(UTF8문자열 string) string {
-	EUC_KR문자열, _, _ := transform.String(korean.EUCKR.NewDecoder(), UTF8문자열)
+func f2UTF16(UTF8문자열 string) string {
+	UTF16문자열, _ := unicode.UTF16(unicode.LittleEndian, unicode.UseBOM).NewDecoder().String(UTF8문자열)
 
-	return EUC_KR문자열
+	return UTF16문자열
 }
 
 func f소스코드_위치(건너뛰는_단계 int) string {
@@ -105,28 +109,56 @@ func F윈도우_핸들_설정(hWnd w32.HWND) {
 }
 
 func F접속() {
-	F체크("SendMessage 1")
-	w32.SendMessage(메인_윈도우, KM_CONNECT, 0,0)
-	F체크("SendMessage 2")
-
-	//질의 := new(lib.S채널_질의_API)
-	//질의.M질의값 = lib.New질의값_기본형(lib.TR접속, "")
-	//질의.Ch회신값 = make(chan interface{}, 0)
-	//질의.Ch에러 = make(chan error, 0)
+	//F체크("SendMessage 1")
+	//일련번호 := F메시지_일련번호()
+	//w32.SendMessage(메인_윈도우, KM_CONNECT, F메시지_일련번호(),0)
+	//F체크("SendMessage 2")
 	//
-	//F체크("접속 질의 준비 완료.")
+	//보관_항목 := S윈도우_메시지_항목{
+	//	M메시지_일련번호 : uint32(일련번호),
+	//	Ch회신 : make(chan []byte, 1),
+	//	M보관_시점: time.Now()}
 	//
-	//Ch질의 <- 질의
+	//F체크()
 	//
-	//F체크("접속 채널 질의 전송 완료.")
+	//S메시지_보관소.S보관(&보관_항목)
+	//
+	//F체크(runtime.NumGoroutine(), runtime.NumCPU())
 	//
 	//select {
-	//case <-질의.Ch회신값:
-	//case 에러 := <-질의.Ch에러:
-	//	F체크("접속 질의 에러 발생.")
-	//	println(에러.Error())
-	//case <-lib.F공통_종료_채널():
-	//	return
+	//case 바이트_모음 := <-보관_항목.Ch회신:
+	//	F체크()
+	//
+	//	반환값 := int32(0)
+	//	반환값 = *(*int32)(unsafe.Pointer(&바이트_모음[0]))
+	//
+	//	F체크(반환값)
+	//case <-time.After(lib.P30초):
+	//	F체크("Time Out 30s.")
 	//}
-}
+	//
+	//F체크()
 
+	F체크("Connect query preparation start.")
+
+	질의 := new(lib.S채널_질의_API)
+	질의.M질의값 = lib.New질의값_기본형(lib.TR접속, "")
+	질의.Ch회신값 = make(chan interface{}, 0)
+	질의.Ch에러 = make(chan error, 0)
+
+	F체크("Connect query ready.")
+
+	Ch질의 <- 질의
+
+	F체크("Connect query sent.")
+
+	select {
+	case <-질의.Ch회신값:
+		F체크("Connect query called.")
+	case 에러 := <-질의.Ch에러:
+		F체크("Connect query error.")
+		println(에러.Error())
+	case <-lib.F공통_종료_채널():
+		return
+	}
+}

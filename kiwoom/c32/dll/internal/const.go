@@ -40,5 +40,11 @@ package k32
 import "github.com/ghts/ghts/lib/w32"
 
 const (
-	KM_CONNECT = w32.WM_USER + 100
+	KM_INIT       = w32.WM_USER + 100
+	KM_CONNECT    = KM_INIT + 1
+	KM_LOGIN_INFO = KM_INIT + 4
+)
+
+const (
+	FALSE = 0
 )

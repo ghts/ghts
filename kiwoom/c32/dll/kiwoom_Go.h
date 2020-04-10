@@ -69,9 +69,13 @@ extern "C" {
 #endif
 
 
-extern GoUint8 InitGoDLL(void* p0);
+extern GoUint8 Init(void* p0);
 
-extern void NotifyLoginResult(GoUint8 p0);
+extern void QuitLoop();
+
+extern void Confirm(unsigned int p0, void* p1, int p2);
+
+extern void OnEventConnect(GoUint8 p0);
 
 #ifdef __cplusplus
 }

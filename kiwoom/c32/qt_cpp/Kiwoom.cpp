@@ -7,7 +7,7 @@
 ****************************************************************************/
 
 #define QAX_DUMPCPP_KHOPENAPILIB_NOINLINES
-#include "KiwoomApi.hpp"
+#include "Kiwoom.hpp"
 
 using namespace KHOpenAPILib;
 

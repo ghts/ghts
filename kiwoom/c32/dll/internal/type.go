@@ -35,53 +35,67 @@ GNU GPL v2는 이 프로그램과 함께 제공됩니다.
 (자유 소프트웨어 재단 : Free Software Foundation, Inc.,
 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA) */
 
-package main
+package k32
 
-import "C"
 import (
-	k32 "github.com/ghts/ghts/kiwoom/c32/dll/internal"
 	"github.com/ghts/ghts/lib"
-	"github.com/ghts/ghts/lib/w32"
-	"unsafe"
+	"sync"
+	"time"
 )
 
-func main() {}
-
-//export Init
-func Init(_hWnd unsafe.Pointer) (반환값 bool) {
-	defer lib.S예외처리{M함수: func() { 반환값 = false }}.S실행()
-
-	k32.F윈도우_핸들_설정(w32.HWND(_hWnd))
-
-	ch초기화 := make(chan lib.T신호, 1)
-	go k32.Go루틴_관리(ch초기화)
-	<-ch초기화
-
-	go k32.F접속()
-
-	return true
+type S윈도우_메시지_항목 struct {
+	M메시지_일련번호 uintptr
+	Ch회신      chan []byte
+	M보관_시점    time.Time
 }
 
-//| OS             | WPARAM          | LPARAM        |
-//| 32-bit Windows | 32-bit unsigned | 32-bit signed |
-//| 64-bit Windows | 64-bit unsigned | 64-bit signed |
+func New윈도우_메시지_보관소() *S윈도우_메시지_보관소 {
+	s := new(S윈도우_메시지_보관소)
+	s.보관소 = make(map[uintptr]*S윈도우_메시지_항목)
 
-//export Confirm
-func Confirm(일련번호 C.uint, ptr데이터 unsafe.Pointer, sizeOf데이터 C.int) {
-	k32.F체크("Confirm SN", 일련번호, sizeOf데이터)
-
-	바이트_모음 := C.GoBytes(ptr데이터, sizeOf데이터)
-
-	k32.F체크("Confirm value", lib.F2문자열_공백제거(바이트_모음))
-
-	k32.S메시지_보관소.S회신(uintptr(일련번호), 바이트_모음)
-
-	k32.F체크("Confirm notification sent.", 일련번호)
+	return s
 }
 
-//export OnEventConnect
-func OnEventConnect(로그인_여부 bool) {
-	k32.F체크("OnEventConnect()")
-	k32.Ch로그인 <- 로그인_여부
-	k32.F체크("OnEventConnect() Login result submitted.")
+type S윈도우_메시지_보관소 struct {
+	sync.Mutex
+	보관소 map[uintptr]*S윈도우_메시지_항목
+}
+
+func (s *S윈도우_메시지_보관소) S보관(항목 *S윈도우_메시지_항목) {
+	s.Lock()
+	defer s.Unlock()
+
+	s.보관소[항목.M메시지_일련번호] = 항목
+}
+
+func (s *S윈도우_메시지_보관소) S삭제(일련번호 uintptr) {
+	s.Lock()
+	defer s.Unlock()
+
+	delete(s.보관소, 일련번호)
+}
+
+func (s *S윈도우_메시지_보관소) S회신(일련번호 uintptr, 바이트_모음 []byte) error {
+	defer s.S삭제(일련번호)
+
+	if 항목, ok := s.보관소[일련번호]; !ok {
+		return lib.New에러("해당 일련번호의 메시지 보관 항목이 존재하지 않음 : '%v'", 일련번호)
+	} else {
+		항목.Ch회신 <- 바이트_모음
+	}
+
+	return nil
+}
+
+func (s *S윈도우_메시지_보관소) S정리() {
+	s.Lock()
+	defer s.Unlock()
+
+	일분전 := time.Now().Add(-1 * lib.P1분)
+
+	for 일련번호, 값 := range s.보관소 {
+		if 값.M보관_시점.Before(일분전) {
+			delete(s.보관소, 일련번호)
+		}
+	}
 }

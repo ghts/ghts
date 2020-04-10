@@ -37,6 +37,7 @@ GNU GPL v2는 이 프로그램과 함께 제공됩니다.
 
 package k32
 
+import "C"
 import (
 	kt "github.com/ghts/ghts/kiwoom/base"
 	"github.com/ghts/ghts/lib"
@@ -45,6 +46,8 @@ import (
 	"go.nanomsg.org/mangos/v3"
 	"runtime"
 	"strings"
+	"time"
+	"unsafe"
 )
 
 func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
@@ -54,12 +57,12 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 	if 전달_도우미_수량 < 2 {
 		전달_도우미_수량 = 2
 	}
-	
+
 	콜백_도우미_수량 = runtime.NumCPU() / 2
 	if 콜백_도우미_수량 < 2 {
 		콜백_도우미_수량 = 2
 	}
-	
+
 	ch수신_도우미_초기화 := make(chan lib.T신호)
 	ch수신_도우미_종료 := make(chan lib.T신호)
 
@@ -74,13 +77,13 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 
 	// Go루틴 생성
 	go go수신_도우미(ch수신_도우미_초기화, ch수신_도우미_종료)
-	
+
 	for i := 0; i < 전달_도우미_수량; i++ {
 		go go전달_도우미(ch전달_도우미_초기화, ch전달_도우미_종료)
 	}
-	
+
 	go go함수_호출_도우미(ch호출_도우미_초기화, ch호출_도우미_종료)
-	
+
 	//for i := 0; i < 콜백_도우미_수량; i++ {
 	//	go go콜백_도우미(ch콜백_도우미_초기화, ch콜백_도우미_종료)
 	//}
@@ -93,7 +96,7 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 	}
 
 	<-ch호출_도우미_초기화
-	
+
 	//for i := 0; i < 콜백_도우미_수량; i++ {
 	//	F체크(i)
 	//
@@ -109,11 +112,11 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 		default:
 		}
 	}()
-	
+
 	ch초기화 <- lib.P신호_초기화
 
 	F체크("Goroutines initialization complete.")
-	
+
 	// 종료 되는 Go루틴 재생성.
 	for {
 		select {
@@ -138,7 +141,7 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 				F체크()
 				go go전달_도우미(ch전달_도우미_초기화, ch전달_도우미_종료)
 				F체크()
-				
+
 			}
 		case <-ch호출_도우미_종료:
 			select {
@@ -156,7 +159,7 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 			default:
 				F체크()
 				go go콜백_도우미(ch콜백_도우미_초기화, ch콜백_도우미_종료)
-				F체크()				
+				F체크()
 			}
 		}
 	}
@@ -392,11 +395,10 @@ func f콜백_동기식(콜백값 lib.I콜백) (에러 error) {
 	return nil
 }
 
-
 func f질의값_처리(질의 *lib.S채널_질의_API) {
 	var 에러 error
 
-	F체크("f질의값_처리()")
+	F체크("Query processing")
 
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 질의.Ch에러 <- 에러 }}.S실행()
 
@@ -459,7 +461,35 @@ func f질의값_처리(질의 *lib.S채널_질의_API) {
 }
 
 func F접속_처리(질의 *lib.S채널_질의_API) {
-	F체크("F접속_처리() 1")
-	w32.SendMessage(메인_윈도우, KM_CONNECT, 0,0)
-	F체크("F접속_처리() 2")
+	보관_항목 := &S윈도우_메시지_항목{
+		M메시지_일련번호: F메시지_일련번호(),
+		Ch회신:      make(chan []byte, 1),
+		M보관_시점:    time.Now()}
+
+	S메시지_보관소.S보관(보관_항목)
+
+	F체크("Connect query MSG prepare.")
+	F안전한_PostMessage(KM_CONNECT, 보관_항목.M메시지_일련번호, 0)
+	F체크("Connect query MSG posted.")
+
+	F체크("Waiting for connect MSG confirmation.")
+	바이트_모음 := <-보관_항목.Ch회신
+	F체크("Connect MSG confirmed.")
+
+	//문자열 := lib.F2문자열_공백제거(바이트_모음)
+	문자열 := C.GoString((*C.char)(unsafe.Pointer(&바이트_모음[0])))
+
+	F체크(문자열)
+}
+
+func F안전한_PostMessage(uMsg uint32, wParam, lParam uintptr) {
+	for {
+		결과 := w32.PostMessage(메인_윈도우, uMsg, wParam, lParam)
+
+		F체크("PostMessage HRESULT", 결과)
+
+		if 결과 != FALSE {
+			return
+		}
+	}
 }

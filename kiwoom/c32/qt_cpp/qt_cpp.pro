@@ -16,19 +16,18 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    KiwoomApi.cpp \
-    KiwoomApiWrapper.cpp \
-    func.cpp \
-    main.cpp
+    Func.cpp \
+    Kiwoom.cpp \
+    KiwoomEvents.cpp \
+    Main.cpp \
+    WinMsgHandler.cpp
 
 HEADERS += \
-    KiwoomApi.hpp \
-    KiwoomApiWrapper.hpp \
-    PostMessageTask.hpp \
+    Func.hpp \
+    Kiwoom.hpp \
+    KiwoomEvents.hpp \
     WinMsg.hpp \
-    WinMsgHandler.hpp \
-    func.hpp \
-    var.hpp
+    WinMsgHandler.hpp
 
 FORMS +=
 

@@ -57,6 +57,7 @@ var (
 	접속_처리_잠금  sync.Mutex
 	api_호출_잠금 sync.Mutex
 
+	Ch작업  = make(chan *lib.S작업, 100)
 	Ch로그인 = make(chan bool, 1)
 	Ch수신  = make(chan *mangos.Message, 1000)
 	Ch질의  = make(chan *lib.S채널_질의_API, 100)
@@ -70,12 +71,15 @@ var (
 	Ch전달_도우미_종료    = make(chan lib.T신호, 100)
 	Ch콜백_도우미_종료    = make(chan lib.T신호, 100)
 	Ch함수_호출_도우미_종료 = make(chan lib.T신호, 1)
+
+	메시지_일련번호_생성기 = lib.New안전한_일련번호()
+	S메시지_보관소     = New윈도우_메시지_보관소()
 )
 
 // 초기화 이후에는 사실상 읽기 전용이어서, 다중 사용에 문제가 없는 값들.
 var (
 	//설정파일_디렉토리 = filepath.Join(lib.GOPATH(), "src", reflect.TypeOf(S콜백_대기_저장소{}).PkgPath())
 	//설정파일_경로   = filepath.Join(설정파일_디렉토리, "config.ini")
-	계좌번호_모음   []string
-	계좌_비밀번호   string
+	계좌번호_모음 []string
+	계좌_비밀번호 string
 )
