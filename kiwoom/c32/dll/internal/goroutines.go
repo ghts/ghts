@@ -47,7 +47,6 @@ import (
 	"runtime"
 	"strings"
 	"time"
-	"unsafe"
 )
 
 func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
@@ -463,23 +462,17 @@ func f질의값_처리(질의 *lib.S채널_질의_API) {
 func F접속_처리(질의 *lib.S채널_질의_API) {
 	보관_항목 := &S윈도우_메시지_항목{
 		M메시지_일련번호: F메시지_일련번호(),
-		Ch회신:      make(chan []byte, 1),
+		Ch회신:      make(chan string, 1),
 		M보관_시점:    time.Now()}
 
 	S메시지_보관소.S보관(보관_항목)
+	F체크("Connect MSG prepared.")
 
-	F체크("Connect query MSG prepare.")
 	F안전한_PostMessage(KM_CONNECT, 보관_항목.M메시지_일련번호, 0)
-	F체크("Connect query MSG posted.")
+	F체크("Connect MSG posted.")
 
-	F체크("Waiting for connect MSG confirmation.")
-	바이트_모음 := <-보관_항목.Ch회신
-	F체크("Connect MSG confirmed.")
-
-	//문자열 := lib.F2문자열_공백제거(바이트_모음)
-	문자열 := C.GoString((*C.char)(unsafe.Pointer(&바이트_모음[0])))
-
-	F체크(문자열)
+	회신_문자열 := <-보관_항목.Ch회신
+	F체크(lib.F2문자열("Connect MSG confirmed : '%v'", 회신_문자열))
 }
 
 func F안전한_PostMessage(uMsg uint32, wParam, lParam uintptr) {

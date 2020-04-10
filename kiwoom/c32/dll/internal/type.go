@@ -45,7 +45,7 @@ import (
 
 type S윈도우_메시지_항목 struct {
 	M메시지_일련번호 uintptr
-	Ch회신      chan []byte
+	Ch회신      chan string
 	M보관_시점    time.Time
 }
 
@@ -75,13 +75,13 @@ func (s *S윈도우_메시지_보관소) S삭제(일련번호 uintptr) {
 	delete(s.보관소, 일련번호)
 }
 
-func (s *S윈도우_메시지_보관소) S회신(일련번호 uintptr, 바이트_모음 []byte) error {
+func (s *S윈도우_메시지_보관소) S회신(일련번호 uintptr, 회신값 string) error {
 	defer s.S삭제(일련번호)
 
 	if 항목, ok := s.보관소[일련번호]; !ok {
 		return lib.New에러("해당 일련번호의 메시지 보관 항목이 존재하지 않음 : '%v'", 일련번호)
 	} else {
-		항목.Ch회신 <- 바이트_모음
+		항목.Ch회신 <- 회신값
 	}
 
 	return nil

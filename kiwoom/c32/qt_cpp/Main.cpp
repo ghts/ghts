@@ -27,7 +27,6 @@ int main(int argc, char *argv[])
     return a.exec();
 }
 
-
 void connectKiwoomEventSignalSlot(KHOpenAPILib::KHOpenAPI *kiwoom, KiwoomEvents *kiwoomEvents) {
     kiwoomEvents->connect(kiwoom, SIGNAL(OnEventConnect(int)), kiwoomEvents,  SLOT(OnEventConnectHandler(int)));
     kiwoomEvents->connect(kiwoom, SIGNAL(OnReceiveChejanData(QString, int, QString)), kiwoomEvents,  SLOT(OnReceiveChejanDataHandler(QString, int, QString)));

@@ -42,7 +42,6 @@ import (
 	"fmt"
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/lib/w32"
-	"golang.org/x/text/encoding/unicode"
 	"path/filepath"
 	"runtime"
 	"strconv"
@@ -66,12 +65,6 @@ func F체크(값_모음 ...interface{}) {
 	버퍼.WriteString(f소스코드_위치(1))
 
 	println(버퍼.String())
-}
-
-func f2UTF16(UTF8문자열 string) string {
-	UTF16문자열, _ := unicode.UTF16(unicode.LittleEndian, unicode.UseBOM).NewDecoder().String(UTF8문자열)
-
-	return UTF16문자열
 }
 
 func f소스코드_위치(건너뛰는_단계 int) string {
@@ -109,47 +102,15 @@ func F윈도우_핸들_설정(hWnd w32.HWND) {
 }
 
 func F접속() {
-	//F체크("SendMessage 1")
-	//일련번호 := F메시지_일련번호()
-	//w32.SendMessage(메인_윈도우, KM_CONNECT, F메시지_일련번호(),0)
-	//F체크("SendMessage 2")
-	//
-	//보관_항목 := S윈도우_메시지_항목{
-	//	M메시지_일련번호 : uint32(일련번호),
-	//	Ch회신 : make(chan []byte, 1),
-	//	M보관_시점: time.Now()}
-	//
-	//F체크()
-	//
-	//S메시지_보관소.S보관(&보관_항목)
-	//
-	//F체크(runtime.NumGoroutine(), runtime.NumCPU())
-	//
-	//select {
-	//case 바이트_모음 := <-보관_항목.Ch회신:
-	//	F체크()
-	//
-	//	반환값 := int32(0)
-	//	반환값 = *(*int32)(unsafe.Pointer(&바이트_모음[0]))
-	//
-	//	F체크(반환값)
-	//case <-time.After(lib.P30초):
-	//	F체크("Time Out 30s.")
-	//}
-	//
-	//F체크()
-
 	F체크("Connect query preparation start.")
 
 	질의 := new(lib.S채널_질의_API)
 	질의.M질의값 = lib.New질의값_기본형(lib.TR접속, "")
 	질의.Ch회신값 = make(chan interface{}, 0)
 	질의.Ch에러 = make(chan error, 0)
-
 	F체크("Connect query ready.")
 
 	Ch질의 <- 질의
-
 	F체크("Connect query sent.")
 
 	select {

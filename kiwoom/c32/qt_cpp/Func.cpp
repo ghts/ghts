@@ -38,32 +38,30 @@ bool Init(QWidget *w) {
     return result;
 }
 
-void Confirm(uint serialNo, void *ptrData, int sizeOfData) {
+void Confirm(uint serialNo, QString qString) {
     QLibrary *kiwoom_Go = GetKiwoom_Go();
     if (kiwoom_Go == NULL) {
         qDebug()<<"Abort Confirm() : "<<serialNo;
         return;
     }
 
-    typedef void (*Confirm)(uint, void*, int);
+    typedef void (*Confirm)(uint, char*);
     Confirm confirm = (Confirm)kiwoom_Go->resolve("Confirm");
     qDebug()<<"Resolve('Confirm')" << OK_ERR(confirm);
 
-    if (!confirm) { return; }
+    if (!confirm) {
+        qDebug()<<"Abort Confirm() : "<<serialNo;
+        return;
+    }
 
-    confirm(serialNo, ptrData, sizeOfData);
-    qDebug()<<"Confirm() OK.";
-}
-
-void ConfirmString(uint serialNo, QString qString) {
     int bufferSize = qString.length()*4;
-
     qDebug()<<"Buffer size : "<<bufferSize;
 
     char *buffer = new char[bufferSize]();
     qsnprintf(buffer, sizeof(buffer), "%s", qString.toUtf8().constData());
 
-    Confirm(serialNo, (void*)(&buffer[0]), bufferSize);
+    confirm(serialNo, buffer);
+    qDebug()<<"Confirm() OK.";
 
     delete[] buffer;
 }

@@ -71,9 +71,7 @@ extern "C" {
 
 extern GoUint8 Init(void* p0);
 
-extern void QuitLoop();
-
-extern void Confirm(unsigned int p0, void* p1, int p2);
+extern void Confirm(unsigned int p0, char* p1);
 
 extern void OnEventConnect(GoUint8 p0);
 

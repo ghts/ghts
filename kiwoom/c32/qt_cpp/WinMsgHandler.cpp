@@ -21,7 +21,7 @@ bool WinMsgHandler::nativeEventFilter(const QByteArray &, void *message, long *)
 
         QString resultString = QString::number(result);
 
-        ConfirmString(serialNo, resultString);
+        Confirm(serialNo, resultString);
         qDebug()<<"Confirm CommConnect(). "<<resultString;
 
         return true;
@@ -32,7 +32,7 @@ bool WinMsgHandler::nativeEventFilter(const QByteArray &, void *message, long *)
         QString result = kiwoom->GetLoginInfo(sTag);
         qDebug()<<"GetLoginInfo("<<sTag<<") : '"<<result<<"'";
 
-        ConfirmString(serialNo, result);
+        Confirm(serialNo, result);
         qDebug()<<"Confirm GetLoginInfo().";
 
         return true;
