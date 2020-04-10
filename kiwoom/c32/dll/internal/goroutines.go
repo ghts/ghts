@@ -474,6 +474,7 @@ func F접속_처리(질의 *lib.S채널_질의_API) {
 	S메시지_보관소.S보관(보관_항목)
 	F체크("F접속_처리() MSG 보관.")
 
+	// 데이터 포인터를 전달하지 않으므로, PostMessage로도 충분하다.
 	f안전한_PostMessage(KM_CONNECT, 보관_항목.M메시지_일련번호, 0)
 	F체크("F접속_처리() MSG Post.")
 
