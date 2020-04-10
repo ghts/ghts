@@ -49,30 +49,30 @@ var (
 	메시지_윈도우      uintptr
 
 	// Xing API 함수 포인터
-	etkConnect              uintptr
-	etkIsConnected          uintptr
-	etkLogin                uintptr
-	etkLogout               uintptr
+	etkConnect     uintptr
+	etkIsConnected uintptr
+	etkLogin       uintptr
+	etkLogout      uintptr
 	//etkDisconnect           uintptr	// syscall, cgo 방식 모두 에러 발생.
-	etkRequest              uintptr
-	etkAdviseRealData       uintptr
-	etkUnadviseRealData     uintptr
-	etkUnadviseWindow       uintptr
-	etkGetAccountListCount  uintptr
-	etkGetAccountList       uintptr
-	etkGetAccountName       uintptr
+	etkRequest             uintptr
+	etkAdviseRealData      uintptr
+	etkUnadviseRealData    uintptr
+	etkUnadviseWindow      uintptr
+	etkGetAccountListCount uintptr
+	etkGetAccountList      uintptr
+	etkGetAccountName      uintptr
 	//etkGetAccountDetailName uintptr		// syscall 방식은 에러 발생. cgo 방식은 정상 작동.
-	etkGetAccountNickName   uintptr
-	etkGetServerName        uintptr
-	etkGetLastError         uintptr
-	etkGetErrorMessage      uintptr
-	etkGetTRCountPerSec     uintptr
-	etkGetTRCountBaseSec    uintptr
-	etkGetTRCountLimit      uintptr
-	etkGetTRCountRequest    uintptr
-	etkReleaseRequestData   uintptr
-	etkReleaseMessageData   uintptr
-	etkDecompress           uintptr
+	etkGetAccountNickName uintptr
+	etkGetServerName      uintptr
+	etkGetLastError       uintptr
+	etkGetErrorMessage    uintptr
+	etkGetTRCountPerSec   uintptr
+	etkGetTRCountBaseSec  uintptr
+	etkGetTRCountLimit    uintptr
+	etkGetTRCountRequest  uintptr
+	etkReleaseRequestData uintptr
+	etkReleaseMessageData uintptr
+	etkDecompress         uintptr
 )
 
 // 다중 사용에 안전한 값들.
