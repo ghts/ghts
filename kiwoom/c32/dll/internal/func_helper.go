@@ -49,11 +49,7 @@ func F윈도우_핸들_설정(hWnd w32.HWND) {
 
 func f안전한_PostMessage(uMsg uint32, wParam, lParam uintptr) {
 	for {
-		결과 := w32.PostMessage(메인_윈도우, uMsg, wParam, lParam)
-
-		F체크("PostMessage HRESULT", 결과)
-
-		if 결과 != FALSE {
+		if 결과 := w32.PostMessage(메인_윈도우, uMsg, wParam, lParam); 결과 != FALSE {
 			return
 		}
 	}

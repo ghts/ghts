@@ -75,8 +75,6 @@ extern void Confirm(unsigned int p0, char* p1);
 
 extern void OnEventConnect(GoUint8 p0);
 
-extern void RunTest();
-
 #ifdef __cplusplus
 }
 #endif

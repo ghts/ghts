@@ -68,6 +68,7 @@ var (
 	콜백_도우미_수량 int
 
 	Ch모니터링_루틴_종료   = make(chan lib.T신호, 1)
+	Ch디버깅_메시지_출력_루틴_종료   = make(chan lib.T신호, 1)
 	Ch수신_도우미_종료    = make(chan lib.T신호, 1)
 	Ch전달_도우미_종료    = make(chan lib.T신호, 100)
 	Ch콜백_도우미_종료    = make(chan lib.T신호, 100)

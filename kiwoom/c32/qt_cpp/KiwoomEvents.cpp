@@ -13,16 +13,14 @@ void KiwoomEvents::OnEventConnectHandler(int nErrCode) {
 
     typedef void (*OnEventConnect)(bool);
     OnEventConnect notifiy = (OnEventConnect)kiwoom_Go->resolve("OnEventConnect");
-    qDebug()<<"Resolve('OnEventConnect') " << OK_ERR(notifiy);
 
     if (!notifiy) {
         qDebug()<<"Abort OnEventConnectHandler().";
         return;
     }
 
-    qDebug()<<(nErrCode == 0);
     notifiy(nErrCode == 0);
-    qDebug("OnEventConnect() OK.");
+    qDebug()<<"OnEventConnect("<<(nErrCode == 0)<<") OK.";
 }
 
 void KiwoomEvents::OnReceiveChejanDataHandler(QString sGubun, int nItemCnt, QString sFIdList) {

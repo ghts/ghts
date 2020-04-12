@@ -72,17 +72,12 @@ func Confirm(일련번호 C.uint, c문자열 *C.char) {
 	k32.F체크(lib.F2문자열("호출 확인 반환값 : '%v'", 문자열))
 
 	k32.S메시지_보관소.S회신(uintptr(일련번호), 문자열)
-	k32.F체크(lib.F2문자열("호출 확인 반환값 전달 : '%v'", 일련번호))
+	k32.F체크(lib.F2문자열("호출 확인 반환값 전달 : '%v', '%v'", 일련번호, 문자열))
 }
 
 //export OnEventConnect
 func OnEventConnect(로그인_여부 bool) {
-	k32.F체크("OnEventConnect()")
 	k32.Ch로그인 <- 로그인_여부
-	k32.F체크("OnEventConnect() 로그인 결과 전달됨.")
+	k32.F체크(lib.F2문자열("OnEventConnect(%v) 채널 송신 완료.", 로그인_여부))
 }
 
-//export RunTest
-func RunTest() {
-	go k32.F로그인_정보_테스트()
-}
