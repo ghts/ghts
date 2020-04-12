@@ -45,7 +45,10 @@ import (
 )
 
 func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
-	defer lib.S예외처리{M에러: &에러}.S실행()
+	defer func() {
+		lib.S예외처리{M에러: &에러}.S실행()
+		Ch모니터링_루틴_종료 <- lib.P신호_종료
+	}()
 
 	전달_도우미_수량 = runtime.NumCPU() / 2
 	if 전달_도우미_수량 < 2 {
@@ -57,13 +60,13 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 		콜백_도우미_수량 = 2
 	}
 
-	ch수신_도우미_초기화 := make(chan lib.T신호)
+	ch수신_도우미_초기화 := make(chan lib.T신호, 1)
 	ch수신_도우미_종료 := make(chan lib.T신호)
 
 	ch전달_도우미_초기화 := make(chan lib.T신호, 전달_도우미_수량)
 	ch전달_도우미_종료 := make(chan lib.T신호)
 
-	ch호출_도우미_초기화 := make(chan lib.T신호)
+	ch호출_도우미_초기화 := make(chan lib.T신호, 1)
 	ch호출_도우미_종료 := make(chan lib.T신호)
 
 	ch콜백_도우미_초기화 := make(chan lib.T신호, 콜백_도우미_수량)
@@ -97,14 +100,6 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 
 	ch공통_종료 := lib.F공통_종료_채널()
 
-	defer func() {
-		select {
-		case <-ch공통_종료:
-			Ch모니터링_루틴_종료 <- lib.P신호_종료
-		default:
-		}
-	}()
-
 	ch초기화 <- lib.P신호_초기화
 
 	// 종료 되는 Go루틴 재생성.
@@ -113,70 +108,45 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 		case <-ch공통_종료:
 			return nil
 		case <-ch수신_도우미_종료:
-			select {
-			case <-ch공통_종료:
-				return nil
-			default:
-				go go수신_도우미(ch수신_도우미_초기화, ch수신_도우미_종료)
-			}
+			go go수신_도우미(ch수신_도우미_초기화, ch수신_도우미_종료)
 		case <-ch전달_도우미_종료:
-			select {
-			case <-ch공통_종료:
-				return nil
-			default:
-				go go전달_도우미(ch전달_도우미_초기화, ch전달_도우미_종료)
-			}
+			go go전달_도우미(ch전달_도우미_초기화, ch전달_도우미_종료)
 		case <-ch호출_도우미_종료:
-			select {
-			case <-ch공통_종료:
-				return nil
-			default:
-				go go함수_호출_도우미(ch호출_도우미_초기화, ch호출_도우미_종료)
-			}
+			go go함수_호출_도우미(ch호출_도우미_초기화, ch호출_도우미_종료)
 		case <-ch콜백_도우미_종료:
-			select {
-			case <-ch공통_종료:
-				return nil
-			default:
-				go go콜백_도우미(ch콜백_도우미_초기화, ch콜백_도우미_종료)
-			}
+			go go콜백_도우미(ch콜백_도우미_초기화, ch콜백_도우미_종료)
 		}
 	}
 }
 
 // 질의값을 소켓으로 수신 후 함수 호출 모듈로 전달.
 func go수신_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
+	if lib.F공통_종료_채널_닫힘() {
+		return nil
+	}
+
 	var 수신_메시지 *mangos.Message
-	ch공통_종료 := lib.F공통_종료_채널()
 
 	defer func() {
-		select {
-		case <-ch공통_종료:
+		lib.S예외처리{M에러: &에러, M출력_숨김: true, M함수: func() {
+			lib.F조건부_실행(에러 != nil &&
+				!strings.Contains(에러.Error(), "connection closed") &&
+				!strings.Contains(에러.Error(), "object closed"),
+				lib.F에러_출력, 에러)
+
+			lib.F조건부_실행(수신_메시지 != nil, 소켓REP_TR수신.S회신Raw, 수신_메시지, lib.JSON, 에러)
+		}}.S실행()
+
+		if lib.F공통_종료_채널_닫힘(){
 			Ch수신_도우미_종료 <- lib.P신호_종료
-		default:
+		} else{
+			ch종료 <- lib.P신호_종료
 		}
 	}()
 
-	defer lib.S예외처리{M에러: &에러, M출력_숨김: true, M함수: func() {
-		select {
-		case <-ch공통_종료:
-			에러 = nil
-			return
-		default:
-		}
+	ch공통_종료 := lib.F공통_종료_채널()
 
-		if 에러 != nil &&
-			!strings.Contains(에러.Error(), "connection closed") &&
-			!strings.Contains(에러.Error(), "object closed") {
-			lib.F에러_출력(에러)
-		}
-
-		lib.F조건부_실행(수신_메시지 != nil, 소켓REP_TR수신.S회신Raw, 수신_메시지, lib.JSON, 에러)
-
-		ch종료 <- lib.P신호_종료
-	}}.S실행()
-
-	ch초기화 <- lib.P신호_초기화
+	lib.F신호_전달_시도(ch초기화, lib.P신호_OK)
 
 	for {
 		수신_메시지, 에러 = 소켓REP_TR수신.G수신Raw()
@@ -199,43 +169,40 @@ func go수신_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 
 // 질의값을 소켓으로 수신 후 API 호출 모듈에 전달 (혹은 인계)
 func go전달_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
+	if lib.F공통_종료_채널_닫힘() {
+		return nil
+	}
+
 	var 수신_메시지 *mangos.Message
-	ch공통_종료 := lib.F공통_종료_채널()
 
 	defer func() {
-		select {
-		case <-ch공통_종료:
+		lib.S예외처리{M에러: &에러, M함수: func() {
+			lib.F조건부_실행(에러 != nil &&
+				!strings.Contains(에러.Error(), "connection closed") &&
+				!strings.Contains(에러.Error(), "object closed"),
+				lib.F에러_출력, 에러)
+
+			lib.F조건부_실행(수신_메시지 != nil, 소켓REP_TR수신.S회신Raw, 수신_메시지, lib.JSON, 에러)
+
+
+		}}.S실행()
+
+		if lib.F공통_종료_채널_닫힘() {
 			Ch전달_도우미_종료 <- lib.P신호_종료
-		default:
+		} else {
+			ch종료 <- lib.P신호_종료
 		}
 	}()
-
-	defer lib.S예외처리{M에러: &에러, M함수: func() {
-		select {
-		case <-ch공통_종료:
-			에러 = nil
-			return
-		default:
-		}
-
-		if 에러 != nil &&
-			!strings.Contains(에러.Error(), "connection closed") &&
-			!strings.Contains(에러.Error(), "object closed") {
-			lib.F에러_출력(에러)
-		}
-
-		lib.F조건부_실행(수신_메시지 != nil, 소켓REP_TR수신.S회신Raw, 수신_메시지, lib.JSON, 에러)
-
-		ch종료 <- lib.P신호_종료
-	}}.S실행()
 
 	var 수신값 *lib.S바이트_변환_모음
 	var i질의값 interface{}
 	var ok bool
 
+	ch공통_종료 := lib.F공통_종료_채널()
+
 	질의 := lib.New채널_질의_API(nil)
 
-	ch초기화 <- lib.P신호_초기화
+	lib.F신호_전달_시도(ch초기화, lib.P신호_OK)
 
 	for {
 		select {
@@ -270,24 +237,19 @@ func go전달_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 // Win32 함수, 증권사 API 모두 Go언어와 같은 동시/병렬 처리에 대한 고려가 없던 시절에 만들어졌으므로,
 // 가능한 단일 고정 스레드에서 호출하는 게 좋다.
 func go함수_호출_도우미(ch초기화, ch종료 chan lib.T신호) {
-	ch공통_종료 := lib.F공통_종료_채널()
+	if lib.F공통_종료_채널_닫힘() {
+		return
+	}
 
 	defer func() {
-		select {
-		case <-ch공통_종료:
-			Ch함수_호출_도우미_종료 <- lib.P신호_종료
-		default:
-		}
-	}()
+		recover()
 
-	defer lib.S예외처리{M함수: func() {
-		select {
-		case <-ch공통_종료:
-			return
-		default:
+		if lib.F공통_종료_채널_닫힘() {
+			Ch함수_호출_도우미_종료 <- lib.P신호_종료
+		} else {
 			ch종료 <- lib.P신호_종료
 		}
-	}}.S실행()
+	}()
 
 	runtime.LockOSThread()
 	defer runtime.UnlockOSThread()
@@ -295,7 +257,9 @@ func go함수_호출_도우미(ch초기화, ch종료 chan lib.T신호) {
 	f초기화_XingAPI() // 모든 API 액세스를 단일 스레드에서 하기 위해서 여기에서 API 초기화를 실행함.
 	F메시지_윈도우_생성()
 
-	ch초기화 <- lib.P신호_초기화
+	ch공통_종료 := lib.F공통_종료_채널()
+
+	lib.F신호_전달_시도(ch초기화, lib.P신호_OK)
 
 	for {
 		select {
