@@ -106,6 +106,14 @@ func F절대값_정수64(값 int64) int64 {
 	return 값
 }
 
+func F절대값_Duration(값 time.Duration) time.Duration {
+	if  값 < 0 {
+		return 값 * -1
+	}
+
+	return 값
+}
+
 func F절대값_실수(값 interface{}) float64 {
 	실수값 := float64(0.0)
 	switch 값.(type) {
@@ -849,4 +857,11 @@ func F지금() time.Time {
 
 func F금일() time.Time {
 	return F2일자(time.Now())
+}
+
+func F신호_전달_시도(ch신호 chan T신호, 신호 T신호) {
+	select {
+	case ch신호 <- 신호:
+	default:
+	}
 }

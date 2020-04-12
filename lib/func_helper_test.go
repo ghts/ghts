@@ -225,3 +225,15 @@ func TestCSV파일에_값_저장_및_읽기(t *testing.T) {
 		}
 	}
 }
+
+func TestF신호_전달_시도(t *testing.T) {
+	ch신호_버퍼_없음 := make(chan T신호)
+	ch신호_버퍼_있음 := make(chan T신호, 1)
+
+	F신호_전달_시도(ch신호_버퍼_없음, P신호_OK)
+	F신호_전달_시도(ch신호_버퍼_있음, P신호_OK)
+
+	신호 := <-ch신호_버퍼_있음
+
+	F테스트_같음(t, 신호, P신호_OK)
+}

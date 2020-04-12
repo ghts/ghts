@@ -123,20 +123,22 @@ func raw_클라이언트_노드_Nano소켓(t I안전한_테스트, ch초기화, 
 
 	var 일자 time.Time
 	t.G에러없음(바이트_변환_모음.G값(0, &일자))
-	t.G같음(일자.Format(P일자_형식), time.Now().Format(P일자_형식))
+
+	지금 := F지금()
+	t.G참임(F절대값_Duration(일자.Sub(지금)) < P10초, 일자, 지금)
 }
 
 func raw_서버_노드_Nano소켓(t I안전한_테스트, ch초기화, ch종료 chan T신호, 주소 T주소) {
 	defer func() { ch종료 <- P신호_종료 }()
 
-	소켓_XREP, 에러 := NewNano소켓XREP(주소) // xrep.NewSocket()
+	소켓_XREP, 에러 := NewNano소켓XREP(주소)
 	t.G에러없음(에러)
 
 	defer 소켓_XREP.Close()
 
 	ch초기화 <- P신호_초기화
 
-	메시지, 에러 := 소켓_XREP.G수신Raw() // .RecvMsg()
+	메시지, 에러 := 소켓_XREP.G수신Raw()
 	t.G에러없음(에러)
 
 	바이트_변환_모음, 에러 := New바이트_변환_모음from바이트_배열(메시지.Body)
