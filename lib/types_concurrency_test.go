@@ -42,6 +42,6 @@ func TestS작업(t *testing.T) {
 	F테스트_참임(t, <-ch응답)
 }
 
-func f작업_테스트용_함수(인수 interface{}) {
-	인수.(chan bool) <- true
+func f작업_테스트용_함수(인수 ...interface{}) {
+	인수[0].(chan bool) <- true
 }
