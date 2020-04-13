@@ -48,12 +48,6 @@ void *XingApiDll() {
     return (void *)hModule;
 }
 
-void FreeXingApiDll() {
-    if (hModule != NULL) {
-        FreeLibrary(hModule);
-    }
-}
-
 BOOL GetAcctDetailName(void *AccountNo, void *Buffer, int BufferSize) {
     memset(Buffer, 0, BufferSize);
 

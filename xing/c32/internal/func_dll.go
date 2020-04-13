@@ -293,7 +293,7 @@ func F로그인() (에러 error) {
 	}
 }
 
-func F로그아웃_및_접속해제() (에러 error) {
+func F로그아웃() (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
 	api_호출_잠금.Lock()
@@ -307,7 +307,7 @@ func F로그아웃_및_접속해제() (에러 error) {
 		return lib.New에러with출력("로그아웃 에러 : '%v'", 에러_번호)
 	}
 
-	lib.F메모("ETK_Disconnect() 에러 발생. syscall, cgo 둘 다 마찬가지.")
+	lib.F메모("ETK_Disconnect() 에러 발생.")
 
 	//_, _, 에러_번호 = syscall.Syscall(etkDisconnect, 0, 0, 0,0)
 	//
@@ -538,6 +538,18 @@ func F계좌_상세명(질의 *lib.S채널_질의_API) {
 		unsafe.Pointer(&버퍼_배열[0]),
 		C.int(버퍼_길이))
 
+	//_, _, 에러_번호 := syscall.Syscall(etkGetAccountDetailName, 3,
+	//	uintptr(unsafe.Pointer(c계좌번호)),
+	//	uintptr(unsafe.Pointer(&버퍼_배열[0])),
+	//	uintptr(버퍼_길이))
+	//
+	//switch 에러_번호 {
+	//case 0:
+	//	질의.Ch회신값 <- lib.F2문자열_EUC_KR_공백제거(버퍼_배열)
+	//default:
+	//	질의.Ch에러 <- lib.New에러("F계좌_상세명() 에러 발생.\n'%v'", 에러_번호)
+	//}
+
 	계좌_상세명 := lib.F2문자열_EUC_KR_공백제거(버퍼_배열[:])
 	질의.Ch회신값 <- 계좌_상세명
 }
@@ -766,7 +778,3 @@ func F압축_해제(압축된_원본_데이터 unsafe.Pointer, 버퍼 *byte, 원
 
 	return int(압축_해제된_데이터_길이)
 }
-
-//func FreeLibrary() {
-//	C.FreeXingApiDll()
-//}

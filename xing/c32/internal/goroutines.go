@@ -41,6 +41,7 @@ import (
 	"go.nanomsg.org/mangos/v3"
 	"runtime"
 	"strings"
+	"syscall"
 	"unsafe"
 )
 
@@ -586,13 +587,10 @@ func F종료_질의_처리(질의 *lib.S채널_질의_API) {
 	질의.Ch회신값 <- lib.P신호_OK
 	f콜백_동기식(lib.New콜백_신호(lib.P신호_C32_종료))
 	f실시간_정보_일괄_해지()
-	F로그아웃_및_접속해제()
+	F로그아웃()
 	F소켓_정리() // F공통_종료_채널_닫기() 포함.
 	lib.F대기(lib.P3초)
 	w32.PostQuitMessage(0)
 	w32.DestroyWindow(메시지_윈도우)
-
-	// syscall, cgo 모두 에러 발생.
-	//syscall.FreeLibrary(xing_api_dll)
-	//FreeLibrary()
+	syscall.FreeLibrary(xing_api_dll)
 }
