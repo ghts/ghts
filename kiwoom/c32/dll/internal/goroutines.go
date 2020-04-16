@@ -460,12 +460,9 @@ func F로그인_정보_처리(질의 *lib.S채널_질의_API) {
 
 	// 데이터 포인터를 전달하지 않으므로, PostMessage로도 충분하다.
 	f안전한_PostMessage(KM_LOGIN_INFO, 보관_항목.M메시지_일련번호, 로그인_정보_구분)
-	F체크("F로그인_정보_처리() PostMessage()")
 
 	회신_문자열 := <-보관_항목.Ch회신
 	회신_문자열 = strings.TrimSpace(회신_문자열)
-
-	F체크(lib.F2문자열("F로그인_정보_처리() 반환 문자열 : '%v'", 회신_문자열))
 
 	switch kt.T로그인_정보_구분(로그인_정보_구분) {
 	case kt.P전체_계좌_수량:

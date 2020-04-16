@@ -128,7 +128,7 @@ func (t T로그인_정보_구분) String() string {
 type T방화벽_상태 uint8
 
 const (
-	P방화벽_미설정 = iota
+	P방화벽_미설정 T방화벽_상태 = iota
 	P방화벽_설정
 	P방화벽_해지
 )

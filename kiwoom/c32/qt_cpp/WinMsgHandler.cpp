@@ -67,7 +67,7 @@ void KM_LOGIN_INFO_Handler(WPARAM serialNo, LPARAM lParam, KHOpenAPILib::KHOpenA
         return;
     }
 
-    QString result = kiwoom->GetLoginInfo (tag);
+    QString result = kiwoom->GetLoginInfo(tag);
     qDebug()<<"C++ GetLoginInfo("<<tag<<") Result : '"<<result<<"'";
 
     Confirm(serialNo, result);
