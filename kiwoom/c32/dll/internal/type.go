@@ -43,6 +43,13 @@ import (
 	"time"
 )
 
+func New윈도우_메시지_항목() *S윈도우_메시지_항목 {
+	return &S윈도우_메시지_항목{
+		M메시지_일련번호: F메시지_일련번호(),
+		Ch회신:      make(chan string, 1),
+		M보관_시점:    time.Now()}
+}
+
 type S윈도우_메시지_항목 struct {
 	M메시지_일련번호 uintptr
 	Ch회신      chan string

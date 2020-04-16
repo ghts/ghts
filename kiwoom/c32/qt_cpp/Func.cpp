@@ -46,7 +46,7 @@ void Confirm(uint serialNo, QString qString) {
         return;
     }
 
-    typedef void (*Confirm)(uint, char*, int);
+    typedef void (*Confirm)(uint, char*);
     Confirm confirm = (Confirm)kiwoom_Go->resolve("Confirm");
 
     if (!confirm) {
@@ -58,7 +58,7 @@ void Confirm(uint serialNo, QString qString) {
     char *buffer = new char[bufferSize]();
     qsnprintf(buffer, bufferSize, "%s", qString.toUtf8().constData());
 
-    confirm(serialNo, buffer, bufferSize);
+    confirm(serialNo, buffer);
 
     delete[] buffer;
 }

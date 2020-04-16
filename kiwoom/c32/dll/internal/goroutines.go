@@ -47,7 +47,6 @@ import (
 	"go.nanomsg.org/mangos/v3"
 	"runtime"
 	"strings"
-	"time"
 	"unsafe"
 )
 
@@ -126,8 +125,6 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 	}()
 
 	lib.F신호_전달_시도(ch초기화, lib.P신호_OK)
-
-	F체크("Go루틴 초기화 완료.")
 
 	// 종료 되는 Go루틴 재생성.
 	for {
@@ -408,8 +405,6 @@ func f콜백_동기식(콜백값 lib.I콜백) (에러 error) {
 func f질의값_처리(질의 *lib.S채널_질의_API) (에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 질의.Ch에러 <- 에러 }}.S실행()
 
-	F체크(질의.M질의값.TR구분())
-
 	switch 질의.M질의값.TR구분() {
 	case kt.TR조회, kt.TR주문:
 		F체크("TODO")
@@ -426,7 +421,7 @@ func f질의값_처리(질의 *lib.S채널_질의_API) (에러 error) {
 		F체크("TODO")
 		// F접속됨(질의)
 	case kt.TR로그인_정보:
-		F체크("TODO")
+		F로그인_정보_처리(질의)
 	case kt.TR소켓_테스트:
 		F체크("TODO")
 		// 질의.Ch회신값 <- lib.P신호_OK
@@ -444,20 +439,92 @@ func f질의값_처리(질의 *lib.S채널_질의_API) (에러 error) {
 }
 
 func F접속_처리(질의 *lib.S채널_질의_API) {
-	보관_항목 := &S윈도우_메시지_항목{
-		M메시지_일련번호: F메시지_일련번호(),
-		Ch회신:      make(chan string, 1),
-		M보관_시점:    time.Now()}
+	보관_항목 := New윈도우_메시지_항목()
+	S메시지_보관소.S보관(보관_항목)
+	f안전한_PostMessage(KM_CONNECT, 보관_항목.M메시지_일련번호, 0)	// 데이터 포인터를 전달하지 않으므로, PostMessage로도 충분하다.
+	회신_문자열 := <-보관_항목.Ch회신
+	질의.Ch회신값 <- (회신_문자열 == "0")	// 호출 성공 여부 반환 (0:성공, 그 외 실패)
+}
 
+func F로그인_정보_처리(질의 *lib.S채널_질의_API) {
+	보관_항목 := New윈도우_메시지_항목()
 	S메시지_보관소.S보관(보관_항목)
 
+	질의값, ok := 질의.M질의값.(*lib.S질의값_정수)
+	if !ok {
+		질의.Ch에러 <- lib.New에러("예상하지 못한 질의값 자료형 : '%T'", 질의값)
+		return
+	}
+
+	로그인_정보_구분 := uintptr(질의값.M정수값)
+
 	// 데이터 포인터를 전달하지 않으므로, PostMessage로도 충분하다.
-	f안전한_PostMessage(KM_CONNECT, 보관_항목.M메시지_일련번호, 0)
-	F체크("F접속_처리() PostMessage() 호출 완료.")
+	f안전한_PostMessage(KM_LOGIN_INFO, 보관_항목.M메시지_일련번호, 로그인_정보_구분)
+	F체크("F로그인_정보_처리() PostMessage()")
 
 	회신_문자열 := <-보관_항목.Ch회신
-	F체크(lib.F2문자열("F접속_처리() 호출 확인 : '%v' '%v'", 회신_문자열, (회신_문자열 == "0")))
+	회신_문자열 = strings.TrimSpace(회신_문자열)
 
-	// 호출 성공 여부 반환 (0:성공, 그 외 실패)
-	질의.Ch회신값 <- (회신_문자열 == "0")
+	F체크(lib.F2문자열("F로그인_정보_처리() 반환 문자열 : '%v'", 회신_문자열))
+
+	switch kt.T로그인_정보_구분(로그인_정보_구분) {
+	case kt.P전체_계좌_수량:
+		if 계좌_수량, 에러 := lib.F2정수(회신_문자열); 에러 != nil {
+			질의.Ch에러 <- 에러
+		} else {
+			질의.Ch회신값 <- 계좌_수량
+		}
+	case kt.P전체_계좌_번호:
+		계좌_번호_후보_모음 := strings.Split(회신_문자열, ";")
+		계좌_번호_모음 := make([]string, 0)
+
+		for _, 계좌_번호 := range 계좌_번호_후보_모음 {
+			계좌_번호 = strings.TrimSpace(계좌_번호)
+			if 계좌_번호 == "" {
+				continue
+			}
+
+			계좌_번호_모음 = append(계좌_번호_모음, 계좌_번호)
+		}
+
+		if len(계좌_번호_모음) == 0 {
+			질의.Ch에러 <- lib.New에러("계좌 번호를 찾을 수 없음. '%v'", 회신_문자열)
+		} else {
+			질의.Ch회신값 <- 계좌_번호_모음
+		}
+	case kt.P사용자_ID:
+		if len(회신_문자열) == 0 {
+			질의.Ch에러 <- lib.New에러("사용자 ID를 찾을 수 없음. '%v'", 회신_문자열)
+		} else {
+			질의.Ch회신값 <- 회신_문자열
+		}
+	case kt.P사용자_이름:
+		if len(회신_문자열) == 0 {
+			질의.Ch에러 <- lib.New에러("사용자 이름을 찾을 수 없음. '%v'", 회신_문자열)
+		} else {
+			질의.Ch회신값 <- 회신_문자열
+		}
+	case kt.P키보드_보안_상태:	// 0:정상, 1:해지
+		switch strings.TrimSpace(회신_문자열) {
+		case "0":
+			질의.Ch회신값 <- true
+		case "1":
+			질의.Ch회신값 <- false
+		default:
+			질의.Ch에러 <- lib.New에러("예상치 못한 회신값 : '%v'", 회신_문자열)
+		}
+	case kt.P방화벽_상태:		// 0:미설정, 1:설정, 2:해지
+		switch strings.TrimSpace(회신_문자열) {
+		case "0":
+			질의.Ch회신값 <- kt.P방화벽_미설정
+		case "1":
+			질의.Ch회신값 <- kt.P방화벽_설정
+		case "2":
+			질의.Ch회신값 <- kt.P방화벽_해지
+		default:
+			질의.Ch에러 <- lib.New에러("예상치 못한 회신값 : '%v'", 회신_문자열)
+		}
+	default:
+		질의.Ch에러 <- lib.New에러("F로그인_정보_처리() 예상치 못한 '로그인_정보_구분' : '%v'", int(로그인_정보_구분))
+	}
 }

@@ -42,7 +42,6 @@ import (
 	k32 "github.com/ghts/ghts/kiwoom/c32/dll/internal"
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/lib/w32"
-	"strings"
 	"unsafe"
 )
 
@@ -68,12 +67,8 @@ func Init(_hWnd unsafe.Pointer) (반환값 bool) {
 //| 64-bit Windows | 64-bit unsigned | 64-bit signed |
 
 //export Confirm
-func Confirm(일련번호 C.uint, ptr문자열 *C.char, 길이 C.int) {
-	바이트_모음 := C.GoBytes(unsafe.Pointer(ptr문자열), 길이)
-	문자열 := strings.TrimSpace(string(바이트_모음))
-
-	k32.F체크(lib.F2문자열("Go Confirm() 일련번호'%v' 문자열'%s'", 일련번호, 문자열))
-	k32.S메시지_보관소.S회신(uintptr(일련번호), 문자열)
+func Confirm(일련번호 C.uint, ptr문자열 *C.char) {
+	k32.S메시지_보관소.S회신(uintptr(일련번호), C.GoString(ptr문자열))
 }
 
 //export OnEventConnect
@@ -82,4 +77,3 @@ func OnEventConnect(로그인_여부 bool) {
 
 	k32.Ch로그인 <- 로그인_여부
 }
-

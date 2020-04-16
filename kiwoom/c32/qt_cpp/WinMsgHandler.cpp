@@ -1,11 +1,13 @@
 #include "WinMsgHandler.hpp"
-#include "WinMsg.hpp"
 #include "Func.hpp"
 #include "Const.hpp"
 
 #include <qt_windows.h>
 #include <QDebug>
 #include <QString>
+
+void KM_CONNECT_Handler(WPARAM, KHOpenAPILib::KHOpenAPI*);
+void KM_LOGIN_INFO_Handler(WPARAM, LPARAM, KHOpenAPILib::KHOpenAPI*);
 
 bool WinMsgHandler::nativeEventFilter(const QByteArray &, void *message, long *) {
     MSG *msg = static_cast<MSG*>(message);
@@ -16,51 +18,57 @@ bool WinMsgHandler::nativeEventFilter(const QByteArray &, void *message, long *)
     LPARAM lParam = msg->lParam;
 
     if (KM_CONNECT == uMsg) {
-        qDebug("KM_CONNECT recevied.");
-
-        int result = kiwoom->CommConnect();
-        qDebug()<<"CommConnect()"<<OK_ERR(result == 0);
-
-        QString resultString = QString::number(result);
-
-        Confirm(serialNo, resultString);
-        qDebug()<<"Confirm CommConnect(). "<<resultString;
-
-        return true;
+        KM_CONNECT_Handler(serialNo, kiwoom);
     } else if (KM_LOGIN_INFO == uMsg) {
-        qDebug("KM_LOGIN_INFO recevied.");
-
-        QString tag;
-
-        switch (lParam) {
-        case ACCOUNT_CNT:
-            tag = QString("ACCOUNT_CNT");
-        case ACCNO:
-            tag = QString("ACCNO");
-        case USER_ID:
-            tag = QString("USER_ID");
-        case USER_NAME:
-            tag = QString("USER_NAME");
-        case KEY_BSECGB:
-            tag = QString("KEY_BSECGB");
-        case FIREW_SECGB:
-            tag = QString("FIREW_SECGB");
-        }
-
-        QString result = kiwoom->GetLoginInfo(tag);
-        qDebug()<<"GetLoginInfo("<<tag<<") : '"<<result<<"'";
-
-        Confirm(serialNo, result);
-        qDebug()<<"Confirm GetLoginInfo() : '"<<result<<"'";
-
-        return true;
+        KM_LOGIN_INFO_Handler(serialNo, lParam, kiwoom);
     } else if (KM_PRINT_DEBUG_MSG == uMsg) {
         qDebug()<<QString::fromUtf8((const char*)lParam);
+    } else {
+        if (uMsg >= KM_INIT && uMsg <= (KM_INIT+100)) {
+            qDebug()<<uMsg<<" : Not implemented Yet.";
+        }
+
+        return false;
     }
 
-    if (uMsg >= KM_INIT && uMsg <= (KM_INIT+100)) {
-        qDebug()<<uMsg<<" : Not implemented Yet.";
+    return true;
+}
+
+void KM_CONNECT_Handler(WPARAM serialNo, KHOpenAPILib::KHOpenAPI *kiwoom) {
+    int result = kiwoom->CommConnect();
+
+    QString resultString = QString::number(result);
+    Confirm(serialNo, resultString);
+}
+
+void KM_LOGIN_INFO_Handler(WPARAM serialNo, LPARAM lParam, KHOpenAPILib::KHOpenAPI *kiwoom) {
+    QString tag;
+
+    if (ACCOUNT_CNT == lParam) {
+        tag = QString("ACCOUNT_CNT");
+        qDebug()<<"C++ KM_LOGIN_INFO recevied : ACCOUNT_CNT "<<lParam;
+    } else if (ACCNO == lParam) {
+        tag = QString("ACCNO");
+        qDebug()<<"C++ KM_LOGIN_INFO recevied : ACCNO "<<lParam;
+    } else if (USER_ID == lParam) {
+        tag = QString("USER_ID");
+        qDebug()<<"C++ KM_LOGIN_INFO recevied : USER_ID "<<lParam;
+    } else if (USER_NAME == lParam) {
+        tag = QString("USER_NAME");
+        qDebug()<<"C++ KM_LOGIN_INFO recevied : USER_NAME"<<lParam;
+    } else if (KEY_BSECGB == lParam) {
+        tag = QString("KEY_BSECGB");
+        qDebug()<<"C++ KM_LOGIN_INFO recevied : KEY_BSECGB"<<lParam;
+    } else if (FIREW_SECGB == lParam) {
+        tag = QString("FIREW_SECGB");
+        qDebug()<<"C++ KM_LOGIN_INFO recevied : FIREW_SECGB"<<lParam;
+    } else {
+        qDebug()<<"C++ KM_LOGIN_INFO 예상하지 못한 값 : "<<lParam;
+        return;
     }
 
-    return false;
+    QString result = kiwoom->GetLoginInfo (tag);
+    qDebug()<<"C++ GetLoginInfo("<<tag<<") Result : '"<<result<<"'";
+
+    Confirm(serialNo, result);
 }

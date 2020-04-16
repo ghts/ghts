@@ -3,7 +3,7 @@
 #include <QDebug>
 
 void KiwoomEvents::OnEventConnectHandler(int nErrCode) {
-    qDebug() << "Login" << OK_ERR(nErrCode == 0);
+    qDebug() << "C++ OnEventConnect()" << OK_ERR(nErrCode == 0);
 
     QLibrary *kiwoom_Go = GetKiwoom_Go();
     if (kiwoom_Go == NULL) {
@@ -20,7 +20,6 @@ void KiwoomEvents::OnEventConnectHandler(int nErrCode) {
     }
 
     notifiy(nErrCode == 0);
-    qDebug()<<"OnEventConnect("<<(nErrCode == 0)<<") OK.";
 }
 
 void KiwoomEvents::OnReceiveChejanDataHandler(QString sGubun, int nItemCnt, QString sFIdList) {

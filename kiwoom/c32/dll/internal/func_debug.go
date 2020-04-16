@@ -42,10 +42,6 @@ import (
 	"fmt"
 	kt "github.com/ghts/ghts/kiwoom/base"
 	"github.com/ghts/ghts/lib"
-	"path/filepath"
-	"runtime"
-	"strconv"
-	"strings"
 )
 
 func F체크(값_모음 ...interface{}) {
@@ -63,22 +59,6 @@ func F체크(값_모음 ...interface{}) {
 	Ch디버깅_메시지 <- 버퍼.String()
 }
 
-func f소스코드_위치(건너뛰는_단계 int) string {
-	건너뛰는_단계++ // 이 메소드를 호출한 함수를 기준으로 0이 되게 하기 위함.
-
-	_, 파일_경로, 행_번호, _ := runtime.Caller(건너뛰는_단계)
-
-	var 파일명 string
-	시작점 := strings.Index(파일_경로, "github.com")
-	if 시작점 >= 0 && 시작점 < len(파일_경로) {
-		파일명 = 파일_경로[시작점:]
-	} else {
-		파일명 = filepath.Base(파일_경로)
-	}
-
-	return 파일명 + ":" + strconv.Itoa(행_번호)
-}
-
 func f변수값_문자열(값_모음 ...interface{}) string {
 	버퍼 := new(bytes.Buffer)
 
@@ -94,91 +74,85 @@ func f변수값_문자열(값_모음 ...interface{}) string {
 }
 
 func F로그인_정보_테스트() {
-	F체크("F로그인_정보_테스트()")
+	//F체크("F로그인_정보_테스트()")
 
-	F계좌_수량_테스트()
-	F체크("F계좌_수량_테스트()")
+	//F계좌_수량_테스트()
 
 	F전체_계좌_번호_테스트()
-	F체크("F전체_계좌_번호_테스트()")
 
-	F사용자_ID_테스트()
-	F체크("F사용자_ID_테스트()")
+	//F사용자_ID_테스트()
 
-	F사용자_이름_테스트()
-	F체크("F사용자_이름_테스트()")
+	//F사용자_이름_테스트()
 
-	F키보드_보안_상태_테스트()
-	F체크("F키보드_보안_상태_테스트()")
+	//F키보드_보안_상태_테스트()
 
-	F방화벽_상태_테스트()
-	F체크("F방화벽_상태_테스트()")
+	//F방화벽_상태_테스트()
 }
 
 func F계좌_수량_테스트() {
-	F체크("F계좌_수량_테스트()")
+	F체크("F계좌_수량_테스트() 시작.")
 
 	질의 := lib.New채널_질의_API(lib.New질의값_정수(kt.TR로그인_정보, "", int(kt.P전체_계좌_수량)))
-	F체크("Account Qty query ready.")
+	F체크("F계좌_수량_테스트() : 질의 준비.")
 
 	Ch질의 <- 질의
-	F체크("Account Qerrty query sent.")
+	F체크("F계좌_수량_테스트() : 질의 전송.")
 
 	select {
 	case 회신값 := <-질의.Ch회신값:
 		if 수량, ok := 회신값.(int); !ok {
-			F체크(lib.F2문자열("Account Qty Test Failure. Unexpected data type : '%T'", 회신값))
+			F체크(lib.F2문자열("F계좌_수량_테스트() 예상하지 못한 자료형 : '%T'", 회신값))
 		} else {
-			F체크(lib.F2문자열("Account Qty Test Success : '%v'", 수량))
+			F체크(lib.F2문자열("F계좌_수량_테스트() OK : '%v'", 수량))
 		}
 	case 에러 := <-질의.Ch에러:
-		F체크(lib.F2문자열("Account Qty Test Error : '%v'.", 에러.Error()))
+		F체크(lib.F2문자열("F계좌_수량_테스트() Error : '%v'.", 에러.Error()))
 	case <-lib.F공통_종료_채널():
 		return
 	}
 }
 
 func F전체_계좌_번호_테스트() {
-	F체크("Account No Test.")
-
 	질의 := lib.New채널_질의_API(lib.New질의값_정수(kt.TR로그인_정보, "", int(kt.P전체_계좌_번호)))
-	F체크("Account No query ready.")
+	F체크("F전체_계좌_번호_테스트() : 질의 준비.")
 
 	Ch질의 <- 질의
-	F체크("Account No query sent.")
+	F체크("F전체_계좌_번호_테스트() : 질의 전송.")
 
 	select {
 	case 회신값 := <-질의.Ch회신값:
 		if 계좌_번호_모음, ok := 회신값.([]string); !ok {
-			F체크(lib.F2문자열("Account No Test Failure. Unexpected data type : '%T'", 회신값))
+			F체크(lib.F2문자열("F전체_계좌_번호_테스트() 예상하지 못한 자료형 : '%T'", 회신값))
 		} else {
-			F체크(lib.F2문자열("Account No Test Success : '%v'", 계좌_번호_모음))
+			F체크(lib.F2문자열("F전체_계좌_번호_테스트() OK. '%v'", 계좌_번호_모음))
 		}
 	case 에러 := <-질의.Ch에러:
-		F체크(lib.F2문자열("Account No Test Error : '%v'.", 에러.Error()))
+		F체크(lib.F2문자열("F전체_계좌_번호_테스트() Error : '%v'.", 에러.Error()))
 	case <-lib.F공통_종료_채널():
 		return
 	}
 }
 
 func F사용자_ID_테스트() {
-	F체크("User ID Test.")
+	F체크("F사용자_ID_테스트()")
 
 	질의 := lib.New채널_질의_API(lib.New질의값_정수(kt.TR로그인_정보, "", int(kt.P사용자_ID)))
-	F체크("User ID query ready.")
+	F체크("F사용자_ID_테스트() : 질의 준비.")
 
 	Ch질의 <- 질의
-	F체크("User ID query sent.")
+	F체크("F사용자_ID_테스트() : 질의 전송.")
 
 	select {
 	case 회신값 := <-질의.Ch회신값:
 		if 사용자_ID, ok := 회신값.(string); !ok {
-			F체크(lib.F2문자열("User ID Test Failure. Unexpected data type : '%T'", 회신값))
+			F체크(lib.F2문자열("F사용자_ID_테스트() 예상하지 못한 자료형 : '%T'", 회신값))
+		} else if 사용자_ID == "" {
+			F체크(lib.F2문자열("F사용자_ID_테스트() Error. 비어있는 회신값."))
 		} else {
-			F체크(lib.F2문자열("User ID Test Success : '%v'", 사용자_ID))
+			F체크(lib.F2문자열("F사용자_ID_테스트() OK : '%v'", 회신값))
 		}
 	case 에러 := <-질의.Ch에러:
-		F체크(lib.F2문자열("User ID Test Error : '%v'.", 에러.Error()))
+		F체크(lib.F2문자열("F사용자_ID_테스트() Error : '%v'.", 에러.Error()))
 	case <-lib.F공통_종료_채널():
 		return
 	}
@@ -188,66 +162,68 @@ func F사용자_이름_테스트() {
 	F체크("User Name Test.")
 
 	질의 := lib.New채널_질의_API(lib.New질의값_정수(kt.TR로그인_정보, "", int(kt.P사용자_이름)))
-	F체크("User Name query ready.")
+	F체크("F사용자_이름_테스트() : 질의 준비")
 
 	Ch질의 <- 질의
-	F체크("User Name query sent.")
+	F체크("F사용자_이름_테스트() : 질의 전송")
 
 	select {
 	case 회신값 := <-질의.Ch회신값:
 		if 사용자_이름, ok := 회신값.(string); !ok {
-			F체크(lib.F2문자열("User Name Test Failure. Unexpected data type : '%T'", 회신값))
+			F체크(lib.F2문자열("F사용자_이름_테스트() 예상하지 못한 자료형 : '%T'", 회신값))
+		} else if 사용자_이름 == "" {
+			F체크(lib.F2문자열("F사용자_이름_테스트() Error. 비어있는 회신값."))
 		} else {
-			F체크(lib.F2문자열("User Name Test Success : '%v'", 사용자_이름))
+			F체크(lib.F2문자열("F사용자_이름_테스트() OK : '%v'", 사용자_이름))
 		}
 	case 에러 := <-질의.Ch에러:
-		F체크(lib.F2문자열("User Name Test Error : '%v'.", 에러.Error()))
+		F체크(lib.F2문자열("F사용자_이름_테스트() Error : '%v'.", 에러.Error()))
 	case <-lib.F공통_종료_채널():
 		return
 	}
 }
 
 func F키보드_보안_상태_테스트() {
-	F체크("Keyboard Security On/Off Test.")
+	F체크("F키보드_보안_상태_테스트()")
 
 	질의 := lib.New채널_질의_API(lib.New질의값_정수(kt.TR로그인_정보, "", int(kt.P키보드_보안_상태)))
-	F체크("Keyboard Security On/Off query ready.")
+	F체크("F키보드_보안_상태_테스트() : 질의 준비.")
 
 	Ch질의 <- 질의
-	F체크("Keyboard Security On/Off query sent.")
+	F체크("F키보드_보안_상태_테스트() : 질의 전송.")
 
 	select {
 	case 회신값 := <-질의.Ch회신값:
 		if 키보드_보안_On_Off, ok := 회신값.(bool); !ok {
-			F체크(lib.F2문자열("Keyboard Security On/Off Test Failure. Unexpected data type : '%T'", 회신값))
+			F체크(lib.F2문자열("F키보드_보안_상태_테스트() 예상하지 못한 자료형 : '%T'", 회신값))
 		} else {
-			F체크(lib.F2문자열("Keyboard Security On/Off Test Success : '%v'", 키보드_보안_On_Off))
+			F체크(lib.F2문자열("F키보드_보안_상태_테스트() OK : '%v'", 키보드_보안_On_Off))
 		}
 	case 에러 := <-질의.Ch에러:
-		F체크(lib.F2문자열("Keyboard Security On/Off Test Error : '%v'.", 에러.Error()))
+		F체크(lib.F2문자열("F키보드_보안_상태_테스트() Error : '%v'.", 에러.Error()))
 	case <-lib.F공통_종료_채널():
 		return
 	}
 }
 
 func F방화벽_상태_테스트() {
-	F체크("Firewall On/Off Test.")
+	F체크("F방화벽_상태_테스트()")
 
 	질의 := lib.New채널_질의_API(lib.New질의값_정수(kt.TR로그인_정보, "", int(kt.P방화벽_상태)))
-	F체크("Firewall On/Off query ready.")
+	F체크("F방화벽_상태_테스트() : 질의 준비.")
 
 	Ch질의 <- 질의
-	F체크("Firewall On/Off query sent.")
+	F체크("F방화벽_상태_테스트() : 질의 전송.")
 
 	select {
 	case 회신값 := <-질의.Ch회신값:
 		if 방화벽_상태, ok := 회신값.(kt.T방화벽_상태); !ok {
-			F체크(lib.F2문자열("Firewall On/Off Test Failure. Unexpected data type : '%T'", 회신값))
+			F체크(lib.F2문자열("F방화벽_상태_테스트() 예상하지 못한 자료형 : '%T'", 회신값))
 		} else {
-			F체크(lib.F2문자열("Firewall On/Off Test Success : '%v'", 방화벽_상태))
+			F체크(lib.F2문자열("F방화벽_상태_테스트() OK : '%v'", 방화벽_상태))
 		}
 	case 에러 := <-질의.Ch에러:
-		F체크(lib.F2문자열("Firewall On/Off Test Error : '%v'.", 에러.Error()))
+		F체크(lib.F2문자열("F방화벽_상태_테스트() Error : '%v'.", 에러.Error()))
 	case <-lib.F공통_종료_채널():
 		return
 	}

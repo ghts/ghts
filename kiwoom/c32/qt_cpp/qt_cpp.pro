@@ -27,7 +27,6 @@ HEADERS += \
     Func.hpp \
     Kiwoom.hpp \
     KiwoomEvents.hpp \
-    WinMsg.hpp \
     WinMsgHandler.hpp
 
 FORMS +=
