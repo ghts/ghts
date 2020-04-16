@@ -9,7 +9,6 @@ QLibrary *GetKiwoom_Go() {
 
     if (!loaded) {
         loaded = kiwoom_Go->load();
-        qDebug()<<"kiwoom_Go.dll Load"<<OK_ERR(loaded);
 
         if (!loaded) {
             return NULL;
@@ -36,7 +35,6 @@ bool Init(QWidget *w) {
     }
 
     bool result = init((void *)w->winId());
-    qDebug()<<"Init()"<<OK_ERR(result);
 
     return result;
 }
@@ -48,7 +46,7 @@ void Confirm(uint serialNo, QString qString) {
         return;
     }
 
-    typedef void (*Confirm)(uint, char*);
+    typedef void (*Confirm)(uint, char*, int);
     Confirm confirm = (Confirm)kiwoom_Go->resolve("Confirm");
 
     if (!confirm) {
@@ -58,10 +56,9 @@ void Confirm(uint serialNo, QString qString) {
 
     int bufferSize = qString.length()*4;
     char *buffer = new char[bufferSize]();
-    qsnprintf(buffer, sizeof(buffer), "%s", qString.toUtf8().constData());
+    qsnprintf(buffer, bufferSize, "%s", qString.toUtf8().constData());
 
-    confirm(serialNo, buffer);
-    qDebug()<<"Confirm() OK.";
+    confirm(serialNo, buffer, bufferSize);
 
     delete[] buffer;
 }
