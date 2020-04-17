@@ -60,6 +60,7 @@ const (
 	TR종료
 
 	// Kiwoom API에서 사용되는 것들
+	TR종목코드_리스트
 	TR로그인_정보
 	TR소켓_테스트
 )
@@ -86,8 +87,10 @@ func TR구분_String(v lib.TR구분) string {
 		return "TR초기화"
 	case TR종료:
 		return "TR종료"
+	case TR종목코드_리스트:
+		return "TR종목코드_리스트"
 	case TR로그인_정보:
-		return "로그인_정보"
+		return "TR로그인_정보"
 	case TR소켓_테스트:
 		return "신호"
 	default:

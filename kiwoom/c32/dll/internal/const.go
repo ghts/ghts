@@ -42,9 +42,10 @@ import (
 )
 
 const (
-	KM_INIT       = w32.WM_USER + 100
-	KM_CONNECT    = KM_INIT + 1
-	KM_LOGIN_INFO = KM_INIT + 4
+	KM_INIT          = w32.WM_USER + 100
+	KM_CONNECT       = KM_INIT + 1
+	KM_LOGIN_INFO    = KM_INIT + 4
+	KM_CODE_LIST     = KM_INIT + 14
 	KM_CONNECT_STATE = KM_INIT + 15
 
 	KM_PRINT_DEBUG_MSG = KM_INIT + 300
@@ -54,3 +55,16 @@ const (
 	FALSE = 0
 )
 
+const (
+	P종목코드_전체         = 999
+	P종목코드_코스피        = 0
+	P종목코드_코스닥        = 10
+	P종목코드_ELW        = 3
+	P종목코드_ETF        = 8
+	P종목코드_KONEX      = 50
+	P종목코드_FUND       = 4
+	P종목코드_WARRANT    = 5
+	P종목코드_REITS      = 6
+	P종목코드_HIGH_YIELD = 9
+	P종목코드_K_OTC      = 30
+)
