@@ -8,6 +8,7 @@
 
 void KM_CONNECT_Handler(WPARAM, KHOpenAPILib::KHOpenAPI*);
 void KM_LOGIN_INFO_Handler(WPARAM, LPARAM, KHOpenAPILib::KHOpenAPI*);
+void KM_CONNECT_STATE_Handler(WPARAM, KHOpenAPILib::KHOpenAPI*);
 
 bool WinMsgHandler::nativeEventFilter(const QByteArray &, void *message, long *) {
     MSG *msg = static_cast<MSG*>(message);
@@ -21,6 +22,8 @@ bool WinMsgHandler::nativeEventFilter(const QByteArray &, void *message, long *)
         KM_CONNECT_Handler(serialNo, kiwoom);
     } else if (KM_LOGIN_INFO == uMsg) {
         KM_LOGIN_INFO_Handler(serialNo, lParam, kiwoom);
+    } else if (KM_CONNECT_STATE == uMsg) {
+        KM_CONNECT_STATE_Handler(serialNo, kiwoom);
     } else if (KM_PRINT_DEBUG_MSG == uMsg) {
         qDebug()<<QString::fromUtf8((const char*)lParam);
     } else {
@@ -71,4 +74,13 @@ void KM_LOGIN_INFO_Handler(WPARAM serialNo, LPARAM lParam, KHOpenAPILib::KHOpenA
     qDebug()<<"C++ GetLoginInfo("<<tag<<") Result : '"<<result<<"'";
 
     Confirm(serialNo, result);
+}
+
+void KM_CONNECT_STATE_Handler(WPARAM serialNo, KHOpenAPILib::KHOpenAPI *kiwoom) {
+    int result = kiwoom->GetConnectState();
+
+    QString resultString = QString::number(result);
+    qDebug()<<"C++ GetConnectState() Result : '"<<result<<"'";
+
+    Confirm(serialNo, resultString);
 }

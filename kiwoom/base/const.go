@@ -54,7 +54,7 @@ const (
 	TR실시간_정보_해지
 	TR실시간_정보_일괄_해지
 	TR접속
-	TR접속됨
+	TR접속_상태
 	TR접속_해제
 	TR초기화
 	TR종료
@@ -78,8 +78,8 @@ func TR구분_String(v lib.TR구분) string {
 		return "TR실시간_정보_일괄_해지"
 	case TR접속:
 		return "TR접속"
-	case TR접속됨:
-		return "TR접속됨"
+	case TR접속_상태:
+		return "TR접속_상태"
 	case TR접속_해제:
 		return "TR접속_해제"
 	case TR초기화:
