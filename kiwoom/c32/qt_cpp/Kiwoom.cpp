@@ -370,8 +370,7 @@ qt_meta_stringdata_all.data,
 qt_meta_data_KHOpenAPILib___DKHOpenAPI, 0, 0, 0 }
 };
 
-void *_DKHOpenAPI::qt_metacast(const char *_clname)
-{
+void *_DKHOpenAPI::qt_metacast(const char *_clname) {
     if (!_clname) return 0;
     if (!strcmp(_clname, "KHOpenAPILib::_DKHOpenAPI"))
         return static_cast<void*>(const_cast<_DKHOpenAPI*>(this));
@@ -551,8 +550,7 @@ qt_meta_stringdata_all.data,
 qt_meta_data_KHOpenAPILib__KHOpenAPI, 0, 0, 0 }
 };
 
-void *KHOpenAPI::qt_metacast(const char *_clname)
-{
+void *KHOpenAPI::qt_metacast(const char *_clname) {
     if (!_clname) return 0;
     if (!strcmp(_clname, "KHOpenAPILib::KHOpenAPI"))
         return static_cast<void*>(const_cast<KHOpenAPI*>(this));
