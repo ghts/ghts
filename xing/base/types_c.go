@@ -872,7 +872,7 @@ type CFOAT00100OutBlock2 struct {
 }
 type CFOAT00100OutBlock struct {
 	OutBlock1 CFOAT00100OutBlock1
-	OutBlock2 CFOAT00300OutBlock2
+	OutBlock2 CFOAT00100OutBlock2
 }
 
 type CFOAT00200InBlock1 struct {
@@ -922,7 +922,7 @@ type CFOAT00200OutBlock2 struct {
 }
 type CFOAT00200OutBlock struct {
 	OutBlock1 CFOAT00200OutBlock1
-	OutBlock2 CFOAT00300OutBlock2
+	OutBlock2 CFOAT00200OutBlock2
 }
 
 type CFOAT00300InBlock1 struct {
@@ -1358,6 +1358,60 @@ type CSPAQ13700OutBlock3 struct {
 	OrdTime       [9]byte
 	OpDrtnNo      [12]byte
 	OdrrId        [16]byte
+}
+
+type CSPAQ22200InBlock1 struct {
+	RecCnt    [5]byte
+	MgmtBrnNo [3]byte
+	AcntNo    [20]byte
+	Pwd       [8]byte
+	BalCreTp  [1]byte
+}
+type CSPAQ22200OutBlock1 struct {
+	RecCnt    [5]byte
+	MgmtBrnNo [3]byte
+	AcntNo    [20]byte
+	Pwd       [8]byte
+	BalCreTp  [1]byte
+}
+type CSPAQ22200OutBlock2 struct {
+	RecCnt                 [5]byte
+	BrnNm                  [40]byte
+	AcntNm                 [40]byte
+	MnyOrdAbleAmt          [16]byte
+	SubstOrdAbleAmt        [16]byte
+	SeOrdAbleAmt           [16]byte
+	KdqOrdAbleAmt          [16]byte
+	CrdtPldgOrdAmt         [16]byte
+	MgnRat100pctOrdAbleAmt [16]byte
+	MgnRat35ordAbleAmt     [16]byte
+	MgnRat50ordAbleAmt     [16]byte
+	CrdtOrdAbleAmt         [16]byte
+	Dps                    [16]byte
+	SubstAmt               [16]byte
+	MgnMny                 [16]byte
+	MgnSubst               [16]byte
+	D1Dps                  [16]byte
+	D2Dps                  [16]byte
+	RcvblAmt               [16]byte
+	D1ovdRepayRqrdAmt      [16]byte
+	D2ovdRepayRqrdAmt      [16]byte
+	MloanAmt               [16]byte
+	ChgAfPldgRat           [9]byte
+	RqrdPldgAmt            [16]byte
+	PdlckAmt               [16]byte
+	OrgPldgSumAmt          [16]byte
+	SubPldgSumAmt          [16]byte
+	CrdtPldgAmtMny         [16]byte
+	CrdtPldgSubstAmt       [16]byte
+	Imreq                  [16]byte
+	CrdtPldgRuseAmt        [16]byte
+	DpslRestrcAmt          [16]byte
+	PrdaySellAdjstAmt      [16]byte
+	PrdayBuyAdjstAmt       [16]byte
+	CrdaySellAdjstAmt      [16]byte
+	CrdayBuyAdjstAmt       [16]byte
+	CslLoanAmtdt1          [16]byte
 }
 
 type T0150InBlock struct {

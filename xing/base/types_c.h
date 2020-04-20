@@ -258,7 +258,7 @@ typedef struct {
 } CSPAT00800OutBlock;
 
 //------------------------------------------------------------------------------
-// 주식 주문 접수 실시간 정보 (SC0)
+// 현물 주문 접수 실시간 정보 (SC0)
 //------------------------------------------------------------------------------
 typedef struct {
     char    lineseq             [  10];    // [long  ,   10] 라인일련번호                   StartPos 0, Length 10
@@ -377,7 +377,7 @@ typedef struct {
 } SC0_OutBlock;
 
 //------------------------------------------------------------------------------
-// 주식 주문 체결 실시간 정보 (SC1)
+// 현물 주문 체결 실시간 정보 (SC1)
 //------------------------------------------------------------------------------
 typedef struct {
     char    lineseq             [  10];    // [long  ,   10] 라인일련번호                   StartPos 0, Length 10
@@ -513,7 +513,7 @@ typedef struct {
 } SC1_OutBlock;
 
 //------------------------------------------------------------------------------
-// 주식 주문 정정 실시간 정보 (SC2)
+// 현물 주문 정정 실시간 정보 (SC2)
 //------------------------------------------------------------------------------
 typedef struct _SC2_OutBlock
 {
@@ -650,7 +650,7 @@ typedef struct _SC2_OutBlock
 } SC2_OutBlock;
 
 //------------------------------------------------------------------------------
-// 주식 주문 취소 실시간 정보 (SC3)
+// 현물 주문 취소 실시간 정보 (SC3)
 //------------------------------------------------------------------------------
 typedef struct {
     char    lineseq[10];    //[long  ,   10] 라인일련번호   StartPos 0, Length 10
@@ -786,7 +786,7 @@ typedef struct {
 } SC3_OutBlock;
 
 //------------------------------------------------------------------------------
-// 주식 주문 거부 실시간 정보 (SC4)
+// 현물 주문 거부 실시간 정보 (SC4)
 //------------------------------------------------------------------------------
 typedef struct {
     char    lineseq[10];    //[long  ,   10] 라인일련번호   StartPos 0, Length 10
@@ -1515,7 +1515,67 @@ typedef struct {
 } CSPAQ13700OutBlock3;
 
 //------------------------------------------------------------------------------
-// 주식 당일 매매일지 수수료 (t0150)
+//  현물 계좌 예수금/주문가능금 총평가 (CSPAQ22200)
+//------------------------------------------------------------------------------
+
+typedef struct {
+    char    RecCnt              [   5];    // [long  ,    5] 레코드갯수                      StartPos 0, Length 5
+    char    MgmtBrnNo           [   3];    // [string,    3] 관리지점번호                    StartPos 5, Length 3
+    char    AcntNo              [  20];    // [string,   20] 계좌번호                        StartPos 8, Length 20
+    char    Pwd                 [   8];    // [string,    8] 비밀번호                        StartPos 28, Length 8
+    char    BalCreTp            [   1];    // [string,    1] 잔고생성구분                    StartPos 36, Length 1
+} CSPAQ22200InBlock1;
+
+typedef struct {
+    char    RecCnt              [   5];    // [long  ,    5] 레코드갯수                      StartPos 0, Length 5
+    char    MgmtBrnNo           [   3];    // [string,    3] 관리지점번호                    StartPos 5, Length 3
+    char    AcntNo              [  20];    // [string,   20] 계좌번호                        StartPos 8, Length 20
+    char    Pwd                 [   8];    // [string,    8] 비밀번호                        StartPos 28, Length 8
+    char    BalCreTp            [   1];    // [string,    1] 잔고생성구분                    StartPos 36, Length 1
+} CSPAQ22200OutBlock1;
+
+typedef struct {
+    char    RecCnt              [   5];    // [long  ,    5] 레코드갯수                      StartPos 0, Length 5
+    char    BrnNm               [  40];    // [string,   40] 지점명                          StartPos 5, Length 40
+    char    AcntNm              [  40];    // [string,   40] 계좌명                          StartPos 45, Length 40
+    char    MnyOrdAbleAmt       [  16];    // [long  ,   16] 현금주문가능금액                StartPos 85, Length 16
+    char    SubstOrdAbleAmt     [  16];    // [long  ,   16] 대용주문가능금액                StartPos 101, Length 16
+    char    SeOrdAbleAmt        [  16];    // [long  ,   16] 거래소금액                      StartPos 117, Length 16
+    char    KdqOrdAbleAmt       [  16];    // [long  ,   16] 코스닥금액                      StartPos 133, Length 16
+    char    CrdtPldgOrdAmt      [  16];    // [long  ,   16] 신용담보주문금액                StartPos 149, Length 16
+    char    MgnRat100pctOrdAbleAmt[  16];    // [long  ,   16] 증거금률100퍼센트주문가능금액   StartPos 165, Length 16
+    char    MgnRat35ordAbleAmt  [  16];    // [long  ,   16] 증거금률35%주문가능금액         StartPos 181, Length 16
+    char    MgnRat50ordAbleAmt  [  16];    // [long  ,   16] 증거금률50%주문가능금액         StartPos 197, Length 16
+    char    CrdtOrdAbleAmt      [  16];    // [long  ,   16] 신용주문가능금액                StartPos 213, Length 16
+    char    Dps                 [  16];    // [long  ,   16] 예수금                          StartPos 229, Length 16
+    char    SubstAmt            [  16];    // [long  ,   16] 대용금액                        StartPos 245, Length 16
+    char    MgnMny              [  16];    // [long  ,   16] 증거금현금                      StartPos 261, Length 16
+    char    MgnSubst            [  16];    // [long  ,   16] 증거금대용                      StartPos 277, Length 16
+    char    D1Dps               [  16];    // [long  ,   16] D1예수금                        StartPos 293, Length 16
+    char    D2Dps               [  16];    // [long  ,   16] D2예수금                        StartPos 309, Length 16
+    char    RcvblAmt            [  16];    // [long  ,   16] 미수금액                        StartPos 325, Length 16
+    char    D1ovdRepayRqrdAmt   [  16];    // [long  ,   16] D1연체변제소요금액              StartPos 341, Length 16
+    char    D2ovdRepayRqrdAmt   [  16];    // [long  ,   16] D2연체변제소요금액              StartPos 357, Length 16
+    char    MloanAmt            [  16];    // [long  ,   16] 융자금액                        StartPos 373, Length 16
+    char    ChgAfPldgRat        [   9];    // [double,  9.3] 변경후담보비율                  StartPos 389, Length 9
+    char    RqrdPldgAmt         [  16];    // [long  ,   16] 소요담보금액                    StartPos 398, Length 16
+    char    PdlckAmt            [  16];    // [long  ,   16] 담보부족금액                    StartPos 414, Length 16
+    char    OrgPldgSumAmt       [  16];    // [long  ,   16] 원담보합계금액                  StartPos 430, Length 16
+    char    SubPldgSumAmt       [  16];    // [long  ,   16] 부담보합계금액                  StartPos 446, Length 16
+    char    CrdtPldgAmtMny      [  16];    // [long  ,   16] 신용담보금현금                  StartPos 462, Length 16
+    char    CrdtPldgSubstAmt    [  16];    // [long  ,   16] 신용담보대용금액                StartPos 478, Length 16
+    char    Imreq               [  16];    // [long  ,   16] 신용설정보증금                  StartPos 494, Length 16
+    char    CrdtPldgRuseAmt     [  16];    // [long  ,   16] 신용담보재사용금액              StartPos 510, Length 16
+    char    DpslRestrcAmt       [  16];    // [long  ,   16] 처분제한금액                    StartPos 526, Length 16
+    char    PrdaySellAdjstAmt   [  16];    // [long  ,   16] 전일매도정산금액                StartPos 542, Length 16
+    char    PrdayBuyAdjstAmt    [  16];    // [long  ,   16] 전일매수정산금액                StartPos 558, Length 16
+    char    CrdaySellAdjstAmt   [  16];    // [long  ,   16] 금일매도정산금액                StartPos 574, Length 16
+    char    CrdayBuyAdjstAmt    [  16];    // [long  ,   16] 금일매수정산금액                StartPos 590, Length 16
+    char    CslLoanAmtdt1       [  16];    // [long  ,   16] 매도대금담보대출금액            StartPos 606, Length 16
+} CSPAQ22200OutBlock2;
+
+//------------------------------------------------------------------------------
+// 현물 당일 매매일지 수수료 (t0150)
 //------------------------------------------------------------------------------
 
 typedef struct {
@@ -1709,7 +1769,7 @@ typedef struct {
 } T0434OutBlock1;
 
 //------------------------------------------------------------------------------
-// 주식 현재가 호가 조회 (t1101)
+// 현물 현재가 호가 조회 (t1101)
 //------------------------------------------------------------------------------
 typedef struct {
     char    shcode[6];      char    _shcode;    //[string,    6] 단축코드   StartPos 0, Length 6
@@ -1805,7 +1865,7 @@ typedef struct {
 } T1101OutBlock;
 
 //------------------------------------------------------------------------------
-// 주식 현재가 시세 조회 (t1102)
+// 현물 현재가 시세 조회 (t1102)
 //------------------------------------------------------------------------------
 typedef struct {
     char    shcode              [   6];    char    _shcode              ;    // [string,    6] 단축코드                        StartPos 0, Length 6
@@ -2641,7 +2701,7 @@ typedef struct {
 } T8432OutBlock;
 
 //------------------------------------------------------------------------------
-// 주식종목조회 API용 (t8436)
+// 현물 종목조회 API용 (t8436)
 //------------------------------------------------------------------------------
 typedef struct {
     char    gubun[1];    //[string,    1] 구분(0:전체1:코스피2:코스닥)
@@ -2818,7 +2878,7 @@ typedef struct _I5__OutBlock
 } I5_OutBlock;
 
 //------------------------------------------------------------------------------
-// 주식 VI발동해제 (VI_)
+// 현물 VI발동해제 (VI_)
 //------------------------------------------------------------------------------
 typedef struct {
     char    shcode[6];      char    _shcode;    //[string,    6] 단축코드

@@ -133,6 +133,11 @@ type CSPAQ13700OutBlock1 C.CSPAQ13700OutBlock1
 type CSPAQ13700OutBlock2 C.CSPAQ13700OutBlock2
 type CSPAQ13700OutBlock3 C.CSPAQ13700OutBlock3
 
+//  현물 계좌 예수금/주문가능금 총평가 (CSPAQ22200)
+type CSPAQ22200InBlock1 C.CSPAQ22200InBlock1
+type CSPAQ22200OutBlock1 C.CSPAQ22200OutBlock1
+type CSPAQ22200OutBlock2 C.CSPAQ22200OutBlock2
+
 // 주식 당일 매매일지 수수료 (t0150)
 type T0150InBlock C.T0150InBlock
 type T0150OutBlock C.T0150OutBlock
