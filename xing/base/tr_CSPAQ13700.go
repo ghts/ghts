@@ -44,7 +44,7 @@ import (
 
 type CSPAQ13700_현물계좌_주문체결내역_질의값 struct {
 	*lib.S질의값_기본형
-	M레코드_수량  int64
+	M레코드_수량  int
 	M계좌번호    string
 	M주문시장코드  string
 	M매매구분    string
@@ -67,7 +67,7 @@ type CSPAQ13700_현물계좌_주문체결내역_응답 struct {
 }
 
 type CSPAQ13700_현물계좌_주문체결내역_헤더1 struct {
-	M레코드_수량 int64
+	M레코드_수량 int
 	M계좌번호   string
 	M주문시장코드 string
 	M매매구분   string
@@ -80,7 +80,7 @@ type CSPAQ13700_현물계좌_주문체결내역_헤더1 struct {
 }
 
 type CSPAQ13700_현물계좌_주문체결내역_헤더2 struct {
-	M레코드_수량 int64
+	M레코드_수량 int
 	M매도체결금액 int64
 	M매수체결금액 int64
 	M매도체결수량 int64
@@ -172,7 +172,7 @@ func NewCSPAQ13700_현물계좌_주문체결내역_헤더1(b []byte) (값 *CSPAQ
 	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
 
 	값 = new(CSPAQ13700_현물계좌_주문체결내역_헤더1)
-	값.M레코드_수량 = lib.F2정수64_단순형(g.RecCnt)
+	값.M레코드_수량 = lib.F2정수_단순형(g.RecCnt)
 	값.M계좌번호 = lib.F2문자열_공백제거(g.AcntNo)
 	값.M주문시장코드 = lib.F2문자열(g.OrdMktCode)
 	값.M매매구분 = lib.F2문자열(g.BnsTpCode)
@@ -195,7 +195,7 @@ func NewCSPAQ13700_현물계좌_주문체결내역_헤더2(b []byte) (값 *CSPAQ
 	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
 
 	값 = new(CSPAQ13700_현물계좌_주문체결내역_헤더2)
-	값.M레코드_수량 = lib.F2정수64_단순형(g.RecCnt)
+	값.M레코드_수량 = lib.F2정수_단순형(g.RecCnt)
 	값.M매도체결금액 = lib.F2정수64_단순형(g.SellExecAmt)
 	값.M매수체결금액 = lib.F2정수64_단순형(g.BuyExecAmt)
 	값.M매도체결수량 = lib.F2정수64_단순형(g.SellExecQty)

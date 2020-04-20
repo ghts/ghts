@@ -44,7 +44,7 @@ import (
 
 type CSPAQ12300_현물계좌_잔고내역_질의값 struct {
 	*lib.S질의값_기본형
-	M레코드_수량     int64
+	M레코드_수량     int
 	M계좌번호       string
 	M잔고생성_구분    string
 	M수수료적용_구분   string
@@ -63,7 +63,7 @@ type CSPAQ12300_현물계좌_잔고내역_응답 struct {
 }
 
 type CSPAQ12300_현물계좌_잔고내역_응답1 struct {
-	M레코드_수량     int64
+	M레코드_수량     int
 	M계좌번호       string
 	M잔고생성_구분    string
 	M수수료적용_구분   string
@@ -72,7 +72,7 @@ type CSPAQ12300_현물계좌_잔고내역_응답1 struct {
 }
 
 type CSPAQ12300_현물계좌_잔고내역_응답2 struct {
-	M레코드_수량           int64
+	M레코드_수량           int
 	M지점명              string
 	M계좌명              string
 	M현금주문가능금액         int64
@@ -237,7 +237,7 @@ func NewCSPAQ12300_현물계좌_잔고내역_조회_응답_헤더1(b []byte) (�
 	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
 
 	값 = new(CSPAQ12300_현물계좌_잔고내역_응답1)
-	값.M레코드_수량 = lib.F2정수64_단순형(g.RecCnt)
+	값.M레코드_수량 = lib.F2정수_단순형(g.RecCnt)
 	값.M계좌번호 = lib.F2문자열_공백제거(g.AcntNo)
 	값.M잔고생성_구분 = lib.F2문자열(g.BalCreTp)
 	값.M수수료적용_구분 = lib.F2문자열(g.CmsnAppTpCode)
