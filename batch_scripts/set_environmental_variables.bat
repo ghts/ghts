@@ -22,6 +22,6 @@ IF /I "%GOARCH%"=="amd64" (
 )
 
 SET CGO_ENABLED=1
-SET PATH=%GOROOT%\bin;%GOPATH%\bin;C:\Rtools\bin;%GCC_PATH%\bin;%PROJECT_ROOT%\batch_scripts;C:\Program Files\Git\bin
+SET PATH=%GOROOT%\bin;%GOPATH%\bin;%GCC_PATH%\bin;%PROJECT_ROOT%\batch_scripts;C:\Program Files\Git\bin;C:\msys64\usr\bin
 
  
