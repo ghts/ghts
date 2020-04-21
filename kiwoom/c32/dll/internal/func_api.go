@@ -64,4 +64,3 @@ func F접속() {
 		return
 	}
 }
-

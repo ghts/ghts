@@ -57,22 +57,22 @@ var (
 	접속_처리_잠금  sync.Mutex
 	api_호출_잠금 sync.Mutex
 
-	Ch작업  = make(chan *lib.S작업, 100)
-	Ch로그인 = make(chan bool, 1)
-	Ch수신  = make(chan *mangos.Message, 1000)
-	Ch질의  = make(chan *lib.S채널_질의_API, 100)
-	ch콜백  = make(chan lib.I콜백, 100)
+	Ch작업      = make(chan *lib.S작업, 100)
+	Ch로그인     = make(chan bool, 1)
+	Ch수신      = make(chan *mangos.Message, 1000)
+	Ch질의      = make(chan *lib.S채널_질의_API, 100)
+	ch콜백      = make(chan lib.I콜백, 100)
 	Ch디버깅_메시지 = make(chan string, 1000)
 
 	전달_도우미_수량 int
 	콜백_도우미_수량 int
 
-	Ch모니터링_루틴_종료   = make(chan lib.T신호, 1)
-	Ch디버깅_메시지_출력_루틴_종료   = make(chan lib.T신호, 1)
-	Ch수신_도우미_종료    = make(chan lib.T신호, 1)
-	Ch전달_도우미_종료    = make(chan lib.T신호, 100)
-	Ch콜백_도우미_종료    = make(chan lib.T신호, 100)
-	Ch함수_호출_도우미_종료 = make(chan lib.T신호, 1)
+	Ch모니터링_루틴_종료       = make(chan lib.T신호, 1)
+	Ch디버깅_메시지_출력_루틴_종료 = make(chan lib.T신호, 1)
+	Ch수신_도우미_종료        = make(chan lib.T신호, 1)
+	Ch전달_도우미_종료        = make(chan lib.T신호, 100)
+	Ch콜백_도우미_종료        = make(chan lib.T신호, 100)
+	Ch함수_호출_도우미_종료     = make(chan lib.T신호, 1)
 
 	메시지_일련번호_생성기 = lib.New안전한_일련번호()
 	S메시지_보관소     = New윈도우_메시지_보관소()

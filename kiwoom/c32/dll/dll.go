@@ -56,7 +56,7 @@ func Init(_hWnd unsafe.Pointer) (반환값 bool) {
 	ch초기화 := make(chan lib.T신호, 1)
 	go k32.Go루틴_관리(ch초기화)
 	<-ch초기화
-	
+
 	go k32.F접속()
 
 	return true
