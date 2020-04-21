@@ -107,7 +107,7 @@ func F절대값_정수64(값 int64) int64 {
 }
 
 func F절대값_Duration(값 time.Duration) time.Duration {
-	if  값 < 0 {
+	if 값 < 0 {
 		return 값 * -1
 	}
 

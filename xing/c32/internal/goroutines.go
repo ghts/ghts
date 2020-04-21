@@ -138,9 +138,9 @@ func go수신_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 			lib.F조건부_실행(수신_메시지 != nil, 소켓REP_TR수신.S회신Raw, 수신_메시지, lib.JSON, 에러)
 		}}.S실행()
 
-		if lib.F공통_종료_채널_닫힘(){
+		if lib.F공통_종료_채널_닫힘() {
 			Ch수신_도우미_종료 <- lib.P신호_종료
-		} else{
+		} else {
 			ch종료 <- lib.P신호_종료
 		}
 	}()
@@ -184,7 +184,6 @@ func go전달_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 				lib.F에러_출력, 에러)
 
 			lib.F조건부_실행(수신_메시지 != nil, 소켓REP_TR수신.S회신Raw, 수신_메시지, lib.JSON, 에러)
-
 
 		}}.S실행()
 
@@ -389,7 +388,7 @@ func F조회_및_주문_질의_처리(질의 *lib.S채널_질의_API) { // 질�
 	case xt.TR현물계좌_예수금_주문가능금액_CSPAQ22200:
 		계좌번호 := 질의값.(*lib.S질의값_문자열).M문자열
 
-		c데이터 = unsafe.Pointer(xt.NewCSPAQ22200InBlock(계좌번호,계좌_비밀번호))
+		c데이터 = unsafe.Pointer(xt.NewCSPAQ22200InBlock(계좌번호, 계좌_비밀번호))
 		길이 = xt.SizeCSPAQ22200InBlock1
 	case xt.TR현물_정상_주문_CSPAT00600:
 		c데이터 = unsafe.Pointer(xt.NewCSPAT00600InBlock(질의값.(*xt.CSPAT00600_현물_정상_주문_질의값), 계좌_비밀번호))

@@ -213,14 +213,15 @@ func f에러_발생(TR코드, 코드, 내용 string) bool {
 	case xt.TR현물_정정_주문_CSPAT00700:
 		return 코드 != "00131"
 	case xt.TR선물옵션_예탁금_증거금_조회_CFOBQ10500,
-		xt.TR선물옵션_미결제약정_현황_CFOFQ02400:
+		xt.TR선물옵션_미결제약정_현황_CFOFQ02400,
+		xt.TR현물계좌_잔고내역_조회_CSPAQ12300,
+		xt.TR현물계좌_예수금_주문가능금액_CSPAQ22200:
 		return 코드 != "00136"
 	case xt.TR현물_취소_주문_CSPAT00800:
 		return 코드 != "00156"
 	case xt.TR선물옵션_주문체결내역조회_CFOAQ00600:
 		return 코드 != "00136" && 코드 != "00133"
-	case xt.TR현물계좌_잔고내역_조회_CSPAQ12300:
-		return 코드 != "00136"
+
 	case xt.TR현물계좌_주문체결내역_조회_CSPAQ13700:
 		// 조회내역이 없을 때 : 실서버(00200), 모의서버(09901)
 		return 코드 != "00133" && 코드 != "00136" && 코드 != "00200" && 코드 != "09901"
@@ -387,10 +388,6 @@ func f초당_전송_제한_확인(TR코드 string) lib.I전송_권한 {
 
 	switch {
 	case !존재함:
-		for 키, 값 := range tr코드별_초당_전송_제한 {
-			lib.F체크포인트(키, 값)
-		}
-
 		panic(lib.New에러("전송제한을 찾을 수 없음 : '%v'", TR코드))
 	case 전송_권한.TR코드() != TR코드:
 		panic("예상하지 못한 경우.")

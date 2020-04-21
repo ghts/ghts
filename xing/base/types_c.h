@@ -1574,6 +1574,11 @@ typedef struct {
     char    CslLoanAmtdt1       [  16];    // [long  ,   16] 매도대금담보대출금액            StartPos 606, Length 16
 } CSPAQ22200OutBlock2;
 
+typedef struct {
+    CSPAQ22200OutBlock1	outBlock1;
+    CSPAQ22200OutBlock2	outBlock2;
+} CSPAQ22200OutBlock;
+
 //------------------------------------------------------------------------------
 // 현물 당일 매매일지 수수료 (t0150)
 //------------------------------------------------------------------------------

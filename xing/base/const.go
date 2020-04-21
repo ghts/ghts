@@ -92,6 +92,7 @@ const (
 	SizeCSPAQ22200InBlock1  = int(unsafe.Sizeof(CSPAQ22200InBlock1{}))
 	SizeCSPAQ22200OutBlock1 = int(unsafe.Sizeof(CSPAQ22200OutBlock1{}))
 	SizeCSPAQ22200OutBlock2 = int(unsafe.Sizeof(CSPAQ22200OutBlock2{}))
+	SizeCSPAQ22200OutBlock  = int(unsafe.Sizeof(CSPAQ22200OutBlock{}))
 	SizeCSPAT00600InBlock1  = int(unsafe.Sizeof(CSPAT00600InBlock1{}))
 	SizeCSPAT00600OutBlock  = int(unsafe.Sizeof(CSPAT00600OutBlock{}))
 	SizeCSPAT00600OutBlock1 = int(unsafe.Sizeof(CSPAT00600OutBlock1{}))
@@ -178,6 +179,7 @@ const (
 	P자료형_CSPAQ12300OutBlock             = "CSPAQ12300OutBlock"
 	P자료형_CSPAQ13700_현물계좌_주문체결내역_질의값     = "CSPAQ13700_현물계좌_주문체결내역_질의값"
 	P자료형_CSPAQ13700OutBlock             = "CSPAQ13700OutBlock"
+	P자료형_CSPAQ22200OutBlock             = "CSPAQ22200OutBlock"
 	P자료형_CSPAQ22200OutBlock1            = "CSPAQ22200OutBlock1"
 	P자료형_CSPAQ22200OutBlock2            = "CSPAQ22200OutBlock2"
 	P자료형_CSPAT00600_현물_정상_주문_질의값        = "CSPAT00600_현물_정상_주문_질의값"
@@ -292,12 +294,12 @@ const (
 	TR선물옵션_예탁금_증거금_조회_CFOBQ10500 = "CFOBQ10500"
 	TR선물옵션_미결제약정_현황_CFOFQ02400   = "CFOFQ02400"
 
-	TR현물계좌_잔고내역_조회_CSPAQ12300   = "CSPAQ12300"
-	TR현물계좌_주문체결내역_조회_CSPAQ13700 = "CSPAQ13700"
+	TR현물계좌_잔고내역_조회_CSPAQ12300    = "CSPAQ12300"
+	TR현물계좌_주문체결내역_조회_CSPAQ13700  = "CSPAQ13700"
 	TR현물계좌_예수금_주문가능금액_CSPAQ22200 = "CSPAQ22200"
-	TR현물_정상_주문_CSPAT00600       = "CSPAT00600"
-	TR현물_정정_주문_CSPAT00700       = "CSPAT00700"
-	TR현물_취소_주문_CSPAT00800       = "CSPAT00800"
+	TR현물_정상_주문_CSPAT00600        = "CSPAT00600"
+	TR현물_정정_주문_CSPAT00700        = "CSPAT00700"
+	TR현물_취소_주문_CSPAT00800        = "CSPAT00800"
 
 	TR현물_당일_매매일지_t0150        = "t0150"
 	TR현물_일자별_매매일지_t0151       = "t0151"

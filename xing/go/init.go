@@ -341,6 +341,7 @@ func f초기화_TR전송_제한() (에러 error) {
 		xt.TR선물옵션_미결제약정_현황_CFOFQ02400,
 		xt.TR현물계좌_잔고내역_조회_CSPAQ12300,
 		xt.TR현물계좌_주문체결내역_조회_CSPAQ13700,
+		xt.TR현물계좌_예수금_주문가능금액_CSPAQ22200,
 		xt.TR현물_정상_주문_CSPAT00600,
 		xt.TR현물_정정_주문_CSPAT00700,
 		xt.TR현물_취소_주문_CSPAT00800,

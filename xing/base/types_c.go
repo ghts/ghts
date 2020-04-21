@@ -1413,6 +1413,10 @@ type CSPAQ22200OutBlock2 struct {
 	CrdayBuyAdjstAmt       [16]byte
 	CslLoanAmtdt1          [16]byte
 }
+type CSPAQ22200OutBlock struct {
+	OutBlock1 CSPAQ22200OutBlock1
+	OutBlock2 CSPAQ22200OutBlock2
+}
 
 type T0150InBlock struct {
 	Accno   [11]byte
