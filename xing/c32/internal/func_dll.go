@@ -307,8 +307,7 @@ func F로그아웃() (에러 error) {
 		return lib.New에러with출력("로그아웃 에러 : '%v'", 에러_번호)
 	}
 
-	lib.F메모("ETK_Disconnect() 에러 발생.")
-
+	// ETK_Disconnect() 에러 발생. syscall, cgo 모두 마찬가지.
 	//_, _, 에러_번호 = syscall.Syscall(etkDisconnect, 0, 0, 0,0)
 	//
 	//if 에러_번호 != 0 {

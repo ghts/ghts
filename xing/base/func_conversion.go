@@ -576,6 +576,8 @@ func F바이트_변환값_해석_Raw(바이트_변환값 *lib.S바이트_변환)
 		return NewCSPAQ12300_현물계좌_잔고내역_응답(b)
 	case P자료형_CSPAQ13700OutBlock:
 		return NewCSPAQ13700_현물계좌_주문체결내역_응답(b)
+	case P자료형_CSPAQ22200OutBlock2:
+		return NewCSPAQ22200_현물계좌_예수금_주문가능금액_응답(b)
 	case P자료형_CSPAT00600OutBlock:
 		return NewCSPAT00600_현물_정상_주문_응답(b)
 	case P자료형_CSPAT00700OutBlock:

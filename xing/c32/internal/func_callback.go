@@ -166,6 +166,10 @@ func OnTrData(TR데이터 unsafe.Pointer) {
 	}
 
 	자료형_문자열 := lib.F확인(f자료형_문자열_해석(g)).(string)
+	if f전송_불필요(자료형_문자열) {
+		return
+	}
+
 	TR코드 := lib.F2문자열_공백제거(g.TrCode)
 	추가_연속조회_필요_문자열 := lib.F2문자열(g.Cont)
 	추가_연속조회_필요 := false

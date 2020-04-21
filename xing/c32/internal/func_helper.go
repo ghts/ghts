@@ -139,6 +139,13 @@ func f자료형_문자열_해석(g *xt.TR_DATA) (자료형_문자열 string, 에
 		}
 
 		return xt.P자료형_CSPAQ13700OutBlock, nil
+	case xt.TR현물계좌_예수금_주문가능금액_CSPAQ22200:
+		switch 길이 {
+		case xt.SizeCSPAQ22200OutBlock1:
+			return xt.P자료형_CSPAQ22200OutBlock1, nil
+		case xt.SizeCSPAQ22200OutBlock2:
+			return xt.P자료형_CSPAQ22200OutBlock2, nil
+		}
 	case xt.TR현물_정상_주문_CSPAT00600:
 		switch 길이 {
 		case xt.SizeCSPAT00600OutBlock:
@@ -308,7 +315,19 @@ func f자료형_문자열_해석(g *xt.TR_DATA) (자료형_문자열 string, 에
 	panic(lib.New에러("예상하지 못한 TR코드 & 길이 : '%v' '%v'", TR코드, 길이))
 }
 
+func f전송_불필요(자료형_문자열 string) bool {
+	switch 자료형_문자열 {
+	case xt.P자료형_CSPAQ22200OutBlock1:
+		return true
+	}
+
+	return false
+}
+
 func f민감정보_삭제(raw값 []byte, 구분_문자열 string) []byte {
+
+	lib.F메모("CSPAQ22200 비밀번호 전송 전에 삭제할 것.")
+
 	switch 구분_문자열 {
 	case xt.P자료형_CSPAQ12300OutBlock,
 		xt.P자료형_CSPAQ13700OutBlock,
@@ -317,15 +336,18 @@ func f민감정보_삭제(raw값 []byte, 구분_문자열 string) []byte {
 		xt.P자료형_CFOBQ10500OutBlock,
 		xt.P자료형_CFOFQ02400OutBlock:
 		f민감정보_삭제_도우미(raw값, 25, 8)
+	case xt.P자료형_CFOAT00100OutBlock,
+		xt.P자료형_CFOAT00200OutBlock,
+		xt.P자료형_CFOAT00300OutBlock:
+		f민감정보_삭제_도우미(raw값, 27, 8)
+	case xt.P자료형_CSPAQ22200OutBlock1:
+		f민감정보_삭제_도우미(raw값, 28, 8)
 	case xt.P자료형_CSPAT00700OutBlock,
 		xt.P자료형_CSPAT00800OutBlock:
 		f민감정보_삭제_도우미(raw값, 35, 8)
 	case xt.RT현물_주문_접수_SC0:
 		f민감정보_삭제_도우미(raw값, 277, 8)
-	case xt.P자료형_CFOAT00100OutBlock,
-		xt.P자료형_CFOAT00200OutBlock,
-		xt.P자료형_CFOAT00300OutBlock:
-		f민감정보_삭제_도우미(raw값, 27, 8)
+
 	}
 
 	return raw값
