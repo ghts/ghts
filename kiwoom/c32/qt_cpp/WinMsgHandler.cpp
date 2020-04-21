@@ -8,7 +8,6 @@
 
 typedef void (*MsgHandler)(WPARAM, LPARAM, KHOpenAPILib::KHOpenAPI*);
 
-
 void KM_CONNECT_Handler(WPARAM, LPARAM, KHOpenAPILib::KHOpenAPI*);
 void KM_LOGIN_INFO_Handler(WPARAM, LPARAM, KHOpenAPILib::KHOpenAPI*);
 void KM_CODE_LIST_Handler(WPARAM, LPARAM, KHOpenAPILib::KHOpenAPI*);
@@ -91,30 +90,30 @@ void KM_CODE_LIST_Handler(WPARAM serialNo, LPARAM lParam, KHOpenAPILib::KHOpenAP
 
     if (CODE_LIST_ALL == lParam) {
          qDebug()<<"KM_CODE_LIST_Handler : CODE_LIST_ALL."<<market;
-        // market = NULL;
+         QString listKOSPI = kiwoom->GetCodeListByMarket(QString::number(CODE_LIST_KOSPI));
+         QString listKOSDAQ = kiwoom->GetCodeListByMarket(QString::number(CODE_LIST_KOSDAQ));
+         QString listETF = kiwoom->GetCodeListByMarket(QString::number(CODE_LIST_ETF));
+         QString listAll =
+                 CODE_LIST_FUND == lParam       ||listKOSPI.append(listKOSDAQ).append(listETF);
+         qDebug()<<"C++ GetCodeListByMarket(All) Result : '"<<listAll<<"'";
+         Confirm(serialNo, listAll);
     } else if (CODE_LIST_KOSPI == lParam      ||
                CODE_LIST_KOSDAQ == lParam     ||
                CODE_LIST_ELW == lParam        ||
                CODE_LIST_ETF == lParam        ||
                CODE_LIST_KONEX == lParam      ||
-               CODE_LIST_FUND == lParam       ||
                CODE_LIST_WARRANT == lParam    ||
                CODE_LIST_REITS == lParam      ||
                CODE_LIST_HIGH_YIELD == lParam ||
                CODE_LIST_K_OTC == lParam) {
         market = QString::number(lParam);
-
-        qDebug()<<"KM_CODE_LIST_Handler : "<<market;
+        QString result = kiwoom->GetCodeListByMarket(market);
+        qDebug()<<"C++ GetCodeListByMarket("<<market<<") Result : '"<<result<<"'";
+        Confirm(serialNo, result);
     } else {
         qDebug()<<"C++ GetCodeListByMarket() unexpeted marekt type : "<<lParam;
+        Confirm(serialNo, "");
     }
-
-    qDebug()<<"C++ GetCodeListByMarket("<<market<<") Call.";
-    QString result = kiwoom->GetCodeListByMarket(market);
-    qDebug()<<"C++ GetCodeListByMarket("<<market<<") Result : '"<<result<<"'";
-
-    Confirm(serialNo, result);
-     qDebug()<<"KM_CODE_LIST_Handler Confirm :"<< result;
 }
 
 void KM_CONNECT_STATE_Handler(WPARAM serialNo, LPARAM, KHOpenAPILib::KHOpenAPI *kiwoom) {
