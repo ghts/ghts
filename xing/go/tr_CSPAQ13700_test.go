@@ -61,7 +61,7 @@ func TestCSPAQ13700_현물계좌_주문체결내역(t *testing.T) {
 }
 
 func testCSPAQ13700_현물계좌_주문체결내역_도우미(t *testing.T, 계좌번호 string, 일자 time.Time) {
-	값_모음, 에러 := TrCSPAQ13700_현물계좌_주문체결내역(계좌번호, 일자)
+	값_모음, 에러 := TrCSPAQ13700_현물계좌_주문체결내역(계좌번호, 일자, xt.CSPAQ13700_체결)
 	lib.F테스트_에러없음(t, 에러)
 
 	for _, 값 := range 값_모음 {

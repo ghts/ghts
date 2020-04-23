@@ -286,50 +286,6 @@ func f종목모음_설정() (에러 error) {
 	return nil
 }
 
-func f한국증시_거래시간_도우미(시작_시간, 시작_분, 종료_시간, 종료_분 int) bool {
-	값 := 당일.G값()
-	지금 := time.Now()
-	로케일 := 지금.Location()
-
-	시작_시각 := time.Date(값.Year(), 값.Month(), 값.Day(), 시작_시간, 시작_분, 0, 0, 로케일)
-	종료_시각 := time.Date(값.Year(), 값.Month(), 값.Day(), 종료_시간, 종료_분, 0, 0, 로케일)
-
-	if 지금.After(시작_시각) && 지금.Before(종료_시각) {
-		return true
-	}
-
-	return false
-}
-
-func F한국증시_정규시장_거래시간임() bool {
-	return f한국증시_거래시간_도우미(9, 0, 15, 30)
-}
-
-func F한국증시_정규경쟁대량매매_거래시간임() bool {
-	return f한국증시_거래시간_도우미(9, 0, 15, 00)
-}
-
-func F한국증시_동시호가_시간임() bool {
-	return f한국증시_거래시간_도우미(8, 0, 9, 0) ||
-		f한국증시_거래시간_도우미(15, 20, 15, 30)
-}
-
-func F한국증시_시간외_종가매매_시간임() bool {
-	return f한국증시_거래시간_도우미(15, 40, 16, 0)
-}
-
-func F한국증시_시간외_단일가매매_시간임() bool {
-	return f한국증시_거래시간_도우미(16, 0, 18, 0)
-}
-
-func F한국증시_시간외_대량바스켓매매_거래시간임() bool {
-	return f한국증시_거래시간_도우미(15, 40, 18, 0)
-}
-
-func F한국증시_정규장_종료() bool {
-	return lib.F금일().After(F당일()) || lib.F지금().After(lib.F2금일_시각_단순형("1504", "1530"))
-}
-
 func F종목by코드(종목코드 string) (종목 *lib.S종목, 에러 error) {
 	if 종목, ok := 종목맵_전체[종목코드]; !ok {
 		return nil, lib.New에러("해당 종목코드가 존재하지 않습니다. '%v'", 종목코드)
@@ -446,4 +402,8 @@ func F최소_호가단위by시장구분_기준가(시장구분 lib.T시장구분
 	}
 
 	return 0, lib.New에러with출력("예상하지 못한 시장구분. %v", 시장구분)
+}
+
+func F금일_한국증시_개장() bool {
+	return F당일().Equal(lib.F금일())
 }

@@ -89,7 +89,7 @@ func TestT1101_현물_호가_조회(t *testing.T) {
 		매수호가수량합 = 매수호가수량합 + 값.M매수호가수량_모음[i]
 	}
 
-	if F한국증시_정규시장_거래시간임() {
+	if F금일_한국증시_개장() && lib.F한국증시_정규시장_거래시간임() {
 		lib.F테스트_참임(t, 값.M시각.After(time.Now().Add(-1*lib.P10분)),
 			값.M시각.Format("15:04:06"), time.Now().Add(-1*lib.P10분).Format("15:04:06"))
 		lib.F테스트_참임(t, 값.M시각.Before(time.Now().Add(lib.P10분)),

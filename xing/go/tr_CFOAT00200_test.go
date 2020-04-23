@@ -52,7 +52,7 @@ func TestCFOAT00200_선물옵션_정정주문(t *testing.T) {
 
 	t.SkipNow()
 
-	if !F한국증시_정규시장_거래시간임() {
+	if !F금일_한국증시_개장() || !lib.F한국증시_정규시장_거래시간임() {
 		t.SkipNow()
 	}
 
