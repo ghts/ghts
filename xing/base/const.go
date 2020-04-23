@@ -1753,6 +1753,27 @@ func (p T대출상세분류_CSPAQ12300) String() string {
 	}
 }
 
+type T주문_체결_미체결_구분_CSPAQ13700 uint8
+
+const (
+	CSPAQ13700_체결_미체결_전체 T주문_체결_미체결_구분_CSPAQ13700 = 0
+	CSPAQ13700_체결 T주문_체결_미체결_구분_CSPAQ13700 = 1
+	CSPAQ13700_미체결 T주문_체결_미체결_구분_CSPAQ13700 = 3
+)
+
+func (p T주문_체결_미체결_구분_CSPAQ13700) String() string {
+	switch p {
+	case CSPAQ13700_체결_미체결_전체:
+		return "전체"
+	case CSPAQ13700_체결:
+		return "체결"
+	case CSPAQ13700_미체결:
+		return "미체결"
+	default:
+		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
+	}
+}
+
 type T주문처리_유형_CSPAQ13700 uint8
 
 const (
