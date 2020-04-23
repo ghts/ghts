@@ -113,15 +113,17 @@ func f초기화_XingAPI() {
 	etkGetAccountList, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_GetAccountList")
 	lib.F확인(에러)
 
-	etkGetAccountName, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_GetAccountName")
-	lib.F확인(에러)
+	// syscall 방식은 에러 발생. cgo 방식은 정상 작동.
+	//etkGetAccountName, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_GetAccountName")
+	//lib.F확인(에러)
 
 	// syscall 방식은 에러 발생. cgo 방식은 정상 작동.
 	//etkGetAccountDetailName, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_GetAcctDetailName")
 	//lib.F확인(에러)
 
-	etkGetAccountNickName, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_GetAcctNickname")
-	lib.F확인(에러)
+	// syscall 방식은 에러 발생. cgo 방식은 정상 작동.
+	//etkGetAccountNickName, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_GetAcctNickname")
+	//lib.F확인(에러)
 
 	etkGetServerName, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_GetServerName")
 	lib.F확인(에러)
@@ -482,30 +484,40 @@ func F계좌번호_모음(질의 *lib.S채널_질의_API) {
 }
 
 func F계좌_이름(질의 *lib.S채널_질의_API) {
+	defer lib.S예외처리{M함수: func() {
+		질의.Ch에러 <- lib.New에러("F계좌_이름() 에러 발생.")
+	}}.S실행()
+
 	계좌_번호 := 질의.M질의값.(*lib.S질의값_문자열).M문자열
-	버퍼_초기값 := "                                         "
-	버퍼_길이 := len(버퍼_초기값)
-
-	c버퍼 := c.F2C문자열(버퍼_초기값)
-	defer c.F메모리_해제(unsafe.Pointer(c버퍼))
-
 	c계좌번호 := c.F2C문자열(계좌_번호)
 	defer c.F메모리_해제(unsafe.Pointer(c계좌번호))
 
+	var 버퍼_배열 [41]byte // 버퍼 길이 41로 고정
+	버퍼_길이 := len(버퍼_배열)
+
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
+	
+	C.GetAccountName(
+		unsafe.Pointer(c계좌번호),
+		unsafe.Pointer(&버퍼_배열[0]),
+		C.int(버퍼_길이))
 
-	_, _, 에러_번호 := syscall.Syscall(etkGetAccountName, 3,
-		uintptr(unsafe.Pointer(c계좌번호)),
-		uintptr(unsafe.Pointer(c버퍼)),
-		uintptr(버퍼_길이))
+	계좌_이름 := lib.F2문자열_EUC_KR_공백제거(버퍼_배열[:])
+	질의.Ch회신값 <- 계좌_이름
 
-	switch 에러_번호 {
-	case 0:
-		질의.Ch회신값 <- lib.F2문자열_EUC_KR_공백제거(c.F2Go바이트_모음(unsafe.Pointer(c버퍼), 버퍼_길이))
-	default:
-		질의.Ch에러 <- lib.New에러("F계좌_이름() 에러 발생.\n'%v'", 에러_번호)
-	}
+	// syscall 방식 호출은 에러 발생
+	//_, _, 에러_번호 := syscall.Syscall(etkGetAccountName, 3,
+	//	uintptr(unsafe.Pointer(c계좌번호)),
+	//	uintptr(unsafe.Pointer(c버퍼)),
+	//	uintptr(버퍼_길이))
+	//
+	//switch 에러_번호 {
+	//case 0:
+	//	질의.Ch회신값 <- lib.F2문자열_EUC_KR_공백제거(c.F2Go바이트_모음(unsafe.Pointer(c버퍼), 버퍼_길이))
+	//default:
+	//	질의.Ch에러 <- lib.New에러("F계좌_이름() 에러 발생.\n'%v'", 에러_번호)
+	//}
 }
 
 func F계좌_상세명(질의 *lib.S채널_질의_API) {
@@ -520,12 +532,18 @@ func F계좌_상세명(질의 *lib.S채널_질의_API) {
 	var 버퍼_배열 [41]byte // 버퍼 길이 41로 고정
 	버퍼_길이 := len(버퍼_배열)
 
-	// syscall 방식 호출은 에러 발생
+	api_호출_잠금.Lock()
+	defer api_호출_잠금.Unlock()
+
 	C.GetAcctDetailName(
 		unsafe.Pointer(c계좌번호),
 		unsafe.Pointer(&버퍼_배열[0]),
 		C.int(버퍼_길이))
 
+	계좌_상세명 := lib.F2문자열_EUC_KR_공백제거(버퍼_배열[:])
+	질의.Ch회신값 <- 계좌_상세명
+
+	// syscall 방식 호출은 에러 발생
 	//_, _, 에러_번호 := syscall.Syscall(etkGetAccountDetailName, 3,
 	//	uintptr(unsafe.Pointer(c계좌번호)),
 	//	uintptr(unsafe.Pointer(&버퍼_배열[0])),
@@ -537,36 +555,43 @@ func F계좌_상세명(질의 *lib.S채널_질의_API) {
 	//default:
 	//	질의.Ch에러 <- lib.New에러("F계좌_상세명() 에러 발생.\n'%v'", 에러_번호)
 	//}
-
-	계좌_상세명 := lib.F2문자열_EUC_KR_공백제거(버퍼_배열[:])
-	질의.Ch회신값 <- 계좌_상세명
 }
 
 func F계좌_별명(질의 *lib.S채널_질의_API) {
+	defer lib.S예외처리{M함수: func() {
+		질의.Ch에러 <- lib.New에러("F계좌_별명() 에러 발생.")
+	}}.S실행()
+
 	계좌_번호 := 질의.M질의값.(*lib.S질의값_문자열).M문자열
-	버퍼_초기값 := "                                                     "
-	버퍼_길이 := len(버퍼_초기값)
-
-	c버퍼 := c.F2C문자열(버퍼_초기값)
-	defer c.F메모리_해제(unsafe.Pointer(c버퍼))
-
 	c계좌번호 := c.F2C문자열(계좌_번호)
 	defer c.F메모리_해제(unsafe.Pointer(c계좌번호))
+
+	var 버퍼_배열 [41]byte // 버퍼 길이 41로 고정
+	버퍼_길이 := len(버퍼_배열)
 
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
-	_, _, 에러_번호 := syscall.Syscall(etkGetAccountNickName, 3,
-		uintptr(unsafe.Pointer(c계좌번호)),
-		uintptr(unsafe.Pointer(c버퍼)),
-		uintptr(버퍼_길이))
+	C.GetAcctNickName(
+		unsafe.Pointer(c계좌번호),
+		unsafe.Pointer(&버퍼_배열[0]),
+		C.int(버퍼_길이))
 
-	switch 에러_번호 {
-	case 0:
-		질의.Ch회신값 <- lib.F2문자열_EUC_KR_공백제거(c.F2Go바이트_모음(unsafe.Pointer(c버퍼), 버퍼_길이))
-	default:
-		질의.Ch에러 <- lib.New에러("F계좌_별명() 에러 발생.\n'%v'", 에러_번호)
-	}
+	계좌_별명 := lib.F2문자열_EUC_KR_공백제거(버퍼_배열[:])
+	질의.Ch회신값 <- 계좌_별명
+
+	// syscall 방식 호출은 에러 발생
+	//_, _, 에러_번호 := syscall.Syscall(etkGetAccountNickName, 3,
+	//	uintptr(unsafe.Pointer(c계좌번호)),
+	//	uintptr(unsafe.Pointer(c버퍼)),
+	//	uintptr(버퍼_길이))
+	//
+	//switch 에러_번호 {
+	//case 0:
+	//	질의.Ch회신값 <- lib.F2문자열_EUC_KR_공백제거(c.F2Go바이트_모음(unsafe.Pointer(c버퍼), 버퍼_길이))
+	//default:
+	//	질의.Ch에러 <- lib.New에러("F계좌_별명() 에러 발생.\n'%v'", 에러_번호)
+	//}
 }
 
 func F서버_이름(질의 *lib.S채널_질의_API) {

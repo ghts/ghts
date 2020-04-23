@@ -35,22 +35,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
 void *XingApiDll();
 void FreeXingApiDll();
-void GetAcctDetailName(void *AccountNo, void *Buffer, int BufferSize);
 
-//------------------------------------------------------------------------------
-// GCC를 사용하기 위해서 필요한 부분.
-//------------------------------------------------------------------------------
-//#ifndef MSGFLT_ALLOW
-//
-//typedef struct tagCHANGEFILTERSTRUCT {
-//	DWORD cbSize;
-//	DWORD ExtStatus;
-//} CHANGEFILTERSTRUCT, *PCHANGEFILTERSTRUCT;
-//
-//typedef BOOL WINAPI ChangeWindowMessageFilterEx(HWND hWnd, UINT message, DWORD action, PCHANGEFILTERSTRUCT pChangeFilterStruct);
-//
-//const DWORD MSGFLT_ALLOW = 1;
-//const DWORD MSGFLT_DISALLOW = 2;
-//const DWORD MSGFLT_RESET = 0;
-//#endif
-//------------------------------------------------------------------------------
+void GetAccountName(void *AccountNo, void *Buffer, int BufferSize);
+void GetAcctDetailName(void *AccountNo, void *Buffer, int BufferSize);
+void GetAcctNickName(void *AccountNo, void *Buffer, int BufferSize);
