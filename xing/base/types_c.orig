@@ -139,6 +139,12 @@ type CSPAQ22200OutBlock1 C.CSPAQ22200OutBlock1
 type CSPAQ22200OutBlock2 C.CSPAQ22200OutBlock2
 type CSPAQ22200OutBlock C.CSPAQ22200OutBlock
 
+// 현물 계좌 기간별 수익률 상세 (FOCCQ33600)
+type FOCCQ33600InBlock1 C.FOCCQ33600InBlock1
+type FOCCQ33600OutBlock1 C.FOCCQ33600OutBlock1
+type FOCCQ33600OutBlock2 C.FOCCQ33600OutBlock2
+type FOCCQ33600OutBlock3 C.FOCCQ33600OutBlock3
+
 // 주식 당일 매매일지 수수료 (t0150)
 type T0150InBlock C.T0150InBlock
 type T0150OutBlock C.T0150OutBlock

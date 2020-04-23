@@ -1418,6 +1418,45 @@ type CSPAQ22200OutBlock struct {
 	OutBlock2 CSPAQ22200OutBlock2
 }
 
+type FOCCQ33600InBlock1 struct {
+	RecCnt   [5]byte
+	AcntNo   [20]byte
+	Pwd      [8]byte
+	QrySrtDt [8]byte
+	QryEndDt [8]byte
+	TermTp   [1]byte
+}
+type FOCCQ33600OutBlock1 struct {
+	RecCnt   [5]byte
+	AcntNo   [20]byte
+	Pwd      [8]byte
+	QrySrtDt [8]byte
+	QryEndDt [8]byte
+	TermTp   [1]byte
+}
+type FOCCQ33600OutBlock2 struct {
+	RecCnt           [5]byte
+	AcntNm           [40]byte
+	BnsctrAmt        [16]byte
+	MnyinAmt         [16]byte
+	MnyoutAmt        [16]byte
+	InvstAvrbalPramt [16]byte
+	InvstPlAmt       [16]byte
+	InvstErnrat      [9]byte
+}
+type FOCCQ33600OutBlock3 struct {
+	BaseDt           [8]byte
+	FdEvalAmt        [19]byte
+	EotEvalAmt       [19]byte
+	InvstAvrbalPramt [16]byte
+	BnsctrAmt        [16]byte
+	MnyinSecinAmt    [16]byte
+	MnyoutSecoutAmt  [16]byte
+	EvalPnlAmt       [16]byte
+	TermErnrat       [11]byte
+	Idx              [13]byte
+}
+
 type T0150InBlock struct {
 	Accno   [11]byte
 	Medosu  [1]byte
