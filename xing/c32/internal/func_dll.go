@@ -497,7 +497,7 @@ func F계좌_이름(질의 *lib.S채널_질의_API) {
 
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
-	
+
 	C.GetAccountName(
 		unsafe.Pointer(c계좌번호),
 		unsafe.Pointer(&버퍼_배열[0]),

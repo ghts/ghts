@@ -415,7 +415,7 @@ func 현물_계좌번호() (계좌번호 string, 에러 error) {
 	if 에러 != nil {
 		return "", 에러
 	}
-	
+
 	if 서버_구분 == xt.P서버_모의투자 {
 		return F계좌번호by상세명("위탁")
 	} else {
