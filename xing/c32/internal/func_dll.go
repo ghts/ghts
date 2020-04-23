@@ -237,7 +237,7 @@ func f접속됨() (bool, error) {
 	}
 }
 
-func F로그인() (에러 error) {
+func F로그인(서버_구분 xt.T서버_구분) (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
 	if lib.F파일_없음(설정파일_경로) {
@@ -266,7 +266,7 @@ func F로그인() (에러 error) {
 	defer c.F메모리_해제(unsafe.Pointer(c암호))
 
 	키_CertPWD := lib.F확인(섹션.GetKey("CertPWD")).(*ini.Key)
-	공인인증서_암호 := lib.F조건부_값(lib.F테스트_모드_실행_중(), "", 키_CertPWD.String()).(string)
+	공인인증서_암호 := lib.F조건부_문자열(서버_구분 == xt.P서버_실거래, 키_CertPWD.String(), "")
 	c공인인증서_암호 := c.F2C문자열(공인인증서_암호)
 	defer c.F메모리_해제(unsafe.Pointer(c공인인증서_암호))
 
