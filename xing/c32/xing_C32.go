@@ -26,15 +26,12 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package main
 
 import (
-	"github.com/ghts/ghts/lib"
 	xt "github.com/ghts/ghts/xing/base"
 	x32 "github.com/ghts/ghts/xing/c32/internal"
 )
 
 func main() {
-	lib.F메모("당분간 main()에서도 테스트 모드로 작동하도록 함.")
-
-	lib.F테스트_모드_시작()
-	x32.F초기화(xt.P서버_모의투자)
+	//x32.F초기화(xt.P서버_모의투자)
+	x32.F초기화(xt.P서버_실거래)
 	x32.F종료_대기()
 }

@@ -309,6 +309,8 @@ func f질의값_처리(질의 *lib.S채널_질의_API) {
 		TR코드별_전송_제한(질의)
 	case xt.TR소켓_테스트:
 		질의.Ch회신값 <- lib.P신호_OK
+	case xt.TR서버_구분:
+		질의.Ch회신값 <- int(서버_구분)
 	case xt.TR종료:
 		F종료_질의_처리(질의)
 	//case xt.TR초기화:

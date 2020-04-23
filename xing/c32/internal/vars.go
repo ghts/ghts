@@ -35,6 +35,7 @@ package x32
 
 import (
 	"github.com/ghts/ghts/lib"
+	xt "github.com/ghts/ghts/xing/base"
 	"go.nanomsg.org/mangos/v3"
 	"path/filepath"
 	"reflect"
@@ -111,4 +112,5 @@ var (
 	설정파일_경로   = filepath.Join(설정파일_디렉토리, "config.ini")
 	계좌번호_모음   []string
 	계좌_비밀번호   string
+	서버_구분     xt.T서버_구분
 )

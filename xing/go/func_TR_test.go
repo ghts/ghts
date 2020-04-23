@@ -35,54 +35,44 @@ package xing
 
 import (
 	"github.com/ghts/ghts/lib"
+	xt "github.com/ghts/ghts/xing/base"
 	"testing"
-	"time"
 )
 
-func TestF접속됨(t *testing.T) {
+func TestF계좌_관련_함수(t *testing.T) {
 	t.Parallel()
 
-	접속됨, 에러 := F접속됨()
+	계좌_수량, 에러 := F계좌_수량()
 	lib.F테스트_에러없음(t, 에러)
-	lib.F테스트_참임(t, 접속됨)
-}
+	lib.F테스트_참임(t, 계좌_수량 > 0, 계좌_수량)
 
-func TestF계좌번호_모음(t *testing.T) {
-	t.Parallel()
+	for i := 0; i < 계좌_수량; i++ {
+		계좌_번호, 에러 := F계좌_번호(i)
+		lib.F테스트_에러없음(t, 에러)
+		lib.F테스트_참임(t, len(계좌_번호) > 0)
 
-	계좌번호_모음, 에러 := F계좌번호_모음()
+		계좌_이름, 에러 := F계좌_이름(계좌_번호)
+		lib.F테스트_에러없음(t, 에러)
+		lib.F테스트_참임(t, len(계좌_이름) > 0)
 
-	lib.F테스트_에러없음(t, 에러)
-	lib.F테스트_참임(t, len(계좌번호_모음) > 0)
+		계좌_상세명, 에러 := F계좌_상세명(계좌_번호)
+		lib.F테스트_에러없음(t, 에러)
+		lib.F테스트_참임(t, len(계좌_상세명) > 0)
 
-	for _, 계좌번호 := range 계좌번호_모음 {
-		lib.F테스트_참임(t, len(계좌번호) > 0)
+		계좌_별명, 에러 := F계좌_별명(계좌_번호)
+		lib.F테스트_에러없음(t, 에러)
+		lib.F테스트_참임(t, len(계좌_별명) >= 0)
 	}
 }
 
-func TestF영업일_기준_전일_당일(t *testing.T) {
-	t.Parallel()
-
-	전일 := F전일()
-	당일 := F당일()
-
-	lib.F테스트_다름(t, 전일, time.Time{})
-	lib.F테스트_다름(t, 당일, time.Time{})
-	lib.F테스트_참임(t, 전일.After(time.Now().AddDate(-1, 0, 0)))
-	lib.F테스트_참임(t, 당일.After(전일))
-	lib.F테스트_참임(t, 당일.Before(time.Now().AddDate(0, 0, 1)))
-	lib.F테스트_같음(t, 전일.Hour(), 0)
-	lib.F테스트_같음(t, 전일.Minute(), 0)
-	lib.F테스트_같음(t, 전일.Second(), 0)
-	lib.F테스트_같음(t, 전일.Nanosecond(), 0)
-	lib.F테스트_같음(t, 당일.Hour(), 0)
-	lib.F테스트_같음(t, 당일.Minute(), 0)
-	lib.F테스트_같음(t, 당일.Second(), 0)
-	lib.F테스트_같음(t, 당일.Nanosecond(), 0)
+func TestF서버_이름(t *testing.T) {
+	서버_이름, 에러 := F서버_이름()
+	lib.F테스트_에러없음(t, 에러)
+	lib.F테스트_다름(t, 서버_이름, "")
 }
 
-func TestC32_재시작(t *testing.T) {
-	lib.F메모("C32_재시작() 실행 후 소켓 에러 발생.")
-	t.SkipNow()
-	lib.F테스트_에러없음(t, C32_재시작())
+func TestF서버_구분(t *testing.T) {
+	서버_구분, 에러 := F서버_구분()
+	lib.F테스트_에러없음(t, 에러)
+	lib.F테스트_같음(t, 서버_구분, xt.P서버_모의투자, xt.P서버_실거래)
 }

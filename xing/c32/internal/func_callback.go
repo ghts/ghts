@@ -222,7 +222,7 @@ func OnMessageAndError(MSG데이터 unsafe.Pointer) {
 	콜백값.S콜백_기본형 = lib.New콜백_기본형(lib.P콜백_메시지_및_에러)
 	콜백값.M식별번호 = int(g.RequestID)
 	콜백값.M코드 = lib.F2문자열_공백제거(g.MsgCode)
-	콜백값.M내용 = lib.F2문자열_EUC_KR_공백제거(c.F2Go바이트_모음(unsafe.Pointer(g.MsgData), int(g.MsgLength)))
+	콜백값.M내용 = c.F2문자열_EUC_KR(unsafe.Pointer(g.MsgData))
 	콜백값.M에러여부 = 에러여부
 
 	lib.F조건부_실행(에러여부, lib.F체크포인트, 콜백값)
@@ -263,16 +263,20 @@ func OnRealtimeData(REALTIME데이터 unsafe.Pointer) {
 	소켓PUB_실시간_정보.S송신_검사(lib.Raw, 바이트_변환값)
 }
 
-func OnLogin(wParam unsafe.Pointer) {
+func OnLogin(wParam, lParam unsafe.Pointer) {
 	코드 := c.F2Go문자열(wParam)
 	정수, 에러 := lib.F2정수(코드)
 	로그인_성공_여부 := 에러 == nil && 정수 == 0
 
-	if !로그인_성공_여부 && lib.F테스트_모드_실행_중() {
-		fmt.Println("********************************")
-		fmt.Println("*  모의 투자 기간을 확인하세요. *")
-		fmt.Println("********************************")
-		lib.F문자열_출력("")
+	if !로그인_성공_여부 {
+		lib.F문자열_출력(c.F2문자열_EUC_KR(lParam))
+
+		if f모의투자서버_접속_중() {
+			fmt.Println("********************************")
+			fmt.Println("*  모의 투자 기간을 확인하세요. *")
+			fmt.Println("********************************")
+			lib.F문자열_출력("")
+		}
 	}
 
 	select {

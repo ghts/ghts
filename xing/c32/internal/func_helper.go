@@ -349,3 +349,7 @@ func f민감정보_삭제_도우미(raw값 []byte, 시작_인덱스, 길이 int)
 		raw값[i] = 0
 	}
 }
+
+func f모의투자서버_접속_중() bool {
+	return 서버_구분 == xt.P서버_모의투자
+}

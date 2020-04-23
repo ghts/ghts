@@ -43,8 +43,10 @@ func init() {
 	lib.TR구분_String = xt.TR구분_String
 }
 
-func F초기화(서버_구분 xt.T서버_구분) (에러 error) {
+func F초기화(서버 xt.T서버_구분) (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
+
+	서버_구분 = 서버
 
 	f초기화_Go루틴()
 	f초기화_서버_접속(서버_구분)

@@ -388,6 +388,7 @@ const (
 	TR계좌_상세명
 	TR계좌_별명
 	TR소켓_테스트
+	TR서버_구분
 )
 
 func TR구분_String(v lib.TR구분) string {
@@ -430,6 +431,8 @@ func TR구분_String(v lib.TR구분) string {
 		return "계좌_상세명"
 	case TR소켓_테스트:
 		return "신호"
+	case TR서버_구분:
+		return "서버_구분"
 	default:
 		return lib.F2문자열("예상하지 못한 M값 : '%v'", v)
 	}

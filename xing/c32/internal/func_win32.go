@@ -101,7 +101,7 @@ func WndProc(hWnd w32.HWND, msg uint32, wParam, lParam uintptr) uintptr {
 		OnRealtimeData(unsafe.Pointer(lParam))
 		return TRUE
 	case XM_LOGIN:
-		OnLogin(unsafe.Pointer(wParam))
+		OnLogin(unsafe.Pointer(wParam), unsafe.Pointer(lParam))
 		return TRUE
 	case XM_LOGOUT:
 		OnLogout()

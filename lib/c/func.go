@@ -36,7 +36,11 @@ package c
 // #cgo CFLAGS: -Wall
 // #include <stdlib.h>
 import "C"
-import "unsafe"
+import (
+	"golang.org/x/text/encoding/korean"
+	"strings"
+	"unsafe"
+)
 
 func F2C문자열(go문자열 string) *C.char {
 	return C.CString(go문자열)
@@ -44,6 +48,31 @@ func F2C문자열(go문자열 string) *C.char {
 
 func F2Go문자열(c문자열_포인터 unsafe.Pointer) string {
 	return C.GoString((*C.char)(c문자열_포인터))
+}
+
+func F2문자열_EUC_KR(c문자열_포인터 unsafe.Pointer) string {
+	바이트_모음 := F2Go바이트_모음(c문자열_포인터, 2048)
+
+	return strings.TrimSpace(f2문자열_EUC_KR(바이트_모음))
+}
+
+func f2문자열_EUC_KR(바이트_모음 []byte) string {
+	null문자_인덱스 := strings.Index(string(바이트_모음), "\x00")
+
+	if null문자_인덱스 >= 0 {
+		바이트_모음 = 바이트_모음[:null문자_인덱스]
+	}
+
+	바이트_모음_utf8, 에러 := korean.EUCKR.NewDecoder().Bytes(바이트_모음)
+	if 에러 != nil {
+		if len(바이트_모음) > 0 {
+			return f2문자열_EUC_KR(바이트_모음[:len(바이트_모음)-1])
+		}
+
+		return string(바이트_모음)
+	}
+
+	return string(바이트_모음_utf8)
 }
 
 func F2Go바이트_모음(c데이터 unsafe.Pointer, 길이 int) []byte {
