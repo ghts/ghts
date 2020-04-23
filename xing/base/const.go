@@ -1757,8 +1757,8 @@ type T주문_체결_미체결_구분_CSPAQ13700 uint8
 
 const (
 	CSPAQ13700_체결_미체결_전체 T주문_체결_미체결_구분_CSPAQ13700 = 0
-	CSPAQ13700_체결 T주문_체결_미체결_구분_CSPAQ13700 = 1
-	CSPAQ13700_미체결 T주문_체결_미체결_구분_CSPAQ13700 = 3
+	CSPAQ13700_체결        T주문_체결_미체결_구분_CSPAQ13700 = 1
+	CSPAQ13700_미체결       T주문_체결_미체결_구분_CSPAQ13700 = 3
 )
 
 func (p T주문_체결_미체결_구분_CSPAQ13700) String() string {
