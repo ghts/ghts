@@ -382,7 +382,11 @@ func TrCSPAQ13700_현물계좌_주문체결내역(계좌번호 string, 주문일
 	체결_미체결_구분 xt.T주문_체결_미체결_구분_CSPAQ13700) (값_모음 []*xt.CSPAQ13700_현물계좌_주문체결내역_반복값, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 값_모음 = nil }}.S실행()
 
-	계좌번호_모음 := lib.F확인(F계좌번호_모음()).([]string)
+	계좌번호_모음, 에러 := F계좌번호_모음()
+	if 에러 != nil {
+		lib.F에러_출력(에러)
+		return nil, 에러
+	}
 
 	존재함 := false
 	for _, 계좌번호_값 := range 계좌번호_모음 {
@@ -1562,7 +1566,11 @@ func F계좌번호_모음() (응답값 []string, 에러 error) {
 	질의값 := lib.New질의값_기본형(xt.TR계좌번호_모음, "")
 
 	계좌번호_모음 = make([]string, 0)
-	lib.F확인(F질의(질의값, lib.P10초).G값(0, &계좌번호_모음))
+	if 에러 = F질의(질의값, lib.P10초).G값(0, &계좌번호_모음); 에러 != nil {
+		lib.F에러_출력(에러)
+		return nil, 에러
+	}
+
 
 	return 계좌번호_모음, nil
 }

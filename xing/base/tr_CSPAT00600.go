@@ -37,7 +37,6 @@ import (
 	"bytes"
 	"encoding/binary"
 	"github.com/ghts/ghts/lib"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -128,7 +127,7 @@ func NewCSPAT00600InBlock(질의값 *CSPAT00600_현물_정상_주문_질의값, 
 	lib.F바이트_복사_문자열(g.InptPwd[:], 비밀번호)
 	lib.F바이트_복사_문자열(g.IsuNo[:], 질의값.M종목코드)
 	lib.F바이트_복사_정수(g.OrdQty[:], 질의값.M주문수량)
-	lib.F바이트_복사_정수(g.OrdPrc[:], 질의값.M주문단가)
+	lib.F바이트_복사_실수(g.OrdPrc[:], 질의값.M주문단가, 2)
 	lib.F바이트_복사_문자열(g.BnsTpCode[:], lib.F2문자열(int(질의값.M매도_매수_구분)))
 	lib.F바이트_복사_정수(g.OrdprcPtnCode[:], int(F2Xing호가유형(질의값.M호가유형)))
 	lib.F바이트_복사_정수(g.MgntrnCode[:], int(F2Xing신용거래_구분(질의값.M신용거래_구분)))
@@ -142,7 +141,7 @@ func NewCSPAT00600InBlock(질의값 *CSPAT00600_현물_정상_주문_질의값, 
 		lib.F바이트_복사_문자열(g.LoanDt[:], 질의값.M대출일)
 	}
 
-	lib.F바이트_복사_문자열(g.OrdCndiTpCode[:], strconv.Itoa(int(질의값.M주문조건)))
+	lib.F바이트_복사_정수(g.OrdCndiTpCode[:], int(질의값.M주문조건))
 
 	f속성값_초기화(g)
 

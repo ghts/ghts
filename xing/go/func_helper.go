@@ -181,8 +181,9 @@ func f접속유지_도우미() {
 
 func f에러_발생(TR코드, 코드, 내용 string) bool {
 	switch TR코드 {
-	case xt.TR현물_정상_주문_CSPAT00600,
-		xt.TR현물_당일_매매일지_t0150,
+	case xt.TR현물_정상_주문_CSPAT00600:
+		return 코드 != "00000" && 코드 != "00039" && 코드 != "00040"
+	case xt.TR현물_당일_매매일지_t0150,
 		xt.TR현물_일자별_매매일지_t0151,
 		xt.TR시간_조회_t0167,
 		xt.TR현물_체결_미체결_조회_t0425,
