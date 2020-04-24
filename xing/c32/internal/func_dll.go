@@ -261,7 +261,7 @@ func F로그인(서버_구분 xt.T서버_구분) (에러 error) {
 	defer c.F메모리_해제(unsafe.Pointer(c공인인증서_암호))
 
 	키_AcctPWD := lib.F확인(섹션.GetKey("AcctPWD")).(*ini.Key)
-	계좌_비밀번호 = 키_AcctPWD.String()
+	계좌_비밀번호 = lib.F조건부_문자열(서버_구분 == xt.P서버_실거래, 키_AcctPWD.String(), "0000")
 
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
