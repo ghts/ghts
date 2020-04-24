@@ -51,7 +51,21 @@ func F2Go문자열(c문자열_포인터 unsafe.Pointer) string {
 }
 
 func F2문자열_EUC_KR(c문자열_포인터 unsafe.Pointer) string {
-	바이트_모음 := F2Go바이트_모음(c문자열_포인터, 1024)
+	var 바이트_모음 []byte
+	길이 := 128
+
+	for {
+		바이트_모음 = F2Go바이트_모음(c문자열_포인터, 길이)
+
+		null문자_인덱스 := strings.Index(string(바이트_모음), "\x00")
+
+		if null문자_인덱스 >= 0 {
+			break
+		}
+
+		길이 += 128
+	}
+
 
 	return strings.TrimSpace(f2문자열_EUC_KR(바이트_모음))
 }
