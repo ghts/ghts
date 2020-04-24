@@ -37,7 +37,6 @@ import (
 	"bytes"
 	"encoding/csv"
 	"encoding/gob"
-	"encoding/json"
 	"errors"
 	"io"
 	"io/ioutil"
@@ -741,11 +740,19 @@ func F파일에서_값_읽기(값_포인터 interface{}, 파일명 string, 파�
 	return nil
 }
 
-func JSON쓰기(값 interface{}, 파일명 string) error {
-	if 바이트_변환값, 에러 := json.Marshal(값); 에러 != nil {
+func JSON_파일_저장(값 interface{}, 파일명 string) (에러 error) {
+	if 바이트_모음, 에러 := F인코딩(JSON, 값); 에러 != nil {
 		return 에러
 	} else {
-		return ioutil.WriteFile(파일명, 바이트_변환값, 0644)
+		return ioutil.WriteFile(파일명, 바이트_모음, 0644)
+	}
+}
+
+func JSON_파일_읽기(파일명 string, 반환값 interface{}) (에러 error) {
+	if 바이트_모음, 에러 := ioutil.ReadFile(파일명); 에러 != nil {
+		return 에러
+	} else {
+		return F디코딩(JSON, 바이트_모음, 반환값)
 	}
 }
 
