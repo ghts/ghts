@@ -58,9 +58,9 @@ func F바이트_복사_문자열(바이트_배열 []byte, 문자열 string) {
 func F바이트_복사_정수(바이트_배열 []byte, 값 interface{}) {
 	문자열 := ""
 
-	switch F종류(값) {
-	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64,
-		reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+	switch 값.(type) {
+	case int, int8, int16, int32, int64,
+		uint, uint8, uint16, uint32, uint64:
 		문자열 = F2문자열(값)
 	default:
 		panic(New에러("값 자료형이 아닙니다. %T %v", 값, F종류(값)))
@@ -78,11 +78,31 @@ func F바이트_복사_정수(바이트_배열 []byte, 값 interface{}) {
 func F바이트_복사_실수(바이트_배열 []byte, 값 interface{}, 소숫점_이하_자릿수 int) {
 	var 문자열 string
 
-	switch F종류(값) {
-	case reflect.Float32:
-		문자열 = strconv.FormatFloat(float64(값.(float32)), 'f', 소숫점_이하_자릿수, 32)
-	case reflect.Float64:
-		문자열 = strconv.FormatFloat(값.(float64), 'f', 소숫점_이하_자릿수, 64)
+	switch 변환값 := 값.(type) {
+	case float64:
+		문자열 = strconv.FormatFloat(변환값, 'f', 소숫점_이하_자릿수, 64)
+	case float32:
+		문자열 = strconv.FormatFloat(float64(변환값), 'f', 소숫점_이하_자릿수, 64)
+	case int:
+		문자열 = strconv.FormatFloat(float64(변환값), 'f', 소숫점_이하_자릿수, 64)
+	case int8:
+		문자열 = strconv.FormatFloat(float64(변환값), 'f', 소숫점_이하_자릿수, 64)
+	case int16:
+		문자열 = strconv.FormatFloat(float64(변환값), 'f', 소숫점_이하_자릿수, 64)
+	case int32:
+		문자열 = strconv.FormatFloat(float64(변환값), 'f', 소숫점_이하_자릿수, 64)
+	case int64:
+		문자열 = strconv.FormatFloat(float64(변환값), 'f', 소숫점_이하_자릿수, 64)
+	case uint:
+		문자열 = strconv.FormatFloat(float64(변환값), 'f', 소숫점_이하_자릿수, 64)
+	case uint8:
+		문자열 = strconv.FormatFloat(float64(변환값), 'f', 소숫점_이하_자릿수, 64)
+	case uint16:
+		문자열 = strconv.FormatFloat(float64(변환값), 'f', 소숫점_이하_자릿수, 64)
+	case uint32:
+		문자열 = strconv.FormatFloat(float64(변환값), 'f', 소숫점_이하_자릿수, 64)
+	case uint64:
+		문자열 = strconv.FormatFloat(float64(변환값), 'f', 소숫점_이하_자릿수, 64)
 	default:
 		panic(New에러("값 자료형이 아닙니다. %T %v", 값, F종류(값)))
 	}
