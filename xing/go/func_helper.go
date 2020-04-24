@@ -183,6 +183,10 @@ func f에러_발생(TR코드, 코드, 내용 string) bool {
 	switch TR코드 {
 	case xt.TR현물_정상_주문_CSPAT00600:
 		return 코드 != "00000" && 코드 != "00039" && 코드 != "00040"
+	case xt.TR현물_정정_주문_CSPAT00700:
+		return 코드 != "00131" && 코드 != "00132"
+	case xt.TR현물_취소_주문_CSPAT00800:
+		return 코드 != "00156"
 	case xt.TR현물_당일_매매일지_t0150,
 		xt.TR현물_일자별_매매일지_t0151,
 		xt.TR시간_조회_t0167,
@@ -211,15 +215,11 @@ func f에러_발생(TR코드, 코드, 내용 string) bool {
 		return 코드 != "00132" && 코드 != "02258"
 	case xt.TR선물옵션_취소주문_CFOAT00300:
 		return 코드 != "00156" && 코드 != "02258"
-	case xt.TR현물_정정_주문_CSPAT00700:
-		return 코드 != "00131"
 	case xt.TR선물옵션_예탁금_증거금_조회_CFOBQ10500,
 		xt.TR선물옵션_미결제약정_현황_CFOFQ02400,
 		xt.TR현물계좌_잔고내역_조회_CSPAQ12300,
 		xt.TR현물계좌_예수금_주문가능금액_CSPAQ22200:
 		return 코드 != "00136"
-	case xt.TR현물_취소_주문_CSPAT00800:
-		return 코드 != "00156"
 	case xt.TR선물옵션_주문체결내역조회_CFOAQ00600:
 		return 코드 != "00136" && 코드 != "00133"
 

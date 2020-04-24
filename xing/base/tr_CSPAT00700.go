@@ -116,7 +116,7 @@ func NewCSPAT00700InBlock(질의값 *CSPAT00700_현물_정정_주문_질의값, 
 	lib.F바이트_복사_정수(g.OrdQty[:], 질의값.M주문수량)
 	lib.F바이트_복사_정수(g.OrdprcPtnCode[:], int(F2Xing호가유형(질의값.M호가유형)))
 	lib.F바이트_복사_정수(g.OrdCndiTpCode[:], int(질의값.M주문조건))
-	lib.F바이트_복사_정수(g.OrdPrc[:], 질의값.M주문단가)
+	lib.F바이트_복사_실수(g.OrdPrc[:], 질의값.M주문단가, 2)
 
 	f속성값_초기화(g)
 

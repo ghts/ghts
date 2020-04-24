@@ -1571,7 +1571,6 @@ func F계좌번호_모음() (응답값 []string, 에러 error) {
 		return nil, 에러
 	}
 
-
 	return 계좌번호_모음, nil
 }
 
