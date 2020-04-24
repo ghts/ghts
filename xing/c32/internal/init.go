@@ -43,56 +43,10 @@ func init() {
 	lib.TR구분_String = xt.TR구분_String
 }
 
-func F초기화(서버 xt.T서버_구분) (에러 error) {
-	defer lib.S예외처리{M에러: &에러}.S실행()
-
-	서버_구분 = 서버
-
-	f초기화_Go루틴()
-	f초기화_서버_접속(서버_구분)
-
-	return nil
-}
-
-func f초기화_Go루틴() {
+func F초기화() {
 	ch초기화 := make(chan lib.T신호)
 	go Go루틴_관리(ch초기화)
 	<-ch초기화
-}
-
-func f초기화_서버_접속(서버_구분 xt.T서버_구분) (에러 error) {
-	defer lib.S예외처리{M에러: &에러}.S실행()
-
-	lib.F조건부_패닉(!lib.F인터넷에_접속됨(), "서버 접속이 불가 : 인터넷 접속을 확인하십시오.")
-
-	질의 := lib.New채널_질의_API(lib.New질의값_정수(lib.TR접속, "", int(서버_구분)))
-
-	Ch질의 <- 질의
-
-	select {
-	case <-질의.Ch회신값:
-		// OK
-	case 에러 := <-질의.Ch에러:
-		return 에러
-		lib.F문자열_출력("접속 처리 실행 실패 후 재시도.")
-	case <-time.After(lib.P30초):
-		return lib.New에러("접속 타임아웃")
-	}
-
-	select {
-	case 로그인_여부 := <-ch로그인:
-		if !로그인_여부 {
-			return lib.New에러with출력("로그인 실패.")
-		}
-	case <-time.After(lib.P30초):
-		return lib.New에러with출력("로그인 타임아웃")
-	}
-
-	F콜백(lib.New콜백_신호(lib.P신호_C32_READY))
-
-	println("**     C32 READY     **")
-
-	return nil
 }
 
 func f종료_질의_송신() {

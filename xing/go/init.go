@@ -81,18 +81,22 @@ func init() {
 	lib.F메모(메모)
 }
 
-func F초기화() (에러 error) {
+func F초기화(서버_구분 xt.T서버_구분) (에러 error) {
 	if API초기화_완료.G값() {
 		return nil
 	}
 
 	defer func() {
 		lib.S예외처리{M에러: &에러}.S실행()
-		API초기화_완료.S값(true)
+
+		if 에러 == nil {
+			API초기화_완료.S값(true)
+		}
 	}()
 
 	f초기화_Go루틴()
 	lib.F확인(f초기화_xing_C32())
+	lib.F확인(f접속_로그인(서버_구분))
 	lib.F조건부_패닉(!f초기화_작동_확인(), "초기화 작동 확인 실패.")
 	lib.F확인(f초기화_TR전송_제한())
 	lib.F확인(f종목모음_설정())
@@ -102,6 +106,20 @@ func F초기화() (에러 error) {
 	fmt.Println("**     초기화 완료     **")
 
 	return nil
+}
+
+func f초기화_Go루틴() {
+	lib.F메모("RT 루틴 일시 비활성화")
+	고루틴_모음 := []func(chan lib.T신호) error{go_TR콜백_처리} //, go_RT_주문처리결과}
+	ch초기화 := make(chan lib.T신호, len(고루틴_모음))
+
+	for _, 고루틴 := range 고루틴_모음 {
+		go 고루틴(ch초기화)
+	}
+
+	for range 고루틴_모음 {
+		<-ch초기화
+	}
 }
 
 func f초기화_xing_C32() (에러 error) {
@@ -136,18 +154,23 @@ func f초기화_xing_C32() (에러 error) {
 	return nil
 }
 
-func f초기화_Go루틴() {
-	lib.F메모("RT 루틴 일시 비활성화")
-	고루틴_모음 := []func(chan lib.T신호) error{go_TR콜백_처리} //, go_RT_주문처리결과}
-	ch초기화 := make(chan lib.T신호, len(고루틴_모음))
-
-	for _, 고루틴 := range 고루틴_모음 {
-		go 고루틴(ch초기화)
+func f접속_로그인(서버_구분 xt.T서버_구분) (에러 error){
+	if !tr수신_소켓_동작_확인() {
+		return lib.New에러("C32 프로세스 REP소켓 접속 불가.")
 	}
 
-	for range 고루틴_모음 {
-		<-ch초기화
+	질의값 := lib.New질의값_정수(lib.TR접속, "", int(서버_구분))
+	i응답값 := F질의(질의값).G해석값_단순형(0)
+
+	if 응답값, ok := i응답값.(lib.T신호); !ok {
+		return lib.New에러("f접속_로그인() 예상하지 못한 자료형 : '%T'", i응답값)
+	} else if 응답값 != lib.P신호_OK {
+		return lib.New에러("예상하지 못한 응답값 : '%v'", 응답값)
 	}
+
+	<-ch신호_C32_시작
+
+	return nil
 }
 
 func f초기화_작동_확인() (작동_여부 bool) {
@@ -159,16 +182,6 @@ func f초기화_작동_확인() (작동_여부 bool) {
 	// C32 모듈의 소켓이 초기화 될 시간을 준다.
 	// 이게 없으면 제대로 작동하지 않으며, 필수적인 부분임. 삭제하지 말 것.
 	lib.F대기(lib.P10초)
-
-	// 소켓REP_TR수신 동작 테스트
-	go tr수신_소켓_동작_확인(ch확인)
-
-	select {
-	case <-ch확인:
-	case <-ch타임아웃:
-		lib.F체크포인트("F소켓REP_TR수신_동작_여부_확인() 타임아웃.")
-		return false
-	}
 
 	// F접속됨() 테스트
 	go f접속_확인(ch확인)
@@ -185,16 +198,16 @@ func f초기화_작동_확인() (작동_여부 bool) {
 	return true
 }
 
-func tr수신_소켓_동작_확인(ch완료 chan lib.T신호) {
-	defer func() { ch완료 <- lib.P신호_종료 }()
-
+func tr수신_소켓_동작_확인() bool {
 	for i := 0; i < 100; i++ {
 		if 응답 := F질의(lib.New질의값_기본형(xt.TR소켓_테스트, ""), lib.P5초); 응답.G에러() == nil {
-			return
+			return true
 		}
 
 		lib.F대기(lib.P500밀리초)
 	}
+
+	return false
 }
 
 func f접속_확인(ch완료 chan lib.T신호) {

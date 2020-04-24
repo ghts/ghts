@@ -35,6 +35,7 @@ package xing
 
 import (
 	"github.com/ghts/ghts/lib"
+	xt "github.com/ghts/ghts/xing/base"
 	"testing"
 )
 
@@ -51,7 +52,7 @@ func f테스트_준비() (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
 	lib.F테스트_모드_시작()
-	lib.F확인(F초기화())
+	lib.F확인(F초기화(xt.P서버_모의투자))
 	lib.F확인(F주문_응답_실시간_정보_구독())
 
 	return nil

@@ -283,6 +283,10 @@ func OnLogin(wParam, lParam unsafe.Pointer) {
 	case ch로그인 <- 로그인_성공_여부:
 	default:
 	}
+
+	F콜백(lib.New콜백_신호(lib.P신호_C32_READY))
+
+	println("**    Xing C32 READY     **")
 }
 
 func OnLogout() {

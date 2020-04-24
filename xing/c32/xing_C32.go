@@ -26,12 +26,10 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package main
 
 import (
-	xt "github.com/ghts/ghts/xing/base"
 	x32 "github.com/ghts/ghts/xing/c32/internal"
 )
 
 func main() {
-	//x32.F초기화(xt.P서버_모의투자)
-	x32.F초기화(xt.P서버_실거래)
+	x32.F초기화()
 	x32.F종료_대기()
 }

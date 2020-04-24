@@ -43,17 +43,13 @@ import (
 )
 
 func F전일() time.Time {
-	if 전일 == nil {
-		F초기화()
-	}
+	lib.F조건부_패닉(전일 == nil, "Xing API가 초기화 되어 있지 않습니다.")
 
 	return 전일.G값()
 }
 
 func F당일() time.Time {
-	if 당일 == nil {
-		F초기화()
-	}
+	lib.F조건부_패닉(당일 == nil, "Xing API가 초기화 되어 있지 않습니다.")
 
 	return 당일.G값()
 }
@@ -413,6 +409,7 @@ func f전송_시각_기록(TR코드 string) {
 
 func 현물_계좌번호() (계좌번호 string, 에러 error) {
 	서버_구분, 에러 := F서버_구분()
+
 	if 에러 != nil {
 		return "", 에러
 	}
@@ -437,6 +434,8 @@ func F계좌번호by상세명(상세명 string) (계좌번호 string, 에러 err
 	for _, 계좌번호 := range 계좌번호_모음 {
 		계좌_상세명, 에러 := F계좌_상세명(계좌번호)
 		lib.F확인(에러)
+
+		lib.F체크포인트(계좌번호, 계좌_상세명, 상세명)
 
 		if 계좌_상세명 == 상세명 {
 			return 계좌번호, nil

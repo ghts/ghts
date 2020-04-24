@@ -279,9 +279,9 @@ func F로그인(서버_구분 xt.T서버_구분) (에러 error) {
 		return lib.New에러("F로그인() 에러 발생.\n'%v'", 에러_번호)
 	case 참거짓 == FALSE:
 		return lib.New에러with출력("F로그인() 실패.")
-	default:
-		return nil
 	}
+
+	return nil
 }
 
 func F로그아웃() (에러 error) {
