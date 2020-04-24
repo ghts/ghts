@@ -1841,7 +1841,7 @@ func (p T통신매체구분) F해석(값 interface{}) T통신매체구분 {
 		return P통신매체_안드로이드
 	case "API", "씽(X-ing)":
 		return P통신매체_API
-	case "HTS":
+	case "HTS", "xingQ master":
 		return P통신매체_HTS
 	default:
 		panic(lib.New에러("예상하지 못한 값 : '%v'", 문자열))

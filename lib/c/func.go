@@ -52,7 +52,7 @@ func F2Go문자열(c문자열_포인터 unsafe.Pointer) string {
 
 func F2문자열_EUC_KR(c문자열_포인터 unsafe.Pointer) string {
 	var 바이트_모음 []byte
-	길이 := 128
+	길이 := 64
 
 	for {
 		바이트_모음 = F2Go바이트_모음(c문자열_포인터, 길이)
@@ -63,7 +63,7 @@ func F2문자열_EUC_KR(c문자열_포인터 unsafe.Pointer) string {
 			break
 		}
 
-		길이 += 128
+		길이 += 64
 	}
 
 
