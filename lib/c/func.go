@@ -66,7 +66,6 @@ func F2문자열_EUC_KR(c문자열_포인터 unsafe.Pointer) string {
 		길이 += 64
 	}
 
-
 	return strings.TrimSpace(f2문자열_EUC_KR(바이트_모음))
 }
 

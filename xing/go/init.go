@@ -154,7 +154,7 @@ func f초기화_xing_C32() (에러 error) {
 	return nil
 }
 
-func f접속_로그인(서버_구분 xt.T서버_구분) (에러 error){
+func f접속_로그인(서버_구분 xt.T서버_구분) (에러 error) {
 	if !tr수신_소켓_동작_확인() {
 		return lib.New에러("C32 프로세스 REP소켓 접속 불가.")
 	}
