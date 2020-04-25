@@ -583,6 +583,18 @@ func (s S종목별_일일_가격정보_모음) G종목코드() string {
 	return s.M저장소[0].M종목코드
 }
 
+func (s S종목별_일일_가격정보_모음) G값(일자 time.Time) (*S일일_가격정보, error) {
+	if 인덱스, 존재함 := s.인덱스[F2일자(일자)]; !존재함 {
+		return nil, New에러("해당되는 인덱스 없음 : '%v'", F2일자(일자).Format(P일자_형식))
+	} else if 인덱스 < 0 {
+		return nil, New에러("음수 인덱스 : '%v'", 인덱스)
+	} else if 인덱스 >= len(s.M저장소) {
+		return nil, New에러("너무 큰 인덱스 : '%v' '%v'", 인덱스, len(s.M저장소))
+	} else {
+		return s.M저장소[인덱스], nil
+	}
+}
+
 func (s S종목별_일일_가격정보_모음) S추가(값 *S일일_가격정보) (*S종목별_일일_가격정보_모음, error) {
 	return New종목별_일일_가격정보_모음(append(s.M저장소, 값))
 }
@@ -591,12 +603,12 @@ func (s S종목별_일일_가격정보_모음) S복수_추가(값_모음 []*S일
 	return New종목별_일일_가격정보_모음(append(s.M저장소, 값_모음...))
 }
 
-func (s S종목별_일일_가격정보_모음) S정렬() {
+func (s *S종목별_일일_가격정보_모음) S정렬() {
 	sort.Sort(s)
 	s.s인덱스_설정()
 }
 
-func (s S종목별_일일_가격정보_모음) s인덱스_설정() {
+func (s *S종목별_일일_가격정보_모음) s인덱스_설정() {
 	s.인덱스 = make(map[time.Time]int)
 
 	for i, 값 := range s.M저장소 {
