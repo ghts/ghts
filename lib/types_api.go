@@ -36,7 +36,6 @@ package lib
 import (
 	"bytes"
 	"container/list"
-	"sort"
 	"sync"
 	"time"
 )

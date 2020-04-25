@@ -128,7 +128,7 @@ func F전체_종목_일일_가격정보_저장(db파일경로 string) (에러 er
 			continue
 		} else if len(값_모음) == 0 {
 			lib.F체크포인트(i, 종목코드, "추가 저장할 데이터가 없음.")
-			continue	// 추가 저장할 데이터가 없음.
+			continue // 추가 저장할 데이터가 없음.
 		}
 
 		일일_가격정보_슬라이스 := make([]*lib.S일일_가격정보, len(값_모음))
