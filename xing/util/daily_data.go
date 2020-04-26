@@ -70,6 +70,8 @@ func F종목별_일일_가격정보_읽기(종목코드 string, db *bolt.DB) (
 		return nil
 	})
 
+	종목별_일일_가격정보_모음.S정렬_및_인덱스_설정()
+
 	return
 }
 
