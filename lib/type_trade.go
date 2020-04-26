@@ -34,6 +34,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package lib
 
 import (
+	"math"
 	"sort"
 	"strconv"
 	"time"
@@ -115,7 +116,16 @@ func New종목별_일일_가격정보_모음(값_모음 []*S일일_가격정보)
 	}
 
 	s = &S종목별_일일_가격정보_모음{M저장소: 값_모음}
-	s.S정렬()
+
+	// 정렬
+	sort.Sort(s)
+
+	// 인덱스 설정
+	s.인덱스 = make(map[uint32]int)
+
+	for i, 값 := range s.M저장소 {
+		s.인덱스[값.M일자] = i
+	}
 
 	return s, nil
 }
@@ -149,23 +159,73 @@ func (s S종목별_일일_가격정보_모음) S복수_추가(값_모음 []*S일
 	return New종목별_일일_가격정보_모음(append(s.M저장소, 값_모음...))
 }
 
-func (s *S종목별_일일_가격정보_모음) S정렬() {
-	sort.Sort(s)
-	s.s인덱스_설정()
-}
-
-func (s *S종목별_일일_가격정보_모음) s인덱스_설정() {
-	s.인덱스 = make(map[uint32]int)
-
-	for i, 값 := range s.M저장소 {
-		s.인덱스[값.M일자] = i
-	}
-}
-
 func (s S종목별_일일_가격정보_모음) Len() int { return len(s.M저장소) }
 func (s S종목별_일일_가격정보_모음) Swap(i, j int) {
 	s.M저장소[i], s.M저장소[j] = s.M저장소[j], s.M저장소[i]
 }
 func (s S종목별_일일_가격정보_모음) Less(i, j int) bool {
 	return s.M저장소[i].M일자 < s.M저장소[j].M일자
+}
+
+func (s S종목별_일일_가격정보_모음) G전일_종가()[]float64 {
+	전일_종가_모음 := make([]float64, len(s.M저장소))
+	전일_종가_모음[0] = (s.M저장소[0].M종가 + s.M저장소[1].M종가 + s.M저장소[2].M종가) / 3.0 // 임의로 값을 채워넣음.
+
+	for i:=1 ; i<len(s.M저장소) ; i++ {
+		전일_종가_모음[i] = s.M저장소[i-1].M종가
+	}
+}
+
+func (s S종목별_일일_가격정보_모음) SMA(윈도우_크기 int) []float64 {
+	// Look Ahead Bias를 방지하기 위해서 전일 종가 기준으로 함.
+	return F단순_이동_평균(s.G전일_종가(), 윈도우_크기)
+}
+
+func (s S종목별_일일_가격정보_모음) EMA(윈도우_크기 int) []float64 {
+	// Look Ahead Bias를 방지하기 위해서 전일 종가 기준으로 함.
+	return F지수_이동_평균(s.G전일_종가(), 윈도우_크기)
+}
+
+func (s S종목별_일일_가격정보_모음) F볼린저_밴드_SMA(윈도우_크기 int, 채널_폭_표준편차_배율 float64) (상한, 이평, 하한 []float64) {
+	// Look Ahead Bias를 방지하기 위해서 전일 종가 기준으로 함.
+	return F볼린저_밴드_SMA(s.G전일_종가(), 윈도우_크기, 채널_폭_표준편차_배율)
+}
+
+func (s S종목별_일일_가격정보_모음) F볼린저_밴드_EMA(윈도우_크기 int, 채널_폭_표준편차_배율 float64) (상한, 이평, 하한 []float64) {
+	// Look Ahead Bias를 방지하기 위해서 전일 종가 기준으로 함.
+	return F볼린저_밴드_EMA(s.G전일_종가(), 윈도우_크기, 채널_폭_표준편차_배율)
+}
+
+func (s S종목별_일일_가격정보_모음) TrueRange() []float64 {
+	// Look Ahead Bias를 방지하기 위해서 하루 늦추어서 전일 True Range 값으로 설정함.
+	TrueRange모음 := make([]float64, len(s.M저장소))
+
+	TrueRange모음[0] = 0.0
+	TrueRange모음[1] = 0.0
+
+	for i:=2 ; i<len(s.M저장소) ; i++ {
+		값1 := s.M저장소[i-2].M고가 - s.M저장소[i-1].M저가
+		값2 := math.Abs(s.M저장소[i-1].M고가 - s.M저장소[i-2].M종가)
+		값3 := math.Abs(s.M저장소[i-2].M종가 - s.M저장소[i-1].M저가)
+
+		TrueRange모음[i] = math.Max(값1, math.Max(값2, 값3))
+	}
+
+	return TrueRange모음
+}
+
+func (s S종목별_일일_가격정보_모음) ATR_SMA(윈도우_크기 int) []float64 {
+	TrueRange모음 := s.TrueRange()
+	TrueRange모음[0] = (TrueRange모음[3] + TrueRange모음[4] + TrueRange모음[5]) / 3.0	// 임의로 값을 채워 넣음.
+	TrueRange모음[1] = (TrueRange모음[4] + TrueRange모음[5] + TrueRange모음[6]) / 3.0	// 임의로 값을 채워 넣음.
+
+	return F단순_이동_평균(TrueRange모음, 윈도우_크기)
+}
+
+func (s S종목별_일일_가격정보_모음) ATR_EMA(윈도우_크기 int) []float64 {
+	TrueRange모음 := s.TrueRange()
+	TrueRange모음[0] = (TrueRange모음[3] + TrueRange모음[4] + TrueRange모음[5]) / 3.0	// 임의로 값을 채워 넣음.
+	TrueRange모음[1] = (TrueRange모음[4] + TrueRange모음[5] + TrueRange모음[6]) / 3.0	// 임의로 값을 채워 넣음.
+
+	return F지수_이동_평균(TrueRange모음, 윈도우_크기)
 }
