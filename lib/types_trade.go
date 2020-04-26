@@ -268,6 +268,28 @@ func (s S종목별_일일_가격정보_모음) Less(i, j int) bool {
 	return s.M저장소[i].M일자 < s.M저장소[j].M일자
 }
 
+func (s S종목별_일일_가격정보_모음) G전일_고가() []float64 {
+	전일_고가_모음 := make([]float64, len(s.M저장소))
+	전일_고가_모음[0] = (s.M저장소[0].M고가 + s.M저장소[1].M고가 + s.M저장소[2].M고가) / 3.0 // 임의로 값을 채워넣음.
+
+	for i := 1; i < len(s.M저장소); i++ {
+		전일_고가_모음[i] = s.M저장소[i-1].M고가
+	}
+
+	return 전일_고가_모음
+}
+
+func (s S종목별_일일_가격정보_모음) G전일_저가() []float64 {
+	전일_저가_모음 := make([]float64, len(s.M저장소))
+	전일_저가_모음[0] = (s.M저장소[0].M저가 + s.M저장소[1].M저가 + s.M저장소[2].M저가) / 3.0 // 임의로 값을 채워넣음.
+
+	for i := 1; i < len(s.M저장소); i++ {
+		전일_저가_모음[i] = s.M저장소[i-1].M저가
+	}
+
+	return 전일_저가_모음
+}
+
 func (s S종목별_일일_가격정보_모음) G전일_종가() []float64 {
 	전일_종가_모음 := make([]float64, len(s.M저장소))
 	전일_종가_모음[0] = (s.M저장소[0].M종가 + s.M저장소[1].M종가 + s.M저장소[2].M종가) / 3.0 // 임의로 값을 채워넣음.
@@ -277,6 +299,18 @@ func (s S종목별_일일_가격정보_모음) G전일_종가() []float64 {
 	}
 
 	return 전일_종가_모음
+}
+
+func (s S종목별_일일_가격정보_모음) G고가(윈도우_크기 int) float64 {
+	전일_고가_모음 := s.G전일_고가()
+
+	return F고가(전일_고가_모음)
+}
+
+func (s S종목별_일일_가격정보_모음) G저가(윈도우_크기 int) float64 {
+	전일_저가_모음 := s.G전일_저가()
+
+	return F저가(전일_저가_모음)
 }
 
 func (s S종목별_일일_가격정보_모음) SMA(윈도우_크기 int) []float64 {
@@ -317,15 +351,7 @@ func (s S종목별_일일_가격정보_모음) TrueRange() []float64 {
 	return TrueRange모음
 }
 
-func (s S종목별_일일_가격정보_모음) ATR_SMA(윈도우_크기 int) []float64 {
-	TrueRange모음 := s.TrueRange()
-	TrueRange모음[0] = (TrueRange모음[3] + TrueRange모음[4] + TrueRange모음[5]) / 3.0 // 임의로 값을 채워 넣음.
-	TrueRange모음[1] = (TrueRange모음[4] + TrueRange모음[5] + TrueRange모음[6]) / 3.0 // 임의로 값을 채워 넣음.
-
-	return F단순_이동_평균(TrueRange모음, 윈도우_크기)
-}
-
-func (s S종목별_일일_가격정보_모음) ATR_EMA(윈도우_크기 int) []float64 {
+func (s S종목별_일일_가격정보_모음) ATR(윈도우_크기 int) []float64 {
 	TrueRange모음 := s.TrueRange()
 	TrueRange모음[0] = (TrueRange모음[3] + TrueRange모음[4] + TrueRange모음[5]) / 3.0 // 임의로 값을 채워 넣음.
 	TrueRange모음[1] = (TrueRange모음[4] + TrueRange모음[5] + TrueRange모음[6]) / 3.0 // 임의로 값을 채워 넣음.
@@ -333,7 +359,7 @@ func (s S종목별_일일_가격정보_모음) ATR_EMA(윈도우_크기 int) []f
 	return F지수_이동_평균(TrueRange모음, 윈도우_크기)
 }
 
-func (s S종목별_일일_가격정보_모음) ATR_EMA채널vsSMA(윈도우_크기 int, atr증분 float64) []float64 {
+func (s S종목별_일일_가격정보_모음) ATR채널_SMA기반(윈도우_크기 int, atr증분 float64) []float64 {
 	ATR_EMA채널 := make([]float64, len(s.M저장소))
 
 	SMA := s.SMA(윈도우_크기)

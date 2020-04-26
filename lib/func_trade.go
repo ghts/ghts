@@ -35,6 +35,54 @@ package lib
 
 import "math"
 
+func f최대_실수값(값_모음 []float64) float64 {
+	최대값 := 값_모음[0]
+	
+	for i:=1 ; i<len(값_모음) ; i++ {
+		최대값 = math.Max(최대값, 값_모음[i])
+	} 
+	
+	return 최대값
+}
+
+func f최소_실수값(값_모음 []float64) float64 {
+	최소값 := 값_모음[0]
+
+	for i:=1 ; i<len(값_모음) ; i++ {
+		최소값 = math.Min(최소값, 값_모음[i])
+	}
+
+	return 최소값
+}
+
+func F고가(값_모음 []float64, 윈도우_크기 int) []float64 {
+	고가_모음 := make([]float64, len(값_모음))
+	
+	for i := 0 ; i<윈도우_크기 ; i++ {
+		고가_모음[i] = f최대_실수값(값_모음[:i])
+	}
+	
+	for i:=윈도우_크기 ; i<len(값_모음) ; i++ {
+		고가_모음[i] = f최대_실수값(값_모음[i-윈도우_크기+1:i])
+	}
+	
+	return 고가_모음
+}
+
+func F저가(값_모음 []float64, 윈도우_크기 int) []float64 {
+	저가_모음 := make([]float64, len(값_모음))
+
+	for i := 0 ; i<윈도우_크기 ; i++ {
+		저가_모음[i] = f최소_실수값(값_모음[:i])
+	}
+
+	for i:=윈도우_크기 ; i<len(값_모음) ; i++ {
+		저가_모음[i] = f최소_실수값(값_모음[i-윈도우_크기+1:i])
+	}
+
+	return 저가_모음
+}
+
 func F단순_이동_평균(값_모음 []float64, 윈도우_크기 int) []float64 {
 	이동_평균_모음 := make([]float64, len(값_모음))
 	윈도우_크기_실수값 := float64(윈도우_크기)
