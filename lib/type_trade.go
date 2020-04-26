@@ -139,13 +139,21 @@ func (s S종목별_일일_가격정보_모음) G종목코드() string {
 	return s.M저장소[0].M종목코드
 }
 
-func (s S종목별_일일_가격정보_모음) G값(일자 uint32) (*S일일_가격정보, error) {
+func (s S종목별_일일_가격정보_모음) G인덱스(일자 uint32) (int, error) {
 	if 인덱스, 존재함 := s.인덱스[일자]; !존재함 {
 		return nil, New에러("해당되는 인덱스 없음 : '%v'", 일자)
 	} else if 인덱스 < 0 {
 		return nil, New에러("음수 인덱스 : '%v'", 인덱스)
 	} else if 인덱스 >= len(s.M저장소) {
 		return nil, New에러("너무 큰 인덱스 : '%v' '%v'", 인덱스, len(s.M저장소))
+	} else {
+		return 인덱스
+	}
+}
+
+func (s S종목별_일일_가격정보_모음) G값(일자 uint32) (*S일일_가격정보, error) {
+	if 인덱스, 에러 := s.G인덱스(일자); 에러 != nil {
+		return nil, 에러
 	} else {
 		return s.M저장소[인덱스], nil
 	}
