@@ -35,6 +35,7 @@ package lib
 
 import (
 	"sort"
+	"strconv"
 	"time"
 )
 
@@ -56,25 +57,31 @@ func New일일_가격정보(종목코드 string, 일자 time.Time, 시가, 고�
 	}
 
 	return &S일일_가격정보{
-		M키:    종목코드 + "_" + 일자.Format("060102"),
 		M종목코드: 종목코드,
-		M일자:   일자,
-		M시가:   시가,
-		M고가:   고가,
-		M저가:   저가,
-		M종가:   종가,
-		M거래량:  거래량}
+		M일자:   uint32(F2정수_단순형(일자.Format("20060102"))),
+		M시가:   float64(시가),
+		M고가:   float64(고가),
+		M저가:   float64(저가),
+		M종가:   float64(종가),
+		M거래량:  uint64(거래량)}
 }
 
 type S일일_가격정보 struct {
-	M키    string
 	M종목코드 string
-	M일자   time.Time
-	M시가   int64
-	M고가   int64
-	M저가   int64
-	M종가   int64
-	M거래량  int64
+	M일자   uint32
+	M시가   float64
+	M고가   float64
+	M저가   float64
+	M종가   float64
+	M거래량  uint64
+}
+
+func (s S일일_가격정보) G키() string {
+	return s.M종목코드 + "_" + strconv.Itoa(int(s.M일자))
+}
+
+func (s S일일_가격정보) G일자() time.Time {
+	return F2포맷된_일자_단순형("20060102", F2문자열(s.M일자))
 }
 
 func New종목별_일일_가격정보_모음(값_모음 []*S일일_가격정보) (s *S종목별_일일_가격정보_모음, 에러 error) {
@@ -89,14 +96,14 @@ func New종목별_일일_가격정보_모음(값_모음 []*S일일_가격정보)
 	}
 
 	// 중복 제거를 위한 맵.
-	맵 := make(map[time.Time]*S일일_가격정보)
+	맵 := make(map[uint32]*S일일_가격정보)
 
 	for _, 값 := range 값_모음 {
 		if 값.M종목코드 != 종목코드 {
 			return nil, New에러("서로 다른 종목코드 : '%v' '%v'", 값.M종목코드, 종목코드)
 		}
 
-		맵[F2일자(값.M일자)] = 값
+		맵[값.M일자] = 값
 	}
 
 	값_모음 = make([]*S일일_가격정보, len(맵))
@@ -115,16 +122,16 @@ func New종목별_일일_가격정보_모음(값_모음 []*S일일_가격정보)
 
 type S종목별_일일_가격정보_모음 struct {
 	M저장소 []*S일일_가격정보
-	인덱스  map[time.Time]int
+	인덱스  map[uint32]int
 }
 
 func (s S종목별_일일_가격정보_모음) G종목코드() string {
 	return s.M저장소[0].M종목코드
 }
 
-func (s S종목별_일일_가격정보_모음) G값(일자 time.Time) (*S일일_가격정보, error) {
-	if 인덱스, 존재함 := s.인덱스[F2일자(일자)]; !존재함 {
-		return nil, New에러("해당되는 인덱스 없음 : '%v'", F2일자(일자).Format(P일자_형식))
+func (s S종목별_일일_가격정보_모음) G값(일자 uint32) (*S일일_가격정보, error) {
+	if 인덱스, 존재함 := s.인덱스[일자]; !존재함 {
+		return nil, New에러("해당되는 인덱스 없음 : '%v'", 일자)
 	} else if 인덱스 < 0 {
 		return nil, New에러("음수 인덱스 : '%v'", 인덱스)
 	} else if 인덱스 >= len(s.M저장소) {
@@ -148,7 +155,7 @@ func (s *S종목별_일일_가격정보_모음) S정렬() {
 }
 
 func (s *S종목별_일일_가격정보_모음) s인덱스_설정() {
-	s.인덱스 = make(map[time.Time]int)
+	s.인덱스 = make(map[uint32]int)
 
 	for i, 값 := range s.M저장소 {
 		s.인덱스[값.M일자] = i
@@ -160,5 +167,5 @@ func (s S종목별_일일_가격정보_모음) Swap(i, j int) {
 	s.M저장소[i], s.M저장소[j] = s.M저장소[j], s.M저장소[i]
 }
 func (s S종목별_일일_가격정보_모음) Less(i, j int) bool {
-	return s.M저장소[i].M일자.Before(s.M저장소[j].M일자)
+	return s.M저장소[i].M일자 < s.M저장소[j].M일자
 }

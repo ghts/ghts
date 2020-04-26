@@ -36,7 +36,6 @@ package lib
 import (
 	"github.com/ugorji/go/codec"
 	"golang.org/x/text/encoding/korean"
-	"unicode"
 
 	"bytes"
 	"math"
@@ -46,6 +45,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"unicode"
 )
 
 // 배열은 값으로 복사되므로 배열을 전달 받으면 복사해도 원본에 반영되지 않음.
