@@ -72,4 +72,3 @@ func (s S영업일_모음) G증분_개장일(일자 uint32, 증분 int) (uint32,
 		return s.M저장소[인덱스+증분], nil
 	}
 }
-

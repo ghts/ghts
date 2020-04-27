@@ -318,6 +318,10 @@ func (s S종목별_일일_가격정보_모음) MIN(윈도우_크기 int) []float
 }
 
 func (s S종목별_일일_가격정보_모음) SMA(윈도우_크기 int) []float64 {
+	if s.Len() <= 윈도우_크기 {
+		panic(New에러("값_모음 길이가 너무 짦음. %v %v %v", s.G종목코드(), s.Len(), 윈도우_크기))
+	}
+
 	// Look Ahead Bias를 방지하기 위해서 전일 종가 기준으로 함.
 	return F단순_이동_평균(s.G전일_종가(), 윈도우_크기)
 }
@@ -327,14 +331,19 @@ func (s S종목별_일일_가격정보_모음) EMA(윈도우_크기 int) []float
 	return F지수_이동_평균(s.G전일_종가(), 윈도우_크기)
 }
 
-func (s S종목별_일일_가격정보_모음) F볼린저_밴드_SMA(윈도우_크기 int, 채널_폭_표준편차_배율 float64) (상한, 이평, 하한 []float64) {
+func (s S종목별_일일_가격정보_모음) G볼린저_밴드(윈도우_크기 int, 표준편차_배율 float64) []float64 {
 	// Look Ahead Bias를 방지하기 위해서 전일 종가 기준으로 함.
-	return F볼린저_밴드_SMA(s.G전일_종가(), 윈도우_크기, 채널_폭_표준편차_배율)
+	return F볼린저_밴드(s.G전일_종가(), 윈도우_크기, 표준편차_배율)
 }
 
-func (s S종목별_일일_가격정보_모음) F볼린저_밴드_EMA(윈도우_크기 int, 채널_폭_표준편차_배율 float64) (상한, 이평, 하한 []float64) {
+func (s S종목별_일일_가격정보_모음) G볼린저_밴드_폭(윈도우_크기 int, 표준편차_배율 float64) []float64 {
 	// Look Ahead Bias를 방지하기 위해서 전일 종가 기준으로 함.
-	return F볼린저_밴드_EMA(s.G전일_종가(), 윈도우_크기, 채널_폭_표준편차_배율)
+	return F볼린저_밴드_폭(s.G전일_종가(), 윈도우_크기, 표준편차_배율)
+}
+
+func (s S종목별_일일_가격정보_모음) G지수_볼린저_밴드(윈도우_크기 int, 표준편차_배율 float64) []float64 {
+	// Look Ahead Bias를 방지하기 위해서 전일 종가 기준으로 함.
+	return F지수_볼린저_밴드(s.G전일_종가(), 윈도우_크기, 표준편차_배율)
 }
 
 func (s S종목별_일일_가격정보_모음) TrueRange() []float64 {
@@ -363,14 +372,25 @@ func (s S종목별_일일_가격정보_모음) ATR(윈도우_크기 int) []float
 	return F지수_이동_평균(TrueRange모음, 윈도우_크기)
 }
 
-func (s S종목별_일일_가격정보_모음) ATR채널_SMA기반(윈도우_크기 int, atr증분 float64) []float64 {
+func (s S종목별_일일_가격정보_모음) ATR채널_SMA(윈도우_크기 int, atr증분 float64) []float64 {
 	ATR채널 := make([]float64, len(s.M저장소))
-
 	SMA := s.SMA(윈도우_크기)
 	ATR := s.ATR(윈도우_크기)
 
 	for i := 0; i < len(s.M저장소); i++ {
 		ATR채널[i] = SMA[i] + atr증분*ATR[i]
+	}
+
+	return ATR채널
+}
+
+func (s S종목별_일일_가격정보_모음) ATR채널_EMA(윈도우_크기 int, atr증분 float64) []float64 {
+	ATR채널 := make([]float64, len(s.M저장소))
+	EMA := s.EMA(윈도우_크기)
+	ATR := s.ATR(윈도우_크기)
+
+	for i := 0; i < len(s.M저장소); i++ {
+		ATR채널[i] = EMA[i] + atr증분*ATR[i]
 	}
 
 	return ATR채널
@@ -387,6 +407,35 @@ func (s S종목별_일일_가격정보_모음) Chandelier청산선(윈도우_크
 	}
 
 	return Chandelier청산선
+}
+
+func (s S종목별_일일_가격정보_모음) G평균_추세_점수(전일 uint32) (float64, error) {
+	기준_인덱스, 에러 := s.G인덱스(전일)
+	if 에러 != nil {
+		return 0, 에러
+	}
+
+	합계 := 0
+
+	기준일_전일_종가 := s.M저장소[기준_인덱스].M종가
+
+	// 월간 상승과 하락을 번갈아 하는 추세-역추세 교차 현상이 있으므로,
+	// 최근 1달 간 추세는 역추세 현상으로 인해 판단의 정학성을 떨어뜨리는 부작용이 있으므로,
+	// 차라리 빼 버리는 게 차라리 좋다고 해서 i가 2부터 시작함.
+	// 추세는 약 1년간 지속된다고 하므로 12까지 검색함.
+	for i := 2; i <= 12; i++ {
+		과거_종가 := s.M저장소[기준_인덱스-(i*20)].M종가
+
+		if 기준일_전일_종가 >= 과거_종가 {
+			합계++
+		}
+	}
+
+	return float64(합계) / 11.0, nil
+}
+
+func (s S종목별_일일_가격정보_모음) G평균_추세_점수2(전일 time.Time) (float64, error) {
+	return s.G평균_추세_점수(F2정수_일자(전일))
 }
 
 type I매매 interface {

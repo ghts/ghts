@@ -323,7 +323,7 @@ func ETF종목_여부(종목_코드 string) bool {
 func ETN종목_여부(종목_코드 string) bool {
 	종목, 에러 := F종목by코드(종목_코드)
 
-	if 에러 != nil && 종목.G시장구분() == lib.P시장구분_ETN {
+	if 에러 != nil && 종목 != nil && 종목.G시장구분() == lib.P시장구분_ETN {
 		return true
 	}
 

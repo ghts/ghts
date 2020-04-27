@@ -605,6 +605,10 @@ func F2일자(값 time.Time) time.Time {
 	return time.Date(값.Year(), 값.Month(), 값.Day(), 0, 0, 0, 0, 값.Location())
 }
 
+func F2정수_일자(일자 time.Time) uint32 {
+	return uint32(F2정수64_단순형(일자.Format("20060102")))
+}
+
 func F2포맷된_시각(포맷 string, 값 interface{}) (time.Time, error) {
 	문자열 := ""
 
