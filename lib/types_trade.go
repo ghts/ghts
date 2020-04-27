@@ -87,15 +87,19 @@ type S일일_가격정보 struct {
 	M거래량  uint64
 }
 
-func (s S일일_가격정보) G종목코드() string   { return s.M종목코드 }
-func (s S일일_가격정보) G일자() uint32     { return s.M일자 }
-func (s S일일_가격정보) G시가() float64    { return s.M시가 }
-func (s S일일_가격정보) G고가() float64    { return s.M고가 }
-func (s S일일_가격정보) G저가() float64    { return s.M저가 }
-func (s S일일_가격정보) G종가() float64    { return s.M종가 }
-func (s S일일_가격정보) G거래량() uint64    { return s.M거래량 }
-func (s S일일_가격정보) G키() string      { return s.M종목코드 + "_" + strconv.Itoa(int(s.M일자)) }
-func (s S일일_가격정보) G일자2() time.Time { return F2포맷된_일자_단순형("20060102", F2문자열(s.M일자)) }
+func (s S일일_가격정보) G종목코드() string { return s.M종목코드 }
+func (s S일일_가격정보) G일자() uint32   { return s.M일자 }
+func (s S일일_가격정보) G시가() float64  { return s.M시가 }
+func (s S일일_가격정보) G고가() float64  { return s.M고가 }
+func (s S일일_가격정보) G저가() float64  { return s.M저가 }
+func (s S일일_가격정보) G종가() float64  { return s.M종가 }
+func (s S일일_가격정보) G거래량() uint64  { return s.M거래량 }
+func (s S일일_가격정보) G키() string {
+	return s.M종목코드 + "_" + strconv.Itoa(int(s.M일자))
+}
+func (s S일일_가격정보) G일자2() time.Time {
+	return F2포맷된_일자_단순형("20060102", F2문자열(s.M일자))
+}
 
 func New종목별_일일_가격정보_모음(값_모음 []*S일일_가격정보) (s *S종목별_일일_가격정보_모음, 에러 error) {
 	if len(값_모음) == 0 {
@@ -301,16 +305,16 @@ func (s S종목별_일일_가격정보_모음) G전일_종가() []float64 {
 	return 전일_종가_모음
 }
 
-func (s S종목별_일일_가격정보_모음) G고가(윈도우_크기 int) float64 {
+func (s S종목별_일일_가격정보_모음) MAX(윈도우_크기 int) []float64 {
 	전일_고가_모음 := s.G전일_고가()
 
-	return F고가(전일_고가_모음)
+	return F고가(전일_고가_모음, 윈도우_크기)
 }
 
-func (s S종목별_일일_가격정보_모음) G저가(윈도우_크기 int) float64 {
+func (s S종목별_일일_가격정보_모음) MIN(윈도우_크기 int) []float64 {
 	전일_저가_모음 := s.G전일_저가()
 
-	return F저가(전일_저가_모음)
+	return F저가(전일_저가_모음, 윈도우_크기)
 }
 
 func (s S종목별_일일_가격정보_모음) SMA(윈도우_크기 int) []float64 {
@@ -360,21 +364,35 @@ func (s S종목별_일일_가격정보_모음) ATR(윈도우_크기 int) []float
 }
 
 func (s S종목별_일일_가격정보_모음) ATR채널_SMA기반(윈도우_크기 int, atr증분 float64) []float64 {
-	ATR_EMA채널 := make([]float64, len(s.M저장소))
+	ATR채널 := make([]float64, len(s.M저장소))
 
 	SMA := s.SMA(윈도우_크기)
-	ATR_EMA := s.ATR_EMA(윈도우_크기)
+	ATR := s.ATR(윈도우_크기)
 
 	for i := 0; i < len(s.M저장소); i++ {
-		ATR_EMA채널[i] = SMA[i] + atr증분*ATR_EMA[i]
+		ATR채널[i] = SMA[i] + atr증분*ATR[i]
 	}
 
-	return ATR_EMA채널
+	return ATR채널
+}
+
+func (s S종목별_일일_가격정보_모음) Chandelier청산선(윈도우_크기 int, atr하락비율 float64) []float64 {
+	Chandelier청산선 := make([]float64, len(s.M저장소))
+
+	고가 := s.MAX(윈도우_크기)
+	ATR := s.ATR(윈도우_크기)
+
+	for i := 0; i < len(s.M저장소); i++ {
+		Chandelier청산선[i] = 고가[i] - math.Abs(atr하락비율)*ATR[i]
+	}
+
+	return Chandelier청산선
 }
 
 type I매매 interface {
 	G종목코드() string
 	G수량() int
+	G손절폭() float64
 	G매수_일자() uint32
 	G매수_가격() float64
 	G매수_금액() float64
@@ -383,35 +401,47 @@ type I매매 interface {
 	G매도_가격() float64
 	S매도_가격(float64)
 	G매도_금액() float64
-	G매도_후_자본() float64
-	S매도_후_자본(float64)
+	G매도_후_평가액() float64
+	S매도_후_평가액(float64)
+	G손절매_필요(string, float64) bool
 	G수익() float64
-	G수익율() float64
-	G완료됨() bool
+	G단일_거래_수익율() float64
+	G자본_대비_수익율() float64
 }
 
 type S매매 struct {
-	M종목코드    string
-	M수량      int
-	M매수_일자   uint32
-	M매수_가격   float64
-	M매도_일자   uint32
-	M매도_가격   float64
-	M매도_후_자본 float64
+	M종목코드     string
+	M수량       int
+	M손절폭      float64
+	M매수_일자    uint32
+	M매수_가격    float64
+	M매도_일자    uint32
+	M매도_가격    float64
+	M매도_후_평가액 float64
 }
 
-func (s S매매) G종목코드() string       { return s.M종목코드 }
-func (s S매매) G수량() int            { return s.M수량 }
-func (s S매매) G매수_일자() uint32      { return s.M매수_일자 }
-func (s S매매) G매수_가격() float64     { return s.M매수_가격 }
-func (s S매매) G매수_금액() float64     { return float64(s.M수량) * s.M매수_가격 * 1.00015 }
-func (s S매매) G매도_일자() uint32      { return s.M매도_일자 }
-func (s *S매매) S매도_일자(값 uint32)    { s.M매도_일자 = 값 }
-func (s S매매) G매도_가격() float64     { return s.M매도_가격 }
-func (s *S매매) S매도_가격(값 float64)   { s.M매도_가격 = 값 }
-func (s S매매) G매도_금액() float64     { return float64(s.M수량) * s.M매도_가격 * (1 - 0.00265) }
-func (s S매매) G매도_후_자본() float64   { return s.M매도_후_자본 }
-func (s *S매매) S매도_후_자본(값 float64) { s.M매도_후_자본 = 값 }
+func (s S매매) G종목코드() string     { return s.M종목코드 }
+func (s S매매) G수량() int          { return s.M수량 }
+func (s S매매) G손절폭() float64     { return math.Abs(s.M손절폭) }
+func (s S매매) G매수_일자() uint32    { return s.M매수_일자 }
+func (s S매매) G매수_가격() float64   { return s.M매수_가격 }
+func (s S매매) G매수_금액() float64   { return float64(s.M수량) * s.M매수_가격 * 1.00015 }
+func (s S매매) G매도_일자() uint32    { return s.M매도_일자 }
+func (s *S매매) S매도_일자(값 uint32)  { s.M매도_일자 = 값 }
+func (s S매매) G매도_가격() float64   { return s.M매도_가격 }
+func (s *S매매) S매도_가격(값 float64) { s.M매도_가격 = 값 }
+func (s S매매) G매도_금액() float64 {
+	return float64(s.M수량) * s.M매도_가격 * (1 - 0.00265)
+}
+func (s S매매) G매도_후_평가액() float64   { return s.M매도_후_평가액 }
+func (s *S매매) S매도_후_평가액(값 float64) { s.M매도_후_평가액 = 값 }
+func (s S매매) G손절매_필요(종목코드 string, 기준가 float64) bool {
+	if s.M종목코드 != 종목코드 {
+		return false
+	}
+
+	return 기준가 < s.M매수_가격-math.Abs(s.M손절폭)
+}
 
 func (s S매매) G수익() float64 {
 	수익 := s.G매도_금액() - s.G매수_금액()
@@ -419,24 +449,26 @@ func (s S매매) G수익() float64 {
 	return math.Round(수익*1000) / 1000
 }
 
-func (s S매매) G수익율() float64 {
+func (s S매매) G단일_거래_수익율() float64 {
 	수익율 := s.G수익() / s.G매수_금액() * 100
 
 	return math.Round(수익율*1000) / 1000
 }
 
-func (s S매매) G완료됨() bool {
-	return s.M매도_일자 > 0 || s.M매도_가격 != 0
+func (s S매매) G자본_대비_수익율() float64 {
+	수익율 := s.G수익() / s.G매도_후_평가액() * 100
+
+	return math.Round(수익율*1000) / 1000
 }
 
-type I매매_신호 interface {
+type I매도_신호 interface {
 	G일자() uint32
 	G종목코드() string
 	G기준가() float64
 }
 
-func New매매_신호(일자 uint32, 종목코드 string, 기준가 float64) *S매매_신호 {
-	s := new(S매매_신호)
+func New매도_신호(일자 uint32, 종목코드 string, 기준가 float64) *S매도_신호 {
+	s := new(S매도_신호)
 	s.M일자 = 일자
 	s.M종목코드 = 종목코드
 	s.M기준가 = 기준가
@@ -444,53 +476,192 @@ func New매매_신호(일자 uint32, 종목코드 string, 기준가 float64) *S�
 	return s
 }
 
-type S매매_신호 struct {
+type S매도_신호 struct {
 	M일자   uint32
 	M종목코드 string
 	M기준가  float64
 }
 
-func (s S매매_신호) G일자() uint32   { return s.M일자 }
-func (s S매매_신호) G종목코드() string { return s.M종목코드 }
-func (s S매매_신호) G기준가() float64 { return s.M기준가 }
+func (s S매도_신호) G일자() uint32   { return s.M일자 }
+func (s S매도_신호) G종목코드() string { return s.M종목코드 }
+func (s S매도_신호) G기준가() float64 { return s.M기준가 }
+
+type I매수_신호 interface {
+	I매도_신호
+	G손절폭() float64
+}
+
+func New매수_신호(일자 uint32, 종목코드 string, 기준가, 손절폭 float64) *S매수_신호 {
+	s := new(S매수_신호)
+	s.S매도_신호 = New매도_신호(일자, 종목코드, 기준가)
+	s.M손절폭 = 손절폭
+
+	return s
+}
+
+type S매수_신호 struct {
+	*S매도_신호
+	M손절폭 float64
+}
+
+func (s S매수_신호) G손절폭() float64 { return s.M손절폭 }
 
 type I포트폴리오 interface {
-	S매수_신호_발생(매수_신호 I매매_신호)
-	S매도_신호_발생(매도_신호 I매매_신호)
+	S매수_신호_발생(매수_신호 I매수_신호)
+	S매도_신호_발생(매도_신호 I매도_신호)
+}
+
+type I손절매_확인_정보 interface {
+	G일자() uint32
+	G종목코드() string
+	G기준가() float64
+}
+
+func New손절매_확인_정보(일자 uint32, 종목코드 string, 기준가 float64) *S손절매_확인_정보 {
+	s := new(S손절매_확인_정보)
+	s.M일자 = 일자
+	s.M종목코드 = 종목코드
+	s.M기준가 = 기준가
+
+	return s
+}
+
+type S손절매_확인_정보 struct {
+	M일자   uint32
+	M종목코드 string
+	M기준가  float64
+}
+
+func (s S손절매_확인_정보) G일자() uint32   { return s.M일자 }
+func (s S손절매_확인_정보) G종목코드() string { return s.M종목코드 }
+func (s S손절매_확인_정보) G기준가() float64 { return s.M기준가 }
+
+func New모의_매매_포트폴리오(초기_자본 float64, 거래당_최대_손실비율_퍼센트 float64, 최대_동시_진행_거래_수량 int) *S포트폴리오 {
+	s := new(S포트폴리오)
+	s.M자본 = 초기_자본
+	s.M거래당_최대_손실비율 = 거래당_최대_손실비율_퍼센트 / 100
+	s.M진행_중_매매 = make(chan I매매, 최대_동시_진행_거래_수량)
+	s.M매매_기록 = make([]I매매, 0)
+
+	const 가상_슬리피지_비용 = 30
+
+	s.M매수_신호_처리기 = func(매수_신호 I매수_신호) {
+		if !s.G매수_가능() {
+			return
+		}
+
+		// 수량을 조절하여 1회 거래손실이 자본의 일정비율 이내가 되도록 설정.
+		// 금융업에서 1회 거래손실이 자본의 2%를 넘지 않도록 하는 규칙이 기본이라고 함.
+		// 전형적인 추세추종전략에서
+		// 1회 거래손실이 1%이면 설정하면 예상 최대 누적 손실은 30% 정도이라고 함.
+		// 1회 거래손실이 2%이면 설정하면 예상 최대 누적 손실은 65% 정도이라고 함
+		// '터틀의 방식(Way of the Turtle)' 제8장 그림 8-1 참조.
+		수량 := int(s.M자본 * s.M거래당_최대_손실비율 / 매수_신호.G손절폭())
+
+		if 수량 == 0 {
+			return
+		}
+
+		매매 := new(S매매)
+		매매.M종목코드 = 매수_신호.G종목코드()
+		매매.M수량 = 수량
+		매매.M손절폭 = 매수_신호.G손절폭()
+		매매.M매수_일자 = 매수_신호.G일자()
+
+		// API 호출 없는 모의 거래.
+		매매.M매수_가격 = F매수_거래가(매수_신호.G기준가(), 가상_슬리피지_비용)
+
+		s.S매수_변동_기록(매매)
+	}
+
+	s.M매도_신호_처리기 = func(매도_신호 I매도_신호) {
+		for i := 0; i < len(s.M진행_중_매매); i++ {
+			매매 := <-s.M진행_중_매매
+
+			if 매매.G종목코드() == 매도_신호.G종목코드() {
+				매매.S매도_일자(매도_신호.G일자())
+
+				// API 호출 없는 모의 거래.
+				매매.S매도_가격(F매도_거래가(매도_신호.G기준가(), 가상_슬리피지_비용))
+
+				s.S매도_변동_기록(매매)
+			} else {
+				s.M진행_중_매매 <- 매매
+			}
+		}
+	}
+
+	s.M손절매_처리기 = func(데이터 I손절매_확인_정보) {
+		for i := 0; i < len(s.M진행_중_매매); i++ {
+			매매 := <-s.M진행_중_매매
+
+			if 매매.G손절매_필요(데이터.G종목코드(), 데이터.G기준가()) {
+				매매.S매도_일자(데이터.G일자())
+
+				// API 호출 없는 모의 거래.
+				매매.S매도_가격(F매도_거래가(데이터.G기준가(), 가상_슬리피지_비용))
+
+				s.S매도_변동_기록(매매)
+			} else {
+				s.M진행_중_매매 <- 매매
+			}
+		}
+	}
+
+	return s
 }
 
 type S포트폴리오 struct {
-	M자본        float64
-	M매매_기록     []I매매
-	M매수_신호_처리기 func(매수_신호 I매매_신호)
-	M매도_신호_처리기 func(매도_신호 I매매_신호)
-	M손절매_처리기   func(일일_가격정보 I일일_가격정보)
+	M자본          float64
+	M거래당_최대_손실비율 float64
+	M진행_중_매매     chan I매매
+	M매매_기록       []I매매
+	M매수_신호_처리기   func(I매수_신호)
+	M매도_신호_처리기   func(I매도_신호)
+	M손절매_처리기     func(I손절매_확인_정보)
 }
 
-func (s *S포트폴리오) S매수_신호_발생(매수_신호 I매매_신호) {
+func (s S포트폴리오) G매수_가능() bool {
+	return len(s.M진행_중_매매) < cap(s.M진행_중_매매)
+}
+
+func (s *S포트폴리오) S매수_신호_발생(매수_신호 I매수_신호) {
 	if s.M매수_신호_처리기 != nil {
 		s.M매수_신호_처리기(매수_신호)
 	}
 }
 
-func (s *S포트폴리오) S매도_신호_발생(매도_신호 I매매_신호) {
+func (s *S포트폴리오) S매도_신호_발생(매도_신호 I매도_신호) {
 	if s.M매도_신호_처리기 != nil {
 		s.M매도_신호_처리기(매도_신호)
 	}
 }
 
-func (s *S포트폴리오) S손절매_확인(일일_가격정보 I일일_가격정보) {
+func (s *S포트폴리오) S손절매_확인(손절매_확인_정보 I손절매_확인_정보) {
 	if s.M손절매_처리기 != nil {
-		s.M손절매_처리기(일일_가격정보)
+		s.M손절매_처리기(손절매_확인_정보)
 	}
 }
 
 func (s *S포트폴리오) S매수_변동_기록(매매 I매매) {
 	s.M자본 -= 매매.G매수_금액()
-	s.M매매_기록 = append(s.M매매_기록, 매매)
+	s.M진행_중_매매 <- 매매
 }
 
 func (s *S포트폴리오) S매도_변동_기록(매매 I매매) {
 	s.M자본 += 매매.G매도_금액()
-	매매.S매도_후_자본(math.Round(s.M자본))
+	s.M매매_기록 = append(s.M매매_기록, 매매)
+	매매.S매도_후_평가액(math.Round((s.M자본+s.G진행_중_매매_평가액())*1000) / 1000)
+}
+
+func (s *S포트폴리오) G진행_중_매매_평가액() float64 {
+	진행_중_매매_평가액 := 0.0
+
+	for i := 0; i < len(s.M진행_중_매매); i++ {
+		매매 := <-s.M진행_중_매매
+		진행_중_매매_평가액 += 매매.G매수_금액()
+		s.M진행_중_매매 <- 매매
+	}
+
+	return 진행_중_매매_평가액
 }

@@ -33,22 +33,25 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
 package lib
 
-import "math"
+import (
+	"math"
+	"strconv"
+)
 
 func f최대_실수값(값_모음 []float64) float64 {
 	최대값 := 값_모음[0]
-	
-	for i:=1 ; i<len(값_모음) ; i++ {
+
+	for i := 1; i < len(값_모음); i++ {
 		최대값 = math.Max(최대값, 값_모음[i])
-	} 
-	
+	}
+
 	return 최대값
 }
 
 func f최소_실수값(값_모음 []float64) float64 {
 	최소값 := 값_모음[0]
 
-	for i:=1 ; i<len(값_모음) ; i++ {
+	for i := 1; i < len(값_모음); i++ {
 		최소값 = math.Min(최소값, 값_모음[i])
 	}
 
@@ -57,27 +60,29 @@ func f최소_실수값(값_모음 []float64) float64 {
 
 func F고가(값_모음 []float64, 윈도우_크기 int) []float64 {
 	고가_모음 := make([]float64, len(값_모음))
-	
-	for i := 0 ; i<윈도우_크기 ; i++ {
+	고가_모음[0] = 값_모음[0]
+
+	for i := 1; i < 윈도우_크기; i++ {
 		고가_모음[i] = f최대_실수값(값_모음[:i])
 	}
-	
-	for i:=윈도우_크기 ; i<len(값_모음) ; i++ {
-		고가_모음[i] = f최대_실수값(값_모음[i-윈도우_크기+1:i])
+
+	for i := 윈도우_크기; i < len(값_모음); i++ {
+		고가_모음[i] = f최대_실수값(값_모음[i-윈도우_크기+1 : i])
 	}
-	
+
 	return 고가_모음
 }
 
 func F저가(값_모음 []float64, 윈도우_크기 int) []float64 {
 	저가_모음 := make([]float64, len(값_모음))
+	저가_모음[0] = 값_모음[0]
 
-	for i := 0 ; i<윈도우_크기 ; i++ {
+	for i := 1; i < 윈도우_크기; i++ {
 		저가_모음[i] = f최소_실수값(값_모음[:i])
 	}
 
-	for i:=윈도우_크기 ; i<len(값_모음) ; i++ {
-		저가_모음[i] = f최소_실수값(값_모음[i-윈도우_크기+1:i])
+	for i := 윈도우_크기; i < len(값_모음); i++ {
+		저가_모음[i] = f최소_실수값(값_모음[i-윈도우_크기+1 : i])
 	}
 
 	return 저가_모음
@@ -171,4 +176,60 @@ func f볼린저_밴드_도우미(값_모음, 이동_평균_모음 []float64, 윈
 	}
 
 	return 상한_모음, 이동_평균_모음, 하한_모음
+}
+
+func F매수_거래가(기준값, 슬리피지_비용 float64) float64 {
+	거래가_후보 := int64(math.Ceil(기준값))
+
+	for {
+		if 거래가_후보%5 == 0 {
+			return float64(거래가_후보) + 슬리피지_비용
+		}
+
+		거래가_후보++
+	}
+}
+
+func F매도_거래가(기준값, 슬리피지_비용 float64) float64 {
+	거래가_후보 := int64(math.Floor(기준값))
+
+	for {
+		if 거래가_후보%5 == 0 {
+			return float64(거래가_후보) - 슬리피지_비용
+		}
+
+		거래가_후보--
+	}
+}
+
+func F상향_돌파(전일_고가, 당일_고가, 기준가 float64) bool {
+	return 전일_고가 < 기준가 && 당일_고가 > 기준가
+}
+
+func F하향_돌파(전일_저가, 당일_저가, 기준가 float64) bool {
+	return 전일_저가 > 기준가 && 당일_저가 < 기준가
+}
+
+func F기하_수익율(수익율_모음 []float64) float64 {
+	기하_수익율 := 1.0
+
+	for _, 수익율 := range 수익율_모음 {
+		기하_수익율 *= 1 + (수익율 / 100)
+	}
+
+	return math.Round((기하_수익율*100-100)*1000) / 1000
+}
+
+func F기간(시작일, 종료일 uint32) int {
+	시작, 에러 := F2포맷된_일자("20060102", strconv.Itoa(int(시작일)))
+	if 에러 != nil {
+		return 0
+	}
+
+	종료, 에러 := F2포맷된_일자("20060102", strconv.Itoa(int(종료일)))
+	if 에러 != nil {
+		return 0
+	}
+
+	return int(종료.Sub(시작).Hours() / 24)
 }
