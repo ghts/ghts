@@ -129,7 +129,7 @@ func NewCSPAT00600InBlock(질의값 *CSPAT00600_현물_정상_주문_질의값, 
 	lib.F바이트_복사_정수(g.OrdQty[:], 질의값.M주문수량)
 	lib.F바이트_복사_실수(g.OrdPrc[:], 질의값.M주문단가, 2)
 	lib.F바이트_복사_문자열(g.BnsTpCode[:], lib.F2문자열(int(질의값.M매도_매수_구분)))
-	lib.F바이트_복사_정수(g.OrdprcPtnCode[:], int(F2Xing호가유형(질의값.M호가유형)))
+	lib.F바이트_복사_정수(g.OrdprcPtnCode[:], int(F2Xing호가유형(질의값.M호가유형, 질의값.M주문조건)))
 	lib.F바이트_복사_정수(g.MgntrnCode[:], int(F2Xing신용거래_구분(질의값.M신용거래_구분)))
 
 	// 대출일 : YYYYMMDD, 신용주문이 아닐 경우는 SPACE

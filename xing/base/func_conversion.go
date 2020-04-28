@@ -112,27 +112,55 @@ func F2신용거래_구분(신용거래_구분 T신용거래_구분) lib.T신용
 	return lib.P신용거래_해당없음
 }
 
-func F2Xing호가유형(호가_유형 lib.T호가유형) T호가유형 {
-	switch 호가_유형 {
-	case lib.P호가_지정가:
-		return P호가_지정가
-	case lib.P호가_시장가:
-		return P호가_시장가
-	case lib.P호가_조건부_지정가:
-		return P호가_지정가
-	case lib.P호가_최유리_지정가:
-		return P호가_최유리_지정가
-	case lib.P호가_최우선_지정가:
-		return P호가_최우선_지정가
-	case lib.P호가_장전_시간외:
-		return P호가_장전_시간외
-	case lib.P호가_장후_시간외:
-		return P호가_장후_시간외
-	case lib.P호가_시간외_단일가:
-		return P호가_시간외_단일가
-	default:
-		panic(lib.New에러("예상하지 못한 호가_유형 값. %v", 호가_유형))
+func F2Xing호가유형(호가_유형 lib.T호가유형, 주문_조건 lib.T주문조건) T호가유형 {
+	switch 주문_조건 {
+	case lib.P주문조건_없음:
+		switch 호가_유형 {
+		case lib.P호가_지정가:
+			return P호가_지정가
+		case lib.P호가_시장가:
+			return P호가_시장가
+		case lib.P호가_조건부_지정가:
+			return P호가_지정가
+		case lib.P호가_최유리_지정가:
+			return P호가_최유리_지정가
+		case lib.P호가_최우선_지정가:
+			return P호가_최우선_지정가
+		case lib.P호가_장전_시간외:
+			return P호가_장전_시간외
+		case lib.P호가_장후_시간외:
+			return P호가_장후_시간외
+		case lib.P호가_시간외_단일가:
+			return P호가_시간외_단일가
+		}
+	case lib.P주문조건_IOC:
+		switch 호가_유형 {
+		case lib.P호가_지정가:
+			return P호가_지정가_IOC
+		case lib.P호가_시장가:
+			return P호가_시장가_IOC
+		case lib.P호가_최유리_지정가:
+			return P호가_최유리_지정가_IOC
+		}
+	case lib.P주문조건_FOK:
+		switch 호가_유형 {
+		case lib.P호가_지정가:
+			return P호가_지정가_FOK
+		case lib.P호가_시장가:
+			return P호가_시장가_FOK
+		case lib.P호가_최유리_지정가:
+			return P호가_최유리_지정가_FOK
+		}
 	}
+
+	// 다음 경우는 어떻게 처리해야 될 지 모르겠음.
+	//P호가_지정가_전환      T호가유형 = 27
+	//P호가_지정가_IOC_전환  T호가유형 = 28
+	//P호가_지정가_FOK_전환  T호가유형 = 29
+	//P호가_부분충족_K_OTC  T호가유형 = 41
+	//P호가_전량충족_K_OTC  T호가유형 = 42
+
+	panic(lib.New에러("예상하지 못한 경우 : %v %v", 호가_유형, 주문_조건))
 }
 
 func F2호가유형(호가_유형 T호가유형) lib.T호가유형 {

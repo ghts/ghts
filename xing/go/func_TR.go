@@ -36,8 +36,9 @@ package xing
 import (
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/xing/base"
-	"strconv"
 
+	"fmt"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -1534,8 +1535,8 @@ func F질의_단일TR(질의값 lib.I질의값, 옵션_모음 ...interface{}) (�
 				return nil, 변환값
 			}
 
-			println("*********************************************************")
-			println(변환값.Error())
+			fmt.Println("*********************************************************")
+			fmt.Println(변환값.Error())
 			lib.F문자열_출력("*********************************************************")
 
 			return nil, 변환값
