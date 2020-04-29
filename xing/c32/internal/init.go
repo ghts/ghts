@@ -47,6 +47,7 @@ func F초기화() {
 	ch초기화 := make(chan lib.T신호)
 	go Go루틴_관리(ch초기화)
 	<-ch초기화
+	F콜백(lib.New콜백_신호(lib.P신호_C32_초기화))
 }
 
 func f종료_질의_송신() {

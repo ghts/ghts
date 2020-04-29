@@ -31,7 +31,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package xing
+package xg
 
 import (
 	"github.com/ghts/ghts/lib"
@@ -94,6 +94,7 @@ func F초기화(서버_구분 xt.T서버_구분) (에러 error) {
 		}
 	}()
 
+	f소켓_생성()
 	f초기화_Go루틴()
 	lib.F확인(f초기화_xing_C32())
 	lib.F확인(f접속_로그인(서버_구분))
@@ -106,6 +107,10 @@ func F초기화(서버_구분 xt.T서버_구분) (에러 error) {
 	fmt.Println("**     초기화 완료     **")
 
 	return nil
+}
+
+func f소켓_생성() {
+	소켓REP_TR콜백 = lib.NewNano소켓XREP_단순형(lib.P주소_Xing_C함수_콜백)
 }
 
 func f초기화_Go루틴() {
@@ -145,6 +150,7 @@ func f초기화_xing_C32() (에러 error) {
 		}
 
 		lib.F확인(lib.F외부_프로세스_실행(xing_C32_경로))
+		<-ch신호_C32_초기화
 	default:
 		lib.F문자열_출력("*********************************************\n"+
 			"현재 OS(%v)에서는 'xing_C32'를 수동으로 실행해야 합니다.\n"+
@@ -155,6 +161,9 @@ func f초기화_xing_C32() (에러 error) {
 }
 
 func f접속_로그인(서버_구분 xt.T서버_구분) (에러 error) {
+
+	소켓SUB_실시간_정보 = lib.NewNano소켓SUB_단순형(lib.P주소_Xing_실시간)
+
 	if !tr수신_소켓_동작_확인() {
 		return lib.New에러("C32 프로세스 REP소켓 접속 불가.")
 	}
@@ -168,7 +177,7 @@ func f접속_로그인(서버_구분 xt.T서버_구분) (에러 error) {
 		return lib.New에러("예상하지 못한 응답값 : '%v'", 응답값)
 	}
 
-	<-ch신호_C32_시작
+	<-ch신호_C32_로그인
 
 	return nil
 }
@@ -292,9 +301,9 @@ func F전일_당일_설정() (에러 error) {
 func C32_종료됨() bool {
 	프로세스ID := xing_C32_PID()
 	포트_닫힘_C함수_호출 := lib.F포트_닫힘_확인(lib.P주소_Xing_C함수_호출)
-	포트_닫힘_실시간 := lib.F포트_닫힘_확인(lib.P주소_Xing_실시간)
+	//포트_닫힘_실시간 := lib.F포트_닫힘_확인(lib.P주소_Xing_실시간)
 
-	return 프로세스ID < 0 && 포트_닫힘_C함수_호출 && 포트_닫힘_실시간
+	return 프로세스ID < 0 && 포트_닫힘_C함수_호출 // && 포트_닫힘_실시간
 }
 
 func C32_종료() (에러 error) {

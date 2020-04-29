@@ -31,7 +31,7 @@ GNU Lesser General xt.Public License for more details.
 You should have received a copy of the GNU Lesser General xt.Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package xing
+package xg
 
 import (
 	"github.com/ghts/ghts/lib"

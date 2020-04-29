@@ -2,18 +2,17 @@ package util
 
 import (
 	"github.com/ghts/ghts/lib"
+	_ "github.com/go-sql-driver/mysql"
+
+	"database/sql"
 	"sort"
 )
 
-func New영업일_모음(db파일경로 string) *S영업일_모음 {
-	db, 에러 := DB(db파일경로)
-	defer db.Close()
+func New영업일_모음(db *sql.DB) *S영업일_모음 {
+	일일_가격정보_모음_KODEX200, 에러 := F종목별_일일_가격정보_읽기(db, "069500")
 	lib.F확인(에러)
 
-	일일_가격정보_모음_KODEX200, 에러 := F종목별_일일_가격정보_읽기("069500", db)
-	lib.F확인(에러)
-
-	일일_가격정보_모음_삼성전자, 에러 := F종목별_일일_가격정보_읽기("005930", db)
+	일일_가격정보_모음_삼성전자, 에러 := F종목별_일일_가격정보_읽기(db,"005930")
 	lib.F확인(에러)
 
 	개장일_맵 := make(map[uint32]int)

@@ -470,7 +470,7 @@ func (s S종목별_일일_가격정보_모음) G추세_점수() []float64 {
 	return 추세_점수
 }
 
-func (s S종목별_일일_가격정보_모음) G단일_추세_점수(전일 uint32) (float64, error) {
+func (s S종목별_일일_가격정보_모음) G추세_점수값(전일 uint32) (float64, error) {
 	기준_인덱스, 에러 := s.G인덱스(전일)
 	if 에러 != nil {
 		return 0, 에러
@@ -495,8 +495,8 @@ func (s S종목별_일일_가격정보_모음) G단일_추세_점수(전일 uint
 	return float64(합계) / 11.0, nil
 }
 
-func (s S종목별_일일_가격정보_모음) G단일_추세_점수2(전일 time.Time) (float64, error) {
-	return s.G단일_추세_점수(F2정수_일자(전일))
+func (s S종목별_일일_가격정보_모음) G추세_점수값2(전일 time.Time) (float64, error) {
+	return s.G추세_점수값(F2정수_일자(전일))
 }
 
 type I매매 interface {

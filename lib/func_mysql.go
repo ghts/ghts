@@ -1,4 +1,4 @@
-/* Copyright (C) 2015-2020 김운하(UnHa Kim)  < unha.kim.ghts at gmail dot com >
+/* Copyright(C) 2015-2020년 김운하(UnHa Kim)  < unha.kim.ghts at gmail dot com >
 
 이 파일은 GHTS의 일부입니다.
 
@@ -15,7 +15,7 @@ GNU LGPL 2.1판은 이 프로그램과 함께 제공됩니다.
 (자유 소프트웨어 재단 : Free Software Foundation, Inc.,
 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA)
 
-Copyright (C) 2015-2020년 UnHa Kim (< unha.kim.ghts at gmail dot com >)
+Copyright(C) 2015-2020년 UnHa Kim(< unha.kim.ghts at gmail dot com >)
 
 This file is part of GHTS.
 
@@ -31,4 +31,25 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package xg
+package lib
+
+import "database/sql"
+import _ "github.com/go-sql-driver/mysql"
+
+func DSN_MySQL(address, username, password, dbname string) string {
+	return F2문자열("%v:%v@tcp(%v:3306)/%v",
+		username,
+		password,
+		address,
+		dbname)
+}
+
+func DB_MySQL(DSN string) (*sql.DB, error) {
+	db, _ := sql.Open("mysql", DSN)
+
+	if 에러 :=db.Ping(); 에러 != nil {
+		return nil, 에러
+	}
+
+	return db, nil
+}

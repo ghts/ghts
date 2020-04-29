@@ -31,7 +31,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package xing
+package xg
 
 import (
 	"github.com/ghts/ghts/lib"
@@ -171,9 +171,14 @@ func f콜백_신호_처리기(콜백 lib.I콜백) (에러 error) {
 	신호 := lib.T신호_32비트_모듈(정수값)
 
 	switch 신호 {
-	case lib.P신호_C32_READY:
+	case lib.P신호_C32_초기화:
 		select {
-		case ch신호_C32_시작 <- 신호:
+		case ch신호_C32_초기화 <- 신호:
+		default:
+		}
+	case lib.P신호_C32_LOGIN:
+		select {
+		case ch신호_C32_로그인 <- 신호:
 		default:
 		}
 	case lib.P신호_C32_종료:

@@ -34,73 +34,173 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package util
 
 import (
+	"bytes"
+	"context"
+	"database/sql"
 	"github.com/ghts/ghts/lib"
 	xt "github.com/ghts/ghts/xing/base"
 	xing "github.com/ghts/ghts/xing/go"
-	bolt "go.etcd.io/bbolt"
+	//bolt "go.etcd.io/bbolt"
 	"time"
 )
 
-const P일일_가격정보_버킷 = "daily_price_data"
+//const P일일_가격정보_버킷 = "daily_price_data"
+//
+//func BoltDB(db파일경로 string) (db *bolt.DB, 에러 error) {
+//	if db, 에러 = bolt.Open(db파일경로, 0600, nil); 에러 == nil {
+//		// 일일 가격정보 버킷
+//		db.Update(func(tx *bolt.Tx) error {
+//			_, 에러 := tx.CreateBucketIfNotExists([]byte(P일일_가격정보_버킷))
+//
+//			return 에러
+//		})
+//	}
+//
+//	return
+//}
+//
+//func F종목별_일일_가격정보_읽기_BoltDB(db *bolt.DB, 종목코드 string) (
+//	종목별_일일_가격정보_모음 *lib.S종목별_일일_가격정보_모음, 에러 error) {
+//	에러 = db.View(func(tx *bolt.Tx) error {
+//		일일_가격정보_버킷 := tx.Bucket([]byte(P일일_가격정보_버킷))
+//		바이트_모음 := 일일_가격정보_버킷.Get([]byte(종목코드))
+//
+//		if 에러 := lib.F디코딩(lib.MsgPack, 바이트_모음, &종목별_일일_가격정보_모음); 에러 != nil {
+//			종목별_일일_가격정보_모음 = nil
+//			return 에러
+//		}
+//
+//		return nil
+//	})
+//
+//	종목별_일일_가격정보_모음.S정렬_및_인덱스_설정()
+//
+//	return
+//}
+//
+//func F종목별_일일_가격정보_저장_BoltDB(db *bolt.DB, 값 *lib.S종목별_일일_가격정보_모음) error {
+//	바이트_모음, 에러 := lib.F인코딩(lib.MsgPack, 값)
+//	if 에러 != nil {
+//		return 에러
+//	}
+//
+//	return db.Update(func(tx *bolt.Tx) error {
+//		일일_가격정보_버킷 := tx.Bucket([]byte(P일일_가격정보_버킷))
+//
+//		return 일일_가격정보_버킷.Put([]byte(값.G종목코드()), 바이트_모음)
+//	})
+//}
 
-func DB(db파일경로 string) (db *bolt.DB, 에러 error) {
-	if db, 에러 = bolt.Open(db파일경로, 0600, nil); 에러 == nil {
-		// 일일 가격정보 버킷
-		db.Update(func(tx *bolt.Tx) error {
-			_, 에러 := tx.CreateBucketIfNotExists([]byte(P일일_가격정보_버킷))
+func F종목별_일일_가격정보_읽기(db *sql.DB, 종목코드 string) (s *lib.S종목별_일일_가격정보_모음, 에러 error) {
+	SQL := new(bytes.Buffer)
+	SQL.WriteString("SELET ")
+	SQL.WriteString(" code,")
+	SQL.WriteString(" date,")
+	SQL.WriteString(" open,")
+	SQL.WriteString(" high,")
+	SQL.WriteString(" low,")
+	SQL.WriteString(" close,")
+	SQL.WriteString(" volume ")
+	SQL.WriteString("FROM daily_price ")
+	SQL.WriteString("WHERE code=?")
 
-			return 에러
-		})
+	stmt, 에러 := db.Prepare(SQL.String())
+	if 에러 != nil {
+		return nil, 에러
 	}
+	defer stmt.Close()
 
-	return
-}
+	rows, 에러 := stmt.Query(종목코드)
+	if 에러 != nil {
+		return nil, 에러
+	}
+	defer rows.Close()
 
-func F종목별_일일_가격정보_읽기(종목코드 string, db *bolt.DB) (
-	종목별_일일_가격정보_모음 *lib.S종목별_일일_가격정보_모음, 에러 error) {
-	에러 = db.View(func(tx *bolt.Tx) error {
-		일일_가격정보_버킷 := tx.Bucket([]byte(P일일_가격정보_버킷))
-		바이트_모음 := 일일_가격정보_버킷.Get([]byte(종목코드))
+	s = new(lib.S종목별_일일_가격정보_모음)
+	s.M저장소 = make([]*lib.S일일_가격정보, 0)
 
-		if 에러 := lib.F디코딩(lib.MsgPack, 바이트_모음, &종목별_일일_가격정보_모음); 에러 != nil {
-			종목별_일일_가격정보_모음 = nil
-			return 에러
+	for rows.Next() {
+		일일_가격정보 := new(lib.S일일_가격정보)
+
+		에러 = rows.Scan(
+			&일일_가격정보.M종목코드,
+			&일일_가격정보.M일자,
+			&일일_가격정보.M시가,
+			&일일_가격정보.M고가,
+			&일일_가격정보.M저가,
+			&일일_가격정보.M종가,
+			&일일_가격정보.M거래량)
+
+		if 에러 != nil {
+			return nil, 에러
 		}
 
-		return nil
-	})
+		s.M저장소 = append(s.M저장소, 일일_가격정보)
+	}
 
-	종목별_일일_가격정보_모음.S정렬_및_인덱스_설정()
+	s.S정렬_및_인덱스_설정()
 
-	return
+	return s, nil
+
 }
 
-func F종목별_일일_가격정보_저장(값 *lib.S종목별_일일_가격정보_모음, db *bolt.DB) error {
-	바이트_모음, 에러 := lib.F인코딩(lib.MsgPack, 값)
+func F종목별_일일_가격정보_저장(db *sql.DB, 모음 *lib.S종목별_일일_가격정보_모음) error {
+	SQL := new(bytes.Buffer)
+	SQL.WriteString("INSERT IGNORE INTO daily_price (")
+	SQL.WriteString("code,")
+	SQL.WriteString("date,")
+	SQL.WriteString("open,")
+	SQL.WriteString("high,")
+	SQL.WriteString("low,")
+	SQL.WriteString("close,")
+	SQL.WriteString("volume")
+	SQL.WriteString(") VALUES (?,?,?,?,?,?,?)")
+
+	txOpts := new(sql.TxOptions)
+	txOpts.Isolation = sql.LevelDefault
+	txOpts.ReadOnly = false
+
+	tx, 에러 := db.BeginTx(context.TODO(), txOpts)
 	if 에러 != nil {
 		return 에러
 	}
 
-	return db.Update(func(tx *bolt.Tx) error {
-		일일_가격정보_버킷 := tx.Bucket([]byte(P일일_가격정보_버킷))
+	stmt, 에러 := tx.Prepare(SQL.String())
+	if 에러 != nil {
+		tx.Rollback()
+		return 에러
+	}
+	defer stmt.Close()
 
-		return 일일_가격정보_버킷.Put([]byte(값.G종목코드()), 바이트_모음)
-	})
+	for _, 값 := range 모음.M저장소 {
+		_, 에러 = stmt.Exec(
+			값.M종목코드,
+			값.M일자,
+			값.M시가,
+			값.M고가,
+			값.M저가,
+			값.M종가,
+			값.M거래량)
+
+		if 에러 != nil {
+			tx.Rollback()
+			return 에러
+		}
+	}
+
+	tx.Commit()
+
+	return nil
 }
 
-func F일일_가격정보_수집(db파일경로 string) (에러 error) {
-	defer xing.F리소스_정리()
-	xing.F초기화(xt.P서버_모의투자)
-
-	db, 에러 := DB(db파일경로)
-	lib.F확인(에러)
-	defer db.Close()
-
+func F일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string) (에러 error) {
 	var 시작일, 종료일, 마지막_저장일 time.Time
 	var 종목별_일일_가격정보_모음 *lib.S종목별_일일_가격정보_모음
 
-	for i, 종목코드 := range xing.F종목코드_모음_전체() {
-		종목별_일일_가격정보_모음, 에러 = F종목별_일일_가격정보_읽기(종목코드, db)
+	F일일_가격정보_테이블_생성(db)
+
+	for i, 종목코드 := range 종목코드_모음 {
+		종목별_일일_가격정보_모음, 에러 = F종목별_일일_가격정보_읽기(db, 종목코드)
 
 		if 에러 == nil {
 			// lib.S종목별_일일_가격정보_모음 는 일자 순서로 정렬되어 있음.
@@ -112,7 +212,6 @@ func F일일_가격정보_수집(db파일경로 string) (에러 error) {
 		}
 
 		if 시작일.Equal(xing.F당일()) || 시작일.After(xing.F당일()) {
-			lib.F체크포인트(i, 종목코드, "이미 최신 데이터로 업데이트 되어 있음.")
 			continue // 이미 최신 데이터로 업데이트 되어 있음.
 		}
 
@@ -159,7 +258,7 @@ func F일일_가격정보_수집(db파일경로 string) (에러 error) {
 			continue
 		}
 
-		에러 = F종목별_일일_가격정보_저장(종목별_일일_가격정보_모음, db)
+		에러 = F종목별_일일_가격정보_저장(db, 종목별_일일_가격정보_모음)
 		if 에러 != nil {
 			lib.F에러_출력(에러)
 			continue
@@ -167,4 +266,22 @@ func F일일_가격정보_수집(db파일경로 string) (에러 error) {
 	}
 
 	return nil
+}
+
+func F일일_가격정보_테이블_생성(db *sql.DB) error {
+	SQL := new(bytes.Buffer)
+	SQL.WriteString("CREATE TABLE IF NOT EXISTS daily_price (")
+	SQL.WriteString("code CHAR(8) NOT NULL,")
+	SQL.WriteString("date DATE NOT NULL,")
+	SQL.WriteString("open DECIMAL(20,3) NOT NULL,")
+	SQL.WriteString("high DECIMAL(20,3) NOT NULL,")
+	SQL.WriteString("low DECIMAL(20,3) NOT NULL,")
+	SQL.WriteString("close DECIMAL(20,3) NOT NULL,")
+	SQL.WriteString("volume BIGINT NOT NULL,")
+	SQL.WriteString("CONSTRAINT PRIMARY KEY (code,date)")
+	SQL.WriteString(")")
+
+	_, 에러 := db.Exec(SQL.String())
+
+	return 에러
 }

@@ -64,6 +64,7 @@ const (
 	P3분     = 3 * time.Minute
 	P5분     = 5 * time.Minute
 	P10분    = 10 * time.Minute
+	P15분    = 15 * time.Minute
 	P1시간    = time.Hour
 	P1일     = 24 * time.Hour
 	P1년     = 365 * P1일
@@ -213,7 +214,7 @@ const (
 	P메시지_갱신 = "U" // UPDATE
 )
 
-const 포트_번호_최소값 = 3001
+const 포트_번호_최소값 = 4500
 
 const (
 	P주소_주소정보 T주소 = iota
@@ -320,13 +321,14 @@ func (t T신호) String() string {
 type T신호_32비트_모듈 uint8
 
 const (
-	P신호_C32_READY = iota
+	P신호_C32_초기화 = iota
+	P신호_C32_LOGIN
 	P신호_C32_종료
 )
 
 func (p T신호_32비트_모듈) String() string {
 	switch p {
-	case P신호_C32_READY:
+	case P신호_C32_초기화:
 		return "C32 READY"
 	case P신호_C32_종료:
 		return "C32 종료"

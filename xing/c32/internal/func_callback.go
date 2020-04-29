@@ -284,7 +284,7 @@ func OnLogin(wParam, lParam unsafe.Pointer) {
 	default:
 	}
 
-	F콜백(lib.New콜백_신호(lib.P신호_C32_READY))
+	F콜백(lib.New콜백_신호(lib.P신호_C32_LOGIN))
 
 	println("**    Xing C32 READY     **")
 }

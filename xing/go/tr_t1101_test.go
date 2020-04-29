@@ -31,7 +31,7 @@ GNU Lesser General xt.Public License for more details.
 You should have received a copy of the GNU Lesser General xt.Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package xing
+package xg
 
 import (
 	"github.com/ghts/ghts/lib"
@@ -89,7 +89,7 @@ func TestT1101_현물_호가_조회(t *testing.T) {
 		매수호가수량합 = 매수호가수량합 + 값.M매수호가수량_모음[i]
 	}
 
-	if F금일_한국증시_개장() && lib.F한국증시_정규시장_거래시간임() {
+	if F금일_한국증시_개장() && lib.F한국증시_정규_거래_시간임() {
 		lib.F테스트_참임(t, 값.M시각.After(time.Now().Add(-1*lib.P10분)),
 			값.M시각.Format("15:04:06"), time.Now().Add(-1*lib.P10분).Format("15:04:06"))
 		lib.F테스트_참임(t, 값.M시각.Before(time.Now().Add(lib.P10분)),

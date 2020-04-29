@@ -31,7 +31,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package xing
+package xg
 
 import (
 	"github.com/ghts/ghts/lib"
@@ -57,7 +57,7 @@ func TestCFOAT00300_선물옵션_취소주문(t *testing.T) {
 
 	if 서버_구분 == xt.P서버_실거래 ||
 		!F금일_한국증시_개장() ||
-		!lib.F한국증시_정규시장_거래시간임() {
+		!lib.F한국증시_정규_거래_시간임() {
 		t.SkipNow()
 	}
 
