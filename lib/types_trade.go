@@ -305,6 +305,17 @@ func (s S종목별_일일_가격정보_모음) G전일_종가() []float64 {
 	return 전일_종가_모음
 }
 
+func (s S종목별_일일_가격정보_모음) G전일_거래량() []float64 {
+	전일_거래량 := make([]float64, len(s.M저장소))
+	전일_거래량[0] = float64(s.M저장소[0].M거래량 + s.M저장소[1].M거래량 + s.M저장소[2].M거래량) / 3.0 // 임의로 값을 채워넣음.
+
+	for i := 1; i < len(s.M저장소); i++ {
+		전일_거래량[i] = float64(s.M저장소[i-1].M거래량)
+	}
+
+	return 전일_거래량
+}
+
 func (s S종목별_일일_가격정보_모음) MAX(윈도우_크기 int) []float64 {
 	전일_고가_모음 := s.G전일_고가()
 
@@ -329,6 +340,23 @@ func (s S종목별_일일_가격정보_모음) SMA(윈도우_크기 int) []float
 func (s S종목별_일일_가격정보_모음) EMA(윈도우_크기 int) []float64 {
 	// Look Ahead Bias를 방지하기 위해서 전일 종가 기준으로 함.
 	return F지수_이동_평균(s.G전일_종가(), 윈도우_크기)
+}
+
+func (s S종목별_일일_가격정보_모음) VWMA(윈도우_크기 int) []float64 {
+	종가 := s.G전일_종가()
+	거래량 := s.G전일_거래량()
+	거래량_합계 := F합계(거래량[:윈도우_크기-1])
+	거래량_가중_이동_평균 := make([]float64, len(s.M저장소))
+
+	for i:=윈도우_크기 ; i<len(s.M저장소) ; i++ {
+		거래량_합계 += 거래량[i] - 거래량[i-윈도우_크기]
+
+		for j:=i-윈도우_크기+1 ; j<=i ; j++ {
+			거래량_가중_이동_평균[i] += 종가[j] * 거래량[j] / 거래량_합계
+		}
+	}
+
+	return 거래량_가중_이동_평균
 }
 
 func (s S종목별_일일_가격정보_모음) G볼린저_밴드(윈도우_크기 int, 표준편차_배율 float64) []float64 {
@@ -499,6 +527,48 @@ func (s S종목별_일일_가격정보_모음) G추세_점수값2(전일 time.Ti
 	return s.G추세_점수값(F2정수_일자(전일))
 }
 
+
+
+func (s S종목별_일일_가격정보_모음) MFI(윈도우_크기 int) []float64 {
+	// 참고자료 : https://www.investopedia.com/terms/m/mfi.asp
+	// 해당 웹페이지에 나온 공식을 그대로 적용하다보니 모든 단어들이 영어임.
+
+	high := s.G전일_고가()
+	low := s.G전일_저가()
+	close := s.G전일_종가()
+	volume := s.G전일_거래량()
+	typical_price := make([]float64, len(s.M저장소))
+	positive_money_flow := make([]float64, len(s.M저장소))
+	negative_money_flow := make([]float64, len(s.M저장소))
+	sum_positive_money_flow := 0.0
+	sum_negative_money_flow := 0.0
+	mfi := make([]float64, len(s.M저장소))
+
+	for i:=1 ; i<len(s.M저장소) ; i++ {
+		typical_price[i] = (high[i] + low[i] + close[i]) / 3
+		raw_money_flow := typical_price[i] * volume[i]
+
+		if typical_price[i] > typical_price[i-1] {
+			positive_money_flow[i] = raw_money_flow
+		} else {
+			negative_money_flow[i] = raw_money_flow
+		}
+
+		if i < 윈도우_크기 {
+			sum_positive_money_flow += positive_money_flow[i]
+			sum_negative_money_flow += negative_money_flow[i]
+		} else {
+			sum_positive_money_flow += positive_money_flow[i] - positive_money_flow[i-윈도우_크기]
+			sum_negative_money_flow += negative_money_flow[i] - negative_money_flow[i-윈도우_크기]
+		}
+
+		money_flow_ratio := sum_positive_money_flow / sum_negative_money_flow
+		mfi[i] = 100 - 100 / (1+money_flow_ratio)
+	}
+
+	return mfi
+}
+
 type I매매 interface {
 	G종목코드() string
 	G수량() int
@@ -646,7 +716,7 @@ func (s S손절매_확인_정보) G일자() uint32   { return s.M일자 }
 func (s S손절매_확인_정보) G종목코드() string { return s.M종목코드 }
 func (s S손절매_확인_정보) G기준가() float64 { return s.M기준가 }
 
-func New모의_매매_포트폴리오(초기_자본 float64, 거래당_최대_손실비율_퍼센트 float64, 최대_동시_진행_거래_수량 int) *S포트폴리오 {
+func New모의_액티브_매매_포트폴리오(초기_자본 float64, 거래당_최대_손실비율_퍼센트 float64, 최대_동시_진행_거래_수량 int) *S포트폴리오 {
 	s := new(S포트폴리오)
 	s.M자본 = 초기_자본
 	s.M거래당_최대_손실비율 = 거래당_최대_손실비율_퍼센트 / 100
