@@ -343,20 +343,7 @@ func (s S종목별_일일_가격정보_모음) EMA(윈도우_크기 int) []float
 }
 
 func (s S종목별_일일_가격정보_모음) VWMA(윈도우_크기 int) []float64 {
-	종가 := s.G전일_종가()
-	거래량 := s.G전일_거래량()
-	거래량_합계 := F합계(거래량[:윈도우_크기-1])
-	거래량_가중_이동_평균 := make([]float64, len(s.M저장소))
-
-	for i:=윈도우_크기 ; i<len(s.M저장소) ; i++ {
-		거래량_합계 += 거래량[i] - 거래량[i-윈도우_크기]
-
-		for j:=i-윈도우_크기+1 ; j<=i ; j++ {
-			거래량_가중_이동_평균[i] += 종가[j] * 거래량[j] / 거래량_합계
-		}
-	}
-
-	return 거래량_가중_이동_평균
+	return F가중_이동_평균(s.G전일_종가(), s.G전일_거래량(), 윈도우_크기)
 }
 
 func (s S종목별_일일_가격정보_모음) G볼린저_밴드(윈도우_크기 int, 표준편차_배율 float64) []float64 {
@@ -527,8 +514,6 @@ func (s S종목별_일일_가격정보_모음) G추세_점수값2(전일 time.Ti
 	return s.G추세_점수값(F2정수_일자(전일))
 }
 
-
-
 func (s S종목별_일일_가격정보_모음) MFI(윈도우_크기 int) []float64 {
 	// 참고자료 : https://www.investopedia.com/terms/m/mfi.asp
 	// 해당 웹페이지에 나온 공식을 그대로 적용하다보니 모든 단어들이 영어임.
@@ -567,6 +552,36 @@ func (s S종목별_일일_가격정보_모음) MFI(윈도우_크기 int) []float
 	}
 
 	return mfi
+}
+
+func (s S종목별_일일_가격정보_모음) VPCI(단기, 장기 int) []float64 {
+	// '거래량으로 투자하라'(Buff Dormeier 저) 제 17장
+	// https://www.tradingview.com/script/lmTqKOsa-Indicator-Volume-Price-Confirmation-Indicator-VPCI/
+	단기_VMWA := s.VWMA(단기)
+	장기_VWMA := s.VWMA(장기)
+	단기_SMA := s.SMA(단기)
+	장기_SMA := s.SMA(장기)
+	단기_거래량_SMA := F단순_이동_평균(s.G전일_거래량(), 단기)
+	장기_거래량_SMA := F단순_이동_평균(s.G전일_거래량(), 장기)
+
+	VPC := make([]float64, len(s.M저장소))
+	VPR := make([]float64, len(s.M저장소))
+	VM := make([]float64, len(s.M저장소))
+	VPCI := make([]float64, len(s.M저장소))
+
+	for i:=0 ; i<len(s.M저장소) ; i++ {
+		VPC[i] = 장기_VWMA[i] - 장기_SMA[i]
+		VPR[i] = 단기_VMWA[i] / 단기_SMA[i]
+		VM[i] = 단기_거래량_SMA[i] / 장기_거래량_SMA[i]
+		VPCI[i] = VPC[i]*VPR[i]*VM[i]
+	}
+
+	return VPCI
+}
+
+func (s S종목별_일일_가격정보_모음) VPCI_VWMA(단기, 장기 int) []float64 {
+	// '거래량으로 투자하라'(Buff Dormeier 저) 제 17장
+	return F가중_이동_평균(s.VPCI(단기, 장기), s.G전일_거래량(), 단기)
 }
 
 type I매매 interface {
