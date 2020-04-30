@@ -556,6 +556,7 @@ func (s S종목별_일일_가격정보_모음) MFI(윈도우_크기 int) []float
 
 func (s S종목별_일일_가격정보_모음) VPCI(단기, 장기 int) []float64 {
 	// '거래량으로 투자하라'(Buff Dormeier 저) 제 17장
+	// http://docs.mta.org/docs/2007DowAward.pdf
 	// https://www.tradingview.com/script/lmTqKOsa-Indicator-Volume-Price-Confirmation-Indicator-VPCI/
 	단기_VMWA := s.VWMA(단기)
 	장기_VWMA := s.VWMA(장기)
@@ -579,7 +580,7 @@ func (s S종목별_일일_가격정보_모음) VPCI(단기, 장기 int) []float6
 	return VPCI
 }
 
-func (s S종목별_일일_가격정보_모음) VPCI_VWMA(단기, 장기 int) []float64 {
+func (s S종목별_일일_가격정보_모음) VPCIs(단기, 장기 int) []float64 {
 	// '거래량으로 투자하라'(Buff Dormeier 저) 제 17장
 	return F가중_이동_평균(s.VPCI(단기, 장기), s.G전일_거래량(), 단기)
 }
