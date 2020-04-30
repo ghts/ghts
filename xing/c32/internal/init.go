@@ -104,3 +104,35 @@ func F소켓_정리() error {
 
 	return nil
 }
+
+// 접속 채널 질의 송신. 테스트용 접속이나 재접속 용도.
+func F서버_접속(서버_구분 xt.T서버_구분) (에러 error) {
+	defer lib.S예외처리{M에러: &에러}.S실행()
+
+	lib.F조건부_패닉(!lib.F인터넷에_접속됨(), "서버 접속이 불가 : 인터넷 접속을 확인하십시오.")
+
+	질의 := lib.New채널_질의_API(lib.New질의값_정수(lib.TR접속, "", int(서버_구분)))
+
+	Ch질의 <- 질의
+
+	select {
+	case <-질의.Ch회신값:
+		// OK
+	case 에러 := <-질의.Ch에러:
+		return 에러
+		lib.F문자열_출력("접속 처리 실행 실패 후 재시도.")
+	case <-time.After(lib.P30초):
+		return lib.New에러("접속 타임아웃")
+	}
+
+	select {
+	case 로그인_여부 := <-ch로그인:
+		if !로그인_여부 {
+			return lib.New에러with출력("로그인 실패.")
+		}
+	case <-time.After(lib.P30초):
+		return lib.New에러with출력("로그인 타임아웃")
+	}
+
+	return nil
+}

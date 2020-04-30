@@ -296,7 +296,10 @@ func OnLogout() {
 
 func OnDisconnected() {
 	lib.F체크포인트("OnDisconnected.")
-	// XingAPI가 신호를 보내오지 않음.  여기에 기능을 구현해 봤자 소용없음.
+
+	// API 호출은 하나의 스레드에서 해야 안전하므로, F접속()을 직접 호출하지 않고,
+	// 채널 질의를 통해서 간접적으로 호출함.
+	F서버_접속(서버_구분)
 }
 
 func OnTimeout(c int) {
