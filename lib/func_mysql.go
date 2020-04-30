@@ -37,7 +37,7 @@ import "database/sql"
 import _ "github.com/go-sql-driver/mysql"
 
 func DSN_MySQL(address, username, password, dbname string) string {
-	return F2문자열("%v:%v@tcp(%v:3306)/%v",
+	return F2문자열("%v:%v@tcp(%v:3306)/%v?parseTime=true",
 		username,
 		password,
 		address,
