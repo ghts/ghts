@@ -149,7 +149,14 @@ func F종목별_일일_가격정보_읽기(db *sql.DB, 종목코드 string) (s *
 
 }
 
-func F종목별_일일_가격정보_저장(db *sql.DB, 모음 *lib.S종목별_일일_가격정보_모음) error {
+func F종목별_일일_가격정보_저장(db *sql.DB, 모음 *lib.S종목별_일일_가격정보_모음) (에러 error) {
+	var tx *sql.Tx
+	defer lib.S예외처리{M에러 : &에러, M함수: func() {
+		if tx != nil {
+			tx.Rollback()
+		}
+	}}.S실행()
+
 	SQL := new(bytes.Buffer)
 	SQL.WriteString("INSERT IGNORE INTO daily_price (")
 	SQL.WriteString("code,")
@@ -165,17 +172,11 @@ func F종목별_일일_가격정보_저장(db *sql.DB, 모음 *lib.S종목별_�
 	txOpts.Isolation = sql.LevelDefault
 	txOpts.ReadOnly = false
 
-	tx, 에러 := db.BeginTx(context.TODO(), txOpts)
-	if 에러 != nil {
-		lib.F에러_출력(에러)
-		return 에러
-	}
+	tx, 에러 = db.BeginTx(context.TODO(), txOpts)
+	lib.F확인(에러)
 
 	stmt, 에러 := tx.Prepare(SQL.String())
-	if 에러 != nil {
-		tx.Rollback()
-		return 에러
-	}
+	lib.F확인(에러)
 	defer stmt.Close()
 
 	for _, 값 := range 모음.M저장소 {
@@ -187,11 +188,7 @@ func F종목별_일일_가격정보_저장(db *sql.DB, 모음 *lib.S종목별_�
 			값.M저가,
 			값.M종가,
 			값.M거래량)
-
-		if 에러 != nil {
-			tx.Rollback()
-			return 에러
-		}
+		lib.F확인(에러)
 	}
 
 	tx.Commit()
