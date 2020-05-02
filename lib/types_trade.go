@@ -307,7 +307,7 @@ func (s S종목별_일일_가격정보_모음) G전일_종가() []float64 {
 
 func (s S종목별_일일_가격정보_모음) G전일_거래량() []float64 {
 	전일_거래량 := make([]float64, len(s.M저장소))
-	전일_거래량[0] = float64(s.M저장소[0].M거래량 + s.M저장소[1].M거래량 + s.M저장소[2].M거래량) / 3.0 // 임의로 값을 채워넣음.
+	전일_거래량[0] = float64(s.M저장소[0].M거래량+s.M저장소[1].M거래량+s.M저장소[2].M거래량) / 3.0 // 임의로 값을 채워넣음.
 
 	for i := 1; i < len(s.M저장소); i++ {
 		전일_거래량[i] = float64(s.M저장소[i-1].M거래량)
@@ -532,7 +532,7 @@ func (s S종목별_일일_가격정보_모음) MFI(윈도우_크기 int) []float
 	sum_negative_money_flow := 0.0
 	mfi := make([]float64, len(s.M저장소))
 
-	for i:=1 ; i<len(s.M저장소) ; i++ {
+	for i := 1; i < len(s.M저장소); i++ {
 		typical_price[i] = (high[i] + low[i] + close[i]) / 3
 		raw_money_flow := typical_price[i] * volume[i]
 
@@ -551,7 +551,7 @@ func (s S종목별_일일_가격정보_모음) MFI(윈도우_크기 int) []float
 		}
 
 		money_flow_ratio := sum_positive_money_flow / sum_negative_money_flow
-		mfi[i] = 100 - 100 / (1+money_flow_ratio)
+		mfi[i] = 100 - 100/(1+money_flow_ratio)
 	}
 
 	return mfi
@@ -573,11 +573,11 @@ func (s S종목별_일일_가격정보_모음) VPCI(단기, 장기 int) []float6
 	VM := make([]float64, len(s.M저장소))
 	VPCI := make([]float64, len(s.M저장소))
 
-	for i:=0 ; i<len(s.M저장소) ; i++ {
+	for i := 0; i < len(s.M저장소); i++ {
 		VPC[i] = 장기_VWMA[i] - 장기_SMA[i]
 		VPR[i] = 단기_VMWA[i] / 단기_SMA[i]
 		VM[i] = 단기_거래량_SMA[i] / 장기_거래량_SMA[i]
-		VPCI[i] = VPC[i]*VPR[i]*VM[i]
+		VPCI[i] = VPC[i] * VPR[i] * VM[i]
 	}
 
 	return VPCI

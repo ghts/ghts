@@ -120,7 +120,7 @@ func F종목별_일일_가격정보_읽기(db *sql.DB, 종목코드 string) (s *
 	s = new(lib.S종목별_일일_가격정보_모음)
 	s.M저장소 = make([]*lib.S일일_가격정보, 0)
 
-	var 일자  time.Time
+	var 일자 time.Time
 
 	for rows.Next() {
 		일일_가격정보 := new(lib.S일일_가격정보)
@@ -146,12 +146,11 @@ func F종목별_일일_가격정보_읽기(db *sql.DB, 종목코드 string) (s *
 	s.S정렬_및_인덱스_설정()
 
 	return s, nil
-
 }
 
 func F종목별_일일_가격정보_저장(db *sql.DB, 모음 *lib.S종목별_일일_가격정보_모음) (에러 error) {
 	var tx *sql.Tx
-	defer lib.S예외처리{M에러 : &에러, M함수: func() {
+	defer lib.S예외처리{M에러: &에러, M함수: func() {
 		if tx != nil {
 			tx.Rollback()
 		}
