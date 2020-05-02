@@ -749,7 +749,9 @@ func JSON_파일_저장(값 interface{}, 파일명 string) (에러 error) {
 }
 
 func JSON_파일_읽기(파일명 string, 반환값 interface{}) (에러 error) {
-	if 바이트_모음, 에러 := ioutil.ReadFile(파일명); 에러 != nil {
+	if !F파일_존재함(파일명) {
+		return New에러("해당 파일이 존재하지 않음. '%s'", 파일명)
+	} else if 바이트_모음, 에러 := ioutil.ReadFile(파일명); 에러 != nil {
 		return 에러
 	} else {
 		return F디코딩(JSON, 바이트_모음, 반환값)
