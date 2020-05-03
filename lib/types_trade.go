@@ -375,11 +375,11 @@ func (s S종목별_일일_가격정보_모음) G변동성_고점_대비_비율(�
 	고점_대비_비율 := make([]float64, len(s.M저장소))
 
 	for i := 0; i < 윈도우_크기; i++ {
-		고점[i] = F최대_실수값(볼린저_밴드_폭[:i])
+		고점[i] = F최대값_실수(볼린저_밴드_폭[:i])
 	}
 
 	for i := 윈도우_크기; i < len(s.M저장소); i++ {
-		고점[i] = F최대_실수값(볼린저_밴드_폭[i-윈도우_크기+1 : i])
+		고점[i] = F최대값_실수(볼린저_밴드_폭[i-윈도우_크기+1 : i])
 	}
 
 	for i := 0; i < len(s.M저장소); i++ {
@@ -462,61 +462,6 @@ func (s S종목별_일일_가격정보_모음) Chandelier청산선(윈도우_크
 	return Chandelier청산선
 }
 
-func (s S종목별_일일_가격정보_모음) G추세_점수() []float64 {
-	추세_점수 := make([]float64, len(s.M저장소))
-
-	for i := 0; i < 241; i++ {
-		추세_점수[i] = 0.0
-	}
-
-	for i := 241; i < len(s.M저장소); i++ {
-		기준_인덱스 := i - 1
-		합계 := 0
-		전일_종가 := s.M저장소[기준_인덱스].M종가
-
-		for i := 2; i <= 12; i++ {
-			과거_종가 := s.M저장소[기준_인덱스-(i*20)].M종가
-
-			if 전일_종가 >= 과거_종가 {
-				합계++
-			}
-		}
-
-		추세_점수[i] = float64(합계) / 11.0
-	}
-
-	return 추세_점수
-}
-
-func (s S종목별_일일_가격정보_모음) G추세_점수값(전일 uint32) (float64, error) {
-	기준_인덱스, 에러 := s.G인덱스(전일)
-	if 에러 != nil {
-		return 0, 에러
-	}
-
-	합계 := 0
-
-	전일_종가 := s.M저장소[기준_인덱스].M종가
-
-	// 월간 상승과 하락을 번갈아 하는 추세-역추세 교차 현상이 있으므로,
-	// 최근 1달 간 추세는 역추세 현상으로 인해 판단의 정학성을 떨어뜨리는 부작용이 있으므로,
-	// 차라리 빼 버리는 게 차라리 좋다고 해서 i가 2부터 시작함.
-	// 추세는 약 1년간 지속된다고 하므로 12까지 검색함.
-	for i := 2; i <= 12; i++ {
-		과거_종가 := s.M저장소[기준_인덱스-(i*20)].M종가
-
-		if 전일_종가 >= 과거_종가 {
-			합계++
-		}
-	}
-
-	return float64(합계) / 11.0, nil
-}
-
-func (s S종목별_일일_가격정보_모음) G추세_점수값2(전일 time.Time) (float64, error) {
-	return s.G추세_점수값(F2정수_일자(전일))
-}
-
 func (s S종목별_일일_가격정보_모음) MFI(윈도우_크기 int) []float64 {
 	// 참고자료 : https://www.investopedia.com/terms/m/mfi.asp
 	// 해당 웹페이지에 나온 공식을 그대로 적용하다보니 모든 단어들이 영어임.
@@ -588,10 +533,91 @@ func (s S종목별_일일_가격정보_모음) VPCIs(단기, 장기 int) []float
 	return F가중_이동_평균(s.VPCI(단기, 장기), s.G전일_거래량(), 단기)
 }
 
-type I매매 interface {
+func (s S종목별_일일_가격정보_모음) G추세_점수() []float64 {
+	추세_점수 := make([]float64, len(s.M저장소))
+
+	for i := 0; i < 232; i++ {
+		추세_점수[i] = 0.0
+	}
+
+	for i := 232; i < len(s.M저장소); i++ {
+		기준_인덱스 := i - 1
+		합계 := 0
+		전일_종가 := s.M저장소[기준_인덱스].M종가
+
+		for i := 2; i <= 11; i++ {
+			과거_종가 := s.M저장소[기준_인덱스-(i*21)].M종가
+
+			if 전일_종가 >= 과거_종가 {
+				합계++
+			}
+		}
+
+		추세_점수[i] = float64(합계) / 10.0
+	}
+
+	return 추세_점수
+}
+
+func (s S종목별_일일_가격정보_모음) G추세_점수_평균(윈도우_크기 int) []float64 {
+	return F지수_이동_평균(s.G추세_점수(), 윈도우_크기)
+}
+
+func (s S종목별_일일_가격정보_모음) G추세_점수값(전일 uint32) (float64, error) {
+	기준_인덱스, 에러 := s.G인덱스(전일)
+	if 에러 != nil {
+		return 0, 에러
+	}
+
+	합계 := 0
+
+	전일_종가 := s.M저장소[기준_인덱스].M종가
+
+	for i := 2; i <= 11; i++ {
+		과거_종가 := s.M저장소[기준_인덱스-(i*21)].M종가
+
+		if 전일_종가 >= 과거_종가 {
+			합계++
+		}
+	}
+
+	return float64(합계) / 10.0, nil
+}
+
+func (s S종목별_일일_가격정보_모음) G추세_점수값2(전일 time.Time) (float64, error) {
+	return s.G추세_점수값(F2정수_일자(전일))
+}
+
+func (s S종목별_일일_가격정보_모음) G월수익율_변동성() []float64 {
+	월수익율_변동성 := make([]float64, len(s.M저장소))
+
+	for i := 0; i < 253; i++ {
+		월수익율_변동성[i] = 0.0
+	}
+
+	for i := 253; i < len(s.M저장소); i++ {
+		기준_인덱스 := i - 1 // Look Ahead Bias 방지를 위해서 전일 기준으로 시작.
+		월수익율 := make([]float64, 12)
+
+		for j := 0; j < 12; j++ {
+			과거_종가1 := s.M저장소[기준_인덱스-(j*21)].M종가
+			과거_종가2 := s.M저장소[기준_인덱스-((j+1)*21)].M종가
+			월수익율[j] = (과거_종가1 - 과거_종가2) / 과거_종가2
+		}
+
+		월수익율_변동성[i] = F표준_편차(월수익율)
+	}
+
+	return 월수익율_변동성
+}
+
+func (s S종목별_일일_가격정보_모음) G월수익율_변동성_평균(윈도우_크기 int) []float64 {
+	return F지수_이동_평균(s.G월수익율_변동성(), 윈도우_크기)
+}
+
+type I매수_매도_쌍 interface {
 	G종목코드() string
 	G수량() int
-	G손절폭() float64
 	G매수_일자() uint32
 	G매수_가격() float64
 	G매수_금액() float64
@@ -600,6 +626,7 @@ type I매매 interface {
 	G매도_가격() float64
 	S매도_가격(float64)
 	G매도_금액() float64
+	G손절폭() float64
 	G매도_후_평가액() float64
 	S매도_후_평가액(float64)
 	G손절매_필요(string, float64) bool
@@ -608,7 +635,7 @@ type I매매 interface {
 	G자본_대비_수익율() float64
 }
 
-type S매매 struct {
+type S매수_매도_쌍 struct {
 	M종목코드     string
 	M수량       int
 	M손절폭      float64
@@ -619,22 +646,24 @@ type S매매 struct {
 	M매도_후_평가액 float64
 }
 
-func (s S매매) G종목코드() string     { return s.M종목코드 }
-func (s S매매) G수량() int          { return s.M수량 }
-func (s S매매) G손절폭() float64     { return math.Abs(s.M손절폭) }
-func (s S매매) G매수_일자() uint32    { return s.M매수_일자 }
-func (s S매매) G매수_가격() float64   { return s.M매수_가격 }
-func (s S매매) G매수_금액() float64   { return float64(s.M수량) * s.M매수_가격 * 1.00015 }
-func (s S매매) G매도_일자() uint32    { return s.M매도_일자 }
-func (s *S매매) S매도_일자(값 uint32)  { s.M매도_일자 = 값 }
-func (s S매매) G매도_가격() float64   { return s.M매도_가격 }
-func (s *S매매) S매도_가격(값 float64) { s.M매도_가격 = 값 }
-func (s S매매) G매도_금액() float64 {
+func (s S매수_매도_쌍) G종목코드() string   { return s.M종목코드 }
+func (s S매수_매도_쌍) G수량() int        { return s.M수량 }
+func (s S매수_매도_쌍) G손절폭() float64   { return math.Abs(s.M손절폭) }
+func (s S매수_매도_쌍) G매수_일자() uint32  { return s.M매수_일자 }
+func (s S매수_매도_쌍) G매수_가격() float64 { return s.M매수_가격 }
+func (s S매수_매도_쌍) G매수_금액() float64 {
+	return float64(s.M수량) * s.M매수_가격 * 1.00015
+}
+func (s S매수_매도_쌍) G매도_일자() uint32    { return s.M매도_일자 }
+func (s *S매수_매도_쌍) S매도_일자(값 uint32)  { s.M매도_일자 = 값 }
+func (s S매수_매도_쌍) G매도_가격() float64   { return s.M매도_가격 }
+func (s *S매수_매도_쌍) S매도_가격(값 float64) { s.M매도_가격 = 값 }
+func (s S매수_매도_쌍) G매도_금액() float64 {
 	return float64(s.M수량) * s.M매도_가격 * (1 - 0.00265)
 }
-func (s S매매) G매도_후_평가액() float64   { return s.M매도_후_평가액 }
-func (s *S매매) S매도_후_평가액(값 float64) { s.M매도_후_평가액 = 값 }
-func (s S매매) G손절매_필요(종목코드 string, 기준가 float64) bool {
+func (s S매수_매도_쌍) G매도_후_평가액() float64   { return s.M매도_후_평가액 }
+func (s *S매수_매도_쌍) S매도_후_평가액(값 float64) { s.M매도_후_평가액 = 값 }
+func (s S매수_매도_쌍) G손절매_필요(종목코드 string, 기준가 float64) bool {
 	if s.M종목코드 != 종목코드 {
 		return false
 	}
@@ -642,225 +671,20 @@ func (s S매매) G손절매_필요(종목코드 string, 기준가 float64) bool 
 	return 기준가 < s.M매수_가격-math.Abs(s.M손절폭)
 }
 
-func (s S매매) G수익() float64 {
+func (s S매수_매도_쌍) G수익() float64 {
 	수익 := s.G매도_금액() - s.G매수_금액()
 
 	return math.Round(수익*1000) / 1000
 }
 
-func (s S매매) G단일_거래_수익율() float64 {
+func (s S매수_매도_쌍) G단일_거래_수익율() float64 {
 	수익율 := s.G수익() / s.G매수_금액() * 100
 
 	return math.Round(수익율*1000) / 1000
 }
 
-func (s S매매) G자본_대비_수익율() float64 {
+func (s S매수_매도_쌍) G자본_대비_수익율() float64 {
 	수익율 := s.G수익() / s.G매도_후_평가액() * 100
 
 	return math.Round(수익율*1000) / 1000
-}
-
-type I매도_신호 interface {
-	G일자() uint32
-	G종목코드() string
-	G기준가() float64
-}
-
-func New매도_신호(일자 uint32, 종목코드 string, 기준가 float64) *S매도_신호 {
-	s := new(S매도_신호)
-	s.M일자 = 일자
-	s.M종목코드 = 종목코드
-	s.M기준가 = 기준가
-
-	return s
-}
-
-type S매도_신호 struct {
-	M일자   uint32
-	M종목코드 string
-	M기준가  float64
-}
-
-func (s S매도_신호) G일자() uint32   { return s.M일자 }
-func (s S매도_신호) G종목코드() string { return s.M종목코드 }
-func (s S매도_신호) G기준가() float64 { return s.M기준가 }
-
-type I매수_신호 interface {
-	I매도_신호
-	G손절폭() float64
-}
-
-func New매수_신호(일자 uint32, 종목코드 string, 기준가, 손절폭 float64) *S매수_신호 {
-	s := new(S매수_신호)
-	s.S매도_신호 = New매도_신호(일자, 종목코드, 기준가)
-	s.M손절폭 = 손절폭
-
-	return s
-}
-
-type S매수_신호 struct {
-	*S매도_신호
-	M손절폭 float64
-}
-
-func (s S매수_신호) G손절폭() float64 { return s.M손절폭 }
-
-type I포트폴리오 interface {
-	S매수_신호_발생(매수_신호 I매수_신호)
-	S매도_신호_발생(매도_신호 I매도_신호)
-}
-
-type I손절매_확인_정보 interface {
-	G일자() uint32
-	G종목코드() string
-	G기준가() float64
-}
-
-func New손절매_확인_정보(일자 uint32, 종목코드 string, 기준가 float64) *S손절매_확인_정보 {
-	s := new(S손절매_확인_정보)
-	s.M일자 = 일자
-	s.M종목코드 = 종목코드
-	s.M기준가 = 기준가
-
-	return s
-}
-
-type S손절매_확인_정보 struct {
-	M일자   uint32
-	M종목코드 string
-	M기준가  float64
-}
-
-func (s S손절매_확인_정보) G일자() uint32   { return s.M일자 }
-func (s S손절매_확인_정보) G종목코드() string { return s.M종목코드 }
-func (s S손절매_확인_정보) G기준가() float64 { return s.M기준가 }
-
-func New모의_액티브_매매_포트폴리오(초기_자본 float64, 거래당_최대_손실비율_퍼센트 float64, 최대_동시_진행_거래_수량 int) *S포트폴리오 {
-	s := new(S포트폴리오)
-	s.M자본 = 초기_자본
-	s.M거래당_최대_손실비율 = 거래당_최대_손실비율_퍼센트 / 100
-	s.M진행_중_매매 = make(chan I매매, 최대_동시_진행_거래_수량)
-	s.M매매_기록 = make([]I매매, 0)
-
-	const 가상_슬리피지_비용 = 30
-
-	s.M매수_신호_처리기 = func(매수_신호 I매수_신호) {
-		if !s.G매수_가능() {
-			return
-		}
-
-		// 수량을 조절하여 1회 거래손실이 자본의 일정비율 이내가 되도록 설정.
-		// 금융업에서 1회 거래손실이 자본의 2%를 넘지 않도록 하는 규칙이 기본이라고 함.
-		// 전형적인 추세추종전략에서
-		// 1회 거래손실이 1%이면 설정하면 예상 최대 누적 손실은 30% 정도이라고 함.
-		// 1회 거래손실이 2%이면 설정하면 예상 최대 누적 손실은 65% 정도이라고 함
-		// '터틀의 방식(Way of the Turtle)' 제8장 그림 8-1 참조.
-		수량 := int(s.M자본 * s.M거래당_최대_손실비율 / 매수_신호.G손절폭())
-
-		if 수량 == 0 {
-			return
-		}
-
-		매매 := new(S매매)
-		매매.M종목코드 = 매수_신호.G종목코드()
-		매매.M수량 = 수량
-		매매.M손절폭 = 매수_신호.G손절폭()
-		매매.M매수_일자 = 매수_신호.G일자()
-
-		// API 호출 없는 모의 거래.
-		매매.M매수_가격 = F모의_매수_거래가(매수_신호.G기준가(), 가상_슬리피지_비용)
-
-		s.S매수_변동_기록(매매)
-	}
-
-	s.M매도_신호_처리기 = func(매도_신호 I매도_신호) {
-		for i := 0; i < len(s.M진행_중_매매); i++ {
-			매매 := <-s.M진행_중_매매
-
-			if 매매.G종목코드() == 매도_신호.G종목코드() {
-				매매.S매도_일자(매도_신호.G일자())
-
-				// API 호출 없는 모의 거래.
-				매매.S매도_가격(F모의_매도_거래가(매도_신호.G기준가(), 가상_슬리피지_비용))
-
-				s.S매도_변동_기록(매매)
-			} else {
-				s.M진행_중_매매 <- 매매
-			}
-		}
-	}
-
-	s.M손절매_처리기 = func(데이터 I손절매_확인_정보) {
-		for i := 0; i < len(s.M진행_중_매매); i++ {
-			매매 := <-s.M진행_중_매매
-
-			if 매매.G손절매_필요(데이터.G종목코드(), 데이터.G기준가()) {
-				매매.S매도_일자(데이터.G일자())
-
-				// API 호출 없는 모의 거래.
-				매매.S매도_가격(F모의_매도_거래가(데이터.G기준가(), 가상_슬리피지_비용))
-
-				s.S매도_변동_기록(매매)
-			} else {
-				s.M진행_중_매매 <- 매매
-			}
-		}
-	}
-
-	return s
-}
-
-type S포트폴리오 struct {
-	M자본          float64
-	M거래당_최대_손실비율 float64
-	M진행_중_매매     chan I매매
-	M매매_기록       []I매매
-	M매수_신호_처리기   func(I매수_신호)
-	M매도_신호_처리기   func(I매도_신호)
-	M손절매_처리기     func(I손절매_확인_정보)
-}
-
-func (s S포트폴리오) G매수_가능() bool {
-	return len(s.M진행_중_매매) < cap(s.M진행_중_매매)
-}
-
-func (s *S포트폴리오) S매수_신호_발생(매수_신호 I매수_신호) {
-	if s.M매수_신호_처리기 != nil {
-		s.M매수_신호_처리기(매수_신호)
-	}
-}
-
-func (s *S포트폴리오) S매도_신호_발생(매도_신호 I매도_신호) {
-	if s.M매도_신호_처리기 != nil {
-		s.M매도_신호_처리기(매도_신호)
-	}
-}
-
-func (s *S포트폴리오) S손절매_확인(손절매_확인_정보 I손절매_확인_정보) {
-	if s.M손절매_처리기 != nil {
-		s.M손절매_처리기(손절매_확인_정보)
-	}
-}
-
-func (s *S포트폴리오) S매수_변동_기록(매매 I매매) {
-	s.M자본 -= 매매.G매수_금액()
-	s.M진행_중_매매 <- 매매
-}
-
-func (s *S포트폴리오) S매도_변동_기록(매매 I매매) {
-	s.M자본 += 매매.G매도_금액()
-	s.M매매_기록 = append(s.M매매_기록, 매매)
-	매매.S매도_후_평가액(math.Round((s.M자본+s.G진행_중_매매_평가액())*1000) / 1000)
-}
-
-func (s *S포트폴리오) G진행_중_매매_평가액() float64 {
-	진행_중_매매_평가액 := 0.0
-
-	for i := 0; i < len(s.M진행_중_매매); i++ {
-		매매 := <-s.M진행_중_매매
-		진행_중_매매_평가액 += 매매.G매수_금액()
-		s.M진행_중_매매 <- 매매
-	}
-
-	return 진행_중_매매_평가액
 }
