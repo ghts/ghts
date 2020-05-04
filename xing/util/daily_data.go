@@ -92,6 +92,8 @@ import (
 //}
 
 func F종목별_일일_가격정보_읽기(db *sql.DB, 종목코드 string) (s *lib.S종목별_일일_가격정보_모음, 에러 error) {
+	종목코드 = lib.F종목코드_보정(종목코드)
+
 	SQL := new(bytes.Buffer)
 	SQL.WriteString("SELECT")
 	SQL.WriteString(" code,")
@@ -204,31 +206,29 @@ func F일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string) (에�
 	for i, 종목코드 := range 종목코드_모음 {
 		종목별_일일_가격정보_모음, 에러 = F종목별_일일_가격정보_읽기(db, 종목코드)
 
+		// 시작일 설정
+		시작일 = lib.F지금().AddDate(-30, 0, 0)
 		if 에러 == nil && len(종목별_일일_가격정보_모음.M저장소) > 0 {
 			// lib.S종목별_일일_가격정보_모음 는 일자 순서로 정렬되어 있음.
 			마지막_저장일 = 종목별_일일_가격정보_모음.M저장소[len(종목별_일일_가격정보_모음.M저장소)-1].G일자2()
 			시작일 = 마지막_저장일.AddDate(0, 0, 1)
-		} else {
-			시작일 = lib.F지금().AddDate(-30, 0, 0)
 		}
 
-		if 시작일.Equal(xing.F당일()) || 시작일.After(xing.F당일()) {
+		// 종료일 설정
+		if 시작일.After(xing.F당일().Add(-1*lib.P1초)) {
 			continue // 이미 최신 데이터로 업데이트 되어 있음.
-		}
-
-		if lib.F금일().After(xing.F당일()) {
-			종료일 = lib.F금일()
-		} else if lib.F금일().Equal(xing.F당일()) &&
-			lib.F지금().Hour() >= 16 {
+		} else if lib.F지금().After(xing.F당일().Add(15*lib.P1시간+lib.P30분)) {
 			종료일 = lib.F금일()
 		} else {
 			종료일 = xing.F전일()
 		}
 
-		if 시작일.Equal(종료일) || 시작일.After(종료일) {
+		// 시작일, 종료일 같으면 건너뜀.
+		if 시작일.After(종료일.Add(-1*lib.P1초)) {
 			continue
 		}
 
+		// 데이터 수집
 		값_모음, 에러 := xing.TrT8413_현물_차트_일주월(종목코드, 시작일, 종료일, xt.P일주월_일)
 		if 에러 != nil {
 			lib.F에러_출력(에러)
@@ -255,7 +255,7 @@ func F일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string) (에�
 			일일_가격정보_슬라이스 = append(일일_가격정보_슬라이스, 종목별_일일_가격정보_모음.M저장소...)
 		}
 
-		lib.F체크포인트(i, 종목코드, 시작일.Format(lib.P일자_형식), 종료일.Format(lib.P일자_형식), len(일일_가격정보_슬라이스))
+		lib.F문자열_출력("%v %v %v~$v %v개", i, 종목코드, 시작일.Format(lib.P일자_형식), 종료일.Format(lib.P일자_형식), len(일일_가격정보_슬라이스))
 
 		종목별_일일_가격정보_모음, 에러 = lib.New종목별_일일_가격정보_모음(일일_가격정보_슬라이스)
 		if 에러 != nil {
