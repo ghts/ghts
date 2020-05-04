@@ -225,6 +225,10 @@ func F일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string) (에�
 			종료일 = xing.F전일()
 		}
 
+		if 시작일.Equal(종료일) || 시작일.After(종료일) {
+			continue
+		}
+
 		값_모음, 에러 := xing.TrT8413_현물_차트_일주월(종목코드, 시작일, 종료일, xt.P일주월_일)
 		if 에러 != nil {
 			lib.F에러_출력(에러)

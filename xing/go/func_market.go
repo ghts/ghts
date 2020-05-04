@@ -36,6 +36,7 @@ package xg
 import (
 	"github.com/ghts/ghts/lib"
 	xt "github.com/ghts/ghts/xing/base"
+	"strings"
 	"time"
 )
 
@@ -201,6 +202,11 @@ func F선물옵션_종목코드_검사(종목코드 string) (에러 error) {
 }
 
 func F종목코드_존재함(종목코드 string) bool {
+	// ETN 종목코드 처리.
+	if len(종목코드) == 7 && strings.HasPrefix(종목코드, "Q") {
+		종목코드 = 종목코드[1:]
+	}
+
 	_, 존재함 := 종목맵_전체[종목코드]
 
 	return 존재함
@@ -287,6 +293,11 @@ func f종목모음_설정() (에러 error) {
 }
 
 func F종목by코드(종목코드 string) (종목 *lib.S종목, 에러 error) {
+	// ETN 종목코드 처리.
+	if len(종목코드) == 7 && strings.HasPrefix(종목코드, "Q") {
+		종목코드 = 종목코드[1:]
+	}
+
 	if 종목, ok := 종목맵_전체[종목코드]; !ok {
 		return nil, lib.New에러("해당 종목코드가 존재하지 않습니다. '%v'", 종목코드)
 	} else {
