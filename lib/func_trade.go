@@ -34,7 +34,6 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package lib
 
 import (
-	"fmt"
 	"math"
 	"strconv"
 	"strings"
@@ -368,36 +367,12 @@ func F매수_주문가by퍼센트(현재가 int64, 퍼센트 float64) int64 {
 	}
 }
 
-func F포트폴리오_표시(포트폴리오 *S액티브_매매_포트폴리오, 초기_자본 float64) {
-	자본 := make([]float64, len(포트폴리오.M매매_기록))
-
-	for i, 매매 := range 포트폴리오.M매매_기록 {
-		자본[i] = 매매.G매도_후_평가액()
-
-		//lib.F체크포인트(i,
-		//	매매.G매수_일자(),
-		//	lib.F기간(매매.G매수_일자(), 매매.G매도_일자()),
-		//	int64(매매.G매수_금액()),
-		//	int64(매매.G수익()),
-		//	매매.G단일_거래_수익율(),
-		//	매매.G자본_대비_수익율(),
-		//	math.Round(매매.G매도_후_평가액()/초기_자본*1000)/1000)
-	}
-
-	수익 := 포트폴리오.M자본 + 포트폴리오.G진행_중_매매_평가액() - 초기_자본
-	수익율 := 수익 / 초기_자본 * 100
-
-	fmt.Printf("수익율 : %v%%, 수익 변동성 : %v\n",
-		math.Round(수익율*1000)/1000,
-		math.Round(F표준_편차(자본)*1000)/1000)
-}
-
 func F종목코드_보정(종목코드 string) string {
 	if len(종목코드) == 7 && strings.HasPrefix(종목코드, "A") {
 		return 종목코드[1:]
 	} else if len(종목코드) == 7 && strings.HasPrefix(종목코드, "Q") {
 		return 종목코드[1:]
 	}
-	
+
 	return 종목코드
 }

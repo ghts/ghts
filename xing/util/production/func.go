@@ -31,87 +31,55 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package x32
+package production
 
 import (
 	"github.com/ghts/ghts/lib"
-	"github.com/ghts/ghts/xing/base"
-	"testing"
+	xt "github.com/ghts/ghts/xing/base"
+	xing "github.com/ghts/ghts/xing/go"
+
+	"fmt"
 )
 
-func TestMain(m *testing.M) {
-	if lib.F환경변수("GOARCH") != "386" {
-		lib.New에러with출력("C32 모듈은 32비트 전용입니다.")
-		return
-	}
-
-	f테스트_준비()
-	defer f테스트_정리()
-
-	m.Run()
-}
-
-func f테스트_준비() {
-	defer lib.S예외처리{}.S실행()
-
-	lib.F테스트_모드_시작()
-
-	ch초기화 := make(chan lib.T신호)
-	go go테스트용_TR콜백_수신(ch초기화)
-	<-ch초기화
-
-	F초기화()
-	F서버_접속(xt.P서버_모의투자)
-}
-
-func f테스트_정리() {
-	lib.F테스트_모드_종료()
-	f종료_질의_송신()
-	F종료_대기()
-
-	// go테스트용_TR콜백_종료
-	lib.F패닉억제_호출(소켓REP_테스트용_TR콜백.Close)
+func F계좌별_금일_미체결_주문_일괄_취소(계좌번호 string) {
+	fmt.Printf("%v : 미체결 주문 일괄 취소\n", 계좌번호)
 
 	for {
-		if lib.F포트_닫힘_확인(lib.P주소_Xing_C함수_콜백) {
-			break
-		}
-	}
+		미체결_주문내역_모음, 에러 := xing.TrCSPAQ13700_현물계좌_주문체결내역(계좌번호, lib.F금일(), xt.CSPAQ13700_미체결)
 
-	<-Ch테스트용_TR콜백_종료
-}
-
-var 소켓REP_테스트용_TR콜백 lib.I소켓
-var Ch테스트용_TR콜백_종료 = make(chan lib.T신호, 1)
-
-func go테스트용_TR콜백_수신(ch초기화 chan lib.T신호) {
-	ch공통_종료 := lib.F공통_종료_채널()
-	defer func() {
-		select {
-		case <-ch공통_종료:
-			Ch테스트용_TR콜백_종료 <- lib.P신호_종료
-		default:
-		}
-	}()
-
-	소켓REP_테스트용_TR콜백 = lib.NewNano소켓REP_단순형(lib.P주소_Xing_C함수_콜백)
-	defer 소켓REP_테스트용_TR콜백.Close()
-
-	ch초기화 <- lib.P신호_초기화
-
-	for {
-		값, 에러 := 소켓REP_테스트용_TR콜백.G수신()
 		if 에러 != nil {
 			lib.F에러_출력(에러)
-			continue
+			break
+		} else if len(미체결_주문내역_모음) == 0 {
+			break // 취소할 미체결 주문이 없음.
 		}
 
-		select {
-		case <-ch공통_종료:
-			return
-		default:
+		for _, 미체결_주문내역 := range 미체결_주문내역_모음 {
+
+			질의값_취소주문 := lib.New질의값_취소_주문()
+			질의값_취소주문.M구분 = xt.TR주문
+			질의값_취소주문.M코드 = xt.TR현물_취소_주문_CSPAT00800
+			질의값_취소주문.M원주문번호 = 미체결_주문내역.M주문번호
+			질의값_취소주문.M계좌번호 = 계좌번호
+			질의값_취소주문.M종목코드 = 미체결_주문내역.M종목코드
+			질의값_취소주문.M주문수량 = 미체결_주문내역.M정정취소가능수량
+
+			종목_기본_정보, 에러 := xing.F종목by코드(미체결_주문내역.M종목코드)
+			lib.F확인(에러)
+
+			lib.F문자열_출력("[%v(%v)] %v주 %s 취소",
+				미체결_주문내역.M종목코드,
+				종목_기본_정보.G이름(),
+				미체결_주문내역.M정정취소가능수량,
+				미체결_주문내역.M매도_매수_구분)
+
+			_, 에러 = xing.TrCSPAT00800_현물_취소주문(질의값_취소주문)
+			if 에러 != nil {
+				lib.F에러_출력(에러)
+				continue
+			}
 		}
 
-		소켓REP_테스트용_TR콜백.S송신(값.G변환_형식(0), lib.P신호_OK)
+		lib.F대기(lib.P5초) // 취소 주문 실행 대기.
 	}
 }
