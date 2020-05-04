@@ -37,6 +37,7 @@ import (
 	"fmt"
 	"math"
 	"strconv"
+	"strings"
 )
 
 func F합계(값_모음 []float64) float64 {
@@ -389,4 +390,14 @@ func F포트폴리오_표시(포트폴리오 *S액티브_매매_포트폴리오,
 	fmt.Printf("수익율 : %v%%, 수익 변동성 : %v\n",
 		math.Round(수익율*1000)/1000,
 		math.Round(F표준_편차(자본)*1000)/1000)
+}
+
+func F종목코드_보정(종목코드 string) string {
+	if len(종목코드) == 7 && strings.HasPrefix(종목코드, "A") {
+		return 종목코드[1:]
+	} else if len(종목코드) == 7 && strings.HasPrefix(종목코드, "Q") {
+		return 종목코드[1:]
+	}
+	
+	return 종목코드
 }
