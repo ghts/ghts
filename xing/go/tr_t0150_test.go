@@ -61,7 +61,7 @@ func TestT0150_현물_당일_매매일지(t *testing.T) {
 		case lib.P매수:
 			lib.F테스트_같음(t, 값.M농특세, 0)
 		case lib.P매도:
-			if ETF종목_여부(값.M종목코드) {
+			if ETF_ETN_종목_여부(값.M종목코드) {
 				lib.F테스트_같음(t, 값.M거래세, 0)
 				lib.F테스트_같음(t, 값.M농특세, 0)
 			} else {

@@ -122,7 +122,7 @@ func TestT1102_현물_시세_조회(t *testing.T) {
 	lib.F테스트_같음(t, 값.M연중_최저가_일자.Year(), time.Now().Year())
 	lib.F테스트_참임(t, 값.M목표가 >= 0, 값.M목표가)
 
-	if ETF종목_여부(값.M종목코드) {
+	if ETF_ETN_종목_여부(값.M종목코드) {
 		lib.F테스트_같음(t, 값.M자본금_억, 0)
 		lib.F테스트_같음(t, 값.M액면가, 0)
 		lib.F테스트_같음(t, 값.M전분기_매출액_억, 0)

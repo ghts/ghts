@@ -40,6 +40,8 @@ import (
 )
 
 func F종목코드_모음_전체() []string {
+	lib.F조건부_패닉(len(종목모음_전체) == 0, "xing 초기화 안 됨.")
+
 	종목코드_모음 := make([]string, len(종목모음_전체), len(종목모음_전체))
 
 	for i, 종목 := range 종목모음_전체 {
@@ -50,6 +52,8 @@ func F종목코드_모음_전체() []string {
 }
 
 func F종목코드_모음_KOSPI() []string {
+	lib.F조건부_패닉(len(종목모음_전체) == 0, "xing 초기화 안 됨.")
+
 	종목코드_모음 := make([]string, len(종목모음_코스피), len(종목모음_코스피))
 
 	for i, 종목 := range 종목모음_코스피 {
@@ -60,6 +64,8 @@ func F종목코드_모음_KOSPI() []string {
 }
 
 func F종목코드_모음_KOSDAQ() []string {
+	lib.F조건부_패닉(len(종목모음_전체) == 0, "xing 초기화 안 됨.")
+
 	종목코드_모음 := make([]string, len(종목모음_코스닥), len(종목모음_코스닥))
 
 	for i, 종목 := range 종목모음_코스닥 {
@@ -70,6 +76,8 @@ func F종목코드_모음_KOSDAQ() []string {
 }
 
 func F종목코드_모음_ETF() []string {
+	lib.F조건부_패닉(len(종목모음_전체) == 0, "xing 초기화 안 됨.")
+
 	종목코드_모음 := make([]string, len(종목모음_ETF), len(종목모음_ETF))
 
 	for i, 종목 := range 종목모음_ETF {
@@ -80,6 +88,8 @@ func F종목코드_모음_ETF() []string {
 }
 
 func F종목코드_모음_ETN() []string {
+	lib.F조건부_패닉(len(종목모음_전체) == 0, "xing 초기화 안 됨.")
+
 	종목코드_모음 := make([]string, len(종목모음_ETN), len(종목모음_ETN))
 
 	for i, 종목 := range 종목모음_ETN {
@@ -90,6 +100,8 @@ func F종목코드_모음_ETN() []string {
 }
 
 func F종목코드_모음_ETF_ETN() []string {
+	lib.F조건부_패닉(len(종목모음_전체) == 0, "xing 초기화 안 됨.")
+
 	종목코드_모음 := make([]string, len(종목모음_ETF_ETN), len(종목모음_ETF_ETN))
 
 	for i, 종목 := range 종목모음_ETF_ETN {
@@ -318,20 +330,10 @@ func f임의_종목_추출(종목_모음 []*lib.S종목) *lib.S종목 {
 	return 종목_모음[lib.F임의_범위_이내_정수값(0, len(종목_모음))].G복제본()
 }
 
-func ETF종목_여부(종목_코드 string) bool {
+func ETF_ETN_종목_여부(종목_코드 string) bool {
 	종목, 에러 := F종목by코드(종목_코드)
 
-	return 에러 == nil && 종목.G시장구분() == lib.P시장구분_ETF
-}
-
-func ETN종목_여부(종목_코드 string) bool {
-	종목, 에러 := F종목by코드(종목_코드)
-
-	if 에러 != nil && 종목 != nil && 종목.G시장구분() == lib.P시장구분_ETN {
-		return true
-	}
-
-	return false
+	return 에러 == nil && (종목.G시장구분() == lib.P시장구분_ETF || 종목.G시장구분() == lib.P시장구분_ETN)
 }
 
 func F최소_호가단위by종목코드(종목코드 string) (값 int64, 에러 error) {
@@ -350,6 +352,8 @@ func F최소_호가단위by종목(종목 *lib.S종목) (값 int64, 에러 error)
 
 func F최소_호가단위by시장구분_기준가(시장구분 lib.T시장구분, 기준가 int64) (값 int64, 에러 error) {
 	switch 시장구분 {
+	case lib.P시장구분_ETF, lib.P시장구분_ETN:
+		return 5, nil
 	case lib.P시장구분_코스피:
 		switch {
 		case 기준가 < 1000:
@@ -401,8 +405,6 @@ func F최소_호가단위by시장구분_기준가(시장구분 lib.T시장구분
 		default:
 			panic(lib.New에러with출력("예상하지 못한 경우. %v", 기준가))
 		}
-	case lib.P시장구분_ETF:
-		return 5, nil
 	}
 
 	return 0, lib.New에러with출력("예상하지 못한 시장구분. %v", 시장구분)

@@ -57,9 +57,9 @@ func TestF질의값_종목코드_검사(t *testing.T) {
 	lib.F테스트_에러없음(t, F질의값_종목코드_검사(질의값2))
 }
 
-func TestETF종목_여부(t *testing.T) {
+func TestETF_ETN_종목_여부(t *testing.T) {
 	t.Parallel()
 
-	lib.F테스트_거짓임(t, ETF종목_여부("000020"))
-	lib.F테스트_참임(t, ETF종목_여부("069500"))
+	lib.F테스트_거짓임(t, ETF_ETN_종목_여부("000020"))
+	lib.F테스트_참임(t, ETF_ETN_종목_여부("069500"))
 }
