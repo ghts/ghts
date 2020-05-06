@@ -42,7 +42,9 @@ import (
 	"time"
 )
 
-func F일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string) (에러 error) {
+func F일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string, ch완료 chan lib.T신호) (에러 error) {
+	defer func() { ch완료 <- lib.P신호_종료 }()
+
 	var 시작일, 종료일, 마지막_저장일 time.Time
 	var 종목별_일일_가격정보_모음 *lib.S종목별_일일_가격정보_모음
 
