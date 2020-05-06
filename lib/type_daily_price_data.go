@@ -104,6 +104,16 @@ func (s S일일_가격정보) G일자2() time.Time {
 	return F2포맷된_일자_단순형("20060102", F2문자열(s.M일자))
 }
 
+func New종목별_일일_가격정보_모음_DB읽기(db *sql.DB, 종목코드 string) (s *S종목별_일일_가격정보_모음, 에러 error) {
+	s = new(S종목별_일일_가격정보_모음)
+
+	if 에러 = s.DB읽기(db, 종목코드); 에러 != nil {
+		return nil, 에러
+	}
+
+	return s, nil
+}
+
 func New종목별_일일_가격정보_모음(값_모음 []*S일일_가격정보) (s *S종목별_일일_가격정보_모음, 에러 error) {
 	if len(값_모음) == 0 {
 		return nil, New에러("비어 있는 입력값.")
