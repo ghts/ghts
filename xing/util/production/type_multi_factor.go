@@ -43,45 +43,44 @@ import (
 type S종목별_멀티_팩터_데이터 struct {
 	*S종목별_공통_데이터
 	*lib.S내재가치_정보
-	M시가총액 float64
+	M시가총액    float64
 	M시가총액_순위 int
-	EV float64
+	EV       float64
 	// -- 가치 팩터 --
-	EV_EBITDA float64
+	EV_EBITDA   float64
 	EV_EBITDA순위 int
-	EV_Sales float64
-	EV_Sales순위 int
-	EV_FCF float64
-	EV_FCF순위 int
-	PBR float64
-	PBR순위 int
-	PER float64
-	PER순위 int
-	PSR float64
-	PSR순위 int
-	PCR float64
-	PCR순위 int
-	DPR float64 // DPS / Price Rate : 배당수익율과 같은 효과. 높을 수록 좋다.
-	DPR순위 int
+	EV_Sales    float64
+	EV_Sales순위  int
+	EV_FCF      float64
+	EV_FCF순위    int
+	PBR         float64
+	PBR순위       int
+	PER         float64
+	PER순위       int
+	PSR         float64
+	PSR순위       int
+	PCR         float64
+	PCR순위       int
+	DPR         float64 // DPS / Price Rate : 배당수익율과 같은 효과. 높을 수록 좋다.
+	DPR순위       int
 	// --- 추세 팩터 --
-	M추세점수 float64
+	M추세점수    float64
 	M추세점수_순위 int
 	// --- 퀄리티 팩터 --
-	GPA float64	// 매출총이익 / 자산
+	GPA   float64 // 매출총이익 / 자산
 	GPA순위 int
 	//ROIC float64	// '*S내재가치_정보'에 이미 포함되어 있음.
 	ROIC순위 int
 	//ROE float64	// '*S내재가치_정보'에 이미 포함되어 있음. // 하위 10% 그룹은 걸러야 한다.
 	ROE순위 int
 	//ROA float64	// '*S내재가치_정보'에 이미 포함되어 있음. // 하위 10% 그룹은 걸러야 한다.
-	ROA순위 int
-	APR float64 // = Accrual / Price  = (당기순이익 - 영업현금흐름) / 현재가 : 상위 10% 그룹은 걸러야 한다.
-	APR순위 int
-	AAR float64 // = Accrual / Asseet = (당기순이익 - 영업현금흐름) / 총자산 : 상위 10% 그룹은 걸러야 한다.
-	AAR순위 int
-	CDR float64 // Cash flow / Debt = 현금 흐름 / 부채 : 하위 10% 그룹은 걸러야 한다.
-	CDR순위 int
-	M부채증가율 float64 // 부채증가율 : 상위 10% 그룹은 걸러내어야 한다.
+	ROA순위     int
+	APR       float64 // = Accrual / Price  = (당기순이익 - 영업현금흐름) / 현재가 : 상위 10% 그룹은 걸러야 한다.
+	APR순위     int
+	AAR       float64 // = Accrual / Asseet = (당기순이익 - 영업현금흐름) / 총자산 : 상위 10% 그룹은 걸러야 한다.
+	AAR순위     int
+	CDR       float64 // Cash flow / Debt = 현금 흐름 / 부채 : 하위 10% 그룹은 걸러야 한다.
+	CDR순위     int
+	M부채증가율    float64 // 부채증가율 : 상위 10% 그룹은 걸러내어야 한다.
 	M부채증가율_순위 int
 }
-

@@ -246,8 +246,8 @@ func (s *S종목별_일일_가격정보_모음) DB저장(db *sql.DB) (에러 err
 }
 
 func (s *S종목별_일일_가격정보_모음) S정렬_및_인덱스_설정() {
-	sort.Sort(s)	// 정렬
-	s.인덱스 = make(map[uint32]int)	// 인덱스 설정
+	sort.Sort(s)                 // 정렬
+	s.인덱스 = make(map[uint32]int) // 인덱스 설정
 
 	for i, 값 := range s.M저장소 {
 		s.인덱스[값.M일자] = i
