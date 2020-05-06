@@ -600,6 +600,8 @@ func F바이트_변환값_해석_Raw(바이트_변환값 *lib.S바이트_변환)
 		return NewCFOBQ105000OutBlock(b)
 	case P자료형_CFOFQ02400OutBlock:
 		return NewCFOFQ02400OutBlock(b)
+	case P자료형_CSPAQ12200OutBlock:
+		return NewCSPAQ12200_현물계좌_총평가_응답(b)
 	case P자료형_CSPAQ12300OutBlock:
 		return NewCSPAQ12300_현물계좌_잔고내역_응답(b)
 	case P자료형_CSPAQ13700OutBlock:

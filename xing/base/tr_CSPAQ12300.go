@@ -44,7 +44,6 @@ import (
 
 type CSPAQ12300_현물계좌_잔고내역_질의값 struct {
 	*lib.S질의값_기본형
-	M레코드_수량     int
 	M계좌번호       string
 	M잔고생성_구분    string
 	M수수료적용_구분   string
@@ -190,7 +189,7 @@ type CSPAQ12300_현물계좌_잔고내역_응답_반복값 struct {
 
 func NewCSPAQ12300InBlock(질의값 *CSPAQ12300_현물계좌_잔고내역_질의값, 비밀번호 string) (g *CSPAQ12300InBlock1) {
 	g = new(CSPAQ12300InBlock1)
-	lib.F바이트_복사_정수(g.RecCnt[:], 질의값.M레코드_수량)
+	lib.F바이트_복사_정수(g.RecCnt[:], 1)
 	lib.F바이트_복사_문자열(g.AcntNo[:], 질의값.M계좌번호)
 	lib.F바이트_복사_문자열(g.Pwd[:], 비밀번호)
 	lib.F바이트_복사_문자열(g.BalCreTp[:], 질의값.M잔고생성_구분)

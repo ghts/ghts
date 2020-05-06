@@ -119,6 +119,15 @@ func f자료형_문자열_해석(g *xt.TR_DATA) (자료형_문자열 string, 에
 		}
 
 		return xt.P자료형_CFOFQ02400OutBlock, nil
+	case xt.TR현물계좌_총평가_CSPAQ12200:
+		switch 길이 {
+		case xt.SizeCSPAQ12200OutBlock1:
+			return xt.P자료형_CSPAQ12200OutBlock1, nil
+		case xt.SizeCSPAQ12200OutBlock2:
+			return xt.P자료형_CSPAQ12200OutBlock2, nil
+		case xt.SizeCSPAQ12200OutBlock1 + xt.SizeCSPAQ12200OutBlock2:
+			return xt.P자료형_CSPAQ12200OutBlock, nil
+		}
 	case xt.TR현물계좌_잔고내역_조회_CSPAQ12300:
 		const 헤더_길이 = xt.SizeCSPAQ12300OutBlock1 + xt.SizeCSPAQ12300OutBlock2 + 5
 		// Non-block 모드는 Occurs데이터 수량을 나타내는 5바이트 추가됨.
@@ -331,7 +340,10 @@ func f민감정보_삭제(raw값 []byte, 구분_문자열 string) []byte {
 		xt.P자료형_CFOAT00200OutBlock,
 		xt.P자료형_CFOAT00300OutBlock:
 		f민감정보_삭제_도우미(raw값, 27, 8)
-	case xt.P자료형_CSPAQ22200OutBlock1, xt.P자료형_CSPAQ22200OutBlock:
+	case xt.P자료형_CSPAQ12200OutBlock1,
+		xt.P자료형_CSPAQ12200OutBlock,
+		xt.P자료형_CSPAQ22200OutBlock1,
+		xt.P자료형_CSPAQ22200OutBlock:
 		f민감정보_삭제_도우미(raw값, 28, 8)
 	case xt.P자료형_CSPAT00700OutBlock,
 		xt.P자료형_CSPAT00800OutBlock:

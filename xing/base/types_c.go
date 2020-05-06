@@ -1153,6 +1153,85 @@ type CFOFQ02400OutBlock4 struct {
 	EvalErnrat   [12]byte
 }
 
+type CSPAQ12200InBlock1 struct {
+	RecCnt    [5]byte
+	MgmtBrnNo [3]byte
+	AcntNo    [20]byte
+	Pwd       [8]byte
+	BalCreTp  [1]byte
+}
+type CSPAQ12200OutBlock1 struct {
+	RecCnt    [5]byte
+	MgmtBrnNo [3]byte
+	AcntNo    [20]byte
+	Pwd       [8]byte
+	BalCreTp  [1]byte
+}
+type CSPAQ12200OutBlock2 struct {
+	RecCnt                 [5]byte
+	BrnNm                  [40]byte
+	AcntNm                 [40]byte
+	MnyOrdAbleAmt          [16]byte
+	MnyoutAbleAmt          [16]byte
+	SeOrdAbleAmt           [16]byte
+	KdqOrdAbleAmt          [16]byte
+	BalEvalAmt             [16]byte
+	RcvblAmt               [16]byte
+	DpsastTotamt           [16]byte
+	PnlRat                 [18]byte
+	InvstOrgAmt            [20]byte
+	InvstPlAmt             [16]byte
+	CrdtPldgOrdAmt         [16]byte
+	Dps                    [16]byte
+	SubstAmt               [16]byte
+	D1Dps                  [16]byte
+	D2Dps                  [16]byte
+	MnyrclAmt              [16]byte
+	MgnMny                 [16]byte
+	MgnSubst               [16]byte
+	ChckAmt                [16]byte
+	SubstOrdAbleAmt        [16]byte
+	MgnRat100pctOrdAbleAmt [16]byte
+	MgnRat35ordAbleAmt     [16]byte
+	MgnRat50ordAbleAmt     [16]byte
+	PrdaySellAdjstAmt      [16]byte
+	PrdayBuyAdjstAmt       [16]byte
+	CrdaySellAdjstAmt      [16]byte
+	CrdayBuyAdjstAmt       [16]byte
+	D1ovdRepayRqrdAmt      [16]byte
+	D2ovdRepayRqrdAmt      [16]byte
+	D1PrsmptWthdwAbleAmt   [16]byte
+	D2PrsmptWthdwAbleAmt   [16]byte
+	DpspdgLoanAmt          [16]byte
+	Imreq                  [16]byte
+	MloanAmt               [16]byte
+	ChgAfPldgRat           [9]byte
+	OrgPldgAmt             [16]byte
+	SubPldgAmt             [16]byte
+	RqrdPldgAmt            [16]byte
+	OrgPdlckAmt            [16]byte
+	PdlckAmt               [16]byte
+	AddPldgMny             [16]byte
+	D1OrdAbleAmt           [16]byte
+	CrdtIntdltAmt          [16]byte
+	EtclndAmt              [16]byte
+	NtdayPrsmptCvrgAmt     [16]byte
+	OrgPldgSumAmt          [16]byte
+	CrdtOrdAbleAmt         [16]byte
+	SubPldgSumAmt          [16]byte
+	CrdtPldgAmtMny         [16]byte
+	CrdtPldgSubstAmt       [16]byte
+	AddCrdtPldgMny         [16]byte
+	CrdtPldgRuseAmt        [16]byte
+	AddCrdtPldgSubst       [16]byte
+	CslLoanAmtdt1          [16]byte
+	DpslRestrcAmt          [16]byte
+}
+type CSPAQ12200OutBlock struct {
+	OutBlock1 CSPAQ12200OutBlock1
+	OutBlock2 CSPAQ12200OutBlock2
+}
+
 type CSPAQ12300InBlock1 struct {
 	RecCnt         [5]byte
 	AcntNo         [20]byte

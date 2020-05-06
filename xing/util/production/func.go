@@ -86,9 +86,11 @@ func F계좌별_금일_미체결_주문_일괄_취소(계좌번호 string) {
 }
 
 func F레버리지(종목코드 string) bool {
-	if 종목, 에러 := xing.F종목by코드(종목코드); 에러 != nil {
+	if !xing.ETF_ETN_종목_여부(종목코드) {
+		return false
+	} else if 종목, 에러 := xing.F종목by코드(종목코드); 에러 != nil {
 		return false
 	} else {
-		return strings.Contains(종목.G이름(), "레버리지")
+		return strings.Contains(종목.G이름(), "레버")
 	}
 }

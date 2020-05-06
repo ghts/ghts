@@ -373,6 +373,11 @@ func F조회_및_주문_질의_처리(질의 *lib.S채널_질의_API) { // 질�
 
 		c데이터 = unsafe.Pointer(xt.NewCFOFQ02400InBlock1(질의값_CFOFQ02400, 계좌_비밀번호))
 		길이 = xt.SizeCFOFQ02400InBlock1
+	case xt.TR현물계좌_총평가_CSPAQ12200:
+		계좌번호 := 질의값.(*lib.S질의값_문자열).M문자열
+
+		c데이터 = unsafe.Pointer(xt.NewCSPAQ12200InBlock(계좌번호, 계좌_비밀번호))
+		길이 = xt.SizeCSPAQ12200InBlock1
 	case xt.TR현물계좌_잔고내역_조회_CSPAQ12300:
 		질의값_CSPAQ12300 := 질의값.(*xt.CSPAQ12300_현물계좌_잔고내역_질의값)
 		연속_조회_여부 = 질의값_CSPAQ12300.M연속조회_여부

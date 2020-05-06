@@ -81,6 +81,10 @@ const (
 	SizeCFOFQ02400OutBlock2 = int(unsafe.Sizeof(CFOFQ02400OutBlock2{}))
 	SizeCFOFQ02400OutBlock3 = int(unsafe.Sizeof(CFOFQ02400OutBlock3{}))
 	SizeCFOFQ02400OutBlock4 = int(unsafe.Sizeof(CFOFQ02400OutBlock4{}))
+	SizeCSPAQ12200InBlock1  = int(unsafe.Sizeof(CSPAQ12200InBlock1{}))
+	SizeCSPAQ12200OutBlock1 = int(unsafe.Sizeof(CSPAQ12200OutBlock1{}))
+	SizeCSPAQ12200OutBlock2 = int(unsafe.Sizeof(CSPAQ12200OutBlock2{}))
+	SizeCSPAQ12200OutBlock  = int(unsafe.Sizeof(CSPAQ12200OutBlock{}))
 	SizeCSPAQ12300InBlock1  = int(unsafe.Sizeof(CSPAQ12300InBlock1{}))
 	SizeCSPAQ12300OutBlock1 = int(unsafe.Sizeof(CSPAQ12300OutBlock1{}))
 	SizeCSPAQ12300OutBlock2 = int(unsafe.Sizeof(CSPAQ12300OutBlock2{}))
@@ -175,6 +179,9 @@ const (
 	P자료형_CFOBQ10500OutBlock             = "CFOBQ10500OutBlock"
 	P자료형_CFOFQ02400_선물옵션_미결제약정_질의값      = "CFOFQ02400_선물옵션_미결제약정_질의값"
 	P자료형_CFOFQ02400OutBlock             = "CFOFQ02400OutBlock"
+	P자료형_CSPAQ12200OutBlock             = "CSPAQ12200OutBlock"
+	P자료형_CSPAQ12200OutBlock1            = "CSPAQ12200OutBlock1"
+	P자료형_CSPAQ12200OutBlock2            = "CSPAQ12200OutBlock2"
 	P자료형_CSPAQ12300_현물계좌_잔고내역_질의값       = "CSPAQ12300_현물계좌_잔고내역_질의값"
 	P자료형_CSPAQ12300OutBlock             = "CSPAQ12300OutBlock"
 	P자료형_CSPAQ13700_현물계좌_주문체결내역_질의값     = "CSPAQ13700_현물계좌_주문체결내역_질의값"
@@ -294,6 +301,7 @@ const (
 	TR선물옵션_예탁금_증거금_조회_CFOBQ10500 = "CFOBQ10500"
 	TR선물옵션_미결제약정_현황_CFOFQ02400   = "CFOFQ02400"
 
+	TR현물계좌_총평가_CSPAQ12200        = "CSPAQ12200"
 	TR현물계좌_잔고내역_조회_CSPAQ12300    = "CSPAQ12300"
 	TR현물계좌_주문체결내역_조회_CSPAQ13700  = "CSPAQ13700"
 	TR현물계좌_예수금_주문가능금액_CSPAQ22200 = "CSPAQ22200"
