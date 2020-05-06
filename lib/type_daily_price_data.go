@@ -34,6 +34,9 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package lib
 
 import (
+	"bytes"
+	"context"
+	"database/sql"
 	"math"
 	"sort"
 	"strconv"
@@ -142,12 +145,109 @@ type S종목별_일일_가격정보_모음 struct {
 	인덱스  map[uint32]int
 }
 
-func (s *S종목별_일일_가격정보_모음) S정렬_및_인덱스_설정() {
-	// 정렬
-	sort.Sort(s)
+func (s *S종목별_일일_가격정보_모음) DB읽기(db *sql.DB, 종목코드 string) (에러 error) {
+	종목코드 = F종목코드_보정(종목코드)
+	F확인(F일일_가격정보_테이블_생성(db))
 
-	// 인덱스 설정
-	s.인덱스 = make(map[uint32]int)
+	SQL := new(bytes.Buffer)
+	SQL.WriteString("SELECT")
+	SQL.WriteString(" code,")
+	SQL.WriteString(" date,")
+	SQL.WriteString(" open,")
+	SQL.WriteString(" high,")
+	SQL.WriteString(" low,")
+	SQL.WriteString(" close,")
+	SQL.WriteString(" volume ")
+	SQL.WriteString("FROM daily_price ")
+	SQL.WriteString("WHERE code=? ")
+	SQL.WriteString("ORDER BY date")
+
+	stmt, 에러 := db.Prepare(SQL.String())
+	F확인(에러)
+	defer stmt.Close()
+
+	rows, 에러 := stmt.Query(종목코드)
+	F확인(에러)
+	defer rows.Close()
+
+	s.M저장소 = make([]*S일일_가격정보, 0)
+
+	var 일자 time.Time
+
+	for rows.Next() {
+		일일_가격정보 := new(S일일_가격정보)
+
+		F확인(rows.Scan(
+			&일일_가격정보.M종목코드,
+			&일자,
+			&일일_가격정보.M시가,
+			&일일_가격정보.M고가,
+			&일일_가격정보.M저가,
+			&일일_가격정보.M종가,
+			&일일_가격정보.M거래량))
+
+		일일_가격정보.M일자 = F2정수_일자(일자)
+
+		s.M저장소 = append(s.M저장소, 일일_가격정보)
+	}
+
+	s.S정렬_및_인덱스_설정()
+
+	return nil
+}
+
+func (s *S종목별_일일_가격정보_모음) DB저장(db *sql.DB) (에러 error) {
+	var tx *sql.Tx
+	defer S예외처리{M에러: &에러, M함수: func() {
+		if tx != nil {
+			tx.Rollback()
+		}
+	}}.S실행()
+
+	F확인(F일일_가격정보_테이블_생성(db))
+
+	SQL := new(bytes.Buffer)
+	SQL.WriteString("INSERT IGNORE INTO daily_price (")
+	SQL.WriteString("code,")
+	SQL.WriteString("date,")
+	SQL.WriteString("open,")
+	SQL.WriteString("high,")
+	SQL.WriteString("low,")
+	SQL.WriteString("close,")
+	SQL.WriteString("volume")
+	SQL.WriteString(") VALUES (?,?,?,?,?,?,?)")
+
+	txOpts := new(sql.TxOptions)
+	txOpts.Isolation = sql.LevelDefault
+	txOpts.ReadOnly = false
+
+	tx, 에러 = db.BeginTx(context.TODO(), txOpts)
+	F확인(에러)
+
+	stmt, 에러 := tx.Prepare(SQL.String())
+	F확인(에러)
+	defer stmt.Close()
+
+	for _, 값 := range s.M저장소 {
+		_, 에러 = stmt.Exec(
+			값.M종목코드,
+			값.M일자,
+			값.M시가,
+			값.M고가,
+			값.M저가,
+			값.M종가,
+			값.M거래량)
+		F확인(에러)
+	}
+
+	tx.Commit()
+
+	return nil
+}
+
+func (s *S종목별_일일_가격정보_모음) S정렬_및_인덱스_설정() {
+	sort.Sort(s)	// 정렬
+	s.인덱스 = make(map[uint32]int)	// 인덱스 설정
 
 	for i, 값 := range s.M저장소 {
 		s.인덱스[값.M일자] = i
@@ -629,4 +729,22 @@ func (s S종목별_일일_가격정보_모음) G월수익율_변동성_모음() 
 
 func (s S종목별_일일_가격정보_모음) G월수익율_변동성_평균_모음(윈도우_크기 int) []float64 {
 	return F지수_이동_평균(s.G월수익율_변동성_모음(), 윈도우_크기)
+}
+
+func F일일_가격정보_테이블_생성(db *sql.DB) error {
+	SQL := new(bytes.Buffer)
+	SQL.WriteString("CREATE TABLE IF NOT EXISTS daily_price (")
+	SQL.WriteString("code CHAR(8) NOT NULL,")
+	SQL.WriteString("date DATE NOT NULL,")
+	SQL.WriteString("open DECIMAL(20,3) NOT NULL,")
+	SQL.WriteString("high DECIMAL(20,3) NOT NULL,")
+	SQL.WriteString("low DECIMAL(20,3) NOT NULL,")
+	SQL.WriteString("close DECIMAL(20,3) NOT NULL,")
+	SQL.WriteString("volume BIGINT NOT NULL,")
+	SQL.WriteString("CONSTRAINT PRIMARY KEY (code,date)")
+	SQL.WriteString(")")
+
+	_, 에러 := db.Exec(SQL.String())
+
+	return 에러
 }

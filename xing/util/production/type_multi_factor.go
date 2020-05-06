@@ -34,52 +34,54 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package pd
 
 import (
-	"fmt"
 	"github.com/ghts/ghts/lib"
-	xt "github.com/ghts/ghts/xing/base"
-	xing "github.com/ghts/ghts/xing/go"
 )
 
-func F계좌별_금일_미체결_주문_일괄_취소(계좌번호 string) {
-	fmt.Printf("%v : 미체결 주문 일괄 취소\n", 계좌번호)
-
-	for {
-		미체결_주문내역_모음, 에러 := xing.TrCSPAQ13700_현물계좌_주문체결내역(계좌번호, lib.F금일(), xt.CSPAQ13700_미체결)
-
-		if 에러 != nil {
-			lib.F에러_출력(에러)
-			break
-		} else if len(미체결_주문내역_모음) == 0 {
-			break // 취소할 미체결 주문이 없음.
-		}
-
-		for _, 미체결_주문내역 := range 미체결_주문내역_모음 {
-
-			질의값_취소주문 := lib.New질의값_취소_주문()
-			질의값_취소주문.M구분 = xt.TR주문
-			질의값_취소주문.M코드 = xt.TR현물_취소_주문_CSPAT00800
-			질의값_취소주문.M원주문번호 = 미체결_주문내역.M주문번호
-			질의값_취소주문.M계좌번호 = 계좌번호
-			질의값_취소주문.M종목코드 = 미체결_주문내역.M종목코드
-			질의값_취소주문.M주문수량 = 미체결_주문내역.M정정취소가능수량
-
-			종목_기본_정보, 에러 := xing.F종목by코드(미체결_주문내역.M종목코드)
-			lib.F확인(에러)
-
-			lib.F문자열_출력("[%v(%v)] %v주 %s 취소",
-				미체결_주문내역.M종목코드,
-				종목_기본_정보.G이름(),
-				미체결_주문내역.M정정취소가능수량,
-				미체결_주문내역.M매도_매수_구분)
-
-			_, 에러 = xing.TrCSPAT00800_현물_취소주문(질의값_취소주문)
-			if 에러 != nil {
-				lib.F에러_출력(에러)
-				continue
-			}
-		}
-
-		lib.F대기(lib.P5초) // 취소 주문 실행 대기.
-	}
+// 각 항목의 활용법은 다음 서적 참조할 것.
+// '할 수 있다! 퀀트투자'(강환국 저).
+// 'What works on Wall Street'(James P, O'Shaughnessy 저).
+type S종목별_멀티_팩터_데이터 struct {
+	*S종목별_공통_데이터
+	*lib.S내재가치_정보
+	M시가총액 float64
+	M시가총액_순위 int
+	EV float64
+	// -- 가치 팩터 --
+	EV_EBITDA float64
+	EV_EBITDA순위 int
+	EV_Sales float64
+	EV_Sales순위 int
+	EV_FCF float64
+	EV_FCF순위 int
+	PBR float64
+	PBR순위 int
+	PER float64
+	PER순위 int
+	PSR float64
+	PSR순위 int
+	PCR float64
+	PCR순위 int
+	DPR float64 // DPS / Price Rate : 배당수익율과 같은 효과. 높을 수록 좋다.
+	DPR순위 int
+	// --- 추세 팩터 --
+	M추세점수 float64
+	M추세점수_순위 int
+	// --- 퀄리티 팩터 --
+	GPA float64	// 매출총이익 / 자산
+	GPA순위 int
+	//ROIC float64	// '*S내재가치_정보'에 이미 포함되어 있음.
+	ROIC순위 int
+	//ROE float64	// '*S내재가치_정보'에 이미 포함되어 있음. // 하위 10% 그룹은 걸러야 한다.
+	ROE순위 int
+	//ROA float64	// '*S내재가치_정보'에 이미 포함되어 있음. // 하위 10% 그룹은 걸러야 한다.
+	ROA순위 int
+	APR float64 // = Accrual / Price  = (당기순이익 - 영업현금흐름) / 현재가 : 상위 10% 그룹은 걸러야 한다.
+	APR순위 int
+	AAR float64 // = Accrual / Asseet = (당기순이익 - 영업현금흐름) / 총자산 : 상위 10% 그룹은 걸러야 한다.
+	AAR순위 int
+	CDR float64 // Cash flow / Debt = 현금 흐름 / 부채 : 하위 10% 그룹은 걸러야 한다.
+	CDR순위 int
+	M부채증가율 float64 // 부채증가율 : 상위 10% 그룹은 걸러내어야 한다.
+	M부채증가율_순위 int
 }
 

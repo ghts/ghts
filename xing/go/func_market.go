@@ -367,6 +367,16 @@ func ETF_ETN_종목_여부(종목_코드 string) bool {
 	}
 }
 
+func F레버리지_종목_여부(종목코드 string) bool {
+	if !ETF_ETN_종목_여부(종목코드) {
+		return false
+	} else if 종목, 에러 := F종목by코드(종목코드); 에러 != nil {
+		return false
+	} else {
+		return strings.Contains(종목.G이름(), "레버")
+	}
+}
+
 func F최소_호가단위by종목코드(종목코드 string) (값 int64, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 값 = 0 }}.S실행()
 
