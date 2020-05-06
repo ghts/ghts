@@ -361,7 +361,7 @@ func ETF_ETN_종목_여부(종목_코드 string) bool {
 		strings.HasPrefix(종목.G이름(), "대신 "),
 		strings.HasPrefix(종목.G이름(), "신한 "),
 		strings.HasPrefix(종목.G이름(), "미래에셋 "):
-			return true
+		return true
 	default:
 		return false
 	}
