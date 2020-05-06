@@ -44,6 +44,7 @@ func TestF샘플_종목_모음_전체(t *testing.T) {
 	for _, 종목 := range lib.F샘플_종목_모음_전체() {
 		if 에러 := F종목코드_검사(종목.G코드()); 에러 != nil {
 			lib.F체크포인트(종목.G코드())
+			t.FailNow()
 		}
 	}
 }
