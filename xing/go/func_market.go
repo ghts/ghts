@@ -36,6 +36,7 @@ package xg
 import (
 	"github.com/ghts/ghts/lib"
 	xt "github.com/ghts/ghts/xing/base"
+	"strings"
 	"time"
 )
 
@@ -333,7 +334,37 @@ func f임의_종목_추출(종목_모음 []*lib.S종목) *lib.S종목 {
 func ETF_ETN_종목_여부(종목_코드 string) bool {
 	종목, 에러 := F종목by코드(종목_코드)
 
-	return 에러 == nil && (종목.G시장구분() == lib.P시장구분_ETF || 종목.G시장구분() == lib.P시장구분_ETN)
+	switch {
+	case 에러 != nil:
+		return false
+	case 종목.G시장구분() == lib.P시장구분_ETF,
+		종목.G시장구분() == lib.P시장구분_ETN,
+		strings.Contains(종목.G이름(), "ETN"),
+		strings.HasPrefix(종목.G이름(), "KODEX "),
+		strings.HasPrefix(종목.G이름(), "TIGER "),
+		strings.HasPrefix(종목.G이름(), "KOSEF "),
+		strings.HasPrefix(종목.G이름(), "KINDEX "),
+		strings.HasPrefix(종목.G이름(), "KBSTAR "),
+		strings.HasPrefix(종목.G이름(), "HANARO "),
+		strings.HasPrefix(종목.G이름(), "ARIRANG "),
+		strings.HasPrefix(종목.G이름(), "SMART "),
+		strings.HasPrefix(종목.G이름(), "파워 "),
+		strings.HasPrefix(종목.G이름(), "TREX "),
+		strings.HasPrefix(종목.G이름(), "KTOP "),
+		strings.HasPrefix(종목.G이름(), "마이티 "),
+		strings.HasPrefix(종목.G이름(), "FOCUS "),
+		strings.HasPrefix(종목.G이름(), "흥국 "),
+		strings.HasPrefix(종목.G이름(), "QV "),
+		strings.HasPrefix(종목.G이름(), "삼성 "),
+		strings.HasPrefix(종목.G이름(), "TRUE "),
+		strings.HasPrefix(종목.G이름(), "KB "),
+		strings.HasPrefix(종목.G이름(), "대신 "),
+		strings.HasPrefix(종목.G이름(), "신한 "),
+		strings.HasPrefix(종목.G이름(), "미래에셋 "):
+			return true
+	default:
+		return false
+	}
 }
 
 func F최소_호가단위by종목코드(종목코드 string) (값 int64, 에러 error) {
