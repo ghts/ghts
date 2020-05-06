@@ -8,6 +8,14 @@ import (
 	"time"
 )
 
+func New내재가치_정보_모음_DB읽기(db *sql.DB) *S내재가치_정보_모음 {
+	s := new(S내재가치_정보_모음)
+	s.M저장소 = make(map[string]*S내재가치_정보)
+	s.DB읽기(db)
+
+	return s
+}
+
 func New내재가치_정보_모음() *S내재가치_정보_모음 {
 	s := new(S내재가치_정보_모음)
 	s.M저장소 = make(map[string]*S내재가치_정보)
@@ -21,6 +29,20 @@ type S내재가치_정보_모음 struct {
 
 func (s *S내재가치_정보_모음) G종목별_최신_정보(종목코드 string) *S내재가치_정보 {
 	for 연도 := F지금().Year(); 연도 > 2015; 연도-- {
+		for 월 := 12; 월 > 0; 월++ {
+			키 := 종목코드 + F2문자열(연도*100+월)
+			if 값, 존재함 := s.M저장소[키]; 존재함 {
+				return 값
+			}
+		}
+	}
+
+	return nil
+}
+
+func (s *S내재가치_정보_모음) G종목별_차최신_정보(종목코드 string) *S내재가치_정보 {
+	차최신_연도 := s.G종목별_최신_정보(종목코드).S내재가치_식별정보.G일자2().Year() - 1
+	for 연도 := 차최신_연도; 연도 > 2015; 연도-- {
 		for 월 := 12; 월 > 0; 월++ {
 			키 := 종목코드 + F2문자열(연도*100+월)
 			if 값, 존재함 := s.M저장소[키]; 존재함 {
@@ -137,19 +159,19 @@ func (s S내재가치_식별정보) G일자2() time.Time {
 }
 
 type S재무제표_정보_내용 struct {
-	M매출액      int64
-	M매출총이익    int64
-	M영업이익     int64
-	M세전계속사업이익 int64
-	M당기순이익    int64
-	M자산       int64
-	M현금및현금성자산 int64 // EV계산에 필요함.
-	M부채       int64
-	M자본       int64
-	M영업_현금흐름  int64
-	M투자_현금흐름  int64
-	M재무_현금흐름  int64
-	M현금_증가    int64
+	M매출액      float64
+	M매출총이익    float64
+	M영업이익     float64
+	M세전계속사업이익 float64
+	M당기순이익    float64
+	M자산       float64
+	M현금및현금성자산 float64 // EV계산에 필요함.
+	M부채       float64
+	M자본       float64
+	M영업_현금흐름  float64
+	M투자_현금흐름  float64
+	M재무_현금흐름  float64
+	M현금_증가    float64
 }
 
 type S재무비율_정보_내용 struct {
@@ -171,7 +193,7 @@ type S재무비율_정보_내용 struct {
 }
 
 type S투자지표_정보_내용 struct {
-	M상장주식수    int64
+	M상장주식수    float64
 	EPS       float64
 	EBITDAPS  float64
 	CFPS      float64

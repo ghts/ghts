@@ -1,4 +1,4 @@
-package xg
+package xing
 
 // 실행 속도가 조금 빨라지는 것 같기는 한데, 컴파일 속도가 느려져서 개발에 방해가 됨.
 //go:generate ..\lib\generate.bat
