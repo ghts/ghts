@@ -94,9 +94,10 @@ func New종목별_멀티_팩터_데이터(
 	return s
 }
 
-// 각 항목의 활용법은 다음 서적 참조할 것.
-// '할 수 있다! 퀀트투자'(강환국 저).
-// 'What works on Wall Street'(James P, O'Shaughnessy 저).
+// 멀티 팩터 방법론은 다음 서적 참조할 것. (간단한 서적 -> 복잡한 서적)
+// - '주식 시장을 이기는 작은 책 (조엘 그린블라트 저).
+// - '할 수 있다! 퀀트투자'(강환국 저).
+// - 'What works on Wall Street'(James P, O'Shaughnessy 저).
 type S종목별_멀티_팩터_데이터 struct {
 	*S종목별_공통_데이터
 	*lib.S내재가치_정보
@@ -105,40 +106,40 @@ type S종목별_멀티_팩터_데이터 struct {
 	EV    float64
 	// -- 가치 팩터 --
 	EV_EBITDA   float64
-	EV_EBITDA점수 float64
+	EV_EBITDA등급 float64
 	EV_Sales    float64
-	EV_Sales점수  float64
-	EV_FCF      float64
-	EV_FCF점수    float64
-	PBR         float64
-	PBR점수       float64
-	PER         float64
-	PER점수       float64
-	PSR         float64
-	PSR점수       float64
-	PCR         float64
-	PCR점수       float64
-	DPR         float64 // DPS / Price Rate : 배당수익율과 같은 효과. 다른 가치 지수와 반대로 높을수록 좋다. 배당금이 없는 경우가 많아서 가격이 분모임.
-	DPR점수       float64
+	EV_Sales등급 float64
+	EV_FCF     float64
+	EV_FCF등급 float64
+	PBR      float64
+	PBR등급    float64
+	PER      float64
+	PER등급    float64
+	PSR      float64
+	PSR등급    float64
+	PCR      float64
+	PCR등급    float64
+	DPR      float64 // DPS / Price Rate : 배당수익율과 같은 효과. 다른 가치 지수와 반대로 높을수록 좋다. 배당금이 없는 경우가 많아서 가격이 분모임.
+	DPR등급    float64
 	// --- 추세 팩터 --
-	M추세점수     float64
-	M추세점수_백분율 float64
+	M추세점수    float64
+	M추세점수_등급 float64
 	// --- 퀄리티 팩터 --
 	GPA   float64 // 매출총이익 / 자산
-	GPA점수 float64
+	GPA등급 float64
 	//ROIC float64	// '*S내재가치_정보'에 이미 포함되어 있음.
-	ROIC점수 float64
+	ROIC등급 float64
 	//ROE float64	// '*S내재가치_정보'에 이미 포함되어 있음. // 하위 10% 그룹은 걸러야 한다.
-	ROE점수 float64
+	ROE등급 float64
 	//ROA float64	// '*S내재가치_정보'에 이미 포함되어 있음. // 하위 10% 그룹은 걸러야 한다.
-	ROA점수     float64
+	ROA등급     float64
 	APR       float64 // = Accrual / Price  = (당기순이익 - 영업현금흐름) / 현재가 : 낮을수록 분식회계 위험이 낮다. 상위 10% 그룹은 걸러야 한다.
-	APR점수     float64
+	APR등급     float64
 	AAR       float64 // = Accrual / Asseet = (당기순이익 - 영업현금흐름) / 총자산 : 낮을수록 분식회계 위험이 낮다. 상위 10% 그룹은 걸러야 한다.
-	AAR점수     float64
+	AAR등급     float64
 	CDR       float64 // Cash flow / Debt = 현금 흐름 / 부채 : 하위 10% 그룹은 걸러야 한다.
-	CDR점수     float64
+	CDR등급     float64
 	M부채증가율    float64 // 부채증가율 : 상위 10% 그룹은 걸러내어야 한다.
-	M부채증가율_점수 float64
-	M복합_점수    float64
+	M부채증가율_등급 float64
+	M복합_등급    float64
 }
