@@ -345,12 +345,13 @@ func TrCSPAQ12200_현물계좌_총평가(계좌번호 string) (값 *xt.CSPAQ1220
 
 }
 
-func TrCSPAQ12300_현물계좌_잔고내역_조회(계좌번호 string, 단가_구분 xt.T단가_구분_CSPAQ12300, 수수료_적용_여부 bool) (값 *xt.CSPAQ12300_현물계좌_잔고내역_응답, 에러 error) {
-	defer lib.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+func TrCSPAQ12300_현물계좌_잔고내역_조회(계좌번호 string, 단가_구분 xt.T단가_구분_CSPAQ12300,
+	수수료_적용_여부 bool) (값_모음 []*xt.CSPAQ12300_현물계좌_잔고내역_응답_반복값, 에러 error) {
+	defer lib.S예외처리{M에러: &에러, M함수: func() { 값_모음 = nil }}.S실행()
 
 	lib.F조건부_패닉(!F계좌번호_존재함(계좌번호), "존재하지 않는 계좌번호 : '%v'", 계좌번호)
 
-	값 = new(xt.CSPAQ12300_현물계좌_잔고내역_응답)
+	값_모음 = make([]*xt.CSPAQ12300_현물계좌_잔고내역_응답_반복값, 0)
 	연속조회_여부 := false
 	연속키 := ""
 
@@ -371,9 +372,7 @@ func TrCSPAQ12300_현물계좌_잔고내역_조회(계좌번호 string, 단가_�
 		수신값, ok := i응답값.(*xt.CSPAQ12300_현물계좌_잔고내역_응답)
 		lib.F조건부_패닉(!ok, "TrCSPAQ12300() 예상하지 못한 자료형 : '%T'", i응답값)
 
-		값.M헤더1 = 수신값.M헤더1
-		값.M헤더2 = 수신값.M헤더2
-		값.M반복값_모음 = append(값.M반복값_모음, 수신값.M반복값_모음...)
+		값_모음 = append(값_모음, 수신값.M반복값_모음...)
 
 		if !수신값.M추가_연속조회_필요 {
 			break
@@ -383,7 +382,7 @@ func TrCSPAQ12300_현물계좌_잔고내역_조회(계좌번호 string, 단가_�
 		연속키 = 수신값.M연속키
 	}
 
-	return 값, nil
+	return 값_모음, nil
 }
 
 func TrCSPAQ13700_현물계좌_주문체결내역(계좌번호 string, 주문일 time.Time,
