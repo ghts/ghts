@@ -39,16 +39,11 @@ import (
 	"github.com/ghts/ghts/lib"
 )
 
-type T8407_현물_멀티_현재가_조회_질의값 struct {
-	*lib.S질의값_복수_종목
-	M요청건수 int // 최대 압축 2000, 비압축 500
-}
-
 //type T8407_현물_멀티_현재가_조회_응답 struct {
-//	M반복값_모음 []*T8407_현물_멀티_현재가_조회_응답_반복값
+//	M반복값_모음 []*T8407_현물_멀티_현재가_조회_응답
 //}
 
-type T8407_현물_멀티_현재가_조회_응답_반복값 struct {
+type T8407_현물_멀티_현재가_조회_응답 struct {
 	M종목코드          string
 	M종목명           string
 	M현재가           int64
@@ -73,19 +68,7 @@ type T8407_현물_멀티_현재가_조회_응답_반복값 struct {
 	M하한가           int64
 }
 
-func NewT8407_현물_멀티_현재가_조회_질의값(종목코드_모음 []string) *T8407_현물_멀티_현재가_조회_질의값 {
-	if len(종목코드_모음) > 50 {
-		panic(lib.New에러("종목코드 수량이 50개가 넘습니다. : '%v'", len(종목코드_모음)))
-	}
-
-	s := new(T8407_현물_멀티_현재가_조회_질의값)
-	s.S질의값_복수_종목 = lib.New질의값_복수종목(lib.TR조회, TR현물_멀티_현재가_조회_t8407, 종목코드_모음)
-	s.M요청건수 = len(종목코드_모음)
-
-	return s
-}
-
-func NewT8407InBlock(질의값 *T8407_현물_멀티_현재가_조회_질의값) (g *T8407InBlock) {
+func NewT8407InBlock(질의값 *lib.S질의값_복수_종목) (g *T8407InBlock) {
 	버퍼 := new(bytes.Buffer)
 
 	for _, 종목코드 := range 질의값.M종목코드_모음 {
@@ -93,14 +76,14 @@ func NewT8407InBlock(질의값 *T8407_현물_멀티_현재가_조회_질의값) 
 	}
 
 	g = new(T8407InBlock)
-	lib.F바이트_복사_정수(g.Nrec[:], 질의값.M요청건수)
+	lib.F바이트_복사_정수(g.Nrec[:], len(질의값.M종목코드_모음))
 	lib.F바이트_복사_문자열(g.Shcode[:], 버퍼.String())
 
 	f속성값_초기화(g)
 
 	return g
 }
-func NewT8407_현물_멀티_현재가_조회_응답_반복값_모음(b []byte) (값_모음 []*T8407_현물_멀티_현재가_조회_응답_반복값, 에러 error) {
+func NewT8407_현물_멀티_현재가_조회_응답_반복값_모음(b []byte) (값_모음 []*T8407_현물_멀티_현재가_조회_응답, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 값_모음 = nil }}.S실행()
 
 	나머지 := len(b) % SizeT8407OutBlock1
@@ -109,14 +92,13 @@ func NewT8407_현물_멀티_현재가_조회_응답_반복값_모음(b []byte) (
 	버퍼 := bytes.NewBuffer(b)
 	수량 := len(b) / SizeT8407OutBlock1
 	g_모음 := make([]*T8407OutBlock1, 수량, 수량)
-
-	값_모음 = make([]*T8407_현물_멀티_현재가_조회_응답_반복값, 수량, 수량)
+	값_모음 = make([]*T8407_현물_멀티_현재가_조회_응답, 수량, 수량)
 
 	for i, g := range g_모음 {
 		g = new(T8407OutBlock1)
 		lib.F확인(binary.Read(버퍼, binary.BigEndian, g))
 
-		s := new(T8407_현물_멀티_현재가_조회_응답_반복값)
+		s := new(T8407_현물_멀티_현재가_조회_응답)
 		s.M종목코드 = lib.F2문자열(g.Shcode)
 		s.M종목명 = lib.F2문자열_EUC_KR_공백제거(g.Hname)
 		s.M현재가 = lib.F2정수64_단순형(g.Price)

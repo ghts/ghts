@@ -192,10 +192,6 @@ func (s S질의값_복수_종목) G전체_종목코드() string {
 }
 
 func New질의값_복수종목(TR구분 TR구분, TR코드 string, 종목코드_모음 []string) *S질의값_복수_종목 {
-	if 종목코드_모음 == nil {
-		종목코드_모음 = make([]string, 0)
-	}
-
 	s := new(S질의값_복수_종목)
 	s.S질의값_기본형 = New질의값_기본형(TR구분, TR코드)
 	s.M종목코드_모음 = 종목코드_모음

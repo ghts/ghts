@@ -40,6 +40,16 @@ type S종목별_멀티_팩터_데이터_도우미 struct {
 	Less함수 func(*S종목별_멀티_팩터_데이터_도우미, int, int) bool
 }
 
+func (s *S종목별_멀티_팩터_데이터_도우미) G종목코드_모음() []string {
+	종목코드_모음 := make([]string, len(s.M저장소))
+
+	for i := 0; i < len(s.M저장소); i++ {
+		종목코드_모음[i] = s.M저장소[i].M종목코드
+	}
+
+	return 종목코드_모음
+}
+
 func (s *S종목별_멀티_팩터_데이터_도우미) Len() int {
 	return len(s.M저장소)
 }

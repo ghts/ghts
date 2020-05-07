@@ -108,19 +108,19 @@ type S종목별_멀티_팩터_데이터 struct {
 	EV_EBITDA   float64
 	EV_EBITDA등급 float64
 	EV_Sales    float64
-	EV_Sales등급 float64
-	EV_FCF     float64
-	EV_FCF등급 float64
-	PBR      float64
-	PBR등급    float64
-	PER      float64
-	PER등급    float64
-	PSR      float64
-	PSR등급    float64
-	PCR      float64
-	PCR등급    float64
-	DPR      float64 // DPS / Price Rate : 배당수익율과 같은 효과. 다른 가치 지수와 반대로 높을수록 좋다. 배당금이 없는 경우가 많아서 가격이 분모임.
-	DPR등급    float64
+	EV_Sales등급  float64
+	EV_FCF      float64
+	EV_FCF등급    float64
+	PBR         float64
+	PBR등급       float64
+	PER         float64
+	PER등급       float64
+	PSR         float64
+	PSR등급       float64
+	PCR         float64
+	PCR등급       float64
+	DPR         float64 // DPS / Price Rate : 배당수익율과 같은 효과. 다른 가치 지수와 반대로 높을수록 좋다. 배당금이 없는 경우가 많아서 가격이 분모임.
+	DPR등급       float64
 	// --- 추세 팩터 --
 	M추세점수    float64
 	M추세점수_등급 float64
