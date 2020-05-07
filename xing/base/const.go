@@ -1710,6 +1710,24 @@ func (p T투자경고_질의_구분) String() string {
 	}
 }
 
+type T단가_구분_CSPAQ12300 uint8
+
+const (
+	CSPAQ12300_평균_단가  T단가_구분_CSPAQ12300 = 0
+	CSPAQ12300_BEP_단가 T단가_구분_CSPAQ12300 = 1
+)
+
+func (p T단가_구분_CSPAQ12300) String() string {
+	switch p {
+	case CSPAQ12300_평균_단가:
+		return "평균 단가"
+	case CSPAQ12300_BEP_단가:
+		return "BEP 단가"
+	default:
+		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
+	}
+}
+
 type T등록_시장_CSPAQ12300 uint8
 
 const (
