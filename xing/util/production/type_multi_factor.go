@@ -40,6 +40,12 @@ import (
 func New종목별_멀티_팩터_데이터(
 	종목별_일일_가격정보_모음 *lib.S종목별_일일_가격정보_모음,
 	내재가치_정보_모음 *lib.S내재가치_정보_모음) (s *S종목별_멀티_팩터_데이터) {
+
+	// 추세 점수 산출에는 11개월치 데이터가 필요함.
+	if len(종목별_일일_가격정보_모음.M저장소) < 232 {
+		return nil
+	}
+
 	defer lib.S예외처리{M함수: func() { s = nil }}.S실행()
 
 	종목코드 := 종목별_일일_가격정보_모음.M저장소[0].M종목코드
@@ -47,13 +53,22 @@ func New종목별_멀티_팩터_데이터(
 	s = new(S종목별_멀티_팩터_데이터)
 	s.S종목별_공통_데이터 = new(S종목별_공통_데이터)
 	s.S내재가치_정보 = 내재가치_정보_모음.G종목별_최신_정보(종목코드)
+
+	if s.S내재가치_정보 == nil ||
+		s.S내재가치_식별정보 == nil ||
+		s.S재무제표_정보_내용 == nil ||
+		s.S재무비율_정보_내용 == nil ||
+		s.S투자지표_정보_내용 == nil {
+		return nil
+	}
+
 	s.M종목코드 = 종목코드
 	s.M기준가 = 종목별_일일_가격정보_모음.G최근_종가()
 	s.M시가총액 = s.M상장주식수 * s.M기준가
 	s.EV = s.M시가총액 + s.M부채 - s.M현금및현금성자산
 	s.EV_EBITDA = s.EV / (s.EBITDAPS * s.M상장주식수)
 	s.EV_Sales = s.EV / s.M매출액
-	s.EV_FCF = s.EV / s.FCFF
+	s.EV_FCF = s.EV / (s.CFPS * s.M상장주식수)
 	s.PBR = s.M기준가 / s.BPS
 	s.PER = s.M기준가 / s.EPS
 	s.PSR = s.M기준가 / s.SPS
@@ -64,7 +79,17 @@ func New종목별_멀티_팩터_데이터(
 	s.APR = (s.M당기순이익 - s.M영업_현금흐름) / s.M기준가
 	s.AAR = (s.M당기순이익 - s.M영업_현금흐름) / s.M자산
 	s.CDR = s.M현금_증가 / s.M부채
-	s.M부채증가율 = 내재가치_정보_모음.G종목별_차최신_정보(종목코드).M부채_비율 - s.M부채_비율
+
+	차최신_정보 := 내재가치_정보_모음.G종목별_차최신_정보(종목코드)
+	if 차최신_정보 == nil ||
+		차최신_정보.S내재가치_식별정보 == nil ||
+		차최신_정보.S재무제표_정보_내용 == nil ||
+		차최신_정보.S재무비율_정보_내용 == nil ||
+		차최신_정보.S투자지표_정보_내용 == nil {
+		return nil
+	}
+
+	s.M부채증가율 = 차최신_정보.M부채_비율 - s.M부채_비율
 
 	return s
 }
@@ -75,27 +100,45 @@ func New종목별_멀티_팩터_데이터(
 type S종목별_멀티_팩터_데이터 struct {
 	*S종목별_공통_데이터
 	*lib.S내재가치_정보
-	M기준가     float64 // 산출 시점에서 가장 최근의 종가. 대부분의 경우 '전일 종가'가 될 것임.
-	M시가총액    float64
-	EV       float64
+	M기준가  float64 // 산출 시점에서 가장 최근의 종가. 대부분의 경우 '전일 종가'가 될 것임.
+	M시가총액 float64
+	EV    float64
 	// -- 가치 팩터 --
 	EV_EBITDA   float64
+	EV_EBITDA점수 float64
 	EV_Sales    float64
+	EV_Sales점수  float64
 	EV_FCF      float64
+	EV_FCF점수    float64
 	PBR         float64
+	PBR점수       float64
 	PER         float64
+	PER점수       float64
 	PSR         float64
+	PSR점수       float64
 	PCR         float64
-	DPR         float64 // DPS / Price Rate : 배당수익율과 같은 효과. 높을 수록 좋다. 배당금이 없는 경우가 많아서 가격이 분모임.
+	PCR점수       float64
+	DPR         float64 // DPS / Price Rate : 배당수익율과 같은 효과. 다른 가치 지수와 반대로 높을수록 좋다. 배당금이 없는 경우가 많아서 가격이 분모임.
+	DPR점수       float64
 	// --- 추세 팩터 --
-	M추세점수    float64
+	M추세점수     float64
+	M추세점수_백분율 float64
 	// --- 퀄리티 팩터 --
 	GPA   float64 // 매출총이익 / 자산
+	GPA점수 float64
 	//ROIC float64	// '*S내재가치_정보'에 이미 포함되어 있음.
+	ROIC점수 float64
 	//ROE float64	// '*S내재가치_정보'에 이미 포함되어 있음. // 하위 10% 그룹은 걸러야 한다.
+	ROE점수 float64
 	//ROA float64	// '*S내재가치_정보'에 이미 포함되어 있음. // 하위 10% 그룹은 걸러야 한다.
-	APR       float64 // = Accrual / Price  = (당기순이익 - 영업현금흐름) / 현재가 : 상위 10% 그룹은 걸러야 한다.
-	AAR       float64 // = Accrual / Asseet = (당기순이익 - 영업현금흐름) / 총자산 : 상위 10% 그룹은 걸러야 한다.
+	ROA점수     float64
+	APR       float64 // = Accrual / Price  = (당기순이익 - 영업현금흐름) / 현재가 : 낮을수록 분식회계 위험이 낮다. 상위 10% 그룹은 걸러야 한다.
+	APR점수     float64
+	AAR       float64 // = Accrual / Asseet = (당기순이익 - 영업현금흐름) / 총자산 : 낮을수록 분식회계 위험이 낮다. 상위 10% 그룹은 걸러야 한다.
+	AAR점수     float64
 	CDR       float64 // Cash flow / Debt = 현금 흐름 / 부채 : 하위 10% 그룹은 걸러야 한다.
+	CDR점수     float64
 	M부채증가율    float64 // 부채증가율 : 상위 10% 그룹은 걸러내어야 한다.
+	M부채증가율_점수 float64
+	M복합_점수    float64
 }

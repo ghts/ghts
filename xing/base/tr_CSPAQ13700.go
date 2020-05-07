@@ -44,7 +44,6 @@ import (
 
 type CSPAQ13700_현물계좌_주문체결내역_질의값 struct {
 	*lib.S질의값_기본형
-	M레코드_수량  int
 	M계좌번호    string
 	M주문시장코드  string
 	M매매구분    string
@@ -123,7 +122,7 @@ type CSPAQ13700_현물계좌_주문체결내역_반복값 struct {
 
 func NewCSPAQ13700InBlock(질의값 *CSPAQ13700_현물계좌_주문체결내역_질의값, 비밀번호 string) (g *CSPAQ13700InBlock1) {
 	g = new(CSPAQ13700InBlock1)
-	lib.F바이트_복사_정수(g.RecCnt[:], 질의값.M레코드_수량)
+	lib.F바이트_복사_정수(g.RecCnt[:], 1)
 	lib.F바이트_복사_문자열(g.AcntNo[:], 질의값.M계좌번호)
 	lib.F바이트_복사_문자열(g.InptPwd[:], 비밀번호)
 	lib.F바이트_복사_문자열(g.OrdMktCode[:], 질의값.M주문시장코드)

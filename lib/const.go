@@ -539,7 +539,7 @@ func (v T시장구분) Parse(값 string) error {
 type T매도_매수_구분 uint8
 
 const (
-	P매도매수_전체 T매도_매수_구분 = iota
+	P매도_매수_전체 T매도_매수_구분 = iota
 	P매도
 	P매수
 	P매도_정정
@@ -594,7 +594,7 @@ func (p T매도_매수_구분) F해석(값 interface{}) T매도_매수_구분 {
 
 func (p T매도_매수_구분) G검사() error {
 	switch p {
-	case P매도매수_전체, P매도, P매수, P매도_정정, P매수_정정, P매도_취소, P매수_취소:
+	case P매도_매수_전체, P매도, P매수, P매도_정정, P매수_정정, P매도_취소, P매수_취소:
 		return nil
 	default:
 		return New에러("잘못된 매수 매도 구분값 : %v", int(p))

@@ -100,7 +100,7 @@ func TestCFOAT00100_선물옵션_정상주문(t *testing.T) {
 		t.SkipNow()
 	}
 
-	//매매구분_모음 := []lib.T매도_매수_구분{lib.P매도, lib.P매수}	// lib.P매도매수_전체
+	//매매구분_모음 := []lib.T매도_매수_구분{lib.P매도, lib.P매수}	// lib.P매도_매수_전체
 
 	// 모의투자 IOC/FOK는 주문 불가,
 	//호가유형_모음 := []xt.T호가유형{xt.P호가_지정가, xt.P호가_시장가, xt.P호가_조건부_지정가,

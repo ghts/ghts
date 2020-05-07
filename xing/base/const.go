@@ -1819,7 +1819,7 @@ const (
 	P통신매체_안드로이드    = 23
 	P통신매체_API      = 41
 	P통신매체_HTS      = 85
-	P통신매체_모의서버_HTS = 50
+	P통신매체_모의서버_API = 50
 )
 
 func (p T통신매체구분) String() string {
@@ -1832,8 +1832,8 @@ func (p T통신매체구분) String() string {
 		return "API"
 	case P통신매체_HTS:
 		return "HTS"
-	case P통신매체_모의서버_HTS:
-		return "모의 서버 HTS"
+	case P통신매체_모의서버_API:
+		return "모의 서버 API"
 	default:
 		panic(lib.New에러("예상하지 못한 값 : " + strconv.Itoa(int(p))))
 	}
