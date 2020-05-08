@@ -68,7 +68,6 @@ var (
 	xing_C32_재실행_잠금 sync.Mutex
 	xing_C32_재실행_시각 = lib.New안전한_시각(time.Time{})
 
-	API초기화_완료  = lib.New안전한_bool(false)
 	접속유지_실행중   = lib.New안전한_bool(false)
 	주문_응답_구독_중 = lib.New안전한_bool(false)
 )
@@ -87,4 +86,6 @@ var (
 	기준가_맵        = make(map[string]int64)
 	하한가_맵        = make(map[string]int64)
 	계좌번호_모음      []string
+	서버_구분        xt.T서버_구분
+	프로세스ID_C32   int
 )

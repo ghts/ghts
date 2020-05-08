@@ -37,6 +37,7 @@ import (
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/xing/base"
 	"go.nanomsg.org/mangos/v3"
+	"strings"
 )
 
 func go_TR콜백_처리(ch초기화 chan lib.T신호) (에러 error) {
@@ -109,7 +110,10 @@ func go루틴_콜백_처리_도우미(ch초기화 chan lib.T신호, ch도우미_
 					에러 = nil
 					return
 				default:
-					lib.New에러with출력(에러)
+					if !strings.Contains(에러.Error(), "object closed") {
+						lib.New에러with출력(에러)
+					}
+
 					continue
 				}
 			}

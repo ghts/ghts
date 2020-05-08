@@ -36,6 +36,7 @@ package xing
 import (
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/xing/base"
+	"github.com/mitchellh/go-ps"
 
 	"fmt"
 	"runtime"
@@ -81,23 +82,13 @@ func init() {
 	lib.F메모(메모)
 }
 
-func F초기화(서버_구분 xt.T서버_구분) (에러 error) {
-	if API초기화_완료.G값() {
-		return nil
-	}
-
-	defer func() {
-		lib.S예외처리{M에러: &에러}.S실행()
-
-		if 에러 == nil {
-			API초기화_완료.S값(true)
-		}
-	}()
+func F초기화(값 xt.T서버_구분) (에러 error) {
+	서버_구분 = 값
 
 	f소켓_생성()
 	f초기화_Go루틴()
 	lib.F확인(f초기화_xing_C32())
-	lib.F확인(f접속_로그인(서버_구분))
+	lib.F확인(f접속_로그인())
 	lib.F조건부_패닉(!f초기화_작동_확인(), "초기화 작동 확인 실패.")
 	lib.F확인(f초기화_TR전송_제한())
 	lib.F확인(f종목모음_설정())
@@ -137,19 +128,7 @@ func f초기화_xing_C32() (에러 error) {
 
 	switch runtime.GOOS {
 	case "windows":
-		if !C32_종료됨() {
-			F질의(lib.New질의값_기본형(lib.TR종료, ""))
-		}
-
-		for i := 0; i < 100; i++ {
-			if C32_종료됨() {
-				break
-			}
-
-			lib.F대기(lib.P300밀리초)
-		}
-
-		lib.F확인(lib.F외부_프로세스_실행(xing_C32_경로))
+		프로세스ID_C32 = lib.F확인(lib.F외부_프로세스_실행(xing_C32_경로)).(int)
 		<-ch신호_C32_초기화
 	default:
 		lib.F문자열_출력("*********************************************\n"+
@@ -160,8 +139,7 @@ func f초기화_xing_C32() (에러 error) {
 	return nil
 }
 
-func f접속_로그인(서버_구분 xt.T서버_구분) (에러 error) {
-
+func f접속_로그인() (에러 error) {
 	소켓SUB_실시간_정보 = lib.NewNano소켓SUB_단순형(xt.F주소_실시간())
 
 	if !tr수신_소켓_동작_확인() {
@@ -299,11 +277,11 @@ func F전일_당일_설정() (에러 error) {
 }
 
 func C32_종료됨() bool {
-	프로세스ID := xing_C32_PID()
+	프로세스, 에러 := ps.FindProcess(프로세스ID_C32)
 	포트_닫힘_C함수_호출 := lib.F포트_닫힘_확인(xt.F주소_C32_호출())
-	//포트_닫힘_실시간 := lib.F포트_닫힘_확인(lib.P주소_Xing_실시간)
+	포트_닫힘_실시간 := lib.F포트_닫힘_확인(xt.F주소_실시간())
 
-	return 프로세스ID < 0 && 포트_닫힘_C함수_호출 // && 포트_닫힘_실시간
+	return 프로세스 == nil && 에러 == nil && 포트_닫힘_C함수_호출 && 포트_닫힘_실시간
 }
 
 func C32_종료() (에러 error) {
@@ -323,11 +301,12 @@ func C32_종료() (에러 error) {
 		return lib.New에러with출력("C32 종료 타임아웃")
 	}
 
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 10; i++ {
 		if C32_종료됨() {
 			return nil
 		}
 
+		lib.F프로세스_종료by프로세스ID(프로세스ID_C32)
 		lib.F대기(lib.P1초)
 	}
 

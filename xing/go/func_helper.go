@@ -34,10 +34,9 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package xing
 
 import (
+	"fmt"
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/xing/base"
-	"github.com/mitchellh/go-ps"
-
 	"strings"
 	"time"
 )
@@ -102,21 +101,6 @@ func F2당일_시각_단순형(포맷 string, 값 interface{}) time.Time {
 	return lib.F확인(F2당일_시각(포맷, 값)).(time.Time)
 }
 
-func xing_C32_PID() (프로세스ID int) {
-	defer lib.S예외처리{M함수: func() { 프로세스ID = -1 }}.S실행()
-
-	프로세스_모음, 에러 := ps.Processes()
-	lib.F확인(에러)
-
-	for _, 프로세스 := range 프로세스_모음 {
-		if 실행화일명 := 프로세스.Executable(); strings.HasSuffix(xing_C32_경로, 실행화일명) {
-			return 프로세스.Pid()
-		}
-	}
-
-	return -1
-}
-
 func f접속유지_실행() {
 	if !lib.F인터넷에_접속됨() {
 		return
@@ -143,14 +127,6 @@ func f접속유지_도우미() {
 	ch공통_종료 := lib.F공통_종료_채널()
 
 	for {
-		select {
-		case <-ch신호_접속유지_종료:
-			return
-		case <-ch공통_종료:
-			return
-		default:
-		}
-
 		lib.F대기(13 * lib.P1초)
 
 		select {
@@ -342,16 +318,22 @@ func C32_재시작() (에러 error) {
 
 	defer xing_C32_재실행_시각.S값(lib.F지금())
 
-	lib.F문자열_출력("** C32 재시작 : %v **", time.Now().Format(lib.P간략한_시간_형식))
+	fmt.Printf("**     C32 재시작 %v **\n", time.Now().Format(lib.P간략한_시간_형식))
 	lib.F확인(C32_종료())
-	lib.F대기(lib.P3초) // 소켓이 정리될 시간을 줌.
+	lib.F패닉억제_호출(소켓REP_TR콜백.Close)
+	소켓REQ_저장소.S정리()
+
+	xt.F주소_재설정()
+	f소켓_생성()
 	lib.F확인(f초기화_xing_C32())
+	lib.F확인(f접속_로그인())
 	lib.F조건부_패닉(!f초기화_작동_확인(), "초기화 작동 확인 실패.")
 	lib.F확인(f초기화_TR전송_제한())
 	lib.F확인(f종목모음_설정())
 	lib.F확인(F전일_당일_설정())
+	f접속유지_실행()
 
-	println("** C32 재시작 완료  **")
+	fmt.Println("**     C32 재시작 완료     **")
 
 	return nil
 }
