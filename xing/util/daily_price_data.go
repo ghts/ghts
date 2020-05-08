@@ -34,6 +34,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package util
 
 import (
+	"fmt"
 	"github.com/ghts/ghts/lib"
 	xt "github.com/ghts/ghts/xing/base"
 	xing "github.com/ghts/ghts/xing/go"
@@ -51,8 +52,6 @@ func F일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string, ch완
 	lib.F일일_가격정보_테이블_생성(db)
 
 	for i, 종목코드 := range 종목코드_모음 {
-		lib.F체크포인트(i, 종목코드)
-
 		종목별_일일_가격정보_모음, 에러 = lib.New종목별_일일_가격정보_모음_DB읽기(db, 종목코드)
 		lib.F확인(에러)
 
@@ -64,18 +63,21 @@ func F일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string, ch완
 			시작일 = 마지막_저장일.AddDate(0, 0, 1)
 		}
 
-		// 종료일 설정
 		if 시작일.After(xing.F당일().Add(-1 * lib.P1초)) {
+			fmt.Printf("%v [%v] : 이미 최신 데이터로 업데이트 되어 있음.\n", i, 종목코드)
 			continue // 이미 최신 데이터로 업데이트 되어 있음.
-		} else if lib.F지금().After(xing.F당일().Add(15*lib.P1시간 + lib.P30분)) {
+		}
+
+		// 종료일 설정
+		if lib.F지금().After(xing.F당일().Add(15*lib.P1시간 + lib.P30분)) {
 			종료일 = lib.F금일()
 		} else {
 			종료일 = xing.F전일()
 		}
 
-		// 시작일, 종료일 같으면 건너뜀.
-		if 시작일.After(종료일.Add(-1 * lib.P1초)) {
-			continue
+		// 시작일과 종료일이 같으면 수천 개의 데이터를 불러오는 현상이 있음.
+		if 시작일.Equal(종료일) {
+			시작일 = 시작일.AddDate(0, 0, -1)
 		}
 
 		// 데이터 수집
