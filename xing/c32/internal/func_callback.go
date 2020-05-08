@@ -78,7 +78,7 @@ func go콜백_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 	}}.S실행()
 
 	for {
-		if lib.F포트_열림_확인(lib.P주소_Xing_C함수_콜백) {
+		if lib.F포트_열림_확인(xt.F주소_C32_콜백()) {
 			break
 		}
 

@@ -110,7 +110,7 @@ func F초기화(서버_구분 xt.T서버_구분) (에러 error) {
 }
 
 func f소켓_생성() {
-	소켓REP_TR콜백 = lib.NewNano소켓XREP_단순형(lib.P주소_Xing_C함수_콜백)
+	소켓REP_TR콜백 = lib.NewNano소켓XREP_단순형(xt.F주소_C32_콜백())
 }
 
 func f초기화_Go루틴() {
@@ -162,7 +162,7 @@ func f초기화_xing_C32() (에러 error) {
 
 func f접속_로그인(서버_구분 xt.T서버_구분) (에러 error) {
 
-	소켓SUB_실시간_정보 = lib.NewNano소켓SUB_단순형(lib.P주소_Xing_실시간)
+	소켓SUB_실시간_정보 = lib.NewNano소켓SUB_단순형(xt.F주소_실시간())
 
 	if !tr수신_소켓_동작_확인() {
 		return lib.New에러("C32 프로세스 REP소켓 접속 불가.")
@@ -300,7 +300,7 @@ func F전일_당일_설정() (에러 error) {
 
 func C32_종료됨() bool {
 	프로세스ID := xing_C32_PID()
-	포트_닫힘_C함수_호출 := lib.F포트_닫힘_확인(lib.P주소_Xing_C함수_호출)
+	포트_닫힘_C함수_호출 := lib.F포트_닫힘_확인(xt.F주소_C32_호출())
 	//포트_닫힘_실시간 := lib.F포트_닫힘_확인(lib.P주소_Xing_실시간)
 
 	return 프로세스ID < 0 && 포트_닫힘_C함수_호출 // && 포트_닫힘_실시간

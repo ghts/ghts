@@ -56,6 +56,8 @@ func f테스트_준비() {
 
 	lib.F테스트_모드_시작()
 
+	xt.F주소_설정()
+
 	ch초기화 := make(chan lib.T신호)
 	go go테스트용_TR콜백_수신(ch초기화)
 	<-ch초기화
@@ -73,7 +75,7 @@ func f테스트_정리() {
 	lib.F패닉억제_호출(소켓REP_테스트용_TR콜백.Close)
 
 	for {
-		if lib.F포트_닫힘_확인(lib.P주소_Xing_C함수_콜백) {
+		if lib.F포트_닫힘_확인(xt.F주소_C32_콜백()) {
 			break
 		}
 	}
@@ -94,7 +96,7 @@ func go테스트용_TR콜백_수신(ch초기화 chan lib.T신호) {
 		}
 	}()
 
-	소켓REP_테스트용_TR콜백 = lib.NewNano소켓REP_단순형(lib.P주소_Xing_C함수_콜백)
+	소켓REP_테스트용_TR콜백 = lib.NewNano소켓REP_단순형(xt.F주소_C32_콜백())
 	defer 소켓REP_테스트용_TR콜백.Close()
 
 	ch초기화 <- lib.P신호_초기화

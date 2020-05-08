@@ -78,11 +78,11 @@ var (
 
 // 다중 사용에 안전한 값들.
 var (
-	소켓REP_TR수신   = lib.NewNano소켓XREP_단순형(lib.P주소_Xing_C함수_호출)
-	소켓PUB_실시간_정보 = lib.NewNano소켓PUB_단순형(lib.P주소_Xing_실시간)
+	소켓REP_TR수신   = lib.NewNano소켓XREP_단순형(xt.F주소_C32_호출())
+	소켓PUB_실시간_정보 = lib.NewNano소켓PUB_단순형(xt.F주소_실시간())
 
 	소켓REQ_저장소 = lib.New소켓_저장소(20, func() lib.I소켓_질의 {
-		return lib.NewNano소켓REQ_단순형(lib.P주소_Xing_C함수_콜백, lib.P30초)
+		return lib.NewNano소켓REQ_단순형(xt.F주소_C32_콜백(), lib.P30초)
 	})
 
 	접속_처리_잠금  sync.Mutex

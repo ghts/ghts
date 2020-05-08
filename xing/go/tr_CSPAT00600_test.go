@@ -61,7 +61,7 @@ func TestCSPAT00600_현물_정상_주문(t *testing.T) {
 		t.SkipNow()
 	}
 
-	소켓SUB_실시간 := lib.NewNano소켓SUB_단순형(lib.P주소_Xing_실시간)
+	소켓SUB_실시간 := lib.NewNano소켓SUB_단순형(xt.F주소_실시간())
 	lib.F대기(lib.P1초)
 
 	lib.F테스트_에러없음(t, F주문_응답_실시간_정보_구독())

@@ -35,11 +35,15 @@ package xt
 
 import (
 	"github.com/ghts/ghts/lib"
+	"sync"
 	"time"
 )
 
 var (
 	전일, 당일 lib.I안전한_시각
+
+	주소_설정_완료 = lib.New안전한_bool(false)
+	주소_설정_잠금 sync.Mutex
 )
 
 func F전일_당일_설정(전일값, 당일값 time.Time) {

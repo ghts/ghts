@@ -215,78 +215,20 @@ const (
 	P메시지_갱신 = "U" // UPDATE
 )
 
-const 포트_번호_최소값 = 4500
-
-const (
-	P주소_주소정보 T주소 = iota
-	//P주소_테스트
-	P주소_종목정보
-	P주소_가격정보
-	P주소_가격정보_입수
-	P주소_가격정보_배포
-	P주소_NH_TR
-	P주소_NH_실시간
-	P주소_NH_C함수_콜백
-	P주소_NH_C함수_호출
-	P주소_Xing_TR
-	P주소_Xing_실시간
-	P주소_Xing_C함수_콜백
-	P주소_Xing_C함수_호출
-	P주소_키움_TR
-	P주소_키움_실시간
-	P주소_키움_C함수_콜백
-	P주소_키움_C함수_호출
-)
+const 포트_번호_최소값 = 3000
 
 type T주소 int
 
-func (t T주소) G단축값() string {
-	switch t {
-	case P주소_주소정보: // 최소한의 고정값.
-		return "127.0.0.1:3000"
-	default:
-		포트_번호 := strconv.Itoa(int(t) + 포트_번호_최소값)
-		return "127.0.0.1:" + 포트_번호
-	}
+func (p T주소) G단축값() string {
+	return "127.0.0.1:" + strconv.Itoa(int(p)+포트_번호_최소값)
 }
 
-func (t T주소) G값() string {
-	return "tcp://" + t.G단축값()
+func (p T주소) G값() string {
+	return "tcp://" + p.G단축값()
 }
 
-func (t T주소) String() string {
-	return t.G이름() + " : " + t.G값()
-}
-
-func (t T주소) G이름() string {
-	switch t {
-	case P주소_주소정보:
-		return "주소 정보"
-		//case P주소_테스트:
-		//	return "테스트"
-	case P주소_종목정보:
-		return "종목 정보"
-	case P주소_가격정보:
-		return "가격 정보"
-	case P주소_가격정보_입수:
-		return "가격 정보 입수"
-	case P주소_가격정보_배포:
-		return "가격 정보 배포"
-	case P주소_NH_TR:
-		return "NH TR"
-	case P주소_NH_실시간:
-		return "NH 실시간"
-	case P주소_Xing_TR:
-		return "Xing TR"
-	case P주소_Xing_실시간:
-		return "Xing 실시간"
-	case P주소_Xing_C함수_호출:
-		return "Xing C함수 호출"
-	case P주소_Xing_C함수_콜백:
-		return "Xing C함수 콜백"
-	default:
-		return "알려지지 않은 주소 (테스트용?)"
-	}
+func (p T주소) String() string {
+	return p.G값()
 }
 
 const (

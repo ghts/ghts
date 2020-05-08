@@ -40,6 +40,12 @@ import (
 )
 
 const (
+	P주소_C32_호출_환경변수명 = "ADDRESS_C32_TR"
+	P주소_C32_콜백_환경변수명 = "ADDRESS_C32_Callback"
+	P주소_실시간_환경변수명    = "ADDRESS_Realtime"
+)
+
+const (
 	Sizeof_TR_DATA          = 104 // unsafe.Sizeof(xt.TR_DATA{})
 	Sizeof_MSG_DATA         = 24  // unsafe.Sizeof(xt.MSG_DATA{})
 	Sizeof_REALTIME_DATA    = 84  // unsafe.Sizeof(xt.REALTIME_DATA{})

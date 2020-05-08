@@ -89,13 +89,13 @@ func F소켓_정리() error {
 	lib.F패닉억제_호출(소켓PUB_실시간_정보.Close)
 
 	for {
-		if lib.F포트_닫힘_확인(lib.P주소_Xing_C함수_호출) {
+		if lib.F포트_닫힘_확인(xt.F주소_C32_호출()) {
 			break
 		}
 	}
 
 	for {
-		if lib.F포트_닫힘_확인(lib.P주소_Xing_실시간) {
+		if lib.F포트_닫힘_확인(xt.F주소_실시간()) {
 			break
 		}
 	}
