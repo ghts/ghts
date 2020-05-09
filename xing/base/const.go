@@ -1840,6 +1840,7 @@ const (
 	P통신매체_아이폰      = 22
 	P통신매체_안드로이드    = 23
 	P통신매체_API      = 41
+	P통신매체_자동주문     = 80
 	P통신매체_HTS      = 85
 	P통신매체_모의서버_API = 50
 )
@@ -1854,6 +1855,8 @@ func (p T통신매체구분) String() string {
 		return "API"
 	case P통신매체_HTS:
 		return "HTS"
+	case P통신매체_자동주문:
+		return "자동 주문"
 	case P통신매체_모의서버_API:
 		return "모의 서버 API"
 	default:
