@@ -67,7 +67,7 @@ func F일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string) (에�
 			fmt.Printf("%v [%v] : 이미 최신 데이터로 업데이트 되어 있음.\n", i, 종목코드)
 			continue
 		} else if 시작일.Equal(xing.F당일()) {
-			if lib.F지금().After(xing.F당일().Add(15*lib.P1시간 + lib.P30분)) {
+			if lib.F지금().After(xing.F당일().Add(18*lib.P1시간)) {
 				당일_데이터만_검색할_종목코드 = append(당일_데이터만_검색할_종목코드, 종목코드)
 			}
 			continue
