@@ -215,9 +215,13 @@ const (
 	P메시지_갱신 = "U" // UPDATE
 )
 
-const 포트_번호_최소값 = 3000
+const 포트_번호_최소값 = 2000
 
 type T주소 int
+
+func (p T주소) G포트_번호() int {
+	return int(p) + 포트_번호_최소값
+}
 
 func (p T주소) G단축값() string {
 	return "127.0.0.1:" + strconv.Itoa(int(p)+포트_번호_최소값)
