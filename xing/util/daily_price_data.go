@@ -66,10 +66,11 @@ func F일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string) (에�
 		if 시작일.After(xing.F당일()) {
 			fmt.Printf("%v [%v] : 이미 최신 데이터로 업데이트 되어 있음.\n", i, 종목코드)
 			continue
-		} else if 시작일.Equal(xing.F당일()) {
-			if lib.F지금().After(xing.F당일().Add(18*lib.P1시간)) {
-				당일_데이터만_검색할_종목코드 = append(당일_데이터만_검색할_종목코드, 종목코드)
-			}
+		} else if 시작일.Equal(xing.F당일()) &&
+			lib.F지금().After(xing.F당일().Add(18*lib.P1시간)) &&
+			lib.F지금().Before(xing.F당일().Add(29*lib.P1시간)) {
+			// 당일 폐장 후 다음 영업일 개장하기 전까지는 t8407을 써도 된다.
+			당일_데이터만_검색할_종목코드 = append(당일_데이터만_검색할_종목코드, 종목코드)
 			continue
 		}
 
@@ -124,7 +125,9 @@ func F일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string) (에�
 		lib.F확인(종목별_일일_가격정보_모음.DB저장(db))
 	}
 
-	lib.F확인(f당일_가격정보_수집(db, 당일_데이터만_검색할_종목코드))
+	if len(당일_데이터만_검색할_종목코드) > 0 {
+		lib.F확인(f당일_가격정보_수집(db, 당일_데이터만_검색할_종목코드))
+	}
 
 	return nil
 }
