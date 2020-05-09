@@ -210,11 +210,7 @@ type S투자지표_정보_내용 struct {
 
 func F내재가치_정보_모음_DB저장(db *sql.DB, 값_모음 []*S내재가치_정보) (에러 error) {
 	var tx *sql.Tx
-	defer S예외처리{M에러: &에러, M함수: func() {
-		if tx != nil {
-			tx.Rollback()
-		}
-	}}.S실행()
+	defer S예외처리{M에러: &에러, M함수: func() { F조건부_실행(tx != nil, tx.Rollback) }}.S실행()
 
 	F확인(F내재가치_정보_테이블_생성(db))
 
