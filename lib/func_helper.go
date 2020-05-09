@@ -122,13 +122,12 @@ func F최소값_정수(값_모음 ...int) int {
 	return 최소값
 }
 
+func F절대값_정수(값 int) int {
+	return F조건부_정수(값 < 0, -1*값, 값)
+}
+
 func F절대값_정수64(값 int64) int64 {
-
-	if 값 < 0 {
-		return 값 * -1
-	}
-
-	return 값
+	return F조건부_정수64(값 < 0, -1*값, 값)
 }
 
 func F절대값_Duration(값 time.Duration) time.Duration {
