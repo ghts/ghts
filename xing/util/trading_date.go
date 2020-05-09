@@ -8,7 +8,7 @@ import (
 	"sort"
 )
 
-func New영업일_모음(db *sql.DB) *S영업일_모음 {
+func New개장일_모음(db *sql.DB) *S개장일_모음 {
 	일일_가격정보_모음_KODEX200, 에러 := lib.New종목별_일일_가격정보_모음_DB읽기(db, "069500")
 	lib.F확인(에러)
 
@@ -36,7 +36,7 @@ func New영업일_모음(db *sql.DB) *S영업일_모음 {
 	// 개장일 정렬
 	sort.Ints(개장일_모음)
 
-	s := new(S영업일_모음)
+	s := new(S개장일_모음)
 	s.M저장소 = make([]uint32, len(개장일_맵))
 	s.인덱스_맵 = make(map[uint32]int)
 
@@ -48,12 +48,12 @@ func New영업일_모음(db *sql.DB) *S영업일_모음 {
 	return s
 }
 
-type S영업일_모음 struct {
+type S개장일_모음 struct {
 	M저장소  []uint32
 	인덱스_맵 map[uint32]int
 }
 
-func (s S영업일_모음) G인덱스(일자 uint32) int {
+func (s S개장일_모음) G인덱스(일자 uint32) int {
 	if 인덱스, 존재함 := s.인덱스_맵[일자]; 존재함 {
 		return 인덱스
 	} else {
@@ -61,7 +61,7 @@ func (s S영업일_모음) G인덱스(일자 uint32) int {
 	}
 }
 
-func (s S영업일_모음) G증분_개장일(일자 uint32, 증분 int) (uint32, error) {
+func (s S개장일_모음) G증분_개장일(일자 uint32, 증분 int) (uint32, error) {
 	if 인덱스 := s.G인덱스(일자); 인덱스 < 0 {
 		return 0, lib.New에러("존재하지 않는 일자 : '%v'", 일자)
 	} else if 인덱스+증분 < 0 || 인덱스+증분 >= len(s.M저장소) {
