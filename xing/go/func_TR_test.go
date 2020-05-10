@@ -74,7 +74,6 @@ func TestF서버_이름(t *testing.T) {
 }
 
 func TestF서버_구분(t *testing.T) {
-	서버_구분, 에러 := F서버_구분()
-	lib.F테스트_에러없음(t, 에러)
+	서버_구분 := F서버_구분()
 	lib.F테스트_같음(t, 서버_구분, xt.P서버_모의투자, xt.P서버_실거래)
 }
