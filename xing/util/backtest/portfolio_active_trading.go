@@ -71,7 +71,7 @@ type S매수_매도_쌍 struct {
 }
 
 func (s S매수_매도_쌍) G종목코드() string   { return s.M종목코드 }
-func (s S매수_매도_쌍) G수량() int64       { return s.M수량 }
+func (s S매수_매도_쌍) G수량() int64      { return s.M수량 }
 func (s S매수_매도_쌍) G손절폭() float64   { return math.Abs(s.M손절폭) }
 func (s S매수_매도_쌍) G매수_일자() uint32  { return s.M매수_일자 }
 func (s S매수_매도_쌍) G매수_가격() float64 { return s.M매수_가격 }
@@ -224,9 +224,9 @@ func New모의_액티브_매매_포트폴리오(초기_자본 float64, 거래당
 		매매.M수량 = 수량
 		매매.M손절폭 = 매수_신호.G손절폭()
 		매매.M매수_일자 = 매수_신호.G일자()
-		매매.M매수_가격 = lib.F모의_매수_거래가(매수_신호.G기준가(), 가상_슬리피지_비용)	// API 호출 없는 모의 거래.
+		매매.M매수_가격 = lib.F모의_매수_거래가(매수_신호.G기준가(), 가상_슬리피지_비용) // API 호출 없는 모의 거래.
 
-		if float64(수량) * 매매.M매수_가격 > s.M자본 {
+		if float64(수량)*매매.M매수_가격 > s.M자본 {
 			수량 = int64(s.M자본 / 매매.M매수_가격)
 		}
 

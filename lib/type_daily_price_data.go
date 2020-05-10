@@ -618,6 +618,22 @@ func (s S종목별_일일_가격정보_모음) MFI_모음(윈도우_크기 int) 
 	return mfi
 }
 
+func (s S종목별_일일_가격정보_모음) MFIs_모음(윈도우_크기_MFI, 윈도우_크기_이동평균 int) []float64 {
+	return F가중_이동_평균(s.MFI_모음(윈도우_크기_MFI), s.G전일_거래량_모음(), 윈도우_크기_이동평균)
+}
+
+func (s S종목별_일일_가격정보_모음) MFI(윈도우_크기 int) float64 {
+	MFI_모음 := s.MFI_모음(윈도우_크기)
+
+	return MFI_모음[len(MFI_모음)-1]
+}
+
+func (s S종목별_일일_가격정보_모음) MFIs(윈도우_크기_MFI, 윈도우_크기_이동평균 int) float64 {
+	MFIs_모음 := s.MFIs_모음(윈도우_크기_MFI, 윈도우_크기_이동평균)
+
+	return MFIs_모음[len(MFIs_모음)-1]
+}
+
 func (s S종목별_일일_가격정보_모음) VPCI_모음(단기, 장기 int) []float64 {
 	// '거래량으로 투자하라'(Buff Dormeier 저) 제 17장
 	// http://docs.mta.org/docs/2007DowAward.pdf
@@ -647,6 +663,18 @@ func (s S종목별_일일_가격정보_모음) VPCI_모음(단기, 장기 int) [
 func (s S종목별_일일_가격정보_모음) VPCIs_모음(단기, 장기 int) []float64 {
 	// '거래량으로 투자하라'(Buff Dormeier 저) 제 17장
 	return F가중_이동_평균(s.VPCI_모음(단기, 장기), s.G전일_거래량_모음(), 단기)
+}
+
+func (s S종목별_일일_가격정보_모음) VPCI(단기, 장기 int) float64 {
+	VPCI_모음 := s.VPCI_모음(단기, 장기)
+
+	return VPCI_모음[len(VPCI_모음)-1]
+}
+
+func (s S종목별_일일_가격정보_모음) VPCIs(단기, 장기 int) float64 {
+	VPCIs_모음 := s.VPCIs_모음(단기, 장기)
+
+	return VPCIs_모음[len(VPCIs_모음)-1]
 }
 
 func (s S종목별_일일_가격정보_모음) G추세_점수_모음() []float64 {

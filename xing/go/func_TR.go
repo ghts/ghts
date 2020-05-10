@@ -1612,11 +1612,6 @@ func F서버_이름() (서버_이름 string, 에러 error) {
 	return 서버_이름, nil
 }
 
-func F서버_구분() (서버_구분 xt.T서버_구분, 에러 error) {
-	defer lib.S예외처리{M에러: &에러, M함수: func() { 서버_구분 = xt.P서버_실거래 }}.S실행()
-
-	회신_메시지 := F질의(lib.New질의값_기본형(xt.TR서버_구분, ""))
-	정수값 := lib.F확인(회신_메시지.G해석값(0)).(int)
-
-	return xt.T서버_구분(정수값), nil
+func F서버_구분() xt.T서버_구분 {
+	return 서버_구분
 }
