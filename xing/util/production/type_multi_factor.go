@@ -383,4 +383,6 @@ func F종목별_멀티_팩터_데이터_등급_산출(멀티_팩터_데이터_�
 	for i, 값 := range s.M저장소 {
 		값.M부채증가율 = math.Floor(float64(i)/float64(len(s.M저장소))*100.0) + 1
 	}
+
+	return nil
 }
