@@ -231,12 +231,12 @@ func OnMessageAndError(MSG데이터 unsafe.Pointer) {
 }
 
 func OnReleaseData(식별번호 int) {
-	F데이터_해제(식별번호)
 	F콜백(lib.New콜백_TR완료(식별번호))
+	F데이터_해제(식별번호)
 }
 
-func OnRealtimeData(REALTIME데이터 unsafe.Pointer) {
-	c데이터 := c.F2Go바이트_모음(REALTIME데이터, xt.Sizeof_REALTIME_DATA)
+func OnRealtimeData(실시간_데이터 unsafe.Pointer) {
+	c데이터 := c.F2Go바이트_모음(실시간_데이터, xt.Sizeof_REALTIME_DATA)
 	버퍼 := bytes.NewBuffer(c데이터)
 	g := new(xt.REALTIME_DATA)
 
@@ -249,6 +249,8 @@ func OnRealtimeData(REALTIME데이터 unsafe.Pointer) {
 	binary.Read(버퍼, binary.LittleEndian, &g.X_RegKey)
 	binary.Read(버퍼, binary.LittleEndian, &g.DataLength)
 
+	lib.F체크포인트(lib.F2문자열_공백제거(g.TrCode))
+
 	// uintptr형식으로 바로 읽어들이면 제대로 읽어들이지 못함.
 	// uint32형식을 통해서 uintptr형식으로 변환해서 버그 회피.
 	var 주소값 uint32
@@ -256,6 +258,7 @@ func OnRealtimeData(REALTIME데이터 unsafe.Pointer) {
 	g.Data = uintptr(주소값)
 
 	// KeyData, RegKey등이 불필요한 듯 해서 전송 안 함. 필요하면 추가할 것.
+
 	raw값 := c.F2Go바이트_모음(unsafe.Pointer(g.Data), int(g.DataLength))
 	raw값 = f민감정보_삭제(raw값, lib.F2문자열_공백제거(g.TrCode))
 	바이트_변환값 := lib.F확인(lib.New바이트_변환Raw(lib.F2문자열(g.TrCode), raw값, false)).(*lib.S바이트_변환)

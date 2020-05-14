@@ -98,6 +98,7 @@ func WndProc(hWnd w32.HWND, msg uint32, wParam, lParam uintptr) uintptr {
 		}
 		return FALSE
 	case XM_RECEIVE_REAL_DATA:
+		lib.F체크포인트("실시간 데이터")
 		OnRealtimeData(unsafe.Pointer(lParam))
 		return TRUE
 	case XM_LOGIN:

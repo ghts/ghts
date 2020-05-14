@@ -12,7 +12,8 @@
 보다 자세한 사항에 대해서는 GNU LGPL 2.1판을 참고하시기 바랍니다.
 GNU LGPL 2.1판은 이 프로그램과 함께 제공됩니다.
 만약, 이 문서가 누락되어 있다면 자유 소프트웨어 재단으로 문의하시기 바랍니다.
-(자유 소프트웨어 재단 : Free Software Foundation, Inc.,
+(자유 소프트웨어 재
+단 : Free Software Foundation, Inc.,
 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA)
 
 Copyright (C) 2015-2020년 UnHa Kim (< unha.kim.ghts at gmail dot com >)

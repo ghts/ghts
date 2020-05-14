@@ -56,6 +56,7 @@ const (
 	SizeSC4_OutBlock        = int(unsafe.Sizeof(SC4_OutBlock{}))
 	SizeH1_OutBlock         = int(unsafe.Sizeof(H1_OutBlock{}))
 	SizeH2_OutBlock         = int(unsafe.Sizeof(H2_OutBlock{}))
+	SizeHA_OutBlock         = int(unsafe.Sizeof(HA_OutBlock{}))
 	SizeS3_OutBlock         = int(unsafe.Sizeof(S3_OutBlock{}))
 	SizeYS3OutBlock         = int(unsafe.Sizeof(YS3OutBlock{}))
 	SizeI5_OutBlock         = int(unsafe.Sizeof(I5_OutBlock{}))
@@ -344,6 +345,7 @@ const (
 
 	RT코스피_호가_잔량_H1      = "H1_"
 	RT코스피_시간외_호가_잔량_H2  = "H2_"
+	RT코스닥_호가잔량_HA    = "HA_"
 	RT코스피_체결_S3         = "S3_"
 	RT코스피_예상_체결_YS3     = "YS3"
 	RT코스피_ETF_NAV_I5    = "I5_"
@@ -367,7 +369,6 @@ const (
 	RT코스닥_거래원        = "OK_"
 	RT코스피_기세         = "S4_"
 	RT코스닥_LP호가       = "B7_"
-	RT코스닥_호가잔량       = "HA_"
 	RT코스닥_시간외_호가잔량   = "HB_"
 	RT지수             = "IJ_"
 	RT예상지수           = "YJ_"

@@ -540,6 +540,8 @@ func F바이트_변환값_해석(바이트_변환값 *lib.S바이트_변환) (�
 }
 
 func F바이트_변환값_해석_Raw(바이트_변환값 *lib.S바이트_변환) (해석값 interface{}, 에러 error) {
+	defer lib.S예외처리{M에러: &에러, M함수: func() { 해석값 = nil }}.S실행()
+
 	var b []byte
 	lib.F확인(바이트_변환값.G값(&b))
 
@@ -564,6 +566,8 @@ func F바이트_변환값_해석_Raw(바이트_변환값 *lib.S바이트_변환)
 		return New코스피_호가_잔량(b)
 	case RT코스피_시간외_호가_잔량_H2:
 		return New코스피_시간외_호가_잔량(b)
+	case RT코스닥_호가잔량_HA:
+		return New코스닥_호가_잔량(b)
 	case RT코스피_체결_S3:
 		return New코스피_체결(b)
 	case RT코스피_예상_체결_YS3:
@@ -577,7 +581,7 @@ func F바이트_변환값_해석_Raw(바이트_변환값 *lib.S바이트_변환)
 	case RT장_운영정보_JIF:
 		return New장_운영정보(b)
 	case RT코스닥_체결, RT코스닥_예상_체결, RT코스피_거래원, RT코스닥_거래원,
-		RT코스피_기세, RT코스닥_LP호가, RT코스닥_호가잔량, RT코스닥_시간외_호가잔량,
+		RT코스피_기세, RT코스닥_LP호가, RT코스닥_시간외_호가잔량,
 		RT지수, RT예상지수, RT실시간_뉴스_제목_패킷, RT업종별_투자자별_매매_현황:
 		return nil, lib.New에러("미구현 RT코드 : '%v'", 자료형_문자열)
 	case P자료형_CFOAQ00600OutBlock:

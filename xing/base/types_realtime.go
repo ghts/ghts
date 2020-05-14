@@ -53,7 +53,7 @@ type S현물_주문_응답_실시간_정보 struct { // 'SCn'
 
 func (s S현물_주문_응답_실시간_정보) TR코드() string { return s.RT코드 }
 
-type S코스피_호가_잔량_실시간_정보 struct {
+type S호가_잔량_실시간_정보 struct {
 	RT코드     string
 	M종목코드    string
 	M시각      time.Time
@@ -67,9 +67,7 @@ type S코스피_호가_잔량_실시간_정보 struct {
 	M매수_총잔량  int64
 }
 
-func (s S코스피_호가_잔량_실시간_정보) TR코드() string {
-	return RT코스피_호가_잔량_H1
-}
+func (s S호가_잔량_실시간_정보) TR코드() string { return s.RT코드 }
 
 type S코스피_시간외_호가_잔량_실시간_정보 struct {
 	M종목코드      string

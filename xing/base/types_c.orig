@@ -262,33 +262,14 @@ type T8436OutBlock C.T8436OutBlock
 // 실시간 정보 구조체
 //------------------------------------------------------------------------------
 
-// 코스피 호가 잔량
-type H1_InBlock C.H1_InBlock
-type H1_OutBlock C.H1_OutBlock
-
-// 코스피 시간외 호가 잔량
-type H2_InBlock C.H2_InBlock
-type H2_OutBlock C.H2_OutBlock
-
-// 코스피 체결
-type S3_InBlock C.S3_InBlock
-type S3_OutBlock C.S3_OutBlock
-
-// 코스피 예상 체결
-type YS3InBlock C.YS3InBlock
-type YS3OutBlock C.YS3OutBlock
-
-// 코스피 ETF NAV
-type I5_InBlock C.I5_InBlock
-type I5_OutBlock C.I5_OutBlock
-
-// 주식 VI발동해제
-type VI_InBlock C.VI_InBlock
-type VI_OutBlock C.VI_OutBlock
-
-// 시간외 단일가 VI발동해제
-type DVIInBlock C.DVIInBlock
-type DVIOutBlock C.DVIOutBlock
+type H1_OutBlock C.H1_OutBlock  // 코스피 호가 잔량
+type H2_OutBlock C.H2_OutBlock  // 코스피 시간외 호가 잔량
+type HA_OutBlock C.HA_OutBlock  // 코스닥 호가 잔량
+type S3_OutBlock C.S3_OutBlock  // 코스피 체결
+type YS3OutBlock C.YS3OutBlock  // 코스피 예상 체결
+type I5_OutBlock C.I5_OutBlock  // 코스피 ETF NAV
+type VI_OutBlock C.VI_OutBlock  // 주식 VI발동해제
+type DVIOutBlock C.DVIOutBlock  // 시간외 단일가 VI발동해제
 
 // 장 운영 정보
 type JIFInBlock C.JIFInBlock

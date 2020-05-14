@@ -1141,7 +1141,7 @@ func TrT8407_현물_멀티_현재가_조회(종목코드_모음 []string) (응�
 	// TR전송 제한 소모 속도를 늦추어서, 타임아웃이 되지 않게 하는 것이 오히려 도움이 됨.
 	lib.F대기(lib.P1초)
 
-	질의값 := lib.New질의값_복수종목(xt.TR조회, xt.TR현물_멀티_현재가_조회_t8407, 종목코드_모음)
+	질의값 := lib.New질의값_복수_종목(xt.TR조회, xt.TR현물_멀티_현재가_조회_t8407, 종목코드_모음)
 	i응답값, 에러 := F질의_단일TR(질의값)
 	lib.F확인(에러)
 
@@ -1513,7 +1513,8 @@ func F질의_단일TR(질의값 lib.I질의값, 옵션_모음 ...interface{}) (�
 		switch 변환값 := 값.(type) {
 		case error:
 			if strings.Contains(변환값.Error(), "주문이 접수 대기") ||
-				strings.Contains(변환값.Error(), "원주문번호를 잘못 입력") {
+				strings.Contains(변환값.Error(), "원주문번호를 잘못 입력") ||
+				strings.Contains(변환값.Error(), "취소 가능한 수량을 초과하였습니다.") {
 				return nil, 변환값
 			}
 

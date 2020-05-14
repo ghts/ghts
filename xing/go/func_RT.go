@@ -46,12 +46,20 @@ func F실시간_정보_해지_단순TR(RT코드 string) (에러 error) {
 	return F질의(lib.New질의값_기본형(xt.TR실시간_정보_해지, RT코드)).G에러()
 }
 
-func F실시간_정보_구독(RT코드 string, 종목코드_모음 []string) (에러 error) {
-	return F질의(lib.New질의값_복수종목(xt.TR실시간_정보_구독, RT코드, 종목코드_모음)).G에러()
+func F실시간_정보_구독_단일_종목(RT코드 string, 종목코드 string) (에러 error) {
+	return F질의(lib.New질의값_단일_종목2(xt.TR실시간_정보_구독, RT코드, 종목코드)).G에러()
 }
 
-func F실시간_정보_해지(RT코드 string, 종목코드_모음 []string) (에러 error) {
-	return F질의(lib.New질의값_복수종목(xt.TR실시간_정보_해지, RT코드, 종목코드_모음)).G에러()
+func F실시간_정보_해지_단일_종목(RT코드 string, 종목코드 string) (에러 error) {
+	return F질의(lib.New질의값_단일_종목2(xt.TR실시간_정보_해지, RT코드, 종목코드)).G에러()
+}
+
+func F실시간_정보_구독_복수_종목(RT코드 string, 종목코드_모음 []string) (에러 error) {
+	return F질의(lib.New질의값_복수_종목(xt.TR실시간_정보_구독, RT코드, 종목코드_모음)).G에러()
+}
+
+func F실시간_정보_해지_복수_종목(RT코드 string, 종목코드_모음 []string) (에러 error) {
+	return F질의(lib.New질의값_복수_종목(xt.TR실시간_정보_해지, RT코드, 종목코드_모음)).G에러()
 }
 
 func F실시간_정보_일괄_해지() (에러 error) {
@@ -69,7 +77,7 @@ func F실시간_데이터_구독_ETF(종목코드 string, 종목코드_모음 ..
 		xt.RT코스피_예상_체결_YS3}
 
 	for _, RT코드 := range RT코드_모음 {
-		lib.F확인(F실시간_정보_구독(RT코드, 종목코드_모음))
+		lib.F확인(F실시간_정보_구독_복수_종목(RT코드, 종목코드_모음))
 	}
 
 	return nil
@@ -86,7 +94,7 @@ func F실시간_데이터_해지_ETF(종목코드_모음 []string) (에러 error
 		xt.RT코스피_예상_체결_YS3}
 
 	for _, RT코드 := range RT코드_모음 {
-		lib.F확인(F실시간_정보_해지(RT코드, 종목코드_모음))
+		lib.F확인(F실시간_정보_해지_복수_종목(RT코드, 종목코드_모음))
 	}
 
 	return nil
