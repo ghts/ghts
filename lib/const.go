@@ -65,6 +65,7 @@ const (
 	P5분     = 5 * time.Minute
 	P10분    = 10 * time.Minute
 	P15분    = 15 * time.Minute
+	P20분    = 20 * time.Minute
 	P30분    = 30 * time.Minute
 	P1시간    = time.Hour
 	P1일     = 24 * time.Hour

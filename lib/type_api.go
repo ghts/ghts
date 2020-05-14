@@ -160,6 +160,14 @@ func New질의값_단일_종목() *S질의값_단일_종목 {
 	return s
 }
 
+func New질의값_단일_종목2(TR구분 TR구분, TR코드, 종목코드 string) *S질의값_단일_종목 {
+	s := new(S질의값_단일_종목)
+	s.S질의값_기본형 = New질의값_기본형(TR구분, TR코드)
+	s.M종목코드 = 종목코드
+
+	return s
+}
+
 type S질의값_단일종목_연속키 struct {
 	*S질의값_단일_종목
 	M연속키 string
@@ -168,6 +176,14 @@ type S질의값_단일종목_연속키 struct {
 func New질의값_단일종목_연속키() *S질의값_단일종목_연속키 {
 	s := new(S질의값_단일종목_연속키)
 	s.S질의값_단일_종목 = New질의값_단일_종목()
+
+	return s
+}
+
+func New질의값_복수_종목(TR구분 TR구분, TR코드 string, 종목코드_모음 []string) *S질의값_복수_종목 {
+	s := new(S질의값_복수_종목)
+	s.S질의값_기본형 = New질의값_기본형(TR구분, TR코드)
+	s.M종목코드_모음 = 종목코드_모음
 
 	return s
 }
@@ -189,14 +205,6 @@ func (s S질의값_복수_종목) G전체_종목코드() string {
 	}
 
 	return 버퍼.String()
-}
-
-func New질의값_복수종목(TR구분 TR구분, TR코드 string, 종목코드_모음 []string) *S질의값_복수_종목 {
-	s := new(S질의값_복수_종목)
-	s.S질의값_기본형 = New질의값_기본형(TR구분, TR코드)
-	s.M종목코드_모음 = 종목코드_모음
-
-	return s
 }
 
 type S질의값_정상_주문 struct {
@@ -333,7 +341,7 @@ func (s *s전송_권한) s오래된_전송_기록_정리() {
 		전송_기록 := s.전송_기록_저장소.Front()
 		전송_시각 := 전송_기록.Value.(time.Time)
 
-		if 지금.Sub(전송_시각) > s.간격 {
+		if 지금.Sub(전송_시각) > s.간격 && 전송_기록 != nil {
 			s.전송_기록_저장소.Remove(전송_기록)
 		} else {
 			return
