@@ -209,6 +209,8 @@ func (s *S종목별_일일_가격정보_모음) DB읽기(db *sql.DB, 종목코�
 func (s *S종목별_일일_가격정보_모음) DB저장(db *sql.DB) (에러 error) {
 	var tx *sql.Tx
 	defer S예외처리{M에러: &에러, M함수: func() {
+		F에러_출력(에러)
+
 		if tx != nil {
 			tx.Rollback()
 		}
@@ -216,16 +218,25 @@ func (s *S종목별_일일_가격정보_모음) DB저장(db *sql.DB) (에러 err
 
 	F확인(F일일_가격정보_테이블_생성(db))
 
-	SQL := new(bytes.Buffer)
-	SQL.WriteString("INSERT IGNORE INTO daily_price (")
-	SQL.WriteString("code,")
-	SQL.WriteString("date,")
-	SQL.WriteString("open,")
-	SQL.WriteString("high,")
-	SQL.WriteString("low,")
-	SQL.WriteString("close,")
-	SQL.WriteString("volume")
-	SQL.WriteString(") VALUES (?,?,?,?,?,?,?)")
+	SQL생성 := new(bytes.Buffer)
+	SQL생성.WriteString("INSERT IGNORE INTO daily_price (")
+	SQL생성.WriteString("  code,")
+	SQL생성.WriteString("  date,")
+	SQL생성.WriteString("  open,")
+	SQL생성.WriteString("  high,")
+	SQL생성.WriteString("  low,")
+	SQL생성.WriteString("  close,")
+	SQL생성.WriteString("  volume")
+	SQL생성.WriteString(") VALUES (?,?,0,0,0,0,0)")
+
+	SQL수정 := new(bytes.Buffer)
+	SQL수정.WriteString("UPDATE daily_price SET")
+	SQL수정.WriteString("  open=?,")
+	SQL수정.WriteString("  high=?,")
+	SQL수정.WriteString("  low=?,")
+	SQL수정.WriteString("  close=?,")
+	SQL수정.WriteString("  volume=? ")
+	SQL수정.WriteString("WHERE code=? AND date=?")
 
 	txOpts := new(sql.TxOptions)
 	txOpts.Isolation = sql.LevelDefault
@@ -234,19 +245,19 @@ func (s *S종목별_일일_가격정보_모음) DB저장(db *sql.DB) (에러 err
 	tx, 에러 = db.BeginTx(context.TODO(), txOpts)
 	F확인(에러)
 
-	stmt, 에러 := tx.Prepare(SQL.String())
+	stmt생성, 에러 := tx.Prepare(SQL생성.String())
 	F확인(에러)
-	defer stmt.Close()
+	defer stmt생성.Close()
+
+	stmt수정, 에러 := tx.Prepare(SQL수정.String())
+	F확인(에러)
+	defer stmt수정.Close()
 
 	for _, 값 := range s.M저장소 {
-		_, 에러 = stmt.Exec(
-			값.M종목코드,
-			값.M일자,
-			값.M시가,
-			값.M고가,
-			값.M저가,
-			값.M종가,
-			값.M거래량)
+		_, 에러 = stmt생성.Exec(값.M종목코드, 값.G일자())
+		F확인(에러)
+
+		_, 에러 := stmt수정.Exec(값.M시가, 값.M고가, 값.M저가, 값.M종가, 값.M거래량, 값.M종목코드, 값.G일자())
 		F확인(에러)
 	}
 
