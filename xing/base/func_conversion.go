@@ -566,7 +566,7 @@ func F바이트_변환값_해석_Raw(바이트_변환값 *lib.S바이트_변환)
 		return New코스피_호가_잔량(b)
 	case RT코스피_시간외_호가_잔량_H2:
 		return New코스피_시간외_호가_잔량(b)
-	case RT코스닥_호가잔량_HA:
+	case RT코스닥_호가_잔량_HA:
 		return New코스닥_호가_잔량(b)
 	case RT코스피_체결_S3:
 		return New코스피_체결(b)

@@ -133,3 +133,35 @@ func F주문_응답_실시간_정보_해지() (에러 error) {
 
 	return nil
 }
+
+func F호가_잔량_실시간_정보_구독(종목코드 string) (에러 error) {
+	defer lib.S예외처리{M에러: &에러}.S실행()
+
+	종목, 에러 := F종목by코드(종목코드)
+	lib.F확인(에러)
+
+	switch 종목.G시장구분() {
+	case lib.P시장구분_코스피, lib.P시장구분_ETF, lib.P시장구분_ETN:
+		return F실시간_정보_구독_단일_종목(xt.RT코스피_호가_잔량_H1, 종목코드)
+	case lib.P시장구분_코스닥:
+		return F실시간_정보_구독_단일_종목(xt.RT코스닥_호가_잔량_HA, 종목코드)
+	default:
+		return lib.New에러("미구현 시장 구분 : '%v' '%v'", 종목코드, 종목.G시장구분())
+	}
+}
+
+func F호가_잔량_실시간_정보_해지(종목코드 string) (에러 error) {
+	defer lib.S예외처리{M에러: &에러}.S실행()
+
+	종목, 에러 := F종목by코드(종목코드)
+	lib.F확인(에러)
+
+	switch 종목.G시장구분() {
+	case lib.P시장구분_코스피, lib.P시장구분_ETF, lib.P시장구분_ETN:
+		return F실시간_정보_해지_단일_종목(xt.RT코스피_호가_잔량_H1, 종목코드)
+	case lib.P시장구분_코스닥:
+		return F실시간_정보_해지_단일_종목(xt.RT코스닥_호가_잔량_HA, 종목코드)
+	default:
+		return lib.New에러("미구현 시장 구분 : '%v' '%v'", 종목코드, 종목.G시장구분())
+	}
+}
