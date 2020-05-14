@@ -522,9 +522,7 @@ func F문자열_출력(포맷_문자열 string, 추가_매개변수 ...interface
 		버퍼.WriteString(위치)
 	}
 
-	if !strings.HasSuffix(포맷_문자열, "\n") {
-		버퍼.WriteString("\n")
-	}
+	버퍼.WriteString("\n")
 
 	fmt.Printf(버퍼.String(), 추가_매개변수...)
 }
