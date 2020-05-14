@@ -335,7 +335,11 @@ func F질의(TR코드 string, c데이터 unsafe.Pointer, 길이 int,
 		에러 := lib.New에러with출력("F질의() 에러 발생. 에러 코드 : '%v'", 에러_번호)
 
 		if strings.Contains(에러.Error(), "Access is denied.") {
-			F콜백(lib.New콜백_신호(lib.P신호_C32_재시작_필요))
+			lib.F체크포인트("재시작 콜백 신호 송신")
+			f콜백_동기식(lib.New콜백_신호(lib.P신호_C32_재시작_필요))
+
+			lib.F체크포인트("C32 자체 종료.")
+			f종료()
 		}
 	}
 
