@@ -300,9 +300,7 @@ func OnLogout() {
 func OnDisconnected() {
 	lib.F체크포인트("OnDisconnected.")
 
-	// API 호출은 하나의 스레드에서 해야 안전하므로, F접속()을 직접 호출하지 않고,
-	// 채널 질의를 통해서 간접적으로 호출함.
-	F서버_접속(서버_구분)
+	F콜백(lib.New콜백_신호(lib.P신호_C32_재시작_필요))
 }
 
 func OnTimeout(c int) {

@@ -221,7 +221,7 @@ func f데이터_복원_이중_응답(대기_항목 *c32_콜백_대기_항목, �
 		}
 	}
 
-	switch 변환값 := 수신값.S해석기(xt.F바이트_변환값_해석).G해석값_단순형().(type)  {
+	switch 변환값 := 수신값.S해석기(xt.F바이트_변환값_해석).G해석값_단순형().(type) {
 	case nil:
 		대기_항목.대기값 = nil
 		대기_항목.데이터_수신 = true
@@ -306,17 +306,28 @@ func f데이터_복원_반복_조회(대기_항목 *c32_콜백_대기_항목, �
 func C32_재시작() (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
+	// 동시 다발 실행 방지.
 	xing_C32_재실행_잠금.Lock()
 	defer xing_C32_재실행_잠금.Unlock()
 
-	최근에_재시작_됨 := xing_C32_재실행_시각.G값().After(lib.F지금().Add(-1 * lib.P3분))
-	if 최근에_재시작_됨 {
+	// 중복 재실행 방지.
+	if 최근_재시작 := xing_C32_재실행_시각.G값().After(lib.F지금().Add(-1 * lib.P1분)); 최근_재시작 {
 		return
 	}
 
-	defer xing_C32_재실행_시각.S값(lib.F지금())
-
 	fmt.Printf("**     C32 재시작 %v **\n", time.Now().Format(lib.P간략한_시간_형식))
+
+	lib.F확인(c32_재시작_도우미())
+
+	return nil
+}
+
+func c32_재시작_도우미() (에러 error) {
+	// 재귀 반복 시도.
+	defer lib.S예외처리{M함수: func() { 에러 = c32_재시작_도우미() }}.S실행()
+
+	C32_재시작_실행_중.S값(true)
+
 	lib.F확인(C32_종료())
 	lib.F패닉억제_호출(소켓REP_TR콜백.Close)
 	소켓REQ_저장소.S정리()
@@ -330,6 +341,9 @@ func C32_재시작() (에러 error) {
 	lib.F확인(f종목모음_설정())
 	lib.F확인(F전일_당일_설정())
 	f접속유지_실행()
+
+	C32_재시작_실행_중.S값(false)
+	xing_C32_재실행_시각.S값(lib.F지금())
 
 	fmt.Println("**     C32 재시작 완료     **")
 

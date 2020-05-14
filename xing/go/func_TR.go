@@ -1430,6 +1430,10 @@ func TrT8432_지수선물_마스터_조회(구분 string) (응답값_모음 []*x
 func TrT8436_주식종목_조회(시장_구분 lib.T시장구분) (응답값_모음 []*xt.T8436_현물_종목조회_응답_반복값, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 응답값_모음 = nil }}.S실행()
 
+	if C32_재시작_실행_중.G값() {
+		return nil, lib.New에러("C32 재시작 실행 중.")
+	}
+
 	var 시장구분_문자열 string
 
 	switch 시장_구분 {

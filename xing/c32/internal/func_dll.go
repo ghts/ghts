@@ -40,6 +40,7 @@ import (
 	"github.com/ghts/ghts/lib/c"
 	"github.com/ghts/ghts/xing/base"
 	"gopkg.in/ini.v1"
+	"strings"
 	"syscall"
 
 	"bytes"
@@ -331,7 +332,11 @@ func F질의(TR코드 string, c데이터 unsafe.Pointer, 길이 int,
 		0, 0)
 
 	if 에러_번호 != 0 {
-		lib.F에러_출력(lib.New에러("F질의() 에러 발생. 에러 코드 : '%v'", 에러_번호))
+		에러 := lib.New에러with출력("F질의() 에러 발생. 에러 코드 : '%v'", 에러_번호)
+
+		if strings.Contains(에러.Error(), "Access is denied.") {
+			F콜백(lib.New콜백_신호(lib.P신호_C32_재시작_필요))
+		}
 	}
 
 	return int(질의ID)

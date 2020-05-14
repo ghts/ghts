@@ -68,8 +68,9 @@ var (
 	xing_C32_재실행_잠금 sync.Mutex
 	xing_C32_재실행_시각 = lib.New안전한_시각(time.Time{})
 
-	접속유지_실행중   = lib.New안전한_bool(false)
-	주문_응답_구독_중 = lib.New안전한_bool(false)
+	접속유지_실행중     = lib.New안전한_bool(false)
+	주문_응답_구독_중   = lib.New안전한_bool(false)
+	C32_재시작_실행_중 = lib.New안전한_bool(false)
 )
 
 // 종목 관련 저장소는 초기화 이후에는 사실상 읽기 전용. 다중 사용에 문제가 없음.

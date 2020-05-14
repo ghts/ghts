@@ -182,6 +182,8 @@ func f콜백_신호_처리기(콜백 lib.I콜백) (에러 error) {
 		case ch신호_C32_로그인 <- 신호:
 		default:
 		}
+	case lib.P신호_C32_재시작_필요:
+		go C32_재시작()
 	case lib.P신호_C32_종료:
 		select {
 		case ch신호_C32_종료 <- 신호:
