@@ -157,6 +157,9 @@ func F절대값_실수(값 interface{}) float64 {
 }
 
 func F대기(시간 time.Duration) { time.Sleep(시간) }
+func F대기_초(초 float64)      { time.Sleep(time.Duration(float64(P1초) * 초)) }
+func F대기_분(분 float64)      { time.Sleep(time.Duration(float64(P1분) * 분)) }
+func F대기_시간(시간 float64)    { time.Sleep(time.Duration(float64(P1시간) * 시간)) }
 
 func F신호_수신(채널 <-chan T신호) bool {
 	select {

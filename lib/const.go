@@ -61,6 +61,7 @@ const (
 	P30초    = 30 * time.Second
 	P40초    = 40 * time.Second
 	P1분     = 1 * time.Minute
+	P2분     = 2 * time.Minute
 	P3분     = 3 * time.Minute
 	P5분     = 5 * time.Minute
 	P10분    = 10 * time.Minute
