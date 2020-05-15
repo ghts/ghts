@@ -87,10 +87,10 @@ func New종목별_멀티_팩터_데이터(
 	s.APR = (s.M당기순이익 - s.M영업_현금흐름) / s.M기준가
 	s.AAR = (s.M당기순이익 - s.M영업_현금흐름) / s.M자산
 	s.CDR = s.M현금_증가 / s.M부채
+	s.M전일_VPCI = 종목별_일일_가격정보_모음.G전일_VPCI(10, 50)
+	s.M전일_VPCIs = 종목별_일일_가격정보_모음.G전일_VPCIs(10, 50)
 	s.VPCI = 종목별_일일_가격정보_모음.VPCI(10, 50)
 	s.VPCIs = 종목별_일일_가격정보_모음.VPCIs(10, 50)
-	s.MFI = 종목별_일일_가격정보_모음.MFI(14)
-	s.MFIs = 종목별_일일_가격정보_모음.MFIs(14, 9)
 
 	차최신_정보 := 내재가치_정보_모음.G종목별_차최신_정보(종목코드)
 	if 차최신_정보 == nil ||
@@ -161,10 +161,10 @@ type S종목별_멀티_팩터_데이터 struct {
 	M부채증가율    float64 // 부채증가율 : 상위 10% 그룹은 걸러내어야 한다.
 	M부채증가율_등급 float64
 	// --- 거래량 팩터 --
-	MFI   float64
-	MFIs  float64
-	VPCI  float64
-	VPCIs float64
+	M전일_VPCI  float64
+	M전일_VPCIs float64
+	VPCI      float64
+	VPCIs     float64
 	// --- 최종 등급 --
 	M복합_등급 float64
 }
@@ -175,7 +175,7 @@ func F종목별_멀티_팩터_데이터_DB읽기(db *sql.DB) (값_모음 []*S종
 	값_모음 = make([]*S종목별_멀티_팩터_데이터, 0)
 	내재가치_정보_모음 := lib.New내재가치_정보_모음_DB읽기(db)
 
-	for i, 종목코드 := range xing.F종목코드_모음_전체() {
+	for _, 종목코드 := range xing.F종목코드_모음_전체() {
 		if xing.ETF_ETN_종목_여부(종목코드) {
 			continue
 		}
@@ -187,10 +187,6 @@ func F종목별_멀티_팩터_데이터_DB읽기(db *sql.DB) (값_모음 []*S종
 
 		if 값 := New종목별_멀티_팩터_데이터(종목별_일일_가격정보_모음, 내재가치_정보_모음); 값 != nil {
 			값_모음 = append(값_모음, 값)
-		}
-
-		if i > 0 && i%100 == 0 {
-			lib.F체크포인트(i, len(값_모음))
 		}
 	}
 
