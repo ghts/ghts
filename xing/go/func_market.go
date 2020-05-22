@@ -499,6 +499,28 @@ func F지주회사_종목_여부(종목코드 string) bool {
 	return false
 }
 
+func F특수_종목_여부(종목코드 string) bool {
+	종목, 에러 := F종목by코드(종목코드)
+	if 에러 != nil {
+		return false
+	}
+
+	종목명 := 종목.G이름()
+
+	switch {
+	case strings.Contains(종목명, "스팩") &&
+		strings.Contains(종목명, "호"):
+		return true
+	case strings.HasPrefix(종목명, "하이골드") &&
+		strings.Contains(종목명, "호"):
+		return true
+	case strings.Contains(종목명, "리츠"):
+		return true
+	}
+
+	return false
+}
+
 func F최소_호가단위by종목코드(종목코드 string) (값 int64, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 값 = 0 }}.S실행()
 
