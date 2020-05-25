@@ -31,21 +31,30 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package lib
+package xing
 
 import (
+	"github.com/ghts/ghts/lib"
+	"strings"
 	"testing"
 )
 
 func TestF샘플_종목_모음(t *testing.T) {
 	t.Parallel()
 
-	샘플_종목_모음 := F샘플_종목_모음_코스피_주식()
+	샘플_종목_모음 := lib.F샘플_종목_모음_전체()
 
-	F테스트_참임(t, len(샘플_종목_모음) > 0)
+	lib.F테스트_참임(t, len(샘플_종목_모음) > 0)
 
 	for _, 종목 := range 샘플_종목_모음 {
-		F테스트_참임(t, 종목.G이름() != "")
-		F테스트_참임(t, 종목.G코드() != "")
+		lib.F테스트_참임(t, F종목코드_존재함(종목.G코드()), 종목.G코드())
+
+		종목_비교값, 에러 := F종목by코드(종목.G코드())
+		lib.F테스트_에러없음(t, 에러)
+
+		종목명 := strings.ReplaceAll(종목.G코드(), " ", "")
+		종목명2 := strings.ReplaceAll(종목_비교값.G코드(), " ", "")
+
+		lib.F테스트_참임(t, strings.Contains(종목명, 종목명2), 종목.G이름(), 종목_비교값.G이름())
 	}
 }
