@@ -680,6 +680,30 @@ func (s S종목별_일일_가격정보_모음) MFIs(윈도우_크기_MFI, 윈도
 	return MFIs_모음[len(MFIs_모음)-1]
 }
 
+func (s S종목별_일일_가격정보_모음) G전일_MFI(윈도우_크기 int) float64 {
+	전일_MFI_모음 := s.mfi_도우미(
+		윈도우_크기,
+		s.G전일_고가_모음(),
+		s.G전일_저가_모음(),
+		s.G전일_종가_모음(),
+		s.G전일_거래량_모음())
+
+	return 전일_MFI_모음[len(전일_MFI_모음)-1]
+}
+
+func (s S종목별_일일_가격정보_모음) G전일_MFIs(윈도우_크기_MFI, 윈도우_크기_이동평균 int) float64 {
+	전일_MFI_모음 := s.mfi_도우미(
+		윈도우_크기_MFI,
+		s.G전일_고가_모음(),
+		s.G전일_저가_모음(),
+		s.G전일_종가_모음(),
+		s.G전일_거래량_모음())
+
+	전일_MFIs_모음 := F가중_이동_평균(전일_MFI_모음, s.G전일_거래량_모음(), 윈도우_크기_이동평균)
+
+	return 전일_MFIs_모음[len(전일_MFIs_모음)-1]
+}
+
 func (s S종목별_일일_가격정보_모음) mfi_도우미(윈도우_크기 int,
 	고가_모음 []float64, 저가_모음 []float64, 종가_모음 []float64, 거래량_모음 []float64) []float64 {
 	// 참고자료 : https://www.investopedia.com/terms/m/mfi.asp
