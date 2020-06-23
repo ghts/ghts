@@ -175,7 +175,7 @@ func NewCSPAT00800_현물_취소_주문_응답2(b []byte) (s *CSPAT00800_S현물
 	s.M레코드_수량 = lib.F2정수_단순형(g.RecCnt)
 	s.M주문번호 = lib.F2정수64_단순형(g.OrdNo)
 	s.M모_주문번호 = lib.F2정수64_단순형(g.PrntOrdNo)
-	s.M주문시각 = lib.F2금일_시각_단순형("150405.999999", 시각_문자열)
+	s.M주문시각 = lib.F2금일_시각_단순형_공백은_초기값("150405.999999", 시각_문자열)
 	s.M주문시장_코드 = T주문시장구분(lib.F2정수_단순형(g.OrdMktCode))
 	s.M주문유형_코드 = lib.F2문자열_공백제거(g.OrdPtnCode)
 	s.M종목코드 = lib.F2문자열_공백제거(g.ShtnIsuNo)
