@@ -590,8 +590,12 @@ func F2일자(값 time.Time) time.Time {
 	return time.Date(값.Year(), 값.Month(), 값.Day(), 0, 0, 0, 0, 값.Location())
 }
 
-func F2정수_일자(일자 time.Time) uint32 {
+func F일자2정수(일자 time.Time) uint32 {
 	return uint32(F2정수64_단순형(일자.Format("20060102")))
+}
+
+func F정수2일자(일자_정수값 uint32) (일자 time.Time, 에러 error) {
+	return F2포맷된_일자("20060102", F2문자열(일자_정수값))
 }
 
 func F2포맷된_시각(포맷 string, 값 interface{}) (time.Time, error) {
