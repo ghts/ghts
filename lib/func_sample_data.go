@@ -526,7 +526,6 @@ func F샘플_종목_모음_ETF() []*S종목 {
 	종목_모음 = append(종목_모음, New종목("091180", "KODEX 자동차", P시장구분_ETF))
 	종목_모음 = append(종목_모음, New종목("091220", "TIGER 은행", P시장구분_ETF))
 	종목_모음 = append(종목_모음, New종목("091230", "TIGER 반도체", P시장구분_ETF))
-	종목_모음 = append(종목_모음, New종목("097750", "TREX 중소형가치", P시장구분_ETF))
 	종목_모음 = append(종목_모음, New종목("098560", "TIGER 방송통신", P시장구분_ETF))
 	종목_모음 = append(종목_모음, New종목("099140", "KODEX China H", P시장구분_ETF))
 	종목_모음 = append(종목_모음, New종목("100910", "KOSEF KRX100", P시장구분_ETF))
