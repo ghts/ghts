@@ -70,3 +70,9 @@ func (s S개장일_모음) G증분_개장일(일자 uint32, 증분 int) (uint32,
 		return s.M저장소[인덱스+증분], nil
 	}
 }
+
+func (s S개장일_모음) G이전_개장일(기간 int) (이전_개장일 uint32, 에러 error) {
+	defer lib.S예외처리{M에러: &에러, M함수: func() { 이전_개장일 = 0 }}.S실행()
+
+	return s.M저장소[len(s.M저장소)-기간-1], nil
+}
