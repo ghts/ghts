@@ -49,6 +49,8 @@ func F당일_일일_가격정보_수집(db *sql.DB) (에러 error) {
 		}
 	}
 
+	lib.F문자열_출력("당일 가격정보 수집 완료.")
+
 	return nil
 }
 
