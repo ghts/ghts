@@ -79,19 +79,19 @@ func (s *T1404_관리종목_조회_응답_반복값_모음) G반복값_모음_TR
 }
 
 type T1404_관리종목_조회_응답_반복값 struct {
-	M종목코드       string
-	M종목명        string
-	M현재가        int64
-	M전일대비구분     T전일대비_구분
-	M전일대비_등락폭   int64
-	M전일대비_등락율   float64
-	M거래량        int64
-	M지정일_주가     int64
-	M지정일_대비_등락폭 int64
-	M지정일_대비_등락율 float64
-	M사유         T관리종목_지정_사유_구분
-	M지정일        time.Time
-	M해제일        time.Time
+	M종목코드     string
+	M종목명      string
+	M현재가      int64
+	M전일대비구분   T전일대비_구분
+	M전일대비_등락폭 int64
+	M전일대비_등락율 float64
+	M거래량      int64
+	M지정일_주가   int64
+	//M지정일_대비_등락폭 int64
+	//M지정일_대비_등락율 float64
+	M사유  T관리종목_지정_사유_구분
+	M지정일 time.Time
+	M해제일 time.Time
 }
 
 func NewT1404InBlock(질의값 *T1404_관리종목_조회_질의값) (g *T1404InBlock) {
@@ -147,8 +147,8 @@ func NewT1404_관리종목_조회_응답_반복값_모음(b []byte) (값_모음 
 		값.M거래량 = lib.F2정수64_단순형(g.Volume)
 		값.M지정일 = lib.F2포맷된_일자_단순형("20060102", g.Date)
 		값.M지정일_주가 = lib.F2정수64_단순형(g.Tprice)
-		값.M지정일_대비_등락폭 = lib.F2정수64_단순형(g.Tchange)
-		값.M지정일_대비_등락율 = lib.F2실수_소숫점_추가_단순형(g.Tdiff, 2)
+		//값.M지정일_대비_등락폭 = lib.F2정수64_단순형(g.Tchange)
+		//값.M지정일_대비_등락율 = lib.F2실수_소숫점_추가_단순형(g.Tdiff, 2)
 		값.M사유 = T관리종목_지정_사유_구분(lib.F2정수64_단순형(g.Reason))
 		값.M해제일 = lib.F2포맷된_일자_단순형_공백은_초기값("20060102", g.Edate)
 
