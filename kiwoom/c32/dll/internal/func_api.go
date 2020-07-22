@@ -1,4 +1,4 @@
-/* Copyright(C) 2015-2020년 김운하(UnHa Kim)  < unha.kim.ghts at gmail dot com >
+/* Copyright(C) 2015-2020년 김운하 (unha.kim@ghts.org)
 
 키움증권 API는 OCX규격으로 작성되어 있는 데,
 OCX규격은 Go언어로 직접 사용하기에 기술적 난이도가 높아서,
