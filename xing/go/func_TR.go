@@ -268,6 +268,11 @@ func TrCFOFQ02400_선물옵션_미결제약정(계좌번호 string, 등록시장
 func TrCSPAT00600_현물_정상주문(질의값 *xt.CSPAT00600_현물_정상_주문_질의값) (응답값 *xt.CSPAT00600_현물_정상_주문_응답, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 응답값 = nil }}.S실행()
 
+	// ETN 종목코드 보정
+	if strings.HasPrefix(질의값.M종목코드, "5") {
+		질의값.M종목코드 = "Q" + 질의값.M종목코드
+	}
+
 	i응답값, 에러 := F질의_단일TR(질의값)
 	lib.F확인(에러)
 
@@ -279,6 +284,11 @@ func TrCSPAT00600_현물_정상주문(질의값 *xt.CSPAT00600_현물_정상_주
 
 func TrCSPAT00700_현물_정정주문(질의값 *xt.CSPAT00700_현물_정정_주문_질의값) (응답값 *xt.CSPAT00700_현물_정정_주문_응답, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 응답값 = nil }}.S실행()
+
+	// ETN 종목코드 보정
+	if strings.HasPrefix(질의값.M종목코드, "5") {
+		질의값.M종목코드 = "Q" + 질의값.M종목코드
+	}
 
 	for i := 0; i < 10; i++ { // 최대 10번 재시도
 		i응답값, 에러 := F질의_단일TR(질의값)
@@ -305,6 +315,11 @@ func TrCSPAT00700_현물_정정주문(질의값 *xt.CSPAT00700_현물_정정_주
 
 func TrCSPAT00800_현물_취소주문(질의값 *lib.S질의값_취소_주문) (응답값 *xt.CSPAT00800_현물_취소_주문_응답, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 응답값 = nil }}.S실행()
+
+	// ETN 종목코드 보정
+	if strings.HasPrefix(질의값.M종목코드, "5") {
+		질의값.M종목코드 = "Q" + 질의값.M종목코드
+	}
 
 	for i := 0; i < 10; i++ { // 최대 10번 재시도
 		i응답값, 에러 := F질의_단일TR(질의값)
