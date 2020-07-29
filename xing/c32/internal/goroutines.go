@@ -321,7 +321,7 @@ func f질의값_처리(질의 *lib.S채널_질의_API) {
 	}
 }
 
-func F조회_및_주문_질의_처리(질의 *lib.S채널_질의_API) { // 질의값 lib.I질의값) (식별번호 int, 에러 error) {
+func F조회_및_주문_질의_처리(질의 *lib.S채널_질의_API) {
 	접속됨, 에러 := f접속됨()
 
 	switch {
