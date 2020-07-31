@@ -1614,6 +1614,15 @@ func F계좌_번호(인덱스 int) (계좌_번호 string, 에러 error) {
 	return 계좌_번호, nil
 }
 
+func F계좌_번호_단순형(인덱스 int) (계좌_번호 string) {
+	defer lib.S예외처리{M함수: func() { 계좌_번호 = "" }}.S실행()
+
+	회신_메시지 := F질의(lib.New질의값_정수(xt.TR계좌번호_모음, "", 인덱스))
+	계좌_번호 = lib.F확인(회신_메시지.G해석값(0)).([]string)[인덱스]
+
+	return 계좌_번호
+}
+
 func F계좌_이름(계좌_번호 string) (계좌_이름 string, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 계좌_이름 = "" }}.S실행()
 
