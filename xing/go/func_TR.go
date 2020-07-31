@@ -397,6 +397,14 @@ func TrCSPAQ12300_현물계좌_잔고내역_조회(계좌번호 string, 단가_�
 		연속키 = 수신값.M연속키
 	}
 
+	for i, 값 := range 값_모음 {
+		if strings.HasPrefix(값.M종목코드, "Q") ||
+			strings.HasPrefix(값.M종목코드, "A") {
+			값.M종목코드 = 값.M종목코드[1:]
+			값_모음[i] = 값
+		}
+	}
+
 	return 값_모음, nil
 }
 
