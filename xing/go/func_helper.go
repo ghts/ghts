@@ -311,7 +311,7 @@ func C32_재시작() (에러 error) {
 	defer xing_C32_재실행_잠금.Unlock()
 
 	// 중복 재실행 방지.
-	if 최근_재시작 := xing_C32_재실행_시각.G값().After(lib.F지금().Add(-1 * lib.P1분)); 최근_재시작 {
+	if 최근_재시작 := xing_C32_재실행_시각.G값().After(lib.F지금().Add(-1 * lib.P3분)); 최근_재시작 {
 		return
 	}
 
