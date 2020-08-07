@@ -329,7 +329,7 @@ func F조회_및_주문_질의_처리(질의 *lib.S채널_질의_API) {
 		질의.Ch에러 <- 에러
 		return
 	case !접속됨:
-		질의.Ch에러 <- lib.New에러("F조회_및_주문_질의_처리() : XingAPI에 접속되어 있지 않습니다.")
+		질의.Ch에러 <- lib.New에러("[%v] F조회_및_주문_질의_처리() : XingAPI에 접속되어 있지 않습니다.", lib.F지금().Format(lib.P간략한_시간_형식))
 		return
 	}
 

@@ -1562,6 +1562,7 @@ func F질의_단일TR(질의값 lib.I질의값, 옵션_모음 ...interface{}) (�
 				strings.Contains(변환값.Error(), "취소 가능한 수량을 초과하였습니다.") {
 				return nil, 변환값
 			} else if strings.Contains(변환값.Error(), "XingAPI에 접속되어 있지 않습니다.") {
+				lib.F문자열_출력("[%v] XingAPI 재접속 시도.", lib.F지금().Format(lib.P간략한_시간_형식))
 				C32_재시작()
 				lib.F대기(lib.P10초)
 				return F질의_단일TR(질의값, 옵션_모음...)
