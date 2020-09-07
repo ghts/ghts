@@ -161,7 +161,7 @@ func NewT1102_현물_시세_조회_응답(b []byte) (s *T1102_현물_시세_조�
 	defer lib.S예외처리{M에러: &에러, M함수: func() { s = nil }}.S실행()
 
 	lib.F조건부_패닉(len(b) != SizeT1102OutBlock,
-		"예상하지 못한 길이 : '%v", len(b))
+		"예상하지 못한 길이 : '%v' '%v'", len(b), SizeT1102OutBlock)
 
 	g := new(T1102OutBlock)
 	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
