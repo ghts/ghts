@@ -122,6 +122,7 @@ type T1102_현물_시세_조회_응답 struct {
 	M저유동성종목여부      bool
 	M이상급등종목여부      bool
 	M대차불가여부        bool
+	M투자유의          bool
 	M매도_거래원_정보_모음  []*T1102_거래원_정보
 	M매수_거래원_정보_모음  []*T1102_거래원_정보
 	M외국계_매도_거래원_정보 *T1102_거래원_정보
@@ -247,14 +248,22 @@ func NewT1102_현물_시세_조회_응답(b []byte) (s *T1102_현물_시세_조�
 	s.M저유동성종목여부 = lib.F2참거짓(g.Low_lqdt_gu, 1, true)
 	s.M이상급등종목여부 = lib.F2참거짓(g.Abnormal_rise_gu, 1, true)
 
-	대차불가표시_문자열 := lib.F2문자열_EUC_KR_공백제거(g.Lend_text)
-	switch 대차불가표시_문자열 {
+	switch 대차불가표시_문자열 := lib.F2문자열_EUC_KR_공백제거(g.Lend_text); 대차불가표시_문자열 {
 	case "":
 		s.M대차불가여부 = false
 	case "대차불가":
 		s.M대차불가여부 = true
 	default:
 		panic(lib.New에러("%v '대차불가표시_문자열' 예상하지 못한 값 : '%v'", s.M종목코드, 대차불가표시_문자열))
+	}
+
+	switch 투자유의_문자열 := lib.F2문자열_EUC_KR_공백제거(g.Ty_text); 투자유의_문자열 {
+	case "":
+		s.M투자유의 = false
+	case "투자유의":
+		s.M투자유의 = true
+	default:
+		panic(lib.New에러("%v '투자유의_문자열' 예상하지 못한 값 : '%v'", s.M종목코드, 투자유의_문자열))
 	}
 
 	s.M매도_거래원_정보_모음 = newT1102_거래원_정보_모음(5)

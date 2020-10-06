@@ -2243,6 +2243,8 @@ type T1102OutBlock struct {
 	X_abnormal_rise_gu   byte
 	Lend_text            [8]byte
 	X_lend_text          byte
+	Ty_text              [8]byte
+	X_ty_text            byte
 }
 
 type T1301InBlock struct {
