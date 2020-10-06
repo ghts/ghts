@@ -261,9 +261,7 @@ func (s *S종목별_일일_가격정보_모음) DB저장(db *sql.DB) (에러 err
 		F확인(에러)
 	}
 
-	tx.Commit()
-
-	return nil
+	return tx.Commit()
 }
 
 func (s *S종목별_일일_가격정보_모음) S정렬_및_인덱스_설정() {
