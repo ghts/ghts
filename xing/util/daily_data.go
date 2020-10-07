@@ -54,7 +54,7 @@ func F당일_일일_가격정보_수집(db *sql.DB) (에러 error) {
 	return nil
 }
 
-func F일주일_일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string) (에러 error) {
+func F일개월_일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string) (에러 error) {
 	var 시작일, 종료일 time.Time
 	var 종목별_일일_가격정보_모음 *lib.S종목별_일일_가격정보_모음
 
@@ -74,7 +74,7 @@ func F일주일_일일_가격정보_수집(db *sql.DB, 종목코드_모음 []str
 		lib.F확인(에러)
 
 		// 시작일 설정. 데이터 수량이 1개이나 100개이나 소요 시간은 비슷함.
-		시작일 = lib.F지금().AddDate(0, 0, -14)
+		시작일 = lib.F지금().AddDate(0, 0, -31)
 
 		// 종료일 설정
 		if lib.F지금().After(xing.F당일().Add(15*lib.P1시간 + lib.P30분)) {
