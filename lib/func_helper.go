@@ -122,6 +122,22 @@ func F최소값_정수(값_모음 ...int) int {
 	return 최소값
 }
 
+func F최대값_정수(값_모음 ...int) int {
+	if len(값_모음) == 0 {
+		panic("비어있는 M값 모음.")
+	}
+
+	최대값 := 값_모음[0]
+
+	for _, 값 := range 값_모음 {
+		if 값 > 최대값 {
+			최대값 = 값
+		}
+	}
+
+	return 최대값
+}
+
 func F절대값_정수(값 int) int {
 	return F조건부_정수(값 < 0, -1*값, 값)
 }
