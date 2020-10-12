@@ -61,20 +61,8 @@ func F테스트_모드_종료() error {
 	return 에러
 }
 
-func F문자열_출력_일시정지_중() bool {
-	return 문자열_출력_일시정지_모드.G값()
-}
-
-func F문자열_출력_일시정지_시작() error {
-	return 문자열_출력_일시정지_모드.S값(true)
-}
-
-func F문자열_출력_일시정지_해제() error {
-	return 문자열_출력_일시정지_모드.S값(false)
-}
-
 func F패닉2에러(함수 interface{}, 추가_매개변수 ...interface{}) (에러 error) {
-	defer S예외처리{M에러: &에러}.S실행()
+	defer S예외처리{M에러: &에러, M출력_숨김: true}.S실행()
 
 	인수_모음 := make([]reflect.Value, len(추가_매개변수))
 
@@ -126,11 +114,6 @@ func f테스트_참임(t testing.TB, true이어야_하는_조건 bool, 에러_�
 		출력_문자열 += F변수값_문자열(에러_발생_시_출력할_변수_모음...)
 	}
 
-	if F문자열_출력_일시정지_중() {
-		F문자열_출력_일시정지_해제()
-		defer F문자열_출력_일시정지_시작()
-	}
-
 	F문자열_출력_도우미(true, 출력_문자열)
 
 	t.FailNow()
@@ -154,11 +137,6 @@ func f테스트_거짓임(t testing.TB, false이어야_하는_조건 bool, 출�
 		출력_문자열 += F변수값_자료형_문자열(출력값_모음...)
 	}
 
-	if F문자열_출력_일시정지_중() {
-		F문자열_출력_일시정지_해제()
-		defer F문자열_출력_일시정지_시작()
-	}
-
 	F문자열_출력(출력_문자열)
 
 	t.FailNow()
@@ -175,11 +153,6 @@ func f테스트_에러없음(t testing.TB, 에러_후보_모음 ...interface{}) 
 		// PASS
 	case error:
 		if 에러값 != nil {
-			if F문자열_출력_일시정지_중() {
-				F문자열_출력_일시정지_해제()
-				defer F문자열_출력_일시정지_시작()
-			}
-
 			F문자열_출력("f테스트_에러없음() : 에러 발생.\n%v", F변수값_문자열(에러_후보_모음...))
 			t.FailNow()
 		}
@@ -232,19 +205,8 @@ func f테스트_같음(t testing.TB, 값 interface{}, 비교값1 interface{}, �
 		}
 	}
 
-	// 같은 M값 발견 못함.
-	if F문자열_출력_일시정지_중() {
-		F문자열_출력_일시정지_해제()
-		defer F문자열_출력_일시정지_시작()
-	}
-
 	값_모음 := []interface{}{값}
 	값_모음 = append(값_모음, 비교값_모음...)
-
-	if F문자열_출력_일시정지_중() {
-		F문자열_출력_일시정지_해제()
-		defer F문자열_출력_일시정지_시작()
-	}
 
 	F문자열_출력_도우미(true, "같은 값을 발견하지 못함.\n%v", F변수값_자료형_문자열(값_모음...))
 
@@ -265,19 +227,8 @@ func f테스트_다름(t testing.TB, 값 interface{}, 비교값1 interface{}, �
 			continue
 		}
 
-		// 같은 M값 발견함.
-		if F문자열_출력_일시정지_중() {
-			F문자열_출력_일시정지_해제()
-			defer F문자열_출력_일시정지_시작()
-		}
-
 		값_모음 := []interface{}{값}
 		값_모음 = append(값_모음, 비교값_모음...)
-
-		if F문자열_출력_일시정지_중() {
-			F문자열_출력_일시정지_해제()
-			defer F문자열_출력_일시정지_시작()
-		}
 
 		F문자열_출력_도우미(true, "같은 값을 발견함.\n%v", F변수값_자료형_문자열(값_모음...))
 
@@ -439,79 +390,6 @@ func f포맷된_문자열(포맷_문자열 string, 추가_매개변수 ...interf
 	return fmt.Sprintf(포맷_문자열, 추가_매개변수...)
 }
 
-func New에러with출력(포맷_문자열or에러 interface{}, 추가_매개변수 ...interface{}) error {
-	return new에러(true, 포맷_문자열or에러, 추가_매개변수...)
-}
-
-func New에러(포맷_문자열or에러 interface{}, 추가_매개변수 ...interface{}) error {
-	return new에러(false, 포맷_문자열or에러, 추가_매개변수...)
-}
-
-func New조건부_에러(조건 bool, 포맷_문자열or에러 interface{}, 추가_매개변수 ...interface{}) error {
-	if !조건 {
-		return nil
-	}
-
-	return new에러(false, 포맷_문자열or에러, 추가_매개변수...)
-}
-
-func new에러(출력_여부 bool, 포맷_문자열or에러 interface{}, 추가_매개변수 ...interface{}) error {
-	if 에러 := F인터페이스_모음_입력값_검사(추가_매개변수); 에러 != nil {
-		추가_매개변수 = 추가_매개변수[0].([]interface{})
-	}
-
-	var 포맷_문자열 string
-
-	switch 값 := 포맷_문자열or에러.(type) {
-	case nil:
-		return nil
-	case error:
-		포맷_문자열 = 값.Error()
-	case string:
-		포맷_문자열 = 값
-	default:
-		panic(New에러("new에러() 예상하지 못한 자료형. '%T'", 포맷_문자열or에러))
-	}
-
-	포맷_문자열 = strings.TrimSpace(F호출경로_추가(포맷_문자열))
-
-	버퍼 := new(bytes.Buffer)
-
-	if !strings.HasPrefix(포맷_문자열, "\n") {
-		버퍼.WriteString("\n")
-	}
-
-	if strings.HasSuffix(포맷_문자열, "\n") {
-		버퍼.WriteString(포맷_문자열[:len(포맷_문자열)-1])
-	} else {
-		버퍼.WriteString(포맷_문자열)
-	}
-
-	버퍼.WriteString("\n")
-
-	// 중복 출력 방지하기 위해서 시간 문자열을 포함시켜서 구분이 되게 한다.
-	시각_문자열_검색_조건 := []string{`[0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}.[0-9]{2,}`}
-
-	if F정규식_검색(포맷_문자열, 시각_문자열_검색_조건) == "" {
-
-		버퍼.WriteString(time.Now().Format("15:04:05.99999999 \n"))
-	}
-
-	포맷_문자열 = 버퍼.String()
-
-	에러 := new(s에러)
-	에러.error = fmt.Errorf(포맷_문자열, 추가_매개변수...)
-
-	if 변환값, ok := 포맷_문자열or에러.(I출력_완료); ok && 변환값.G출력_완료() {
-		에러.출력_완료 = true
-	} else if 출력_여부 {
-		F문자열_출력_도우미(true, 포맷_문자열, 추가_매개변수...)
-		에러.출력_완료 = true
-	}
-
-	return 에러
-}
-
 func F문자열_출력(포맷_문자열 string, 추가_매개변수 ...interface{}) {
 	버퍼 := new(bytes.Buffer)
 	버퍼.WriteString(strings.TrimSpace(포맷_문자열))
@@ -528,18 +406,20 @@ func F문자열_출력(포맷_문자열 string, 추가_매개변수 ...interface
 }
 
 func F에러_출력(에러 interface{}, 추가_매개변수 ...interface{}) {
-	var 에러값 error
-
-	switch 값 := 에러.(type) {
+	switch 변환값 := 에러.(type) {
+	case *S에러:
+		F조건부_실행(!변환값.G출력_완료(), fmt.Println, 변환값.Error())
+		변환값.S출력_완료()
+	case S에러:
+		F조건부_실행(!변환값.G출력_완료(), fmt.Println, 변환값.Error())
+		(&변환값).S출력_완료()
 	case error:
-		에러값 = New에러(값)
+		fmt.Println(New에러(변환값).Error())
 	case string:
-		에러값 = New에러(값, 추가_매개변수)
+		fmt.Println(New에러(변환값, 추가_매개변수).Error())
 	default:
-		panic(New에러("F에러_출력() 예상하지 못한 자료형 : '%T'", 값))
+		panic(New에러("F에러_출력() 예상하지 못한 자료형 : '%T'", 에러))
 	}
-
-	F문자열_출력_도우미(true, 에러값.Error())
 }
 
 func F문자열_호출경로_출력(포맷_문자열 string, 추가_매개변수 ...interface{}) {
@@ -547,9 +427,7 @@ func F문자열_호출경로_출력(포맷_문자열 string, 추가_매개변수
 }
 
 func F문자열_출력_도우미(호출경로_포함_여부 bool, 포맷_문자열 string, 추가_매개변수 ...interface{}) {
-	if F문자열_출력_일시정지_중() {
-		return
-	} else if 호출경로_포함_여부 && F문자열_중복_확인(포맷_문자열) {
+	if 호출경로_포함_여부 && F문자열_중복_확인(포맷_문자열) {
 		return // 호출경로가 포함되어 있을 때만 중복 방지가 필요함.
 	}
 
