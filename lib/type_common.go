@@ -50,6 +50,10 @@ func New에러(포맷_문자열or에러 interface{}, 추가_매개변수 ...inte
 	case nil:
 		return nil
 	case *S에러:
+		변환값.호출_경로_모음 = F호출경로_모음()
+		return 변환값
+	case S에러:
+		(&변환값).호출_경로_모음 = F호출경로_모음()
 		return 변환값
 	case error:
 		if len(추가_매개변수) > 0 {
