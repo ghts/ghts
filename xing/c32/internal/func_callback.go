@@ -249,8 +249,6 @@ func OnRealtimeData(실시간_데이터 unsafe.Pointer) {
 	binary.Read(버퍼, binary.LittleEndian, &g.X_RegKey)
 	binary.Read(버퍼, binary.LittleEndian, &g.DataLength)
 
-	lib.F체크포인트(lib.F2문자열_공백제거(g.TrCode))
-
 	// uintptr형식으로 바로 읽어들이면 제대로 읽어들이지 못함.
 	// uint32형식을 통해서 uintptr형식으로 변환해서 버그 회피.
 	var 주소값 uint32
