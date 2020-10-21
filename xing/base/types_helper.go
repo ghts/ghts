@@ -80,5 +80,5 @@ type TR코드별_전송_제한_정보 struct {
 }
 
 type TR코드별_전송_제한_정보_모음 struct {
-	M배열 []*TR코드별_전송_제한_정보
+	M맵 map[string]*TR코드별_전송_제한_정보
 }
