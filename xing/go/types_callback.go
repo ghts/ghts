@@ -129,8 +129,11 @@ func (s *c32_콜백_저장소) S추가(식별번호 int, TR코드 string) chan i
 }
 
 func (s *c32_콜백_저장소) S회신(식별번호 int) {
-	대기_항목 := s.G값(식별번호)
-	대기_항목.S회신()
+	if 대기_항목 := s.G값(식별번호); 대기_항목 == nil {
+		lib.New에러with출력("nil 대기 항목.")
+	} else {
+		대기_항목.S회신()
+	}
 
 	s.Lock()
 	delete(s.저장소, 식별번호)
