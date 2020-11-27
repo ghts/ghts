@@ -269,14 +269,24 @@ func OnLogin(wParam, lParam unsafe.Pointer) {
 	정수, 에러 := lib.F2정수(코드)
 	로그인_성공_여부 := 에러 == nil && 정수 == 0
 
-	if !로그인_성공_여부 {
-		lib.F문자열_출력(c.F2문자열_EUC_KR(lParam))
+	if 로그인_성공_여부 {
+		fmt.Println("**    Xing LOGIN SUCCESS     **")
+
+		F콜백(lib.New콜백_신호(lib.P신호_C32_LOGIN))
+	} else {
+		if 에러 == nil {
+			lib.F문자열_출력("에러 코드 : %v", 정수)
+		}
+
+		lib.F문자열_출력("에러 메세지 : %v", c.F2문자열_EUC_KR(lParam))
 
 		if f모의투자서버_접속_중() {
-			fmt.Println("********************************")
-			fmt.Println("*  모의 투자 기간을 확인하세요. *")
-			fmt.Println("********************************")
-			lib.F문자열_출력("")
+			버퍼 := new(bytes.Buffer)
+			버퍼.WriteString("********************************\n")
+			버퍼.WriteString("*  모의 투자 기간을 확인하세요. *\n")
+			버퍼.WriteString("********************************")
+
+			lib.F문자열_출력(버퍼.String())
 		}
 	}
 
@@ -284,10 +294,6 @@ func OnLogin(wParam, lParam unsafe.Pointer) {
 	case ch로그인 <- 로그인_성공_여부:
 	default:
 	}
-
-	F콜백(lib.New콜백_신호(lib.P신호_C32_LOGIN))
-
-	fmt.Println("**    Xing LOGIN SUCCESS     **")
 }
 
 func OnLogout() {
