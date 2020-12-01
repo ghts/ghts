@@ -68,7 +68,7 @@ func (s *S내재가치_정보_모음) DB읽기(db *sql.DB) (에러 error) {
 	F확인(F내재가치_정보_테이블_생성(db))
 
 	SQL := new(bytes.Buffer)
-	SQL.WriteString("SELECT json ")
+	SQL.WriteString("SELECT code, date, json ")
 	SQL.WriteString("FROM fundamental_data ")
 	SQL.WriteString("ORDER BY code, date")
 
@@ -81,11 +81,18 @@ func (s *S내재가치_정보_모음) DB읽기(db *sql.DB) (에러 error) {
 	defer rows.Close()
 
 	for rows.Next() {
+		var code string
+		var date time.Time
 		var json string
 		var 값 *S내재가치_정보
 
-		F확인(rows.Scan(&json))
-		F확인(F디코딩(JSON, []byte(json), &값))
+		F확인(rows.Scan(&code, &date, &json))
+
+		if 에러 = F디코딩(JSON, []byte(json), &값); 에러 != nil {
+			F체크포인트(code, date.Format(P일자_형식))
+			F에러_출력(에러)
+			continue
+		}
 
 		s.M저장소[값.G키()] = 값
 	}
