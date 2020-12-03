@@ -177,8 +177,11 @@ func F대기_초(초 float64)      { time.Sleep(time.Duration(float64(P1초) * �
 func F대기_분(분 float64)      { time.Sleep(time.Duration(float64(P1분) * 분)) }
 func F대기_시간(시간 float64)    { time.Sleep(time.Duration(float64(P1시간) * 시간)) }
 
-func F대기_목표_시각(목표_시각 time.Time) {
-	if 지금 := F지금(); 목표_시각.After(지금) {
+func F대기_한국_시각(시, 분, 초 int) {
+	목표_시각 := F2금일_한국_시각_단순형(시, 분, 초)
+	지금 := F지금()
+
+	if 목표_시각.After(지금) {
 		대기_시간 := 목표_시각.Sub(지금)
 		F대기(대기_시간)
 	}
