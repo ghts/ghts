@@ -34,10 +34,9 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package xt
 
 import (
-	"github.com/ghts/ghts/lib"
-
 	"bytes"
 	"encoding/binary"
+	"github.com/ghts/ghts/lib"
 	"strings"
 	"time"
 )

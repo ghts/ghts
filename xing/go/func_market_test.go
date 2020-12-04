@@ -35,7 +35,6 @@ package xing
 
 import (
 	"github.com/ghts/ghts/lib"
-
 	"testing"
 )
 

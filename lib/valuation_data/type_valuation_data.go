@@ -1,9 +1,10 @@
-package lib
+package valuation_data
 
 import (
 	"bytes"
 	"context"
 	"database/sql"
+	"github.com/ghts/ghts/lib"
 	"strconv"
 	"time"
 )
@@ -28,9 +29,9 @@ type S내재가치_정보_모음 struct {
 }
 
 func (s *S내재가치_정보_모음) G종목별_최신_정보(종목코드 string) *S내재가치_정보 {
-	for 연도 := F지금().Year(); 연도 > 2015; 연도-- {
+	for 연도 := lib.F지금().Year(); 연도 > 2015; 연도-- {
 		for 월 := 12; 월 > 0; 월-- {
-			키 := 종목코드 + F2문자열(연도*100+월)
+			키 := 종목코드 + lib.F2문자열(연도*100+월)
 			if 값, 존재함 := s.M저장소[키]; 존재함 {
 				return 값
 			}
@@ -44,7 +45,7 @@ func (s *S내재가치_정보_모음) G종목별_차최신_정보(종목코드 s
 	차최신_연도 := s.G종목별_최신_정보(종목코드).S내재가치_식별정보.G일자2().Year() - 1
 	for 연도 := 차최신_연도; 연도 > 2015; 연도-- {
 		for 월 := 12; 월 > 0; 월-- {
-			키 := 종목코드 + F2문자열(연도*100+월)
+			키 := 종목코드 + lib.F2문자열(연도*100+월)
 			if 값, 존재함 := s.M저장소[키]; 존재함 {
 				return 값
 			}
@@ -55,17 +56,17 @@ func (s *S내재가치_정보_모음) G종목별_차최신_정보(종목코드 s
 }
 
 func (s *S내재가치_정보_모음) S파일_읽기(파일명 string) error {
-	return JSON_파일_읽기(파일명, s)
+	return lib.JSON_파일_읽기(파일명, s)
 }
 
 func (s *S내재가치_정보_모음) S파일_저장(파일명 string) error {
-	return JSON_파일_저장(s, 파일명)
+	return lib.JSON_파일_저장(s, 파일명)
 }
 
 func (s *S내재가치_정보_모음) DB읽기(db *sql.DB) (에러 error) {
-	defer S예외처리{M에러: &에러, M함수: func() { s = nil }}.S실행()
+	defer lib.S예외처리{M에러: &에러, M함수: func() { s = nil }}.S실행()
 
-	F확인(F내재가치_정보_테이블_생성(db))
+	lib.F확인(F내재가치_정보_테이블_생성(db))
 
 	SQL := new(bytes.Buffer)
 	SQL.WriteString("SELECT code, date, json ")
@@ -73,11 +74,11 @@ func (s *S내재가치_정보_모음) DB읽기(db *sql.DB) (에러 error) {
 	SQL.WriteString("ORDER BY code, date")
 
 	stmt, 에러 := db.Prepare(SQL.String())
-	F확인(에러)
+	lib.F확인(에러)
 	defer stmt.Close()
 
 	rows, 에러 := stmt.Query()
-	F확인(에러)
+	lib.F확인(에러)
 	defer rows.Close()
 
 	for rows.Next() {
@@ -86,11 +87,11 @@ func (s *S내재가치_정보_모음) DB읽기(db *sql.DB) (에러 error) {
 		var json string
 		var 값 *S내재가치_정보
 
-		F확인(rows.Scan(&code, &date, &json))
+		lib.F확인(rows.Scan(&code, &date, &json))
 
-		if 에러 = F디코딩(JSON, []byte(json), &값); 에러 != nil {
-			F체크포인트(code, date.Format(P일자_형식))
-			F에러_출력(에러)
+		if 에러 = lib.F디코딩(lib.JSON, []byte(json), &값); 에러 != nil {
+			lib.F체크포인트(code, date.Format(lib.P일자_형식))
+			lib.F에러_출력(에러)
 			continue
 		}
 
@@ -162,7 +163,7 @@ func (s S내재가치_식별정보) G일자() uint32 {
 }
 
 func (s S내재가치_식별정보) G일자2() time.Time {
-	return F2포맷된_일자_단순형("20060102", strconv.Itoa(int(s.M연도_월*100+1)))
+	return lib.F2포맷된_일자_단순형("20060102", strconv.Itoa(int(s.M연도_월*100+1)))
 }
 
 type S재무제표_정보_내용 struct {
@@ -217,9 +218,9 @@ type S투자지표_정보_내용 struct {
 
 func F내재가치_정보_모음_DB저장(db *sql.DB, 값_모음 []*S내재가치_정보) (에러 error) {
 	var tx *sql.Tx
-	defer S예외처리{M에러: &에러, M함수: func() { F조건부_실행(tx != nil, tx.Rollback) }}.S실행()
+	defer lib.S예외처리{M에러: &에러, M함수: func() { lib.F조건부_실행(tx != nil, tx.Rollback) }}.S실행()
 
-	F확인(F내재가치_정보_테이블_생성(db))
+	lib.F확인(F내재가치_정보_테이블_생성(db))
 
 	SQL생성 := new(bytes.Buffer)
 	SQL생성.WriteString("INSERT IGNORE INTO fundamental_data (")
@@ -237,25 +238,25 @@ func F내재가치_정보_모음_DB저장(db *sql.DB, 값_모음 []*S내재가�
 	txOpts.ReadOnly = false
 
 	tx, 에러 = db.BeginTx(context.TODO(), txOpts)
-	F확인(에러)
+	lib.F확인(에러)
 
 	stmt생성, 에러 := tx.Prepare(SQL생성.String())
-	F확인(에러)
+	lib.F확인(에러)
 	defer stmt생성.Close()
 
 	stmt수정, 에러 := tx.Prepare(SQL수정.String())
-	F확인(에러)
+	lib.F확인(에러)
 	defer stmt수정.Close()
 
 	for _, 값 := range 값_모음 {
-		json, 에러 := F인코딩(JSON, 값)
-		F확인(에러)
+		json, 에러 := lib.F인코딩(lib.JSON, 값)
+		lib.F확인(에러)
 
 		_, 에러 = stmt생성.Exec(값.M종목코드, 값.G일자())
-		F확인(에러)
+		lib.F확인(에러)
 
 		_, 에러 = stmt수정.Exec(string(json), 값.M종목코드, 값.G일자())
-		F확인(에러)
+		lib.F확인(에러)
 	}
 
 	tx.Commit()

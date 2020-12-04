@@ -35,6 +35,8 @@ package xing
 
 import (
 	"github.com/ghts/ghts/lib"
+	krx "github.com/ghts/ghts/lib/krx_time"
+	"github.com/ghts/ghts/lib/nanomsg"
 	xt "github.com/ghts/ghts/xing/base"
 
 	"testing"
@@ -43,7 +45,7 @@ import (
 func TestF호가_잔량_실시간_정보(t *testing.T) {
 	t.Parallel()
 
-	if !lib.F한국증시_정규_거래_시간임() {
+	if !krx.F한국증시_정규_거래_시간임() {
 		t.SkipNow()
 	}
 
@@ -63,7 +65,7 @@ func TestF호가_잔량_실시간_정보(t *testing.T) {
 	lib.F테스트_에러없음(t, 에러)
 	lib.F테스트_같음(t, 종목_ETF.G시장구분(), lib.P시장구분_ETF)
 
-	소켓SUB_실시간 := lib.NewNano소켓SUB_단순형(xt.F주소_실시간())
+	소켓SUB_실시간 := nanomsg.NewNano소켓SUB_단순형(xt.F주소_실시간())
 	//lib.F대기(lib.P1초)
 
 	lib.F테스트_에러없음(t, F호가_잔량_실시간_정보_구독(종목코드_코스피))

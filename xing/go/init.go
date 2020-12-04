@@ -35,6 +35,8 @@ package xing
 
 import (
 	"github.com/ghts/ghts/lib"
+	"github.com/ghts/ghts/lib/external_process"
+	"github.com/ghts/ghts/lib/nanomsg"
 	"github.com/ghts/ghts/xing/base"
 	"github.com/mitchellh/go-ps"
 
@@ -101,7 +103,7 @@ func F초기화(값 xt.T서버_구분) (에러 error) {
 }
 
 func f소켓_생성() {
-	소켓REP_TR콜백 = lib.NewNano소켓XREP_단순형(xt.F주소_C32_콜백())
+	소켓REP_TR콜백 = nanomsg.NewNano소켓XREP_단순형(xt.F주소_C32_콜백())
 }
 
 func f초기화_Go루틴() {
@@ -128,7 +130,7 @@ func f초기화_xing_C32() (에러 error) {
 
 	switch runtime.GOOS {
 	case "windows":
-		프로세스ID_C32 = lib.F확인(lib.F외부_프로세스_실행(xing_C32_경로)).(int)
+		프로세스ID_C32 = lib.F확인(external_process.F외부_프로세스_실행(xing_C32_경로)).(int)
 		<-ch신호_C32_초기화
 	default:
 		lib.F문자열_출력("*********************************************\n"+
@@ -140,7 +142,7 @@ func f초기화_xing_C32() (에러 error) {
 }
 
 func f접속_로그인() (에러 error) {
-	소켓SUB_실시간_정보 = lib.NewNano소켓SUB_단순형(xt.F주소_실시간())
+	소켓SUB_실시간_정보 = nanomsg.NewNano소켓SUB_단순형(xt.F주소_실시간())
 
 	if !tr수신_소켓_동작_확인() {
 		return lib.New에러("C32 프로세스 REP소켓 접속 불가.")
@@ -306,7 +308,7 @@ func C32_종료() (에러 error) {
 			return nil
 		}
 
-		lib.F프로세스_종료by프로세스ID(프로세스ID_C32)
+		external_process.F프로세스_종료by프로세스ID(프로세스ID_C32)
 		lib.F대기(lib.P1초)
 	}
 

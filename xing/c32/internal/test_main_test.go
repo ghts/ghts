@@ -35,6 +35,7 @@ package x32
 
 import (
 	"github.com/ghts/ghts/lib"
+	"github.com/ghts/ghts/lib/nanomsg"
 	"github.com/ghts/ghts/xing/base"
 	"testing"
 )
@@ -96,7 +97,7 @@ func go테스트용_TR콜백_수신(ch초기화 chan lib.T신호) {
 		}
 	}()
 
-	소켓REP_테스트용_TR콜백 = lib.NewNano소켓REP_단순형(xt.F주소_C32_콜백())
+	소켓REP_테스트용_TR콜백 = nanomsg.NewNano소켓REP_단순형(xt.F주소_C32_콜백())
 	defer 소켓REP_테스트용_TR콜백.Close()
 
 	ch초기화 <- lib.P신호_초기화

@@ -35,6 +35,7 @@ package xing
 
 import (
 	"github.com/ghts/ghts/lib"
+	krx "github.com/ghts/ghts/lib/krx_time"
 	xt "github.com/ghts/ghts/xing/base"
 	"testing"
 	"time"
@@ -93,7 +94,7 @@ func TestCFOAT00100_선물옵션_정상주문(t *testing.T) {
 
 	if 서버_구분 == xt.P서버_실거래 ||
 		!F금일_한국증시_개장() ||
-		!lib.F한국증시_정규_거래_시간임() {
+		!krx.F한국증시_정규_거래_시간임() {
 		t.SkipNow()
 	}
 

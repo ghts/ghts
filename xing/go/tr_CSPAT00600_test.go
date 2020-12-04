@@ -36,6 +36,8 @@ package xing
 
 import (
 	"github.com/ghts/ghts/lib"
+	krx "github.com/ghts/ghts/lib/krx_time"
+	"github.com/ghts/ghts/lib/nanomsg"
 	"github.com/ghts/ghts/xing/base"
 	"strings"
 
@@ -55,11 +57,11 @@ func TestCSPAT00600_현물_정상_주문(t *testing.T) {
 
 	if 서버_구분 == xt.P서버_실거래 ||
 		!F금일_한국증시_개장() ||
-		!lib.F한국증시_정규_거래_시간임() {
+		!krx.F한국증시_정규_거래_시간임() {
 		t.SkipNow()
 	}
 
-	소켓SUB_실시간 := lib.NewNano소켓SUB_단순형(xt.F주소_실시간())
+	소켓SUB_실시간 := nanomsg.NewNano소켓SUB_단순형(xt.F주소_실시간())
 	lib.F대기(lib.P1초)
 
 	lib.F테스트_에러없음(t, F주문_응답_실시간_정보_구독())

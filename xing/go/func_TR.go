@@ -35,6 +35,7 @@ package xing
 
 import (
 	"github.com/ghts/ghts/lib"
+	"github.com/ghts/ghts/lib/trade"
 	"github.com/ghts/ghts/xing/base"
 
 	"fmt"
@@ -716,7 +717,7 @@ func TrT1102_현물_시세_조회(종목코드 string) (응답값 *xt.T1102_현�
 	질의값 := lib.New질의값_단일_종목()
 	질의값.M구분 = xt.TR조회
 	질의값.M코드 = xt.TR현물_시세_조회_t1102
-	질의값.M종목코드 = lib.F종목코드_보정(종목코드)
+	질의값.M종목코드 = trade.F종목코드_보정(종목코드)
 
 	i응답값, 에러 := F질의_단일TR(질의값)
 	lib.F확인(에러)
@@ -1155,7 +1156,7 @@ func TrT8407_현물_멀티_현재가_조회(종목코드_모음_전체 []string)
 	}
 
 	for i, 종목코드 := range 종목코드_모음_전체 {
-		종목코드 = lib.F종목코드_보정(종목코드)
+		종목코드 = trade.F종목코드_보정(종목코드)
 		종목코드_모음_전체[i] = 종목코드
 
 		lib.F확인(F종목코드_검사(종목코드))
@@ -1330,7 +1331,7 @@ func TrT8413_현물_차트_일주월(종목코드 string, 시작일, 종료일 t
 	추가_인수_모음 ...interface{}) (응답값_모음 []*xt.T8413_현물_차트_일주월_응답_반복값, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 응답값_모음 = nil }}.S실행()
 
-	종목코드 = lib.F종목코드_보정(종목코드)
+	종목코드 = trade.F종목코드_보정(종목코드)
 	lib.F확인(F종목코드_검사(종목코드))
 	lib.F조건부_패닉(종료일.Before(시작일), "시작일자가 종료일자보다 늦습니다. %v, %v", 시작일, 종료일)
 

@@ -34,10 +34,9 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package xt
 
 import (
-	"github.com/ghts/ghts/lib"
-
 	"bytes"
 	"encoding/binary"
+	"github.com/ghts/ghts/lib"
 )
 
 type T8432_지수선물_마스터_조회_반복값 struct {

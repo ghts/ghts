@@ -39,6 +39,7 @@ package k32
 
 import (
 	"github.com/ghts/ghts/lib"
+	"github.com/ghts/ghts/lib/nanomsg"
 	"github.com/ghts/ghts/lib/w32"
 	"go.nanomsg.org/mangos/v3"
 	"sync"
@@ -47,11 +48,11 @@ import (
 var (
 	메인_윈도우 w32.HWND
 
-	소켓REP_TR수신   = lib.NewNano소켓XREP_단순형(lib.P주소_키움_C함수_호출)
-	소켓PUB_실시간_정보 = lib.NewNano소켓PUB_단순형(lib.P주소_키움_실시간)
+	소켓REP_TR수신   = nanomsg.NewNano소켓XREP_단순형(lib.P주소_키움_C함수_호출)
+	소켓PUB_실시간_정보 = nanomsg.NewNano소켓PUB_단순형(lib.P주소_키움_실시간)
 
 	소켓REQ_저장소 = lib.New소켓_저장소(20, func() lib.I소켓_질의 {
-		return lib.NewNano소켓REQ_단순형(lib.P주소_키움_C함수_콜백, lib.P30초)
+		return nanomsg.NewNano소켓REQ_단순형(lib.P주소_키움_C함수_콜백, lib.P30초)
 	})
 
 	접속_처리_잠금  sync.Mutex

@@ -1,4 +1,4 @@
-/* Copyright (C) 2015-2020 김운하 (unha.kim@ghts.org)
+/* Copyright(C) 2015-2020년 김운하 (unha.kim@ghts.org)
 
 이 파일은 GHTS의 일부입니다.
 
@@ -15,7 +15,7 @@ GNU LGPL 2.1판은 이 프로그램과 함께 제공됩니다.
 (자유 소프트웨어 재단 : Free Software Foundation, Inc.,
 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA)
 
-Copyright (C) 2015-2020년 UnHa Kim (unha.kim@ghts.org)
+Copyright(C) 2015-2020년 UnHa Kim(unha.kim@ghts.org)
 
 This file is part of GHTS.
 
@@ -31,37 +31,28 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package x32
+package mysql
 
 import (
+	"database/sql"
 	"github.com/ghts/ghts/lib"
-	"github.com/ghts/ghts/lib/nanomsg"
-	xt "github.com/ghts/ghts/xing/base"
-	"testing"
 )
+import _ "github.com/go-sql-driver/mysql"
 
-func TestP접속됨(t *testing.T) {
-	t.Parallel()
+func DSN_MySQL(address, username, password, dbname string) string {
+	return lib.F2문자열("%v:%v@tcp(%v:3306)/%v?parseTime=true",
+		username,
+		password,
+		address,
+		dbname)
+}
 
-	if !lib.F인터넷에_접속됨() {
-		t.SkipNow()
+func DB_MySQL(DSN string) (*sql.DB, error) {
+	db, _ := sql.Open("mysql", DSN)
+
+	if 에러 := db.Ping(); 에러 != nil {
+		return nil, 에러
 	}
 
-	소켓REQ, 에러 := nanomsg.NewNano소켓REQ(xt.F주소_C32_호출(), lib.P10초)
-	lib.F테스트_에러없음(t, 에러)
-
-	defer 소켓REQ.Close()
-
-	질의값 := lib.New질의값_기본형(lib.TR접속됨, "")
-
-	응답 := 소켓REQ.G질의_응답_검사(lib.P변환형식_기본값, 질의값)
-	lib.F테스트_에러없음(t, 응답.G에러())
-	lib.F테스트_같음(t, 응답.G수량(), 1)
-
-	접속됨, 에러 := f접속됨()
-	lib.F테스트_에러없음(t, 에러)
-
-	참거짓, ok := 응답.G해석값_단순형(0).(bool)
-	lib.F테스트_참임(t, ok)
-	lib.F테스트_같음(t, 참거짓, 접속됨)
+	return db, nil
 }

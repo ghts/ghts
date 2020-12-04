@@ -1,8 +1,11 @@
-package lib
+package krx
 
-import "time"
+import (
+	"github.com/ghts/ghts/lib"
+	"time"
+)
 
-const p임시_지연_시간 = 0 * P1시간
+const p임시_지연_시간 = 0 * lib.P1시간
 
 func F한국증시_정규_거래_시간임() bool {
 	return f한국증시_거래시간_도우미(9, 0, 15, 20)
@@ -56,7 +59,7 @@ func F한국증시_폐장_시간임() bool {
 }
 
 func f한국증시_거래시간_도우미(시작_시간, 시작_분, 종료_시간, 종료_분 int) bool {
-	값 := F금일()
+	값 := lib.F금일()
 	지금 := time.Now()
 	로케일 := 지금.Location()
 

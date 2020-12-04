@@ -54,10 +54,6 @@ var (
 
 	실행경로_수정_잠금 = new(sync.Mutex)
 
-	프로세스ID_저장소          = s안전한_프로세스ID_저장소{저장소: make(map[int]S비어있음), 파일명: p프로세스ID_목록_파일명}
-	프로세스ID_목록_파일_초기화_완료 = New안전한_bool(false)
-	파이썬_경로              = New안전한_string("")
-
 	// 이하 테스트 관련 함수 모음
 	인터넷_접속_확인_잠금 sync.Mutex
 	인터넷_접속됨      = true
