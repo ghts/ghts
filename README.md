@@ -16,26 +16,22 @@ GHTS
 
 사전준비물
 - Go언어 : https://golang.org/dl/
-- C언어 컴파일러 (Msys2) : https://www.msys2.org/
+- C/C++ 컴파일러 및 ZeroMQ (MSYS2) : https://www.msys2.org/
 
 *********************************************************
-Msys2 C언어 컴파일러 추가 설치
+MSYS2 설치 후 'MSYS2 MSYS' 터미널을 열고 아래 명령을 실행한다.
 
-“MSYS2 MSYS” 터미널에서 아래 명령을 실행하여 업데이트한다.
-<pre><code>pacman –Syu</code></pre>
-
-“MSYS2 MSYS” 터미널을 종료했다가 다시 실행한 후, 아래 명령을 실행하여 업데이트를 계속한다.
-<pre><code>pacman -Su</code></pre>
-
-“MSYS2 MSYS” 터미널을 종료했다가 다시 실행한 후, 아래 명령을 실행하여 compiler와 그밖에 필요한 package를 설치한다. 
-<pre><code>pacman -S --needed base-devel
-pacman -S --needed mingw-w64-i686-toolchain
-pacman -S --needed mingw-w64-x86_64-toolchain</code></pre>
+<pre><code>pacman -Syuu 
+pacman -S base-devel
+pacman -S mingw-w64-i686-toolchain
+pacman -S mingw-w64-x86_64-toolchain
+pacman -S mingw-w64-i686-zeromq
+pacman -S mingw-w64-x86_64-zeromq
+pacman -S mingw-w64-x86_64-{git,git-doc-html,git-doc-man,curl} git-extra</code></pre>
 
 *********************************************************
 GHTS 라이브러리 설치
 
-설치방법
 <pre><code>go get github.com/ghts/ghts</code></pre>
  
 *********************************************************
