@@ -47,7 +47,7 @@ func TestP접속됨(t *testing.T) {
 		t.SkipNow()
 	}
 
-	소켓REQ, 에러 := nanomsg.NewNano소켓REQ(xt.F주소_C32_호출(), lib.P10초)
+	소켓REQ, 에러 := nano.NewNano소켓REQ(xt.F주소_C32_호출(), lib.P10초)
 	lib.F테스트_에러없음(t, 에러)
 
 	defer 소켓REQ.Close()

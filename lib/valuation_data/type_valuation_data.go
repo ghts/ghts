@@ -1,4 +1,4 @@
-package valuation_data
+package val
 
 import (
 	"bytes"

@@ -37,7 +37,9 @@ GNU GPL v2는 이 프로그램과 함께 제공됩니다.
 
 package kt
 
-import "github.com/ghts/ghts/lib"
+import (
+	"github.com/ghts/ghts/lib"
+)
 
 const (
 	ProgID     = "KHOPENAPI.KHOpenAPICtrl.1"
@@ -148,3 +150,9 @@ func (t T방화벽_상태) String() string {
 
 	return lib.F2문자열("예상하지 못한 방화벽 상태 구분값 : '%v'", int(t))
 }
+
+const (
+	P주소_키움_C함수_호출 = 4414
+	P주소_키움_C함수_콜백 = 4415
+	P주소_키움_실시간    = 4416
+)

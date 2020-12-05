@@ -65,7 +65,7 @@ func TestF호가_잔량_실시간_정보(t *testing.T) {
 	lib.F테스트_에러없음(t, 에러)
 	lib.F테스트_같음(t, 종목_ETF.G시장구분(), lib.P시장구분_ETF)
 
-	소켓SUB_실시간 := nanomsg.NewNano소켓SUB_단순형(xt.F주소_실시간())
+	소켓SUB_실시간 := nano.NewNano소켓SUB_단순형(xt.F주소_실시간())
 	//lib.F대기(lib.P1초)
 
 	lib.F테스트_에러없음(t, F호가_잔량_실시간_정보_구독(종목코드_코스피))
