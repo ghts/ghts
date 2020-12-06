@@ -57,7 +57,7 @@ func f테스트_준비() {
 
 	lib.F테스트_모드_시작()
 
-	xt.F주소_설정()
+	xt.F임의_주소_설정()
 
 	ch초기화 := make(chan lib.T신호)
 	go go테스트용_TR콜백_수신(ch초기화)
