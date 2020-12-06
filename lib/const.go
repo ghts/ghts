@@ -847,6 +847,8 @@ func (t T소켓_종류) String() string {
 		return "REQ"
 	case P소켓_종류_REP:
 		return "REP"
+	case P소켓_종류_XREP:
+		return "XREP"
 	case P소켓_종류_DEALER:
 		return "DEALER"
 	case P소켓_종류_ROUTER:
@@ -862,7 +864,7 @@ func (t T소켓_종류) String() string {
 	case P소켓_종류_PAIR:
 		return "PAIR"
 	default:
-		return F2문자열("예상하지 못한 소켓 종류 : '%v'", t)
+		return F2문자열("예상하지 못한 소켓 종류 : '%v'", uint8(t))
 	}
 }
 
