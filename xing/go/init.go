@@ -87,17 +87,60 @@ func init() {
 func F초기화(값 xt.T서버_구분) (에러 error) {
 	서버_구분 = 값
 
+	f초기화_도우미()
+
+	fmt.Println("**     초기화 완료     **")
+
+	return nil
+}
+
+func C32_재시작() (에러 error) {
+	defer lib.S예외처리{M에러: &에러}.S실행()
+
+	// 동시 다발 실행 방지.
+	xing_C32_재실행_잠금.Lock()
+	defer xing_C32_재실행_잠금.Unlock()
+
+	// 중복 재실행 방지.
+	if 최근_재시작 := xing_C32_재실행_시각.G값().After(lib.F지금().Add(-1 * lib.P3분)); 최근_재시작 {
+		return
+	}
+
+	fmt.Printf("**  C32 재시작 %v **\n", time.Now().Format(lib.P간략한_시간_형식))
+
+	lib.F확인(c32_재시작_도우미())
+
+	return nil
+}
+
+func f초기화_도우미() {
 	f소켓_생성()
 	f초기화_Go루틴()
 	lib.F확인(f초기화_xing_C32())
-	lib.F확인(f접속_로그인())
 	lib.F조건부_패닉(!f초기화_작동_확인(), "초기화 작동 확인 실패.")
 	lib.F확인(f초기화_TR전송_제한())
 	lib.F확인(f종목모음_설정())
 	lib.F확인(F전일_당일_설정())
 	f접속유지_실행()
+}
 
-	fmt.Println("**     초기화 완료     **")
+func c32_재시작_도우미() (에러 error) {
+	// 재귀 반복 시도.
+	defer lib.S예외처리{M함수: func() { 에러 = c32_재시작_도우미() }}.S실행()
+
+	C32_재시작_실행_중.S값(true)
+
+	lib.F확인(C32_종료())
+	lib.F패닉억제_호출(소켓REP_TR콜백.Close)
+	소켓REQ_저장소.S정리()
+	xt.F임의_주소_재설정()
+
+	f초기화_도우미()
+
+	C32_재시작_실행_중.S값(false)
+	xing_C32_재실행_시각.S값(lib.F지금())
+
+	fmt.Println("**     C32 재시작 완료     **")
 
 	return nil
 }
@@ -107,6 +150,10 @@ func f소켓_생성() {
 }
 
 func f초기화_Go루틴() {
+	if 고루틴_초기화_완료.G값() {
+		return
+	}
+
 	lib.F메모("RT 루틴 일시 비활성화")
 	고루틴_모음 := []func(chan lib.T신호) error{go_TR콜백_처리} //, go_RT_주문처리결과}
 	ch초기화 := make(chan lib.T신호, len(고루틴_모음))
@@ -118,27 +165,34 @@ func f초기화_Go루틴() {
 	for range 고루틴_모음 {
 		<-ch초기화
 	}
+
+	고루틴_초기화_완료.S값(true)
 }
 
 func f초기화_xing_C32() (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
 	if !lib.F인터넷에_접속됨() {
-		lib.F문자열_출력("인터넷을 확인하십시오.")
-		return
+		return lib.New에러with출력("인터넷에 접속되어 있지 않습니다.")
 	}
 
-	switch runtime.GOOS {
-	case "windows":
-		프로세스ID_C32 = lib.F확인(external_process.F외부_프로세스_실행(xing_C32_경로)).(int)
-		<-ch신호_C32_초기화
-	default:
+	// 이미 c32이 실행되어서 정상 작동 중이면 그대로 재사용.
+	if !lib.F테스트_모드_실행_중() && f초기화_작동_확인() {
+		return nil
+	}
+
+	if runtime.GOOS != "windows" {
 		lib.F문자열_출력("*********************************************\n"+
 			"현재 OS(%v)에서는 'xing_C32'를 수동으로 실행해야 합니다.\n"+
 			"*********************************************", runtime.GOOS)
+
+		return lib.New에러("지원되지 않는 OS '%v'.", runtime.GOOS)
 	}
 
-	return nil
+	프로세스ID_C32 = lib.F확인(external_process.F외부_프로세스_실행(xing_C32_경로)).(int)
+	<-ch신호_C32_초기화
+
+	return f접속_로그인()
 }
 
 func f접속_로그인() (에러 error) {
@@ -165,22 +219,17 @@ func f접속_로그인() (에러 error) {
 func f초기화_작동_확인() (작동_여부 bool) {
 	defer lib.S예외처리{M함수: func() { 작동_여부 = false }}.S실행()
 
-	ch확인 := make(chan lib.T신호, 1)
+	ch확인 := make(chan bool, 1)
 	ch타임아웃 := time.After(lib.P1분)
 
-	// F접속됨() 테스트
-	go f접속_확인(ch확인)
+	go f초기화_작동_확인_도우미(ch확인)
 
 	select {
-	case <-ch확인:
+	case 접속됨 := <-ch확인:
+		return 접속됨
 	case <-ch타임아웃:
-		lib.F체크포인트("F접속됨_확인() 타임아웃.")
 		return false
 	}
-
-	fmt.Println("**     C32 동작 확인 완료     **")
-
-	return true
 }
 
 func tr수신_소켓_동작_확인() bool {
@@ -195,16 +244,19 @@ func tr수신_소켓_동작_확인() bool {
 	return false
 }
 
-func f접속_확인(ch완료 chan lib.T신호) {
+func f초기화_작동_확인_도우미(ch완료 chan bool) {
+	var 접속_여부 bool
+
 	defer func() {
 		if ch완료 != nil {
-			ch완료 <- lib.P신호_종료
+			ch완료 <- 접속_여부
 		}
 	}()
 
 	for i := 0; i < 10; i++ {
 		if 접속됨, 에러 := F접속됨(); 에러 == nil && 접속됨 {
-			break
+			접속_여부 = true
+			return
 		} else if 에러 != nil {
 			lib.F에러_출력(에러)
 		}
@@ -212,14 +264,10 @@ func f접속_확인(ch완료 chan lib.T신호) {
 		lib.F대기(lib.P1초)
 	}
 
-	if 접속됨, 에러 := F접속됨(); 에러 != nil || !접속됨 {
-		panic(lib.New에러("이 시점에 접속되어 있어야 함."))
-	}
-
 	return
 }
 
-func tr동작_확인(ch완료 chan lib.T신호) {
+func f시스템_시간tr동작_확인(ch완료 chan lib.T신호) {
 	defer func() { ch완료 <- lib.P신호_종료 }()
 
 	if len(tr코드별_전송_제한_1초) == 0 {

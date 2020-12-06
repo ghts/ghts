@@ -90,4 +90,5 @@ var (
 	계좌번호_모음      []string
 	서버_구분        xt.T서버_구분
 	프로세스ID_C32   int
+	고루틴_초기화_완료   = lib.New안전한_bool(false)
 )
