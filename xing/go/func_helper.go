@@ -101,15 +101,21 @@ func F2당일_시각_단순형(포맷 string, 값 interface{}) time.Time {
 }
 
 func f접속유지_실행() {
-	if lib.F인터넷에_접속됨() && !접속유지_실행중.G값() {
-		go f접속유지_도우미()
+	if !lib.F인터넷에_접속됨() {
+		return
 	}
+
+	if 접속유지_실행중.G값() {
+		return
+	}
+
+	go f접속유지_도우미()
 }
 
 func f접속유지_도우미() {
 	재시작_여부 := false
 
-	defer lib.F조건부_실행(재시작_여부, C32_재시작)
+	defer lib.F조건부_실행(재시작_여부, C32_재시작())
 
 	if 에러 := 접속유지_실행중.S값(true); 에러 == nil {
 		defer 접속유지_실행중.S값(false)
