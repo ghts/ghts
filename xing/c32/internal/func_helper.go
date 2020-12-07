@@ -77,48 +77,48 @@ func f자료형_문자열_해석(g *xt.TR_DATA) (자료형_문자열 string, 에
 	길이 := lib.F2정수_단순형(g.DataLength)
 
 	switch TR코드 {
-	case xt.TR선물옵션_주문체결내역조회_CFOAQ00600:
-		// Non-block 모드는 Occurs데이터 수량을 나타내는 5바이트 추가됨.
-		if 길이 == 0 {
-			return xt.P자료형_nil, nil
-		} else if 길이 < (xt.SizeCFOAQ00600OutBlock1+xt.SizeCFOAQ00600OutBlock2+5) ||
-			(길이-(xt.SizeCFOAQ00600OutBlock1+xt.SizeCFOAQ00600OutBlock2+5))%xt.SizeCFOAQ00600OutBlock3 != 0 {
-			break
-		}
-
-		return xt.P자료형_CFOAQ00600OutBlock, nil
-	case xt.TR선물옵션_정상주문_CFOAT00100:
-		if 길이 == xt.SizeCFOAT00100OutBlock {
-			return xt.P자료형_CFOAT00100OutBlock, nil
-		}
-	case xt.TR선물옵션_정정주문_CFOAT00200:
-		if 길이 == xt.SizeCFOAT00200OutBlock {
-			return xt.P자료형_CFOAT00200OutBlock, nil
-		}
-	case xt.TR선물옵션_취소주문_CFOAT00300:
-		if 길이 == xt.SizeCFOAT00300OutBlock {
-			return xt.P자료형_CFOAT00300OutBlock, nil
-		}
-	case xt.TR선물옵션_예탁금_증거금_조회_CFOBQ10500:
-		const 헤더_길이 = xt.SizeCFOBQ10500OutBlock1 + xt.SizeCFOBQ10500OutBlock2 + 5
-
-		if 길이 == 0 {
-			return xt.P자료형_nil, nil
-		} else if 길이 < 헤더_길이 || (길이-헤더_길이)%xt.SizeCFOBQ10500OutBlock3 != 0 {
-			break
-		}
-
-		return xt.P자료형_CFOBQ10500OutBlock, nil
-	case xt.TR선물옵션_미결제약정_현황_CFOFQ02400:
-		const 헤더_길이 = xt.SizeCFOFQ02400OutBlock1 + xt.SizeCFOFQ02400OutBlock2 + 5 + 5
-
-		if 길이 == 0 {
-			return xt.P자료형_nil, nil
-		} else if 길이 < 헤더_길이 { // 각 Occurs OutBlock 앞에 5자리로 Count 가 들어갑니다.
-			break
-		}
-
-		return xt.P자료형_CFOFQ02400OutBlock, nil
+	//case xt.TR선물옵션_주문체결내역조회_CFOAQ00600:
+	//	// Non-block 모드는 Occurs데이터 수량을 나타내는 5바이트 추가됨.
+	//	if 길이 == 0 {
+	//		return xt.P자료형_nil, nil
+	//	} else if 길이 < (xt.SizeCFOAQ00600OutBlock1+xt.SizeCFOAQ00600OutBlock2+5) ||
+	//		(길이-(xt.SizeCFOAQ00600OutBlock1+xt.SizeCFOAQ00600OutBlock2+5))%xt.SizeCFOAQ00600OutBlock3 != 0 {
+	//		break
+	//	}
+	//
+	//	return xt.P자료형_CFOAQ00600OutBlock, nil
+	//case xt.TR선물옵션_정상주문_CFOAT00100:
+	//	if 길이 == xt.SizeCFOAT00100OutBlock {
+	//		return xt.P자료형_CFOAT00100OutBlock, nil
+	//	}
+	//case xt.TR선물옵션_정정주문_CFOAT00200:
+	//	if 길이 == xt.SizeCFOAT00200OutBlock {
+	//		return xt.P자료형_CFOAT00200OutBlock, nil
+	//	}
+	//case xt.TR선물옵션_취소주문_CFOAT00300:
+	//	if 길이 == xt.SizeCFOAT00300OutBlock {
+	//		return xt.P자료형_CFOAT00300OutBlock, nil
+	//	}
+	//case xt.TR선물옵션_예탁금_증거금_조회_CFOBQ10500:
+	//	const 헤더_길이 = xt.SizeCFOBQ10500OutBlock1 + xt.SizeCFOBQ10500OutBlock2 + 5
+	//
+	//	if 길이 == 0 {
+	//		return xt.P자료형_nil, nil
+	//	} else if 길이 < 헤더_길이 || (길이-헤더_길이)%xt.SizeCFOBQ10500OutBlock3 != 0 {
+	//		break
+	//	}
+	//
+	//	return xt.P자료형_CFOBQ10500OutBlock, nil
+	//case xt.TR선물옵션_미결제약정_현황_CFOFQ02400:
+	//	const 헤더_길이 = xt.SizeCFOFQ02400OutBlock1 + xt.SizeCFOFQ02400OutBlock2 + 5 + 5
+	//
+	//	if 길이 == 0 {
+	//		return xt.P자료형_nil, nil
+	//	} else if 길이 < 헤더_길이 { // 각 Occurs OutBlock 앞에 5자리로 Count 가 들어갑니다.
+	//		break
+	//	}
+	//
+	//	return xt.P자료형_CFOFQ02400OutBlock, nil
 	case xt.TR현물계좌_총평가_CSPAQ12200:
 		switch 길이 {
 		case xt.SizeCSPAQ12200OutBlock1:
@@ -216,16 +216,16 @@ func f자료형_문자열_해석(g *xt.TR_DATA) (자료형_문자열 string, 에
 		}
 
 		return xt.P자료형_T0425OutBlock, nil
-	case xt.TR선물옵션_체결_미체결_조회_t0434:
-		// Non-block 모드는 Occurs데이터 수량을 나타내는 5바이트 추가됨.
-		if 길이 == 0 {
-			return xt.P자료형_nil, nil
-		} else if 길이 < (xt.SizeT0434OutBlock+5) ||
-			(길이-(xt.SizeT0434OutBlock+5))%xt.SizeT0434OutBlock1 != 0 {
-			break
-		}
-
-		return xt.P자료형_T0434OutBlock, nil
+	//case xt.TR선물옵션_체결_미체결_조회_t0434:
+	//	// Non-block 모드는 Occurs데이터 수량을 나타내는 5바이트 추가됨.
+	//	if 길이 == 0 {
+	//		return xt.P자료형_nil, nil
+	//	} else if 길이 < (xt.SizeT0434OutBlock+5) ||
+	//		(길이-(xt.SizeT0434OutBlock+5))%xt.SizeT0434OutBlock1 != 0 {
+	//		break
+	//	}
+	//
+	//	return xt.P자료형_T0434OutBlock, nil
 	case xt.TR현물_호가_조회_t1101:
 		return xt.P자료형_T1101OutBlock, nil
 	case xt.TR현물_시세_조회_t1102:
@@ -313,11 +313,11 @@ func f자료형_문자열_해석(g *xt.TR_DATA) (자료형_문자열 string, 에
 		case 길이%xt.SizeT8428OutBlock1 == 0:
 			return xt.P자료형_T8428OutBlock1, nil
 		}
-	case xt.TR지수선물_마스터_조회_t8432:
-		switch {
-		case 길이%xt.SizeT8432OutBlock == 0:
-			return xt.P자료형_T8432OutBlock, nil
-		}
+	//case xt.TR지수선물_마스터_조회_t8432:
+	//	switch {
+	//	case 길이%xt.SizeT8432OutBlock == 0:
+	//		return xt.P자료형_T8432OutBlock, nil
+	//	}
 	case xt.TR현물_종목_조회_t8436:
 		if 길이%xt.SizeT8436OutBlock == 0 {
 			return xt.P자료형_T8436OutBlock, nil
@@ -332,19 +332,19 @@ func f민감정보_삭제(raw값 []byte, 구분_문자열 string) []byte {
 	switch 구분_문자열 {
 	case xt.P자료형_CSPAQ12300OutBlock,
 		xt.P자료형_CSPAQ13700OutBlock,
-		xt.P자료형_CSPAT00600OutBlock,
-		xt.P자료형_CFOAQ00600OutBlock,
-		xt.P자료형_CFOBQ10500OutBlock,
-		xt.P자료형_CFOFQ02400OutBlock:
+		xt.P자료형_CSPAT00600OutBlock:	//,
+		//xt.P자료형_CFOAQ00600OutBlock,
+		//xt.P자료형_CFOBQ10500OutBlock,
+		//xt.P자료형_CFOFQ02400OutBlock:
 		f민감정보_삭제_도우미(raw값, 25, 8)
-	case xt.P자료형_CFOAT00100OutBlock,
-		xt.P자료형_CFOAT00200OutBlock,
-		xt.P자료형_CFOAT00300OutBlock:
-		f민감정보_삭제_도우미(raw값, 27, 8)
-	case xt.P자료형_CSPAQ12200OutBlock1,
-		xt.P자료형_CSPAQ12200OutBlock,
-		xt.P자료형_CSPAQ22200OutBlock1,
-		xt.P자료형_CSPAQ22200OutBlock:
+	//case xt.P자료형_CFOAT00100OutBlock,
+	//	xt.P자료형_CFOAT00200OutBlock,
+	//	xt.P자료형_CFOAT00300OutBlock:
+	//	f민감정보_삭제_도우미(raw값, 27, 8)
+	case xt.P자료형_CSPAQ22200OutBlock1,
+		xt.P자료형_CSPAQ22200OutBlock,
+		xt.P자료형_CSPAQ12200OutBlock1,
+		xt.P자료형_CSPAQ12200OutBlock:
 		f민감정보_삭제_도우미(raw값, 28, 8)
 	case xt.P자료형_CSPAT00700OutBlock,
 		xt.P자료형_CSPAT00800OutBlock:

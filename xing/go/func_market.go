@@ -36,7 +36,6 @@ package xing
 import (
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/lib/trade"
-	xt "github.com/ghts/ghts/xing/base"
 	"strings"
 	"time"
 )
@@ -116,13 +115,13 @@ func F종목코드_모음_ETF_ETN() []string {
 func F질의값_종목코드_검사(질의값_원본 lib.I질의값) (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
-	switch 질의값_원본.TR코드() {
-	case xt.TR선물옵션_정상주문_CFOAT00100,
-		xt.TR선물옵션_정정주문_CFOAT00200,
-		xt.TR선물옵션_취소주문_CFOAT00300,
-		xt.TR선물옵션_체결_미체결_조회_t0434: // 선물옵션은 종목코드 규칙이 현물과 다르다.
-		return F선물옵션_종목코드_검사(질의값_원본.(lib.I종목코드).G종목코드())
-	}
+	//switch 질의값_원본.TR코드() {
+	//case xt.TR선물옵션_정상주문_CFOAT00100,
+	//	xt.TR선물옵션_정정주문_CFOAT00200,
+	//	xt.TR선물옵션_취소주문_CFOAT00300,
+	//	xt.TR선물옵션_체결_미체결_조회_t0434: // 선물옵션은 종목코드 규칙이 현물과 다르다.
+	//	return F선물옵션_종목코드_검사(질의값_원본.(lib.I종목코드).G종목코드())
+	//}
 
 	switch 질의값 := 질의값_원본.(type) {
 	case lib.I종목코드:

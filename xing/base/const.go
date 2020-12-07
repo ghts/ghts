@@ -174,18 +174,18 @@ const (
 
 	P자료형_nil                            = "nil"
 	P자료형_S현물_주문_응답_실시간_정보               = "S현물_주문_응답_실시간_정보"
-	P자료형_CFOAQ00600_선물옵션_주문체결내역_질의값     = "CFOAQ00600_선물옵션_주문체결내역_질의값"
-	P자료형_CFOAQ00600OutBlock             = "CFOAQ00600OutBlock"
-	P자료형_CFOAT00100_선물옵션_정상주문_질의값       = "CFOAT00100_선물옵션_정상주문_질의값"
-	P자료형_CFOAT00100OutBlock             = "CFOAT00100OutBlock"
-	P자료형_CFOAT00200_선물옵션_정정주문_질의값       = "CFOAT00200_선물옵션_정정주문_질의값"
-	P자료형_CFOAT00200OutBlock             = "CFOAT00200OutBlock"
-	P자료형_CFOAT00300_선물옵션_취소주문_질의값       = "CFOAT00300_선물옵션_취소주문_질의값"
-	P자료형_CFOAT00300OutBlock             = "CFOAT00300OutBlock"
-	P자료형_CFOBQ10500_선물옵션_예탁금_증거금_조회_질의값 = "CFOBQ10500_선물옵션_예탁금_증거금_조회_질의값"
-	P자료형_CFOBQ10500OutBlock             = "CFOBQ10500OutBlock"
-	P자료형_CFOFQ02400_선물옵션_미결제약정_질의값      = "CFOFQ02400_선물옵션_미결제약정_질의값"
-	P자료형_CFOFQ02400OutBlock             = "CFOFQ02400OutBlock"
+	//P자료형_CFOAQ00600_선물옵션_주문체결내역_질의값     = "CFOAQ00600_선물옵션_주문체결내역_질의값"
+	//P자료형_CFOAQ00600OutBlock             = "CFOAQ00600OutBlock"
+	//P자료형_CFOAT00100_선물옵션_정상주문_질의값       = "CFOAT00100_선물옵션_정상주문_질의값"
+	//P자료형_CFOAT00100OutBlock             = "CFOAT00100OutBlock"
+	//P자료형_CFOAT00200_선물옵션_정정주문_질의값       = "CFOAT00200_선물옵션_정정주문_질의값"
+	//P자료형_CFOAT00200OutBlock             = "CFOAT00200OutBlock"
+	//P자료형_CFOAT00300_선물옵션_취소주문_질의값       = "CFOAT00300_선물옵션_취소주문_질의값"
+	//P자료형_CFOAT00300OutBlock             = "CFOAT00300OutBlock"
+	//P자료형_CFOBQ10500_선물옵션_예탁금_증거금_조회_질의값 = "CFOBQ10500_선물옵션_예탁금_증거금_조회_질의값"
+	//P자료형_CFOBQ10500OutBlock             = "CFOBQ10500OutBlock"
+	//P자료형_CFOFQ02400_선물옵션_미결제약정_질의값      = "CFOFQ02400_선물옵션_미결제약정_질의값"
+	//P자료형_CFOFQ02400OutBlock             = "CFOFQ02400OutBlock"
 	P자료형_CSPAQ12200OutBlock             = "CSPAQ12200OutBlock"
 	P자료형_CSPAQ12200OutBlock1            = "CSPAQ12200OutBlock1"
 	P자료형_CSPAQ12200OutBlock2            = "CSPAQ12200OutBlock2"
@@ -217,8 +217,8 @@ const (
 	P자료형_T0167OutBlock                  = "T0167OutBlock"
 	P자료형_T0425_현물_체결_미체결_조회_질의값         = "T0425_현물_체결_미체결_조회_질의값"
 	P자료형_T0425OutBlock                  = "T0425OutBlock"
-	P자료형_T0434_선물옵션_체결_미체결_조회_질의값       = "T0434_선물옵션_체결_미체결_조회_질의값"
-	P자료형_T0434OutBlock                  = "T0434OutBlock"
+	//P자료형_T0434_선물옵션_체결_미체결_조회_질의값       = "T0434_선물옵션_체결_미체결_조회_질의값"
+	//P자료형_T0434OutBlock                  = "T0434OutBlock"
 	P자료형_T1101_현물_호가_조회_응답              = "T1101_현물_호가_조회_응답"
 	P자료형_T1101OutBlock                  = "T1101OutBlock"
 	P자료형_T1102_현물_시세_조회_응답              = "T1102_현물_시세_조회_응답"
@@ -299,12 +299,12 @@ const (
 )
 
 const (
-	TR선물옵션_주문체결내역조회_CFOAQ00600   = "CFOAQ00600"
-	TR선물옵션_정상주문_CFOAT00100       = "CFOAT00100"
-	TR선물옵션_정정주문_CFOAT00200       = "CFOAT00200"
-	TR선물옵션_취소주문_CFOAT00300       = "CFOAT00300"
-	TR선물옵션_예탁금_증거금_조회_CFOBQ10500 = "CFOBQ10500"
-	TR선물옵션_미결제약정_현황_CFOFQ02400   = "CFOFQ02400"
+	//TR선물옵션_주문체결내역조회_CFOAQ00600   = "CFOAQ00600"
+	//TR선물옵션_정상주문_CFOAT00100       = "CFOAT00100"
+	//TR선물옵션_정정주문_CFOAT00200       = "CFOAT00200"
+	//TR선물옵션_취소주문_CFOAT00300       = "CFOAT00300"
+	//TR선물옵션_예탁금_증거금_조회_CFOBQ10500 = "CFOBQ10500"
+	//TR선물옵션_미결제약정_현황_CFOFQ02400   = "CFOFQ02400"
 
 	TR현물계좌_총평가_CSPAQ12200        = "CSPAQ12200"
 	TR현물계좌_잔고내역_조회_CSPAQ12300    = "CSPAQ12300"
@@ -318,7 +318,7 @@ const (
 	TR현물_일자별_매매일지_t0151       = "t0151"
 	TR시간_조회_t0167             = "t0167"
 	TR현물_체결_미체결_조회_t0425      = "t0425"
-	TR선물옵션_체결_미체결_조회_t0434    = "t0434"
+	//TR선물옵션_체결_미체결_조회_t0434    = "t0434"
 	TR현물_호가_조회_t1101          = "t1101"
 	TR현물_시세_조회_t1102          = "t1102"
 	TR현물_기간별_조회_t1305         = "t1305"
@@ -333,7 +333,7 @@ const (
 	TR현물_차트_분_t8412      = "t8412"
 	TR현물_차트_일주월_t8413    = "t8413"
 	TR증시_주변_자금_추이_t8428  = "t8428"
-	TR지수선물_마스터_조회_t8432  = "t8432"
+	//TR지수선물_마스터_조회_t8432  = "t8432"
 	TR현물_종목_조회_t8436     = "t8436"
 
 	// 구현된 RT코드
@@ -916,8 +916,8 @@ const (
 	P주문_상품매도_대차   T주문유형 = 7
 	P주문_상품매도      T주문유형 = 9
 	P주문_상품매수      T주문유형 = 10
-	P주문_선물대용매도_일반 T주문유형 = 11
-	P주문_선물대용매도_반대 T주문유형 = 12
+	//P주문_선물대용매도_일반 T주문유형 = 11
+	//P주문_선물대용매도_반대 T주문유형 = 12
 	P주문_현금매도_프    T주문유형 = 13
 	P주문_현금매수_프    T주문유형 = 14
 	P주문_현금매수_유가   T주문유형 = 15
@@ -950,10 +950,10 @@ func (p T주문유형) String() string {
 		return "상품매도"
 	case P주문_상품매수:
 		return "상품매수"
-	case P주문_선물대용매도_일반:
-		return "선물대용매도(일반)"
-	case P주문_선물대용매도_반대:
-		return "선물대용매도(반대)"
+	//case P주문_선물대용매도_일반:
+	//	return "선물대용매도(일반)"
+	//case P주문_선물대용매도_반대:
+	//	return "선물대용매도(반대)"
 	case P주문_현금매도_프:
 		return "현금매도_프"
 	case P주문_현금매수_프:
@@ -1930,190 +1930,190 @@ func (p T신용_구분_t0425) String() string {
 	}
 }
 
-type CFOAQ00600_선물옵션분류 uint8
+//type CFOAQ00600_선물옵션분류 uint8
+//
+//const (
+//	P선물옵션_전체 CFOAQ00600_선물옵션분류 = 0
+//	P선물      CFOAQ00600_선물옵션분류 = 11
+//	P옵션      CFOAQ00600_선물옵션분류 = 12
+//)
+//
+//func (p CFOAQ00600_선물옵션분류) String() string {
+//	switch p {
+//	case P선물옵션_전체:
+//		return "전체"
+//	case P선물:
+//		return "선물"
+//	case P옵션:
+//		return "옵션"
+//	default:
+//		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
+//	}
+//}
 
-const (
-	P선물옵션_전체 CFOAQ00600_선물옵션분류 = 0
-	P선물      CFOAQ00600_선물옵션분류 = 11
-	P옵션      CFOAQ00600_선물옵션분류 = 12
-)
+//type T선옵_상품군 uint8
+//
+//const (
+//	P선옵_상품군_전체      T선옵_상품군 = 0
+//	P선옵_상품군_주가지수    T선옵_상품군 = 1
+//	P선옵_상품군_개별주식    T선옵_상품군 = 2
+//	P선옵_상품군_가공채권    T선옵_상품군 = 3
+//	P선옵_상품군_통화      T선옵_상품군 = 4
+//	P선옵_상품군_원자재_농산물 T선옵_상품군 = 5
+//	P선옵_상품군_금리      T선옵_상품군 = 6
+//)
+//
+//func (p T선옵_상품군) String() string {
+//	switch p {
+//	case P선옵_상품군_전체:
+//		return "전체"
+//	case P선옵_상품군_주가지수:
+//		return "주가지수"
+//	case P선옵_상품군_개별주식:
+//		return "개별주식"
+//	case P선옵_상품군_가공채권:
+//		return "가공채권"
+//	case P선옵_상품군_통화:
+//		return "통화"
+//	case P선옵_상품군_원자재_농산물:
+//		return "원자재/농산물"
+//	case P선옵_상품군_금리:
+//		return "금리"
+//	default:
+//		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
+//	}
+//}
 
-func (p CFOAQ00600_선물옵션분류) String() string {
-	switch p {
-	case P선물옵션_전체:
-		return "전체"
-	case P선물:
-		return "선물"
-	case P옵션:
-		return "옵션"
-	default:
-		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
-	}
-}
+//type T선물옵션_체결구분 uint8
+//
+//const (
+//	P선물옵션_매도 T선물옵션_체결구분 = iota
+//	P선물옵션_매수
+//	P선물옵션_전매
+//	P선물옵션_환매
+//	P선물옵션_최종전매
+//	P선물옵션_최종환매
+//	P선물옵션_권리행사
+//	P선물옵션_권리배정
+//	P선물옵션_미행사
+//	P선물옵션_미배정
+//)
+//
+//func (p T선물옵션_체결구분) String() string {
+//	switch p {
+//	case P선물옵션_매도:
+//		return "매도"
+//	case P선물옵션_매수:
+//		return "매수"
+//	case P선물옵션_전매:
+//		return "전매"
+//	case P선물옵션_환매:
+//		return "환매"
+//	case P선물옵션_최종전매:
+//		return "최종전매"
+//	case P선물옵션_최종환매:
+//		return "최종환매"
+//	case P선물옵션_권리행사:
+//		return "권리행사"
+//	case P선물옵션_권리배정:
+//		return "권리배정"
+//	case P선물옵션_미행사:
+//		return "미행사"
+//	case P선물옵션_미배정:
+//		return "미배정"
+//	default:
+//		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
+//	}
+//}
 
-type T선옵_상품군 uint8
+//type CFOAQ00600_정렬구분 uint8
+//
+//const (
+//	CFOAQ00600_역순 CFOAQ00600_정렬구분 = 3
+//	CFOAQ00600_정순 CFOAQ00600_정렬구분 = 4
+//)
+//
+//func (p CFOAQ00600_정렬구분) String() string {
+//	switch p {
+//	case CFOAQ00600_역순:
+//		return "역순"
+//	case CFOAQ00600_정순:
+//		return "정순"
+//	default:
+//		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
+//	}
+//}
+//
+//type CFOAQ00600_주문구분 uint8
+//
+//const (
+//	P주문_확인 CFOAQ00600_주문구분 = iota
+//	P주문_접수
+//	P주문_거부
+//)
+//
+//func (p CFOAQ00600_주문구분) String() string {
+//	switch p {
+//	case P주문_확인:
+//		return "확인"
+//	case P주문_접수:
+//		return "접수"
+//	case P주문_거부:
+//		return "거부"
+//	default:
+//		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
+//	}
+//}
+//
+//type CFOAQ00600_체결구분명 uint8
+//
+//type T선물옵션품목 uint8
+//
+//const (
+//	P선옵품목_코스피200_관련 T선물옵션품목 = 1
+//	P선옵품목_코스피200_제외 T선물옵션품목 = 2
+//	P선옵품목_코스닥50_관련  T선물옵션품목 = 3 // 현재는 발생데이터 존재 안 함.
+//)
+//
+//func (p T선물옵션품목) String() string {
+//	switch p {
+//	case P선옵품목_코스피200_관련:
+//		return "코스피200 관련"
+//	case P선옵품목_코스피200_제외:
+//		return "코스피200 제외"
+//	case P선옵품목_코스닥50_관련:
+//		return "코스닥 50 관련"
+//	default:
+//		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
+//	}
+//}
 
-const (
-	P선옵_상품군_전체      T선옵_상품군 = 0
-	P선옵_상품군_주가지수    T선옵_상품군 = 1
-	P선옵_상품군_개별주식    T선옵_상품군 = 2
-	P선옵_상품군_가공채권    T선옵_상품군 = 3
-	P선옵_상품군_통화      T선옵_상품군 = 4
-	P선옵_상품군_원자재_농산물 T선옵_상품군 = 5
-	P선옵_상품군_금리      T선옵_상품군 = 6
-)
-
-func (p T선옵_상품군) String() string {
-	switch p {
-	case P선옵_상품군_전체:
-		return "전체"
-	case P선옵_상품군_주가지수:
-		return "주가지수"
-	case P선옵_상품군_개별주식:
-		return "개별주식"
-	case P선옵_상품군_가공채권:
-		return "가공채권"
-	case P선옵_상품군_통화:
-		return "통화"
-	case P선옵_상품군_원자재_농산물:
-		return "원자재/농산물"
-	case P선옵_상품군_금리:
-		return "금리"
-	default:
-		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
-	}
-}
-
-type T선물옵션_체결구분 uint8
-
-const (
-	P선물옵션_매도 T선물옵션_체결구분 = iota
-	P선물옵션_매수
-	P선물옵션_전매
-	P선물옵션_환매
-	P선물옵션_최종전매
-	P선물옵션_최종환매
-	P선물옵션_권리행사
-	P선물옵션_권리배정
-	P선물옵션_미행사
-	P선물옵션_미배정
-)
-
-func (p T선물옵션_체결구분) String() string {
-	switch p {
-	case P선물옵션_매도:
-		return "매도"
-	case P선물옵션_매수:
-		return "매수"
-	case P선물옵션_전매:
-		return "전매"
-	case P선물옵션_환매:
-		return "환매"
-	case P선물옵션_최종전매:
-		return "최종전매"
-	case P선물옵션_최종환매:
-		return "최종환매"
-	case P선물옵션_권리행사:
-		return "권리행사"
-	case P선물옵션_권리배정:
-		return "권리배정"
-	case P선물옵션_미행사:
-		return "미행사"
-	case P선물옵션_미배정:
-		return "미배정"
-	default:
-		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
-	}
-}
-
-type CFOAQ00600_정렬구분 uint8
-
-const (
-	CFOAQ00600_역순 CFOAQ00600_정렬구분 = 3
-	CFOAQ00600_정순 CFOAQ00600_정렬구분 = 4
-)
-
-func (p CFOAQ00600_정렬구분) String() string {
-	switch p {
-	case CFOAQ00600_역순:
-		return "역순"
-	case CFOAQ00600_정순:
-		return "정순"
-	default:
-		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
-	}
-}
-
-type CFOAQ00600_주문구분 uint8
-
-const (
-	P주문_확인 CFOAQ00600_주문구분 = iota
-	P주문_접수
-	P주문_거부
-)
-
-func (p CFOAQ00600_주문구분) String() string {
-	switch p {
-	case P주문_확인:
-		return "확인"
-	case P주문_접수:
-		return "접수"
-	case P주문_거부:
-		return "거부"
-	default:
-		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
-	}
-}
-
-type CFOAQ00600_체결구분명 uint8
-
-type T선물옵션품목 uint8
-
-const (
-	P선옵품목_코스피200_관련 T선물옵션품목 = 1
-	P선옵품목_코스피200_제외 T선물옵션품목 = 2
-	P선옵품목_코스닥50_관련  T선물옵션품목 = 3 // 현재는 발생데이터 존재 안 함.
-)
-
-func (p T선물옵션품목) String() string {
-	switch p {
-	case P선옵품목_코스피200_관련:
-		return "코스피200 관련"
-	case P선옵품목_코스피200_제외:
-		return "코스피200 제외"
-	case P선옵품목_코스닥50_관련:
-		return "코스닥 50 관련"
-	default:
-		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
-	}
-}
-
-type CFOFQ02400_등록시장 uint8
-
-const (
-	CFOFQ02400_전체     CFOFQ02400_등록시장 = 99
-	CFOFQ02400_KOSPI  CFOFQ02400_등록시장 = 40
-	CFOFQ02400_KOSDAQ CFOFQ02400_등록시장 = 20
-	CFOFQ02400_KSE    CFOFQ02400_등록시장 = 10
-	CFOFQ02400_KOFEX  CFOFQ02400_등록시장 = 50
-)
-
-func (p CFOFQ02400_등록시장) String() string {
-	switch p {
-	case CFOFQ02400_전체:
-		return "전체"
-	case CFOFQ02400_KOSPI:
-		return "KOSPI"
-	case CFOFQ02400_KOSDAQ:
-		return "KOSDAQ"
-	case CFOFQ02400_KSE:
-		return "KSE"
-	case CFOFQ02400_KOFEX:
-		return "KOFEX"
-	default:
-		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
-	}
-}
+//type CFOFQ02400_등록시장 uint8
+//
+//const (
+//	CFOFQ02400_전체     CFOFQ02400_등록시장 = 99
+//	CFOFQ02400_KOSPI  CFOFQ02400_등록시장 = 40
+//	CFOFQ02400_KOSDAQ CFOFQ02400_등록시장 = 20
+//	CFOFQ02400_KSE    CFOFQ02400_등록시장 = 10
+//	CFOFQ02400_KOFEX  CFOFQ02400_등록시장 = 50
+//)
+//
+//func (p CFOFQ02400_등록시장) String() string {
+//	switch p {
+//	case CFOFQ02400_전체:
+//		return "전체"
+//	case CFOFQ02400_KOSPI:
+//		return "KOSPI"
+//	case CFOFQ02400_KOSDAQ:
+//		return "KOSDAQ"
+//	case CFOFQ02400_KSE:
+//		return "KSE"
+//	case CFOFQ02400_KOFEX:
+//		return "KOFEX"
+//	default:
+//		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
+//	}
+//}
 
 type T상태_T0434 uint8
 

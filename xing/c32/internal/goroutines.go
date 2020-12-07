@@ -343,36 +343,36 @@ func F조회_및_주문_질의_처리(질의 *lib.S채널_질의_API) {
 	TR코드 := 질의값.(lib.I질의값).TR코드()
 
 	switch TR코드 {
-	case xt.TR선물옵션_주문체결내역조회_CFOAQ00600:
-		질의값_CFOAQ00600 := 질의값.(*xt.CFOAQ00600_선물옵션_주문체결내역_질의값)
-		연속_조회_여부 = 질의값_CFOAQ00600.M연속조회_여부
-		연속_조회_키 = 질의값_CFOAQ00600.M연속키
-
-		c데이터 = unsafe.Pointer(xt.NewCFOAQ00600InBlock1(질의값_CFOAQ00600, 계좌_비밀번호))
-		길이 = xt.SizeCFOAQ00600InBlock1
-	case xt.TR선물옵션_정상주문_CFOAT00100:
-		c데이터 = unsafe.Pointer(xt.NewCFOAT00100InBlock1(질의값.(*xt.CFOAT00100_선물옵션_정상주문_질의값), 계좌_비밀번호))
-		길이 = xt.SizeCFOAT00100InBlock1
-	case xt.TR선물옵션_정정주문_CFOAT00200:
-		c데이터 = unsafe.Pointer(xt.NewCFOAT00200InBlock1(질의값.(*xt.CFOAT00200_선물옵션_정정주문_질의값), 계좌_비밀번호))
-		길이 = xt.SizeCFOAT00200InBlock1
-	case xt.TR선물옵션_취소주문_CFOAT00300:
-		c데이터 = unsafe.Pointer(xt.NewCFOAT00300InBlock1(질의값.(*xt.CFOAT00300_선물옵션_취소주문_질의값), 계좌_비밀번호))
-		길이 = xt.SizeCFOAT00300InBlock1
-	case xt.TR선물옵션_예탁금_증거금_조회_CFOBQ10500:
-		질의값_CFOBQ10500 := 질의값.(*xt.CFOBQ10500_선물옵션_예탁금_증거금_조회_질의값)
-		연속_조회_여부 = 질의값_CFOBQ10500.M연속조회_여부
-		연속_조회_키 = 질의값_CFOBQ10500.M연속키
-
-		c데이터 = unsafe.Pointer(xt.NewCFOBQ105000InBlock1(질의값_CFOBQ10500, 계좌_비밀번호))
-		길이 = xt.SizeCFOBQ10500InBlock1
-	case xt.TR선물옵션_미결제약정_현황_CFOFQ02400:
-		질의값_CFOFQ02400 := 질의값.(*xt.CFOFQ02400_선물옵션_미결제약정_질의값)
-		연속_조회_여부 = 질의값_CFOFQ02400.M연속조회_여부
-		연속_조회_키 = 질의값_CFOFQ02400.M연속키
-
-		c데이터 = unsafe.Pointer(xt.NewCFOFQ02400InBlock1(질의값_CFOFQ02400, 계좌_비밀번호))
-		길이 = xt.SizeCFOFQ02400InBlock1
+	//case xt.TR선물옵션_주문체결내역조회_CFOAQ00600:
+	//	질의값_CFOAQ00600 := 질의값.(*xt.CFOAQ00600_선물옵션_주문체결내역_질의값)
+	//	연속_조회_여부 = 질의값_CFOAQ00600.M연속조회_여부
+	//	연속_조회_키 = 질의값_CFOAQ00600.M연속키
+	//
+	//	c데이터 = unsafe.Pointer(xt.NewCFOAQ00600InBlock1(질의값_CFOAQ00600, 계좌_비밀번호))
+	//	길이 = xt.SizeCFOAQ00600InBlock1
+	//case xt.TR선물옵션_정상주문_CFOAT00100:
+	//	c데이터 = unsafe.Pointer(xt.NewCFOAT00100InBlock1(질의값.(*xt.CFOAT00100_선물옵션_정상주문_질의값), 계좌_비밀번호))
+	//	길이 = xt.SizeCFOAT00100InBlock1
+	//case xt.TR선물옵션_정정주문_CFOAT00200:
+	//	c데이터 = unsafe.Pointer(xt.NewCFOAT00200InBlock1(질의값.(*xt.CFOAT00200_선물옵션_정정주문_질의값), 계좌_비밀번호))
+	//	길이 = xt.SizeCFOAT00200InBlock1
+	//case xt.TR선물옵션_취소주문_CFOAT00300:
+	//	c데이터 = unsafe.Pointer(xt.NewCFOAT00300InBlock1(질의값.(*xt.CFOAT00300_선물옵션_취소주문_질의값), 계좌_비밀번호))
+	//	길이 = xt.SizeCFOAT00300InBlock1
+	//case xt.TR선물옵션_예탁금_증거금_조회_CFOBQ10500:
+	//	질의값_CFOBQ10500 := 질의값.(*xt.CFOBQ10500_선물옵션_예탁금_증거금_조회_질의값)
+	//	연속_조회_여부 = 질의값_CFOBQ10500.M연속조회_여부
+	//	연속_조회_키 = 질의값_CFOBQ10500.M연속키
+	//
+	//	c데이터 = unsafe.Pointer(xt.NewCFOBQ105000InBlock1(질의값_CFOBQ10500, 계좌_비밀번호))
+	//	길이 = xt.SizeCFOBQ10500InBlock1
+	//case xt.TR선물옵션_미결제약정_현황_CFOFQ02400:
+	//	질의값_CFOFQ02400 := 질의값.(*xt.CFOFQ02400_선물옵션_미결제약정_질의값)
+	//	연속_조회_여부 = 질의값_CFOFQ02400.M연속조회_여부
+	//	연속_조회_키 = 질의값_CFOFQ02400.M연속키
+	//
+	//	c데이터 = unsafe.Pointer(xt.NewCFOFQ02400InBlock1(질의값_CFOFQ02400, 계좌_비밀번호))
+	//	길이 = xt.SizeCFOFQ02400InBlock1
 	case xt.TR현물계좌_총평가_CSPAQ12200:
 		계좌번호 := 질의값.(*lib.S질의값_문자열).M문자열
 
@@ -419,9 +419,9 @@ func F조회_및_주문_질의_처리(질의 *lib.S채널_질의_API) {
 	case xt.TR현물_체결_미체결_조회_t0425:
 		c데이터 = unsafe.Pointer(xt.NewT0425InBlock(질의값.(*xt.T0425_현물_체결_미체결_조회_질의값), 계좌_비밀번호))
 		길이 = xt.SizeT0425InBlock
-	case xt.TR선물옵션_체결_미체결_조회_t0434:
-		c데이터 = unsafe.Pointer(xt.NewT0434InBlock(질의값.(*xt.T0434_선물옵션_체결_미체결_조회_질의값), 계좌_비밀번호))
-		길이 = xt.SizeT0434InBlock
+	//case xt.TR선물옵션_체결_미체결_조회_t0434:
+	//	c데이터 = unsafe.Pointer(xt.NewT0434InBlock(질의값.(*xt.T0434_선물옵션_체결_미체결_조회_질의값), 계좌_비밀번호))
+	//	길이 = xt.SizeT0434InBlock
 	case xt.TR현물_호가_조회_t1101:
 		c데이터 = unsafe.Pointer(xt.NewT1101InBlock(질의값.(*lib.S질의값_단일_종목)))
 		길이 = xt.SizeT1101InBlock
@@ -522,9 +522,9 @@ func F조회_및_주문_질의_처리(질의 *lib.S채널_질의_API) {
 
 		c데이터 = unsafe.Pointer(xt.NewT8428InBlock(질의값.(*xt.T8428_증시주변_자금추이_질의값)))
 		길이 = xt.SizeT8428InBlock
-	case xt.TR지수선물_마스터_조회_t8432:
-		c데이터 = unsafe.Pointer(xt.NewT8432InBlock(질의값.(*lib.S질의값_문자열)))
-		길이 = xt.SizeT8428InBlock
+	//case xt.TR지수선물_마스터_조회_t8432:
+	//	c데이터 = unsafe.Pointer(xt.NewT8432InBlock(질의값.(*lib.S질의값_문자열)))
+	//	길이 = xt.SizeT8428InBlock
 	case xt.TR현물_종목_조회_t8436:
 		c데이터 = unsafe.Pointer(xt.NewT8436InBlock(질의값.(*lib.S질의값_문자열)))
 		길이 = xt.SizeT8436InBlock

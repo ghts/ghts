@@ -278,30 +278,30 @@ func F바이트_변환값_해석(바이트_변환값 *lib.S바이트_변환) (�
 		s := new(S현물_주문_응답_실시간_정보)
 		lib.F확인(바이트_변환값.G값(s))
 		return s, nil
-	case P자료형_CFOAQ00600_선물옵션_주문체결내역_질의값:
-		s := new(CFOAQ00600_선물옵션_주문체결내역_질의값)
-		lib.F확인(바이트_변환값.G값(s))
-		return s, nil
-	case P자료형_CFOAT00100_선물옵션_정상주문_질의값:
-		s := new(CFOAT00100_선물옵션_정상주문_질의값)
-		lib.F확인(바이트_변환값.G값(s))
-		return s, nil
-	case P자료형_CFOAT00200_선물옵션_정정주문_질의값:
-		s := new(CFOAT00200_선물옵션_정정주문_질의값)
-		lib.F확인(바이트_변환값.G값(s))
-		return s, nil
-	case P자료형_CFOAT00300_선물옵션_취소주문_질의값:
-		s := new(CFOAT00300_선물옵션_취소주문_질의값)
-		lib.F확인(바이트_변환값.G값(s))
-		return s, nil
-	case P자료형_CFOBQ10500_선물옵션_예탁금_증거금_조회_질의값:
-		s := new(CFOBQ10500_선물옵션_예탁금_증거금_조회_질의값)
-		lib.F확인(바이트_변환값.G값(s))
-		return s, nil
-	case P자료형_CFOFQ02400_선물옵션_미결제약정_질의값:
-		s := new(CFOFQ02400_선물옵션_미결제약정_질의값)
-		lib.F확인(바이트_변환값.G값(s))
-		return s, nil
+	//case P자료형_CFOAQ00600_선물옵션_주문체결내역_질의값:
+	//	s := new(CFOAQ00600_선물옵션_주문체결내역_질의값)
+	//	lib.F확인(바이트_변환값.G값(s))
+	//	return s, nil
+	//case P자료형_CFOAT00100_선물옵션_정상주문_질의값:
+	//	s := new(CFOAT00100_선물옵션_정상주문_질의값)
+	//	lib.F확인(바이트_변환값.G값(s))
+	//	return s, nil
+	//case P자료형_CFOAT00200_선물옵션_정정주문_질의값:
+	//	s := new(CFOAT00200_선물옵션_정정주문_질의값)
+	//	lib.F확인(바이트_변환값.G값(s))
+	//	return s, nil
+	//case P자료형_CFOAT00300_선물옵션_취소주문_질의값:
+	//	s := new(CFOAT00300_선물옵션_취소주문_질의값)
+	//	lib.F확인(바이트_변환값.G값(s))
+	//	return s, nil
+	//case P자료형_CFOBQ10500_선물옵션_예탁금_증거금_조회_질의값:
+	//	s := new(CFOBQ10500_선물옵션_예탁금_증거금_조회_질의값)
+	//	lib.F확인(바이트_변환값.G값(s))
+	//	return s, nil
+	//case P자료형_CFOFQ02400_선물옵션_미결제약정_질의값:
+	//	s := new(CFOFQ02400_선물옵션_미결제약정_질의값)
+	//	lib.F확인(바이트_변환값.G값(s))
+	//	return s, nil
 	case P자료형_CSPAQ12300_현물계좌_잔고내역_질의값:
 		s := new(CSPAQ12300_현물계좌_잔고내역_질의값)
 		lib.F확인(바이트_변환값.G값(s))
@@ -330,10 +330,10 @@ func F바이트_변환값_해석(바이트_변환값 *lib.S바이트_변환) (�
 		s := new(T0425_현물_체결_미체결_조회_질의값)
 		lib.F확인(바이트_변환값.G값(s))
 		return s, nil
-	case P자료형_T0434_선물옵션_체결_미체결_조회_질의값:
-		s := new(T0434_선물옵션_체결_미체결_조회_질의값)
-		lib.F확인(바이트_변환값.G값(s))
-		return s, nil
+	//case P자료형_T0434_선물옵션_체결_미체결_조회_질의값:
+	//	s := new(T0434_선물옵션_체결_미체결_조회_질의값)
+	//	lib.F확인(바이트_변환값.G값(s))
+	//	return s, nil
 	case P자료형_T1101_현물_호가_조회_응답:
 		s := new(T1101_현물_호가_조회_응답)
 		lib.F확인(바이트_변환값.G값(s))
@@ -584,18 +584,18 @@ func F바이트_변환값_해석_Raw(바이트_변환값 *lib.S바이트_변환)
 		RT코스피_기세, RT코스닥_LP호가, RT코스닥_시간외_호가잔량,
 		RT지수, RT예상지수, RT실시간_뉴스_제목_패킷, RT업종별_투자자별_매매_현황:
 		return nil, lib.New에러("미구현 RT코드 : '%v'", 자료형_문자열)
-	case P자료형_CFOAQ00600OutBlock:
-		return NewCFOAQ00600OutBlock(b)
-	case P자료형_CFOAT00100OutBlock:
-		return NewCFOAT00100OutBlock(b)
-	case P자료형_CFOAT00200OutBlock:
-		return NewCFOAT00200OutBlock(b)
-	case P자료형_CFOAT00300OutBlock:
-		return NewCFOAT00300OutBlock(b)
-	case P자료형_CFOBQ10500OutBlock:
-		return NewCFOBQ105000OutBlock(b)
-	case P자료형_CFOFQ02400OutBlock:
-		return NewCFOFQ02400OutBlock(b)
+	//case P자료형_CFOAQ00600OutBlock:
+	//	return NewCFOAQ00600OutBlock(b)
+	//case P자료형_CFOAT00100OutBlock:
+	//	return NewCFOAT00100OutBlock(b)
+	//case P자료형_CFOAT00200OutBlock:
+	//	return NewCFOAT00200OutBlock(b)
+	//case P자료형_CFOAT00300OutBlock:
+	//	return NewCFOAT00300OutBlock(b)
+	//case P자료형_CFOBQ10500OutBlock:
+	//	return NewCFOBQ105000OutBlock(b)
+	//case P자료형_CFOFQ02400OutBlock:
+	//	return NewCFOFQ02400OutBlock(b)
 	case P자료형_CSPAQ12200OutBlock:
 		return NewCSPAQ12200_현물계좌_총평가_응답(b)
 	case P자료형_CSPAQ12300OutBlock:
@@ -618,8 +618,8 @@ func F바이트_변환값_해석_Raw(바이트_변환값 *lib.S바이트_변환)
 		return NewT0167_시각_조회_응답(b)
 	case P자료형_T0425OutBlock:
 		return NewT0425_현물_체결_미체결_조회_응답(b)
-	case P자료형_T0434OutBlock:
-		return NewT0434_선물옵션_체결_미체결_조회_응답(b)
+	//case P자료형_T0434OutBlock:
+	//	return NewT0434_선물옵션_체결_미체결_조회_응답(b)
 	case P자료형_T1101OutBlock:
 		return NewT1101_현물_호가_조회_응답(b)
 	case P자료형_T1102OutBlock:
@@ -644,12 +644,10 @@ func F바이트_변환값_해석_Raw(바이트_변환값 *lib.S바이트_변환)
 		return NewT1902_ETF시간별_추이_응답_헤더(b)
 	case P자료형_T1902OutBlock1:
 		return NewT1902_ETF시간별_추이_응답_반복값_모음(b)
-	/*
-		case P자료형_T3320OutBlock:
-			return NewT3320_기업정보_요약_응답1(b)
-		case P자료형_T3320OutBlock1:
-			return NewT3320_기업정보_요약_응답2(b)
-	*/
+	//case P자료형_T3320OutBlock:
+	//		return NewT3320_기업정보_요약_응답1(b)
+	//case P자료형_T3320OutBlock1:
+	//	return NewT3320_기업정보_요약_응답2(b)
 	case P자료형_T3341OutBlock:
 		return NewT3341_재무순위_응답_헤더(b)
 	case P자료형_T3341OutBlock1:
