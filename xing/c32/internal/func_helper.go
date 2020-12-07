@@ -332,7 +332,7 @@ func f민감정보_삭제(raw값 []byte, 구분_문자열 string) []byte {
 	switch 구분_문자열 {
 	case xt.P자료형_CSPAQ12300OutBlock,
 		xt.P자료형_CSPAQ13700OutBlock,
-		xt.P자료형_CSPAT00600OutBlock:	//,
+		xt.P자료형_CSPAT00600OutBlock: //,
 		//xt.P자료형_CFOAQ00600OutBlock,
 		//xt.P자료형_CFOBQ10500OutBlock,
 		//xt.P자료형_CFOFQ02400OutBlock:
