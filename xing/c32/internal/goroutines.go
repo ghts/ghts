@@ -472,11 +472,9 @@ func F조회_및_주문_질의_처리(질의 *lib.S채널_질의_API) {
 		}
 		c데이터 = unsafe.Pointer(xt.NewT1902InBlock(질의값.(*lib.S질의값_단일종목_연속키)))
 		길이 = xt.SizeT1902InBlock
-	/*
-		case xt.TR기업정보_요약_t3320:
-			c데이터 = unsafe.Pointer(xt.NewT3320InBlock(질의값.(*lib.S질의값_단일_종목)))
-			길이 = xt.SizeT3320InBlock
-	*/
+	//case xt.TR기업정보_요약_t3320:
+	//	c데이터 = unsafe.Pointer(xt.NewT3320InBlock(질의값.(*lib.S질의값_단일_종목)))
+	//	길이 = xt.SizeT3320InBlock
 	case xt.TR재무순위_종합_t3341:
 		c데이터 = unsafe.Pointer(xt.NewT3341InBlock(질의값.(*xt.T3341_재무순위_질의값)))
 		길이 = xt.SizeT3341InBlock

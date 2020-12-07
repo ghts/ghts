@@ -265,14 +265,14 @@ func f자료형_문자열_해석(g *xt.TR_DATA) (자료형_문자열 string, 에
 		case 길이%xt.SizeT1902OutBlock1 == 0:
 			return xt.P자료형_T1902OutBlock1, nil
 		}
-	case xt.TR기업정보_요약_t3320:
-		lib.F체크포인트(xt.TR기업정보_요약_t3320, xt.SizeT3320OutBlock, xt.SizeT3320OutBlock1)
-		switch 길이 {
-		case xt.SizeT3320OutBlock:
-			return xt.P자료형_T3320OutBlock, nil
-		case xt.SizeT3320OutBlock1:
-			return xt.P자료형_T3320OutBlock1, nil
-		}
+	//case xt.TR기업정보_요약_t3320:
+	//	lib.F체크포인트(xt.TR기업정보_요약_t3320, xt.SizeT3320OutBlock, xt.SizeT3320OutBlock1)
+	//	switch 길이 {
+	//	case xt.SizeT3320OutBlock:
+	//		return xt.P자료형_T3320OutBlock, nil
+	//	case xt.SizeT3320OutBlock1:
+	//		return xt.P자료형_T3320OutBlock1, nil
+	//	}
 	case xt.TR재무순위_종합_t3341:
 		switch {
 		case 길이 == xt.SizeT3341OutBlock:

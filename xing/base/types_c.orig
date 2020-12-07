@@ -217,9 +217,9 @@ type T1902OutBlock C.T1902OutBlock
 type T1902OutBlock1 C.T1902OutBlock1
 
 // 기업 정보 요약 (t3320)
-type T3320InBlock C.T3320InBlock
-type T3320OutBlock C.T3320OutBlock
-type T3320OutBlock1 C.T3320OutBlock1
+//type T3320InBlock C.T3320InBlock
+//type T3320OutBlock C.T3320OutBlock
+//type T3320OutBlock1 C.T3320OutBlock1
 
 // 재무 순위 종합 (t3341)
 type T3341InBlock C.T3341InBlock
