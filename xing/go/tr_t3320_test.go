@@ -33,6 +33,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
 package xing
 
+/*
 import (
 	"github.com/ghts/ghts/lib"
 	"math"
@@ -93,3 +94,4 @@ func TestT3320_F기업정보_요약(t *testing.T) {
 	//값2.T_PEG    = lib.F2실수_단순형(g.Tpeg)
 	lib.F테스트_다름(t, lib.F정규식_검색(값2.M최근분기년도, []string{`[1-9]+`}), "")
 }
+*/

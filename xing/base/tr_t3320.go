@@ -33,6 +33,8 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
 package xt
 
+/*
+
 import (
 	"bytes"
 	"encoding/binary"
@@ -174,3 +176,5 @@ func NewT3320_기업정보_요약_응답2(b []byte) (값 *T3320_기업정보_요
 
 	return 값, nil
 }
+
+*/
