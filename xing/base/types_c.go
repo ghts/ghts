@@ -2876,15 +2876,15 @@ type T3320OutBlock1 struct {
 	Bps        [13]byte
 	X_bps      byte
 	Tper       [13]byte
-	X_t_per    byte
+	X_tper     byte
 	Teps       [13]byte
-	X_t_eps    byte
+	X_teps     byte
 	Peg        [13]byte
 	X_peg      byte
 	Tpeg       [13]byte
-	X_t_peg    byte
+	X_tpeg     byte
 	Tgsym      [6]byte
-	X_t_gsym   byte
+	X_tgsym    byte
 }
 
 type T3341InBlock struct {
