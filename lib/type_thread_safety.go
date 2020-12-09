@@ -55,7 +55,6 @@ func New안전한_bool(값 bool) I안전한_bool {
 	return &s안전한_bool{값: 값}
 }
 
-// 안전한 bool
 type s안전한_bool struct {
 	sync.RWMutex
 	값 bool
@@ -78,6 +77,35 @@ func (s *s안전한_bool) S값(값 bool) error {
 		s.값 = 값
 		return nil
 	}
+}
+
+// 안전한 정수64
+type I안전한_정수64 interface {
+	G값() int64
+	S값(값 int64)
+}
+
+func New안전한_정수64(값 int64) I안전한_정수64 {
+	return &s안전한_정수64{값: 값}
+}
+
+type s안전한_정수64 struct {
+	sync.RWMutex
+	값 int64
+}
+
+func (s *s안전한_정수64) G값() int64 {
+	s.RLock() // Go언어의 Embedded Lock
+	defer s.RUnlock()
+
+	return s.값
+}
+
+func (s *s안전한_정수64) S값(값 int64) {
+	s.Lock()
+	defer s.Unlock()
+
+	s.값 = 값
 }
 
 // 안전한 string
