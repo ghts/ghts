@@ -41,11 +41,6 @@ import (
 	"time"
 )
 
-type CSPAT00600_현물_정상_주문_질의_응답 struct {
-	M질의값 *CSPAT00600_현물_정상_주문_질의값
-	Ch응답 chan *CSPAT00600_현물_정상_주문_응답_에러
-}
-
 type CSPAT00600_현물_정상_주문_질의값 struct {
 	*lib.S질의값_정상_주문
 	//M계좌_비밀번호 string
@@ -55,11 +50,6 @@ type CSPAT00600_현물_정상_주문_질의값 struct {
 
 func (s *CSPAT00600_현물_정상_주문_질의값) S대출일(값 time.Time) {
 	s.M대출일 = 값.Format("20060102")
-}
-
-type CSPAT00600_현물_정상_주문_응답_에러 struct {
-	M응답값 *CSPAT00600_현물_정상_주문_응답
-	M에러  error
 }
 
 type CSPAT00600_현물_정상_주문_응답 struct {

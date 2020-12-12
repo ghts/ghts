@@ -41,21 +41,11 @@ import (
 	"time"
 )
 
-type CSPAT00700_현물_정정_주문_질의_응답 struct {
-	M질의값 *CSPAT00700_현물_정정_주문_질의값
-	Ch응답 chan *CSPAT00700_현물_정정_주문_응답_에러
-}
-
 type CSPAT00700_현물_정정_주문_질의값 struct {
 	*lib.S질의값_정정_주문
 	//M계좌_비밀번호 string
 	M주문조건 lib.T주문조건
 	M호가유형 lib.T호가유형
-}
-
-type CSPAT00700_현물_정정_주문_응답_에러 struct {
-	M응답값 *CSPAT00700_현물_정정_주문_응답
-	M에러  error
 }
 
 type CSPAT00700_현물_정정_주문_응답 struct {

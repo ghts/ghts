@@ -41,16 +41,6 @@ import (
 	"time"
 )
 
-type CSPAT00800_현물_취소_주문_질의_응답 struct {
-	M질의값 *lib.S질의값_취소_주문
-	Ch응답 chan *CSPAT00800_현물_취소_주문_응답_에러
-}
-
-type CSPAT00800_현물_취소_주문_응답_에러 struct {
-	M응답값 *CSPAT00800_현물_취소_주문_응답
-	M에러  error
-}
-
 type CSPAT00800_현물_취소_주문_응답 struct {
 	M응답1 *CSPAT00800_현물_취소_주문_응답1
 	M응답2 *CSPAT00800_S현물_취소_주문_응답2

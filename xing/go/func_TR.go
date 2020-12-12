@@ -267,170 +267,82 @@ import (
 //}
 
 func TrCSPAT00600_현물_정상주문(질의값 *xt.CSPAT00600_현물_정상_주문_질의값) (응답값 *xt.CSPAT00600_현물_정상_주문_응답, 에러 error) {
-	defer lib.S예외처리{M에러: &에러}.S실행()
+	defer lib.S예외처리{M에러: &에러, M함수: func() { 응답값 = nil }}.S실행()
 
-	질의_응답 := new(xt.CSPAT00600_현물_정상_주문_질의_응답)
-	질의_응답.M질의값 = 질의값
-	질의_응답.Ch응답 = make(chan *xt.CSPAT00600_현물_정상_주문_응답_에러, 1)
-
-	ch현물_정상_주문 <- 질의_응답
-
-	select {
-	case 응답_에러 := <-질의_응답.Ch응답:
-		return 응답_에러.M응답값, 응답_에러.M에러
-	case <-time.After(lib.P30초):
-		return nil, lib.New에러("TrCSPAT00600_현물_정상주문() 타임아웃 : %v", *질의값)
-	}
-}
-
-func go현물_정상_주문(ch초기화, ch종료 chan lib.T신호) {
-	var 에러 error
-	defer lib.S예외처리{M에러: &에러, M함수: func() { ch종료 <- lib.P신호_종료 }}.S실행()
-
-	ch공통_종료 := lib.F공통_종료_채널()
-	ch초기화 <- lib.P신호_초기화
-
-	for {
-		select {
-		case <-ch공통_종료:
-			return
-		case 질의_응답 := <-ch현물_정상_주문:
-			f현물_정상주문_도우미(질의_응답)
-		}
-	}
-}
-
-func f현물_정상주문_도우미(질의_응답 *xt.CSPAT00600_현물_정상_주문_질의_응답) {
-	var 에러 error
-	defer lib.S예외처리{M에러: &에러, M함수: func() {
-		질의_응답.Ch응답 <- &xt.CSPAT00600_현물_정상_주문_응답_에러{M응답값: nil, M에러: 에러}
-	}}.S실행()
-
-	if 질의_응답.M질의값.M주문수량 <= 0 {
-		return
-	} else if strings.HasPrefix(질의_응답.M질의값.M종목코드, "5") {
-		질의_응답.M질의값.M종목코드 = "Q" + 질의_응답.M질의값.M종목코드 // ETN 종목코드 보정
+	// ETN 종목코드 보정
+	if strings.HasPrefix(질의값.M종목코드, "5") {
+		질의값.M종목코드 = "Q" + 질의값.M종목코드
 	}
 
-	i응답값, 에러 := F질의_단일TR(질의_응답.M질의값)
+	i응답값, 에러 := F질의_단일TR(질의값)
 	lib.F확인(에러)
 
 	응답값, ok := i응답값.(*xt.CSPAT00600_현물_정상_주문_응답)
-	lib.F조건부_패닉(!ok, "f현물_정상주문_도우미() 예상하지 못한 자료형 : '%T'", i응답값)
+	lib.F조건부_패닉(!ok, "TrCSPAT00600() 예상하지 못한 자료형 : '%T'", i응답값)
 
-	질의_응답.Ch응답 <- &xt.CSPAT00600_현물_정상_주문_응답_에러{M응답값: 응답값, M에러: nil}
+	return 응답값, nil
 }
 
 func TrCSPAT00700_현물_정정주문(질의값 *xt.CSPAT00700_현물_정정_주문_질의값) (응답값 *xt.CSPAT00700_현물_정정_주문_응답, 에러 error) {
-	defer lib.S예외처리{M에러: &에러}.S실행()
+	defer lib.S예외처리{M에러: &에러, M함수: func() { 응답값 = nil }}.S실행()
 
-	질의_응답 := new(xt.CSPAT00700_현물_정정_주문_질의_응답)
-	질의_응답.M질의값 = 질의값
-	질의_응답.Ch응답 = make(chan *xt.CSPAT00700_현물_정정_주문_응답_에러, 1)
-
-	ch현물_정정_주문 <- 질의_응답
-
-	select {
-	case 응답_에러 := <-질의_응답.Ch응답:
-		return 응답_에러.M응답값, 응답_에러.M에러
-	case <-time.After(lib.P30초):
-		return nil, lib.New에러("TrCSPAT00700_현물_정정주문() 타임아웃 : %v", *질의값)
+	// ETN 종목코드 보정
+	if strings.HasPrefix(질의값.M종목코드, "5") {
+		질의값.M종목코드 = "Q" + 질의값.M종목코드
 	}
-}
 
-func go현물_정정_주문(ch초기화, ch종료 chan lib.T신호) {
-	var 에러 error
-	defer lib.S예외처리{M에러: &에러, M함수: func() { ch종료 <- lib.P신호_종료 }}.S실행()
+	for i := 0; i < 10; i++ { // 최대 10번 재시도
+		i응답값, 에러 := F질의_단일TR(질의값)
 
-	ch공통_종료 := lib.F공통_종료_채널()
-	ch초기화 <- lib.P신호_초기화
-
-	for {
-		select {
-		case <-ch공통_종료:
-			return
-		case 질의_응답 := <-ch현물_정정_주문:
-			f현물_정정주문_도우미(질의_응답)
+		if 에러 != nil && (strings.Contains(에러.Error(), "원주문번호를 잘못") ||
+			strings.Contains(에러.Error(), "접수 대기 상태입니다")) {
+			continue
 		}
-	}
-}
 
-func f현물_정정주문_도우미(질의_응답 *xt.CSPAT00700_현물_정정_주문_질의_응답) {
-	var 에러 error
-	defer lib.S예외처리{M에러: &에러, M함수: func() {
-		질의_응답.Ch응답 <- &xt.CSPAT00700_현물_정정_주문_응답_에러{M응답값: nil, M에러: 에러}
-	}}.S실행()
+		lib.F확인(에러)
 
-	//if 질의_응답.M질의값.M주문수량 <= 0 {
-	//	return
-	//} else
+		응답값, ok := i응답값.(*xt.CSPAT00700_현물_정정_주문_응답)
+		lib.F조건부_패닉(!ok, "TrCSPAT00700() 예상하지 못한 자료형 : '%T'", i응답값)
 
-	if strings.HasPrefix(질의_응답.M질의값.M종목코드, "5") {
-		질의_응답.M질의값.M종목코드 = "Q" + 질의_응답.M질의값.M종목코드 // ETN 종목코드 보정
+		if 응답값.M응답2 != nil && 응답값.M응답2.M주문번호 <= 0 {
+			continue
+		}
+
+		return 응답값, nil
 	}
 
-	i응답값, 에러 := F질의_단일TR(질의_응답.M질의값)
-	lib.F확인(에러)
-
-	응답값, ok := i응답값.(*xt.CSPAT00700_현물_정정_주문_응답)
-	lib.F조건부_패닉(!ok, "f현물_정정주문_도우미() 예상하지 못한 자료형 : '%T'", i응답값)
-
-	질의_응답.Ch응답 <- &xt.CSPAT00700_현물_정정_주문_응답_에러{M응답값: 응답값, M에러: nil}
+	return nil, lib.New에러("정정 주문 TR 실행 실패.")
 }
 
 func TrCSPAT00800_현물_취소주문(질의값 *lib.S질의값_취소_주문) (응답값 *xt.CSPAT00800_현물_취소_주문_응답, 에러 error) {
-	defer lib.S예외처리{M에러: &에러}.S실행()
+	defer lib.S예외처리{M에러: &에러, M함수: func() { 응답값 = nil }}.S실행()
 
-	질의_응답 := new(xt.CSPAT00800_현물_취소_주문_질의_응답)
-	질의_응답.M질의값 = 질의값
-	질의_응답.Ch응답 = make(chan *xt.CSPAT00800_현물_취소_주문_응답_에러, 1)
-
-	ch현물_취소_주문 <- 질의_응답
-
-	select {
-	case 응답_에러 := <-질의_응답.Ch응답:
-		return 응답_에러.M응답값, 응답_에러.M에러
-	case <-time.After(lib.P30초):
-		return nil, lib.New에러("TrCSPAT00800_현물_취소주문() 타임아웃 : %v", *질의값)
+	// ETN 종목코드 보정
+	if strings.HasPrefix(질의값.M종목코드, "5") {
+		질의값.M종목코드 = "Q" + 질의값.M종목코드
 	}
-}
 
-func go현물_취소_주문(ch초기화, ch종료 chan lib.T신호) {
-	var 에러 error
-	defer lib.S예외처리{M에러: &에러, M함수: func() { ch종료 <- lib.P신호_종료 }}.S실행()
+	for i := 0; i < 10; i++ { // 최대 10번 재시도
+		i응답값, 에러 := F질의_단일TR(질의값)
 
-	ch공통_종료 := lib.F공통_종료_채널()
-	ch초기화 <- lib.P신호_초기화
-
-	for {
-		select {
-		case <-ch공통_종료:
-			return
-		case 질의_응답 := <-ch현물_취소_주문:
-			f현물_취소주문_도우미(질의_응답)
+		if 에러 != nil && (strings.Contains(에러.Error(), "원주문번호를 잘못") ||
+			strings.Contains(에러.Error(), "접수 대기 상태")) {
+			continue // 재시도
 		}
-	}
-}
 
-func f현물_취소주문_도우미(질의_응답 *xt.CSPAT00800_현물_취소_주문_질의_응답) {
-	var 에러 error
-	defer lib.S예외처리{M에러: &에러, M함수: func() {
-		질의_응답.Ch응답 <- &xt.CSPAT00800_현물_취소_주문_응답_에러{M응답값: nil, M에러: 에러}
-	}}.S실행()
+		lib.F확인(에러)
 
-	if 질의_응답.M질의값.M주문수량 <= 0 {
-		return
-	} else if strings.HasPrefix(질의_응답.M질의값.M종목코드, "5") {
-		질의_응답.M질의값.M종목코드 = "Q" + 질의_응답.M질의값.M종목코드 // ETN 종목코드 보정
+		응답값, ok := i응답값.(*xt.CSPAT00800_현물_취소_주문_응답)
+		lib.F조건부_패닉(!ok, "TrCSPAT00800() 예상하지 못한 자료형 : '%T'", i응답값)
+
+		if 응답값.M응답2 != nil && 응답값.M응답2.M주문번호 <= 0 {
+			continue
+		}
+
+		return 응답값, nil
 	}
 
-	i응답값, 에러 := F질의_단일TR(질의_응답.M질의값)
-	lib.F확인(에러)
-
-	응답값, ok := i응답값.(*xt.CSPAT00800_현물_취소_주문_응답)
-	lib.F조건부_패닉(!ok, "TrCSPAT00800() 예상하지 못한 자료형 : '%T'", i응답값)
-
-	질의_응답.Ch응답 <- &xt.CSPAT00800_현물_취소_주문_응답_에러{M응답값: 응답값, M에러: nil}
+	return nil, lib.New에러("취소 주문 TR 실행 실패.")
 }
 
 func TrCSPAQ12200_현물계좌_총평가(계좌번호 string) (값 *xt.CSPAQ12200_현물계좌_총평가_응답, 에러 error) {
