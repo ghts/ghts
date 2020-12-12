@@ -85,7 +85,7 @@ func F초기화(값 xt.T서버_구분) (에러 error) {
 	서버_구분 = 값
 
 	f소켓_생성()
-	f초기화_Go루틴()
+	go go고루틴_관리()
 	lib.F확인(f초기화_xing_C32())
 	lib.F확인(f접속_로그인())
 	lib.F조건부_패닉(!f초기화_작동_확인(), "초기화 작동 확인 실패.")
@@ -103,17 +103,52 @@ func f소켓_생성() {
 	소켓REP_TR콜백 = nano.NewNano소켓XREP_단순형(xt.F주소_C32_콜백())
 }
 
-func f초기화_Go루틴() {
-	lib.F메모("RT 루틴 일시 비활성화")
-	고루틴_모음 := []func(chan lib.T신호) error{go_TR콜백_처리} //, go_RT_주문처리결과}
-	ch초기화 := make(chan lib.T신호, len(고루틴_모음))
+func go고루틴_관리() (에러 error) {
+	defer lib.S예외처리{M에러: &에러}.S실행()
 
-	for _, 고루틴 := range 고루틴_모음 {
-		go 고루틴(ch초기화)
+	lib.F메모("RT 루틴 일시 비활성화")
+
+	const p주문_도우미_수량 = 100
+
+	ch초기화 := make(chan lib.T신호, 3*p주문_도우미_수량+2)
+	ch종료_TR콜백_처리 := make(chan lib.T신호, 1)
+	//ch종료_RT_주문처리결과 := make(chan lib.T신호, 1)
+	ch종료_현물_정상_주문 := make(chan lib.T신호, p주문_도우미_수량)
+	ch종료_현물_정정_주문 := make(chan lib.T신호, p주문_도우미_수량)
+	ch종료_현물_취소_주문 := make(chan lib.T신호, p주문_도우미_수량)
+	ch종료 := lib.F공통_종료_채널()
+
+	go go_TR콜백_처리(ch초기화, ch종료_TR콜백_처리)
+	//go go_RT_주문처리결과(ch초기화, ch종료_RT_주문처리결과)
+
+	for i := 0; i < p주문_도우미_수량; i++ {
+		go현물_정상_주문(ch초기화, ch종료_현물_정상_주문)
+		go현물_정정_주문(ch초기화, ch종료_현물_정정_주문)
+		go현물_취소_주문(ch초기화, ch종료_현물_취소_주문)
 	}
 
-	for range 고루틴_모음 {
+	for i := 0; i < 3*p주문_도우미_수량+1; i++ {
 		<-ch초기화
+	}
+
+	for {
+		select {
+		case <-ch종료_TR콜백_처리:
+			go go_TR콜백_처리(ch초기화, ch종료_TR콜백_처리)
+			<-ch초기화
+		//case <-ch종료_RT_주문처리결과:
+		//	go go_RT_주문처리결과(ch초기화, ch종료_RT_주문처리결과)
+		//	<-ch초기화
+		case <-ch종료_현물_정상_주문:
+			go go현물_정상_주문(ch초기화, ch종료_현물_정상_주문)
+			<-ch초기화
+		case <-ch종료_현물_정정_주문:
+			go go현물_정정_주문(ch초기화, ch종료_현물_정정_주문)
+		case <-ch종료_현물_취소_주문:
+			go go현물_취소_주문(ch초기화, ch종료_현물_취소_주문)
+		case <-ch종료:
+			return nil
+		}
 	}
 }
 

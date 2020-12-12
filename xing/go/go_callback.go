@@ -40,11 +40,11 @@ import (
 	"strings"
 )
 
-func go_TR콜백_처리(ch초기화 chan lib.T신호) (에러 error) {
-	defer lib.S예외처리{M에러: &에러}.S실행()
+func go_TR콜백_처리(ch초기화, ch종료 chan lib.T신호) (에러 error) {
+	defer lib.S예외처리{M에러: &에러, M함수: func() { ch종료 <- lib.P신호_종료 }}.S실행()
 
 	const 콜백_처리_루틴_수량 = 100
-	ch종료 := lib.F공통_종료_채널()
+	ch공통_종료 := lib.F공통_종료_채널()
 	ch도우미_초기화 := make(chan lib.T신호, 콜백_처리_루틴_수량)
 	ch도우미_종료 := make(chan error, 콜백_처리_루틴_수량)
 
@@ -60,7 +60,7 @@ func go_TR콜백_처리(ch초기화 chan lib.T신호) (에러 error) {
 
 	for {
 		select {
-		case <-ch종료:
+		case <-ch공통_종료:
 			return
 		case 에러 := <-ch도우미_종료:
 			select {
