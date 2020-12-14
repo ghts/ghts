@@ -315,7 +315,8 @@ func TrCSPAT00700_현물_정정주문(질의값 *xt.CSPAT00700_현물_정정_주
 }
 
 func TrCSPAT00800_현물_취소주문(질의값 *lib.S질의값_취소_주문) (응답값 *xt.CSPAT00800_현물_취소_주문_응답, 에러 error) {
-	defer lib.S예외처리{M에러: &에러, M함수: func() { 응답값 = nil }}.S실행()
+	예외_처리 := lib.S예외처리{M에러: &에러, M함수: func() { 응답값 = nil }}
+	defer 예외_처리.S실행()
 
 	// ETN 종목코드 보정
 	if strings.HasPrefix(질의값.M종목코드, "5") {
@@ -327,6 +328,9 @@ func TrCSPAT00800_현물_취소주문(질의값 *lib.S질의값_취소_주문) (
 			if strings.Contains(에러.Error(), "원주문번호를 잘못") ||
 				strings.Contains(에러.Error(), "접수 대기 상태") {
 				continue // 재시도
+			} else if strings.Contains(에러.Error(), "주문수량이 매매가능수량을 초과했습니다") {
+				예외_처리.M출력_숨김 = true
+				return nil, 에러
 			} else {
 				return nil, 에러
 			}
