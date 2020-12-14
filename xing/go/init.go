@@ -312,7 +312,7 @@ func C32_종료() (에러 error) {
 	return lib.New에러with출력("C32 종료 실패")
 }
 
-func F리소스_정리() {
+func F종료() {
 	C32_종료()
 	lib.F공통_종료_채널_닫기()
 	lib.F패닉억제_호출(소켓REP_TR콜백.Close)
