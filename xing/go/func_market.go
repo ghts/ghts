@@ -214,6 +214,10 @@ func F선물옵션_종목코드_검사(종목코드 string) (에러 error) {
 }
 
 func F종목코드_존재함(종목코드 string) bool {
+	if len(종목맵_전체) == 0 {
+		panic(lib.New에러("xing 모듈 초기화 되지 않음."))
+	}
+
 	종목코드 = trade.F종목코드_보정(종목코드)
 
 	_, 존재함 := 종목맵_전체[종목코드]
