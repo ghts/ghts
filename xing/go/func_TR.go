@@ -323,23 +323,20 @@ func TrCSPAT00800_현물_취소주문(질의값 *lib.S질의값_취소_주문) (
 	}
 
 	for i := 0; i < 10; i++ { // 최대 10번 재시도
-		i응답값, 에러 := F질의_단일TR(질의값)
-
-		if 에러 != nil && (strings.Contains(에러.Error(), "원주문번호를 잘못") ||
-			strings.Contains(에러.Error(), "접수 대기 상태")) {
-			continue // 재시도
-		}
-
-		lib.F확인(에러)
-
-		응답값, ok := i응답값.(*xt.CSPAT00800_현물_취소_주문_응답)
-		lib.F조건부_패닉(!ok, "TrCSPAT00800() 예상하지 못한 자료형 : '%T'", i응답값)
-
-		if 응답값.M응답2 != nil && 응답값.M응답2.M주문번호 <= 0 {
+		if i응답값, 에러 := F질의_단일TR(질의값); 에러 != nil {
+			if strings.Contains(에러.Error(), "원주문번호를 잘못") ||
+				strings.Contains(에러.Error(), "접수 대기 상태") {
+				continue // 재시도
+			} else {
+				return nil, 에러
+			}
+		} else if 응답값, ok := i응답값.(*xt.CSPAT00800_현물_취소_주문_응답); !ok {
+			return nil, lib.New에러("TrCSPAT00800() 예상하지 못한 자료형 : '%T'", i응답값)
+		} else if 응답값.M응답2 != nil && 응답값.M응답2.M주문번호 <= 0 {
 			continue
+		} else {
+			return 응답값, nil
 		}
-
-		return 응답값, nil
 	}
 
 	return nil, lib.New에러("취소 주문 TR 실행 실패.")
