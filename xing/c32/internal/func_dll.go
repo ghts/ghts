@@ -39,6 +39,7 @@ import (
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/lib/c"
 	"github.com/ghts/ghts/xing/base"
+	xing "github.com/ghts/ghts/xing/go"
 	"gopkg.in/ini.v1"
 	"strings"
 	"syscall"
@@ -310,7 +311,24 @@ func F로그아웃() (에러 error) {
 }
 
 func F질의(TR코드 string, c데이터 unsafe.Pointer, 길이 int,
-	연속_조회_여부 bool, 연속키 string, 타임아웃 time.Duration) int {
+	연속_조회_여부 bool, 연속키 string, 타임아웃 time.Duration) (반환값 int, 에러 error) {
+	defer lib.S예외처리{M에러: &에러}.S실행()
+
+	접속됨 := false
+
+	for i := 0; i < 3; i++ {
+		if 접속됨, 에러 = f접속됨(); 에러 != nil {
+			return -1, 에러
+		} else if !접속됨 {
+			if 에러 := xing.C32_재시작(); 에러 == nil {
+				break
+			}
+		}
+	}
+
+	if !접속됨 {
+		return -1, 에러
+	}
 
 	cTR코드 := c.F2C문자열(TR코드)
 	defer c.F메모리_해제(unsafe.Pointer(cTR코드))

@@ -38,6 +38,7 @@ import (
 	"github.com/ghts/ghts/lib/c"
 	"github.com/ghts/ghts/lib/w32"
 	"github.com/ghts/ghts/xing/base"
+	xing "github.com/ghts/ghts/xing/go"
 	"go.nanomsg.org/mangos/v3"
 	"runtime"
 	"strings"
@@ -321,17 +322,8 @@ func f질의값_처리(질의 *lib.S채널_질의_API) {
 	}
 }
 
-func F조회_및_주문_질의_처리(질의 *lib.S채널_질의_API) {
-	접속됨, 에러 := f접속됨()
-
-	switch {
-	case 에러 != nil:
-		질의.Ch에러 <- 에러
-		return
-	case !접속됨:
-		질의.Ch에러 <- lib.New에러("[%v] F조회_및_주문_질의_처리() : XingAPI에 접속되어 있지 않습니다.", lib.F지금().Format(lib.P간략한_시간_형식))
-		return
-	}
+func F조회_및_주문_질의_처리(질의 *lib.S채널_질의_API) (에러 error) {
+	defer lib.S예외처리{M에러: &에러, M함수: func() { 질의.Ch에러 <- 에러 }}.S실행()
 
 	var c데이터 unsafe.Pointer
 	defer lib.F조건부_실행(c데이터 != nil, c.F메모리_해제, c데이터)
@@ -534,7 +526,8 @@ func F조회_및_주문_질의_처리(질의 *lib.S채널_질의_API) {
 
 	lib.F조건부_패닉(c데이터 == nil, "c데이터 설정 실패.")
 
-	식별번호 := F질의(TR코드, c데이터, 길이, 연속_조회_여부, 연속_조회_키, lib.P30초)
+	식별번호, 에러 := F질의(TR코드, c데이터, 길이, 연속_조회_여부, 연속_조회_키, lib.P30초)
+	lib.F확인(에러)
 
 	switch {
 	case 식별번호 < 0:
