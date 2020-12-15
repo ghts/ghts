@@ -38,7 +38,6 @@ import (
 	"github.com/ghts/ghts/lib/c"
 	"github.com/ghts/ghts/lib/w32"
 	"github.com/ghts/ghts/xing/base"
-	xing "github.com/ghts/ghts/xing/go"
 	"go.nanomsg.org/mangos/v3"
 	"runtime"
 	"strings"
