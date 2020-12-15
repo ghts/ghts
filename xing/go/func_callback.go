@@ -81,8 +81,9 @@ func f콜백_TR데이터_처리기(값 lib.I콜백) (에러 error) {
 		변환값 := 값.(*lib.S콜백_메시지_및_에러)
 
 		if f에러_발생(TR코드, 변환값.M코드, 변환값.M내용) {
-			if !strings.Contains(변환값.M내용, "주문이 접수 대기") ||
-				!strings.Contains(변환값.M내용, "원주문번호를 잘못 입력") {
+			if !strings.Contains(변환값.M내용, "주문이 접수 대기") &&
+				!strings.Contains(변환값.M내용, "원주문번호를 잘못 입력") &&
+				!strings.Contains(변환값.M내용, "CSPAT00800 : 02714 : 주문수량이 매매가능수량을 초과했습니다") {
 				대기_항목.에러 = lib.New에러("%s : %s : %s", 대기_항목.TR코드, 변환값.M코드, 변환값.M내용)
 			}
 		}
