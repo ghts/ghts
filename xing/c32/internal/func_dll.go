@@ -361,7 +361,7 @@ func F질의(TR코드 string, c데이터 unsafe.Pointer, 길이 int,
 		}
 	}
 
-	return int(질의ID)
+	return int(질의ID), nil
 }
 
 func F실시간_정보_구독(TR코드 string, 전체_종목코드 string, 단위_길이 int) error {
