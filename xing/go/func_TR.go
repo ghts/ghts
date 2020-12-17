@@ -1533,7 +1533,8 @@ func F질의(질의값 lib.I질의값, 옵션_모음 ...interface{}) (값 *lib.S
 }
 
 func F질의_단일TR(질의값 lib.I질의값, 옵션_모음 ...interface{}) (값 interface{}, 에러 error) {
-	defer lib.S예외처리{M에러: &에러, M함수: func() { 값 = 에러 }}.S실행()
+	예외_처리 := lib.S예외처리{M에러: &에러, M함수: func() { 값 = 에러 }}
+	defer 예외_처리.S실행()
 
 	타임아웃 := lib.P1분
 
@@ -1569,6 +1570,7 @@ func F질의_단일TR(질의값 lib.I질의값, 옵션_모음 ...interface{}) (�
 				strings.Contains(변환값.Error(), "원주문번호를 잘못 입력") ||
 				strings.Contains(변환값.Error(), "취소 가능한 수량을 초과하였습니다.") ||
 				strings.Contains(변환값.Error(), "CSPAT00800 : 02714 : 주문수량이 매매가능수량을 초과했습니다") {
+				예외_처리.M출력_숨김 = true
 				return nil, 변환값
 			} else if strings.Contains(변환값.Error(), "XingAPI에 접속되어 있지 않습니다.") {
 				lib.F문자열_출력("[%v] XingAPI 재접속 시도.", lib.F지금().Format(lib.P간략한_시간_형식))
