@@ -328,7 +328,7 @@ func TrCSPAT00800_현물_취소주문(질의값 *lib.S질의값_취소_주문) (
 			if strings.Contains(에러.Error(), "원주문번호를 잘못") ||
 				strings.Contains(에러.Error(), "접수 대기 상태") {
 				continue // 재시도
-			} else if strings.Contains(에러.Error(), "CSPAT00800 : 02714 : 주문수량이 매매가능수량을 초과했습니다") {
+			} else if strings.Contains(에러.Error(), "주문수량이 매매가능수량을 초과했습니다") {
 				예외_처리.M출력_숨김 = true
 				return nil, 에러
 			} else {
@@ -1569,7 +1569,7 @@ func F질의_단일TR(질의값 lib.I질의값, 옵션_모음 ...interface{}) (�
 			if strings.Contains(변환값.Error(), "주문이 접수 대기") ||
 				strings.Contains(변환값.Error(), "원주문번호를 잘못 입력") ||
 				strings.Contains(변환값.Error(), "취소 가능한 수량을 초과하였습니다.") ||
-				strings.Contains(변환값.Error(), "CSPAT00800 : 02714 : 주문수량이 매매가능수량을 초과했습니다") {
+				strings.Contains(변환값.Error(), "주문수량이 매매가능수량을 초과했습니다") {
 				예외_처리.M출력_숨김 = true
 				return nil, 변환값
 			} else if strings.Contains(변환값.Error(), "XingAPI에 접속되어 있지 않습니다.") {
