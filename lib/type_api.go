@@ -331,7 +331,7 @@ func (s *s전송_권한) s오래된_전송_기록_정리() {
 
 	for {
 		if s.전송_기록_저장소.Len() == 0 {
-			continue
+			return
 		} else if 전송_기록 := s.전송_기록_저장소.Front(); 전송_기록 == nil {
 			continue
 		} else if 전송_시각, ok := 전송_기록.Value.(time.Time); !ok {
