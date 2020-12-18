@@ -62,7 +62,7 @@ func f테스트_정리() (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
 	lib.F화면_출력_중지()
-	F리소스_정리()
+	F종료()
 	lib.F테스트_모드_종료()
 
 	return nil
