@@ -29,6 +29,9 @@ pacman -S mingw-w64-i686-zeromq
 pacman -S mingw-w64-x86_64-zeromq
 pacman -S mingw-w64-x86_64-{git,git-doc-html,git-doc-man,curl} git-extra</code></pre>
 
+이후 가끔씩 모든 패키지를 업데이트 하려고 할 때는 다음 명령어를 실행한다.
+<pre><code>pacman -Syuu</code></pre>
+
 *********************************************************
 GHTS 라이브러리 설치
 
