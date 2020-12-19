@@ -285,6 +285,8 @@ func (s *S바이트_변환) UnmarshalBinary(바이트_모음 []byte) (에러 err
 	return nil
 }
 
+func (s *S바이트_변환) Raw바이트_모음() []byte { return s.값 }
+
 func New바이트_변환_단순형(변환_형식 T변환, 값 interface{}) *S바이트_변환 {
 	return F확인(New바이트_변환(변환_형식, 값)).(*S바이트_변환)
 }
