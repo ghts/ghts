@@ -3,14 +3,15 @@ GHTS
 
 - 알고리즘 트레이딩 시스템 구현에 유용한 라이브러리.  
 - Go언어 기반
+- 이베스트투자증권의 Xing API를 사용.
 
 *********************************************************
 
 디렉토리별 기능 설명  
 - lib : 공용 기능.
+- xing/go : c32를 통해서 Xing API 기능 호출 (32/64비트 모두 가능)
+- xing/c32 : Xing API DLL을 직접 호출하는 32비트 모듈.
 - xing/base : Xing API c32/go 공용 자료형.
-- xing/c32 : Xing API DLL을 호출하는 32비트 모듈.
-- xing/go : Xing API 기능 호출 (32/64비트 모두 가능)
 
 *********************************************************
 
@@ -35,15 +36,17 @@ pacman -S mingw-w64-x86_64-{git,git-doc-html,git-doc-man,curl} git-extra</code><
 *********************************************************
 GHTS 라이브러리 설치
 
-<pre><code>go get github.com/ghts/ghts</code></pre>
+<pre><code>go get -u github.com/ghts/ghts</code></pre>
  
 *********************************************************
 
 악성코드로 잘못 진단되는 경우.
 
-금융기관이 설치하는 보안 방화벽 '안랩 세이프 트랜잭션'(Ahnlab Safe Transaction)에서 GHTS가 멀웨어로 잘못 진단됩니다.
+xing c32 모듈은 TR 실행 결과 및 실시간 정보를 네트워크를 통해서 전달하는 동작 방식으로 인해서 몇몇 보안 프로그램에서 멀웨어로 오진됩니다.
 
-'안랩 세이프 트랜잭션'(Ahnlab Safe Transaction)이 실행된 상태에서 GHTS를 '위협 행위 차단'을 체크 해제해야 합니다.
+구체적으로 '안랩 세이프 트랜잭션'(Ahnlab Safe Transaction)에서 GHTS가 멀웨어로 오진되므로,
+
+'안랩 세이프 트랜잭션'(Ahnlab Safe Transaction)에서 '위협 행위 차단'을 해제해야 정상 작동합니다.
 
 윈도우 기본 백신인 '윈도우 디펜더'에서는 아무런 문제가 없습니다. 
 
