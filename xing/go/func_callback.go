@@ -200,10 +200,10 @@ func f콜백_신호_처리기(콜백 lib.I콜백) (에러 error) {
 		default:
 		}
 	case lib.P신호_C32_재시작_필요:
-		lib.F체크포인트("C32_재시작_필요 신호 수신")
+		lib.F문자열_출력("C32_재시작_필요 신호 수신")
 		C32_재시작()
 	case lib.P신호_C32_종료:
-		lib.F체크포인트("C32_종료 신호 수신")
+		lib.F문자열_출력("C32_종료 신호 수신")
 		select {
 		case ch신호_C32_종료 <- 신호:
 		default:
