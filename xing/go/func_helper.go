@@ -305,7 +305,7 @@ func C32_재시작() (에러 error) {
 		return
 	}
 
-	fmt.Printf("**     C32 재시작 %v **\n", time.Now().Format(lib.P간략한_시간_형식))
+	fmt.Printf("**     C32 재시작 %v     **\n", time.Now().Format(lib.P간략한_시간_형식))
 
 	lib.F확인(c32_재시작_도우미())
 
