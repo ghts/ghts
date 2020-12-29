@@ -261,7 +261,7 @@ func (t T신호) String() string {
 	case P신호_종료:
 		return "종료"
 	default:
-		return F2문자열("예상하지 못한 신호값 : '%v'", t)
+		return F2문자열("예상하지 못한 신호값 : '%v'", uint8(t))
 	}
 }
 
