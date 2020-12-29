@@ -42,38 +42,38 @@ import (
 
 // t1101 현물 호가 조회 응답
 type T1101_현물_호가_조회_응답 struct {
-	M종목코드        string
-	M시각          time.Time
-	M종목명         string
-	M현재가         int64
-	M상한가         int64
-	M하한가         int64
-	M시가          int64
-	M고가          int64
-	M저가          int64
-	M전일대비구분      T전일대비_구분
-	M전일대비등락폭     int64
-	M등락율         float64
-	M거래량         int64
-	M전일종가        int64
-	M매도호가_모음     []int64
-	M매수호가_모음     []int64
-	M매도잔량_모음     []int64
-	M매수잔량_모음     []int64
-	M직전매도대비수량_모음 []int64
-	M직전매수대비수량_모음 []int64
-	M매도호가수량합     int64
-	M매수호가수량합     int64
-	M직전매도대비수량합   int64
-	M직전매수대비수량합   int64
-	M예상체결가격      int64
-	M예상체결수량      int64
-	M예상체결전일구분    T전일대비_구분
-	M예상체결전일대비    int64
-	M예상체결등락율     float64
-	M시간외매도잔량     int64
-	M시간외매수잔량     int64
-	M동시호가_구분     T동시호가_구분
+	M종목코드         string
+	M시각           time.Time
+	M종목명          string
+	M현재가          int64
+	M상한가          int64
+	M하한가          int64
+	M시가           int64
+	M고가           int64
+	M저가           int64
+	M전일대비구분       T전일대비_구분
+	M전일대비등락폭      int64
+	M등락율          float64
+	M거래량          int64
+	M전일종가         int64
+	M매도_호가_모음     []int64
+	M매수_호가_모음     []int64
+	M매도_잔량_모음     []int64
+	M매수_잔량_모음     []int64
+	M매도_직전대비수량_모음 []int64
+	M매수_직전대비수량_모음 []int64
+	M매도호가수량합      int64
+	M매수호가수량합      int64
+	M직전매도대비수량합    int64
+	M직전매수대비수량합    int64
+	M예상체결가격       int64
+	M예상체결수량       int64
+	M예상체결전일구분     T전일대비_구분
+	M예상체결전일대비     int64
+	M예상체결등락율      float64
+	M시간외매도잔량      int64
+	M시간외매수잔량      int64
+	M동시호가_구분      T동시호가_구분
 }
 
 func NewT1101InBlock(질의값 *lib.S질의값_단일_종목) (g *T1101InBlock) {
@@ -88,8 +88,7 @@ func NewT1101InBlock(질의값 *lib.S질의값_단일_종목) (g *T1101InBlock) 
 func NewT1101_현물_호가_조회_응답(b []byte) (s *T1101_현물_호가_조회_응답, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { s = nil }}.S실행()
 
-	lib.F조건부_패닉(len(b) != SizeT1101OutBlock,
-		"예상하지 못한 길이 : '%v", len(b))
+	lib.F조건부_패닉(len(b) != SizeT1101OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
 	g := new(T1101OutBlock)
 	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
@@ -110,72 +109,72 @@ func NewT1101_현물_호가_조회_응답(b []byte) (s *T1101_현물_호가_조�
 	s.M등락율 = lib.F2실수_소숫점_추가_단순형(g.Diff, 2)
 	s.M거래량 = lib.F2정수64_단순형(g.Volume)
 	s.M전일종가 = lib.F2정수64_단순형(g.Jnilclose)
-	s.M매도호가_모음 = make([]int64, 10)
-	s.M매수호가_모음 = make([]int64, 10)
-	s.M매도잔량_모음 = make([]int64, 10)
-	s.M매수잔량_모음 = make([]int64, 10)
-	s.M직전매도대비수량_모음 = make([]int64, 10)
-	s.M직전매수대비수량_모음 = make([]int64, 10)
-	s.M매도호가_모음[0] = lib.F2정수64_단순형(g.Offerho1)
-	s.M매수호가_모음[0] = lib.F2정수64_단순형(g.Bidho1)
-	s.M매도잔량_모음[0] = lib.F2정수64_단순형(g.Offerrem1)
-	s.M매수잔량_모음[0] = lib.F2정수64_단순형(g.Bidrem1)
-	s.M직전매도대비수량_모음[0] = lib.F2정수64_단순형(g.Preoffercha1)
-	s.M직전매수대비수량_모음[0] = lib.F2정수64_단순형(g.Prebidcha1)
-	s.M매도호가_모음[1] = lib.F2정수64_단순형(g.Offerho2)
-	s.M매수호가_모음[1] = lib.F2정수64_단순형(g.Bidho2)
-	s.M매도잔량_모음[1] = lib.F2정수64_단순형(g.Offerrem2)
-	s.M매수잔량_모음[1] = lib.F2정수64_단순형(g.Bidrem2)
-	s.M직전매도대비수량_모음[1] = lib.F2정수64_단순형(g.Preoffercha2)
-	s.M직전매수대비수량_모음[1] = lib.F2정수64_단순형(g.Prebidcha2)
-	s.M매도호가_모음[2] = lib.F2정수64_단순형(g.Offerho3)
-	s.M매수호가_모음[2] = lib.F2정수64_단순형(g.Bidho3)
-	s.M매도잔량_모음[2] = lib.F2정수64_단순형(g.Offerrem3)
-	s.M매수잔량_모음[2] = lib.F2정수64_단순형(g.Bidrem3)
-	s.M직전매도대비수량_모음[2] = lib.F2정수64_단순형(g.Preoffercha3)
-	s.M직전매수대비수량_모음[2] = lib.F2정수64_단순형(g.Prebidcha3)
-	s.M매도호가_모음[3] = lib.F2정수64_단순형(g.Offerho4)
-	s.M매수호가_모음[3] = lib.F2정수64_단순형(g.Bidho4)
-	s.M매도잔량_모음[3] = lib.F2정수64_단순형(g.Offerrem4)
-	s.M매수잔량_모음[3] = lib.F2정수64_단순형(g.Bidrem4)
-	s.M직전매도대비수량_모음[3] = lib.F2정수64_단순형(g.Preoffercha4)
-	s.M직전매수대비수량_모음[3] = lib.F2정수64_단순형(g.Prebidcha4)
-	s.M매도호가_모음[4] = lib.F2정수64_단순형(g.Offerho5)
-	s.M매수호가_모음[4] = lib.F2정수64_단순형(g.Bidho5)
-	s.M매도잔량_모음[4] = lib.F2정수64_단순형(g.Offerrem5)
-	s.M매수잔량_모음[4] = lib.F2정수64_단순형(g.Bidrem5)
-	s.M직전매도대비수량_모음[4] = lib.F2정수64_단순형(g.Preoffercha5)
-	s.M직전매수대비수량_모음[4] = lib.F2정수64_단순형(g.Prebidcha5)
-	s.M매도호가_모음[5] = lib.F2정수64_단순형(g.Offerho6)
-	s.M매수호가_모음[5] = lib.F2정수64_단순형(g.Bidho6)
-	s.M매도잔량_모음[5] = lib.F2정수64_단순형(g.Offerrem6)
-	s.M매수잔량_모음[5] = lib.F2정수64_단순형(g.Bidrem6)
-	s.M직전매도대비수량_모음[5] = lib.F2정수64_단순형(g.Preoffercha6)
-	s.M직전매수대비수량_모음[5] = lib.F2정수64_단순형(g.Prebidcha6)
-	s.M매도호가_모음[6] = lib.F2정수64_단순형(g.Offerho7)
-	s.M매수호가_모음[6] = lib.F2정수64_단순형(g.Bidho7)
-	s.M매도잔량_모음[6] = lib.F2정수64_단순형(g.Offerrem7)
-	s.M매수잔량_모음[6] = lib.F2정수64_단순형(g.Bidrem7)
-	s.M직전매도대비수량_모음[6] = lib.F2정수64_단순형(g.Preoffercha7)
-	s.M직전매수대비수량_모음[6] = lib.F2정수64_단순형(g.Prebidcha7)
-	s.M매도호가_모음[7] = lib.F2정수64_단순형(g.Offerho8)
-	s.M매수호가_모음[7] = lib.F2정수64_단순형(g.Bidho8)
-	s.M매도잔량_모음[7] = lib.F2정수64_단순형(g.Offerrem8)
-	s.M매수잔량_모음[7] = lib.F2정수64_단순형(g.Bidrem8)
-	s.M직전매도대비수량_모음[7] = lib.F2정수64_단순형(g.Preoffercha8)
-	s.M직전매수대비수량_모음[7] = lib.F2정수64_단순형(g.Prebidcha8)
-	s.M매도호가_모음[8] = lib.F2정수64_단순형(g.Offerho9)
-	s.M매수호가_모음[8] = lib.F2정수64_단순형(g.Bidho9)
-	s.M매도잔량_모음[8] = lib.F2정수64_단순형(g.Offerrem9)
-	s.M매수잔량_모음[8] = lib.F2정수64_단순형(g.Bidrem9)
-	s.M직전매도대비수량_모음[8] = lib.F2정수64_단순형(g.Preoffercha9)
-	s.M직전매수대비수량_모음[8] = lib.F2정수64_단순형(g.Prebidcha9)
-	s.M매도호가_모음[9] = lib.F2정수64_단순형(g.Offerho10)
-	s.M매수호가_모음[9] = lib.F2정수64_단순형(g.Bidho10)
-	s.M매도잔량_모음[9] = lib.F2정수64_단순형(g.Offerrem10)
-	s.M매수잔량_모음[9] = lib.F2정수64_단순형(g.Bidrem10)
-	s.M직전매도대비수량_모음[9] = lib.F2정수64_단순형(g.Preoffercha10)
-	s.M직전매수대비수량_모음[9] = lib.F2정수64_단순형(g.Prebidcha10)
+	s.M매도_호가_모음 = []int64{
+		lib.F2정수64_단순형(g.Offerho1),
+		lib.F2정수64_단순형(g.Offerho2),
+		lib.F2정수64_단순형(g.Offerho3),
+		lib.F2정수64_단순형(g.Offerho4),
+		lib.F2정수64_단순형(g.Offerho5),
+		lib.F2정수64_단순형(g.Offerho6),
+		lib.F2정수64_단순형(g.Offerho7),
+		lib.F2정수64_단순형(g.Offerho8),
+		lib.F2정수64_단순형(g.Offerho9),
+		lib.F2정수64_단순형(g.Offerho10)}
+	s.M매수_호가_모음 = []int64{
+		lib.F2정수64_단순형(g.Bidho1),
+		lib.F2정수64_단순형(g.Bidho2),
+		lib.F2정수64_단순형(g.Bidho3),
+		lib.F2정수64_단순형(g.Bidho4),
+		lib.F2정수64_단순형(g.Bidho5),
+		lib.F2정수64_단순형(g.Bidho6),
+		lib.F2정수64_단순형(g.Bidho7),
+		lib.F2정수64_단순형(g.Bidho8),
+		lib.F2정수64_단순형(g.Bidho9),
+		lib.F2정수64_단순형(g.Bidho10)}
+	s.M매도_잔량_모음 = []int64{
+		lib.F2정수64_단순형(g.Offerrem1),
+		lib.F2정수64_단순형(g.Offerrem2),
+		lib.F2정수64_단순형(g.Offerrem3),
+		lib.F2정수64_단순형(g.Offerrem4),
+		lib.F2정수64_단순형(g.Offerrem5),
+		lib.F2정수64_단순형(g.Offerrem6),
+		lib.F2정수64_단순형(g.Offerrem7),
+		lib.F2정수64_단순형(g.Offerrem8),
+		lib.F2정수64_단순형(g.Offerrem9),
+		lib.F2정수64_단순형(g.Offerrem10)}
+	s.M매수_잔량_모음 = []int64{
+		lib.F2정수64_단순형(g.Bidrem1),
+		lib.F2정수64_단순형(g.Bidrem2),
+		lib.F2정수64_단순형(g.Bidrem3),
+		lib.F2정수64_단순형(g.Bidrem4),
+		lib.F2정수64_단순형(g.Bidrem5),
+		lib.F2정수64_단순형(g.Bidrem6),
+		lib.F2정수64_단순형(g.Bidrem7),
+		lib.F2정수64_단순형(g.Bidrem8),
+		lib.F2정수64_단순형(g.Bidrem9),
+		lib.F2정수64_단순형(g.Bidrem10)}
+	s.M매도_직전대비수량_모음 = []int64{
+		lib.F2정수64_단순형(g.Preoffercha1),
+		lib.F2정수64_단순형(g.Preoffercha2),
+		lib.F2정수64_단순형(g.Preoffercha3),
+		lib.F2정수64_단순형(g.Preoffercha4),
+		lib.F2정수64_단순형(g.Preoffercha5),
+		lib.F2정수64_단순형(g.Preoffercha6),
+		lib.F2정수64_단순형(g.Preoffercha7),
+		lib.F2정수64_단순형(g.Preoffercha8),
+		lib.F2정수64_단순형(g.Preoffercha9),
+		lib.F2정수64_단순형(g.Preoffercha10)}
+	s.M매수_직전대비수량_모음 = []int64{
+		lib.F2정수64_단순형(g.Prebidcha1),
+		lib.F2정수64_단순형(g.Prebidcha2),
+		lib.F2정수64_단순형(g.Prebidcha3),
+		lib.F2정수64_단순형(g.Prebidcha4),
+		lib.F2정수64_단순형(g.Prebidcha5),
+		lib.F2정수64_단순형(g.Prebidcha6),
+		lib.F2정수64_단순형(g.Prebidcha7),
+		lib.F2정수64_단순형(g.Prebidcha8),
+		lib.F2정수64_단순형(g.Prebidcha9),
+		lib.F2정수64_단순형(g.Prebidcha10)}
 	s.M매도호가수량합 = lib.F2정수64_단순형(g.Offer)
 	s.M매수호가수량합 = lib.F2정수64_단순형(g.Bid)
 	s.M직전매도대비수량합 = lib.F2정수64_단순형(g.Preoffercha)
