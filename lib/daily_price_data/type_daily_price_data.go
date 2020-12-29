@@ -639,25 +639,23 @@ func (s S종목별_일일_가격정보_모음) TrueRange_해외_ETF_ETN_모음()
 	// Look Ahead Bias를 방지하기 위해서 하루 늦추어서 전일 True Range 값으로 설정함.
 	TrueRange모음 := make([]float64, len(s.M저장소))
 
+	// 해외 시장에서 거래되는 원자재에 대한 ETF/ETN은 한국 증시 개장 시간에는 가격 변화가 거의 없음.
+	// 즉, True Range 공식의 당일 관련 부분이 거의 없는 것이나 마찬가지이므로
+	// 변동성 측정 기간을 하루 늘려서 최대 변동량에 다시 2배로 하여서 당일 변동성이 없다시피 한 것을 보완함.
 	for i := 3; i < len(s.M저장소); i++ {
-		// 해외 시장에서 거래되는 원자재에 대한 ETF/ETN은 한국 증시 개장 시간에는 가격 변화가 거의 없음.
-		// 즉, True Range 공식의 당일 관련 부분이 거의 없는 것이나 마찬가지이므로 실제 변동성을 제대로 나타내지 못함.
-		// 이에 변동성 측정 기간을 하루 늘려서 당일 변동성이 반영되지 않는 것을 보완함.
 		값1 := s.M저장소[i-1].M고가 - s.M저장소[i-1].M저가
-		값2 := math.Abs(s.M저장소[i-1].M고가 - s.M저장소[i-2].M저가)
-		값3 := math.Abs(s.M저장소[i-2].M고가 - s.M저장소[i-1].M저가)
-		값4 := math.Abs(s.M저장소[i-3].M종가 - s.M저장소[i-1].M고가)
-		값5 := math.Abs(s.M저장소[i-3].M종가 - s.M저장소[i-1].M저가)
-		값6 := math.Abs(s.M저장소[i-3].M종가 - s.M저장소[i-2].M고가)
-		값7 := math.Abs(s.M저장소[i-3].M종가 - s.M저장소[i-2].M저가)
+		값2 := math.Abs(s.M저장소[i-2].M종가 - s.M저장소[i-1].M고가)
+		값3 := math.Abs(s.M저장소[i-2].M종가 - s.M저장소[i-1].M저가)
+		값4 := math.Abs(s.M저장소[i-3].M종가 - s.M저장소[i-2].M고가)
+		값5 := math.Abs(s.M저장소[i-3].M종가 - s.M저장소[i-2].M저가)
 
-		TrueRange모음[i] = lib.F최대값_실수([]float64{값1, 값2, 값3, 값4, 값5, 값6, 값7})
+		TrueRange모음[i] = lib.F최대값_실수([]float64{값1, 값2, 값3, 값4, 값5}) * 2
 	}
 
 	return TrueRange모음
 }
 
-func (s S종목별_일일_가격정보_모음) ATR_(윈도우_크기 int) float64 {
+func (s S종목별_일일_가격정보_모음) ATR(윈도우_크기 int) float64 {
 	TrueRange모음 := make([]float64, len(s.M저장소))
 
 	for i := 2; i < len(s.M저장소); i++ {
@@ -680,18 +678,16 @@ func (s S종목별_일일_가격정보_모음) ATR_해외_ETF_ETN(윈도우_크�
 	TrueRange모음 := make([]float64, len(s.M저장소))
 
 	// 해외 시장에서 거래되는 원자재에 대한 ETF/ETN은 한국 증시 개장 시간에는 가격 변화가 거의 없음.
-	// 즉, True Range 공식의 당일 관련 부분이 거의 없는 것이나 마찬가지이므로 실제 변동성을 제대로 나타내지 못함.
-	// 이에 변동성 측정 기간을 하루 늘려서 당일 변동성이 반영되지 않는 것을 보완함.
+	// 즉, True Range 공식의 당일 관련 부분이 거의 없는 것이나 마찬가지이므로
+	// 변동성 측정 기간을 하루 늘려서 최대 변동량에 다시 2배로 하여서 당일 변동성이 없다시피 한 것을 보완함.
 	for i := 3; i < len(s.M저장소); i++ {
 		값1 := s.M저장소[i].M고가 - s.M저장소[i].M저가
-		값2 := math.Abs(s.M저장소[i].M고가 - s.M저장소[i-1].M저가)
-		값3 := math.Abs(s.M저장소[i-1].M고가 - s.M저장소[i].M저가)
-		값4 := math.Abs(s.M저장소[i-2].M종가 - s.M저장소[i].M고가)
-		값5 := math.Abs(s.M저장소[i-2].M종가 - s.M저장소[i].M저가)
-		값6 := math.Abs(s.M저장소[i-2].M종가 - s.M저장소[i-1].M고가)
-		값7 := math.Abs(s.M저장소[i-2].M종가 - s.M저장소[i-1].M저가)
+		값2 := math.Abs(s.M저장소[i-1].M종가 - s.M저장소[i].M고가)
+		값3 := math.Abs(s.M저장소[i-1].M종가 - s.M저장소[i].M저가)
+		값4 := math.Abs(s.M저장소[i-2].M종가 - s.M저장소[i-1].M고가)
+		값5 := math.Abs(s.M저장소[i-2].M종가 - s.M저장소[i-1].M저가)
 
-		TrueRange모음[i] = lib.F최대값_실수([]float64{값1, 값2, 값3, 값4, 값5, 값6, 값7})
+		TrueRange모음[i] = lib.F최대값_실수([]float64{값1, 값2, 값3, 값4, 값5}) * 2
 	}
 
 	TrueRange모음[0] = (TrueRange모음[3] + TrueRange모음[4] + TrueRange모음[5]) / 3.0 // 임의로 값을 채워 넣음.
