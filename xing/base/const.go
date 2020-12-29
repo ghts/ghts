@@ -148,6 +148,8 @@ const (
 	SizeT1902InBlock        = int(unsafe.Sizeof(T1902InBlock{}))
 	SizeT1902OutBlock       = int(unsafe.Sizeof(T1902OutBlock{}))
 	SizeT1902OutBlock1      = int(unsafe.Sizeof(T1902OutBlock1{}))
+	SizeT1906InBlock        = int(unsafe.Sizeof(T1906InBlock{}))
+	SizeT1906OutBlock       = int(unsafe.Sizeof(T1906OutBlock{}))
 	//SizeT3320InBlock        = int(unsafe.Sizeof(T3320InBlock{}))
 	//SizeT3320OutBlock       = int(unsafe.Sizeof(T3320OutBlock{}))
 	//SizeT3320OutBlock1      = int(unsafe.Sizeof(T3320OutBlock1{}))
@@ -254,6 +256,8 @@ const (
 	P자료형_T1902_ETF시간별_추이_응답_반복값_모음   = "T1902_ETF시간별_추이_응답_반복값_모음"
 	P자료형_T1902OutBlock               = "T1902OutBlock"
 	P자료형_T1902OutBlock1              = "T1902OutBlock1"
+	P자료형_T1906_ETF_LP_호가_조회_응답       = "T1906_ETF_LP_호가_조회_응답"
+	P자료형_T1906OutBlock               = "T1906OutBlock"
 	//P자료형_T3320_기업정보_요약_응답               = "T3320_기업정보_요약_응답"
 	//P자료형_T3320_기업정보_요약_응답1              = "T3320_기업정보_요약_응답1"
 	//P자료형_T3320_기업정보_요약_응답2              = "T3320_기업정보_요약_응답2"
@@ -326,6 +330,7 @@ const (
 	TR관리_불성실_투자유의_조회_t1404    = "t1404"
 	TR투자경고_매매정지_정리매매_조회_t1405 = "t1405"
 	TR_ETF_시간별_추이_t1902       = "t1902"
+	TR_ETF_LP호가_조회_t1906      = "t1906"
 	//TR기업정보_요약_t3320           = "t3320"
 	TR재무순위_종합_t3341      = "t3341"
 	TR현물_멀티_현재가_조회_t8407 = "t8407"

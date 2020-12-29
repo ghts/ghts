@@ -216,6 +216,10 @@ type T1902InBlock C.T1902InBlock
 type T1902OutBlock C.T1902OutBlock
 type T1902OutBlock1 C.T1902OutBlock1
 
+// ETF LP 호가 (t1906)
+type T1906InBlock C.T1906InBlock
+type T1906OutBlock C.T1906OutBlock
+
 // 기업 정보 요약 (t3320)
 //type T3320InBlock C.T3320InBlock
 //type T3320OutBlock C.T3320OutBlock

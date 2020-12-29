@@ -40,22 +40,24 @@ import (
 	"time"
 )
 
-// t1101 현물 호가 조회 응답
-type T1101_현물_호가_조회_응답 struct {
-	M종목코드         string
-	M시각           time.Time
-	M종목명          string
-	M현재가          int64
-	M상한가          int64
-	M하한가          int64
-	M시가           int64
-	M고가           int64
-	M저가           int64
-	M전일대비구분       T전일대비_구분
+// t1906 ETF LP 호가 조회 응답
+type T1906_ETF_LP_호가_조회_응답 struct {
+	M종목코드        string
+	M시각          time.Time
+	M종목명         string
+	M현재가         int64
+	M상한가         int64
+	M하한가         int64
+	M시가          int64
+	M고가          int64
+	M저가          int64
+	M전일대비구분      T전일대비_구분
 	M전일대비등락폭      int64
 	M등락율          float64
 	M거래량          int64
 	M전일종가         int64
+	LP매도_잔량_모음    []int64
+	LP매수_잔량_모음    []int64
 	M매도_호가_모음     []int64
 	M매수_호가_모음     []int64
 	M매도_잔량_모음     []int64
@@ -72,12 +74,12 @@ type T1101_현물_호가_조회_응답 struct {
 	M예상체결전일대비     int64
 	M예상체결등락율      float64
 	M시간외매도잔량      int64
-	M시간외매수잔량      int64
-	M동시호가_구분      T동시호가_구분
+	M시간외매수잔량     int64
+	M동시호가_구분     T동시호가_구분
 }
 
-func NewT1101InBlock(질의값 *lib.S질의값_단일_종목) (g *T1101InBlock) {
-	g = new(T1101InBlock)
+func NewT1906InBlock(질의값 *lib.S질의값_단일_종목) (g *T1906InBlock) {
+	g = new(T1906InBlock)
 	lib.F바이트_복사_문자열(g.Shcode[:], 질의값.M종목코드)
 
 	f속성값_초기화(g)
@@ -85,15 +87,15 @@ func NewT1101InBlock(질의값 *lib.S질의값_단일_종목) (g *T1101InBlock) 
 	return g
 }
 
-func NewT1101_현물_호가_조회_응답(b []byte) (s *T1101_현물_호가_조회_응답, 에러 error) {
+func NewT1906_ETF_LP_호가_조회_응답(b []byte) (s *T1906_ETF_LP_호가_조회_응답, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { s = nil }}.S실행()
 
-	lib.F조건부_패닉(len(b) != SizeT1101OutBlock, "예상하지 못한 길이 : '%v", len(b))
+	lib.F조건부_패닉(len(b) != SizeT1906OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
-	g := new(T1101OutBlock)
+	g := new(T1906OutBlock)
 	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
 
-	s = new(T1101_현물_호가_조회_응답)
+	s = new(T1906_ETF_LP_호가_조회_응답)
 	s.M종목코드 = lib.F2문자열_공백제거(g.Shcode)
 
 	if 시각_문자열 := lib.F2문자열_공백제거(g.Hotime); len(시각_문자열) <= 6 {
@@ -131,6 +133,28 @@ func NewT1101_현물_호가_조회_응답(b []byte) (s *T1101_현물_호가_조�
 		lib.F2정수64_단순형(g.Bidho8),
 		lib.F2정수64_단순형(g.Bidho9),
 		lib.F2정수64_단순형(g.Bidho10)}
+	s.LP매도_잔량_모음 = []int64{
+		lib.F2정수64_단순형(g.Lp_offerrem1),
+		lib.F2정수64_단순형(g.Lp_offerrem2),
+		lib.F2정수64_단순형(g.Lp_offerrem3),
+		lib.F2정수64_단순형(g.Lp_offerrem4),
+		lib.F2정수64_단순형(g.Lp_offerrem5),
+		lib.F2정수64_단순형(g.Lp_offerrem6),
+		lib.F2정수64_단순형(g.Lp_offerrem7),
+		lib.F2정수64_단순형(g.Lp_offerrem8),
+		lib.F2정수64_단순형(g.Lp_offerrem9),
+		lib.F2정수64_단순형(g.Lp_offerrem10)}
+	s.LP매수_잔량_모음 = []int64{
+		lib.F2정수64_단순형(g.Lp_bidrem1),
+		lib.F2정수64_단순형(g.Lp_bidrem2),
+		lib.F2정수64_단순형(g.Lp_bidrem3),
+		lib.F2정수64_단순형(g.Lp_bidrem4),
+		lib.F2정수64_단순형(g.Lp_bidrem5),
+		lib.F2정수64_단순형(g.Lp_bidrem6),
+		lib.F2정수64_단순형(g.Lp_bidrem7),
+		lib.F2정수64_단순형(g.Lp_bidrem8),
+		lib.F2정수64_단순형(g.Lp_bidrem9),
+		lib.F2정수64_단순형(g.Lp_bidrem10)}
 	s.M매도_잔량_모음 = []int64{
 		lib.F2정수64_단순형(g.Offerrem1),
 		lib.F2정수64_단순형(g.Offerrem2),
@@ -186,7 +210,7 @@ func NewT1101_현물_호가_조회_응답(b []byte) (s *T1101_현물_호가_조�
 	s.M예상체결등락율 = lib.F2실수_소숫점_추가_단순형(g.Yediff, 2)
 	s.M시간외매도잔량 = lib.F2정수64_단순형(g.Tmoffer)
 	s.M시간외매수잔량 = lib.F2정수64_단순형(g.Tmbid)
-	s.M동시호가_구분 = T동시호가_구분(lib.F2정수64_단순형(g.Status))
+	s.M동시호가_구분 = T동시호가_구분(lib.F2정수64_단순형(g.Ho_status))
 	s.M상한가 = lib.F2정수64_단순형(g.Uplmtprice)
 	s.M하한가 = lib.F2정수64_단순형(g.Dnlmtprice)
 	s.M시가 = lib.F2정수64_단순형(g.Open)
