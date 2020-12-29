@@ -42,16 +42,16 @@ import (
 
 // t1906 ETF LP 호가 조회 응답
 type T1906_ETF_LP_호가_조회_응답 struct {
-	M종목코드        string
-	M시각          time.Time
-	M종목명         string
-	M현재가         int64
-	M상한가         int64
-	M하한가         int64
-	M시가          int64
-	M고가          int64
-	M저가          int64
-	M전일대비구분      T전일대비_구분
+	M종목코드         string
+	M시각           time.Time
+	M종목명          string
+	M현재가          int64
+	M상한가          int64
+	M하한가          int64
+	M시가           int64
+	M고가           int64
+	M저가           int64
+	M전일대비구분       T전일대비_구분
 	M전일대비등락폭      int64
 	M등락율          float64
 	M거래량          int64
@@ -74,8 +74,8 @@ type T1906_ETF_LP_호가_조회_응답 struct {
 	M예상체결전일대비     int64
 	M예상체결등락율      float64
 	M시간외매도잔량      int64
-	M시간외매수잔량     int64
-	M동시호가_구분     T동시호가_구분
+	M시간외매수잔량      int64
+	M동시호가_구분      T동시호가_구분
 }
 
 func NewT1906InBlock(질의값 *lib.S질의값_단일_종목) (g *T1906InBlock) {

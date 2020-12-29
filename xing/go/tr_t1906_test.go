@@ -136,4 +136,3 @@ func TestT1906_ETF_LP_호가_조회(t *testing.T) {
 	lib.F테스트_참임(t, 값.M고가 >= 값.M저가 || 값.M고가 == 0)
 	lib.F테스트_참임(t, 값.M저가 <= 값.M현재가)
 }
-

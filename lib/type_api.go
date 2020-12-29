@@ -333,9 +333,9 @@ func (s *s전송_권한) s오래된_전송_기록_정리() {
 		if s.전송_기록_저장소.Len() == 0 {
 			return
 		} else if 전송_기록 := s.전송_기록_저장소.Front(); 전송_기록 == nil {
-			return	// continue
+			return // continue
 		} else if 전송_시각, ok := 전송_기록.Value.(time.Time); !ok {
-			return	//continue
+			return //continue
 		} else if 지금.Sub(전송_시각) > s.간격 {
 			F패닉억제_호출(s.전송_기록_저장소.Remove, 전송_기록)
 		} else {
