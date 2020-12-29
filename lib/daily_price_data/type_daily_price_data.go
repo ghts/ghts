@@ -503,10 +503,30 @@ func (s S종목별_일일_가격정보_모음) G전일_거래량_모음() []floa
 	return 전일_거래량
 }
 
+func (s S종목별_일일_가격정보_모음) G전일_기간_고가(윈도우_크기 int) float64 {
+	역순_고가_모음 := make([]float64, 윈도우_크기)
+
+	for i := 0; i < 윈도우_크기; i++ {
+		역순_고가_모음[i] = s.M저장소[len(s.M저장소)-2-i].M고가
+	}
+
+	return lib.F최대값_실수(역순_고가_모음)
+}
+
 func (s S종목별_일일_가격정보_모음) G전일_기간_고가_모음(윈도우_크기 int) []float64 {
 	전일_고가_모음 := s.G전일_고가_모음()
 
 	return trade.F이동_범위_최대값(전일_고가_모음, 윈도우_크기)
+}
+
+func (s S종목별_일일_가격정보_모음) G전일_기간_저가(윈도우_크기 int) float64 {
+	역순_저가_모음 := make([]float64, 윈도우_크기)
+
+	for i := 0; i < 윈도우_크기; i++ {
+		역순_저가_모음[i] = s.M저장소[len(s.M저장소)-2-i].M저가
+	}
+
+	return lib.F최소값_실수(역순_저가_모음)
 }
 
 func (s S종목별_일일_가격정보_모음) G전일_기간_저가_모음(윈도우_크기 int) []float64 {
@@ -606,8 +626,8 @@ func (s S종목별_일일_가격정보_모음) TrueRange_모음() []float64 {
 
 	for i := 2; i < len(s.M저장소); i++ {
 		값1 := s.M저장소[i-1].M고가 - s.M저장소[i-1].M저가
-		값2 := math.Abs(s.M저장소[i-1].M고가 - s.M저장소[i-2].M종가)
-		값3 := math.Abs(s.M저장소[i-2].M종가 - s.M저장소[i-1].M저가)
+		값2 := math.Abs(s.M저장소[i-1].M고가 - s.M저장소[i-2].M저가)
+		값3 := math.Abs(s.M저장소[i-2].M고가 - s.M저장소[i-1].M저가)
 
 		TrueRange모음[i] = lib.F최대값_실수([]float64{값1, 값2, 값3})
 	}
@@ -615,14 +635,35 @@ func (s S종목별_일일_가격정보_모음) TrueRange_모음() []float64 {
 	return TrueRange모음
 }
 
-func (s S종목별_일일_가격정보_모음) ATR(윈도우_크기 int) float64 {
-	// 실제 거래에서 사용하기 위해서 당일값을 사용.
+func (s S종목별_일일_가격정보_모음) TrueRange_해외_ETF_ETN_모음() []float64 {
+	// Look Ahead Bias를 방지하기 위해서 하루 늦추어서 전일 True Range 값으로 설정함.
+	TrueRange모음 := make([]float64, len(s.M저장소))
+
+	for i := 3; i < len(s.M저장소); i++ {
+		// 해외 시장에서 거래되는 원자재에 대한 ETF/ETN은 한국 증시 개장 시간에는 가격 변화가 거의 없음.
+		// 즉, True Range 공식의 당일 관련 부분이 거의 없는 것이나 마찬가지이므로 실제 변동성을 제대로 나타내지 못함.
+		// 이에 변동성 측정 기간을 하루 늘려서 당일 변동성이 반영되지 않는 것을 보완함.
+		값1 := s.M저장소[i-1].M고가 - s.M저장소[i-1].M저가
+		값2 := math.Abs(s.M저장소[i-1].M고가 - s.M저장소[i-2].M저가)
+		값3 := math.Abs(s.M저장소[i-2].M고가 - s.M저장소[i-1].M저가)
+		값4 := math.Abs(s.M저장소[i-3].M종가 - s.M저장소[i-1].M고가)
+		값5 := math.Abs(s.M저장소[i-3].M종가 - s.M저장소[i-1].M저가)
+		값6 := math.Abs(s.M저장소[i-3].M종가 - s.M저장소[i-2].M고가)
+		값7 := math.Abs(s.M저장소[i-3].M종가 - s.M저장소[i-2].M저가)
+
+		TrueRange모음[i] = lib.F최대값_실수([]float64{값1, 값2, 값3, 값4, 값5, 값6, 값7})
+	}
+
+	return TrueRange모음
+}
+
+func (s S종목별_일일_가격정보_모음) ATR_(윈도우_크기 int) float64 {
 	TrueRange모음 := make([]float64, len(s.M저장소))
 
 	for i := 2; i < len(s.M저장소); i++ {
 		값1 := s.M저장소[i].M고가 - s.M저장소[i].M저가
-		값2 := math.Abs(s.M저장소[i].M고가 - s.M저장소[i-1].M종가)
-		값3 := math.Abs(s.M저장소[i-1].M종가 - s.M저장소[i].M저가)
+		값2 := math.Abs(s.M저장소[i].M고가 - s.M저장소[i-1].M저가)
+		값3 := math.Abs(s.M저장소[i-1].M고가 - s.M저장소[i].M저가)
 
 		TrueRange모음[i] = lib.F최대값_실수([]float64{값1, 값2, 값3})
 	}
@@ -635,10 +676,46 @@ func (s S종목별_일일_가격정보_모음) ATR(윈도우_크기 int) float64
 	return atr모음[len(atr모음)-1]
 }
 
+func (s S종목별_일일_가격정보_모음) ATR_해외_ETF_ETN(윈도우_크기 int) float64 {
+	TrueRange모음 := make([]float64, len(s.M저장소))
+
+	// 해외 시장에서 거래되는 원자재에 대한 ETF/ETN은 한국 증시 개장 시간에는 가격 변화가 거의 없음.
+	// 즉, True Range 공식의 당일 관련 부분이 거의 없는 것이나 마찬가지이므로 실제 변동성을 제대로 나타내지 못함.
+	// 이에 변동성 측정 기간을 하루 늘려서 당일 변동성이 반영되지 않는 것을 보완함.
+	for i := 3; i < len(s.M저장소); i++ {
+		값1 := s.M저장소[i].M고가 - s.M저장소[i].M저가
+		값2 := math.Abs(s.M저장소[i].M고가 - s.M저장소[i-1].M저가)
+		값3 := math.Abs(s.M저장소[i-1].M고가 - s.M저장소[i].M저가)
+		값4 := math.Abs(s.M저장소[i-2].M종가 - s.M저장소[i].M고가)
+		값5 := math.Abs(s.M저장소[i-2].M종가 - s.M저장소[i].M저가)
+		값6 := math.Abs(s.M저장소[i-2].M종가 - s.M저장소[i-1].M고가)
+		값7 := math.Abs(s.M저장소[i-2].M종가 - s.M저장소[i-1].M저가)
+
+		TrueRange모음[i] = lib.F최대값_실수([]float64{값1, 값2, 값3, 값4, 값5, 값6, 값7})
+	}
+
+	TrueRange모음[0] = (TrueRange모음[3] + TrueRange모음[4] + TrueRange모음[5]) / 3.0 // 임의로 값을 채워 넣음.
+	TrueRange모음[1] = (TrueRange모음[4] + TrueRange모음[5] + TrueRange모음[6]) / 3.0 // 임의로 값을 채워 넣음.
+	TrueRange모음[2] = (TrueRange모음[5] + TrueRange모음[6] + TrueRange모음[7]) / 3.0 // 임의로 값을 채워 넣음.
+
+	atr모음 := trade.F지수_이동_평균(TrueRange모음, 윈도우_크기)
+
+	return atr모음[len(atr모음)-1]
+}
+
 func (s S종목별_일일_가격정보_모음) ATR_모음(윈도우_크기 int) []float64 {
 	TrueRange모음 := s.TrueRange_모음()
 	TrueRange모음[0] = (TrueRange모음[3] + TrueRange모음[4] + TrueRange모음[5]) / 3.0 // 임의로 값을 채워 넣음.
 	TrueRange모음[1] = (TrueRange모음[4] + TrueRange모음[5] + TrueRange모음[6]) / 3.0 // 임의로 값을 채워 넣음.
+
+	return trade.F지수_이동_평균(TrueRange모음, 윈도우_크기)
+}
+
+func (s S종목별_일일_가격정보_모음) ATR_해외_ETF_ETN_모음(윈도우_크기 int) []float64 {
+	TrueRange모음 := s.TrueRange_해외_ETF_ETN_모음()
+	TrueRange모음[0] = (TrueRange모음[3] + TrueRange모음[4] + TrueRange모음[5]) / 3.0 // 임의로 값을 채워 넣음.
+	TrueRange모음[1] = (TrueRange모음[4] + TrueRange모음[5] + TrueRange모음[6]) / 3.0 // 임의로 값을 채워 넣음.
+	TrueRange모음[2] = (TrueRange모음[5] + TrueRange모음[6] + TrueRange모음[7]) / 3.0 // 임의로 값을 채워 넣음.
 
 	return trade.F지수_이동_평균(TrueRange모음, 윈도우_크기)
 }
