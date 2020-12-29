@@ -9,7 +9,9 @@ import (
 	"sort"
 )
 
-func New개장일_모음(db *sql.DB) *S개장일_모음 {
+func New개장일_모음(db *sql.DB) (개장일_모음 *S개장일_모음, 에러 error) {
+	defer lib.S예외처리{M에러: &에러}.S실행()
+
 	일일_가격정보_모음_KODEX200, 에러 := daily_price_data.New종목별_일일_가격정보_모음_DB읽기(db, "069500")
 	lib.F확인(에러)
 
@@ -26,27 +28,27 @@ func New개장일_모음(db *sql.DB) *S개장일_모음 {
 		개장일_맵[일일_정보.M일자] = -1
 	}
 
-	개장일_모음 := make([]int, len(개장일_맵))
+	개장일_슬라이스 := make([]int, len(개장일_맵))
 
 	i := 0
 	for 개장일, _ := range 개장일_맵 {
-		개장일_모음[i] = int(개장일)
+		개장일_슬라이스[i] = int(개장일)
 		i++
 	}
 
 	// 개장일 정렬
-	sort.Ints(개장일_모음)
+	sort.Ints(개장일_슬라이스)
 
-	s := new(S개장일_모음)
-	s.M저장소 = make([]uint32, len(개장일_맵))
-	s.인덱스_맵 = make(map[uint32]int)
+	개장일_모음 = new(S개장일_모음)
+	개장일_모음.M저장소 = make([]uint32, len(개장일_맵))
+	개장일_모음.인덱스_맵 = make(map[uint32]int)
 
-	for i, 개장일 := range 개장일_모음 {
-		s.M저장소[i] = uint32(개장일)
-		s.인덱스_맵[uint32(개장일)] = i
+	for i, 개장일 := range 개장일_슬라이스 {
+		개장일_모음.M저장소[i] = uint32(개장일)
+		개장일_모음.인덱스_맵[uint32(개장일)] = i
 	}
 
-	return s
+	return 개장일_모음, nil
 }
 
 type S개장일_모음 struct {
