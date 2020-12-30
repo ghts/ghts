@@ -306,6 +306,10 @@ func f종목모음_설정() (에러 error) {
 }
 
 func F종목by코드(종목코드 string) (종목 *lib.S종목, 에러 error) {
+	if len(종목맵_전체) == 0 {
+		return nil, lib.New에러("Xing API가 초기화 되어 있지 않습니다.")
+	}
+
 	종목코드 = trade.F종목코드_보정(종목코드)
 
 	if 종목, ok := 종목맵_전체[종목코드]; !ok {
