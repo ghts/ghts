@@ -944,6 +944,22 @@ func F지금() time.Time {
 	return time.Now()
 }
 
+func F1분전() time.Time {
+	return time.Now().Add(-3 * time.Minute)
+}
+
+func F3분전() time.Time {
+	return time.Now().Add(-3 * time.Minute)
+}
+
+func F5분전() time.Time {
+	return time.Now().Add(-5 * time.Minute)
+}
+
+func F10분전() time.Time {
+	return time.Now().Add(-10 * time.Minute)
+}
+
 func F금일() time.Time {
 	return F2일자(time.Now())
 }
