@@ -231,6 +231,10 @@ func (p T주소) G값() string {
 	return "tcp://" + p.G단축값()
 }
 
+func (p T주소) URL() string {
+	return "http://" + p.G단축값()
+}
+
 func (p T주소) String() string {
 	return p.G값()
 }
