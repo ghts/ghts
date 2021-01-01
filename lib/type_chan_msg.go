@@ -184,7 +184,7 @@ func (s *s채널_질의) S질의(값_모음 ...interface{}) I채널_질의 {
 
 func (s *s채널_질의) S응답(응답 I채널_메시지) {
 	ch타임아웃 := s.ch타임아웃
-	ch종료 := F공통_종료_채널()
+	ch종료 := Ch공통_종료()
 
 	select {
 	case s.ch응답 <- 응답:
@@ -196,7 +196,7 @@ func (s *s채널_질의) S응답(응답 I채널_메시지) {
 func (s *s채널_질의) G응답() I채널_메시지 {
 	ch응답 := s.ch응답
 	ch타임아웃 := s.ch타임아웃
-	ch종료 := F공통_종료_채널()
+	ch종료 := Ch공통_종료()
 
 	defer s.질의_잠금_해제(ch응답)
 
@@ -223,7 +223,7 @@ func (s *s채널_질의) G응답() I채널_메시지 {
 func (s *s채널_질의) G응답_DONT_WAIT() (I채널_메시지, bool) {
 	ch응답 := s.ch응답
 	ch타임아웃 := s.ch타임아웃
-	ch종료 := F공통_종료_채널()
+	ch종료 := Ch공통_종료()
 
 	select {
 	case 응답 := <-ch응답:

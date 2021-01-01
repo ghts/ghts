@@ -70,7 +70,7 @@ type s소켓_저장소 struct {
 
 func (s *s소켓_저장소) G소켓() I소켓_질의 {
 	select {
-	case <-F공통_종료_채널():
+	case <-Ch공통_종료():
 		return nil
 	case 소켓 := <-s.M저장소:
 		return 소켓

@@ -46,7 +46,7 @@ func go_RT_주문처리결과(ch초기화 chan lib.T신호) (에러 error) {
 	//
 	//var 수신값 *lib.S바이트_변환_모음
 	//
-	//ch종료 := lib.F공통_종료_채널()
+	//ch종료 := lib.Ch공통_종료()
 	//ch초기화 <- lib.P신호_초기화
 	//
 	//if 소켓SUB_실시간_정보, 에러 = lib.NewNano소켓SUB(lib.P주소_Xing_실시간); 에러 != nil {

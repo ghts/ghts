@@ -114,7 +114,7 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 	//	<-ch콜백_도우미_초기화
 	//}
 
-	ch공통_종료 := lib.F공통_종료_채널()
+	ch공통_종료 := lib.Ch공통_종료()
 
 	defer func() {
 		select {
@@ -172,7 +172,7 @@ func go디버깅_메시지_출력_도우미(ch초기화, ch종료 chan lib.T신�
 		}
 	}()
 
-	ch공통_종료 := lib.F공통_종료_채널()
+	ch공통_종료 := lib.Ch공통_종료()
 
 	lib.F신호_전달_시도(ch초기화, lib.P신호_OK)
 
@@ -217,7 +217,7 @@ func go수신_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 		}
 	}()
 
-	ch공통_종료 := lib.F공통_종료_채널()
+	ch공통_종료 := lib.Ch공통_종료()
 
 	lib.F신호_전달_시도(ch초기화, lib.P신호_OK)
 
@@ -269,7 +269,7 @@ func go전달_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 	var i질의값 interface{}
 	var ok bool
 
-	ch공통_종료 := lib.F공통_종료_채널()
+	ch공통_종료 := lib.Ch공통_종료()
 
 	질의 := lib.New채널_질의_API(nil)
 
@@ -325,7 +325,7 @@ func go함수_호출_도우미(ch초기화, ch종료 chan lib.T신호) {
 	runtime.LockOSThread()
 	defer runtime.UnlockOSThread()
 
-	ch공통_종료 := lib.F공통_종료_채널()
+	ch공통_종료 := lib.Ch공통_종료()
 
 	lib.F신호_전달_시도(ch초기화, lib.P신호_OK)
 
@@ -368,7 +368,7 @@ func go콜백_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 		lib.F대기(lib.P500밀리초)
 	}
 
-	ch공통_종료 := lib.F공통_종료_채널()
+	ch공통_종료 := lib.Ch공통_종료()
 
 	lib.F신호_전달_시도(ch초기화, lib.P신호_OK)
 

@@ -60,7 +60,7 @@ func F접속() {
 		}
 	case 에러 := <-질의.Ch에러:
 		F체크(lib.F2문자열("F접속() 에러 : '%v'.", 에러.Error()))
-	case <-lib.F공통_종료_채널():
+	case <-lib.Ch공통_종료():
 		return
 	}
 }

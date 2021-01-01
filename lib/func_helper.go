@@ -556,7 +556,7 @@ func F멀티_스레드_모드임() bool {
 	return !F단일_스레드_모드임()
 }
 
-func F공통_종료_채널() chan T신호 {
+func Ch공통_종료() chan T신호 {
 	return ch공통_종료_채널
 }
 

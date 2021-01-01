@@ -44,7 +44,7 @@ func go_TR콜백_처리(ch초기화 chan lib.T신호) (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
 	const 콜백_처리_루틴_수량 = 100
-	ch종료 := lib.F공통_종료_채널()
+	ch종료 := lib.Ch공통_종료()
 	ch도우미_초기화 := make(chan lib.T신호, 콜백_처리_루틴_수량)
 	ch도우미_종료 := make(chan error, 콜백_처리_루틴_수량)
 
@@ -94,7 +94,7 @@ func go루틴_콜백_처리_도우미(ch초기화 chan lib.T신호, ch도우미_
 	var 콜백값 lib.I콜백
 	var ok bool
 	var 수신값 *lib.S바이트_변환_모음
-	ch종료 := lib.F공통_종료_채널()
+	ch종료 := lib.Ch공통_종료()
 
 	ch초기화 <- lib.P신호_초기화
 

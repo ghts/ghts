@@ -99,7 +99,7 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 		<-ch콜백_도우미_초기화
 	}
 
-	ch공통_종료 := lib.F공통_종료_채널()
+	ch공통_종료 := lib.Ch공통_종료()
 
 	ch초기화 <- lib.P신호_초기화
 
@@ -145,7 +145,7 @@ func go수신_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 		}
 	}()
 
-	ch공통_종료 := lib.F공통_종료_채널()
+	ch공통_종료 := lib.Ch공통_종료()
 
 	lib.F신호_전달_시도(ch초기화, lib.P신호_OK)
 
@@ -198,7 +198,7 @@ func go전달_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 	var i질의값 interface{}
 	var ok bool
 
-	ch공통_종료 := lib.F공통_종료_채널()
+	ch공통_종료 := lib.Ch공통_종료()
 
 	질의 := lib.New채널_질의_API(nil)
 
@@ -257,7 +257,7 @@ func go함수_호출_도우미(ch초기화, ch종료 chan lib.T신호) {
 	f초기화_XingAPI() // 모든 API 액세스를 단일 스레드에서 하기 위해서 여기에서 API 초기화를 실행함.
 	F메시지_윈도우_생성()
 
-	ch공통_종료 := lib.F공통_종료_채널()
+	ch공통_종료 := lib.Ch공통_종료()
 
 	lib.F신호_전달_시도(ch초기화, lib.P신호_OK)
 

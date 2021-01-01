@@ -98,7 +98,7 @@ func F계좌_수량_테스트() {
 		}
 	case 에러 := <-질의.Ch에러:
 		F체크(lib.F2문자열("F계좌_수량_테스트() Error : '%v'.", 에러.Error()))
-	case <-lib.F공통_종료_채널():
+	case <-lib.Ch공통_종료():
 		return
 	}
 }
@@ -117,7 +117,7 @@ func F전체_계좌_번호_테스트() {
 		}
 	case 에러 := <-질의.Ch에러:
 		F체크(lib.F2문자열("F전체_계좌_번호_테스트() Error : '%v'.", 에러.Error()))
-	case <-lib.F공통_종료_채널():
+	case <-lib.Ch공통_종료():
 		return
 	}
 }
@@ -138,7 +138,7 @@ func F사용자_ID_테스트() {
 		}
 	case 에러 := <-질의.Ch에러:
 		F체크(lib.F2문자열("F사용자_ID_테스트() Error : '%v'.", 에러.Error()))
-	case <-lib.F공통_종료_채널():
+	case <-lib.Ch공통_종료():
 		return
 	}
 }
@@ -159,7 +159,7 @@ func F사용자_이름_테스트() {
 		}
 	case 에러 := <-질의.Ch에러:
 		F체크(lib.F2문자열("F사용자_이름_테스트() Error : '%v'.", 에러.Error()))
-	case <-lib.F공통_종료_채널():
+	case <-lib.Ch공통_종료():
 		return
 	}
 }
@@ -178,7 +178,7 @@ func F키보드_보안_상태_테스트() {
 		}
 	case 에러 := <-질의.Ch에러:
 		F체크(lib.F2문자열("F키보드_보안_상태_테스트() Error : '%v'.", 에러.Error()))
-	case <-lib.F공통_종료_채널():
+	case <-lib.Ch공통_종료():
 		return
 	}
 }
@@ -197,7 +197,7 @@ func F방화벽_상태_테스트() {
 		}
 	case 에러 := <-질의.Ch에러:
 		F체크(lib.F2문자열("F방화벽_상태_테스트() Error : '%v'.", 에러.Error()))
-	case <-lib.F공통_종료_채널():
+	case <-lib.Ch공통_종료():
 		return
 	}
 }
@@ -216,7 +216,7 @@ func F접속_상태_테스트() {
 		}
 	case 에러 := <-질의.Ch에러:
 		F체크(lib.F2문자열("F접속_상태_테스트() Error : '%v'.", 에러.Error()))
-	case <-lib.F공통_종료_채널():
+	case <-lib.Ch공통_종료():
 		return
 	}
 }
@@ -238,7 +238,7 @@ func F종목코드_리스트_테스트() {
 		}
 	case 에러 := <-질의.Ch에러:
 		F체크(lib.F2문자열("F종목코드_리스트() Error : '%v'.", 에러.Error()))
-	case <-lib.F공통_종료_채널():
+	case <-lib.Ch공통_종료():
 		return
 	}
 }
