@@ -31,30 +31,37 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package xt
+package xing_http
 
 import (
 	"github.com/ghts/ghts/lib"
-	"sync"
-	"time"
+	xt "github.com/ghts/ghts/xing/base"
 )
 
-var (
-	전일, 당일 lib.I안전한_시각
+func F전일_당일_설정() (에러 error) {
+	lib.S예외처리{M에러: &에러}.S실행()
 
-	주소_설정_완료 = lib.New안전한_bool(false)
-	주소_설정_잠금 sync.Mutex
-)
+	질의값 := xt.NewT1305_현물_기간별_조회_질의값()
+	질의값.M구분 = xt.TR조회
+	질의값.M코드 = xt.TR현물_기간별_조회_t1305
+	질의값.M종목코드 = "069500"
+	질의값.M일주월_구분 = xt.P일주월_일
+	질의값.M연속키 = ""
+	질의값.M수량 = 5
 
-func F전일_당일_설정(전일값, 당일값 time.Time) {
-	전일 = lib.New안전한_시각(전일값)
-	당일 = lib.New안전한_시각(당일값)
-}
+	s := struct {
+		V xt.T1305_현물_기간별_조회_응답
+		E string
+	}{xt.T1305_현물_기간별_조회_응답{}, ""}
 
-func F당일() time.Time {
-	return 당일.G값()
-}
+	lib.F확인(HTTP질의_도우미(xt.TR현물_기간별_조회_t1305, 질의값, &s))
+	lib.F조건부_패닉(s.E != "", s.E)
+	값_모음 := s.V.M반복값_모음.M배열
 
-func F전일() time.Time {
-	return 전일.G값()
+	당일 := 값_모음[0].M일자
+	전일 := 값_모음[1].M일자
+
+	xt.F전일_당일_설정(당일, 전일)
+
+	return nil
 }

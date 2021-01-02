@@ -36,6 +36,7 @@ package x32_http
 import (
 	"github.com/ghts/ghts/lib"
 	xt "github.com/ghts/ghts/xing/base"
+	xing_http "github.com/ghts/ghts/xing_http/go"
 	"testing"
 )
 
@@ -58,6 +59,7 @@ func f테스트_준비() {
 
 	xt.F서버_구분_설정(xt.P서버_모의투자) //실거래)
 	F초기화()
+	xing_http.F전일_당일_설정()
 }
 
 func f테스트_정리() {
