@@ -52,9 +52,17 @@ func F전일_당일_설정(전일값, 당일값 time.Time) {
 }
 
 func F당일() time.Time {
+	if 당일 == nil || 당일.G값().Equal(time.Time{}) {
+		panic("Xing API가 초기화 되지 않았습니다.")
+	}
+
 	return 당일.G값()
 }
 
 func F전일() time.Time {
+	if 전일 == nil || 전일.G값().Equal(time.Time{}) {
+		panic("Xing API가 초기화 되지 않았습니다.")
+	}
+
 	return 전일.G값()
 }
