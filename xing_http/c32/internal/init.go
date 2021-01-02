@@ -36,6 +36,7 @@ package x32_http
 import (
 	"github.com/ghts/ghts/lib"
 	xt "github.com/ghts/ghts/xing/base"
+	xing_http "github.com/ghts/ghts/xing_http/go"
 	"time"
 )
 
@@ -50,6 +51,7 @@ func F초기화() {
 
 	F서버_접속_및_로그인()
 	f계좌_리스트_설정()
+	F전일_당일_설정()
 }
 
 func f종료_질의_송신() {
@@ -113,6 +115,20 @@ func F서버_접속_및_로그인() (에러 error) {
 	case <-time.After(lib.P30초):
 		return lib.New에러with출력("로그인 타임아웃")
 	}
+
+	return nil
+}
+
+func F전일_당일_설정() (에러 error) {
+	lib.S예외처리{M에러: &에러}.S실행()
+
+	값_모음, 에러 := xing_http.TrT1305_기간별_주가_조회("069500", xt.P일주월_일, 20)
+	lib.F확인(에러)
+
+	당일 = lib.New안전한_시각(값_모음[0].M일자)
+	전일 = lib.New안전한_시각(값_모음[1].M일자)
+
+	xt.F전일_당일_설정(전일.G값(), 당일.G값())
 
 	return nil
 }
