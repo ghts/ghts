@@ -271,7 +271,7 @@ func F전일_당일_설정() (에러 error) {
 
 		return nil
 	default:
-		panic(lib.New에러with출력("F전일당일설정() 예상하지 못한 자료형 : '%T'", i응답값))
+		panic(lib.New에러with출력("F전일_당일_설정() 예상하지 못한 자료형 : '%T'", i응답값))
 	}
 }
 
