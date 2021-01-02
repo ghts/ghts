@@ -36,6 +36,7 @@ package x32_http
 import (
 	"github.com/ghts/ghts/lib"
 	xt "github.com/ghts/ghts/xing/base"
+	"os"
 	"time"
 )
 
@@ -65,10 +66,31 @@ func f종료_질의_송신() {
 }
 
 func F종료_대기() {
-	<-Ch_HTTP_모듈_종료
-	<-Ch함수_호출_모듈_종료
-	<-Ch콜백_처리_모듈_종료
-	<-Ch관리_모듈_종료
+	타임아웃 := time.After(lib.P30초)
+
+	select {
+	case <-Ch_HTTP_모듈_종료:
+	case <-타임아웃:
+		os.Exit(0)
+	}
+
+	select {
+	case <-Ch함수_호출_모듈_종료:
+	case <-타임아웃:
+		os.Exit(0)
+	}
+
+	select {
+	case <-Ch콜백_처리_모듈_종료:
+	case <-타임아웃:
+		os.Exit(0)
+	}
+
+	select {
+	case <-Ch관리_모듈_종료:
+	case <-타임아웃:
+		os.Exit(0)
+	}
 }
 
 func F소켓_정리() error {
