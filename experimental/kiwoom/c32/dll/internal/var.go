@@ -38,7 +38,7 @@ GNU GPL v2는 이 프로그램과 함께 제공됩니다.
 package k32
 
 import (
-	kt "github.com/ghts/ghts/kiwoom/base"
+	kt "github.com/ghts/ghts/experimental/kiwoom/base"
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/lib/nanomsg"
 	"github.com/ghts/ghts/lib/w32"

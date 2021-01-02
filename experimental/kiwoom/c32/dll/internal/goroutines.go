@@ -39,7 +39,7 @@ package k32
 
 import "C"
 import (
-	kt "github.com/ghts/ghts/kiwoom/base"
+	kt "github.com/ghts/ghts/experimental/kiwoom/base"
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/lib/c"
 	"github.com/ghts/ghts/lib/w32"

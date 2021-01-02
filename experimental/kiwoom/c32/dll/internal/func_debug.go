@@ -40,7 +40,7 @@ package k32
 import (
 	"bytes"
 	"fmt"
-	kt "github.com/ghts/ghts/kiwoom/base"
+	kt "github.com/ghts/ghts/experimental/kiwoom/base"
 	"github.com/ghts/ghts/lib"
 )
 

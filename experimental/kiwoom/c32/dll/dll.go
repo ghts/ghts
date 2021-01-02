@@ -35,32 +35,45 @@ GNU GPL v2는 이 프로그램과 함께 제공됩니다.
 (자유 소프트웨어 재단 : Free Software Foundation, Inc.,
 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA) */
 
-package k32
+package main
 
+import "C"
 import (
-	kt "github.com/ghts/ghts/kiwoom/base"
+	k32 "github.com/ghts/ghts/experimental/kiwoom/c32/dll/internal"
 	"github.com/ghts/ghts/lib"
+	"github.com/ghts/ghts/lib/w32"
+	"unsafe"
 )
 
-func F접속() {
-	질의 := lib.New채널_질의_API(lib.New질의값_기본형(kt.TR접속, ""))
+func main() {}
 
-	Ch질의 <- 질의
+//export Init
+func Init(_hWnd unsafe.Pointer) (반환값 bool) {
+	defer lib.S예외처리{M함수: func() { 반환값 = false }}.S실행()
 
-	select {
-	case 회신값 := <-질의.Ch회신값:
-		참거짓, ok := 회신값.(bool)
+	k32.F윈도우_핸들_설정(w32.HWND(_hWnd))
 
-		if !ok {
-			F체크(lib.F2문자열("예상하지 못한 자료형 : '%T'", 회신값))
-		} else if !참거짓 {
-			F체크(lib.F2문자열("F접속() 호출 실패. 에러가 발생하지 않고 실패하는 이런 경우는 발생하지 않아야 함."))
-		} else {
-			F체크("Go F접속() 호출 Confirmed.")
-		}
-	case 에러 := <-질의.Ch에러:
-		F체크(lib.F2문자열("F접속() 에러 : '%v'.", 에러.Error()))
-	case <-lib.Ch공통_종료():
-		return
-	}
+	ch초기화 := make(chan lib.T신호, 1)
+	go k32.Go루틴_관리(ch초기화)
+	<-ch초기화
+
+	go k32.F접속()
+
+	return true
+}
+
+//| OS             | WPARAM          | LPARAM        |
+//| 32-bit Windows | 32-bit unsigned | 32-bit signed |
+//| 64-bit Windows | 64-bit unsigned | 64-bit signed |
+
+//export Confirm
+func Confirm(일련번호 C.uint, ptr문자열 *C.char) {
+	k32.S메시지_보관소.S회신(uintptr(일련번호), C.GoString(ptr문자열))
+}
+
+//export OnEventConnect
+func OnEventConnect(로그인_여부 bool) {
+	k32.F체크("OnEventConnect() : " + lib.F조건부_문자열(로그인_여부, "OK", "Error"))
+
+	k32.Ch로그인 <- 로그인_여부
 }
