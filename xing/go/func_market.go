@@ -36,7 +36,6 @@ package xing
 import (
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/lib/trade"
-	xt "github.com/ghts/ghts/xing/base"
 	"strings"
 	"time"
 )
@@ -280,7 +279,7 @@ func f종목모음_설정() (에러 error) {
 	하한가_맵 = make(map[string]int64)
 
 	for _, s := range 종목_정보_모음 {
-		종목 := lib.New종목2(s.M종목코드, s.M종목명, s.M시장구분, s.M전일가, s.M상한가, s.M하한가)
+		종목 := lib.New종목with가격정보(s.M종목코드, s.M종목명, s.M시장구분, s.M전일가, s.M상한가, s.M하한가, s.M기준가)
 
 		기준가_맵[s.M종목코드] = s.M기준가
 		하한가_맵[s.M종목코드] = s.M하한가
@@ -605,5 +604,5 @@ func F최소_호가단위by시장구분_기준가(시장구분 lib.T시장구분
 }
 
 func F금일_한국증시_개장() bool {
-	return xt.F당일().Equal(lib.F금일())
+	return F당일().Equal(lib.F금일())
 }

@@ -56,7 +56,7 @@ func TestT1902_ETF_시간별_추이(t *testing.T) {
 	lib.F테스트_에러없음(t, 에러)
 	lib.F테스트_다름(t, len(값_모음), 0)
 
-	당일 := xt.F당일()
+	당일 := F당일()
 
 	초기값 := time.Time{}
 	이전_시각 := 초기값

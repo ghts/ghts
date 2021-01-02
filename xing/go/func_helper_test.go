@@ -35,7 +35,6 @@ package xing
 
 import (
 	"github.com/ghts/ghts/lib"
-	xt "github.com/ghts/ghts/xing/base"
 	"testing"
 	"time"
 )
@@ -64,8 +63,8 @@ func TestF계좌번호_모음(t *testing.T) {
 func TestF영업일_기준_전일_당일(t *testing.T) {
 	t.Parallel()
 
-	전일 := xt.F전일()
-	당일 := xt.F당일()
+	전일 := F전일()
+	당일 := F당일()
 
 	lib.F테스트_다름(t, 전일, time.Time{})
 	lib.F테스트_다름(t, 당일, time.Time{})

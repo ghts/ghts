@@ -52,7 +52,7 @@ type T8436_현물_종목조회_응답_반복값 struct {
 	M기업인수목적회사여부 bool
 }
 
-type T8436_현물_종목조회_응답_반복값_모음 struct {
+type T8436_현물_종목조회_응답 struct {
 	M배열 []*T8436_현물_종목조회_응답_반복값
 }
 
@@ -68,7 +68,7 @@ func NewT8436InBlock(질의값 *lib.S질의값_문자열) (g *T8436InBlock) {
 	return g
 }
 
-func NewT8436_현물_종목조회_응답_반복값_모음(b []byte) (값 *T8436_현물_종목조회_응답_반복값_모음, 에러 error) {
+func NewT8436_현물_종목조회_응답_반복값_모음(b []byte) (값 *T8436_현물_종목조회_응답, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
 
 	나머지 := len(b) % SizeT8436OutBlock
@@ -78,7 +78,7 @@ func NewT8436_현물_종목조회_응답_반복값_모음(b []byte) (값 *T8436_
 	수량 := len(b) / SizeT8436OutBlock
 	g_모음 := make([]*T8436OutBlock, 수량, 수량)
 
-	값 = new(T8436_현물_종목조회_응답_반복값_모음)
+	값 = new(T8436_현물_종목조회_응답)
 	값.M배열 = make([]*T8436_현물_종목조회_응답_반복값, 수량, 수량)
 
 	for i, g := range g_모음 {
