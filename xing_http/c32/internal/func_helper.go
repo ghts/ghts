@@ -120,11 +120,86 @@ func F질의_처리(w http.ResponseWriter, 질의값 lib.I질의값) (에러 err
 func f질의_처리_도우미(w http.ResponseWriter, 질의값 lib.I질의값) (응답 *xt.S응답) {
 	defer lib.S예외처리{}.S실행()
 
+	switch 질의값.TR구분() {
+	case xt.TR조회, xt.TR주문:
+		f전송_권한_획득(질의값.TR코드())
+
+		defer f전송_시각_기록(질의값.TR코드())
+	}
+
 	select {
 	case 응답 = <-xt.New질의(질의값, Ch질의).Ch응답:
 		return 응답
 	case <-time.After(lib.P30초):
 		return xt.New응답(lib.New에러("f질의_처리_도우미() 타임아웃 %v %v", 질의값.TR구분(), 질의값.TR코드()))
+	}
+}
+
+func f전송_권한_획득(TR코드 string) {
+	switch TR코드 {
+	case "", xt.RT현물_주문_접수_SC0, xt.RT현물_주문_체결_SC1, xt.RT현물_주문_정정_SC2, xt.RT현물_주문_취소_SC3, xt.RT현물_주문_거부_SC4,
+		xt.RT코스피_호가_잔량_H1, xt.RT코스피_시간외_호가_잔량_H2, xt.RT코스피_체결_S3, xt.RT코스피_예상_체결_YS3,
+		xt.RT코스피_ETF_NAV_I5, xt.RT주식_VI발동해제_VI, xt.RT시간외_단일가VI발동해제_DVI, xt.RT장_운영정보_JIF:
+		return
+	}
+
+	f10분당_전송_제한_확인(TR코드)
+
+	if f1초_1회_미만_전송_제한_확인(TR코드) == nil {
+		f초당_전송_제한_확인(TR코드)
+	}
+}
+
+func f1초_1회_미만_전송_제한_확인(TR코드 string) lib.I전송_권한 {
+	전송_권한, 존재함 := tr코드별_전송_제한_초당_1회_미만[TR코드]
+
+	switch {
+	case !존재함:
+		return nil // 해당 TR코드 관련 제한이 존재하지 않음.
+	case 전송_권한.TR코드() != TR코드:
+		panic("예상하지 못한 경우.")
+	}
+
+	return 전송_권한.G획득()
+}
+
+func f초당_전송_제한_확인(TR코드 string) lib.I전송_권한 {
+	전송_권한, 존재함 := tr코드별_전송_제한_1초[TR코드]
+
+	switch {
+	case !존재함:
+		panic(lib.New에러("전송제한을 찾을 수 없음 : '%v'", TR코드))
+	case 전송_권한.TR코드() != TR코드:
+		panic("예상하지 못한 경우.")
+	case 전송_권한.G남은_수량() > 100:
+		panic("전송 한도가 너무 큼. 1초당 한도와 10분당 한도를 혼동한 듯함.")
+	}
+
+	return 전송_권한.G획득()
+}
+
+func f10분당_전송_제한_확인(TR코드 string) lib.I전송_권한 {
+	전송_권한, 존재함 := tr코드별_전송_제한_10분[TR코드]
+
+	switch {
+	case !존재함:
+		return nil // 해당 TR코드 관련 제한이 존재하지 않음.
+	case 전송_권한.TR코드() != TR코드:
+		panic("예상하지 못한 경우.")
+	}
+
+	return 전송_권한.G획득()
+}
+
+func f전송_시각_기록(TR코드 string) {
+	// 10분당 전송 제한 기록
+	if 전송_권한, 존재함 := tr코드별_전송_제한_10분[TR코드]; 존재함 {
+		전송_권한.S기록()
+	}
+
+	// 초당 전송 제한 기록
+	if 전송_권한, 존재함 := tr코드별_전송_제한_1초[TR코드]; 존재함 {
+		전송_권한.S기록()
 	}
 }
 

@@ -91,6 +91,11 @@ var (
 
 	전일, 당일 lib.I안전한_시각
 
+	전송_제한_정보_모음          *xt.TR코드별_전송_제한_정보_모음
+	tr코드별_전송_제한_초당_1회_미만 = make(map[string]lib.I전송_권한)
+	tr코드별_전송_제한_1초       = make(map[string]lib.I전송_권한)
+	tr코드별_전송_제한_10분      = make(map[string]lib.I전송_권한)
+
 	전달_도우미_수량 int
 	콜백_도우미_수량 int
 

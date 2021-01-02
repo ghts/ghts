@@ -219,7 +219,7 @@ func f접속됨() (bool, error) {
 
 	switch 에러_번호 {
 	case 0:
-		return (참거짓 == TRUE || 참거짓 != FALSE), nil
+		return 참거짓 == TRUE || 참거짓 != FALSE, nil
 	default:
 		return false, lib.New에러("f접속됨() 에러 발생.\n'%v'", 에러_번호)
 	}
@@ -674,6 +674,7 @@ func F에러_메시지(질의 *xt.S질의) {
 
 func TR코드별_전송_제한(질의 *xt.S질의) {
 	TR코드_모음 := 질의.M값.(*lib.S질의값_문자열_모음).M문자열_모음
+
 	정보_모음 := new(xt.TR코드별_전송_제한_정보_모음)
 	정보_모음.M맵 = make(map[string]*xt.TR코드별_전송_제한_정보)
 
