@@ -86,7 +86,7 @@ var 소켓REP_테스트용_TR콜백 lib.I소켓
 var Ch테스트용_TR콜백_종료 = make(chan lib.T신호, 1)
 
 func go테스트용_TR콜백_수신(ch초기화 chan lib.T신호) {
-	ch공통_종료 := lib.F공통_종료_채널()
+	ch공통_종료 := lib.Ch공통_종료()
 	defer func() {
 		select {
 		case <-ch공통_종료:
