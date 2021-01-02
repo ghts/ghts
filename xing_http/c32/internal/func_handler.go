@@ -127,8 +127,38 @@ func T0150_현물_당일_매매일지(w http.ResponseWriter, req *http.Request) 
 	F질의_처리(w, 질의값)
 }
 
+func T0151_현물_일자별_매매일지(w http.ResponseWriter, req *http.Request) {
+	질의값 := &xt.T0151_현물_일자별_매매일지_질의값{}
+
+	if 에러 := F질의값_추출(req, 질의값); 에러 != nil {
+		F회신(w, xt.New응답(에러))
+		return
+	}
+
+	질의값.M구분 = xt.TR조회
+	질의값.M코드 = xt.TR현물_일자별_매매일지_t0151
+
+	F질의_처리(w, 질의값)
+}
+
 func T0167_시간_조회(w http.ResponseWriter, req *http.Request) {
 	F질의_처리(w, lib.New질의값_기본형(xt.TR조회, xt.TR시간_조회_t0167))
+}
+
+func T1101_현물_호가_조회(w http.ResponseWriter, req *http.Request) {
+	if 종목코드, 에러 := F문자열_추출(req); 에러 != nil {
+		F회신(w, xt.New응답(에러))
+	} else {
+		F질의_처리(w, lib.New질의값_단일_종목2(xt.TR조회, xt.TR현물_호가_조회_t1101, 종목코드))
+	}
+}
+
+func T1102_현물_시세_조회(w http.ResponseWriter, req *http.Request) {
+	if 종목코드, 에러 := F문자열_추출(req); 에러 != nil {
+		F회신(w, xt.New응답(에러))
+	} else {
+		F질의_처리(w, lib.New질의값_단일_종목2(xt.TR조회, xt.TR현물_시세_조회_t1102, 종목코드))
+	}
 }
 
 func T1305_현물_기간별_조회(w http.ResponseWriter, req *http.Request) {
