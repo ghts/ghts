@@ -9,7 +9,7 @@ import (
 
 func main() {
 	lib.F확인(xing.F초기화(xt.P서버_모의투자))
-	defer xing.F리소스_정리()
+	defer xing.F종료()
 
 	lib.F확인(xing.F주문_응답_실시간_정보_구독())
 	defer xing.F주문_응답_실시간_정보_해지()
