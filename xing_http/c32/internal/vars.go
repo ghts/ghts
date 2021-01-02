@@ -89,6 +89,8 @@ var (
 	Ch질의  = make(chan *xt.S질의, 100)
 	ch콜백  = make(chan lib.I콜백, 100)
 
+	전일, 당일 lib.I안전한_시각
+
 	전달_도우미_수량 int
 	콜백_도우미_수량 int
 

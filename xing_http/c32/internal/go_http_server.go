@@ -45,8 +45,10 @@ func HTTP서버(ch초기화, ch종료 chan lib.T신호) {
 	http.HandleFunc("/account_no_list", 계좌번호_리스트)
 	//http.HandleFunc("/account_detail_name", 계좌_상세명)
 
-	http.HandleFunc("/CSPAQ12200", CSPAQ12200)
-	http.HandleFunc("/t0167", T0167)
+	http.HandleFunc("/"+xt.TR현물계좌_총평가_CSPAQ12200, CSPAQ12200)
+	http.HandleFunc("/"+xt.TR현물계좌_잔고내역_조회_CSPAQ12300, CSPAQ12300)
+	http.HandleFunc("/"+xt.TR시간_조회_t0167, T0167)
+	http.HandleFunc("/"+xt.TR현물_기간별_조회_t1305, T1305)
 
 	ch초기화 <- lib.P신호_초기화
 

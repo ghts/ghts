@@ -78,6 +78,32 @@ func CSPAQ12200(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
+func CSPAQ12300(w http.ResponseWriter, req *http.Request) {
+	질의값 := &xt.CSPAQ12300_현물계좌_잔고내역_질의값{}
+
+	if 에러 := F질의값_추출(w, req, 질의값); 에러 != nil {
+		return
+	}
+
+	질의값.M구분 = xt.TR조회
+	질의값.M코드 = xt.TR현물계좌_잔고내역_조회_CSPAQ12300
+
+	F질의_처리(w, 질의값)
+}
+
 func T0167(w http.ResponseWriter, req *http.Request) {
 	F질의_처리(w, lib.New질의값_기본형(xt.TR조회, xt.TR시간_조회_t0167))
+}
+
+func T1305(w http.ResponseWriter, req *http.Request) {
+	질의값 := &xt.T1305_현물_기간별_조회_질의값{}
+
+	if 에러 := F질의값_추출(w, req, 질의값); 에러 != nil {
+		return
+	}
+
+	질의값.M구분 = xt.TR조회
+	질의값.M코드 = xt.TR현물_기간별_조회_t1305
+
+	F질의_처리(w, 질의값)
 }
