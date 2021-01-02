@@ -285,7 +285,7 @@ func f질의값_처리(질의 *lib.S채널_질의_API) {
 		F실시간_정보_구독_해지_처리(질의)
 	case xt.TR실시간_정보_일괄_해지:
 		F실시간_정보_일괄_해지(질의)
-	case xt.TR접속:
+	case xt.TR접속_및_로그인:
 		F접속_처리(질의)
 	case xt.TR접속됨:
 		F접속됨(질의)
@@ -600,7 +600,6 @@ func f종료() {
 	f실시간_정보_일괄_해지()
 	F로그아웃()
 	F소켓_정리() // F공통_종료_채널_닫기() 포함.
-	lib.F대기(lib.P3초)
 	w32.PostQuitMessage(0)
 	w32.DestroyWindow(메시지_윈도우)
 	syscall.FreeLibrary(xing_api_dll)
