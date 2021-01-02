@@ -58,6 +58,18 @@ func f속성값_초기화(질의값 interface{}) interface{} {
 	return 값.Interface()
 }
 
+func F서버_구분() T서버_구분 {
+	if 구분값, 에러 := lib.F2정수(os.Getenv(P서버_구분_환경변수명)); 에러 == nil && T서버_구분(구분값) == P서버_실거래 {
+		return P서버_실거래
+	} else {
+		return P서버_모의투자
+	}
+}
+
+func F서버_구분_설정(서버_구분 T서버_구분) {
+	os.Setenv(P서버_구분_환경변수명, strconv.Itoa(int(서버_구분)))
+}
+
 func F주소_C32_호출() lib.T주소 {
 	for {
 		// 환경변수를 통하면 자동으로 자식 프로세스에 같은 값이 전달된다.
