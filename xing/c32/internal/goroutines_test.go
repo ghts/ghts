@@ -40,7 +40,7 @@ import (
 	"testing"
 )
 
-func TestP접속됨(t *testing.T) {
+func TestF접속됨(t *testing.T) {
 	t.Parallel()
 
 	if !lib.F인터넷에_접속됨() {
