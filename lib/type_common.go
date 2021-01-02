@@ -148,6 +148,7 @@ type S종목 struct {
 	전일_종가 int64
 	상한가   int64
 	하한가   int64
+	기준가   int64
 }
 
 func (s S종목) G코드() string   { return s.코드 }
@@ -156,6 +157,7 @@ func (s S종목) G시장구분() T시장구분  { return s.시장_구분 }
 func (s S종목) G전일_종가() int64 { return s.전일_종가 }
 func (s S종목) G상한가() int64   { return s.상한가 }
 func (s S종목) G하한가() int64   { return s.하한가 }
+func (s S종목) G기준가() int64   { return s.기준가 }
 
 func (s S종목) String() string {
 	버퍼 := new(bytes.Buffer)
@@ -173,11 +175,17 @@ func (s S종목) G복제본() *S종목 {
 	복제본.코드 = s.코드
 	복제본.이름 = s.이름
 	복제본.시장_구분 = s.시장_구분
+	복제본.전일_종가 = s.전일_종가
+	복제본.상한가 = s.상한가
+	복제본.하한가 = s.하한가
+	복제본.기준가 = s.기준가
 
 	return 복제본
 }
 
 func (s S종목) MarshalBinary() ([]byte, error) {
+	// TODO : 추가된 항목에 맞게 업데이트 필요.
+
 	속성 := make([]byte, 1)
 	속성[0] = byte(uint8(s.시장_구분))
 
@@ -292,7 +300,7 @@ func New종목(코드 string, 이름 string, 시장_구분 T시장구분) *S종�
 	return s
 }
 
-func New종목2(코드 string, 이름 string, 시장_구분 T시장구분, 전일_종가, 상한가, 하한가 int64) *S종목 {
+func New종목with가격정보(코드 string, 이름 string, 시장_구분 T시장구분, 전일_종가, 상한가, 하한가, 기준가 int64) *S종목 {
 	switch 시장_구분 {
 	case P시장구분_코스피, P시장구분_코스닥, P시장구분_ETF, P시장구분_코넥스:
 		if len(코드) != 6 {
@@ -311,6 +319,7 @@ func New종목2(코드 string, 이름 string, 시장_구분 T시장구분, 전�
 	s.전일_종가 = 전일_종가
 	s.상한가 = 상한가
 	s.하한가 = 하한가
+	s.기준가 = 기준가
 
 	return s
 }
