@@ -46,20 +46,24 @@ import (
 	"time"
 )
 
-func F질의값_추출(w http.ResponseWriter, req *http.Request, ptr질의값 interface{}) (에러 error) {
+func F문자열_추출(req *http.Request) (문자열 string, 에러 error) {
+	if 바이트_모음, 에러 := ioutil.ReadAll(req.Body); 에러 != nil {
+		return "", 에러
+	} else {
+		return lib.F문자열_정리(string(바이트_모음)), nil
+	}
+}
+
+func F질의값_추출(req *http.Request, ptr질의값 interface{}) (에러 error) {
 	if lib.F종류(ptr질의값) != reflect.Ptr {
-		에러 = lib.New에러with출력("포인터형이 아님. %T", ptr질의값)
-		F회신(w, xt.New응답(에러))
-		return 에러
+		return lib.New에러with출력("포인터형이 아님. %T", ptr질의값)
 	} else if 바이트_모음, 에러 := ioutil.ReadAll(req.Body); 에러 != nil {
-		F회신(w, xt.New응답(에러))
 		return 에러
 	} else if 에러 = json.Unmarshal(바이트_모음, ptr질의값); 에러 != nil {
-		F회신(w, xt.New응답(에러))
 		return 에러
-	} else {
-		return nil
 	}
+
+	return nil
 }
 
 func F질의_처리(w http.ResponseWriter, 질의값 lib.I질의값) (에러 error) {
@@ -70,7 +74,7 @@ func F질의_처리(w http.ResponseWriter, 질의값 lib.I질의값) (에러 err
 	if 응답 := f질의_처리_도우미(w, 질의값); 응답.Error() != nil {
 		return F회신(w, 응답)
 	} else if 식별번호, ok := 응답.V.(int); !ok {
-		return F회신(w, xt.New응답(lib.New에러("%v : 예상하지 못한 자료형. %T", xt.TR시간_조회_t0167, 응답.V)))
+		return F회신(w, xt.New응답(lib.New에러("%v : 예상하지 못한 자료형. %T", 질의값.TR코드(), 응답.V)))
 	} else {
 		ch회신 = 콜백_대기소.S추가(식별번호, 질의값.TR코드())
 	}
@@ -96,6 +100,8 @@ func F질의_처리(w http.ResponseWriter, 질의값 lib.I질의값) (에러 err
 
 			return F회신(w, xt.New응답(변환값))
 		default:
+			lib.F문자열_출력("%v 회신값 자료형 '%T'", 질의값.TR코드(), 변환값)
+
 			return F회신(w, xt.New응답(변환값))
 		}
 	case <-time.After(lib.P1분):

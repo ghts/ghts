@@ -43,7 +43,12 @@ import (
 	"net/http"
 	"reflect"
 	"strings"
+	"time"
 )
+
+func F당일() time.Time { return xt.F당일() }
+
+func F전일() time.Time { return xt.F전일() }
 
 func f2에러(값 string) error {
 	if strings.TrimSpace(값) == "" {
@@ -73,15 +78,16 @@ func HTTP질의_도우미(url string, 질의값, 결과값_포인터 interface{}
 		return lib.New에러with출력("포인터형이 아님. %T", 결과값_포인터)
 	}
 
-	//if !strings.HasSuffix(url, "/account_no_list") {
+	//if strings.Contains(url, xt.TR현물_종목_조회_t8436) {
 	//	응답 := &xt.S응답{}
 	//	lib.F체크포인트(url, 질의값)
 	//	lib.F체크포인트(바이트_모음_응답)
 	//	lib.F체크포인트(string(바이트_모음_응답))
 	//	lib.F체크포인트(json.Unmarshal(바이트_모음_응답, 응답))
 	//	lib.F체크포인트(응답)
-	//	lib.F체크포인트(응답.V)
 	//	lib.F체크포인트(응답.E)
+	//	lib.F체크포인트(응답.V)
+	//
 	//
 	//	lib.F체크포인트(json.Unmarshal(바이트_모음_응답, 결과값_포인터))
 	//	lib.F체크포인트(결과값_포인터)

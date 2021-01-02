@@ -52,13 +52,39 @@ func go_HTTP서버(ch초기화, ch종료 chan lib.T신호) {
 		}
 	}()
 
+	//TR현물_정상_주문_CSPAT00600        = "CSPAT00600"
+	//TR현물_정정_주문_CSPAT00700        = "CSPAT00700"
+	//TR현물_취소_주문_CSPAT00800        = "CSPAT00800"
+	//TR현물_당일_매매일지_t0150   = "t0150"
+	//TR현물_일자별_매매일지_t0151  = "t0151"
+	//TR현물_체결_미체결_조회_t0425 = "t0425"
+	//TR현물_호가_조회_t1101          = "t1101"
+	//TR현물_시세_조회_t1102          = "t1102"
+	//TR현물_기간별_조회_t1305         = "t1305"
+	//TR현물_당일_전일_분틱_조회_t1310    = "t1310"
+	//TR관리_불성실_투자유의_조회_t1404    = "t1404"
+	//TR투자경고_매매정지_정리매매_조회_t1405 = "t1405"
+	//TR_ETF_시간별_추이_t1902       = "t1902"
+	//TR_ETF_LP호가_조회_t1906      = "t1906"
+	//TR재무순위_종합_t3341      = "t3341"
+	//TR현물_멀티_현재가_조회_t8407 = "t8407"
+	//TR현물_차트_틱_t8411      = "t8411"
+	//TR현물_차트_분_t8412      = "t8412"
+	//TR현물_차트_일주월_t8413    = "t8413"
+	//TR증시_주변_자금_추이_t8428  = "t8428"
+	//TR현물_종목_조회_t8436 = "t8436"
+
 	http.HandleFunc("/account_no_list", 계좌번호_리스트)
 	//http.HandleFunc("/account_detail_name", 계좌_상세명)
 
-	http.HandleFunc("/"+xt.TR현물계좌_총평가_CSPAQ12200, CSPAQ12200)
-	http.HandleFunc("/"+xt.TR현물계좌_잔고내역_조회_CSPAQ12300, CSPAQ12300)
-	http.HandleFunc("/"+xt.TR시간_조회_t0167, T0167)
-	http.HandleFunc("/"+xt.TR현물_기간별_조회_t1305, T1305)
+	http.HandleFunc("/"+xt.TR현물계좌_총평가_CSPAQ12200, CSPAQ12200_현물계좌_총평가)
+	http.HandleFunc("/"+xt.TR현물계좌_잔고내역_조회_CSPAQ12300, CSPAQ12300_현물계좌_잔고내역_조회)
+	http.HandleFunc("/"+xt.TR현물계좌_주문체결내역_조회_CSPAQ13700, CSPAQ13700_현물계좌_주문체결내역_조회)
+	http.HandleFunc("/"+xt.TR현물계좌_예수금_주문가능금액_CSPAQ22200, CSPAQ22200_현물계좌_예수금_주문가능금액)
+	http.HandleFunc("/"+xt.TR현물_당일_매매일지_t0150, T0150_현물_당일_매매일지)
+	http.HandleFunc("/"+xt.TR시간_조회_t0167, T0167_시간_조회)
+	http.HandleFunc("/"+xt.TR현물_기간별_조회_t1305, T1305_현물_기간별_조회)
+	http.HandleFunc("/"+xt.TR현물_종목_조회_t8436, T8436_현물_종목_조회)
 
 	ch초기화 <- lib.P신호_초기화
 

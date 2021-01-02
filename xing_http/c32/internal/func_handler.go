@@ -36,7 +36,6 @@ package x32_http
 import (
 	"github.com/ghts/ghts/lib"
 	xt "github.com/ghts/ghts/xing/base"
-	"io/ioutil"
 	"net/http"
 )
 
@@ -66,11 +65,9 @@ func 계좌번호_리스트(w http.ResponseWriter, req *http.Request) {
 //	}
 //}
 
-func CSPAQ12200(w http.ResponseWriter, req *http.Request) {
-	if 바이트_모음, 에러 := ioutil.ReadAll(req.Body); 에러 != nil {
+func CSPAQ12200_현물계좌_총평가(w http.ResponseWriter, req *http.Request) {
+	if 계좌번호, 에러 := F문자열_추출(req); 에러 != nil {
 		F회신(w, xt.New응답(에러))
-	} else if 계좌번호 := lib.F문자열_정리(string(바이트_모음)); 계좌번호 == "" {
-		F회신(w, xt.New응답(lib.New에러("비어있는 계좌번호 질의값.")))
 	} else if !F계좌번호_존재함(계좌번호) {
 		F회신(w, xt.New응답(lib.New에러("존재하지 않는 계좌번호 : '%v'", 계좌번호)))
 	} else {
@@ -78,10 +75,11 @@ func CSPAQ12200(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func CSPAQ12300(w http.ResponseWriter, req *http.Request) {
+func CSPAQ12300_현물계좌_잔고내역_조회(w http.ResponseWriter, req *http.Request) {
 	질의값 := &xt.CSPAQ12300_현물계좌_잔고내역_질의값{}
 
-	if 에러 := F질의값_추출(w, req, 질의값); 에러 != nil {
+	if 에러 := F질의값_추출(req, 질의값); 에러 != nil {
+		F회신(w, xt.New응답(에러))
 		return
 	}
 
@@ -91,14 +89,53 @@ func CSPAQ12300(w http.ResponseWriter, req *http.Request) {
 	F질의_처리(w, 질의값)
 }
 
-func T0167(w http.ResponseWriter, req *http.Request) {
+func CSPAQ13700_현물계좌_주문체결내역_조회(w http.ResponseWriter, req *http.Request) {
+	질의값 := &xt.CSPAQ13700_현물계좌_주문체결내역_질의값{}
+
+	if 에러 := F질의값_추출(req, 질의값); 에러 != nil {
+		F회신(w, xt.New응답(에러))
+		return
+	}
+
+	질의값.M구분 = xt.TR조회
+	질의값.M코드 = xt.TR현물계좌_주문체결내역_조회_CSPAQ13700
+
+	F질의_처리(w, 질의값)
+}
+
+func CSPAQ22200_현물계좌_예수금_주문가능금액(w http.ResponseWriter, req *http.Request) {
+	if 계좌번호, 에러 := F문자열_추출(req); 에러 != nil {
+		F회신(w, xt.New응답(에러))
+	} else if !F계좌번호_존재함(계좌번호) {
+		F회신(w, xt.New응답(lib.New에러("존재하지 않는 계좌번호 : '%v'", 계좌번호)))
+	} else {
+		F질의_처리(w, lib.New질의값_문자열(xt.TR조회, xt.TR현물계좌_예수금_주문가능금액_CSPAQ22200, 계좌번호))
+	}
+}
+
+func T0150_현물_당일_매매일지(w http.ResponseWriter, req *http.Request) {
+	질의값 := &xt.T0150_현물_당일_매매일지_질의값{}
+
+	if 에러 := F질의값_추출(req, 질의값); 에러 != nil {
+		F회신(w, xt.New응답(에러))
+		return
+	}
+
+	질의값.M구분 = xt.TR조회
+	질의값.M코드 = xt.TR현물_당일_매매일지_t0150
+
+	F질의_처리(w, 질의값)
+}
+
+func T0167_시간_조회(w http.ResponseWriter, req *http.Request) {
 	F질의_처리(w, lib.New질의값_기본형(xt.TR조회, xt.TR시간_조회_t0167))
 }
 
-func T1305(w http.ResponseWriter, req *http.Request) {
+func T1305_현물_기간별_조회(w http.ResponseWriter, req *http.Request) {
 	질의값 := &xt.T1305_현물_기간별_조회_질의값{}
 
-	if 에러 := F질의값_추출(w, req, 질의값); 에러 != nil {
+	if 에러 := F질의값_추출(req, 질의값); 에러 != nil {
+		F회신(w, xt.New응답(에러))
 		return
 	}
 
@@ -106,4 +143,12 @@ func T1305(w http.ResponseWriter, req *http.Request) {
 	질의값.M코드 = xt.TR현물_기간별_조회_t1305
 
 	F질의_처리(w, 질의값)
+}
+
+func T8436_현물_종목_조회(w http.ResponseWriter, req *http.Request) {
+	if 시장구분, 에러 := F문자열_추출(req); 에러 != nil {
+		F회신(w, xt.New응답(에러))
+	} else {
+		F질의_처리(w, lib.New질의값_문자열(xt.TR조회, xt.TR현물_종목_조회_t8436, 시장구분))
+	}
 }

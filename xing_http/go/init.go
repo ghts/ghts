@@ -36,6 +36,7 @@ package xing_http
 import (
 	"github.com/ghts/ghts/lib"
 	xt "github.com/ghts/ghts/xing/base"
+	"time"
 )
 
 func F전일_당일_설정() (에러 error) {
@@ -62,6 +63,70 @@ func F전일_당일_설정() (에러 error) {
 	전일 := 값_모음[1].M일자
 
 	xt.F전일_당일_설정(당일, 전일)
+
+	return nil
+}
+
+func F종목_정보_설정() (에러 error) {
+	종목모음_설정_잠금.Lock()
+	defer 종목모음_설정_잠금.Unlock()
+
+	defer lib.S예외처리{
+		M에러: &에러,
+		M함수: func() {
+			종목모음_코스피 = make([]*lib.S종목, 0)
+			종목모음_코스닥 = make([]*lib.S종목, 0)
+			종목모음_ETF = make([]*lib.S종목, 0)
+			종목모음_ETN = make([]*lib.S종목, 0)
+			종목모음_ETF_ETN = make([]*lib.S종목, 0)
+			종목모음_전체 = make([]*lib.S종목, 0)
+			종목맵_전체 = make(map[string]*lib.S종목)
+			종목모음_설정일 = lib.New안전한_시각(time.Time{})
+		}}.S실행()
+
+	if len(종목모음_코스피) > 0 &&
+		len(종목모음_코스닥) > 0 &&
+		len(종목모음_ETF) > 0 &&
+		len(종목모음_ETN) > 0 &&
+		len(종목모음_ETF_ETN) > 0 &&
+		len(종목모음_전체) > 0 &&
+		len(종목맵_전체) > 0 &&
+		종목모음_설정일.G값().Equal(lib.F금일()) {
+		return nil
+	}
+
+	종목_정보_모음, 에러 := TrT8436_주식종목_조회(lib.P시장구분_전체)
+	lib.F확인(에러)
+
+	종목모음_코스피 = make([]*lib.S종목, 0)
+	종목모음_코스닥 = make([]*lib.S종목, 0)
+	종목모음_ETF = make([]*lib.S종목, 0)
+	종목모음_ETN = make([]*lib.S종목, 0)
+	종목모음_ETF_ETN = make([]*lib.S종목, 0)
+	종목모음_전체 = make([]*lib.S종목, 0)
+	종목맵_전체 = make(map[string]*lib.S종목)
+
+	for _, s := range 종목_정보_모음 {
+		종목 := lib.New종목with가격정보(s.M종목코드, s.M종목명, s.M시장구분, s.M전일가, s.M상한가, s.M하한가, s.M기준가)
+
+		종목맵_전체[종목.G코드()] = 종목
+		종목모음_전체 = append(종목모음_전체, 종목)
+
+		switch s.M시장구분 {
+		case lib.P시장구분_코스피:
+			종목모음_코스피 = append(종목모음_코스피, 종목)
+		case lib.P시장구분_코스닥:
+			종목모음_코스닥 = append(종목모음_코스닥, 종목)
+		case lib.P시장구분_ETF:
+			종목모음_ETF = append(종목모음_ETF, 종목)
+			종목모음_ETF_ETN = append(종목모음_ETF_ETN, 종목)
+		case lib.P시장구분_ETN:
+			종목모음_ETN = append(종목모음_ETN, 종목)
+			종목모음_ETF_ETN = append(종목모음_ETF_ETN, 종목)
+		}
+	}
+
+	종목모음_설정일 = lib.New안전한_시각(lib.F금일())
 
 	return nil
 }
