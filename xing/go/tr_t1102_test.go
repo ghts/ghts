@@ -49,7 +49,7 @@ func TestT1102_현물_시세_조회(t *testing.T) {
 	}
 
 	const 종목코드 = "069500" // KODEX 200
-	당일 := F당일()
+	당일 := xt.F당일()
 	개장_시간 := time.Date(당일.Year(), 당일.Month(), 당일.Day(), 8, 0, 0, 0, 당일.Location())
 
 	값, 에러 := TrT1102_현물_시세_조회(종목코드)

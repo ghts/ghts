@@ -55,7 +55,7 @@ func TestCSPAQ13700_현물계좌_주문체결내역(t *testing.T) {
 	lib.F테스트_에러없음(t, 에러)
 
 	for i := 0; i < 30; i++ {
-		일자 := F당일().AddDate(0, 0, -1*i)
+		일자 := xt.F당일().AddDate(0, 0, -1*i)
 		testCSPAQ13700_현물계좌_주문체결내역_도우미(t, 계좌번호, 일자)
 	}
 }
@@ -66,7 +66,7 @@ func testCSPAQ13700_현물계좌_주문체결내역_도우미(t *testing.T, 계�
 	lib.F테스트_에러없음(t, 에러)
 
 	for _, 값 := range 값_모음 {
-		lib.F테스트_참임(t, 값.M주문일.Before(F당일().AddDate(0, 0, 1)))
+		lib.F테스트_참임(t, 값.M주문일.Before(xt.F당일().AddDate(0, 0, 1)))
 		lib.F테스트_다름(t, 값.M관리지점번호, "")
 		lib.F테스트_다름(t, 값.M주문시장코드, "")
 		lib.F테스트_참임(t, 값.M주문번호 >= 0)
@@ -106,7 +106,7 @@ func testCSPAQ13700_현물계좌_주문체결내역_도우미(t *testing.T, 계�
 			xt.P통신매체_아이폰, xt.P통신매체_안드로이드, xt.P통신매체_API, xt.P통신매체_HTS)
 		lib.F테스트_다름(t, 값.M회원번호, "")
 		lib.F테스트_같음(t, 값.M예약주문여부, xt.CSPAQ13700_예약주문_아님, xt.CSPAQ13700_예약주문)
-		lib.F테스트_참임(t, 값.M대출일.Before(F당일().AddDate(0, 0, 1)))
+		lib.F테스트_참임(t, 값.M대출일.Before(xt.F당일().AddDate(0, 0, 1)))
 		lib.F테스트_참임(t, 값.M주문시각.Hour() >= 9 && 값.M주문시각.Hour() <= 16, 값.M주문시각.Hour())
 		lib.F테스트_다름(t, 값.M운용지시번호, "")
 		lib.F테스트_다름(t, 값.M주문자ID, "")

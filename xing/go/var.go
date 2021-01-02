@@ -62,7 +62,6 @@ var (
 	tr코드별_전송_제한_1초       = make(map[string]lib.I전송_권한)
 	tr코드별_전송_제한_10분      = make(map[string]lib.I전송_권한)
 
-	전일, 당일    lib.I안전한_시각
 	최근_영업일_모음 []time.Time
 
 	xing_C32_경로     = lib.GOPATH() + `/src/github.com/ghts/ghts/xing/c32/xing_C32.bat`

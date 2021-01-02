@@ -41,18 +41,6 @@ import (
 	"time"
 )
 
-func F전일() time.Time {
-	lib.F조건부_패닉(전일 == nil, "Xing API가 초기화 되어 있지 않습니다.")
-
-	return 전일.G값()
-}
-
-func F당일() time.Time {
-	lib.F조건부_패닉(당일 == nil, "Xing API가 초기화 되어 있지 않습니다.")
-
-	return 당일.G값()
-}
-
 func F최근_영업일_모음() []time.Time {
 	return lib.F슬라이스_복사(최근_영업일_모음, nil).([]time.Time)
 }
@@ -67,7 +55,7 @@ func F2전일_시각(포맷 string, 값 interface{}) (time.Time, error) {
 		return time.Time{}, 에러
 	}
 
-	전일 := F전일()
+	전일 := xt.F전일()
 
 	전일_시각 := time.Date(전일.Year(), 전일.Month(), 전일.Day(),
 		시각.Hour(), 시각.Minute(), 시각.Second(), 시각.Nanosecond(), 시각.Location())
@@ -89,7 +77,7 @@ func F2당일_시각(포맷 string, 값 interface{}) (time.Time, error) {
 		return time.Time{}, 에러
 	}
 
-	당일 := F당일()
+	당일 := xt.F당일()
 
 	당일_시각 := time.Date(당일.Year(), 당일.Month(), 당일.Day(),
 		시각.Hour(), 시각.Minute(), 시각.Second(), 시각.Nanosecond(), 시각.Location())

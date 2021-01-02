@@ -57,7 +57,7 @@ func TestT0425_현물_체결_미체결_확인(t *testing.T) {
 	값_모음, 에러 := TrT0425_현물_체결_미체결_조회(계좌번호, 종목코드, 체결_구분, 매도_매수_구분)
 	lib.F테스트_에러없음(t, 에러)
 
-	if F당일().Equal(lib.F2일자(time.Now())) &&
+	if xt.F당일().Equal(lib.F2일자(time.Now())) &&
 		time.Now().Hour() >= 9 &&
 		time.Now().Hour() < 4 {
 		lib.F테스트_다름(t, len(값_모음), 0)

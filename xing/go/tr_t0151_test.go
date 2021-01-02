@@ -35,6 +35,7 @@ package xing
 
 import (
 	"github.com/ghts/ghts/lib"
+	xt "github.com/ghts/ghts/xing/base"
 	"testing"
 )
 
@@ -44,7 +45,7 @@ func TestT0151_일자별_매매일지(t *testing.T) {
 	계좌번호, 에러 := 현물_계좌번호()
 	lib.F테스트_에러없음(t, 에러)
 
-	값_모음, 에러 := TrT0151_현물_일자별_매매일지(계좌번호, F전일())
+	값_모음, 에러 := TrT0151_현물_일자별_매매일지(계좌번호, xt.F전일())
 	lib.F테스트_에러없음(t, 에러)
 
 	for _, 값 := range 값_모음 {

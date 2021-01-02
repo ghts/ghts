@@ -36,6 +36,7 @@ package xing
 import (
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/lib/trade"
+	xt "github.com/ghts/ghts/xing/base"
 	"strings"
 	"time"
 )
@@ -604,5 +605,5 @@ func F최소_호가단위by시장구분_기준가(시장구분 lib.T시장구분
 }
 
 func F금일_한국증시_개장() bool {
-	return F당일().Equal(lib.F금일())
+	return xt.F당일().Equal(lib.F금일())
 }
