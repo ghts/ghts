@@ -41,8 +41,16 @@ import (
 	"strings"
 )
 
-func HTTP서버(ch초기화, ch종료 chan lib.T신호) {
-	defer func() { ch종료 <- lib.P신호_종료 }()
+func go_HTTP서버(ch초기화, ch종료 chan lib.T신호) {
+	defer func() {
+		recover()
+
+		if lib.F공통_종료_채널_닫힘() {
+			Ch_HTTP_모듈_종료 <- lib.P신호_종료
+		} else {
+			ch종료 <- lib.P신호_종료
+		}
+	}()
 
 	http.HandleFunc("/account_no_list", 계좌번호_리스트)
 	//http.HandleFunc("/account_detail_name", 계좌_상세명)
@@ -58,7 +66,7 @@ func HTTP서버(ch초기화, ch종료 chan lib.T신호) {
 
 	// 보안을 위해서 localhost로부터의 접속만 허용.
 	// 참고자료 : https://stackoverflow.com/questions/37896931/how-to-limit-client-ip-address-when-using-golang-http-package
-	HTTP서버 := &http.Server{
+	HTTP서버 = &http.Server{
 		Addr: xt.F주소_C32_호출().G단축값(),
 		Handler: http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 			// get the real IP of the user

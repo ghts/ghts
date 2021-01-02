@@ -111,7 +111,7 @@ func OnTrData(TR데이터 unsafe.Pointer) {
 	바이트_변환값 := lib.F확인(lib.New바이트_변환Raw(자료형_문자열, raw값, true)).(*lib.S바이트_변환)
 	콜백값 := lib.New콜백_TR데이터(int(g.RequestID), 바이트_변환값, TR코드, 추가_연속조회_필요, 연속키)
 
-	ch콜백 <- 콜백값
+	Ch콜백 <- 콜백값
 }
 
 func OnMessageAndError(MSG데이터 unsafe.Pointer) {
@@ -153,11 +153,11 @@ func OnMessageAndError(MSG데이터 unsafe.Pointer) {
 
 	lib.F조건부_실행(에러여부, lib.F체크포인트, 콜백값)
 
-	ch콜백 <- 콜백값
+	Ch콜백 <- 콜백값
 }
 
 func OnReleaseData(식별번호 int) {
-	ch콜백 <- lib.New콜백_TR완료(식별번호)
+	Ch콜백 <- lib.New콜백_TR완료(식별번호)
 	F데이터_해제(식별번호)
 }
 
@@ -215,7 +215,7 @@ func OnLogin(wParam, lParam unsafe.Pointer) {
 	}
 
 	select {
-	case ch로그인 <- 로그인_성공_여부:
+	case Ch로그인 <- 로그인_성공_여부:
 	default:
 	}
 }
@@ -228,21 +228,21 @@ func OnLogout() {
 func OnDisconnected() {
 	lib.F체크포인트("OnDisconnected.")
 
-	ch콜백 <- lib.New콜백_신호(lib.P신호_C32_재시작_필요)
+	Ch콜백 <- lib.New콜백_신호(lib.P신호_C32_재시작_필요)
 }
 
 func OnTimeout(c int) {
 	lib.F체크포인트("OnTimeout.")
 
-	ch콜백 <- lib.New콜백_타임아웃(c)
+	Ch콜백 <- lib.New콜백_타임아웃(c)
 }
 
 func OnLinkData() {
 	// 필요한가?
-	//ch콜백 <- lib.New콜백_기본형(lib.P콜백_링크_데이터)
+	//Ch콜백 <- lib.New콜백_기본형(lib.P콜백_링크_데이터)
 }
 
 func OnRealtimeDataChart() {
 	// 필요한가?
-	//ch콜백 <- lib.New콜백_기본형(lib.P콜백_실시간_차트_데이터)
+	//Ch콜백 <- lib.New콜백_기본형(lib.P콜백_실시간_차트_데이터)
 }

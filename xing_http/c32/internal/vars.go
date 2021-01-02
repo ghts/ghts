@@ -38,6 +38,7 @@ import (
 	"github.com/ghts/ghts/lib/nanomsg"
 	xt "github.com/ghts/ghts/xing/base"
 	"go.nanomsg.org/mangos/v3"
+	"net/http"
 	"path/filepath"
 	"reflect"
 	"sync"
@@ -84,31 +85,27 @@ var (
 	접속_처리_잠금  sync.Mutex
 	api_호출_잠금 sync.Mutex
 
-	ch로그인 = make(chan bool, 1)
+	Ch로그인 = make(chan bool, 1)
 	Ch수신  = make(chan *mangos.Message, 1000)
 	Ch질의  = make(chan *xt.S질의, 100)
-	ch콜백  = make(chan lib.I콜백, 100)
+	Ch콜백  = make(chan lib.I콜백, 100)
 
-	전일, 당일 lib.I안전한_시각
+	Ch관리_모듈_종료    = make(chan lib.T신호, 1)
+	Ch_HTTP_모듈_종료 = make(chan lib.T신호, 1)
+	Ch콜백_처리_모듈_종료 = make(chan lib.T신호, 1)
+	Ch함수_호출_모듈_종료 = make(chan lib.T신호, 1)
 
 	전송_제한_정보_모음          *xt.TR코드별_전송_제한_정보_모음
 	tr코드별_전송_제한_초당_1회_미만 = make(map[string]lib.I전송_권한)
 	tr코드별_전송_제한_1초       = make(map[string]lib.I전송_권한)
 	tr코드별_전송_제한_10분      = make(map[string]lib.I전송_권한)
 
-	전달_도우미_수량 int
-	콜백_도우미_수량 int
-
-	Ch모니터링_루틴_종료   = make(chan lib.T신호, 1)
-	Ch수신_도우미_종료    = make(chan lib.T신호, 1)
-	Ch전달_도우미_종료    = make(chan lib.T신호, 100)
-	Ch콜백_도우미_종료    = make(chan lib.T신호, 100)
-	Ch함수_호출_도우미_종료 = make(chan lib.T신호, 1)
-
 	TR_수신_중    = lib.New안전한_bool(false)
 	API_초기화_완료 = lib.New안전한_bool(false)
 
 	콜백_대기소 = New콜백_저장소()
+
+	HTTP서버 *http.Server
 )
 
 // 초기화 이후에는 사실상 읽기 전용이어서, 다중 사용에 문제가 없는 값들.

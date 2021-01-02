@@ -39,19 +39,22 @@ import (
 
 func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 	defer func() {
-		lib.S예외처리{M에러: &에러}.S실행()
-		Ch모니터링_루틴_종료 <- lib.P신호_종료
+		recover()
+
+		if lib.F공통_종료_채널_닫힘() {
+			Ch관리_모듈_종료 <- lib.P신호_종료
+		}
 	}()
 
 	ch서버_초기화 := make(chan lib.T신호, 1)
 	ch서버_종료 := make(chan lib.T신호, 1)
 	ch호출_도우미_초기화 := make(chan lib.T신호, 1)
-	ch호출_도우미_종료 := make(chan lib.T신호)
-	ch콜백_도우미_초기화 := make(chan lib.T신호, 콜백_도우미_수량)
-	ch콜백_도우미_종료 := make(chan lib.T신호)
+	ch호출_도우미_종료 := make(chan lib.T신호, 1)
+	ch콜백_도우미_초기화 := make(chan lib.T신호, 1)
+	ch콜백_도우미_종료 := make(chan lib.T신호, 1)
 	ch공통_종료 := lib.Ch공통_종료()
 
-	go HTTP서버(ch서버_초기화, ch서버_종료)
+	go go_HTTP서버(ch서버_초기화, ch서버_종료)
 	go go함수_호출_도우미(ch호출_도우미_초기화, ch호출_도우미_종료)
 	go go콜백_처리_도우미(ch콜백_도우미_초기화, ch콜백_도우미_종료)
 
@@ -64,14 +67,14 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 	// 종료 되는 Go루틴 재생성.
 	for {
 		select {
+		case <-ch공통_종료:
+			return nil
 		case <-ch서버_종료:
-			go HTTP서버(ch서버_초기화, ch서버_종료)
+			go go_HTTP서버(ch서버_초기화, ch서버_종료)
 		case <-ch호출_도우미_종료:
 			go go함수_호출_도우미(ch호출_도우미_초기화, ch호출_도우미_종료)
 		case <-ch콜백_도우미_종료:
 			go go콜백_처리_도우미(ch콜백_도우미_초기화, ch콜백_도우미_종료)
-		case <-ch공통_종료:
-			return nil
 		}
 	}
 }

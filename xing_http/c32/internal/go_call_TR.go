@@ -1,26 +1,22 @@
 package x32_http
 
 import (
+	"context"
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/lib/c"
 	"github.com/ghts/ghts/lib/w32"
 	xt "github.com/ghts/ghts/xing/base"
-	"os"
 	"runtime"
 	"syscall"
 	"unsafe"
 )
 
 func go함수_호출_도우미(ch초기화, ch종료 chan lib.T신호) {
-	if lib.F공통_종료_채널_닫힘() {
-		return
-	}
-
 	defer func() {
 		recover()
 
 		if lib.F공통_종료_채널_닫힘() {
-			Ch함수_호출_도우미_종료 <- lib.P신호_종료
+			Ch함수_호출_모듈_종료 <- lib.P신호_종료
 		} else {
 			ch종료 <- lib.P신호_종료
 		}
@@ -361,13 +357,10 @@ func F종료_질의_처리(질의 *xt.S질의) {
 func f종료() {
 	f실시간_정보_일괄_해지()
 	F로그아웃()
+	F소켓_정리()
 	lib.F공통_종료_채널_닫기()
+	HTTP서버.Shutdown(context.TODO())
 	w32.PostQuitMessage(0)
 	w32.DestroyWindow(메시지_윈도우)
 	syscall.FreeLibrary(xing_api_dll)
-
-	go func() {
-		F소켓_정리()
-		os.Exit(0)
-	}()
 }

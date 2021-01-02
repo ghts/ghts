@@ -36,7 +36,6 @@ package x32_http
 import (
 	"github.com/ghts/ghts/lib"
 	xt "github.com/ghts/ghts/xing/base"
-	xing_http "github.com/ghts/ghts/xing_http/go"
 	"time"
 )
 
@@ -52,7 +51,6 @@ func F초기화() {
 	F서버_접속_및_로그인()
 	f계좌_리스트_설정()
 	f초기화_TR전송_제한()
-	F전일_당일_설정()
 }
 
 func f종료_질의_송신() {
@@ -62,20 +60,15 @@ func f종료_질의_송신() {
 	case <-xt.New질의(lib.New질의값_기본형(xt.TR종료, ""), Ch질의).Ch응답:
 	case <-time.After(lib.P10초):
 	}
+
+	F종료_대기()
 }
 
 func F종료_대기() {
-	<-Ch모니터링_루틴_종료
-	<-Ch수신_도우미_종료
-	<-Ch함수_호출_도우미_종료
-
-	for i := 0; i < 전달_도우미_수량; i++ {
-		<-Ch전달_도우미_종료
-	}
-
-	for i := 0; i < 콜백_도우미_수량; i++ {
-		<-Ch콜백_도우미_종료
-	}
+	<-Ch_HTTP_모듈_종료
+	<-Ch함수_호출_모듈_종료
+	<-Ch콜백_처리_모듈_종료
+	<-Ch관리_모듈_종료
 }
 
 func F소켓_정리() error {
@@ -109,27 +102,13 @@ func F서버_접속_및_로그인() (에러 error) {
 	}
 
 	select {
-	case 로그인_여부 := <-ch로그인:
+	case 로그인_여부 := <-Ch로그인:
 		if !로그인_여부 {
 			return lib.New에러with출력("로그인 실패.")
 		}
 	case <-time.After(lib.P30초):
 		return lib.New에러with출력("로그인 타임아웃")
 	}
-
-	return nil
-}
-
-func F전일_당일_설정() (에러 error) {
-	lib.S예외처리{M에러: &에러}.S실행()
-
-	값_모음, 에러 := xing_http.TrT1305_기간별_주가_조회("069500", xt.P일주월_일, 20)
-	lib.F확인(에러)
-
-	당일 = lib.New안전한_시각(값_모음[0].M일자)
-	전일 = lib.New안전한_시각(값_모음[1].M일자)
-
-	xt.F전일_당일_설정(전일.G값(), 당일.G값())
 
 	return nil
 }
@@ -181,23 +160,11 @@ func f초기화_TR전송_제한() (에러 error) {
 		//xt.TR지수선물_마스터_조회_t8432,
 	}
 
-	// 중복 제거
-	TR코드_맵 := make(map[string]lib.S비어있음)
-
-	for _, TR코드 := range TR코드_모음 {
-		TR코드_맵[TR코드] = lib.S비어있음{}
-	}
-
-	TR코드_모음 = make([]string, 0)
-
-	for TR코드 := range TR코드_맵 {
-		TR코드_모음 = append(TR코드_모음, TR코드)
-	}
-	// 중복 제거 완료
-
-	var 응답 *xt.S응답
+	TR코드_모음 = lib.F중복_문자열_제거(TR코드_모음)
 
 	for {
+		var 응답 *xt.S응답
+
 		select {
 		case 응답 = <-xt.New질의(lib.New질의값_문자열_모음(xt.TR코드별_전송_제한, "", TR코드_모음), Ch질의).Ch응답:
 		case <-time.After(lib.P10초):

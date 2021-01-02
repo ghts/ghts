@@ -6,19 +6,24 @@ import (
 	"strings"
 )
 
-func go콜백_처리_도우미(ch초기화, ch도우미_종료 chan lib.T신호) (에러 error) {
+func go콜백_처리_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 	defer func() {
-		lib.S예외처리{M에러: &에러}.S실행()
-		ch도우미_종료 <- lib.P신호_종료
+		recover()
+
+		if lib.F공통_종료_채널_닫힘() {
+			Ch콜백_처리_모듈_종료 <- lib.P신호_종료
+		} else {
+			ch종료 <- lib.P신호_종료
+		}
 	}()
 
-	ch종료 := lib.Ch공통_종료()
+	ch공통_종료 := lib.Ch공통_종료()
 
 	ch초기화 <- lib.P신호_초기화
 
 	for {
 		select {
-		case 콜백값 := <-ch콜백:
+		case 콜백값 := <-Ch콜백:
 			switch 콜백값.G콜백() {
 			case lib.P콜백_TR데이터, lib.P콜백_메시지_및_에러, lib.P콜백_TR완료, lib.P콜백_타임아웃:
 				if 에러 = f콜백_TR데이터_처리기(콜백값); 에러 != nil {
@@ -31,7 +36,7 @@ func go콜백_처리_도우미(ch초기화, ch도우미_종료 chan lib.T신호)
 			default:
 				panic(lib.New에러("예상하지 못한 콜백 구분값 : '%v'", 콜백값.G콜백()))
 			}
-		case <-ch종료:
+		case <-ch공통_종료:
 			return
 		}
 	}
