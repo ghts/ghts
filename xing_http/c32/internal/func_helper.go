@@ -46,18 +46,6 @@ import (
 	"time"
 )
 
-func F전일() time.Time {
-	lib.F조건부_패닉(전일 == nil, "Xing API가 초기화 되어 있지 않습니다.")
-
-	return 전일.G값()
-}
-
-func F당일() time.Time {
-	lib.F조건부_패닉(당일 == nil, "Xing API가 초기화 되어 있지 않습니다.")
-
-	return 당일.G값()
-}
-
 func F질의값_추출(w http.ResponseWriter, req *http.Request, ptr질의값 interface{}) (에러 error) {
 	if lib.F종류(ptr질의값) != reflect.Ptr {
 		에러 = lib.New에러with출력("포인터형이 아님. %T", ptr질의값)
