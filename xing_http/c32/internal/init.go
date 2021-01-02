@@ -49,18 +49,15 @@ func F초기화() {
 	<-ch초기화
 
 	F서버_접속_및_로그인()
+	f계좌_리스트_설정()
 }
 
 func f종료_질의_송신() {
 	defer lib.S예외처리{}.S실행()
 
 	select {
-	case 응답 := <-xt.New질의(lib.New질의값_기본형(xt.TR종료, ""), Ch질의).Ch응답:
-		if 응답.E != nil {
-			lib.F체크포인트(응답.E)
-		}
+	case <-xt.New질의(lib.New질의값_기본형(xt.TR종료, ""), Ch질의).Ch응답:
 	case <-time.After(lib.P10초):
-		lib.F체크포인트()
 	}
 }
 
@@ -100,7 +97,7 @@ func F서버_접속_및_로그인() (에러 error) {
 
 	select {
 	case 응답 := <-xt.New질의(lib.New질의값_기본형(xt.TR접속_및_로그인, ""), Ch질의).Ch응답:
-		if 응답.E != nil {
+		if 응답.Error() != nil {
 			lib.F문자열_출력("서버 접속 실패.")
 			return 에러
 		}

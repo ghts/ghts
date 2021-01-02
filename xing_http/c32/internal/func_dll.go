@@ -472,19 +472,27 @@ func f계좌_번호(인덱스 int) (string, error) {
 	return string(bytes.Trim(c.F2Go바이트_모음(unsafe.Pointer(c버퍼), 버퍼_길이), "\x00")), nil
 }
 
-func F계좌번호_모음(질의 *xt.S질의) {
-	수량, 에러 := f계좌_수량()
-	if 에러 != nil {
-		질의.Ch응답 <- xt.New응답(에러)
-		return
+func f계좌_리스트_설정() (에러 error) {
+	if 수량, 에러 := f계좌_수량(); 에러 != nil {
+		return 에러
+	} else if 수량 != len(계좌번호_모음) {
+		계좌번호_모음 = make([]string, 0)
+
+		for i := 0; i < 수량; i++ {
+			if 계좌번호, 에러 := f계좌_번호(i); 에러 != nil {
+				return lib.New에러with출력(에러)
+			} else {
+				계좌번호_모음 = append(계좌번호_모음, 계좌번호)
+			}
+		}
 	}
 
-	계좌번호_모음 = make([]string, 수량)
+	return nil
+}
 
-	for i := range 계좌번호_모음 {
-		계좌번호_모음[i], 에러 = f계좌_번호(i)
-
-		if 에러 != nil {
+func F계좌번호_모음(질의 *xt.S질의) {
+	if len(계좌번호_모음) == 0 {
+		if 에러 := f계좌_리스트_설정(); 에러 != nil {
 			질의.Ch응답 <- xt.New응답(에러)
 			return
 		}
@@ -551,6 +559,9 @@ func F계좌_상세명(질의 *xt.S질의) {
 		C.int(버퍼_길이))
 
 	계좌_상세명 := lib.F2문자열_EUC_KR_공백제거(버퍼_배열[:])
+
+	lib.F체크포인트("계좌 상세명", 계좌_상세명)
+
 	질의.Ch응답 <- xt.New응답(계좌_상세명)
 
 	// syscall 방식 호출은 에러 발생

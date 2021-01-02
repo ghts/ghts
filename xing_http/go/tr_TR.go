@@ -31,24 +31,38 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package x32_http
+package xing_http
 
 import (
 	"github.com/ghts/ghts/lib"
-	xing_http "github.com/ghts/ghts/xing_http/go"
-	"testing"
+	xt "github.com/ghts/ghts/xing/base"
 	"time"
 )
 
-func TestT0167(t *testing.T) {
-	시각, 에러 := xing_http.TrT0167_시각_조회()
+func TrT0167_시각_조회() (값 time.Time, 에러 error) {
+	defer lib.S예외처리{M에러: &에러, M함수: func() { 값 = time.Time{} }}.S실행()
 
-	lib.F테스트_에러없음(t, 에러)
-	lib.F테스트_같음(t, 시각.Year(), time.Now().Year())
-	lib.F테스트_같음(t, 시각.Month(), time.Now().Month())
-	lib.F테스트_같음(t, 시각.Day(), time.Now().Day())
+	s := struct {
+		V time.Time
+		E string
+	}{time.Time{}, ""}
 
-	지금 := time.Now()
-	차이 := 시각.Sub(지금)
-	lib.F테스트_참임(t, 차이 > (-1*lib.P1시간) && 차이 < lib.P1시간, 시각, 지금)
+	lib.F확인(HTTP질의_도우미(xt.TR시간_조회_t0167, "", &s))
+
+	return s.V, f2에러(s.E)
+}
+
+func TrCSPAQ12200_현물계좌_총평가(계좌번호 string) (값 *xt.CSPAQ12200_현물계좌_총평가_응답, 에러 error) {
+	defer lib.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+
+	lib.F조건부_패닉(!F계좌번호_존재함(계좌번호), "존재하지 않는 계좌번호 : '%v'", 계좌번호)
+
+	s := struct {
+		V xt.CSPAQ12200_현물계좌_총평가_응답
+		E string
+	}{xt.CSPAQ12200_현물계좌_총평가_응답{}, ""}
+
+	lib.F확인(HTTP질의_도우미(xt.TR현물계좌_총평가_CSPAQ12200, 계좌번호, &s))
+
+	return &s.V, f2에러(s.E)
 }

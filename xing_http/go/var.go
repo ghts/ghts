@@ -31,24 +31,8 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package x32_http
+package xing_http
 
-import (
-	"github.com/ghts/ghts/lib"
-	xt "github.com/ghts/ghts/xing/base"
-	"net/http"
+var (
+	계좌번호_모음 []string
 )
-
-func HTTP서버(ch초기화, ch종료 chan lib.T신호) {
-	defer func() { ch종료 <- lib.P신호_종료 }()
-
-	http.HandleFunc("/account_no_list", 계좌번호_리스트)
-	//http.HandleFunc("/account_detail_name", 계좌_상세명)
-
-	http.HandleFunc("/CSPAQ12200", CSPAQ12200)
-	http.HandleFunc("/t0167", T0167)
-
-	ch초기화 <- lib.P신호_초기화
-
-	http.ListenAndServe(xt.F주소_C32_호출().G단축값(), nil)
-}

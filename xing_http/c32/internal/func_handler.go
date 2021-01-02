@@ -36,9 +36,48 @@ package x32_http
 import (
 	"github.com/ghts/ghts/lib"
 	xt "github.com/ghts/ghts/xing/base"
+	"io/ioutil"
 	"net/http"
 )
 
+func 계좌번호_리스트(w http.ResponseWriter, req *http.Request) {
+	if 응답 := f질의_처리_도우미(w, lib.New질의값_기본형(xt.TR계좌번호_모음, "")); 응답.Error() != nil {
+		F회신(w, 응답)
+	} else if 계좌번호_모음, ok := 응답.V.([]string); !ok {
+		F회신(w, xt.New응답(lib.New에러with출력("예상하지 못한 자료형 : '%v' '%T' ", 응답.V, 응답.V)))
+	} else {
+		F회신(w, xt.New응답(계좌번호_모음))
+	}
+}
+
+//func 계좌_상세명(w http.ResponseWriter, req *http.Request) {
+//	var 계좌번호 string
+//
+//	if 바이트_모음, 에러 := ioutil.ReadAll(req.Body); 에러 != nil {
+//		F회신(w, xt.New응답(에러))
+//	} else if 계좌번호 = strings.TrimSpace(string(바이트_모음)); 계좌번호 == "" {
+//		F회신(w, xt.New응답(lib.New에러("비어있는 계좌번호 질의값.")))
+//	} else if 응답 := f질의_처리_도우미(w, lib.New질의값_문자열(xt.TR계좌_상세명, "", 계좌번호)); 응답.E != nil {
+//		F회신(w, 응답)
+//	} else if 계좌_상세명, ok := 응답.V.(string); !ok {
+//		F회신(w, xt.New응답(lib.New에러with출력("예상하지 못한 자료형 : '%v' '%T' ", 응답.V, 응답.V)))
+//	} else {
+//		F회신(w, xt.New응답(계좌_상세명))
+//	}
+//}
+
+func CSPAQ12200(w http.ResponseWriter, req *http.Request) {
+	if 바이트_모음, 에러 := ioutil.ReadAll(req.Body); 에러 != nil {
+		F회신(w, xt.New응답(에러))
+	} else if 계좌번호 := lib.F문자열_정리(string(바이트_모음)); 계좌번호 == "" {
+		F회신(w, xt.New응답(lib.New에러("비어있는 계좌번호 질의값.")))
+	} else if !F계좌번호_존재함(계좌번호) {
+		F회신(w, xt.New응답(lib.New에러("존재하지 않는 계좌번호 : '%v'", 계좌번호)))
+	} else {
+		F질의_처리(w, lib.New질의값_문자열(xt.TR조회, xt.TR현물계좌_총평가_CSPAQ12200, 계좌번호))
+	}
+}
+
 func T0167(w http.ResponseWriter, req *http.Request) {
-	F질의_처리(w, lib.New질의값_기본형(lib.TR조회, xt.TR시간_조회_t0167))
+	F질의_처리(w, lib.New질의값_기본형(xt.TR조회, xt.TR시간_조회_t0167))
 }

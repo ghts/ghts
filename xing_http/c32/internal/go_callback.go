@@ -50,7 +50,6 @@ func f콜백_신호_처리기(콜백 lib.I콜백) (에러 error) {
 
 	//switch 신호 {
 	//case lib.P신호_C32_초기화:
-	//	lib.F체크포인트()
 	//	select {
 	//	case ch신호_C32_초기화 <- 신호:
 	//	default:

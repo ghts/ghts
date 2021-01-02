@@ -36,6 +36,7 @@ package xing_http
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"github.com/ghts/ghts/lib"
 	xt "github.com/ghts/ghts/xing/base"
 	"io/ioutil"
@@ -44,7 +45,15 @@ import (
 	"strings"
 )
 
-func HTTP질의(url string, 질의값, 결과값_포인터 interface{}) (에러 error) {
+func f2에러(값 string) error {
+	if strings.TrimSpace(값) == "" {
+		return nil
+	} else {
+		return errors.New(값)
+	}
+}
+
+func HTTP질의_도우미(url string, 질의값, 결과값_포인터 interface{}) (에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 결과값_포인터 = nil }}.S실행()
 
 	if !strings.HasPrefix(url, xt.F주소_C32_호출().URL()) {
@@ -64,5 +73,70 @@ func HTTP질의(url string, 질의값, 결과값_포인터 interface{}) (에러 
 		return lib.New에러with출력("포인터형이 아님. %T", 결과값_포인터)
 	}
 
+	//if !strings.HasSuffix(url, "/account_no_list") {
+	//	응답 := &xt.S응답{}
+	//	lib.F체크포인트(url, 질의값)
+	//	lib.F체크포인트(바이트_모음_응답)
+	//	lib.F체크포인트(string(바이트_모음_응답))
+	//	lib.F체크포인트(json.Unmarshal(바이트_모음_응답, 응답))
+	//	lib.F체크포인트(응답)
+	//	lib.F체크포인트(응답.V)
+	//	lib.F체크포인트(응답.E)
+	//
+	//	lib.F체크포인트(json.Unmarshal(바이트_모음_응답, 결과값_포인터))
+	//	lib.F체크포인트(결과값_포인터)
+	//}
+
 	return json.Unmarshal(바이트_모음_응답, 결과값_포인터)
 }
+
+func F계좌번호_모음() (응답값 []string, 에러 error) {
+	defer lib.S예외처리{M에러: &에러, M함수: func() { 계좌번호_모음 = nil }}.S실행()
+
+	if len(계좌번호_모음) != 0 {
+		return 계좌번호_모음, nil
+	}
+
+	s := struct {
+		V []string
+		E string
+	}{nil, ""}
+
+	lib.F확인(HTTP질의_도우미("account_no_list", "", &s))
+
+	if f2에러(s.E) == nil && len(s.V) > 0 {
+		계좌번호_모음 = s.V
+	}
+
+	return s.V, f2에러(s.E)
+}
+
+func F계좌번호_존재함(계좌번호 string) bool {
+	if 계좌번호_모음, 에러 := F계좌번호_모음(); 에러 != nil {
+		lib.New에러with출력("계좌번호 모음 리스트 확보 실패.")
+		return false
+	} else {
+		계좌번호 = strings.TrimSpace(계좌번호)
+
+		for _, 값 := range 계좌번호_모음 {
+			if 계좌번호 == 값 {
+				return true
+			}
+		}
+	}
+
+	return false
+}
+
+//func F계좌_상세명(계좌_번호 string) (계좌_상세명 string, 에러 error) {
+//	defer lib.S예외처리{M에러: &에러, M함수: func() { 계좌_상세명 = "" }}.S실행()
+//
+//	s := struct {
+//		V string
+//		E error
+//	}{"", nil}
+//
+//	lib.F확인(HTTP질의_도우미("account_detail_name", 계좌_번호, &s))
+//
+//	return s.V, s.E
+//}

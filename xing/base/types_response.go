@@ -34,7 +34,9 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package xt
 
 import (
+	"errors"
 	"github.com/ghts/ghts/lib"
+	"strings"
 )
 
 func New질의(값 lib.I질의값, ch질의 chan *S질의) *S질의 {
@@ -55,15 +57,23 @@ type S질의 struct {
 func New응답(값 interface{}) *S응답 {
 	switch 값.(type) {
 	case error:
-		return &S응답{V: nil, E: 값.(error)}
+		return &S응답{V: nil, E: 값.(error).Error()}
 	default:
-		return &S응답{V: 값, E: nil}
+		return &S응답{V: 값, E: ""}
 	}
 }
 
 type S응답 struct {
 	V interface{}
-	E error
+	E string
+}
+
+func (s S응답) Error() error {
+	if strings.TrimSpace(s.E) == "" {
+		return nil
+	} else {
+		return errors.New(s.E)
+	}
 }
 
 type I이중_응답 interface {

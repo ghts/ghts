@@ -47,18 +47,14 @@ import (
 func F질의_처리(w http.ResponseWriter, 질의값 lib.I질의값) (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
-	var 응답 *xt.S응답
 	var ch회신 chan interface{}
 
-	select {
-	case 응답 = <-xt.New질의(질의값, Ch질의).Ch응답:
-		if 응답.E != nil {
-			return F회신(w, 응답)
-		} else if 식별번호, ok := 응답.V.(int); !ok {
-			return F회신(w, xt.New응답(lib.New에러("%v : 예상하지 못한 자료형. %T", xt.TR시간_조회_t0167, 응답.V)))
-		} else {
-			ch회신 = 콜백_대기소.S추가(식별번호, 질의값.TR코드())
-		}
+	if 응답 := f질의_처리_도우미(w, 질의값); 응답.Error() != nil {
+		return F회신(w, 응답)
+	} else if 식별번호, ok := 응답.V.(int); !ok {
+		return F회신(w, xt.New응답(lib.New에러("%v : 예상하지 못한 자료형. %T", xt.TR시간_조회_t0167, 응답.V)))
+	} else {
+		ch회신 = 콜백_대기소.S추가(식별번호, 질의값.TR코드())
 	}
 
 	select {
@@ -85,9 +81,20 @@ func F질의_처리(w http.ResponseWriter, 질의값 lib.I질의값) (에러 err
 			return F회신(w, xt.New응답(변환값))
 		}
 	case <-time.After(lib.P1분):
-		return F회신(w, xt.New응답(lib.New에러("타임아웃. '%v' '%v'", 질의값.TR코드(), 질의값)))
+		return F회신(w, xt.New응답(lib.New에러("F질의_처리() 타임아웃. '%v' '%v'", 질의값.TR코드(), 질의값)))
 	case <-lib.Ch공통_종료():
 		return nil
+	}
+}
+
+func f질의_처리_도우미(w http.ResponseWriter, 질의값 lib.I질의값) (응답 *xt.S응답) {
+	defer lib.S예외처리{}.S실행()
+
+	select {
+	case 응답 = <-xt.New질의(질의값, Ch질의).Ch응답:
+		return 응답
+	case <-time.After(lib.P30초):
+		return xt.New응답(lib.New에러("f질의_처리_도우미() 타임아웃 %v %v", 질의값.TR구분(), 질의값.TR코드()))
 	}
 }
 
@@ -100,6 +107,23 @@ func F회신(w http.ResponseWriter, 값 *xt.S응답) (에러 error) {
 	_, 에러 = w.Write(바이트_모음)
 
 	return 에러
+}
+
+func F계좌번호_존재함(계좌번호 string) bool {
+	if len(계좌번호_모음) == 0 {
+		f계좌_리스트_설정()
+	}
+
+	계좌번호 = strings.TrimSpace(계좌번호)
+
+	for _, 값 := range 계좌번호_모음 {
+
+		if 계좌번호 == 값 {
+			return true
+		}
+	}
+
+	return false
 }
 
 func XingAPI디렉토리() (string, error) {
@@ -364,7 +388,6 @@ func f자료형_문자열_해석(g *xt.TR_DATA) (자료형_문자열 string, 에
 	//
 	//	return xt.P자료형_T0434OutBlock, nil
 	//case xt.TR기업정보_요약_t3320:
-	//	lib.F체크포인트(xt.TR기업정보_요약_t3320, xt.SizeT3320OutBlock, xt.SizeT3320OutBlock1)
 	//	switch 길이 {
 	//	case xt.SizeT3320OutBlock:
 	//		return xt.P자료형_T3320OutBlock, nil
