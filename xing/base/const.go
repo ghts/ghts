@@ -40,6 +40,7 @@ import (
 )
 
 const (
+	P서버_구분_환경변수명     = "SERVER_Class"
 	P주소_C32_호출_환경변수명 = "ADDRESS_C32_TR"
 	P주소_C32_콜백_환경변수명 = "ADDRESS_C32_Callback"
 	P주소_실시간_환경변수명    = "ADDRESS_Realtime"
@@ -389,7 +390,7 @@ const (
 	TR실시간_정보_구독
 	TR실시간_정보_해지
 	TR실시간_정보_일괄_해지
-	TR접속
+	TR접속_및_로그인
 	TR접속됨
 	TR접속_해제
 	TR초기화
@@ -421,8 +422,8 @@ func TR구분_String(v lib.TR구분) string {
 		return "TR실시간_정보_해지"
 	case TR실시간_정보_일괄_해지:
 		return "TR실시간_정보_일괄_해지"
-	case TR접속:
-		return "TR접속"
+	case TR접속_및_로그인:
+		return "TR접속_및_로그인"
 	case TR접속됨:
 		return "TR접속됨"
 	case TR접속_해제:
@@ -798,9 +799,9 @@ type T서버_구분 int
 func (p T서버_구분) String() string {
 	switch p {
 	case P서버_실거래:
-		return "hts.ebestsec.co.kr"
+		return "실거래 서버"
 	case P서버_모의투자:
-		return "demo.ebestsec.co.kr"
+		return "모의투자 서버"
 	case P서버_XingACE:
 		return "127.0.0.1"
 	}

@@ -130,8 +130,3 @@ func f자료형_문자열(값 interface{}) string {
 
 	return 자료형[시작_인덱스:]
 }
-
-func TestT재무순위_구분(t *testing.T) {
-	lib.F테스트_같음(t, P재무순위_PEG.String(), "PEG")
-	lib.F테스트_같음(t, P재무순위_PEG.T3341(), "b")
-}
