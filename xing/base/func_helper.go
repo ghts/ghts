@@ -34,6 +34,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package xt
 
 import (
+	"fmt"
 	"github.com/ghts/ghts/lib"
 	"os"
 	"reflect"
@@ -125,6 +126,10 @@ func F주소_설정() {
 			os.Setenv(P주소_C32_콜백_환경변수명, strconv.Itoa(int(주소_C32_콜백)))
 			os.Setenv(P주소_실시간_환경변수명, strconv.Itoa(int(주소_실시간)))
 			주소_설정_완료.S값(true)
+
+			fmt.Println("****************************************")
+			fmt.Printf(" Xing API 호출 URL : %v\n", F주소_C32_호출().URL())
+			fmt.Println("****************************************")
 
 			return
 		}
