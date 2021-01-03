@@ -50,7 +50,7 @@ func F문자열_추출(req *http.Request) (문자열 string, 에러 error) {
 	if 바이트_모음, 에러 := ioutil.ReadAll(req.Body); 에러 != nil {
 		return "", 에러
 	} else {
-		return lib.F문자열_정리(string(바이트_모음)), nil
+		return lib.F앞뒤_따옴표_제거(string(바이트_모음)), nil
 	}
 }
 
