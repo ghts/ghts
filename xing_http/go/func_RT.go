@@ -45,11 +45,11 @@ func F주문_응답_실시간_정보_구독() (에러 error) {
 		return
 	}
 
-	lib.F확인(F실시간_정보_구독_및_해지(lib.TR실시간_정보_구독, xt.RT현물_주문_접수_SC0, nil))
-	lib.F확인(F실시간_정보_구독_및_해지(lib.TR실시간_정보_구독, xt.RT현물_주문_체결_SC1, nil))
-	lib.F확인(F실시간_정보_구독_및_해지(lib.TR실시간_정보_구독, xt.RT현물_주문_정정_SC2, nil))
-	lib.F확인(F실시간_정보_구독_및_해지(lib.TR실시간_정보_구독, xt.RT현물_주문_취소_SC3, nil))
-	lib.F확인(F실시간_정보_구독_및_해지(lib.TR실시간_정보_구독, xt.RT현물_주문_거부_SC4, nil))
+	lib.F확인(F실시간_정보_구독_및_해지(lib.TR실시간_정보_구독, xt.RT현물_주문_접수_SC0))
+	lib.F확인(F실시간_정보_구독_및_해지(lib.TR실시간_정보_구독, xt.RT현물_주문_체결_SC1))
+	lib.F확인(F실시간_정보_구독_및_해지(lib.TR실시간_정보_구독, xt.RT현물_주문_정정_SC2))
+	lib.F확인(F실시간_정보_구독_및_해지(lib.TR실시간_정보_구독, xt.RT현물_주문_취소_SC3))
+	lib.F확인(F실시간_정보_구독_및_해지(lib.TR실시간_정보_구독, xt.RT현물_주문_거부_SC4))
 
 	return nil
 }
@@ -63,17 +63,34 @@ func F주문_응답_실시간_정보_해지() (에러 error) {
 
 	defer 주문_응답_구독_중.S값(false)
 
-	lib.F확인(F실시간_정보_구독_및_해지(lib.TR실시간_정보_해지, xt.RT현물_주문_접수_SC0, nil))
-	lib.F확인(F실시간_정보_구독_및_해지(lib.TR실시간_정보_해지, xt.RT현물_주문_체결_SC1, nil))
-	lib.F확인(F실시간_정보_구독_및_해지(lib.TR실시간_정보_해지, xt.RT현물_주문_정정_SC2, nil))
-	lib.F확인(F실시간_정보_구독_및_해지(lib.TR실시간_정보_해지, xt.RT현물_주문_취소_SC3, nil))
-	lib.F확인(F실시간_정보_구독_및_해지(lib.TR실시간_정보_해지, xt.RT현물_주문_거부_SC4, nil))
+	lib.F확인(F실시간_정보_구독_및_해지(lib.TR실시간_정보_해지, xt.RT현물_주문_접수_SC0))
+	lib.F확인(F실시간_정보_구독_및_해지(lib.TR실시간_정보_해지, xt.RT현물_주문_체결_SC1))
+	lib.F확인(F실시간_정보_구독_및_해지(lib.TR실시간_정보_해지, xt.RT현물_주문_정정_SC2))
+	lib.F확인(F실시간_정보_구독_및_해지(lib.TR실시간_정보_해지, xt.RT현물_주문_취소_SC3))
+	lib.F확인(F실시간_정보_구독_및_해지(lib.TR실시간_정보_해지, xt.RT현물_주문_거부_SC4))
 
 	return nil
 }
 
-func F실시간_정보_구독_및_해지(TR구분 lib.TR구분, 종목코드 string, 종목코드_모음 []string) (에러 error) {
-	질의값 := lib.New질의값_복수_종목(TR구분, 종목코드, 종목코드_모음)
+func F실시간_정보_구독_및_해지(TR구분 lib.TR구분, RT코드 string) (에러 error) {
+	// Go언어 json 패키지의 작동 특성 때문에 'S질의값_기본형'을 송신해도
+	// 서버 측에서 'S질의값_복수_종목'으로 json.Unmarshal()해도 정상 동작한다.
+	질의값 := lib.New질의값_기본형(TR구분, RT코드)
+	s := &xt.S응답{}
+
+	lib.F확인(http질의_도우미("realtime_data", 질의값, &s))
+
+	return f2에러(s.E)
+}
+
+func F실시간_정보_구독_및_해지_단일_종목(TR구분 lib.TR구분, RT코드 string, 종목코드 string) (에러 error) {
+	// 서버 측에서 'S질의값_복수_종목'을 상정하고 있으므로 거기에 맞춰준다.
+	// ('S질의값_단일_종목'을 사용하지 않고, 'S질의값_복수_종목'을 사용한다.)
+	return F실시간_정보_구독_및_해지_복수_종목(TR구분, RT코드, []string{종목코드})
+}
+
+func F실시간_정보_구독_및_해지_복수_종목(TR구분 lib.TR구분, RT코드 string, 종목코드_모음 []string) (에러 error) {
+	질의값 := lib.New질의값_복수_종목(TR구분, RT코드, 종목코드_모음)
 	s := &xt.S응답{}
 
 	lib.F확인(http질의_도우미("realtime_data", 질의값, &s))
