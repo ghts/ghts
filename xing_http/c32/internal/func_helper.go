@@ -46,6 +46,22 @@ import (
 	"time"
 )
 
+func F질의값_추출_TR처리(w http.ResponseWriter, req *http.Request, TR구분 lib.TR구분, TR코드 string, ptr질의값 interface{}) {
+	if lib.F종류(ptr질의값) != reflect.Ptr {
+		lib.New에러with출력("포인터형이 아님. %T", ptr질의값)
+		return
+	} else if 에러 := F질의값_추출(req, ptr질의값); 에러 != nil {
+		F회신(w, xt.New응답(에러))
+		return
+	} else if 질의값, ok := ptr질의값.(lib.I질의값); !ok {
+		lib.New에러with출력("lib.I질의값 인터페이스가 아님. %T", ptr질의값)
+		return
+	} else {
+		질의값.S설정(TR구분, TR코드)
+		F질의_처리(w, 질의값)
+	}
+}
+
 func F문자열_추출(req *http.Request) (문자열 string, 에러 error) {
 	if 바이트_모음, 에러 := ioutil.ReadAll(req.Body); 에러 != nil {
 		return "", 에러
