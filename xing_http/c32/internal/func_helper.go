@@ -46,6 +46,16 @@ import (
 	"time"
 )
 
+func F질의값_추출_RT처리(w http.ResponseWriter, req *http.Request) {
+	var 질의값 *lib.S질의값_복수_종목
+
+	if 에러 := F질의값_추출(req, 질의값); 에러 != nil {
+		F회신(w, xt.New응답(에러))
+	} else {
+		F질의_처리(w, 질의값)
+	}
+}
+
 func F질의값_추출_TR처리(w http.ResponseWriter, req *http.Request, TR구분 lib.TR구분, TR코드 string, 질의값 lib.I질의값) {
 	if lib.F종류(질의값) != reflect.Ptr {
 		lib.New에러with출력("포인터형이 아님. %T", 질의값)

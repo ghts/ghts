@@ -61,44 +61,9 @@ func 계좌_상세명(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func SC0_구독(w http.ResponseWriter, req *http.Request) {
-	F질의값_추출_TR처리(w, req, xt.TR실시간_정보_구독, xt.RT현물_주문_접수_SC0, &lib.S질의값_복수_종목{})
-}
-
-func SC0_해지(w http.ResponseWriter, req *http.Request) {
-	F질의값_추출_TR처리(w, req, xt.TR실시간_정보_해지, xt.RT현물_주문_접수_SC0, &lib.S질의값_기본형{})
-}
-
-func SC1_구독(w http.ResponseWriter, req *http.Request) {
-	F질의값_추출_TR처리(w, req, xt.TR실시간_정보_구독, xt.RT현물_주문_체결_SC1, &lib.S질의값_기본형{})
-}
-
-func SC1_해지(w http.ResponseWriter, req *http.Request) {
-	F질의값_추출_TR처리(w, req, xt.TR실시간_정보_해지, xt.RT현물_주문_체결_SC1, &lib.S질의값_기본형{})
-}
-
-func SC2_구독(w http.ResponseWriter, req *http.Request) {
-	F질의값_추출_TR처리(w, req, xt.TR실시간_정보_구독, xt.RT현물_주문_정정_SC2, &lib.S질의값_기본형{})
-}
-
-func SC2_해지(w http.ResponseWriter, req *http.Request) {
-	F질의값_추출_TR처리(w, req, xt.TR실시간_정보_해지, xt.RT현물_주문_정정_SC2, &lib.S질의값_기본형{})
-}
-
-func SC3_구독(w http.ResponseWriter, req *http.Request) {
-	F질의값_추출_TR처리(w, req, xt.TR실시간_정보_구독, xt.RT현물_주문_취소_SC3, &lib.S질의값_기본형{})
-}
-
-func SC3_해지(w http.ResponseWriter, req *http.Request) {
-	F질의값_추출_TR처리(w, req, xt.TR실시간_정보_해지, xt.RT현물_주문_취소_SC3, &lib.S질의값_기본형{})
-}
-
-func SC4_구독(w http.ResponseWriter, req *http.Request) {
-	F질의값_추출_TR처리(w, req, xt.TR실시간_정보_구독, xt.RT현물_주문_거부_SC4, &lib.S질의값_기본형{})
-}
-
-func SC4_해지(w http.ResponseWriter, req *http.Request) {
-	F질의값_추출_TR처리(w, req, xt.TR실시간_정보_해지, xt.RT현물_주문_거부_SC4, &lib.S질의값_기본형{})
+// 미리 질의값 자료형이 고정되어 있으므로 1개로 충분.
+func 실시간_정보_구독_및_해지(w http.ResponseWriter, req *http.Request) {
+	F질의값_추출_RT처리(w, req)
 }
 
 func CSPAQ12200_현물계좌_총평가(w http.ResponseWriter, req *http.Request) {

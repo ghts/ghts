@@ -54,16 +54,7 @@ func go_HTTP서버(ch초기화, ch종료 chan lib.T신호) {
 
 	http.HandleFunc("/account_no_list", 계좌번호_리스트)
 	http.HandleFunc("/account_detail_name", 계좌_상세명)
-	http.HandleFunc("/SC0_subscribe", SC0_구독)
-	http.HandleFunc("/SC0_unsubscribe", SC0_해지)
-	http.HandleFunc("/SC1_subscribe", SC1_구독)
-	http.HandleFunc("/SC1_unsubscribe", SC1_해지)
-	http.HandleFunc("/SC2_subscribe", SC2_구독)
-	http.HandleFunc("/SC2_unsubscribe", SC2_해지)
-	http.HandleFunc("/SC3_subscribe", SC3_구독)
-	http.HandleFunc("/SC3_unsubscribe", SC3_해지)
-	http.HandleFunc("/SC4_subscribe", SC4_구독)
-	http.HandleFunc("/SC4_unsubscribe", SC4_해지)
+	http.HandleFunc("/realtime_data", 실시간_정보_구독_및_해지) // 미리 질의값 자료형이 고정되어 있으므로 1개로 충분.
 	http.HandleFunc("/"+xt.TR현물계좌_총평가_CSPAQ12200, CSPAQ12200_현물계좌_총평가)
 	http.HandleFunc("/"+xt.TR현물계좌_잔고내역_조회_CSPAQ12300, CSPAQ12300_현물계좌_잔고내역_조회)
 	http.HandleFunc("/"+xt.TR현물계좌_주문체결내역_조회_CSPAQ13700, CSPAQ13700_현물계좌_주문체결내역_조회)

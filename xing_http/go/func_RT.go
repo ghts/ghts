@@ -45,11 +45,11 @@ func F주문_응답_실시간_정보_구독() (에러 error) {
 		return
 	}
 
-	lib.F확인(F구독_SC0())
-	lib.F확인(F구독_SC1())
-	lib.F확인(F구독_SC2())
-	lib.F확인(F구독_SC3())
-	lib.F확인(F구독_SC4())
+	lib.F확인(F실시간_정보_구독_및_해지(lib.TR실시간_정보_구독, xt.RT현물_주문_접수_SC0, nil))
+	lib.F확인(F실시간_정보_구독_및_해지(lib.TR실시간_정보_구독, xt.RT현물_주문_체결_SC1, nil))
+	lib.F확인(F실시간_정보_구독_및_해지(lib.TR실시간_정보_구독, xt.RT현물_주문_정정_SC2, nil))
+	lib.F확인(F실시간_정보_구독_및_해지(lib.TR실시간_정보_구독, xt.RT현물_주문_취소_SC3, nil))
+	lib.F확인(F실시간_정보_구독_및_해지(lib.TR실시간_정보_구독, xt.RT현물_주문_거부_SC4, nil))
 
 	return nil
 }
@@ -63,81 +63,20 @@ func F주문_응답_실시간_정보_해지() (에러 error) {
 
 	defer 주문_응답_구독_중.S값(false)
 
-	lib.F확인(F해지_SC0())
-	lib.F확인(F해지_SC1())
-	lib.F확인(F해지_SC2())
-	lib.F확인(F해지_SC3())
-	lib.F확인(F해지_SC4())
+	lib.F확인(F실시간_정보_구독_및_해지(lib.TR실시간_정보_해지, xt.RT현물_주문_접수_SC0, nil))
+	lib.F확인(F실시간_정보_구독_및_해지(lib.TR실시간_정보_해지, xt.RT현물_주문_체결_SC1, nil))
+	lib.F확인(F실시간_정보_구독_및_해지(lib.TR실시간_정보_해지, xt.RT현물_주문_정정_SC2, nil))
+	lib.F확인(F실시간_정보_구독_및_해지(lib.TR실시간_정보_해지, xt.RT현물_주문_취소_SC3, nil))
+	lib.F확인(F실시간_정보_구독_및_해지(lib.TR실시간_정보_해지, xt.RT현물_주문_거부_SC4, nil))
 
 	return nil
 }
 
-func F구독_SC0() (에러 error) {
+func F실시간_정보_구독_및_해지(TR구분 lib.TR구분, 종목코드 string, 종목코드_모음 []string) (에러 error) {
+	질의값 := lib.New질의값_복수_종목(TR구분, 종목코드, 종목코드_모음)
 	s := &xt.S응답{}
-	lib.F확인(http질의_도우미("SC0_subscribe", "", &s))
 
-	return f2에러(s.E)
-}
-
-func F해지_SC0() (에러 error) {
-	s := &xt.S응답{}
-	lib.F확인(http질의_도우미("SC0_unsubscribe", "", &s))
-
-	return f2에러(s.E)
-}
-
-func F구독_SC1() (에러 error) {
-	s := &xt.S응답{}
-	lib.F확인(http질의_도우미("SC1_subscribe", "", &s))
-
-	return f2에러(s.E)
-}
-
-func F해지_SC1() (에러 error) {
-	s := &xt.S응답{}
-	lib.F확인(http질의_도우미("SC1_unsubscribe", "", &s))
-
-	return f2에러(s.E)
-}
-
-func F구독_SC2() (에러 error) {
-	s := &xt.S응답{}
-	lib.F확인(http질의_도우미("SC2_subscribe", "", &s))
-
-	return f2에러(s.E)
-}
-
-func F해지_SC2() (에러 error) {
-	s := &xt.S응답{}
-	lib.F확인(http질의_도우미("SC2_unsubscribe", "", &s))
-
-	return f2에러(s.E)
-}
-
-func F구독_SC3() (에러 error) {
-	s := &xt.S응답{}
-	lib.F확인(http질의_도우미("SC3_subscribe", "", &s))
-
-	return f2에러(s.E)
-}
-
-func F해지_SC3() (에러 error) {
-	s := &xt.S응답{}
-	lib.F확인(http질의_도우미("SC3_unsubscribe", "", &s))
-
-	return f2에러(s.E)
-}
-
-func F구독_SC4() (에러 error) {
-	s := &xt.S응답{}
-	lib.F확인(http질의_도우미("SC4_subscribe", "", &s))
-
-	return f2에러(s.E)
-}
-
-func F해지_SC4() (에러 error) {
-	s := &xt.S응답{}
-	lib.F확인(http질의_도우미("SC4_unsubscribe", "", &s))
+	lib.F확인(http질의_도우미("realtime_data", 질의값, &s))
 
 	return f2에러(s.E)
 }
