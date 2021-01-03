@@ -48,6 +48,7 @@ type I질의값 interface {
 	TR구분() TR구분
 	TR코드() string
 	G식별번호() int64 // NH Open API에서 필요함. Xing API에서는 사용하지 않음.
+	S설정(TR구분, string)
 }
 
 type I문자열 interface {
@@ -80,6 +81,10 @@ type S질의값_기본형 struct {
 func (s S질의값_기본형) TR구분() TR구분   { return s.M구분 }
 func (s S질의값_기본형) TR코드() string { return s.M코드 }
 func (s S질의값_기본형) G식별번호() int64 { return s.M식별번호 }
+func (s *S질의값_기본형) S설정(구분 TR구분, 코드 string) {
+	s.M구분 = 구분
+	s.M코드 = 코드
+}
 
 func New질의값_정수(TR구분 TR구분, TR코드 string, 값 int) *S질의값_정수 {
 	s := new(S질의값_정수)
