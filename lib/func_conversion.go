@@ -258,7 +258,7 @@ func F2문자열_EUC_KR(값 interface{}) string {
 	return string(바이트_모음_utf8)
 }
 
-func F문자열_정리(값 string) string {
+func F앞뒤_따옴표_제거(값 string) string {
 	return strings.TrimSpace(strings.Trim(strings.Trim(값, `"`), `'`))
 }
 
