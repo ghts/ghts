@@ -43,12 +43,12 @@ import (
 	"net/http"
 	"reflect"
 	"strings"
-	"time"
 )
 
-func F당일() time.Time { return xt.F당일() }
-
-func F전일() time.Time { return xt.F전일() }
+var (
+	F당일 = xt.F당일
+	F전일 = xt.F전일
+)
 
 func f2에러(값 string) error {
 	if strings.TrimSpace(값) == "" {
@@ -58,7 +58,11 @@ func f2에러(값 string) error {
 	}
 }
 
-func HTTP질의_도우미(url string, 질의값, 결과값_포인터 interface{}) (에러 error) {
+func TR도우미(질의값 lib.I질의값, 결과값_포인터 interface{}) (에러 error) {
+	return http질의_도우미(질의값.TR코드(), 질의값, 결과값_포인터)
+}
+
+func http질의_도우미(url string, 질의값, 결과값_포인터 interface{}) (에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 결과값_포인터 = nil }}.S실행()
 
 	if !strings.HasPrefix(url, xt.F주소_C32_호출().URL()) {
@@ -78,6 +82,7 @@ func HTTP질의_도우미(url string, 질의값, 결과값_포인터 interface{}
 		return lib.New에러with출력("포인터형이 아님. %T", 결과값_포인터)
 	}
 
+	// 디버깅용 출력 문자열
 	//if strings.Contains(url, xt.TR현물_종목_조회_t8436) {
 	//	응답 := &xt.S응답{}
 	//	lib.F체크포인트(url, 질의값)
@@ -108,7 +113,7 @@ func F계좌번호_모음() (응답값 []string, 에러 error) {
 		E string
 	}{nil, ""}
 
-	lib.F확인(HTTP질의_도우미("account_no_list", "", &s))
+	lib.F확인(http질의_도우미("account_no_list", "", &s))
 
 	if f2에러(s.E) == nil && len(s.V) > 0 {
 		계좌번호_모음 = s.V
@@ -134,15 +139,15 @@ func F계좌번호_존재함(계좌번호 string) bool {
 	return false
 }
 
-//func F계좌_상세명(계좌_번호 string) (계좌_상세명 string, 에러 error) {
-//	defer lib.S예외처리{M에러: &에러, M함수: func() { 계좌_상세명 = "" }}.S실행()
-//
-//	s := struct {
-//		V string
-//		E error
-//	}{"", nil}
-//
-//	lib.F확인(HTTP질의_도우미("account_detail_name", 계좌_번호, &s))
-//
-//	return s.V, s.E
-//}
+func F계좌_상세명(계좌_번호 string) (계좌_상세명 string, 에러 error) {
+	defer lib.S예외처리{M에러: &에러, M함수: func() { 계좌_상세명 = "" }}.S실행()
+
+	s := struct {
+		V string
+		E error
+	}{"", nil}
+
+	lib.F확인(http질의_도우미("account_detail_name", 계좌_번호, &s))
+
+	return s.V, s.E
+}

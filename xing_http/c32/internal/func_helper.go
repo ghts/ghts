@@ -46,15 +46,12 @@ import (
 	"time"
 )
 
-func F질의값_추출_TR처리(w http.ResponseWriter, req *http.Request, TR구분 lib.TR구분, TR코드 string, ptr질의값 interface{}) {
-	if lib.F종류(ptr질의값) != reflect.Ptr {
-		lib.New에러with출력("포인터형이 아님. %T", ptr질의값)
+func F질의값_추출_TR처리(w http.ResponseWriter, req *http.Request, TR구분 lib.TR구분, TR코드 string, 질의값 lib.I질의값) {
+	if lib.F종류(질의값) != reflect.Ptr {
+		lib.New에러with출력("포인터형이 아님. %T", 질의값)
 		return
-	} else if 에러 := F질의값_추출(req, ptr질의값); 에러 != nil {
+	} else if 에러 := F질의값_추출(req, 질의값); 에러 != nil {
 		F회신(w, xt.New응답(에러))
-		return
-	} else if 질의값, ok := ptr질의값.(lib.I질의값); !ok {
-		lib.New에러with출력("lib.I질의값 인터페이스가 아님. %T", ptr질의값)
 		return
 	} else {
 		질의값.S설정(TR구분, TR코드)
@@ -222,23 +219,6 @@ func F회신(w http.ResponseWriter, 값 *xt.S응답) (에러 error) {
 	_, 에러 = w.Write(바이트_모음)
 
 	return 에러
-}
-
-func F계좌번호_존재함(계좌번호 string) bool {
-	if len(계좌번호_모음) == 0 {
-		f계좌_리스트_설정()
-	}
-
-	계좌번호 = strings.TrimSpace(계좌번호)
-
-	for _, 값 := range 계좌번호_모음 {
-
-		if 계좌번호 == 값 {
-			return true
-		}
-	}
-
-	return false
 }
 
 func XingAPI디렉토리() (string, error) {

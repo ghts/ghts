@@ -20,6 +20,38 @@ func F종목by코드(종목코드 string) (종목 *lib.S종목, 에러 error) {
 	}
 }
 
+func F전일_종가(종목코드 string) (전일_종가 int64, 에러 error) {
+	if 종목, 에러 := F종목by코드(종목코드); 에러 != nil {
+		return 0, 에러
+	} else {
+		return 종목.G전일_종가(), nil
+	}
+}
+
+func F상한가(종목코드 string) (상한가 int64, 에러 error) {
+	if 종목, 에러 := F종목by코드(종목코드); 에러 != nil {
+		return 0, 에러
+	} else {
+		return 종목.G상한가(), nil
+	}
+}
+
+func F하한가(종목코드 string) (하한가 int64, 에러 error) {
+	if 종목, 에러 := F종목by코드(종목코드); 에러 != nil {
+		return 0, 에러
+	} else {
+		return 종목.G하한가(), nil
+	}
+}
+
+func F기준가(종목코드 string) (기준가 int64, 에러 error) {
+	if 종목, 에러 := F종목by코드(종목코드); 에러 != nil {
+		return 0, 에러
+	} else {
+		return 종목.G기준가(), nil
+	}
+}
+
 func F종목코드_모음_전체() []string {
 	lib.F조건부_패닉(len(종목모음_전체) == 0, "xing 초기화 안 됨.")
 
