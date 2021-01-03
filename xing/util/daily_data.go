@@ -19,36 +19,24 @@ func F당일_일일_가격정보_수집(db *sql.DB) (에러 error) {
 
 	daily_price_data.F일일_가격정보_테이블_생성(db)
 
-	종목코드_모음_전체 := xing.F종목코드_모음_전체()
 	당일 := lib.F일자2정수(xing.F당일())
+	현재가_맵, 에러 := xing.TrT8407_현물_멀티_현재가_조회_전종목()
+	lib.F확인(에러)
 
-	for i := 0; i <= len(종목코드_모음_전체)/50; i++ {
-		var 종목코드_모음 []string
+	for 종목코드, 값 := range 현재가_맵 {
+		s := new(daily_price_data.S일일_가격정보)
+		s.M종목코드 = 종목코드
+		s.M일자 = 당일
+		s.M시가 = float64(값.M시가)
+		s.M고가 = float64(값.M고가)
+		s.M저가 = float64(값.M저가)
+		s.M종가 = float64(값.M현재가)
+		s.M거래량 = float64(값.M누적_거래량)
 
-		if len(종목코드_모음_전체) > (i+1)*50 {
-			종목코드_모음 = 종목코드_모음_전체[i*50 : (i+1)*50]
-		} else {
-			종목코드_모음 = 종목코드_모음_전체[i*50:]
-		}
-
-		응답값_맵, 에러 := xing.TrT8407_현물_멀티_현재가_조회(종목코드_모음)
+		종목별_일일_가격정보_모음, 에러 := daily_price_data.New종목별_일일_가격정보_모음([]*daily_price_data.S일일_가격정보{s})
 		lib.F확인(에러)
 
-		for 종목코드, 값 := range 응답값_맵 {
-			s := new(daily_price_data.S일일_가격정보)
-			s.M종목코드 = 종목코드
-			s.M일자 = 당일
-			s.M시가 = float64(값.M시가)
-			s.M고가 = float64(값.M고가)
-			s.M저가 = float64(값.M저가)
-			s.M종가 = float64(값.M현재가)
-			s.M거래량 = float64(값.M누적_거래량)
-
-			종목별_일일_가격정보_모음, 에러 := daily_price_data.New종목별_일일_가격정보_모음([]*daily_price_data.S일일_가격정보{s})
-			lib.F확인(에러)
-
-			lib.F확인(종목별_일일_가격정보_모음.DB저장(db))
-		}
+		lib.F확인(종목별_일일_가격정보_모음.DB저장(db))
 	}
 
 	lib.F문자열_출력("당일 가격정보 수집 완료.")
