@@ -34,6 +34,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package xt
 
 import (
+	"bytes"
 	"fmt"
 	"github.com/ghts/ghts/lib"
 	"os"
@@ -127,9 +128,16 @@ func F주소_설정() {
 			os.Setenv(P주소_실시간_환경변수명, strconv.Itoa(int(주소_실시간)))
 			주소_설정_완료.S값(true)
 
-			fmt.Println("***********************************************")
-			fmt.Printf("* Xing API 호출 URL : '%v' *\n", F주소_C32_호출().URL())
-			fmt.Println("***********************************************")
+			버퍼 := bytes.Buffer{}
+			문자열 := lib.F2문자열("* Xing API 호출 URL : '%v' *", F주소_C32_호출().URL())
+
+			for i := 0; i < len(문자열)-3; i++ {
+				버퍼.WriteString("*")
+			}
+
+			fmt.Println(버퍼.String())
+			fmt.Println(문자열)
+			fmt.Println(버퍼.String())
 
 			return
 		}
