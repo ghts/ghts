@@ -545,10 +545,6 @@ func (s S종목별_일일_가격정보_모음) vpci_모음(단기, 장기 int) [
 		단기_거래량_SMA_모음, 장기_거래량_SMA_모음)
 }
 
-func (s S종목별_일일_가격정보_모음) vpcis_모음(단기, 장기 int) []float64 {
-	return trade.F가중_이동_평균(s.vpci_모음(단기, 장기), s.g거래량_모음(), 단기)
-}
-
 func (s S종목별_일일_가격정보_모음) VPCI(단기, 장기 int) float64 {
 	vpci_모음 := s.vpci_모음(단기, 장기)
 
@@ -559,6 +555,10 @@ func (s S종목별_일일_가격정보_모음) G전일_VPCI(단기, 장기 int) 
 	vpci_모음 := s.vpci_모음(단기, 장기)
 
 	return vpci_모음[len(vpci_모음)-2]
+}
+
+func (s S종목별_일일_가격정보_모음) vpcis_모음(단기, 장기 int) []float64 {
+	return trade.F가중_이동_평균(s.vpci_모음(단기, 장기), s.g거래량_모음(), 단기)
 }
 
 func (s S종목별_일일_가격정보_모음) VPCIs(단기, 장기 int) float64 {
@@ -599,7 +599,7 @@ func (s S종목별_일일_가격정보_모음) G전일_MFI(윈도우_크기 int)
 	return MFI_모음[len(MFI_모음)-2]
 }
 
-func (s S종목별_일일_가격정보_모음) MFIs(윈도우_크기_MFI, 윈도우_크기_이동평균 int) float64 {
+func (s S종목별_일일_가격정보_모음) mfis_모음(윈도우_크기_MFI, 윈도우_크기_이동평균 int) []float64 {
 	MFI_모음 := s.MFI_도우미(
 		윈도우_크기_MFI,
 		s.g고가_모음(),
@@ -607,20 +607,17 @@ func (s S종목별_일일_가격정보_모음) MFIs(윈도우_크기_MFI, 윈도
 		s.G종가_모음(),
 		s.g거래량_모음())
 
-	MFIs_모음 := trade.F가중_이동_평균(MFI_모음, s.g거래량_모음(), 윈도우_크기_이동평균)
+	return trade.F가중_이동_평균(MFI_모음, s.g거래량_모음(), 윈도우_크기_이동평균)
+}
+
+func (s S종목별_일일_가격정보_모음) MFIs(윈도우_크기_MFI, 윈도우_크기_이동평균 int) float64 {
+	MFIs_모음 := s.mfis_모음(윈도우_크기_MFI, 윈도우_크기_이동평균)
 
 	return MFIs_모음[len(MFIs_모음)-1]
 }
 
 func (s S종목별_일일_가격정보_모음) G전일_MFIs(윈도우_크기_MFI, 윈도우_크기_이동평균 int) float64 {
-	MFI_모음 := s.MFI_도우미(
-		윈도우_크기_MFI,
-		s.g고가_모음(),
-		s.g저가_모음(),
-		s.G종가_모음(),
-		s.g거래량_모음())
-
-	MFIs_모음 := trade.F가중_이동_평균(MFI_모음, s.g거래량_모음(), 윈도우_크기_이동평균)
+	MFIs_모음 := s.mfis_모음(윈도우_크기_MFI, 윈도우_크기_이동평균)
 
 	return MFIs_모음[len(MFIs_모음)-2]
 }
