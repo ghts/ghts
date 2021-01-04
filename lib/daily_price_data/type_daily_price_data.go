@@ -486,6 +486,20 @@ func (s S종목별_일일_가격정보_모음) VWMA(윈도우_크기 int) float6
 	return 가중_이동_평균[len(가중_이동_평균)-1]
 }
 
+func (s S종목별_일일_가격정보_모음) G볼린저_밴드_정보(윈도우_크기 int, 상한배율, 하한배율 float64) (중심값, 상한값, 하한값 float64) {
+	종가_모음 := s.G종가_모음()
+	이동_평균_모음 := trade.F이동_평균_도우미(종가_모음, 윈도우_크기, false)
+	표준_편차_모음 := trade.F이동_표준_편차_도우미(종가_모음, 윈도우_크기, false)
+
+	이동_평균 := 이동_평균_모음[len(이동_평균_모음)-1]
+	표준_편차 := 표준_편차_모음[len(표준_편차_모음)-1]
+
+	상한값 = 이동_평균 + 상한배율*표준_편차
+	하한값 = 이동_평균 + 하한배율*표준_편차
+
+	return 이동_평균, 상한값, 하한값
+}
+
 func (s S종목별_일일_가격정보_모음) ATR(윈도우_크기 int) float64 {
 	TrueRange모음 := make([]float64, len(s.M저장소))
 
@@ -505,20 +519,24 @@ func (s S종목별_일일_가격정보_모음) ATR(윈도우_크기 int) float64
 	return atr모음[len(atr모음)-1]
 }
 
-func (s S종목별_일일_가격정보_모음) ATR_해외_ETF_ETN(윈도우_크기 int) float64 {
+func (s S종목별_일일_가격정보_모음) ATR_해외_원자재_ETF_ETN(윈도우_크기 int) float64 {
 	TrueRange모음 := make([]float64, len(s.M저장소))
 
 	// 해외 시장에서 거래되는 원자재에 대한 ETF/ETN은 한국 증시 개장 시간에는 가격 변화가 거의 없음.
-	// 즉, True Range 공식의 당일 관련 부분이 거의 없는 것이나 마찬가지이므로
-	// 변동성 측정 기간을 하루 늘려서 최대 변동량에 다시 2배로 하여서 당일 변동성이 없다시피 한 것을 보완함.
+	// 즉, True Range 공식의 당일 관련 부분이 거의 없는 것이나 마찬가지임.
+	// 그리고, 한국 폐장한 시간동안에 대부분의 가격변동이 일어나므로, 가격 변동에 대응이 느릴 수 밖에 없음.
+	// 그러므로, 변동성을 고의로 약간 부풀려야 적절한 리스크 관리가 가능함.
+	// 이에, 변동성 측정 기간을 하루 늘려서 최대 변동량을 구한 후, 다시 2배로 함.
 	for i := 3; i < len(s.M저장소); i++ {
 		값1 := s.M저장소[i].M고가 - s.M저장소[i].M저가
-		값2 := math.Abs(s.M저장소[i-1].M종가 - s.M저장소[i].M고가)
-		값3 := math.Abs(s.M저장소[i-1].M종가 - s.M저장소[i].M저가)
-		값4 := math.Abs(s.M저장소[i-2].M종가 - s.M저장소[i-1].M고가)
-		값5 := math.Abs(s.M저장소[i-2].M종가 - s.M저장소[i-1].M저가)
+		값2 := math.Abs(s.M저장소[i-1].M고가 - s.M저장소[i-1].M저가)
+		값3 := math.Abs(s.M저장소[i-2].M고가 - s.M저장소[i-2].M저가)
+		값4 := math.Abs(s.M저장소[i-1].M종가 - s.M저장소[i].M고가)
+		값5 := math.Abs(s.M저장소[i-1].M종가 - s.M저장소[i].M저가)
+		값6 := math.Abs(s.M저장소[i-2].M종가 - s.M저장소[i-1].M고가)
+		값7 := math.Abs(s.M저장소[i-2].M종가 - s.M저장소[i-1].M저가)
 
-		TrueRange모음[i] = lib.F최대값_실수([]float64{값1, 값2, 값3, 값4, 값5}) * 2
+		TrueRange모음[i] = lib.F최대값_실수([]float64{값1, 값2, 값3, 값4, 값5, 값6, 값7}) * 2
 	}
 
 	TrueRange모음[0] = (TrueRange모음[3] + TrueRange모음[4] + TrueRange모음[5]) / 3.0 // 임의로 값을 채워 넣음.
@@ -931,21 +949,25 @@ func (s *S일일_가격_백테스트_도우미) TrueRange_모음() []float64 {
 	return TrueRange모음
 }
 
-func (s *S일일_가격_백테스트_도우미) TrueRange_해외_ETF_ETN_모음() []float64 {
+func (s *S일일_가격_백테스트_도우미) TrueRange_원자재_해외_ETF_ETN_모음() []float64 {
 	TrueRange모음 := make([]float64, s.d.Len())
 
 	// 해외 시장에서 거래되는 원자재에 대한 ETF/ETN은 한국 증시 개장 시간에는 가격 변화가 거의 없음.
-	// 즉, True Range 공식의 당일 관련 부분이 거의 없는 것이나 마찬가지이므로
-	// 변동성 측정 기간을 하루 늘려서 최대 변동량에 다시 2배로 하여서 당일 변동성이 없다시피 한 것을 보완함.
+	// 즉, True Range 공식의 당일 관련 부분이 거의 없는 것이나 마찬가지임.
+	// 그리고, 한국 폐장한 시간동안에 대부분의 가격변동이 일어나므로, 가격 변동에 대응이 느릴 수 밖에 없음.
+	// 그러므로, 변동성을 고의로 약간 부풀려야 적절한 리스크 관리가 가능함.
+	// 이에, 변동성 측정 기간을 하루 늘려서 최대 변동량을 구한 후, 다시 2배로 함.
 	for i := 3; i < s.d.Len(); i++ {
 		// Look Ahead Bias를 방지하기 위해서 하루 늦춘 값을 사용함.
 		값1 := s.d.M저장소[i-1].M고가 - s.d.M저장소[i-1].M저가
-		값2 := math.Abs(s.d.M저장소[i-2].M종가 - s.d.M저장소[i-1].M고가)
-		값3 := math.Abs(s.d.M저장소[i-2].M종가 - s.d.M저장소[i-1].M저가)
-		값4 := math.Abs(s.d.M저장소[i-3].M종가 - s.d.M저장소[i-2].M고가)
-		값5 := math.Abs(s.d.M저장소[i-3].M종가 - s.d.M저장소[i-2].M저가)
+		값2 := math.Abs(s.d.M저장소[i-2].M고가 - s.d.M저장소[i-2].M저가)
+		값3 := math.Abs(s.d.M저장소[i-3].M고가 - s.d.M저장소[i-3].M저가)
+		값4 := math.Abs(s.d.M저장소[i-2].M종가 - s.d.M저장소[i-1].M고가)
+		값5 := math.Abs(s.d.M저장소[i-2].M종가 - s.d.M저장소[i-1].M저가)
+		값6 := math.Abs(s.d.M저장소[i-3].M종가 - s.d.M저장소[i-2].M고가)
+		값7 := math.Abs(s.d.M저장소[i-3].M종가 - s.d.M저장소[i-2].M저가)
 
-		TrueRange모음[i] = lib.F최대값_실수([]float64{값1, 값2, 값3, 값4, 값5}) * 2
+		TrueRange모음[i] = lib.F최대값_실수([]float64{값1, 값2, 값3, 값4, 값5, 값6, 값7}) * 2
 	}
 
 	return TrueRange모음
@@ -959,8 +981,8 @@ func (s *S일일_가격_백테스트_도우미) ATR_모음(윈도우_크기 int)
 	return trade.F지수_이동_평균(TrueRange모음, 윈도우_크기)
 }
 
-func (s *S일일_가격_백테스트_도우미) ATR_해외_ETF_ETN_모음(윈도우_크기 int) []float64 {
-	TrueRange모음 := s.TrueRange_해외_ETF_ETN_모음()
+func (s *S일일_가격_백테스트_도우미) ATR_원자재_해외_ETF_ETN_모음(윈도우_크기 int) []float64 {
+	TrueRange모음 := s.TrueRange_원자재_해외_ETF_ETN_모음()
 	TrueRange모음[0] = (TrueRange모음[3] + TrueRange모음[4] + TrueRange모음[5]) / 3.0 // 임의로 값을 채워 넣음.
 	TrueRange모음[1] = (TrueRange모음[4] + TrueRange모음[5] + TrueRange모음[6]) / 3.0 // 임의로 값을 채워 넣음.
 	TrueRange모음[2] = (TrueRange모음[5] + TrueRange모음[6] + TrueRange모음[7]) / 3.0 // 임의로 값을 채워 넣음.
