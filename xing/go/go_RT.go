@@ -38,7 +38,7 @@ import (
 )
 
 func go_RT_주문처리결과(ch초기화 chan lib.T신호) (에러 error) {
-	lib.F메모("RT 루틴 일시 비활성화")
+	lib.F중복없는_문자열_출력("RT 루틴 일시 비활성화")
 
 	return nil
 

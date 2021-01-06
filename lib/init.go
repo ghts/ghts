@@ -88,5 +88,5 @@ func f메모() {
 	버퍼.WriteString("- C 및 Go변환 구조체 크기 비교 테스트 할 것.\n")
 	버퍼.WriteString("- TestMain()에서 환경변수 설정 가능한 지 확인할 것.\n")
 
-	F메모(버퍼.String())
+	F중복없는_문자열_출력(버퍼.String())
 }

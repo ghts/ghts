@@ -78,7 +78,7 @@ func init() {
 - 뉴스 및 공시 정보. (t3102,t3202)
 - TR 결과값을 출력해서 HTS와 대조 비교해 볼 것. (실시간 정보들)
 `
-	lib.F메모(메모)
+	lib.F중복없는_문자열_출력(메모)
 }
 
 func F초기화(값 xt.T서버_구분) (에러 error) {
@@ -104,7 +104,7 @@ func f소켓_생성() {
 }
 
 func f초기화_Go루틴() {
-	lib.F메모("RT 루틴 일시 비활성화")
+	lib.F중복없는_문자열_출력("RT 루틴 일시 비활성화")
 	고루틴_모음 := []func(chan lib.T신호) error{go_TR콜백_처리} //, go_RT_주문처리결과}
 	ch초기화 := make(chan lib.T신호, len(고루틴_모음))
 
