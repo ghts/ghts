@@ -475,7 +475,7 @@ func F문자열_중복_확인(문자열 string) bool {
 func F변수값_문자열(값_모음 ...interface{}) string {
 	버퍼 := new(bytes.Buffer)
 
-	for i, _ := range 값_모음 {
+	for i := range 값_모음 {
 		if i == 0 {
 			버퍼.WriteString("\t'%v'")
 		} else {
@@ -506,18 +506,18 @@ func F변수값_자료형_문자열(값_모음 ...interface{}) string {
 }
 
 // 메모 해야할 일을 소스코드 위치와 함께 표기해 주는 메소드.
-func F메모(문자열 string) {
+func F중복없는_문자열_출력(문자열 string) {
 	if F문자열_중복_확인(문자열) {
 		return
 	}
 
 	for _, 호출경로 := range F호출경로_모음() {
 		if f건너뛰는_호출경로(호출경로) ||
-			strings.Contains(호출경로, "F메모") {
+			strings.Contains(호출경로, "F중복없는_문자열_출력") {
 			continue
 		}
 
-		fmt.Println(f포맷된_문자열("TODO : %s %s", 문자열, 호출경로))
+		fmt.Println(f포맷된_문자열("%s %s", 문자열, 호출경로))
 		break
 	}
 
