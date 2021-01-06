@@ -960,6 +960,10 @@ func F10분전() time.Time {
 	return time.Now().Add(-10 * time.Minute)
 }
 
+func F3년전() time.Time {
+	return time.Now().Add(-3 * P1년)
+}
+
 func F금일() time.Time {
 	return F2일자(time.Now())
 }
