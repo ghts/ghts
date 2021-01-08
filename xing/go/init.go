@@ -81,7 +81,7 @@ func init() {
 	lib.F중복없는_문자열_출력(메모)
 }
 
-func F초기화(값 xt.T서버_구분) (에러 error) {
+func F초기화(값 xt.T서버_구분) {
 	서버_구분 = 값
 
 	f소켓_생성()
@@ -95,8 +95,6 @@ func F초기화(값 xt.T서버_구분) (에러 error) {
 	f접속유지_실행()
 
 	fmt.Println("**     초기화 완료     **")
-
-	return nil
 }
 
 func f소켓_생성() {
