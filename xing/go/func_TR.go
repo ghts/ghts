@@ -269,9 +269,10 @@ import (
 func TrCSPAT00600_현물_정상주문(질의값 *xt.CSPAT00600_현물_정상_주문_질의값) (응답값 *xt.CSPAT00600_현물_정상_주문_응답, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 응답값 = nil }}.S실행()
 
-	// ETN 종목코드 보정
-	if strings.HasPrefix(질의값.M종목코드, "5") {
-		질의값.M종목코드 = "Q" + 질의값.M종목코드
+	if 질의값.M호가유형 == lib.P호가_지정가 && 질의값.M주문단가 == 0 {
+		return nil, lib.New에러with출력("%v %v 지정가 주문 단가 0.", 질의값.M계좌번호, 질의값.M종목코드)
+	} else if strings.HasPrefix(질의값.M종목코드, "5") {
+		질의값.M종목코드 = "Q" + 질의값.M종목코드	// ETN 종목코드 보정
 	}
 
 	i응답값, 에러 := F질의_단일TR(질의값)
