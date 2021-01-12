@@ -39,7 +39,7 @@ import (
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/lib/c"
 	"github.com/ghts/ghts/xing/base"
-	xing "github.com/ghts/ghts/xing/go"
+	xing "github.com/ghts/ghts/xing_http/go"
 	"gopkg.in/ini.v1"
 	"strings"
 	"syscall"

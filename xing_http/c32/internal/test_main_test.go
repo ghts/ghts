@@ -36,7 +36,7 @@ package x32
 import (
 	"github.com/ghts/ghts/lib"
 	xt "github.com/ghts/ghts/xing/base"
-	xing "github.com/ghts/ghts/xing/go"
+	xing "github.com/ghts/ghts/xing_http/go"
 	"testing"
 )
 

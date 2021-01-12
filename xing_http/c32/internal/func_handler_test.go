@@ -38,7 +38,7 @@ import (
 	krx "github.com/ghts/ghts/lib/krx_time"
 	nano "github.com/ghts/ghts/lib/nanomsg"
 	xt "github.com/ghts/ghts/xing/base"
-	xing "github.com/ghts/ghts/xing/go"
+	xing "github.com/ghts/ghts/xing_http/go"
 	"math"
 	"strings"
 	"testing"

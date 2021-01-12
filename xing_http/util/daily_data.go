@@ -5,7 +5,7 @@ import (
 	"github.com/ghts/ghts/lib/daily_price_data"
 	"github.com/ghts/ghts/lib/krx_time"
 	xt "github.com/ghts/ghts/xing/base"
-	xing "github.com/ghts/ghts/xing/go"
+	xing "github.com/ghts/ghts/xing_http/go"
 
 	"database/sql"
 	"time"
