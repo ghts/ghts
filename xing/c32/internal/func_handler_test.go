@@ -38,7 +38,7 @@ import (
 	krx "github.com/ghts/ghts/lib/krx_time"
 	nano "github.com/ghts/ghts/lib/nanomsg"
 	xt "github.com/ghts/ghts/xing/base"
-	xing "github.com/ghts/ghts/xing_http/go"
+	xing "github.com/ghts/ghts/xing/go"
 	"math"
 	"strings"
 	"testing"
@@ -1724,7 +1724,7 @@ func TestT8411_F현물_차트_분틱(t *testing.T) {
 
 func F테스트_현물_차트_틱_응답_반복값_t8411(t *testing.T, 값 *xt.T8411_현물_차트_틱_응답_반복값, 종목코드 string) {
 	lib.F테스트_같음(t, 값.M종목코드, 종목코드)
-	lib.F테스트_참임(t, 값.M일자_시각.Before(lib.F금일()) || 값.M일자_시각.Equal(lib.F금일()))
+	lib.F테스트_참임(t, 값.M일자_시각.Before(lib.F금일()))
 	lib.F테스트_같음(t, 값.M시가, 값.M고가)
 	lib.F테스트_같음(t, 값.M시가, 값.M저가)
 	lib.F테스트_참임(t, 값.M시가 == 값.M종가, 값.M일자_시각, 값.M시가, 값.M종가)
@@ -1754,7 +1754,7 @@ func TestT8412_현물_차트_분(t *testing.T) {
 
 func F테스트_현물_차트_분_응답_반복값_t8412(t *testing.T, 값 *xt.T8412_현물_차트_분_응답_반복값, 종목코드 string) {
 	lib.F테스트_같음(t, 값.M종목코드, 종목코드)
-	lib.F테스트_참임(t, 값.M일자_시각.Before(lib.F금일()) || 값.M일자_시각.Equal(lib.F금일()))
+	lib.F테스트_참임(t, 값.M일자_시각.Before(lib.F금일()))
 	lib.F테스트_같음(t, 값.M일자_시각.Second(), 0, 30)
 	lib.F테스트_참임(t, 값.M고가 >= 값.M시가)
 	lib.F테스트_참임(t, 값.M고가 >= 값.M종가)

@@ -31,12 +31,12 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package x32
+package x32_http
 
 import (
 	"github.com/ghts/ghts/lib"
-	"github.com/ghts/ghts/lib/nanomsg"
-	"github.com/ghts/ghts/xing/base"
+	xt "github.com/ghts/ghts/xing/base"
+	xing "github.com/ghts/ghts/xing/go"
 	"testing"
 )
 
@@ -57,62 +57,13 @@ func f테스트_준비() {
 
 	lib.F테스트_모드_시작()
 
-	ch초기화 := make(chan lib.T신호)
-	go go테스트용_TR콜백_수신(ch초기화)
-	<-ch초기화
-
+	xt.F서버_구분_설정(xt.P서버_모의투자) //실거래)
 	F초기화()
-	F서버_접속(xt.P서버_모의투자)
+	xing.F전일_당일_설정()
+	xing.F종목_정보_설정()
 }
 
 func f테스트_정리() {
 	lib.F테스트_모드_종료()
 	f종료_질의_송신()
-	F종료_대기()
-
-	// go테스트용_TR콜백_종료
-	lib.F패닉억제_호출(소켓REP_테스트용_TR콜백.Close)
-
-	for {
-		if lib.F포트_닫힘_확인(xt.F주소_C32_콜백()) {
-			break
-		}
-	}
-
-	<-Ch테스트용_TR콜백_종료
-}
-
-var 소켓REP_테스트용_TR콜백 lib.I소켓
-var Ch테스트용_TR콜백_종료 = make(chan lib.T신호, 1)
-
-func go테스트용_TR콜백_수신(ch초기화 chan lib.T신호) {
-	ch공통_종료 := lib.Ch공통_종료()
-	defer func() {
-		select {
-		case <-ch공통_종료:
-			Ch테스트용_TR콜백_종료 <- lib.P신호_종료
-		default:
-		}
-	}()
-
-	소켓REP_테스트용_TR콜백 = nano.NewNano소켓REP_단순형(xt.F주소_C32_콜백())
-	defer 소켓REP_테스트용_TR콜백.Close()
-
-	ch초기화 <- lib.P신호_초기화
-
-	for {
-		값, 에러 := 소켓REP_테스트용_TR콜백.G수신()
-		if 에러 != nil {
-			lib.F에러_출력(에러)
-			continue
-		}
-
-		select {
-		case <-ch공통_종료:
-			return
-		default:
-		}
-
-		소켓REP_테스트용_TR콜백.S송신(값.G변환_형식(0), lib.P신호_OK)
-	}
 }
