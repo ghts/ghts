@@ -39,7 +39,7 @@ import (
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/lib/c"
 	"github.com/ghts/ghts/xing/base"
-	xing "github.com/ghts/ghts/xing/go"
+	xing "github.com/ghts/ghts/xing_http/go"
 	"gopkg.in/ini.v1"
 	"strings"
 	"syscall"
@@ -55,7 +55,7 @@ func f초기화_XingAPI() {
 	if API_초기화_완료.G값() {
 		return
 	} else {
-		API_초기화_완료.S값(true)
+		defer API_초기화_완료.S값(true)
 	}
 
 	lib.F조건부_패닉(lib.F환경변수("GOARCH") != "386", "C32 모듈은 32비트 전용입니다.")

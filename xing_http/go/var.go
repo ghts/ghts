@@ -35,14 +35,18 @@ package xing_http
 
 import (
 	"github.com/ghts/ghts/lib"
+	xt "github.com/ghts/ghts/xing/base"
 	"sync"
 	"time"
 )
 
 var (
-	계좌번호_모음 []string
-
-	주문_응답_구독_중 = lib.New안전한_bool(false)
+	계좌번호_모음     []string
+	주문_응답_구독_중  = lib.New안전한_bool(false)
+	접속유지_실행_중   = lib.New안전한_bool(false)
+	서버_구분       xt.T서버_구분
+	xing_C32_경로 = lib.GOPATH() + `/src/github.com/ghts/ghts/xing_http/c32/xing_C32.bat`
+	프로세스ID_C32  int
 )
 
 // 종목 관련 저장소는 초기화 이후에는 사실상 읽기 전용. 다중 사용에 문제가 없음.

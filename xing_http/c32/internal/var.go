@@ -102,6 +102,7 @@ var (
 
 	TR_수신_중    = lib.New안전한_bool(false)
 	API_초기화_완료 = lib.New안전한_bool(false)
+	로그인_완료     = lib.New안전한_bool(false)
 
 	콜백_대기소 = New콜백_저장소()
 

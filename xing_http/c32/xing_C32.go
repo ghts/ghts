@@ -26,6 +26,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package main
 
 import (
+	"github.com/ghts/ghts/lib"
 	xt "github.com/ghts/ghts/xing/base"
 	x32 "github.com/ghts/ghts/xing_http/c32/internal"
 )
@@ -34,4 +35,6 @@ func main() {
 	xt.F서버_구분_설정(xt.P서버_실거래)
 	x32.F초기화()
 	x32.F종료_대기()
+
+	lib.F체크포인트("C32 종료")
 }

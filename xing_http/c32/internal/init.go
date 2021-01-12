@@ -125,7 +125,7 @@ func F서버_접속_및_로그인() (에러 error) {
 
 	select {
 	case 로그인_여부 := <-Ch로그인:
-		if !로그인_여부 {
+		if 로그인_완료.S값(로그인_여부); !로그인_여부 {
 			return lib.New에러with출력("로그인 실패.")
 		}
 	case <-time.After(lib.P30초):

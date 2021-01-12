@@ -34,10 +34,30 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package xing_http
 
 import (
+	"fmt"
 	"github.com/ghts/ghts/lib"
+	"github.com/ghts/ghts/lib/external_process"
 	xt "github.com/ghts/ghts/xing/base"
+	"github.com/mitchellh/go-ps"
+	"runtime"
 	"time"
 )
+
+func F초기화(값 xt.T서버_구분) {
+	서버_구분 = 값
+
+	lib.F확인(f초기화_xing_C32())
+	lib.F확인(F종목_정보_설정())
+	lib.F확인(F전일_당일_설정())
+	f접속유지_실행()
+
+	fmt.Println("**     초기화 완료     **")
+}
+
+func F종료() {
+	C32_종료()
+	lib.F공통_종료_채널_닫기()
+}
 
 func F전일_당일_설정() (에러 error) {
 	lib.S예외처리{M에러: &에러}.S실행()
@@ -129,4 +149,128 @@ func F종목_정보_설정() (에러 error) {
 	종목모음_설정일 = lib.New안전한_시각(lib.F금일())
 
 	return nil
+}
+
+func f초기화_xing_C32() (에러 error) {
+	defer lib.S예외처리{M에러: &에러}.S실행()
+
+	if !lib.F인터넷에_접속됨() {
+		lib.F문자열_출력("인터넷을 확인하십시오.")
+		return
+	} else if runtime.GOOS != "windows" {
+		lib.F문자열_출력("*********************************************\n"+
+			"현재 OS(%v)에서는 'xing_C32'를 수동으로 실행해야 합니다.\n"+
+			"*********************************************", runtime.GOOS)
+
+		return nil
+	}
+
+	xt.F주소_설정()
+
+	프로세스ID_C32 = lib.F확인(external_process.F외부_프로세스_실행(xing_C32_경로)).(int)
+
+	for i := 0; i < 100; i++ {
+		if 접속됨, 에러 := F접속됨(); 에러 == nil && 접속됨 {
+			return nil
+		}
+
+		lib.F대기(lib.P1초)
+	}
+
+	return nil
+}
+
+func f접속유지_실행() {
+	if lib.F인터넷에_접속됨() && !접속유지_실행_중.G값() {
+		go go접속유지_도우미()
+	}
+}
+
+func go접속유지_도우미() {
+	defer 접속유지_실행_중.S값(false)
+
+	접속유지_실행_중.S값(true)
+
+	에러_연속_발생_횟수 := 0
+	ch공통_종료 := lib.Ch공통_종료()
+
+	for {
+		select {
+		case <-time.After(13 * lib.P1초):
+		case <-ch공통_종료:
+			return
+		}
+
+		if _, 에러 := TrT0167_시각_조회(); 에러 == nil {
+			에러_연속_발생_횟수 = 0
+		} else {
+			에러_연속_발생_횟수++
+		}
+
+		// 3회 연속 에러 발생하면 API 연결에 문제 있다고 판단하고, C32 API 모듈 재시작.
+		if 에러_연속_발생_횟수 >= 3 {
+			C32_재시작()
+
+			lib.F대기(lib.P30초)
+
+			for i := 0; i < 100; i++ {
+				if 접속됨, 에러 := F접속됨(); 에러 == nil && 접속됨 {
+					break
+				}
+
+				lib.F대기(lib.P3초)
+			}
+
+			에러_연속_발생_횟수 = 0
+		}
+	}
+}
+
+func C32_재시작() (에러 error) {
+	defer lib.S예외처리{M에러: &에러}.S실행()
+
+	lib.F문자열_출력("**     C32 재시작 %v     **\n", time.Now().Format(lib.P간략한_시간_형식))
+
+	lib.F확인(C32_종료())
+
+	xt.F주소_재설정()
+	lib.F확인(f초기화_xing_C32())
+	lib.F확인(F종목_정보_설정())
+	lib.F확인(F전일_당일_설정())
+
+	fmt.Println("**     C32 재시작 완료     **")
+
+	return nil
+}
+
+func C32_종료() (에러 error) {
+	defer lib.S예외처리{M에러: &에러}.S실행()
+
+	질의값 := lib.New질의값_기본형(lib.TR종료, "")
+
+	s := struct {
+		V lib.T신호
+		E string
+	}{lib.P신호, ""}
+
+	lib.F확인(http질의_도우미("quit", 질의값, &s))
+
+	for i := 0; i < 20; i++ {
+		if C32_종료됨() {
+			return nil
+		}
+
+		lib.F조건부_실행(i > 10, external_process.F프로세스_종료by프로세스ID, 프로세스ID_C32)
+		lib.F대기(lib.P1초)
+	}
+
+	return lib.New에러with출력("C32 종료 실패")
+}
+
+func C32_종료됨() bool {
+	프로세스, 에러 := ps.FindProcess(프로세스ID_C32)
+	포트_닫힘_C함수_호출 := lib.F포트_닫힘_확인(xt.F주소_C32_호출())
+	포트_닫힘_실시간 := lib.F포트_닫힘_확인(xt.F주소_실시간())
+
+	return 프로세스 == nil && 에러 == nil && 포트_닫힘_C함수_호출 && 포트_닫힘_실시간
 }

@@ -82,8 +82,8 @@ func http질의_도우미(url string, 질의값, 결과값_포인터 interface{}
 		return lib.New에러with출력("포인터형이 아님. %T", 결과값_포인터)
 	}
 
-	// 디버깅용 출력 문자열
-	//if strings.Contains(url, xt.TR현물_종목_조회_t8436) {
+	//디버깅용 출력 문자열
+	//if lib.F체크포인트(url); strings.Contains(url, "connected") {
 	//	응답 := &xt.S응답{}
 	//	lib.F체크포인트(url, 질의값)
 	//	lib.F체크포인트(바이트_모음_응답)
@@ -150,4 +150,46 @@ func F계좌_상세명(계좌_번호 string) (계좌_상세명 string, 에러 er
 	lib.F확인(http질의_도우미("account_detail_name", 계좌_번호, &s))
 
 	return s.V, s.E
+}
+
+func F접속됨() (접속됨 bool, 에러 error) {
+	defer lib.S예외처리{M에러: &에러, M함수: func() { 접속됨 = false }, M출력_숨김: true}.S실행()
+
+	if !lib.F포트_열림_확인(xt.F주소_C32_호출()) {
+		return false, lib.New에러("TCP 포트 닫혀있음.")
+	}
+
+	질의값 := lib.New질의값_기본형(lib.TR접속됨, "")
+
+	s := struct {
+		V bool
+		E string
+	}{false, ""}
+
+	lib.F확인(http질의_도우미("connected", 질의값, &s))
+
+	return s.V, f2에러(s.E)
+}
+
+func F서버_구분() xt.T서버_구분 {
+	return 서버_구분
+}
+
+func F계좌_번호(인덱스 int) (계좌_번호 string, 에러 error) {
+	defer lib.S예외처리{M에러: &에러, M함수: func() { 계좌_번호 = "" }}.S실행()
+
+	if 계좌번호_모음, 에러 := F계좌번호_모음(); 에러 != nil {
+		return "", 에러
+	} else if 인덱스 >= len(계좌번호_모음) {
+		return "", lib.New에러("잘못된 인덱스 %v 계좌번호 수량 %v", 인덱스, len(계좌번호_모음))
+	} else {
+		return 계좌번호_모음[인덱스], nil
+	}
+}
+
+func F계좌_번호_단순형(인덱스 int) string {
+	계좌_번호, 에러 := F계좌_번호(인덱스)
+	lib.F확인(에러)
+
+	return 계좌_번호
 }

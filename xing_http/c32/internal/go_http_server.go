@@ -52,6 +52,8 @@ func go_HTTP서버(ch초기화, ch종료 chan lib.T신호) {
 		}
 	}()
 
+	http.HandleFunc("/connected", 접속됨)
+	http.HandleFunc("/quit", 종료)
 	http.HandleFunc("/account_no_list", 계좌번호_리스트)
 	http.HandleFunc("/account_detail_name", 계좌_상세명)
 	http.HandleFunc("/realtime_data", 실시간_정보_구독_및_해지) // 미리 질의값 자료형이 고정되어 있으므로 1개로 충분.

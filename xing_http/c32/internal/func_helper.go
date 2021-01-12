@@ -123,7 +123,7 @@ func F질의_처리(w http.ResponseWriter, 질의값 lib.I질의값) (에러 err
 
 			return F회신(w, xt.New응답(변환값))
 		default:
-			lib.F문자열_출력("%v 회신값 자료형 '%T'", 질의값.TR코드(), 변환값)
+			//lib.F문자열_출력("%v 회신값 자료형 '%T'", 질의값.TR코드(), 변환값)
 
 			return F회신(w, xt.New응답(변환값))
 		}
