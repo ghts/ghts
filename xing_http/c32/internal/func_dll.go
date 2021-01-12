@@ -55,7 +55,7 @@ func f초기화_XingAPI() {
 	if API_초기화_완료.G값() {
 		return
 	} else {
-		API_초기화_완료.S값(true)
+		defer API_초기화_완료.S값(true)
 	}
 
 	lib.F조건부_패닉(lib.F환경변수("GOARCH") != "386", "C32 모듈은 32비트 전용입니다.")
@@ -158,7 +158,7 @@ func f초기화_XingAPI() {
 	lib.F확인(에러)
 }
 
-func F접속(서버_구분 xt.T서버_구분) error {
+func F접속() error {
 	if 접속됨, 에러 := f접속됨(); 에러 != nil {
 		return 에러
 	} else if 접속됨 {
@@ -168,7 +168,7 @@ func F접속(서버_구분 xt.T서버_구분) error {
 	var 서버_이름 string
 	var 포트_번호 int
 
-	switch 서버_구분 {
+	switch xt.F서버_구분() {
 	case xt.P서버_실거래:
 		서버_이름 = "hts.ebestsec.co.kr"
 		포트_번호 = 20001
@@ -205,14 +205,10 @@ func F접속(서버_구분 xt.T서버_구분) error {
 	return nil
 }
 
-func F접속됨(질의 *lib.S채널_질의_API) {
+func F접속됨(질의 *xt.S질의) {
 	접속됨, 에러 := f접속됨()
 
-	if 에러 != nil {
-		질의.Ch에러 <- 에러
-	} else {
-		질의.Ch회신값 <- 접속됨
-	}
+	질의.Ch응답 <- xt.New응답(lib.F조건부_값(에러 == nil, 접속됨, 에러))
 }
 
 func f접속됨() (bool, error) {
@@ -229,7 +225,7 @@ func f접속됨() (bool, error) {
 	}
 }
 
-func F로그인(서버_구분 xt.T서버_구분) (에러 error) {
+func F로그인() (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
 	if lib.F파일_없음(설정파일_경로) {
@@ -258,12 +254,12 @@ func F로그인(서버_구분 xt.T서버_구분) (에러 error) {
 	defer c.F메모리_해제(unsafe.Pointer(c암호))
 
 	키_CertPWD := lib.F확인(섹션.GetKey("CertPWD")).(*ini.Key)
-	공인인증서_암호 := lib.F조건부_문자열(서버_구분 == xt.P서버_실거래, 키_CertPWD.String(), "")
+	공인인증서_암호 := lib.F조건부_문자열(xt.F서버_구분() == xt.P서버_실거래, 키_CertPWD.String(), "")
 	c공인인증서_암호 := c.F2C문자열(공인인증서_암호)
 	defer c.F메모리_해제(unsafe.Pointer(c공인인증서_암호))
 
 	키_AcctPWD := lib.F확인(섹션.GetKey("AcctPWD")).(*ini.Key)
-	계좌_비밀번호 = lib.F조건부_문자열(서버_구분 == xt.P서버_실거래, 키_AcctPWD.String(), "0000")
+	계좌_비밀번호 = lib.F조건부_문자열(xt.F서버_구분() == xt.P서버_실거래, 키_AcctPWD.String(), "0000")
 
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
@@ -353,9 +349,6 @@ func F질의(TR코드 string, c데이터 unsafe.Pointer, 길이 int,
 		에러 := lib.New에러with출력("F질의() 에러 발생. 에러 코드 : '%v'", 에러_번호)
 
 		if strings.Contains(에러.Error(), "Access is denied.") {
-			lib.F체크포인트("재시작 콜백 신호 송신")
-			f콜백_동기식(lib.New콜백_신호(lib.P신호_C32_재시작_필요))
-
 			lib.F체크포인트("C32 자체 종료.")
 			f종료()
 		}
@@ -412,15 +405,10 @@ func F실시간_정보_해지(TR코드 string, 전체_종목코드 string, 단�
 	return nil
 }
 
-func F실시간_정보_일괄_해지(질의 *lib.S채널_질의_API) {
+func F실시간_정보_일괄_해지(질의 *xt.S질의) {
 	에러 := f실시간_정보_일괄_해지()
 
-	switch 에러 {
-	case nil:
-		질의.Ch회신값 <- lib.P신호_OK
-	default:
-		질의.Ch에러 <- 에러
-	}
+	질의.Ch응답 <- xt.New응답(lib.F조건부_값(에러 == nil, lib.P신호_OK, xt.New응답(에러)))
 }
 
 func f실시간_정보_일괄_해지() error {
@@ -441,15 +429,10 @@ func f실시간_정보_일괄_해지() error {
 	return nil
 }
 
-func F계좌_수량(질의 *lib.S채널_질의_API) {
+func F계좌_수량(질의 *xt.S질의) {
 	계좌_수량, 에러 := f계좌_수량()
 
-	switch 에러 {
-	case nil:
-		질의.Ch회신값 <- 계좌_수량
-	default:
-		질의.Ch에러 <- 에러
-	}
+	질의.Ch응답 <- xt.New응답(lib.F조건부_값(에러 == nil, 계좌_수량, 에러))
 }
 
 func f계좌_수량() (int, error) {
@@ -489,33 +472,41 @@ func f계좌_번호(인덱스 int) (string, error) {
 	return string(bytes.Trim(c.F2Go바이트_모음(unsafe.Pointer(c버퍼), 버퍼_길이), "\x00")), nil
 }
 
-func F계좌번호_모음(질의 *lib.S채널_질의_API) {
-	수량, 에러 := f계좌_수량()
-	if 에러 != nil {
-		질의.Ch에러 <- 에러
-		return
+func f계좌_리스트_설정() (에러 error) {
+	if 수량, 에러 := f계좌_수량(); 에러 != nil {
+		return 에러
+	} else if 수량 != len(계좌번호_모음) {
+		계좌번호_모음 = make([]string, 0)
+
+		for i := 0; i < 수량; i++ {
+			if 계좌번호, 에러 := f계좌_번호(i); 에러 != nil {
+				return lib.New에러with출력(에러)
+			} else {
+				계좌번호_모음 = append(계좌번호_모음, 계좌번호)
+			}
+		}
 	}
 
-	계좌번호_모음 = make([]string, 수량)
+	return nil
+}
 
-	for i := range 계좌번호_모음 {
-		계좌번호_모음[i], 에러 = f계좌_번호(i)
-
-		if 에러 != nil {
-			질의.Ch에러 <- 에러
+func F계좌번호_모음(질의 *xt.S질의) {
+	if len(계좌번호_모음) == 0 {
+		if 에러 := f계좌_리스트_설정(); 에러 != nil {
+			질의.Ch응답 <- xt.New응답(에러)
 			return
 		}
 	}
 
-	질의.Ch회신값 <- 계좌번호_모음
+	질의.Ch응답 <- xt.New응답(계좌번호_모음)
 }
 
-func F계좌_이름(질의 *lib.S채널_질의_API) {
+func F계좌_이름(질의 *xt.S질의) {
 	defer lib.S예외처리{M함수: func() {
-		질의.Ch에러 <- lib.New에러("F계좌_이름() 에러 발생.")
+		질의.Ch응답 <- xt.New응답(lib.New에러("F계좌_이름() 에러 발생."))
 	}}.S실행()
 
-	계좌_번호 := 질의.M질의값.(*lib.S질의값_문자열).M문자열
+	계좌_번호 := 질의.M값.(*lib.S질의값_문자열).M문자열
 	c계좌번호 := c.F2C문자열(계좌_번호)
 	defer c.F메모리_해제(unsafe.Pointer(c계좌번호))
 
@@ -531,7 +522,7 @@ func F계좌_이름(질의 *lib.S채널_질의_API) {
 		C.int(버퍼_길이))
 
 	계좌_이름 := lib.F2문자열_EUC_KR_공백제거(버퍼_배열[:])
-	질의.Ch회신값 <- 계좌_이름
+	질의.Ch응답 <- xt.New응답(계좌_이름)
 
 	// syscall 방식 호출은 에러 발생
 	//_, _, 에러_번호 := syscall.Syscall(etkGetAccountName, 3,
@@ -547,12 +538,12 @@ func F계좌_이름(질의 *lib.S채널_질의_API) {
 	//}
 }
 
-func F계좌_상세명(질의 *lib.S채널_질의_API) {
+func F계좌_상세명(질의 *xt.S질의) {
 	defer lib.S예외처리{M함수: func() {
-		질의.Ch에러 <- lib.New에러("F계좌_상세명() 에러 발생.")
+		질의.Ch응답 <- xt.New응답(lib.New에러("F계좌_상세명() 에러 발생."))
 	}}.S실행()
 
-	계좌_번호 := 질의.M질의값.(*lib.S질의값_문자열).M문자열
+	계좌_번호 := 질의.M값.(*lib.S질의값_문자열).M문자열
 	c계좌번호 := c.F2C문자열(계좌_번호)
 	defer c.F메모리_해제(unsafe.Pointer(c계좌번호))
 
@@ -568,7 +559,10 @@ func F계좌_상세명(질의 *lib.S채널_질의_API) {
 		C.int(버퍼_길이))
 
 	계좌_상세명 := lib.F2문자열_EUC_KR_공백제거(버퍼_배열[:])
-	질의.Ch회신값 <- 계좌_상세명
+
+	lib.F체크포인트("계좌 상세명", 계좌_상세명)
+
+	질의.Ch응답 <- xt.New응답(계좌_상세명)
 
 	// syscall 방식 호출은 에러 발생
 	//_, _, 에러_번호 := syscall.Syscall(etkGetAccountDetailName, 3,
@@ -584,12 +578,12 @@ func F계좌_상세명(질의 *lib.S채널_질의_API) {
 	//}
 }
 
-func F계좌_별명(질의 *lib.S채널_질의_API) {
+func F계좌_별명(질의 *xt.S질의) {
 	defer lib.S예외처리{M함수: func() {
-		질의.Ch에러 <- lib.New에러("F계좌_별명() 에러 발생.")
+		질의.Ch응답 <- xt.New응답(lib.New에러("F계좌_별명() 에러 발생."))
 	}}.S실행()
 
-	계좌_번호 := 질의.M질의값.(*lib.S질의값_문자열).M문자열
+	계좌_번호 := 질의.M값.(*lib.S질의값_문자열).M문자열
 	c계좌번호 := c.F2C문자열(계좌_번호)
 	defer c.F메모리_해제(unsafe.Pointer(c계좌번호))
 
@@ -605,7 +599,7 @@ func F계좌_별명(질의 *lib.S채널_질의_API) {
 		C.int(버퍼_길이))
 
 	계좌_별명 := lib.F2문자열_EUC_KR_공백제거(버퍼_배열[:])
-	질의.Ch회신값 <- 계좌_별명
+	질의.Ch응답 <- xt.New응답(계좌_별명)
 
 	// syscall 방식 호출은 에러 발생
 	//_, _, 에러_번호 := syscall.Syscall(etkGetAccountNickName, 3,
@@ -621,7 +615,7 @@ func F계좌_별명(질의 *lib.S채널_질의_API) {
 	//}
 }
 
-func F서버_이름(질의 *lib.S채널_질의_API) {
+func F서버_이름(질의 *xt.S질의) {
 	버퍼 := "                                                   "
 	c버퍼 := c.F2C문자열(버퍼)
 	defer c.F메모리_해제(unsafe.Pointer(c버퍼))
@@ -633,30 +627,22 @@ func F서버_이름(질의 *lib.S채널_질의_API) {
 		uintptr(unsafe.Pointer(c버퍼)),
 		0, 0)
 
-	switch 에러_번호 {
-	case 0:
-		질의.Ch회신값 <- lib.F2문자열_EUC_KR_공백제거(c.F2Go바이트_모음(unsafe.Pointer(c버퍼), len(버퍼)))
-	default:
-		질의.Ch에러 <- lib.New에러("F서버_이름() 에러 발생.\n'%v'", 에러_번호)
-	}
+	질의.Ch응답 <- xt.New응답(lib.F조건부_값(에러_번호 == 0,
+		lib.F2문자열_EUC_KR_공백제거(c.F2Go바이트_모음(unsafe.Pointer(c버퍼), len(버퍼))),
+		lib.New에러("F서버_이름() 에러 발생.\n'%v'", 에러_번호)))
 }
 
-func F에러_코드(질의 *lib.S채널_질의_API) {
+func F에러_코드(질의 *xt.S질의) {
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
 	에러_코드, _, 에러_번호 := syscall.Syscall(etkGetLastError, 0, 0, 0, 0)
 
-	switch 에러_번호 {
-	case 0:
-		질의.Ch회신값 <- int(에러_코드)
-	default:
-		질의.Ch에러 <- lib.New에러("F에러_코드() 에러 발생.\n'%v'", 에러_번호)
-	}
+	질의.Ch응답 <- xt.New응답(lib.F조건부_값(에러_번호 == 0, int(에러_코드), lib.New에러("F에러_코드() 에러 발생.\n'%v'", 에러_번호)))
 }
 
-func F에러_메시지(질의 *lib.S채널_질의_API) {
-	에러_코드 := 질의.M질의값.(*lib.S질의값_정수).M정수값
+func F에러_메시지(질의 *xt.S질의) {
+	에러_코드 := 질의.M값.(*lib.S질의값_정수).M정수값
 
 	go버퍼 := new(bytes.Buffer)
 	for i := 0; i < 512; i++ {
@@ -678,16 +664,17 @@ func F에러_메시지(질의 *lib.S채널_질의_API) {
 
 	switch {
 	case 에러_번호 != 0:
-		질의.Ch에러 <- lib.New에러("F에러_메시지() 에러 발생.\n'%v'", 에러_번호)
+		질의.Ch응답 <- xt.New응답(lib.New에러("F에러_메시지() 에러 발생.\n'%v'", 에러_번호))
 	case 에러_메시지_길이 == 0:
-		질의.Ch에러 <- lib.New에러("에러 메시지를 구할 수 없습니다.")
+		질의.Ch응답 <- xt.New응답(lib.New에러("에러 메시지를 구할 수 없습니다."))
 	default:
-		질의.Ch회신값 <- lib.F2문자열_EUC_KR_공백제거(c.F2Go바이트_모음(unsafe.Pointer(c버퍼), int(에러_메시지_길이)))
+		질의.Ch응답 <- xt.New응답(lib.F2문자열_EUC_KR_공백제거(c.F2Go바이트_모음(unsafe.Pointer(c버퍼), int(에러_메시지_길이))))
 	}
 }
 
-func TR코드별_전송_제한(질의 *lib.S채널_질의_API) {
-	TR코드_모음 := 질의.M질의값.(*lib.S질의값_문자열_모음).M문자열_모음
+func TR코드별_전송_제한(질의 *xt.S질의) {
+	TR코드_모음 := 질의.M값.(*lib.S질의값_문자열_모음).M문자열_모음
+
 	정보_모음 := new(xt.TR코드별_전송_제한_정보_모음)
 	정보_모음.M맵 = make(map[string]*xt.TR코드별_전송_제한_정보)
 
@@ -702,7 +689,7 @@ func TR코드별_전송_제한(질의 *lib.S채널_질의_API) {
 		정보_모음.M맵[TR코드] = 값
 	}
 
-	질의.Ch회신값 <- 정보_모음
+	질의.Ch응답 <- xt.New응답(정보_모음)
 }
 
 func f초당_TR쿼터(TR코드 string) int {

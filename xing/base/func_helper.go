@@ -130,7 +130,7 @@ func F주소_설정() {
 			os.Setenv(P주소_실시간_환경변수명, strconv.Itoa(int(주소_실시간)))
 
 			버퍼 := bytes.Buffer{}
-			문자열 := lib.F2문자열("* Xing API 호출 URL : %v *", F주소_C32_호출().URL())
+			문자열 := lib.F2문자열("* Xing API 호출 URL : '%v' *", F주소_C32_호출().URL())
 
 			for i := 0; i < len(문자열)-3; i++ {
 				버퍼.WriteString("*")

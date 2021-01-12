@@ -1,4 +1,4 @@
-package x32_http
+package x32
 
 import (
 	"context"

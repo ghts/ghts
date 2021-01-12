@@ -31,7 +31,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package x32_http
+package x32
 
 import (
 	"bytes"
@@ -40,8 +40,82 @@ import (
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/lib/c"
 	"github.com/ghts/ghts/xing/base"
+	"strings"
 	"unsafe"
 )
+
+func F콜백(콜백값 lib.I콜백) (에러 error) {
+	ch콜백 <- 콜백값
+	return nil
+}
+
+func go콜백_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
+	ch공통_종료 := lib.Ch공통_종료()
+
+	defer func() {
+		select {
+		case <-ch공통_종료:
+			Ch콜백_도우미_종료 <- lib.P신호_종료
+		default:
+		}
+	}()
+
+	defer lib.S예외처리{M에러: &에러, M함수: func() {
+		select {
+		case <-ch공통_종료:
+			에러 = nil
+			return
+		default:
+		}
+
+		if 에러 != nil &&
+			!strings.Contains(에러.Error(), "connection closed") &&
+			!strings.Contains(에러.Error(), "object closed") {
+			lib.F에러_출력(에러)
+		}
+
+		ch종료 <- lib.P신호_종료
+	}}.S실행()
+
+	for {
+		if lib.F포트_열림_확인(xt.F주소_C32_콜백()) {
+			break
+		}
+
+		lib.F대기(lib.P500밀리초)
+	}
+
+	ch초기화 <- lib.P신호_초기화
+
+	for {
+		select {
+		case <-ch공통_종료:
+			return nil
+		case i콜백 := <-ch콜백:
+			f콜백_동기식(i콜백)
+		}
+	}
+}
+
+func f콜백_동기식(콜백값 lib.I콜백) (에러 error) {
+	defer lib.S예외처리{M에러: &에러}.S실행()
+
+	소켓REQ := 소켓REQ_저장소.G소켓()
+	defer 소켓REQ_저장소.S회수(소켓REQ)
+
+	i값 := 소켓REQ.G질의_응답_검사(lib.P변환형식_기본값, 콜백값).G해석값_단순형(0)
+
+	switch 값 := i값.(type) {
+	case error:
+		return 값
+	case lib.T신호:
+		lib.F조건부_패닉(값 != lib.P신호_OK, "예상하지 못한 신호값 : '%v'", 값)
+	default:
+		panic(lib.New에러("f콜백_동기식() 예상하지 못한 자료형 : '%T'", i값))
+	}
+
+	return nil
+}
 
 func OnTrData(TR데이터 unsafe.Pointer) {
 	c데이터 := c.F2Go바이트_모음(TR데이터, xt.Sizeof_TR_DATA)
@@ -111,7 +185,7 @@ func OnTrData(TR데이터 unsafe.Pointer) {
 	바이트_변환값 := lib.F확인(lib.New바이트_변환Raw(자료형_문자열, raw값, true)).(*lib.S바이트_변환)
 	콜백값 := lib.New콜백_TR데이터(int(g.RequestID), 바이트_변환값, TR코드, 추가_연속조회_필요, 연속키)
 
-	Ch콜백 <- 콜백값
+	F콜백(콜백값)
 }
 
 func OnMessageAndError(MSG데이터 unsafe.Pointer) {
@@ -153,11 +227,11 @@ func OnMessageAndError(MSG데이터 unsafe.Pointer) {
 
 	lib.F조건부_실행(에러여부, lib.F체크포인트, 콜백값)
 
-	Ch콜백 <- 콜백값
+	F콜백(콜백값)
 }
 
 func OnReleaseData(식별번호 int) {
-	Ch콜백 <- lib.New콜백_TR완료(식별번호)
+	F콜백(lib.New콜백_TR완료(식별번호))
 	F데이터_해제(식별번호)
 }
 
@@ -197,6 +271,8 @@ func OnLogin(wParam, lParam unsafe.Pointer) {
 
 	if 로그인_성공_여부 {
 		fmt.Println("**    Xing LOGIN SUCCESS     **")
+
+		F콜백(lib.New콜백_신호(lib.P신호_C32_LOGIN))
 	} else {
 		if 에러 == nil {
 			lib.F문자열_출력("에러 코드 : %v", 정수)
@@ -215,7 +291,7 @@ func OnLogin(wParam, lParam unsafe.Pointer) {
 	}
 
 	select {
-	case Ch로그인 <- 로그인_성공_여부:
+	case ch로그인 <- 로그인_성공_여부:
 	default:
 	}
 }
@@ -228,21 +304,17 @@ func OnLogout() {
 func OnDisconnected() {
 	lib.F체크포인트("OnDisconnected.")
 
-	Ch콜백 <- lib.New콜백_신호(lib.P신호_C32_재시작_필요)
+	F콜백(lib.New콜백_신호(lib.P신호_C32_재시작_필요))
 }
 
 func OnTimeout(c int) {
-	lib.F체크포인트("OnTimeout.")
-
-	Ch콜백 <- lib.New콜백_타임아웃(c)
+	F콜백(lib.New콜백_타임아웃(c))
 }
 
 func OnLinkData() {
-	// 필요한가?
-	//Ch콜백 <- lib.New콜백_기본형(lib.P콜백_링크_데이터)
+	F콜백(lib.New콜백_기본형(lib.P콜백_링크_데이터)) // TODO
 }
 
 func OnRealtimeDataChart() {
-	// 필요한가?
-	//Ch콜백 <- lib.New콜백_기본형(lib.P콜백_실시간_차트_데이터)
+	F콜백(lib.New콜백_기본형(lib.P콜백_실시간_차트_데이터)) // TODO
 }

@@ -31,9 +31,10 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package x32_http
+package x32
 
 import (
+	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/lib/w32"
 	"syscall"
 	"unsafe"
@@ -79,6 +80,7 @@ func F윈도우_메시지_처리() {
 func WndProc(hWnd w32.HWND, msg uint32, wParam, lParam uintptr) uintptr {
 	switch msg {
 	case XM_DISCONNECT:
+		lib.F체크포인트()
 		OnDisconnected()
 		return TRUE
 	case XM_RECEIVE_DATA:

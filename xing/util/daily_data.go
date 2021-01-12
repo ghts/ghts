@@ -51,6 +51,15 @@ func F일개월_일일_가격정보_수집(db *sql.DB, 종목코드_모음 []str
 	daily_price_data.F일일_가격정보_테이블_생성(db)
 
 	for i, 종목코드 := range 종목코드_모음 {
+		for {
+			if xing.C32_재시작_실행_중.G값() {
+				lib.F대기(lib.P10초)
+				continue
+			}
+
+			break
+		}
+
 		종목별_일일_가격정보_모음, 에러 = daily_price_data.New종목별_일일_가격정보_모음_DB읽기(db, 종목코드)
 		lib.F확인(에러)
 
@@ -77,6 +86,15 @@ func F일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string) (에�
 	daily_price_data.F일일_가격정보_테이블_생성(db)
 
 	for i, 종목코드 := range 종목코드_모음 {
+		for {
+			if xing.C32_재시작_실행_중.G값() {
+				lib.F대기(lib.P10초)
+				continue
+			}
+
+			break
+		}
+
 		종목별_일일_가격정보_모음, 에러 = daily_price_data.New종목별_일일_가격정보_모음_DB읽기(db, 종목코드)
 		lib.F확인(에러)
 

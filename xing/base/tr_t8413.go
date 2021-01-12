@@ -114,7 +114,7 @@ func (s *T8413_현물_차트_일주월_응답_반복값) TableName() string {
 }
 
 func (s *T8413_현물_차트_일주월_응답_반복값) TableUnique() [][]string {
-	return [][]string{[]string{"symbol", "date"}}
+	return [][]string{{"symbol", "date"}}
 }
 
 type T8413_현물_차트_일주월_응답_반복값_모음 struct {
