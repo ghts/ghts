@@ -34,9 +34,9 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package x32
 
 import (
+	xing "github.com/ghts/ghts/experimental/xing_http/go"
 	"github.com/ghts/ghts/lib"
 	xt "github.com/ghts/ghts/xing/base"
-	xing "github.com/ghts/ghts/xing_http/go"
 	"testing"
 )
 

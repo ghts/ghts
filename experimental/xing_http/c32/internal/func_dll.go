@@ -36,10 +36,10 @@ package x32
 // #include "func_C.h"
 import "C"
 import (
+	xing "github.com/ghts/ghts/experimental/xing_http/go"
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/lib/c"
 	"github.com/ghts/ghts/xing/base"
-	xing "github.com/ghts/ghts/xing_http/go"
 	"gopkg.in/ini.v1"
 	"strings"
 	"syscall"
