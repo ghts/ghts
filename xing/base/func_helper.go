@@ -111,6 +111,8 @@ func F주소_설정() {
 
 	if 주소_설정_완료.G값() {
 		return
+	} else {
+		defer 주소_설정_완료.S값(true)
 	}
 
 	for {
@@ -126,7 +128,6 @@ func F주소_설정() {
 			os.Setenv(P주소_C32_호출_환경변수명, strconv.Itoa(int(주소_C32_호출)))
 			os.Setenv(P주소_C32_콜백_환경변수명, strconv.Itoa(int(주소_C32_콜백)))
 			os.Setenv(P주소_실시간_환경변수명, strconv.Itoa(int(주소_실시간)))
-			주소_설정_완료.S값(true)
 
 			버퍼 := bytes.Buffer{}
 			문자열 := lib.F2문자열("* Xing API 호출 URL : '%v' *", F주소_C32_호출().URL())
