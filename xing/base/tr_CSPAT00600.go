@@ -52,6 +52,10 @@ func (s *CSPAT00600_현물_정상_주문_질의값) S대출일(값 time.Time) {
 	s.M대출일 = 값.Format("20060102")
 }
 
+func (s *CSPAT00600_현물_정상_주문_질의값) String() string {
+	return lib.F2문자열("%v %v %v %v %v", s.M코드, s.M계좌번호, s.M종목코드, s.M주문수량, s.M매도_매수_구분)
+}
+
 type CSPAT00600_현물_정상_주문_응답 struct {
 	M응답1 *CSPAT00600_현물_정상_주문_응답1
 	M응답2 *CSPAT00600_현물_정상_주문_응답2
