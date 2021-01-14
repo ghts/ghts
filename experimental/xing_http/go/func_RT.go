@@ -76,7 +76,7 @@ func F실시간_정보_구독_및_해지(TR구분 lib.TR구분, RT코드 string)
 	// Go언어 json 패키지의 작동 특성 때문에 'S질의값_기본형'을 송신해도
 	// 서버 측에서 'S질의값_복수_종목'으로 json.Unmarshal()해도 정상 동작한다.
 	질의값 := lib.New질의값_기본형(TR구분, RT코드)
-	s := &xt.S응답{}
+	s := &xt.S응답_JSON{}
 
 	lib.F확인(http질의_도우미("realtime_data", 질의값, &s))
 
@@ -91,7 +91,7 @@ func F실시간_정보_구독_및_해지_단일_종목(TR구분 lib.TR구분, RT
 
 func F실시간_정보_구독_및_해지_복수_종목(TR구분 lib.TR구분, RT코드 string, 종목코드_모음 []string) (에러 error) {
 	질의값 := lib.New질의값_복수_종목(TR구분, RT코드, 종목코드_모음)
-	s := &xt.S응답{}
+	s := &xt.S응답_JSON{}
 
 	lib.F확인(http질의_도우미("realtime_data", 질의값, &s))
 

@@ -193,10 +193,11 @@ func f잔류_프로세스_정리_및_초기화() (수량 int, 에러 error) {
 }
 
 func F프로세스_종료by프로세스ID(프로세스ID int) (에러 error) {
-	defer lib.S예외처리{M에러: &에러}.S실행()
+	defer lib.S예외처리{M에러: &에러, M출력_숨김: true}.S실행()
 
-	프로세스, 에러 := os.FindProcess(프로세스ID)
-	lib.F확인(에러)
-
-	return 프로세스.Kill()
+	if 프로세스, 에러 := os.FindProcess(프로세스ID); 에러 != nil {
+		return 에러
+	} else {
+		return 프로세스.Kill()
+	}
 }

@@ -33,6 +33,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
 package xt
 
+/*
 import (
 	"bytes"
 	"encoding/binary"
@@ -178,3 +179,5 @@ func newCFOAT00200_선물옵션_정정주문_응답2(b []byte) (값 *CFOAT00200_
 
 	return 값, nil
 }
+
+*/

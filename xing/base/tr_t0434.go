@@ -33,6 +33,8 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
 package xt
 
+/*
+
 import (
 	"bytes"
 	"encoding/binary"
@@ -179,3 +181,5 @@ func newT0434_선물옵션_체결_미체결_반복값_모음(b []byte) (값_모�
 
 	return 값_모음, nil
 }
+
+*/

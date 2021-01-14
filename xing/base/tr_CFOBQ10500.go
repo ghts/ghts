@@ -33,6 +33,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
 package xt
 
+/*
 import (
 	"bytes"
 	"encoding/binary"
@@ -236,3 +237,4 @@ func newCFOBQ10500_선물옵션_예탁금_증거금_조회_반복값_모음(b []
 
 	return 값_모음, nil
 }
+*/

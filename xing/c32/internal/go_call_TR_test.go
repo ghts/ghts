@@ -37,7 +37,9 @@ import (
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/lib/nanomsg"
 	xt "github.com/ghts/ghts/xing/base"
+	xing "github.com/ghts/ghts/xing/go"
 	"testing"
+	"time"
 )
 
 func TestF접속됨(t *testing.T) {
@@ -65,3 +67,19 @@ func TestF접속됨(t *testing.T) {
 	lib.F테스트_참임(t, ok)
 	lib.F테스트_같음(t, 참거짓, 접속됨)
 }
+
+func TestT0167_시각_조회(t *testing.T) {
+	t.Parallel()
+
+	시각, 에러 := (<-xing.TrT0167_시각_조회()).G값()
+
+	lib.F테스트_에러없음(t, 에러)
+	lib.F테스트_같음(t, 시각.Year(), time.Now().Year())
+	lib.F테스트_같음(t, 시각.Month(), time.Now().Month())
+	lib.F테스트_같음(t, 시각.Day(), time.Now().Day())
+
+	지금 := time.Now()
+	차이 := 시각.Sub(지금)
+	lib.F테스트_참임(t, 차이 > (-1*lib.P1시간) && 차이 < lib.P1시간, 시각, 지금)
+}
+

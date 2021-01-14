@@ -58,7 +58,7 @@ func f종료_질의_송신() {
 	defer lib.S예외처리{}.S실행()
 
 	select {
-	case <-xt.New질의(lib.New질의값_기본형(xt.TR종료, ""), Ch질의).Ch응답:
+	case <-xt.New질의_JSON(lib.New질의값_기본형(xt.TR종료, ""), Ch질의).Ch응답:
 	case <-time.After(lib.P10초):
 	}
 
@@ -114,7 +114,7 @@ func F서버_접속_및_로그인() (에러 error) {
 	lib.F조건부_패닉(!lib.F인터넷에_접속됨(), "서버 접속이 불가 : 인터넷 접속을 확인하십시오.")
 
 	select {
-	case 응답 := <-xt.New질의(lib.New질의값_기본형(xt.TR접속_및_로그인, ""), Ch질의).Ch응답:
+	case 응답 := <-xt.New질의_JSON(lib.New질의값_기본형(xt.TR접속_및_로그인, ""), Ch질의).Ch응답:
 		if 응답.Error() != nil {
 			lib.F문자열_출력("서버 접속 실패.")
 			return 에러
@@ -185,10 +185,10 @@ func f초기화_TR전송_제한() (에러 error) {
 	TR코드_모음 = lib.F중복_문자열_제거(TR코드_모음)
 
 	for {
-		var 응답 *xt.S응답
+		var 응답 *xt.S응답_JSON
 
 		select {
-		case 응답 = <-xt.New질의(lib.New질의값_문자열_모음(xt.TR코드별_전송_제한, "", TR코드_모음), Ch질의).Ch응답:
+		case 응답 = <-xt.New질의_JSON(lib.New질의값_문자열_모음(xt.TR코드별_전송_제한, "", TR코드_모음), Ch질의).Ch응답:
 		case <-time.After(lib.P10초):
 			return lib.New에러("f초기화_TR전송_제한() 타임아웃.")
 		}

@@ -35,7 +35,6 @@ package x32
 
 const (
 	xing_dll    = "xingAPI.dll"
-	pBufferSize = 512
 	WM_USER     = 0x0400
 )
 

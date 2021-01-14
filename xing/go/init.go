@@ -84,12 +84,12 @@ func init() {
 func F초기화(값 xt.T서버_구분) {
 	서버_구분 = 값
 
-	f소켓_생성()
-	f초기화_Go루틴()
+	F소켓_생성()
+	F초기화_Go루틴()
 	lib.F확인(f초기화_xing_C32())
-	lib.F확인(f접속_로그인())
+	lib.F확인(F접속_로그인())
 	lib.F조건부_패닉(!f초기화_작동_확인(), "초기화 작동 확인 실패.")
-	lib.F확인(f초기화_TR전송_제한())
+	lib.F확인(F초기화_TR전송_제한())
 	lib.F확인(F종목_정보_설정())
 	lib.F확인(F전일_당일_설정())
 	//f접속유지_실행()
@@ -97,11 +97,11 @@ func F초기화(값 xt.T서버_구분) {
 	fmt.Println("**     초기화 완료     **")
 }
 
-func f소켓_생성() {
+func F소켓_생성() {
 	소켓REP_TR콜백 = nano.NewNano소켓XREP_단순형(xt.F주소_C32_콜백())
 }
 
-func f초기화_Go루틴() {
+func F초기화_Go루틴() {
 	lib.F중복없는_문자열_출력("RT 루틴 일시 비활성화")
 	고루틴_모음 := []func(chan lib.T신호) error{go_TR콜백_처리} //, go_RT_주문처리결과}
 	ch초기화 := make(chan lib.T신호, len(고루틴_모음))
@@ -136,7 +136,7 @@ func f초기화_xing_C32() (에러 error) {
 	return nil
 }
 
-func f접속_로그인() (에러 error) {
+func F접속_로그인() (에러 error) {
 	소켓SUB_실시간_정보 = nano.NewNano소켓SUB_단순형(xt.F주소_실시간())
 
 	if !tr수신_소켓_동작_확인() {
@@ -147,7 +147,7 @@ func f접속_로그인() (에러 error) {
 	i응답값 := F질의(질의값).G해석값_단순형(0)
 
 	if 응답값, ok := i응답값.(lib.T신호); !ok {
-		return lib.New에러("f접속_로그인() 예상하지 못한 자료형 : '%T'", i응답값)
+		return lib.New에러("F접속_로그인() 예상하지 못한 자료형 : '%T'", i응답값)
 	} else if 응답값 != lib.P신호_OK {
 		return lib.New에러("예상하지 못한 응답값 : '%v'", 응답값)
 	}
@@ -313,11 +313,15 @@ func C32_종료() (에러 error) {
 func F종료() {
 	C32_종료()
 	lib.F공통_종료_채널_닫기()
+	F소켓_정리()
+}
+
+func F소켓_정리() {
 	lib.F패닉억제_호출(소켓REP_TR콜백.Close)
 	소켓REQ_저장소.S정리()
 }
 
-func f초기화_TR전송_제한() (에러 error) {
+func F초기화_TR전송_제한() (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
 	TR코드_모음 := []string{

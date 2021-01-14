@@ -41,12 +41,16 @@ import (
 )
 
 func go_TR콜백_처리(ch초기화 chan lib.T신호) (에러 error) {
+	if lib.F공통_종료_채널_닫힘() {
+		return
+	}
+
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
 	const 콜백_처리_루틴_수량 = 100
-	ch종료 := lib.Ch공통_종료()
 	ch도우미_초기화 := make(chan lib.T신호, 콜백_처리_루틴_수량)
 	ch도우미_종료 := make(chan error, 콜백_처리_루틴_수량)
+	ch공통_종료 := lib.Ch공통_종료()
 
 	for i := 0; i < 콜백_처리_루틴_수량; i++ {
 		go go루틴_콜백_처리_도우미(ch도우미_초기화, ch도우미_종료)
@@ -60,13 +64,11 @@ func go_TR콜백_처리(ch초기화 chan lib.T신호) (에러 error) {
 
 	for {
 		select {
-		case <-ch종료:
+		case <-ch공통_종료:
 			return
-		case 에러 := <-ch도우미_종료:
-			select {
-			case <-ch종료:
-				return nil
-			default:
+		case 에러 = <-ch도우미_종료:
+			if lib.F공통_종료_채널_닫힘() {
+				return
 			}
 
 			lib.F에러_출력(에러)

@@ -84,7 +84,7 @@ func http질의_도우미(url string, 질의값, 결과값_포인터 interface{}
 
 	//디버깅용 출력 문자열
 	//if lib.F체크포인트(url); strings.Contains(url, "connected") {
-	//	응답 := &xt.S응답{}
+	//	응답 := &xt.S응답_JSON{}
 	//	lib.F체크포인트(url, 질의값)
 	//	lib.F체크포인트(바이트_모음_응답)
 	//	lib.F체크포인트(string(바이트_모음_응답))
