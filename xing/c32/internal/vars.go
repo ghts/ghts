@@ -37,7 +37,6 @@ import (
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/lib/nanomsg"
 	xt "github.com/ghts/ghts/xing/base"
-	"go.nanomsg.org/mangos/v3"
 	"path/filepath"
 	"reflect"
 	"sync"
@@ -90,8 +89,7 @@ var (
 	api_호출_잠금 sync.Mutex
 
 	ch로그인 = make(chan bool, 1)
-	Ch수신  = make(chan *mangos.Message, 1000)
-	Ch질의  = make(chan *lib.S채널_질의_API, 100)
+	Ch질의  = make(chan *lib.S질의, 100)
 	ch콜백  = make(chan lib.I콜백, 100)
 
 	전달_도우미_수량 int
@@ -99,7 +97,6 @@ var (
 
 	Ch모니터링_루틴_종료   = make(chan lib.T신호, 1)
 	Ch수신_도우미_종료    = make(chan lib.T신호, 1)
-	Ch전달_도우미_종료    = make(chan lib.T신호, 100)
 	Ch콜백_도우미_종료    = make(chan lib.T신호, 100)
 	Ch함수_호출_도우미_종료 = make(chan lib.T신호, 1)
 
