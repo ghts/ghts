@@ -83,7 +83,7 @@ func go함수_호출_도우미(ch초기화, ch종료 chan lib.T신호) {
 	}
 }
 
-func f질의값_처리(질의 *lib.S채널_질의_API) {
+func f질의값_처리(질의 *lib.S채널_질의) {
 	var 에러 error
 
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 질의.Ch에러 <- 에러 }}.S실행()
@@ -131,7 +131,7 @@ func f질의값_처리(질의 *lib.S채널_질의_API) {
 	}
 }
 
-func F조회_및_주문_질의_처리(질의 *lib.S채널_질의_API) {
+func F조회_및_주문_질의_처리(질의 *lib.S채널_질의) {
 	var 에러 error
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 질의.Ch에러 <- 에러 }}.S실행()
 
@@ -350,7 +350,7 @@ func F조회_및_주문_질의_처리(질의 *lib.S채널_질의_API) {
 	}
 }
 
-func F실시간_정보_구독_해지_처리(질의 *lib.S채널_질의_API) {
+func F실시간_정보_구독_해지_처리(질의 *lib.S채널_질의) {
 	var 함수 func(string, string, int) error
 	var 전체_종목코드 string
 	var 단위_길이 int
@@ -385,7 +385,7 @@ func F실시간_정보_구독_해지_처리(질의 *lib.S채널_질의_API) {
 	}
 }
 
-func F접속_처리(질의 *lib.S채널_질의_API) {
+func F접속_처리(질의 *lib.S채널_질의) {
 	서버_구분 = xt.T서버_구분(질의.M질의값.(*lib.S질의값_정수).M정수값)
 
 	접속_처리_잠금.Lock()
@@ -400,7 +400,7 @@ func F접속_처리(질의 *lib.S채널_질의_API) {
 	}
 }
 
-func F종료_질의_처리(질의 *lib.S채널_질의_API) {
+func F종료_질의_처리(질의 *lib.S채널_질의) {
 	질의.Ch회신값 <- lib.P신호_종료
 	f종료()
 }

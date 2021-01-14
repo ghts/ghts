@@ -205,7 +205,7 @@ func F접속(서버_구분 xt.T서버_구분) error {
 	return nil
 }
 
-func F접속됨(질의 *lib.S채널_질의_API) {
+func F접속됨(질의 *lib.S채널_질의) {
 	접속됨, 에러 := f접속됨()
 
 	if 에러 != nil {
@@ -412,7 +412,7 @@ func F실시간_정보_해지(TR코드 string, 전체_종목코드 string, 단�
 	return nil
 }
 
-func F실시간_정보_일괄_해지(질의 *lib.S채널_질의_API) {
+func F실시간_정보_일괄_해지(질의 *lib.S채널_질의) {
 	에러 := f실시간_정보_일괄_해지()
 
 	switch 에러 {
@@ -441,7 +441,7 @@ func f실시간_정보_일괄_해지() error {
 	return nil
 }
 
-func F계좌_수량(질의 *lib.S채널_질의_API) {
+func F계좌_수량(질의 *lib.S채널_질의) {
 	계좌_수량, 에러 := f계좌_수량()
 
 	switch 에러 {
@@ -489,7 +489,7 @@ func f계좌_번호(인덱스 int) (string, error) {
 	return string(bytes.Trim(c.F2Go바이트_모음(unsafe.Pointer(c버퍼), 버퍼_길이), "\x00")), nil
 }
 
-func F계좌번호_모음(질의 *lib.S채널_질의_API) {
+func F계좌번호_모음(질의 *lib.S채널_질의) {
 	수량, 에러 := f계좌_수량()
 	if 에러 != nil {
 		질의.Ch에러 <- 에러
@@ -510,7 +510,7 @@ func F계좌번호_모음(질의 *lib.S채널_질의_API) {
 	질의.Ch회신값 <- 계좌번호_모음
 }
 
-func F계좌_이름(질의 *lib.S채널_질의_API) {
+func F계좌_이름(질의 *lib.S채널_질의) {
 	defer lib.S예외처리{M함수: func() {
 		질의.Ch에러 <- lib.New에러("F계좌_이름() 에러 발생.")
 	}}.S실행()
@@ -547,7 +547,7 @@ func F계좌_이름(질의 *lib.S채널_질의_API) {
 	//}
 }
 
-func F계좌_상세명(질의 *lib.S채널_질의_API) {
+func F계좌_상세명(질의 *lib.S채널_질의) {
 	defer lib.S예외처리{M함수: func() {
 		질의.Ch에러 <- lib.New에러("F계좌_상세명() 에러 발생.")
 	}}.S실행()
@@ -584,7 +584,7 @@ func F계좌_상세명(질의 *lib.S채널_질의_API) {
 	//}
 }
 
-func F계좌_별명(질의 *lib.S채널_질의_API) {
+func F계좌_별명(질의 *lib.S채널_질의) {
 	defer lib.S예외처리{M함수: func() {
 		질의.Ch에러 <- lib.New에러("F계좌_별명() 에러 발생.")
 	}}.S실행()
@@ -621,7 +621,7 @@ func F계좌_별명(질의 *lib.S채널_질의_API) {
 	//}
 }
 
-func F서버_이름(질의 *lib.S채널_질의_API) {
+func F서버_이름(질의 *lib.S채널_질의) {
 	버퍼 := "                                                   "
 	c버퍼 := c.F2C문자열(버퍼)
 	defer c.F메모리_해제(unsafe.Pointer(c버퍼))
@@ -641,7 +641,7 @@ func F서버_이름(질의 *lib.S채널_질의_API) {
 	}
 }
 
-func F에러_코드(질의 *lib.S채널_질의_API) {
+func F에러_코드(질의 *lib.S채널_질의) {
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
@@ -655,7 +655,7 @@ func F에러_코드(질의 *lib.S채널_질의_API) {
 	}
 }
 
-func F에러_메시지(질의 *lib.S채널_질의_API) {
+func F에러_메시지(질의 *lib.S채널_질의) {
 	에러_코드 := 질의.M질의값.(*lib.S질의값_정수).M정수값
 
 	go버퍼 := new(bytes.Buffer)
@@ -686,7 +686,7 @@ func F에러_메시지(질의 *lib.S채널_질의_API) {
 	}
 }
 
-func TR코드별_전송_제한(질의 *lib.S채널_질의_API) {
+func TR코드별_전송_제한(질의 *lib.S채널_질의) {
 	TR코드_모음 := 질의.M질의값.(*lib.S질의값_문자열_모음).M문자열_모음
 	정보_모음 := new(xt.TR코드별_전송_제한_정보_모음)
 	정보_모음.M맵 = make(map[string]*xt.TR코드별_전송_제한_정보)
