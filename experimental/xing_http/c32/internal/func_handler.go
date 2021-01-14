@@ -177,7 +177,7 @@ func T1902_ETF_시간별_추이(w http.ResponseWriter, req *http.Request) {
 
 func T1906_ETF_LP호가_조회(w http.ResponseWriter, req *http.Request) {
 	F질의값_추출_TR처리(w, req, xt.TR조회, xt.TR_ETF_LP호가_조회_t1906,
-		lib.New질의값_단일_종목())
+		lib.New질의값_단일_종목_단순형())
 }
 
 func T3341_재무순위_종합(w http.ResponseWriter, req *http.Request) {

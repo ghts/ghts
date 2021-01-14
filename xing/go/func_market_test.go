@@ -47,7 +47,7 @@ func TestF종목코드_존재함(t *testing.T) {
 func TestF질의값_종목코드_검사(t *testing.T) {
 	t.Parallel()
 
-	질의값1 := lib.New질의값_단일_종목()
+	질의값1 := lib.New질의값_단일_종목_단순형()
 	질의값1.M종목코드 = "069500"
 
 	질의값2 := lib.New질의값_복수_종목(lib.TR조회, "", []string{"069500"})

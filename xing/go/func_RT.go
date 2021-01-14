@@ -47,11 +47,11 @@ func F실시간_정보_해지_단순TR(RT코드 string) (에러 error) {
 }
 
 func F실시간_정보_구독_단일_종목(RT코드 string, 종목코드 string) (에러 error) {
-	return F질의(lib.New질의값_단일_종목2(xt.TR실시간_정보_구독, RT코드, 종목코드)).G에러()
+	return F질의(lib.New질의값_단일_종목(xt.TR실시간_정보_구독, RT코드, 종목코드)).G에러()
 }
 
 func F실시간_정보_해지_단일_종목(RT코드 string, 종목코드 string) (에러 error) {
-	return F질의(lib.New질의값_단일_종목2(xt.TR실시간_정보_해지, RT코드, 종목코드)).G에러()
+	return F질의(lib.New질의값_단일_종목(xt.TR실시간_정보_해지, RT코드, 종목코드)).G에러()
 }
 
 func F실시간_정보_구독_복수_종목(RT코드 string, 종목코드_모음 []string) (에러 error) {
