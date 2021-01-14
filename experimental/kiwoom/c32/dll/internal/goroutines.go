@@ -360,13 +360,13 @@ func go콜백_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 		}
 	}()
 
-	for {
-		if lib.F포트_열림_확인(lib.P주소_Xing_C함수_콜백) {
-			break
-		}
-
-		lib.F대기(lib.P500밀리초)
-	}
+	//for {
+	//	if lib.F포트_열림_확인(lib.P주소_Xing_C함수_콜백) {
+	//		break
+	//	}
+	//
+	//	lib.F대기(lib.P500밀리초)
+	//}
 
 	ch공통_종료 := lib.Ch공통_종료()
 
