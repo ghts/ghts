@@ -1,11 +1,12 @@
-package lib
+package xing_http
 
 import (
 	"errors"
+	"github.com/ghts/ghts/lib"
 	"strings"
 )
 
-func New질의(값 I질의값, ch질의 chan *S질의) *S질의 {
+func New질의(값 lib.I질의값, ch질의 chan *S질의) *S질의 {
 	s := new(S질의)
 	s.M값 = 값
 	s.Ch응답 = make(chan *S응답, 1)
@@ -16,7 +17,7 @@ func New질의(값 I질의값, ch질의 chan *S질의) *S질의 {
 }
 
 type S질의 struct {
-	M값   I질의값
+	M값   lib.I질의값
 	Ch응답 chan *S응답
 }
 
@@ -42,7 +43,7 @@ func (s S응답) G값() interface{} {
 	}
 }
 
-func New질의_JSON(값 I질의값, ch질의 chan *S질의_JSON) *S질의_JSON {
+func New질의_JSON(값 lib.I질의값, ch질의 chan *S질의_JSON) *S질의_JSON {
 	s := new(S질의_JSON)
 	s.M값 = 값
 	s.Ch응답 = make(chan *S응답_JSON, 1)
@@ -53,7 +54,7 @@ func New질의_JSON(값 I질의값, ch질의 chan *S질의_JSON) *S질의_JSON {
 }
 
 type S질의_JSON struct {
-	M값   I질의값
+	M값   lib.I질의값
 	Ch응답 chan *S응답_JSON
 }
 
