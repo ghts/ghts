@@ -36,7 +36,6 @@ package x32
 import (
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/xing/base"
-	"go.nanomsg.org/mangos/v3"
 	"strings"
 )
 
@@ -46,16 +45,20 @@ func go수신_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 		return nil
 	}
 
-	var 수신_메시지 *mangos.Message
+	var ctx lib.I송수신
+	var 바이트_변환_모음 *lib.S바이트_변환_모음
 
 	defer func() {
 		lib.S예외처리{M에러: &에러, M출력_숨김: true, M함수: func() {
-			lib.F조건부_실행(에러 != nil &&
+			if 에러 != nil &&
 				!strings.Contains(에러.Error(), "connection closed") &&
-				!strings.Contains(에러.Error(), "object closed"),
-				lib.F에러_출력, 에러)
+				!strings.Contains(에러.Error(), "object closed") {
+				lib.F에러_출력(에러)
+			}
 
-			lib.F조건부_실행(수신_메시지 != nil, 소켓REP_TR수신.S회신Raw, 수신_메시지, lib.JSON, 에러)
+			if ctx != nil {
+				ctx.S송신(lib.JSON, 에러)
+			}
 		}}.S실행()
 
 		if lib.F공통_종료_채널_닫힘() {
@@ -65,30 +68,31 @@ func go수신_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 		}
 	}()
 
-	lib.F신호_전달_시도(ch초기화, lib.P신호_OK)
+	if ctx, 에러 = 소켓REP_TR수신.G컨텍스트(); 에러 != nil {
+		ctx = nil
+		return lib.New에러(에러)
+	}
+
+	ch초기화 <- lib.P신호_초기화
 
 	for {
-		수신_메시지, 에러 = 소켓REP_TR수신.G수신Raw()
-
 		if lib.F공통_종료_채널_닫힘() {
 			return
-		} else if 에러 != nil {
-			if !strings.Contains(에러.Error(), "connection closed") {
+		} else if 바이트_변환_모음, 에러 = ctx.G수신(); 에러 != nil {
+			if !strings.Contains(에러.Error(), "connection closed") &&
+				!strings.Contains(에러.Error(), "object closed") {
 				lib.F에러_출력(에러)
 			}
-
+		} else if 바이트_변환_모음 == nil {
 			continue
-		}
-
-		go func(수신_메시지 *mangos.Message) {
-			defer lib.S예외처리{}.S실행()
-
-			수신값 := lib.New바이트_변환_모음from바이트_배열_단순형(수신_메시지.Body)
-			lib.F조건부_패닉(수신값.G수량() != 1, "메시지 길이 : 예상값 1, 실제값 %v.", 수신값.G수량())
-
-			i질의값 := 수신값.S해석기(xt.F바이트_변환값_해석).G해석값_단순형(0)
-			질의값, ok := i질의값.(lib.I질의값)
-			lib.F조건부_패닉(!ok, "go전달_도우미() 예상하지 못한 자료형 : '%T'", i질의값)
+		} else if 바이트_변환_모음.G수량() != 1 {
+			lib.F에러_출력("메시지 길이 : 예상값 1, 실제값 %v.", 바이트_변환_모음.G수량())
+		} else if i값, 에러 := 바이트_변환_모음.S해석기(xt.F바이트_변환값_해석).G해석값(0); 에러 != nil {
+			lib.F에러_출력(에러)
+		} else if 질의값, ok := i값.(lib.I질의값); !ok {
+			panic(lib.New에러("'I질의값'형이 아님 : '%T'", i값))
+		} else {
+			변환_형식 := 바이트_변환_모음.G변환_형식(0)
 
 			질의 := lib.New채널_질의_API(질의값)
 
@@ -97,12 +101,12 @@ func go수신_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 
 			select {
 			case 회신값 := <-질의.Ch회신값:
-				소켓REP_TR수신.S회신Raw(수신_메시지, 수신값.G변환_형식(0), 회신값)
-			case 에러 := <-질의.Ch에러:
-				소켓REP_TR수신.S회신Raw(수신_메시지, lib.JSON, 에러)
+				ctx.S송신(변환_형식, 회신값)
+			case 에러 = <-질의.Ch에러:
+				ctx.S송신(lib.JSON, 에러)
 			case <-lib.Ch공통_종료():
-				return
+				return nil
 			}
-		}(수신_메시지)
+		}
 	}
 }

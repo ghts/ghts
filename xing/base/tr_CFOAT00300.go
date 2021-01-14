@@ -134,7 +134,7 @@ func newCFOAT00300_선물옵션_취소주문_응답1(b []byte) (값 *CFOAT00300_
 	값.M원주문번호 = lib.F2정수64_단순형(g.OrgOrdNo)
 	값.M취소수량 = lib.F2정수64_단순형(g.CancQty)
 	//값.M통신매체 = T통신매체구분(lib.F2정수_단순형(g.CommdaCode))
-	값.M협의매매완료시각 = lib.F2일자별_시각_단순형_공백은_초기값(당일.G값(), "150405.99", g.DscusBnsCmpltTime)
+	값.M협의매매완료시각 = lib.F2일자별_시각_단순형_공백은_초기값(당일.TCP주소(), "150405.99", g.DscusBnsCmpltTime)
 	//M그룹ID     T증권그룹
 	//값.M주문번호 = lib.F2정수64_단순형(g.OrdSeqno)
 	//값.M포트폴리오번호 = lib.F2정수64_단순형(g.PtflNo)

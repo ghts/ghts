@@ -69,7 +69,7 @@ func go함수_호출_도우미(ch초기화, ch종료 chan lib.T신호) {
 
 	ch공통_종료 := lib.Ch공통_종료()
 
-	lib.F신호_전달_시도(ch초기화, lib.P신호_OK)
+	ch초기화 <- lib.P신호_OK
 
 	for {
 		select {

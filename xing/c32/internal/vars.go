@@ -78,7 +78,7 @@ var (
 
 // 다중 사용에 안전한 값들.
 var (
-	소켓REP_TR수신   = nano.NewNano소켓XREP_단순형(xt.F주소_C32_호출())
+	소켓REP_TR수신   = nano.NewNano소켓REP_단순형(xt.F주소_C32_호출()).(nano.I소켓with컨텍스트)
 	소켓PUB_실시간_정보 = nano.NewNano소켓PUB_단순형(xt.F주소_실시간())
 
 	소켓REQ_저장소 = lib.New소켓_저장소(20, func() lib.I소켓_질의 {
@@ -92,13 +92,13 @@ var (
 	Ch질의  = make(chan *lib.S채널_질의, 100)
 	ch콜백  = make(chan lib.I콜백, 100)
 
-	전달_도우미_수량 int
+	수신_도우미_수량 int
 	콜백_도우미_수량 int
 
 	Ch모니터링_루틴_종료   = make(chan lib.T신호, 1)
-	Ch수신_도우미_종료    = make(chan lib.T신호, 1)
-	Ch콜백_도우미_종료    = make(chan lib.T신호, 100)
 	Ch함수_호출_도우미_종료 = make(chan lib.T신호, 1)
+	Ch수신_도우미_종료    = make(chan lib.T신호, 100)
+	Ch콜백_도우미_종료    = make(chan lib.T신호, 100)
 
 	TR_수신_중    = lib.New안전한_bool(false)
 	API_초기화_완료 = lib.New안전한_bool(false)

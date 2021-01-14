@@ -144,7 +144,7 @@ func newCFOAT00100_선물옵션_정상주문_응답1(b []byte) (값 *CFOAT00100_
 	값.M주문가격 = lib.F2실수_소숫점_추가_단순형(g.OrdPrc, 2)
 	값.M주문수량 = lib.F2정수64_단순형(g.OrdQty)
 	//값.M통신매체 = T통신매체구분(lib.F2정수_단순형(g.CommdaCode))
-	값.M협의매매완료시각 = lib.F2일자별_시각_단순형_공백은_초기값(당일.G값(), "150405.99", g.DscusBnsCmpltTime)
+	값.M협의매매완료시각 = lib.F2일자별_시각_단순형_공백은_초기값(당일.TCP주소(), "150405.99", g.DscusBnsCmpltTime)
 	//값.M주문번호 = lib.F2정수64_단순형(g.OrdSeqno)
 	//값.M포트폴리오번호 = lib.F2정수64_단순형(g.PtflNo)
 	//값.M바스켓번호 = lib.F2정수64_단순형(g.BskNo)

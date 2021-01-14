@@ -36,7 +36,6 @@ package xing
 import (
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/xing/base"
-	"go.nanomsg.org/mangos/v3"
 	"strings"
 )
 
@@ -79,56 +78,49 @@ func go_TR콜백_처리(ch초기화 chan lib.T신호) (에러 error) {
 }
 
 func go루틴_콜백_처리_도우미(ch초기화 chan lib.T신호, ch도우미_종료 chan error) (에러 error) {
-	var 수신_메시지 *mangos.Message // 최대한 재활용 해야 성능 문제를 걱정할 필요가 없어진다.
+	if lib.F공통_종료_채널_닫힘() {
+		return
+	}
 
-	defer func() { ch도우미_종료 <- 에러 }()
+	var ctx lib.I송수신
+	var 바이트_변환_모음 *lib.S바이트_변환_모음
+
 	defer lib.S예외처리{
 		M에러: &에러,
 		M함수: func() {
-			if 수신_메시지 != nil {
-				소켓REP_TR콜백.S회신Raw(수신_메시지, lib.JSON, 에러)
+			if ctx != nil {
+				ctx.S송신(lib.JSON, 에러)
 			}
 		},
 		M함수_항상: func() {
 			ch도우미_종료 <- 에러
 		}}.S실행()
 
-	var 콜백값 lib.I콜백
-	var ok bool
-	var 수신값 *lib.S바이트_변환_모음
-	ch종료 := lib.Ch공통_종료()
+	if ctx, 에러 = 소켓REP_TR콜백.G컨텍스트(); 에러 != nil {
+		ctx = nil
+		return lib.New에러(에러)
+	}
 
 	ch초기화 <- lib.P신호_초기화
 
 	for {
-		select {
-		case <-ch종료:
+		if lib.F공통_종료_채널_닫힘() {
 			return
-		default:
-			수신_메시지, 에러 = 소켓REP_TR콜백.G수신Raw()
-			if 에러 != nil {
-				select {
-				case <-ch종료:
-					에러 = nil
-					return
-				default:
-					if !strings.Contains(에러.Error(), "object closed") {
-						lib.New에러with출력(에러)
-					}
-
-					continue
-				}
+		} else if 바이트_변환_모음, 에러 = ctx.G수신(); 에러 != nil {
+			if !strings.Contains(에러.Error(), "connection closed") &&
+				!strings.Contains(에러.Error(), "object closed") {
+				lib.F에러_출력(에러)
 			}
-
-			수신값 = lib.New바이트_변환_모음from바이트_배열_단순형(수신_메시지.Body)
-			lib.F조건부_패닉(수신값.G수량() != 1, "메시지 길이 : 예상값 1, 실제값 %v.", 수신값.G수량())
-
-			i값 := 수신값.S해석기(xt.F바이트_변환값_해석).G해석값_단순형(0)
-
-			콜백값, ok = i값.(lib.I콜백)
-			lib.F조건부_패닉(!ok, "'I콜백'형이 아님 : '%T'", i값)
-
-			변환_형식 := 수신값.G변환_형식(0)
+		} else if 바이트_변환_모음 == nil {
+			continue
+		} else if 바이트_변환_모음.G수량() != 1 {
+			lib.F에러_출력("메시지 길이 : 예상값 1, 실제값 %v.", 바이트_변환_모음.G수량())
+		} else if i값, 에러 := 바이트_변환_모음.S해석기(xt.F바이트_변환값_해석).G해석값(0); 에러 != nil {
+			lib.F에러_출력(에러)
+		} else if 콜백값, ok := i값.(lib.I콜백); !ok {
+			panic(lib.New에러("'I콜백'형이 아님 : '%T'", i값))
+		} else {
+			변환_형식 := 바이트_변환_모음.G변환_형식(0)
 
 			switch 콜백값.G콜백() {
 			case lib.P콜백_TR데이터, lib.P콜백_메시지_및_에러, lib.P콜백_TR완료, lib.P콜백_타임아웃:
@@ -145,7 +137,7 @@ func go루틴_콜백_처리_도우미(ch초기화 chan lib.T신호, ch도우미_
 				panic(lib.New에러("예상하지 못한 콜백 구분값 : '%v'", 콜백값.G콜백()))
 			}
 
-			소켓REP_TR콜백.S회신Raw(수신_메시지, 변환_형식, lib.P신호_OK)
+			ctx.S송신(변환_형식, lib.P신호_OK)
 		}
 	}
 }

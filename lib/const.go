@@ -227,16 +227,20 @@ func (p T주소) G단축값() string {
 	return "127.0.0.1:" + strconv.Itoa(int(p)+포트_번호_최소값)
 }
 
-func (p T주소) G값() string {
+func (p T주소) TCP주소() string {
 	return "tcp://" + p.G단축값()
 }
 
-func (p T주소) URL() string {
+func (p T주소) HTTP주소() string {
 	return "http://" + p.G단축값()
 }
 
+func (p T주소) WS주소() string {
+	return "ws://" + p.G단축값()
+}
+
 func (p T주소) String() string {
-	return p.G값()
+	return p.G단축값()
 }
 
 const (

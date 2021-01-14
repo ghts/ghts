@@ -31,79 +31,53 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package lib
+package nanomsg_context
 
 import (
-	"sync"
-	"time"
+	"github.com/ghts/ghts/lib"
+	"go.nanomsg.org/mangos/v3"
 )
 
-type I송수신 interface {
-	S송신(변환_형식 T변환, 값_모음 ...interface{}) error
-	G수신() (*S바이트_변환_모음, error)
-}
-
-type I소켓 interface {
-	I송수신
-	S송신_검사(변환_형식 T변환, 값_모음 ...interface{})
-	G수신_검사() *S바이트_변환_모음
-	S타임아웃(타임아웃 time.Duration) I소켓
-	S옵션(옵션_모음 ...interface{})
-	Close() error
-}
-
-type I소켓_질의 interface {
-	I소켓
-	G질의_응답(변환_형식 T변환, 값_모음 ...interface{}) (*S바이트_변환_모음, error)
-	G질의_응답_검사(변환_형식 T변환, 값_모음 ...interface{}) *S바이트_변환_모음
-}
-
-func New소켓_저장소(수량 int, 생성함수 func() I소켓_질의) *s소켓_저장소 {
-	s := new(s소켓_저장소)
-	s.M저장소 = make(chan I소켓_질의, 수량)
-	s.M생성함수 = 생성함수
+func New컨텍스트(ctx mangos.Context) lib.I송수신 {
+	s := new(s컨텍스트)
+	s.ctx = ctx
 
 	return s
 }
 
-type s소켓_저장소 struct {
-	sync.Mutex
-	M저장소  chan I소켓_질의
-	M생성함수 func() I소켓_질의
+type s컨텍스트 struct {
+	ctx mangos.Context
+	변환_형식 lib.T변환       // 전송하는 자료를 변환하는 형식.
 }
 
-func (s *s소켓_저장소) G소켓() I소켓_질의 {
-	select {
-	case <-Ch공통_종료():
-		return nil
-	case 소켓 := <-s.M저장소:
-		return 소켓
-	default:
-		s.Lock()
-		defer s.Unlock()
+func (s *s컨텍스트) S송신(변환_형식 lib.T변환, 값_모음 ...interface{}) (에러 error) {
+	defer lib.S예외처리{M에러: &에러, M출력_숨김: true}.S실행()
 
-		return s.M생성함수()
+	매개체 := lib.New바이트_변환_모음_단순형(변환_형식, 값_모음...)
+	바이트_모음 := lib.F확인(매개체.MarshalBinary()).([]byte)
+
+	return s.ctx.Send(바이트_모음)
+}
+
+func (s *s컨텍스트) G수신() (값 *lib.S바이트_변환_모음, 에러 error) {
+	defer lib.S예외처리{M에러: &에러, M함수: func() { 값 = nil }, M출력_숨김: true}.S실행()
+
+	if 바이트_모음, 에러 := s.ctx.Recv(); 에러 != nil {
+		if 에러.Error() == "connection closed" ||
+			에러.Error() == "object closed" {
+			return nil, nil
+		} else {
+			lib.F에러_출력(에러)
+			return nil, 에러
+		}
+	} else {
+		값 = new(lib.S바이트_변환_모음)
+		if 에러 = 값.UnmarshalBinary(바이트_모음); 에러 != nil {
+			return nil, 에러
+		} else {
+			return 값, nil
+		}
 	}
 }
 
-func (s *s소켓_저장소) S회수(소켓 I소켓_질의) {
-	if 소켓 == nil {
-		return
-	}
 
-	소켓.S타임아웃(P30초)
-
-	select {
-	case s.M저장소 <- 소켓:
-		return
-	default:
-		소켓.Close()
-	}
-}
-
-func (s *s소켓_저장소) S정리() {
-	for i := 0; i < len(s.M저장소); i++ {
-		소켓 := <-s.M저장소
-		소켓.Close()
-	}
-}

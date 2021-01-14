@@ -147,7 +147,7 @@ func NewZero소켓(종류 lib.T소켓_종류, 주소 string, 접속방식 lib.T�
 }
 
 func NewZero소켓REQ(주소 lib.T주소, 옵션_모음 ...interface{}) (lib.I소켓_질의, error) {
-	소켓, 에러 := NewZero소켓(lib.P소켓_종류_REQ, 주소.G값(), lib.P소켓_접속_CONNECT, 옵션_모음...)
+	소켓, 에러 := NewZero소켓(lib.P소켓_종류_REQ, 주소.TCP주소(), lib.P소켓_접속_CONNECT, 옵션_모음...)
 
 	if 에러 != nil {
 		return nil, 에러
@@ -168,7 +168,7 @@ func NewZero소켓REQ_단순형(주소 lib.T주소, 옵션_모음 ...interface{}
 }
 
 func NewZero소켓REP(주소 lib.T주소, 옵션_모음 ...interface{}) (lib.I소켓, error) {
-	return NewZero소켓(lib.P소켓_종류_REP, 주소.G값(), lib.P소켓_접속_BIND, 옵션_모음...)
+	return NewZero소켓(lib.P소켓_종류_REP, 주소.TCP주소(), lib.P소켓_접속_BIND, 옵션_모음...)
 }
 
 func NewZero소켓REP_단순형(주소 lib.T주소, 옵션_모음 ...interface{}) lib.I소켓 {
@@ -176,7 +176,7 @@ func NewZero소켓REP_단순형(주소 lib.T주소, 옵션_모음 ...interface{}
 }
 
 func NewZero소켓PUB(주소 lib.T주소, 옵션_모음 ...interface{}) (소켓 lib.I소켓, 에러 error) {
-	return NewZero소켓(lib.P소켓_종류_PUB, 주소.G값(), lib.P소켓_접속_BIND, 옵션_모음...)
+	return NewZero소켓(lib.P소켓_종류_PUB, 주소.TCP주소(), lib.P소켓_접속_BIND, 옵션_모음...)
 }
 
 func NewZero소켓PUB_단순형(주소 lib.T주소, 옵션_모음 ...interface{}) lib.I소켓 {
@@ -184,7 +184,7 @@ func NewZero소켓PUB_단순형(주소 lib.T주소, 옵션_모음 ...interface{}
 }
 
 func NewZero소켓SUB(주소 lib.T주소, 옵션_모음 ...interface{}) (소켓 lib.I소켓, 에러 error) {
-	return NewZero소켓(lib.P소켓_종류_SUB, 주소.G값(), lib.P소켓_접속_CONNECT, 옵션_모음...)
+	return NewZero소켓(lib.P소켓_종류_SUB, 주소.TCP주소(), lib.P소켓_접속_CONNECT, 옵션_모음...)
 }
 
 func NewZero소켓SUB_단순형(주소 lib.T주소, 옵션_모음 ...interface{}) lib.I소켓 {

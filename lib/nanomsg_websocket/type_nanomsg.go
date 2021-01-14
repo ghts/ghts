@@ -35,7 +35,6 @@ package nano
 
 import (
 	"github.com/ghts/ghts/lib"
-	"github.com/ghts/ghts/lib/nanomsg_context"
 	"go.nanomsg.org/mangos/v3"
 	"go.nanomsg.org/mangos/v3/protocol/pair"
 	"go.nanomsg.org/mangos/v3/protocol/pub"
@@ -45,18 +44,14 @@ import (
 	"go.nanomsg.org/mangos/v3/protocol/req"
 	"go.nanomsg.org/mangos/v3/protocol/sub"
 	"go.nanomsg.org/mangos/v3/protocol/xrep"
-	_ "go.nanomsg.org/mangos/v3/transport/all"
+	_ "go.nanomsg.org/mangos/v3/transport/ws"
 	"strings"
 	"time"
 )
 
-type I소켓with컨텍스트 interface {
-	lib.I소켓
-	G컨텍스트() (lib.I송수신, error)
-}
-
 type I소켓Raw interface {
 	lib.I소켓
+	G컨텍스트() (mangos.Context, error)
 	S송신Raw(*mangos.Message) error
 	S송신Raw_단순형(*mangos.Message)
 	G수신Raw() (*mangos.Message, error)
@@ -266,15 +261,6 @@ func (s *sNano소켓) G수신() (값 *lib.S바이트_변환_모음, 에러 error
 		} else {
 			return 값, nil
 		}
-	}
-}
-
-func (s *sNano소켓) G컨텍스트() (lib.I송수신, error) {
-	if ctx, 에러 := s.Socket.OpenContext(); 에러 != nil {
-		lib.F에러_출력(에러)
-		return nil, 에러
-	} else {
-		return nanomsg_context.New컨텍스트(ctx), nil
 	}
 }
 
