@@ -36,8 +36,7 @@ package xing
 import (
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/lib/external_process"
-	nano_tcp "github.com/ghts/ghts/lib/nanomsg_tcp"
-	nano_ws "github.com/ghts/ghts/lib/nanomsg_websocket"
+	"github.com/ghts/ghts/lib/nanomsg"
 	"github.com/ghts/ghts/xing/base"
 	"github.com/mitchellh/go-ps"
 
@@ -99,7 +98,7 @@ func F초기화(값 xt.T서버_구분) {
 }
 
 func F소켓_생성() {
-	소켓REP_TR콜백 = nano_tcp.NewNano소켓REP_단순형(xt.F주소_콜백())
+	소켓REP_TR콜백 = nano.NewNano소켓REP_단순형(xt.F주소_콜백())
 }
 
 func F초기화_Go루틴() {
@@ -138,7 +137,7 @@ func f초기화_xing_C32() (에러 error) {
 }
 
 func F접속_로그인() (에러 error) {
-	소켓SUB_실시간_정보 = lib.F확인(nano_ws.NewNano소켓SUB(xt.F주소_C32(), "sub")).(lib.I소켓)
+	소켓SUB_실시간_정보 = nano.NewNano소켓SUB_단순형(xt.F주소_실시간())
 
 	if !tr수신_소켓_동작_확인() {
 		return lib.New에러("C32 프로세스 REP소켓 접속 불가.")

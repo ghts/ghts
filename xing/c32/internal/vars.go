@@ -35,9 +35,8 @@ package x32
 
 import (
 	"github.com/ghts/ghts/lib"
-	nano_tcp "github.com/ghts/ghts/lib/nanomsg_tcp"
+	"github.com/ghts/ghts/lib/nanomsg"
 	xt "github.com/ghts/ghts/xing/base"
-	"net/http"
 	"path/filepath"
 	"reflect"
 	"runtime"
@@ -80,11 +79,11 @@ var (
 
 // 다중 사용에 안전한 값들.
 var (
-	소켓REP_TR수신   lib.I소켓with컨텍스트
-	소켓PUB_실시간_정보 lib.I소켓
+	소켓REP_TR수신 = nano.NewNano소켓REP_단순형(xt.F주소_C32())
+	소켓PUB_실시간_정보 = nano.NewNano소켓PUB_단순형(xt.F주소_실시간())
 
 	소켓REQ_저장소 = lib.New소켓_저장소(20, func() lib.I소켓_질의 {
-		return nano_tcp.NewNano소켓REQ_단순형(xt.F주소_콜백(), lib.P30초)
+		return nano.NewNano소켓REQ_단순형(xt.F주소_콜백(), lib.P30초)
 	})
 
 	접속_처리_잠금  sync.Mutex
@@ -116,4 +115,3 @@ var (
 	서버_구분     xt.T서버_구분
 )
 
-var HTTP서버 *http.Server
