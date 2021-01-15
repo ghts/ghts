@@ -87,7 +87,7 @@ func 서버_노드(t lib.I안전한_테스트, 주소 lib.T주소, ch초기화, 
 	ch초기화 <- lib.P신호_초기화
 
 	HTTP서버 = &http.Server{
-		Addr:    lib.F2문자열(주소.G단축값()),
+		Addr:    주소.G단축값(),
 		Handler: mux}
 
 	HTTP서버.ListenAndServe()
@@ -144,9 +144,8 @@ func REQ클라이언트_노드(t lib.I안전한_테스트, 주소 lib.T주소, c
 	defer func() { ch종료 <- lib.P신호_종료 }()
 
 	ch초기화 <- lib.P신호_초기화
-	url := 주소.WS주소() + "/req"
 
-	소켓, 에러 := NewNano소켓REQ(url)
+	소켓, 에러 := NewNano소켓REQ(주소, "req")
 	t.G에러없음(에러)
 	defer 소켓.Close()
 
@@ -169,9 +168,8 @@ func SUB클라이언트_노드(t lib.I안전한_테스트, 주소 lib.T주소, c
 	defer func() { ch종료 <- lib.P신호_종료 }()
 
 	ch초기화 <- lib.P신호_초기화
-	url := 주소.WS주소() + "/sub"
 
-	소켓, 에러 := NewNano소켓SUB(url)
+	소켓, 에러 := NewNano소켓SUB(주소, "sub")
 	t.G에러없음(에러)
 	defer 소켓.Close()
 
