@@ -92,67 +92,6 @@ func 서버_노드_Nano소켓(t lib.I안전한_테스트, ch초기화, ch종료 
 	t.G에러없음(소켓.S송신(lib.F임의_변환_형식(), time.Now()))
 }
 
-func TestNano소켓_RAW_REQ_REP(t *testing.T) {
-	t.Parallel()
-
-	주소 := lib.F테스트용_임의_주소()
-	ch초기화 := make(chan lib.T신호, 2)
-	ch종료 := make(chan lib.T신호, 2)
-	테스트 := lib.New안전한_테스트(t)
-
-	go raw_서버_노드_Nano소켓(테스트, ch초기화, ch종료, 주소)
-	<-ch초기화
-
-	go raw_클라이언트_노드_Nano소켓(테스트, ch초기화, ch종료, 주소)
-	<-ch초기화
-
-	for i := 0; i < 2; i++ {
-		<-ch종료
-	}
-}
-
-func raw_클라이언트_노드_Nano소켓(t lib.I안전한_테스트, ch초기화, ch종료 chan lib.T신호, 주소 lib.T주소) {
-	defer func() { ch종료 <- lib.P신호_종료 }()
-
-	ch초기화 <- lib.P신호_초기화
-
-	소켓REQ, 에러 := NewNano소켓REQ(주소)
-	t.G에러없음(에러)
-	defer 소켓REQ.Close()
-
-	바이트_변환_모음, 에러 := 소켓REQ.G질의_응답(lib.F임의_변환_형식(), "DATE")
-
-	var 일자 time.Time
-	t.G에러없음(바이트_변환_모음.G값(0, &일자))
-
-	지금 := lib.F지금()
-	t.G참임(lib.F절대값_Duration(일자.Sub(지금)) < lib.P10초, 일자, 지금)
-}
-
-func raw_서버_노드_Nano소켓(t lib.I안전한_테스트, ch초기화, ch종료 chan lib.T신호, 주소 lib.T주소) {
-	defer func() { ch종료 <- lib.P신호_종료 }()
-
-	소켓_XREP, 에러 := NewNano소켓XREP(주소)
-	t.G에러없음(에러)
-
-	defer 소켓_XREP.Close()
-
-	ch초기화 <- lib.P신호_초기화
-
-	메시지, 에러 := 소켓_XREP.G수신Raw()
-	t.G에러없음(에러)
-
-	바이트_변환_모음, 에러 := lib.New바이트_변환_모음from바이트_배열(메시지.Body)
-	t.G에러없음(에러)
-
-	var 문자열 string
-	t.G에러없음(바이트_변환_모음.G값(0, &문자열))
-	t.G같음(문자열, "DATE")
-
-	메시지.Body = lib.F확인(lib.New바이트_변환_모음_단순형(lib.MsgPack, time.Now()).MarshalBinary()).([]byte)
-	t.G에러없음(소켓_XREP.S송신Raw(메시지))
-}
-
 func TestNano소켓_PUB_SUB(t *testing.T) {
 	t.Parallel()
 
