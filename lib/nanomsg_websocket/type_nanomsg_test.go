@@ -39,8 +39,6 @@ import (
 	"github.com/ghts/ghts/lib"
 	"go.nanomsg.org/mangos/v3"
 	"go.nanomsg.org/mangos/v3/protocol/pub"
-	"go.nanomsg.org/mangos/v3/protocol/rep"
-	"go.nanomsg.org/mangos/v3/protocol/req"
 	"go.nanomsg.org/mangos/v3/protocol/sub"
 	"go.nanomsg.org/mangos/v3/transport/ws"
 	"net/http"
@@ -99,32 +97,31 @@ func 서버_노드(t lib.I안전한_테스트, 주소 lib.T주소, ch초기화, 
 	HTTP서버.ListenAndServe()
 }
 
-func REQ핸들러(t lib.I안전한_테스트, 소켓 mangos.Socket) {
+func REQ핸들러(t lib.I안전한_테스트, 소켓 lib.I소켓with컨텍스트) {
 	반복_횟수 := 0
 	for {
-		// don't care about the content of received message
-		_, 에러 := 소켓.Recv()
+		바이트_변환_모음, 에러 := 소켓.G수신()
 		t.G에러없음(에러)
 
+		t.G참임(바이트_변환_모음.G수량() == 1)
+
+		i수신값, 에러 := 바이트_변환_모음.G해석값(0)
+		t.G에러없음(에러)
+
+		수신값, ok := i수신값.(string)
+		t.G참임(ok)
+		t.G같음(수신값, "Hello")
+
 		응답값 := fmt.Sprintf("REPLY #%d %s", 반복_횟수, time.Now().String())
-		t.G에러없음(소켓.Send([]byte(응답값)))
+		t.G에러없음(소켓.S송신(lib.MsgPack, 응답값))
 
 		반복_횟수++
 	}
 }
 
 func REQ핸들러_추가(t lib.I안전한_테스트, mux *http.ServeMux, 주소 lib.T주소) {
-	소켓, _ := rep.NewSocket()
-	url := 주소.WS주소() + "/req"
-
-	리스너, 에러 := 소켓.NewListener(url, nil)
+	소켓, 에러 := NewNano소켓REP(mux, 주소, "/req")
 	t.G에러없음(에러)
-
-	핸들러, 에러 := 리스너.GetOption(ws.OptionWebSocketHandler)
-	t.G에러없음(에러)
-
-	mux.Handle("/req", 핸들러.(http.Handler))
-	t.G에러없음(리스너.Listen())
 
 	go REQ핸들러(t, 소켓)
 }
@@ -162,18 +159,22 @@ func REQ클라이언트_노드(t lib.I안전한_테스트, 주소 lib.T주소, c
 	ch초기화 <- lib.P신호_초기화
 	url := 주소.WS주소() + "/req"
 
-	소켓, 에러 := req.NewSocket()
+	소켓, 에러 := NewNano소켓REQ(url)
 	t.G에러없음(에러)
 	defer 소켓.Close()
 
-	t.G에러없음(소켓.Dial(url))
+	t.G에러없음(소켓.S송신(lib.MsgPack, "Hello"))
 
-	lib.F대기(lib.P100밀리초) // TCP연결이 설정될 동안 대기.
-
-	t.G에러없음(소켓.Send([]byte("Hello")))
-
-	수신값, 에러 := 소켓.Recv()
+	바이트_변환_모음, 에러 := 소켓.G수신()
 	t.G에러없음(에러)
+
+	t.G참임(바이트_변환_모음.G수량() == 1)
+
+	i수신값, 에러 := 바이트_변환_모음.G해석값(0)
+	t.G에러없음(에러)
+
+	수신값, ok := i수신값.(string)
+	t.G참임(ok)
 	t.G참임(strings.HasPrefix(lib.F2문자열(수신값), "REPLY "))
 }
 
