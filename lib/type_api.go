@@ -101,7 +101,9 @@ type S질의값_정수 struct {
 	M정수값 int
 }
 
-func (s *S질의값_정수) String() string { return F2문자열("%v %v %v", s.M구분, s.M코드, s.M정수값) }
+func (s *S질의값_정수) String() string {
+	return F2문자열("%v %v %v", s.M구분, s.M코드, s.M정수값)
+}
 
 func New질의값_문자열(TR구분 TR구분, TR코드 string, 값 string) *S질의값_문자열 {
 	s := new(S질의값_문자열)
@@ -116,7 +118,9 @@ type S질의값_문자열 struct {
 	M문자열 string
 }
 
-func (s *S질의값_문자열) String() string { return F2문자열("%v %v %v", s.M구분, s.M코드, s.M문자열) }
+func (s *S질의값_문자열) String() string {
+	return F2문자열("%v %v %v", s.M구분, s.M코드, s.M문자열)
+}
 
 func New질의값_문자열_모음(TR구분 TR구분, TR코드 string, 값 []string) *S질의값_문자열_모음 {
 	s := new(S질의값_문자열_모음)
@@ -131,7 +135,9 @@ type S질의값_문자열_모음 struct {
 	M문자열_모음 []string
 }
 
-func (s *S질의값_문자열_모음) String() string { return F2문자열("%v %v %v", s.M구분, s.M코드, s.M문자열_모음) }
+func (s *S질의값_문자열_모음) String() string {
+	return F2문자열("%v %v %v", s.M구분, s.M코드, s.M문자열_모음)
+}
 
 func New질의값_바이트_변환(TR구분 TR구분, TR코드 string, 값 interface{}) *S질의값_바이트_변환 {
 	s := new(S질의값_바이트_변환)
@@ -181,7 +187,9 @@ type S질의값_단일_종목 struct {
 
 func (s S질의값_단일_종목) G종목코드() string { return s.M종목코드 }
 
-func (s *S질의값_단일_종목) String() string { return F2문자열("%v %v %v", s.M구분, s.M코드, s.M종목코드) }
+func (s *S질의값_단일_종목) String() string {
+	return F2문자열("%v %v %v", s.M구분, s.M코드, s.M종목코드)
+}
 
 func New질의값_단일종목_연속키() *S질의값_단일종목_연속키 {
 	s := new(S질의값_단일종목_연속키)
@@ -195,7 +203,9 @@ type S질의값_단일종목_연속키 struct {
 	M연속키 string
 }
 
-func (s *S질의값_단일종목_연속키) String() string { return F2문자열("%v %v %v %v", s.M구분, s.M코드, s.M종목코드, s.M연속키) }
+func (s *S질의값_단일종목_연속키) String() string {
+	return F2문자열("%v %v %v %v", s.M구분, s.M코드, s.M종목코드, s.M연속키)
+}
 
 func New질의값_복수_종목(TR구분 TR구분, TR코드 string, 종목코드_모음 []string) *S질의값_복수_종목 {
 	s := new(S질의값_복수_종목)
@@ -228,7 +238,9 @@ func (s S질의값_복수_종목) G전체_종목코드() string {
 	return 버퍼.String()
 }
 
-func (s *S질의값_복수_종목) String() string { return F2문자열("%v %v %v", s.M구분, s.M코드, s.M종목코드_모음) }
+func (s *S질의값_복수_종목) String() string {
+	return F2문자열("%v %v %v", s.M구분, s.M코드, s.M종목코드_모음)
+}
 
 type S질의값_정상_주문 struct {
 	*S질의값_단일_종목
@@ -279,7 +291,9 @@ type S질의값_취소_주문 struct {
 	M주문수량  int64
 }
 
-func (s *S질의값_취소_주문) String() string { return F2문자열("%v %v %v %v %v", s.M구분, s.M코드, s.M종목코드, s.M계좌번호, s.M주문수량) }
+func (s *S질의값_취소_주문) String() string {
+	return F2문자열("%v %v %v %v %v", s.M구분, s.M코드, s.M종목코드, s.M계좌번호, s.M주문수량)
+}
 
 // 전송 권한 관련
 type I전송_권한 interface {

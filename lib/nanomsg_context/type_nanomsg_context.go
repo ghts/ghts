@@ -46,8 +46,8 @@ func New컨텍스트(ctx mangos.Context) lib.I송수신 {
 }
 
 type s컨텍스트 struct {
-	ctx mangos.Context
-	변환_형식 lib.T변환       // 전송하는 자료를 변환하는 형식.
+	ctx   mangos.Context
+	변환_형식 lib.T변환 // 전송하는 자료를 변환하는 형식.
 }
 
 func (s *s컨텍스트) S송신(변환_형식 lib.T변환, 값_모음 ...interface{}) (에러 error) {
@@ -79,5 +79,3 @@ func (s *s컨텍스트) G수신() (값 *lib.S바이트_변환_모음, 에러 err
 		}
 	}
 }
-
-

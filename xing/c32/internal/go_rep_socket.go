@@ -49,7 +49,7 @@ func go수신_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 	var 바이트_변환_모음 *lib.S바이트_변환_모음
 
 	defer lib.S예외처리{
-		M에러: &에러,
+		M에러:    &에러,
 		M출력_숨김: true,
 		M함수: func() {
 			if 에러 != nil &&

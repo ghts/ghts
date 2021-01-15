@@ -414,4 +414,3 @@ func f종료() {
 	w32.DestroyWindow(메시지_윈도우)
 	syscall.FreeLibrary(xing_api_dll)
 }
-

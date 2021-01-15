@@ -64,6 +64,6 @@ func f테스트_정리() (에러 error) {
 	lib.F화면_출력_중지()
 	F종료()
 	lib.F테스트_모드_종료()
-	
+
 	return nil
 }
