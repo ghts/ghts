@@ -33,193 +33,164 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
 package nano
 
-/*
 import (
+	"context"
+	"fmt"
 	"github.com/ghts/ghts/lib"
+	"go.nanomsg.org/mangos/v3"
+	"go.nanomsg.org/mangos/v3/protocol/pub"
+	"go.nanomsg.org/mangos/v3/protocol/rep"
+	"go.nanomsg.org/mangos/v3/protocol/req"
+	"go.nanomsg.org/mangos/v3/protocol/sub"
+	"go.nanomsg.org/mangos/v3/transport/ws"
+	"net/http"
+	"strings"
 	"testing"
 	"time"
 )
 
-func TestNano소켓_REQ_REP(t *testing.T) {
+func f테스트용_임의_주소() lib.T주소 {
+	return lib.T주소(lib.F임의값_생성기().Intn(60000))
+}
+
+var HTTP서버 *http.Server
+
+// 1개의 포트로 REQ-REP / SUB-PUB 동시에 처리하는 테스트
+// https://github.com/nanomsg/mangos/tree/master/examples/websocket
+func TestNano웹소켓(t *testing.T) {
 	t.Parallel()
 
 	주소 := f테스트용_임의_주소()
-	ch초기화 := make(chan lib.T신호, 2)
-	ch종료 := make(chan lib.T신호, 2)
+	ch초기화 := make(chan lib.T신호, 3)
+	ch종료 := make(chan lib.T신호, 3)
 	테스트 := lib.New안전한_테스트(t)
 
-	go 서버_노드_Nano소켓(테스트, ch초기화, ch종료, 주소)
+	go 서버_노드(테스트, 주소, ch초기화, ch종료)
+	<-ch초기화 // 서버 노드가 초기화 된 것 확인한 후 클라이언트 노드 생성.
+
+	go REQ클라이언트_노드(테스트, 주소, ch초기화, ch종료)
+	go SUB클라이언트_노드(테스트, 주소, ch초기화, ch종료)
+	<-ch초기화
 	<-ch초기화
 
-	go 클라이언트_노드_Nano소켓(테스트, ch초기화, ch종료, 주소)
-	<-ch초기화
+	// 클라이언트 종료 대기
+	<-ch종료
+	<-ch종료
 
-	for i := 0; i < 2; i++ {
-		<-ch종료
-	}
-}
+	lib.F테스트_에러없음(t, HTTP서버.Shutdown(context.TODO()))
 
-func 클라이언트_노드_Nano소켓(t lib.I안전한_테스트, ch초기화, ch종료 chan lib.T신호, 주소 lib.T주소) {
-	defer func() { ch종료 <- lib.P신호_종료 }()
-
-	소켓REQ, 에러 := NewNano소켓REQ(주소)
-	t.G에러없음(에러)
-	defer 소켓REQ.Close()
-
-	ch초기화 <- lib.P신호_초기화
-
-	바이트_변환_모음, 에러 := 소켓REQ.G질의_응답(lib.F임의_변환_형식(), "DATE")
-
-	var 일자 time.Time
-	t.G에러없음(바이트_변환_모음.G값(0, &일자))
-	t.G같음(일자.Format(lib.P일자_형식), time.Now().Format(lib.P일자_형식))
-}
-
-func 서버_노드_Nano소켓(t lib.I안전한_테스트, ch초기화, ch종료 chan lib.T신호, 주소 lib.T주소) {
-	defer func() { ch종료 <- lib.P신호_종료 }()
-
-	소켓, 에러 := NewNano소켓REP(주소)
-	t.G에러없음(에러)
-
-	ch초기화 <- lib.P신호_초기화
-
-	매개체_모음, 에러 := 소켓.G수신()
-	t.G에러없음(에러)
-
-	var 문자열 string
-	t.G에러없음(매개체_모음.G값(0, &문자열))
-	t.G같음(문자열, "DATE")
-
-	t.G에러없음(소켓.S송신(lib.F임의_변환_형식(), time.Now()))
-}
-
-func TestNano소켓_RAW_REQ_REP(t *testing.T) {
-	t.Parallel()
-
-	주소 := lib.F테스트용_임의_주소()
-	ch초기화 := make(chan lib.T신호, 2)
-	ch종료 := make(chan lib.T신호, 2)
-	테스트 := lib.New안전한_테스트(t)
-
-	go raw_서버_노드_Nano소켓(테스트, ch초기화, ch종료, 주소)
-	<-ch초기화
-
-	go raw_클라이언트_노드_Nano소켓(테스트, ch초기화, ch종료, 주소)
-	<-ch초기화
-
-	for i := 0; i < 2; i++ {
-		<-ch종료
-	}
-}
-
-func raw_클라이언트_노드_Nano소켓(t lib.I안전한_테스트, ch초기화, ch종료 chan lib.T신호, 주소 lib.T주소) {
-	defer func() { ch종료 <- lib.P신호_종료 }()
-
-	ch초기화 <- lib.P신호_초기화
-
-	소켓REQ, 에러 := NewNano소켓REQ(주소)
-	t.G에러없음(에러)
-	defer 소켓REQ.Close()
-
-	바이트_변환_모음, 에러 := 소켓REQ.G질의_응답(lib.F임의_변환_형식(), "DATE")
-
-	var 일자 time.Time
-	t.G에러없음(바이트_변환_모음.G값(0, &일자))
-
-	지금 := lib.F지금()
-	t.G참임(lib.F절대값_Duration(일자.Sub(지금)) < lib.P10초, 일자, 지금)
-}
-
-func raw_서버_노드_Nano소켓(t lib.I안전한_테스트, ch초기화, ch종료 chan lib.T신호, 주소 lib.T주소) {
-	defer func() { ch종료 <- lib.P신호_종료 }()
-
-	소켓_XREP, 에러 := NewNano소켓XREP(주소)
-	t.G에러없음(에러)
-
-	defer 소켓_XREP.Close()
-
-	ch초기화 <- lib.P신호_초기화
-
-	메시지, 에러 := 소켓_XREP.G수신Raw()
-	t.G에러없음(에러)
-
-	바이트_변환_모음, 에러 := lib.New바이트_변환_모음from바이트_배열(메시지.Body)
-	t.G에러없음(에러)
-
-	var 문자열 string
-	t.G에러없음(바이트_변환_모음.G값(0, &문자열))
-	t.G같음(문자열, "DATE")
-
-	메시지.Body = lib.F확인(lib.New바이트_변환_모음_단순형(lib.MsgPack, time.Now()).MarshalBinary()).([]byte)
-	t.G에러없음(소켓_XREP.S송신Raw(메시지))
-}
-
-func TestNano소켓_PUB_SUB(t *testing.T) {
-	t.Parallel()
-
-	const 클라이언트_수량 = 10
-	주소 := lib.F테스트용_임의_주소()
-	테스트 := lib.New안전한_테스트(t)
-	ch초기화 := make(chan lib.T신호, 1)
-	ch중지 := make(chan lib.T신호, 1)
-	ch종료 := make(chan lib.T신호, 클라이언트_수량)
-
-	go 서버_노드_Nano소켓_PUB(테스트, ch초기화, ch중지, ch종료, 주소)
-	<-ch초기화
-
-	for i := 0; i < 클라이언트_수량; i++ {
-		go 클라이언트_노드_Nano소켓_SUB(테스트, ch종료, 주소)
-	}
-
-	for i := 0; i < 클라이언트_수량; i++ {
-		<-ch종료
-	}
-
-	ch중지 <- lib.P신호_OK
+	// 서버 종료 대기
 	<-ch종료
 }
 
-func 서버_노드_Nano소켓_PUB(t lib.I안전한_테스트, ch초기화, ch중지, ch종료 chan lib.T신호, 주소 lib.T주소) {
+func 서버_노드(t lib.I안전한_테스트, 주소 lib.T주소, ch초기화, ch종료 chan lib.T신호) {
 	defer func() { ch종료 <- lib.P신호_종료 }()
 
-	소켓_PUB, 에러 := NewNano소켓PUB(주소)
-	t.G에러없음(에러)
-	defer 소켓_PUB.Close()
+	mux := http.NewServeMux()
+	REQ핸들러_추가(t, mux, 주소)
+	SUB핸들러_추가(t, mux, 주소)
 
-	ch초기화 <- lib.P신호_OK
+	ch초기화 <- lib.P신호_초기화
 
+	HTTP서버 = &http.Server{
+		Addr:    lib.F2문자열(주소.G단축값()),
+		Handler: mux}
+
+	HTTP서버.ListenAndServe()
+}
+
+func REQ핸들러(t lib.I안전한_테스트, 소켓 mangos.Socket) {
+	반복_횟수 := 0
 	for {
-		select {
-		case <-ch중지:
-			return
-		default:
-			t.G에러없음(소켓_PUB.S송신(lib.MsgPack, lib.F금일()))
-			lib.F대기(lib.P500밀리초)
-		}
+		// don't care about the content of received message
+		_, 에러 := 소켓.Recv()
+		t.G에러없음(에러)
+
+		응답값 := fmt.Sprintf("REPLY #%d %s", 반복_횟수, time.Now().String())
+		t.G에러없음(소켓.Send([]byte(응답값)))
+
+		반복_횟수++
 	}
 }
 
-func 클라이언트_노드_Nano소켓_SUB(t lib.I안전한_테스트, ch종료 chan lib.T신호, 주소 lib.T주소) {
-	defer func() { ch종료 <- lib.P신호_종료 }()
+func REQ핸들러_추가(t lib.I안전한_테스트, mux *http.ServeMux, 주소 lib.T주소) {
+	소켓, _ := rep.NewSocket()
+	url := 주소.WS주소() + "/req"
 
-	소켓_SUB, 에러 := NewNano소켓SUB(주소)
-	t.G에러없음(에러)
-	defer 소켓_SUB.Close()
-
-	바이트_변환_모음, 에러 := 소켓_SUB.G수신()
+	리스너, 에러 := 소켓.NewListener(url, nil)
 	t.G에러없음(에러)
 
-	var 수신값 time.Time
-	t.G에러없음(바이트_변환_모음.G값(0, &수신값))
+	핸들러, 에러 := 리스너.GetOption(ws.OptionWebSocketHandler)
+	t.G에러없음(에러)
 
-	t.G같음(수신값, lib.F금일())
+	mux.Handle("/req", 핸들러.(http.Handler))
+	t.G에러없음(리스너.Listen())
+
+	go REQ핸들러(t, 소켓)
 }
 
-func f테스트용_임의_주소() lib.T주소 {
+func SUB핸들러(t lib.I안전한_테스트, 소켓 mangos.Socket) {
+	반복_횟수 := 0
 	for {
-		주소 := lib.T주소(lib.F임의값_생성기().Intn(60000))
+		배포값 := fmt.Sprintf("PUB #%d %s", 반복_횟수, time.Now().String())
+		t.G에러없음(소켓.Send([]byte(배포값)))
 
-		return 주소
+		lib.F대기(lib.P1초)
+		반복_횟수++
 	}
 }
-*/
+
+func SUB핸들러_추가(t lib.I안전한_테스트, mux *http.ServeMux, 주소 lib.T주소) {
+	소켓, _ := pub.NewSocket()
+	url := 주소.WS주소() + "/sub"
+
+	리스너, 에러 := 소켓.NewListener(url, nil)
+	t.G에러없음(에러)
+
+	핸들러, 에러 := 리스너.GetOption(ws.OptionWebSocketHandler)
+	t.G에러없음(에러)
+
+	mux.Handle("/sub", 핸들러.(http.Handler))
+	t.G에러없음(리스너.Listen())
+
+	go SUB핸들러(t, 소켓)
+}
+
+func REQ클라이언트_노드(t lib.I안전한_테스트, 주소 lib.T주소, ch초기화, ch종료 chan lib.T신호) {
+	defer func() { ch종료 <- lib.P신호_종료 }()
+
+	ch초기화 <- lib.P신호_초기화
+	url := 주소.WS주소() + "/req"
+
+	소켓, 에러 := req.NewSocket()
+	t.G에러없음(에러)
+	defer 소켓.Close()
+
+	t.G에러없음(소켓.Dial(url))
+
+	lib.F대기(lib.P100밀리초) // TCP연결이 설정될 동안 대기.
+
+	t.G에러없음(소켓.Send([]byte("Hello")))
+
+	수신값, 에러 := 소켓.Recv()
+	t.G에러없음(에러)
+	t.G참임(strings.HasPrefix(lib.F2문자열(수신값), "REPLY "))
+}
+
+func SUB클라이언트_노드(t lib.I안전한_테스트, 주소 lib.T주소, ch초기화, ch종료 chan lib.T신호) {
+	defer func() { ch종료 <- lib.P신호_종료 }()
+
+	ch초기화 <- lib.P신호_초기화
+	url := 주소.WS주소() + "/sub"
+
+	소켓, 에러 := sub.NewSocket()
+	t.G에러없음(에러)
+	defer 소켓.Close()
+
+	t.G에러없음(소켓.SetOption(mangos.OptionSubscribe, []byte{}))
+	t.G에러없음(소켓.Dial(url))
+
+	수신값, 에러 := 소켓.Recv()
+	t.G에러없음(에러)
+	t.G참임(strings.HasPrefix(lib.F2문자열(수신값), "PUB "))
+}

@@ -224,7 +224,7 @@ func (p T주소) G포트_번호() int {
 }
 
 func (p T주소) G단축값() string {
-	return "127.0.0.1:" + strconv.Itoa(int(p)+포트_번호_최소값)
+	return "127.0.0.1:" + strconv.Itoa(p.G포트_번호())
 }
 
 func (p T주소) TCP주소() string {

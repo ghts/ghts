@@ -153,7 +153,7 @@ func f테스트_에러없음(t testing.TB, 에러_후보_모음 ...interface{}) 
 		// PASS
 	case error:
 		if 에러값 != nil {
-			F문자열_출력("f테스트_에러없음() : 에러 발생.\n%v", F변수값_문자열(에러_후보_모음...))
+			F에러_출력("f테스트_에러없음() : 에러 발생.\n%v", F변수값_문자열(에러_후보_모음...))
 			t.FailNow()
 		}
 	default:

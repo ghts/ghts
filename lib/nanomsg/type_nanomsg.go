@@ -50,8 +50,6 @@ import (
 	"time"
 )
 
-
-
 type I소켓Raw interface {
 	lib.I소켓
 	S송신Raw(*mangos.Message) error
