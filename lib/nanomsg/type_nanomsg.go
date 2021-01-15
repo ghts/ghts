@@ -58,6 +58,7 @@ func NewNano소켓(종류 lib.T소켓_종류, 주소 string, 접속방식 lib.T�
 	switch 종류 {
 	case lib.P소켓_종류_REQ:
 		s.Socket, 에러 = req.NewSocket()
+		s.타임아웃 = lib.P30초
 	case lib.P소켓_종류_REP:
 		s.Socket, 에러 = rep.NewSocket()
 	case lib.P소켓_종류_PUB:
@@ -76,10 +77,6 @@ func NewNano소켓(종류 lib.T소켓_종류, 주소 string, 접속방식 lib.T�
 	}
 
 	lib.F확인(에러)
-
-	if 종류 == lib.P소켓_종류_REQ {
-		s.타임아웃 = lib.P30초
-	}
 
 	s.S옵션(옵션_모음...)
 
@@ -106,7 +103,7 @@ func NewNano소켓(종류 lib.T소켓_종류, 주소 string, 접속방식 lib.T�
 			}
 		}
 	case lib.P소켓_접속_BIND:
-		for i := 0; i < 20; i++ {
+		for i := 0; i < 10; i++ {
 			에러 = s.Socket.Listen(주소)
 
 			switch {
@@ -175,6 +172,32 @@ func NewNano소켓SUB(주소 lib.T주소, 옵션_모음 ...interface{}) (소켓 
 
 func NewNano소켓SUB_단순형(주소 lib.T주소, 옵션_모음 ...interface{}) lib.I소켓 {
 	return lib.F확인(NewNano소켓SUB(주소, 옵션_모음...)).(lib.I소켓)
+}
+
+func NewNano소켓PUSH(주소 lib.T주소, 옵션_모음 ...interface{}) (lib.I소켓, error) {
+	return NewNano소켓(lib.P소켓_종류_PUSH, 주소.TCP주소(), lib.P소켓_접속_CONNECT, 옵션_모음...)
+}
+
+func NewNano소켓PUSH_단순형(주소 lib.T주소, 옵션_모음 ...interface{}) lib.I소켓 {
+	if 소켓, 에러 := NewNano소켓PUSH(주소, 옵션_모음...); 에러 != nil {
+		lib.F에러_출력(에러)
+		return nil
+	} else {
+		return 소켓
+	}
+}
+
+func NewNano소켓PULL(주소 lib.T주소, 옵션_모음 ...interface{}) (lib.I소켓, error) {
+	return NewNano소켓(lib.P소켓_종류_PULL, 주소.TCP주소(), lib.P소켓_접속_BIND, 옵션_모음...)
+}
+
+func NewNano소켓PULL_단순형(주소 lib.T주소, 옵션_모음 ...interface{}) lib.I소켓 {
+	if 소켓, 에러 := NewNano소켓PULL(주소, 옵션_모음...); 에러 != nil {
+		lib.F에러_출력(에러)
+		return nil
+	} else {
+		return 소켓
+	}
 }
 
 type sNano소켓 struct {
