@@ -45,7 +45,7 @@ import (
 	"go.nanomsg.org/mangos/v3/protocol/req"
 	"go.nanomsg.org/mangos/v3/protocol/sub"
 	"go.nanomsg.org/mangos/v3/protocol/xrep"
-	_ "go.nanomsg.org/mangos/v3/transport/all"
+	_ "go.nanomsg.org/mangos/v3/transport/tcp"
 	"strings"
 	"time"
 )

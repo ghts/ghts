@@ -37,107 +37,32 @@ import (
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/lib/nanomsg_context"
 	"go.nanomsg.org/mangos/v3"
-	//"go.nanomsg.org/mangos/v3/protocol/pair"
-	//"go.nanomsg.org/mangos/v3/protocol/pub"
-	//"go.nanomsg.org/mangos/v3/protocol/pull"
-	//"go.nanomsg.org/mangos/v3/protocol/push"
+	"go.nanomsg.org/mangos/v3/protocol/pub"
 	"go.nanomsg.org/mangos/v3/protocol/rep"
 	"go.nanomsg.org/mangos/v3/protocol/req"
-	//"go.nanomsg.org/mangos/v3/protocol/sub"
+	"go.nanomsg.org/mangos/v3/protocol/sub"
 	"go.nanomsg.org/mangos/v3/transport/ws"
 	_ "go.nanomsg.org/mangos/v3/transport/ws"
 	"net/http"
 	"time"
 )
 
-//func NewNano소켓(종류 lib.T소켓_종류, url string, 접속방식 lib.T소켓_접속방식, 옵션_모음 ...interface{}) (소켓 lib.I소켓, 에러 error) {
-//	defer lib.S예외처리{M에러: &에러, M함수: func() { 소켓 = nil }}.S실행()
-//
-//	s := new(sNano소켓)
-//	s.종류 = 종류
-//
-//	switch 종류 {
-//	case lib.P소켓_종류_REQ:
-//		s.Socket, 에러 = req.NewSocket()
-//	case lib.P소켓_종류_REP:
-//		s.Socket, 에러 = rep.NewSocket()
-//	case lib.P소켓_종류_PUB:
-//		s.Socket, 에러 = pub.NewSocket()
-//	case lib.P소켓_종류_SUB:
-//		s.Socket, 에러 = sub.NewSocket()
-//		s.Socket.SetOption(mangos.OptionSubscribe, []byte(""))
-//	case lib.P소켓_종류_PUSH:
-//		s.Socket, 에러 = push.NewSocket()
-//	case lib.P소켓_종류_PULL:
-//		s.Socket, 에러 = pull.NewSocket()
-//	case lib.P소켓_종류_PAIR:
-//		s.Socket, 에러 = pair.NewSocket()
-//	default:
-//		에러 = lib.New에러("예상하지 못한 소켓 종류 : '%v'", 종류)
-//	}
-//
-//	lib.F확인(에러)
-//
-//	if 종류 == lib.P소켓_종류_REQ {
-//		s.타임아웃 = lib.P30초
-//	}
-//
-//	s.S옵션(옵션_모음...)
-//
-//	switch 접속방식 {
-//	case lib.P소켓_접속_CONNECT:
-//		for i := 0; i < 10; i++ {
-//			에러 = s.Socket.Dial(url)
-//
-//			switch {
-//			case 에러 == nil:
-//				return s, nil
-//			case strings.Contains(에러.Error(), "Address in use"):
-//				// 소켓이 완전히 닫히기 전에 다시 Bind()하면 Address in use 가 발생함.
-//				// 이런 경우에는 잠시 기다린 후 재시도 하면 해결됨.
-//				time.Sleep(500 * time.Millisecond)
-//				continue
-//			case strings.Contains(에러.Error(), "connectex: No connection could be made because the target machine actively refused it."):
-//				// SUB소켓 생성 시 종종 발생하는 원인을 모르는 에러.
-//				// 이런 경우에는 잠시 기다린 후 재시도 하면 해결됨.
-//				time.Sleep(500 * time.Millisecond)
-//				continue
-//			default:
-//				panic(lib.New에러(에러))
-//			}
-//		}
-//	case lib.P소켓_접속_BIND:
-//		for i := 0; i < 20; i++ {
-//			에러 = s.Socket.Listen(url)
-//
-//			switch {
-//			case 에러 == nil:
-//				return s, nil
-//			case strings.Contains(에러.Error(), "Address in use"):
-//				// 소켓이 완전히 닫히기 전에 다시 Bind()하면 Address in use 가 발생함.
-//				// 이런 경우에는 잠시 기다린 후 재시도 하면 해결됨.
-//				time.Sleep(500 * time.Millisecond)
-//				continue
-//			default:
-//				return nil, 에러
-//			}
-//		}
-//	default:
-//		return nil, lib.New에러("예상하지 못한 접속 방식 : '%v'", 접속방식)
-//	}
-//
-//	return nil, lib.New에러("소켓 생성 실패.")
-//}
-
-func NewNano소켓REQ(url string, 옵션_모음 ...interface{}) (소켓 lib.I소켓_질의, 에러 error) {
+func NewConnectNano소켓(종류 lib.T소켓_종류, url string, 옵션_모음 ...interface{}) (소켓 lib.I소켓, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 소켓 = nil }}.S실행()
 
 	s := new(sNano소켓)
-	s.종류 = lib.P소켓_종류_REQ
+	s.종류 = 종류
 	s.S옵션(옵션_모음...)
 
-	s.Socket, 에러 = req.NewSocket()
-	lib.F확인(에러)
+	switch 종류 {
+	case lib.P소켓_종류_REQ:
+		s.Socket, 에러 = req.NewSocket()
+	case lib.P소켓_종류_SUB:
+		s.Socket, 에러 = sub.NewSocket()
+		s.Socket.SetOption(mangos.OptionSubscribe, []byte(""))
+	default:
+		에러 = lib.New에러("예상하지 못한 소켓 종류 : '%v'", 종류)
+	}
 
 	lib.F확인(s.Socket.Dial(url))
 
@@ -146,14 +71,34 @@ func NewNano소켓REQ(url string, 옵션_모음 ...interface{}) (소켓 lib.I소
 	return s, nil
 }
 
-func NewNano소켓REP(mux *http.ServeMux, 주소 lib.T주소, 추가url string, 옵션_모음 ...interface{}) (소켓 lib.I소켓with컨텍스트, 에러 error) {
+func NewNano소켓REQ(url string, 옵션_모음 ...interface{}) (lib.I소켓_질의, error) {
+	if 소켓, 에러 := NewConnectNano소켓(lib.P소켓_종류_REQ, url, 옵션_모음...); 에러 != nil {
+		return nil, 에러
+	} else {
+		return 소켓.(lib.I소켓_질의), nil
+	}
+}
+
+func NewNano소켓SUB(url string, 옵션_모음 ...interface{}) (소켓 lib.I소켓, 에러 error) {
+	return NewConnectNano소켓(lib.P소켓_종류_SUB, url, 옵션_모음...)
+}
+
+func NewBindNano소켓(종류 lib.T소켓_종류, mux *http.ServeMux, 주소 lib.T주소, 추가url string, 옵션_모음 ...interface{}) (소켓 lib.I소켓, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 소켓 = nil }}.S실행()
 
 	s := new(sNano소켓)
-	s.종류 = lib.P소켓_종류_REP
+	s.종류 = 종류
 	s.S옵션(옵션_모음...)
 
-	s.Socket, 에러 = rep.NewSocket()
+	switch 종류 {
+	case lib.P소켓_종류_REP:
+		s.Socket, 에러 = rep.NewSocket()
+	case lib.P소켓_종류_PUB:
+		s.Socket, 에러 = pub.NewSocket()
+	default:
+		에러 = lib.New에러("예상하지 못한 소켓 종류 : '%v'", 종류)
+	}
+
 	lib.F확인(에러)
 
 	url := 주소.WS주소() + 추가url
@@ -170,25 +115,17 @@ func NewNano소켓REP(mux *http.ServeMux, 주소 lib.T주소, 추가url string, 
 	return s, nil
 }
 
-//func NewNano소켓REP_단순형(주소 lib.T주소, 옵션_모음 ...interface{}) lib.I소켓with컨텍스트 {
-//	return lib.F확인(NewNano소켓REP(주소, 옵션_모음...)).(lib.I소켓with컨텍스트)
-//}
-//
-//func NewNano소켓PUB(주소 lib.T주소, 옵션_모음 ...interface{}) (소켓 lib.I소켓, 에러 error) {
-//	return NewNano소켓(lib.P소켓_종류_PUB, 주소.TCP주소(), lib.P소켓_접속_BIND, 옵션_모음...)
-//}
-//
-//func NewNano소켓PUB_단순형(주소 lib.T주소, 옵션_모음 ...interface{}) lib.I소켓 {
-//	return lib.F확인(NewNano소켓PUB(주소, 옵션_모음...)).(lib.I소켓)
-//}
-//
-//func NewNano소켓SUB(주소 lib.T주소, 옵션_모음 ...interface{}) (소켓 lib.I소켓, 에러 error) {
-//	return NewNano소켓(lib.P소켓_종류_SUB, 주소.TCP주소(), lib.P소켓_접속_CONNECT, 옵션_모음...)
-//}
-//
-//func NewNano소켓SUB_단순형(주소 lib.T주소, 옵션_모음 ...interface{}) lib.I소켓 {
-//	return lib.F확인(NewNano소켓SUB(주소, 옵션_모음...)).(lib.I소켓)
-//}
+func NewNano소켓REP(mux *http.ServeMux, 주소 lib.T주소, 추가url string, 옵션_모음 ...interface{}) (lib.I소켓with컨텍스트, error) {
+	if 소켓, 에러 := NewBindNano소켓(lib.P소켓_종류_REP, mux, 주소, 추가url, 옵션_모음...); 에러 != nil {
+		return nil, 에러
+	} else {
+		return 소켓.(lib.I소켓with컨텍스트), nil
+	}
+}
+
+func NewNano소켓PUB(mux *http.ServeMux, 주소 lib.T주소, 추가url string, 옵션_모음 ...interface{}) (소켓 lib.I소켓, 에러 error) {
+	return NewBindNano소켓(lib.P소켓_종류_PUB, mux, 주소, 추가url, 옵션_모음...)
+}
 
 type sNano소켓 struct {
 	mangos.Socket
