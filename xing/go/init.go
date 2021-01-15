@@ -109,7 +109,7 @@ func F소켓_생성() {
 
 func F초기화_Go루틴() {
 	lib.F중복없는_문자열_출력("RT 루틴 일시 비활성화")
-	고루틴_모음 := []func(chan lib.T신호) error{go_TR콜백_처리} //, go_RT_주문처리결과}
+	고루틴_모음 := []func(chan lib.T신호) error{Go루틴_관리} //, go_RT_주문처리결과}
 	ch초기화 := make(chan lib.T신호, len(고루틴_모음))
 
 	for _, 고루틴 := range 고루틴_모음 {
@@ -320,6 +320,12 @@ func F종료() {
 	C32_종료()
 	lib.F공통_종료_채널_닫기()
 	F소켓_정리()
+
+	<-Ch모니터링_루틴_종료
+
+	for i:=0 ; i<콜백_도우미_수량 ; i++ {
+		<-Ch콜백_도우미_종료
+	}
 }
 
 func F소켓_정리() {

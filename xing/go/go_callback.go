@@ -39,23 +39,20 @@ import (
 	"strings"
 )
 
-func go_TR콜백_처리(ch초기화 chan lib.T신호) (에러 error) {
-	if lib.F공통_종료_채널_닫힘() {
-		return
-	}
+func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
+	lib.S예외처리{M에러: &에러, M함수_항상: func() {
+		Ch모니터링_루틴_종료 <- lib.P신호_종료
+	}}.S실행()
 
-	defer lib.S예외처리{M에러: &에러}.S실행()
-
-	const 콜백_처리_루틴_수량 = 100
-	ch도우미_초기화 := make(chan lib.T신호, 콜백_처리_루틴_수량)
-	ch도우미_종료 := make(chan error, 콜백_처리_루틴_수량)
+	ch도우미_초기화 := make(chan lib.T신호, 콜백_도우미_수량)
+	ch도우미_종료 := make(chan error, 콜백_도우미_수량)
 	ch공통_종료 := lib.Ch공통_종료()
 
-	for i := 0; i < 콜백_처리_루틴_수량; i++ {
+	for i := 0; i < 콜백_도우미_수량; i++ {
 		go go루틴_콜백_처리_도우미(ch도우미_초기화, ch도우미_종료)
 	}
 
-	for i := 0; i < 콜백_처리_루틴_수량; i++ {
+	for i := 0; i < 콜백_도우미_수량; i++ {
 		<-ch도우미_초기화
 	}
 
@@ -93,7 +90,11 @@ func go루틴_콜백_처리_도우미(ch초기화 chan lib.T신호, ch도우미_
 			}
 		},
 		M함수_항상: func() {
-			ch도우미_종료 <- 에러
+			if lib.F공통_종료_채널_닫힘() {
+				Ch콜백_도우미_종료 <- lib.P신호_종료
+			} else {
+				ch도우미_종료 <- 에러
+			}
 		}}.S실행()
 
 	if ctx, 에러 = 소켓REP_TR콜백.G컨텍스트(); 에러 != nil {
