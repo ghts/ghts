@@ -48,8 +48,10 @@ func go수신_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 	var ctx lib.I송수신
 	var 바이트_변환_모음 *lib.S바이트_변환_모음
 
-	defer func() {
-		lib.S예외처리{M에러: &에러, M출력_숨김: true, M함수: func() {
+	defer lib.S예외처리{
+		M에러: &에러,
+		M출력_숨김: true,
+		M함수: func() {
 			if 에러 != nil &&
 				!strings.Contains(에러.Error(), "connection closed") &&
 				!strings.Contains(에러.Error(), "object closed") {
@@ -59,14 +61,14 @@ func go수신_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 			if ctx != nil {
 				ctx.S송신(lib.JSON, 에러)
 			}
+		},
+		M함수_항상: func() {
+			if lib.F공통_종료_채널_닫힘() {
+				Ch수신_도우미_종료 <- lib.P신호_종료
+			} else {
+				ch종료 <- lib.P신호_종료
+			}
 		}}.S실행()
-
-		if lib.F공통_종료_채널_닫힘() {
-			Ch수신_도우미_종료 <- lib.P신호_종료
-		} else {
-			ch종료 <- lib.P신호_종료
-		}
-	}()
 
 	if ctx, 에러 = 소켓REP_TR수신.G컨텍스트(); 에러 != nil {
 		ctx = nil

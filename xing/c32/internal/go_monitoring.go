@@ -35,24 +35,12 @@ package x32
 
 import (
 	"github.com/ghts/ghts/lib"
-	"runtime"
 )
 
 func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
-	defer func() {
-		lib.S예외처리{M에러: &에러}.S실행()
+	lib.S예외처리{M에러: &에러, M함수_항상: func() {
 		Ch모니터링_루틴_종료 <- lib.P신호_종료
-	}()
-
-	수신_도우미_수량 = runtime.NumCPU() / 2
-	if 수신_도우미_수량 < 2 {
-		수신_도우미_수량 = 2
-	}
-
-	콜백_도우미_수량 = runtime.NumCPU() / 2
-	if 콜백_도우미_수량 < 2 {
-		콜백_도우미_수량 = 2
-	}
+	}}.S실행()
 
 	ch호출_도우미_초기화 := make(chan lib.T신호, 1)
 	ch호출_도우미_종료 := make(chan lib.T신호)

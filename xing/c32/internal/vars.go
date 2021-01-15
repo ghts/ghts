@@ -39,6 +39,7 @@ import (
 	xt "github.com/ghts/ghts/xing/base"
 	"path/filepath"
 	"reflect"
+	"runtime"
 	"sync"
 	"syscall"
 )
@@ -92,13 +93,13 @@ var (
 	Ch질의  = make(chan *lib.S채널_질의, 100)
 	ch콜백  = make(chan lib.I콜백, 100)
 
-	수신_도우미_수량 int
-	콜백_도우미_수량 int
+	수신_도우미_수량 = lib.F최대값_정수(runtime.NumCPU(), 2)
+	콜백_도우미_수량 = lib.F최대값_정수(runtime.NumCPU(), 2)
 
 	Ch모니터링_루틴_종료   = make(chan lib.T신호, 1)
 	Ch함수_호출_도우미_종료 = make(chan lib.T신호, 1)
-	Ch수신_도우미_종료    = make(chan lib.T신호, 100)
-	Ch콜백_도우미_종료    = make(chan lib.T신호, 100)
+	Ch수신_도우미_종료    = make(chan lib.T신호, 수신_도우미_수량)
+	Ch콜백_도우미_종료    = make(chan lib.T신호, 콜백_도우미_수량)
 
 	TR_수신_중    = lib.New안전한_bool(false)
 	API_초기화_완료 = lib.New안전한_bool(false)
