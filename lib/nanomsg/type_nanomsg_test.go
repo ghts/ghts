@@ -47,10 +47,10 @@ func TestNano소켓_REQ_REP(t *testing.T) {
 	ch종료 := make(chan lib.T신호, 2)
 	테스트 := lib.New안전한_테스트(t)
 
-	go 서버_노드_Nano소켓(테스트, ch초기화, ch종료, 주소)
+	go 서버_REP(테스트, ch초기화, ch종료, 주소)
 	<-ch초기화
 
-	go 클라이언트_노드_Nano소켓(테스트, ch초기화, ch종료, 주소)
+	go 클라이언트_REQ(테스트, ch초기화, ch종료, 주소)
 	<-ch초기화
 
 	for i := 0; i < 2; i++ {
@@ -58,7 +58,7 @@ func TestNano소켓_REQ_REP(t *testing.T) {
 	}
 }
 
-func 클라이언트_노드_Nano소켓(t lib.I안전한_테스트, ch초기화, ch종료 chan lib.T신호, 주소 lib.T주소) {
+func 클라이언트_REQ(t lib.I안전한_테스트, ch초기화, ch종료 chan lib.T신호, 주소 lib.T주소) {
 	defer func() { ch종료 <- lib.P신호_종료 }()
 
 	소켓REQ, 에러 := NewNano소켓REQ(주소)
@@ -74,7 +74,7 @@ func 클라이언트_노드_Nano소켓(t lib.I안전한_테스트, ch초기화, 
 	t.G같음(일자.Format(lib.P일자_형식), time.Now().Format(lib.P일자_형식))
 }
 
-func 서버_노드_Nano소켓(t lib.I안전한_테스트, ch초기화, ch종료 chan lib.T신호, 주소 lib.T주소) {
+func 서버_REP(t lib.I안전한_테스트, ch초기화, ch종료 chan lib.T신호, 주소 lib.T주소) {
 	defer func() { ch종료 <- lib.P신호_종료 }()
 
 	소켓, 에러 := NewNano소켓REP(주소)
@@ -102,11 +102,11 @@ func TestNano소켓_PUB_SUB(t *testing.T) {
 	ch중지 := make(chan lib.T신호, 1)
 	ch종료 := make(chan lib.T신호, 클라이언트_수량)
 
-	go 서버_노드_Nano소켓_PUB(테스트, ch초기화, ch중지, ch종료, 주소)
+	go 서버_PUB(테스트, ch초기화, ch중지, ch종료, 주소)
 	<-ch초기화
 
 	for i := 0; i < 클라이언트_수량; i++ {
-		go 클라이언트_노드_Nano소켓_SUB(테스트, ch종료, 주소)
+		go 클라이언트_SUB(테스트, ch종료, 주소)
 	}
 
 	for i := 0; i < 클라이언트_수량; i++ {
@@ -117,7 +117,7 @@ func TestNano소켓_PUB_SUB(t *testing.T) {
 	<-ch종료
 }
 
-func 서버_노드_Nano소켓_PUB(t lib.I안전한_테스트, ch초기화, ch중지, ch종료 chan lib.T신호, 주소 lib.T주소) {
+func 서버_PUB(t lib.I안전한_테스트, ch초기화, ch중지, ch종료 chan lib.T신호, 주소 lib.T주소) {
 	defer func() { ch종료 <- lib.P신호_종료 }()
 
 	소켓_PUB, 에러 := NewNano소켓PUB(주소)
@@ -137,7 +137,7 @@ func 서버_노드_Nano소켓_PUB(t lib.I안전한_테스트, ch초기화, ch중
 	}
 }
 
-func 클라이언트_노드_Nano소켓_SUB(t lib.I안전한_테스트, ch종료 chan lib.T신호, 주소 lib.T주소) {
+func 클라이언트_SUB(t lib.I안전한_테스트, ch종료 chan lib.T신호, 주소 lib.T주소) {
 	defer func() { ch종료 <- lib.P신호_종료 }()
 
 	소켓_SUB, 에러 := NewNano소켓SUB(주소)
