@@ -637,7 +637,7 @@ func F파일_검색(검색_시작_디렉토리, 파일명 string) (string, error
 		return 파일경로, nil
 	}
 
-	ch응답 := make(chan I채널_메시지, 1)
+	ch응답 := make(chan interface{}, 1)
 	go filepath.Walk(검색_시작_디렉토리, func(파일경로 string, 파일정보 os.FileInfo, 에러 error) error {
 		switch {
 		case 에러 != nil:
@@ -646,36 +646,37 @@ func F파일_검색(검색_시작_디렉토리, 파일명 string) (string, error
 			}
 
 			F문자열_출력("예상하지 못한 에러 발생 : %v\n%v", 파일정보.Name(), 에러)
-			ch응답 <- New채널_메시지_에러(에러)
+			ch응답 <- 에러
 			return 에러
 		case 파일정보.IsDir():
 			return nil
 		case strings.ToLower(파일명) == strings.ToLower(파일정보.Name()):
-			ch응답 <- New채널_메시지(파일경로)
+			ch응답 <- 파일경로
 			return New에러("Done")
 		default:
 			return nil
 		}
 	})
 
-	var 응답 I채널_메시지
-
 	select {
-	case 응답 = <-ch응답:
-		if 응답.G에러() != nil {
-			return "", New에러with출력("'%v' : 파일을 찾을 수 없습니다.\n%v", 파일명, 응답.G에러())
+	case 응답 := <-ch응답:
+		switch 응답.(type) {
+		case error:
+			return "", New에러with출력("'%v' : 파일을 찾을 수 없습니다.\n%v", 파일명, 응답.(error))
+		case string:
+			파일경로 = 응답.(string)
+
+			파일경로_맵_잠금.Lock()
+			파일경로_맵[파일명] = 파일경로
+			파일경로_맵_잠금.Unlock()
+
+			return 파일경로, nil
+		default:
+			panic(New에러("예상하지 못한 자료형 '%T' '%v'", 응답, 응답))
 		}
 	case <-time.After(P30초 * 4):
 		return "", New에러with출력("'%v' : 파일 검색 타임아웃", 파일명)
 	}
-
-	파일경로 = 응답.G값(0).(string)
-
-	파일경로_맵_잠금.Lock()
-	파일경로_맵[파일명] = 파일경로
-	파일경로_맵_잠금.Unlock()
-
-	return 파일경로, nil
 }
 
 func F실행경로_추가(파일경로 string) error {
