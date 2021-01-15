@@ -33,6 +33,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
 package nano
 
+/*
 import (
 	"github.com/ghts/ghts/lib"
 	"go.nanomsg.org/mangos/v3"
@@ -339,3 +340,4 @@ func (s *sNano소켓) S옵션(옵션_모음 ...interface{}) {
 		}
 	}
 }
+*/

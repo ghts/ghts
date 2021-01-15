@@ -33,6 +33,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
 package nano
 
+/*
 import (
 	"github.com/ghts/ghts/lib"
 	"testing"
@@ -221,3 +222,4 @@ func f테스트용_임의_주소() lib.T주소 {
 		return 주소
 	}
 }
+*/
