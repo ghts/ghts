@@ -99,12 +99,7 @@ func F초기화(값 xt.T서버_구분) {
 
 func F소켓_생성() {
 	//소켓REP_TR콜백 = nano.NewNano소켓XREP_단순형(xt.F주소_C32_콜백())
-
-	if 소켓, 에러 := nano.NewNano소켓REP(xt.F주소_C32_콜백()); 에러 != nil {
-		lib.F에러_출력(에러)
-	} else {
-		소켓REP_TR콜백 = 소켓.(nano.I소켓with컨텍스트)
-	}
+	소켓REP_TR콜백 = nano.NewNano소켓REP_단순형(xt.F주소_C32_콜백())
 }
 
 func F초기화_Go루틴() {

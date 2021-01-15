@@ -52,6 +52,11 @@ type I소켓 interface {
 	Close() error
 }
 
+type I소켓with컨텍스트 interface {
+	I소켓
+	G컨텍스트() (I송수신, error)
+}
+
 type I소켓_질의 interface {
 	I소켓
 	G질의_응답(변환_형식 T변환, 값_모음 ...interface{}) (*S바이트_변환_모음, error)

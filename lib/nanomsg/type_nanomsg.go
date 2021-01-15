@@ -50,10 +50,7 @@ import (
 	"time"
 )
 
-type I소켓with컨텍스트 interface {
-	lib.I소켓
-	G컨텍스트() (lib.I송수신, error)
-}
+
 
 type I소켓Raw interface {
 	lib.I소켓
@@ -167,12 +164,16 @@ func NewNano소켓REQ_단순형(주소 lib.T주소, 옵션_모음 ...interface{}
 	}
 }
 
-func NewNano소켓REP(주소 lib.T주소, 옵션_모음 ...interface{}) (lib.I소켓, error) {
-	return NewNano소켓(lib.P소켓_종류_REP, 주소.TCP주소(), lib.P소켓_접속_BIND, 옵션_모음...)
+func NewNano소켓REP(주소 lib.T주소, 옵션_모음 ...interface{}) (lib.I소켓with컨텍스트, error) {
+	if 소켓, 에러 := NewNano소켓(lib.P소켓_종류_REP, 주소.TCP주소(), lib.P소켓_접속_BIND, 옵션_모음...); 에러 != nil {
+		return nil, 에러
+	} else {
+		return 소켓.(lib.I소켓with컨텍스트), nil
+	}
 }
 
-func NewNano소켓REP_단순형(주소 lib.T주소, 옵션_모음 ...interface{}) lib.I소켓 {
-	return lib.F확인(NewNano소켓REP(주소, 옵션_모음...)).(lib.I소켓)
+func NewNano소켓REP_단순형(주소 lib.T주소, 옵션_모음 ...interface{}) lib.I소켓with컨텍스트 {
+	return lib.F확인(NewNano소켓REP(주소, 옵션_모음...)).(lib.I소켓with컨텍스트)
 }
 
 func NewNano소켓XREP(주소 lib.T주소, 옵션_모음 ...interface{}) (소켓Raw I소켓Raw, 에러 error) {
