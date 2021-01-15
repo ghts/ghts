@@ -70,10 +70,10 @@ func F서버_구분_설정(서버_구분 T서버_구분) {
 	os.Setenv(P서버_구분_환경변수명, strconv.Itoa(int(서버_구분)))
 }
 
-func F주소_C32_호출() lib.T주소 {
+func F주소_C32() lib.T주소 {
 	for {
 		// 환경변수를 통하면 자동으로 자식 프로세스에 같은 값이 전달된다.
-		if 주소, 에러 := lib.F2정수(os.Getenv(P주소_C32_호출_환경변수명)); 에러 != nil {
+		if 주소, 에러 := lib.F2정수(os.Getenv(P주소_C32_환경변수명)); 에러 != nil {
 			F주소_설정()
 		} else {
 			return lib.T주소(주소)
@@ -81,21 +81,10 @@ func F주소_C32_호출() lib.T주소 {
 	}
 }
 
-func F주소_C32_콜백() lib.T주소 {
+func F주소_콜백() lib.T주소 {
 	for {
 		// 환경변수를 통하면 자동으로 자식 프로세스에 같은 값이 전달된다.
-		if 주소, 에러 := lib.F2정수(os.Getenv(P주소_C32_콜백_환경변수명)); 에러 != nil {
-			F주소_설정()
-		} else {
-			return lib.T주소(주소)
-		}
-	}
-}
-
-func F주소_실시간() lib.T주소 {
-	for {
-		// 환경변수를 통하면 자동으로 자식 프로세스에 같은 값이 전달된다.
-		if 주소, 에러 := lib.F2정수(os.Getenv(P주소_실시간_환경변수명)); 에러 != nil {
+		if 주소, 에러 := lib.F2정수(os.Getenv(P주소_콜백_환경변수명)); 에러 != nil {
 			F주소_설정()
 		} else {
 			return lib.T주소(주소)
@@ -117,18 +106,15 @@ func F주소_설정() {
 		임의_포트_번호 := lib.F임의_범위_이내_정수값(0, 30000)
 		주소_C32_호출 := lib.T주소(임의_포트_번호)
 		주소_C32_콜백 := lib.T주소(임의_포트_번호 + 1)
-		주소_실시간 := lib.T주소(임의_포트_번호 + 2)
 
 		if lib.F포트_닫힘_확인(주소_C32_호출) &&
-			lib.F포트_닫힘_확인(주소_C32_콜백) &&
-			lib.F포트_닫힘_확인(주소_실시간) {
+			lib.F포트_닫힘_확인(주소_C32_콜백) {
 			// 환경변수를 통하면 자동으로 자식 프로세스에 같은 값이 전달된다.
-			os.Setenv(P주소_C32_호출_환경변수명, strconv.Itoa(int(주소_C32_호출)))
-			os.Setenv(P주소_C32_콜백_환경변수명, strconv.Itoa(int(주소_C32_콜백)))
-			os.Setenv(P주소_실시간_환경변수명, strconv.Itoa(int(주소_실시간)))
+			os.Setenv(P주소_C32_환경변수명, strconv.Itoa(int(주소_C32_호출)))
+			os.Setenv(P주소_콜백_환경변수명, strconv.Itoa(int(주소_C32_콜백)))
 
 			//버퍼 := bytes.Buffer{}
-			//문자열 := lib.F2문자열("* Xing API 호출 HTTP주소 : '%v' *", F주소_C32_호출().HTTP주소())
+			//문자열 := lib.F2문자열("* Xing API 호출 HTTP주소 : '%v' *", F주소_C32().HTTP주소())
 			//
 			//for i := 0; i < len(문자열)-3; i++ {
 			//	버퍼.WriteString("*")

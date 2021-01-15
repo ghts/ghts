@@ -31,84 +31,43 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package lib
+package x32
 
 import (
-	"sync"
-	"time"
+	"github.com/ghts/ghts/lib"
+	nano "github.com/ghts/ghts/lib/nanomsg_websocket"
+	xt "github.com/ghts/ghts/xing/base"
+	"net/http"
 )
 
-type I송수신 interface {
-	S송신(변환_형식 T변환, 값_모음 ...interface{}) error
-	G수신() (*S바이트_변환_모음, error)
-}
-
-type I소켓 interface {
-	I송수신
-	S송신_단순형(변환_형식 T변환, 값_모음 ...interface{})
-	G수신_단순형() *S바이트_변환_모음
-	S타임아웃(타임아웃 time.Duration) I소켓
-	S옵션(옵션_모음 ...interface{})
-	Close() error
-}
-
-type I소켓with컨텍스트 interface {
-	I소켓
-	G컨텍스트() (I송수신, error)
-}
-
-type I소켓_질의 interface {
-	I소켓
-	G질의_응답(변환_형식 T변환, 값_모음 ...interface{}) (*S바이트_변환_모음, error)
-	G질의_응답_검사(변환_형식 T변환, 값_모음 ...interface{}) *S바이트_변환_모음
-}
-
-func New소켓_저장소(수량 int, 생성함수 func() I소켓_질의) *s소켓_저장소 {
-	s := new(s소켓_저장소)
-	s.M저장소 = make(chan I소켓_질의, 수량)
-	s.M생성함수 = 생성함수
-
-	return s
-}
-
-type s소켓_저장소 struct {
-	sync.Mutex
-	M저장소  chan I소켓_질의
-	M생성함수 func() I소켓_질의
-}
-
-func (s *s소켓_저장소) G소켓() I소켓_질의 {
-	select {
-	case <-Ch공통_종료():
-		return nil
-	case 소켓 := <-s.M저장소:
-		return 소켓
-	default:
-		s.Lock()
-		defer s.Unlock()
-
-		return s.M생성함수()
-	}
-}
-
-func (s *s소켓_저장소) S회수(소켓 I소켓_질의) {
-	if 소켓 == nil {
+func go_HTTP서버(ch초기화, ch종료 chan lib.T신호) {
+	if lib.F공통_종료_채널_닫힘() {
 		return
 	}
 
-	소켓.S타임아웃(P30초)
+	defer func() {
+		if lib.F공통_종료_채널_닫힘() {
+			Ch_HTTP서버_종료 <- lib.P신호_종료
+		} else {
+			ch종료 <- lib.P신호_종료
+		}
+	}()
 
-	select {
-	case s.M저장소 <- 소켓:
-		return
-	default:
-		소켓.Close()
-	}
-}
+	var 에러 error
+	주소 := xt.F주소_C32()
+	mux := http.NewServeMux()
 
-func (s *s소켓_저장소) S정리() {
-	for i := 0; i < len(s.M저장소); i++ {
-		소켓 := <-s.M저장소
-		소켓.Close()
-	}
+	소켓REP_TR수신, 에러 = nano.NewNano소켓REP(mux, 주소, "/req")
+	lib.F확인(에러)
+
+	소켓PUB_실시간_정보, 에러 = nano.NewNano소켓PUB(mux, 주소, "/sub")
+	lib.F확인(에러)
+
+	ch초기화 <- lib.P신호_초기화
+
+	HTTP서버 = &http.Server{
+		Addr:    주소.G단축값(),
+		Handler: mux}
+
+	HTTP서버.ListenAndServe()
 }

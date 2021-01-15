@@ -35,8 +35,9 @@ package x32
 
 import (
 	"github.com/ghts/ghts/lib"
-	"github.com/ghts/ghts/lib/nanomsg"
+	nano_tcp "github.com/ghts/ghts/lib/nanomsg_tcp"
 	xt "github.com/ghts/ghts/xing/base"
+	"net/http"
 	"path/filepath"
 	"reflect"
 	"runtime"
@@ -79,11 +80,11 @@ var (
 
 // 다중 사용에 안전한 값들.
 var (
-	소켓REP_TR수신   = nano.NewNano소켓REP_단순형(xt.F주소_C32_호출())
-	소켓PUB_실시간_정보 = nano.NewNano소켓PUB_단순형(xt.F주소_실시간())
+	소켓REP_TR수신   lib.I소켓with컨텍스트
+	소켓PUB_실시간_정보 lib.I소켓
 
 	소켓REQ_저장소 = lib.New소켓_저장소(20, func() lib.I소켓_질의 {
-		return nano.NewNano소켓REQ_단순형(xt.F주소_C32_콜백(), lib.P30초)
+		return nano_tcp.NewNano소켓REQ_단순형(xt.F주소_콜백(), lib.P30초)
 	})
 
 	접속_처리_잠금  sync.Mutex
@@ -97,6 +98,7 @@ var (
 	콜백_도우미_수량 = lib.F최대값_정수(runtime.NumCPU(), 2)
 
 	Ch모니터링_루틴_종료   = make(chan lib.T신호, 1)
+	Ch_HTTP서버_종료   = make(chan lib.T신호, 1)
 	Ch함수_호출_도우미_종료 = make(chan lib.T신호, 1)
 	Ch수신_도우미_종료    = make(chan lib.T신호, 수신_도우미_수량)
 	Ch콜백_도우미_종료    = make(chan lib.T신호, 콜백_도우미_수량)
@@ -113,3 +115,5 @@ var (
 	계좌_비밀번호   string
 	서버_구분     xt.T서버_구분
 )
+
+var HTTP서버 *http.Server

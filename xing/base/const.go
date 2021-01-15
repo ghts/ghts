@@ -40,10 +40,9 @@ import (
 )
 
 const (
-	P서버_구분_환경변수명     = "SERVER_Class"
-	P주소_C32_호출_환경변수명 = "ADDRESS_C32_TR"
-	P주소_C32_콜백_환경변수명 = "ADDRESS_C32_Callback"
-	P주소_실시간_환경변수명    = "ADDRESS_Realtime"
+	P서버_구분_환경변수명  = "SERVER_Class"
+	P주소_C32_환경변수명 = "ADDRESS_C32_TR"
+	P주소_콜백_환경변수명  = "ADDRESS_C32_Callback"
 )
 
 const (

@@ -224,7 +224,7 @@ func (s *sNano소켓) S송신(변환_형식 lib.T변환, 값_모음 ...interface
 	return s.Socket.Send(바이트_모음)
 }
 
-func (s *sNano소켓) S송신_검사(변환_형식 lib.T변환, 값_모음 ...interface{}) {
+func (s *sNano소켓) S송신_단순형(변환_형식 lib.T변환, 값_모음 ...interface{}) {
 	lib.F확인(s.S송신(변환_형식, 값_모음...))
 }
 
@@ -277,7 +277,7 @@ func (s *sNano소켓) G컨텍스트() (lib.I송수신, error) {
 	}
 }
 
-func (s *sNano소켓) G수신_검사() *lib.S바이트_변환_모음 {
+func (s *sNano소켓) G수신_단순형() *lib.S바이트_변환_모음 {
 	return lib.F확인(s.G수신()).(*lib.S바이트_변환_모음)
 }
 

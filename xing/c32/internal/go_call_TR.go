@@ -34,6 +34,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package x32
 
 import (
+	"context"
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/lib/c"
 	"github.com/ghts/ghts/lib/w32"
@@ -69,7 +70,10 @@ func go함수_호출_도우미(ch초기화, ch종료 chan lib.T신호) {
 
 	ch공통_종료 := lib.Ch공통_종료()
 
-	ch초기화 <- lib.P신호_OK
+	select {
+	case ch초기화 <- lib.P신호_초기화:
+	default:
+	}
 
 	for {
 		select {
@@ -410,6 +414,7 @@ func f종료() {
 	f실시간_정보_일괄_해지()
 	F로그아웃()
 	F소켓_정리() // F공통_종료_채널_닫기() 포함.
+	HTTP서버.Shutdown(context.TODO())
 	w32.PostQuitMessage(0)
 	w32.DestroyWindow(메시지_윈도우)
 	syscall.FreeLibrary(xing_api_dll)

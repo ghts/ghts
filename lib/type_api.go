@@ -387,7 +387,7 @@ type S문자열_모음 struct {
 	M배열 []string
 }
 
-func New채널_질의_API(질의값 I질의값) *S채널_질의 {
+func New채널_질의(질의값 I질의값) *S채널_질의 {
 	s := &S채널_질의{
 		M질의값:  질의값,
 		Ch회신값: make(chan interface{}, 1),

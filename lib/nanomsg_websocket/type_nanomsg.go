@@ -80,12 +80,21 @@ func NewNano소켓REQ(주소 lib.T주소, 추가url string, 옵션_모음 ...int
 	if 소켓, 에러 := NewConnectNano소켓(lib.P소켓_종류_REQ, 주소, 추가url, 옵션_모음...); 에러 != nil {
 		return nil, 에러
 	} else {
+		소켓.S타임아웃(lib.P30초)
 		return 소켓.(lib.I소켓_질의), nil
 	}
 }
 
+func NewNano소켓REQ_단순형(주소 lib.T주소, 추가url string, 옵션_모음 ...interface{}) lib.I소켓_질의 {
+	return lib.F확인(NewNano소켓REQ(주소, 추가url, 옵션_모음...)).(lib.I소켓_질의)
+}
+
 func NewNano소켓SUB(주소 lib.T주소, 추가url string, 옵션_모음 ...interface{}) (소켓 lib.I소켓, 에러 error) {
 	return NewConnectNano소켓(lib.P소켓_종류_SUB, 주소, 추가url, 옵션_모음...)
+}
+
+func NewNano소켓SUB_단순형(주소 lib.T주소, 추가url string, 옵션_모음 ...interface{}) lib.I소켓 {
+	return lib.F확인(NewNano소켓SUB(주소, 추가url, 옵션_모음...)).(lib.I소켓)
 }
 
 func NewBindNano소켓(종류 lib.T소켓_종류, mux *http.ServeMux, 주소 lib.T주소, 추가url string, 옵션_모음 ...interface{}) (소켓 lib.I소켓, 에러 error) {

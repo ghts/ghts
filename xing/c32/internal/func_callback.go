@@ -78,14 +78,17 @@ func go콜백_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 	}}.S실행()
 
 	for {
-		if lib.F포트_열림_확인(xt.F주소_C32_콜백()) {
+		if lib.F포트_열림_확인(xt.F주소_콜백()) {
 			break
 		}
 
 		lib.F대기(lib.P500밀리초)
 	}
 
-	ch초기화 <- lib.P신호_초기화
+	select {
+	case ch초기화 <- lib.P신호_초기화:
+	default:
+	}
 
 	for {
 		select {
@@ -261,7 +264,9 @@ func OnRealtimeData(실시간_데이터 unsafe.Pointer) {
 	raw값 = f민감정보_삭제(raw값, lib.F2문자열_공백제거(g.TrCode))
 	바이트_변환값 := lib.F확인(lib.New바이트_변환Raw(lib.F2문자열(g.TrCode), raw값, false)).(*lib.S바이트_변환)
 
-	소켓PUB_실시간_정보.S송신_검사(lib.Raw, 바이트_변환값)
+	if 에러 := 소켓PUB_실시간_정보.S송신(lib.Raw, 바이트_변환값); 에러 != nil {
+		lib.F에러_출력(에러)
+	}
 }
 
 func OnLogin(wParam, lParam unsafe.Pointer) {

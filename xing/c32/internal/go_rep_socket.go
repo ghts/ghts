@@ -75,7 +75,10 @@ func go수신_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 		return lib.New에러(에러)
 	}
 
-	ch초기화 <- lib.P신호_초기화
+	select {
+	case ch초기화 <- lib.P신호_초기화:
+	default:
+	}
 
 	for {
 		if lib.F공통_종료_채널_닫힘() {
@@ -96,7 +99,7 @@ func go수신_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 		} else {
 			변환_형식 := 바이트_변환_모음.G변환_형식(0)
 
-			질의 := lib.New채널_질의_API(질의값)
+			질의 := lib.New채널_질의(질의값)
 
 			// 질의 수행.
 			Ch질의 <- 질의

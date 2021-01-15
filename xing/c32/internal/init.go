@@ -53,7 +53,7 @@ func F초기화() {
 func f종료_질의_송신() {
 	defer lib.S예외처리{}.S실행()
 
-	질의 := lib.New채널_질의_API(lib.New질의값_기본형(xt.TR종료, ""))
+	질의 := lib.New채널_질의(lib.New질의값_기본형(xt.TR종료, ""))
 
 	Ch질의 <- 질의
 
@@ -68,6 +68,7 @@ func f종료_질의_송신() {
 
 func F종료_대기() {
 	<-Ch모니터링_루틴_종료
+	<-Ch_HTTP서버_종료
 	<-Ch함수_호출_도우미_종료
 
 	for i := 0; i < 수신_도우미_수량; i++ {
@@ -87,18 +88,6 @@ func F소켓_정리() error {
 	lib.F패닉억제_호출(소켓REP_TR수신.Close)
 	lib.F패닉억제_호출(소켓PUB_실시간_정보.Close)
 
-	for {
-		if lib.F포트_닫힘_확인(xt.F주소_C32_호출()) {
-			break
-		}
-	}
-
-	for {
-		if lib.F포트_닫힘_확인(xt.F주소_실시간()) {
-			break
-		}
-	}
-
 	lib.F대기(lib.P3초) // 소켓이 정리될 시간적 여유를 둠.
 
 	return nil
@@ -110,7 +99,7 @@ func F서버_접속(서버_구분 xt.T서버_구분) (에러 error) {
 
 	lib.F조건부_패닉(!lib.F인터넷에_접속됨(), "서버 접속이 불가 : 인터넷 접속을 확인하십시오.")
 
-	질의 := lib.New채널_질의_API(lib.New질의값_정수(lib.TR접속, "", int(서버_구분)))
+	질의 := lib.New채널_질의(lib.New질의값_정수(lib.TR접속, "", int(서버_구분)))
 
 	Ch질의 <- 질의
 
