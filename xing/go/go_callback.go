@@ -44,15 +44,15 @@ func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
 		Ch모니터링_루틴_종료 <- lib.P신호_종료
 	}}.S실행()
 
-	ch도우미_초기화 := make(chan lib.T신호, 콜백_도우미_수량)
-	ch도우미_종료 := make(chan error, 콜백_도우미_수량)
+	ch도우미_초기화 := make(chan lib.T신호, V콜백_도우미_수량)
+	ch도우미_종료 := make(chan error, V콜백_도우미_수량)
 	ch공통_종료 := lib.Ch공통_종료()
 
-	for i := 0; i < 콜백_도우미_수량; i++ {
+	for i := 0; i < V콜백_도우미_수량; i++ {
 		go go루틴_콜백_처리_도우미(ch도우미_초기화, ch도우미_종료)
 	}
 
-	for i := 0; i < 콜백_도우미_수량; i++ {
+	for i := 0; i < V콜백_도우미_수량; i++ {
 		<-ch도우미_초기화
 	}
 

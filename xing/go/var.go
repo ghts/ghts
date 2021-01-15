@@ -58,10 +58,10 @@ var (
 
 	대기소_C32 = newC32_콜백_대기_저장소()
 
-	콜백_도우미_수량 = lib.F최대값_정수(runtime.NumCPU(), 2)
+	V콜백_도우미_수량 = lib.F최대값_정수(runtime.NumCPU(), 2)
 
 	Ch모니터링_루틴_종료 = make(chan lib.T신호, 1)
-	Ch콜백_도우미_종료  = make(chan lib.T신호, 콜백_도우미_수량)
+	Ch콜백_도우미_종료  = make(chan lib.T신호, V콜백_도우미_수량)
 
 	전송_제한_정보_모음          *xt.TR코드별_전송_제한_정보_모음
 	tr코드별_전송_제한_초당_1회_미만 = make(map[string]lib.I전송_권한)
