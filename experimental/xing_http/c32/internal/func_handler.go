@@ -41,13 +41,13 @@ import (
 
 func 접속됨(w http.ResponseWriter, req *http.Request) {
 	if !로그인_완료.G값() {
-		F회신(w, xt.New응답(false))
+		F회신(w, New응답(false))
 	} else if 응답 := f질의_처리_도우미(w, lib.New질의값_기본형(xt.TR접속됨, "")); 응답.Error() != nil {
 		F회신(w, 응답)
 	} else if 접속_여부, ok := 응답.V.(bool); !ok {
-		F회신(w, xt.New응답(lib.New에러with출력("예상하지 못한 자료형 : '%v' '%T' ", 응답.V, 응답.V)))
+		F회신(w, New응답(lib.New에러with출력("예상하지 못한 자료형 : '%v' '%T' ", 응답.V, 응답.V)))
 	} else {
-		F회신(w, xt.New응답(접속_여부))
+		F회신(w, New응답(접속_여부))
 	}
 }
 
@@ -55,7 +55,7 @@ func 종료(w http.ResponseWriter, req *http.Request) {
 	if 응답 := f질의_처리_도우미(w, lib.New질의값_기본형(xt.TR종료, "")); 응답.Error() != nil {
 		F회신(w, 응답)
 	} else {
-		F회신(w, xt.New응답(lib.P신호_종료))
+		F회신(w, New응답(lib.P신호_종료))
 	}
 }
 
@@ -63,21 +63,21 @@ func 계좌번호_리스트(w http.ResponseWriter, req *http.Request) {
 	if 응답 := f질의_처리_도우미(w, lib.New질의값_기본형(xt.TR계좌번호_모음, "")); 응답.Error() != nil {
 		F회신(w, 응답)
 	} else if 계좌번호_모음, ok := 응답.V.([]string); !ok {
-		F회신(w, xt.New응답(lib.New에러with출력("예상하지 못한 자료형 : '%v' '%T' ", 응답.V, 응답.V)))
+		F회신(w, New응답(lib.New에러with출력("예상하지 못한 자료형 : '%v' '%T' ", 응답.V, 응답.V)))
 	} else {
-		F회신(w, xt.New응답(계좌번호_모음))
+		F회신(w, New응답(계좌번호_모음))
 	}
 }
 
 func 계좌_상세명(w http.ResponseWriter, req *http.Request) {
 	if 계좌번호, 에러 := F문자열_추출(req); 에러 != nil {
-		F회신(w, xt.New응답(에러))
+		F회신(w, New응답(에러))
 	} else if 응답 := f질의_처리_도우미(w, lib.New질의값_문자열(xt.TR계좌_상세명, "", 계좌번호)); 응답.Error() != nil {
 		F회신(w, 응답)
 	} else if 계좌_상세명, ok := 응답.V.(string); !ok {
-		F회신(w, xt.New응답(lib.New에러with출력("예상하지 못한 자료형 : '%v' '%T' ", 응답.V, 응답.V)))
+		F회신(w, New응답(lib.New에러with출력("예상하지 못한 자료형 : '%v' '%T' ", 응답.V, 응답.V)))
 	} else {
-		F회신(w, xt.New응답(계좌_상세명))
+		F회신(w, New응답(계좌_상세명))
 	}
 }
 

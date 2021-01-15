@@ -31,7 +31,7 @@ func go함수_호출_도우미(ch초기화, ch종료 chan lib.T신호) {
 
 	ch공통_종료 := lib.Ch공통_종료()
 
-	lib.F신호_전달_시도(ch초기화, lib.P신호_OK)
+	ch초기화 <- lib.P신호_OK
 
 	for {
 		select {
@@ -45,10 +45,10 @@ func go함수_호출_도우미(ch초기화, ch종료 chan lib.T신호) {
 	}
 }
 
-func f질의값_처리(질의 *xt.S질의) {
+func f질의값_처리(질의 *S질의) {
 	var 에러 error
 
-	defer lib.S예외처리{M에러: &에러, M함수: func() { 질의.Ch응답 <- xt.New응답(에러) }}.S실행()
+	defer lib.S예외처리{M에러: &에러, M함수: func() { 질의.Ch응답 <- New응답(에러) }}.S실행()
 
 	switch 질의.M값.TR구분() {
 	case xt.TR조회, xt.TR주문:
@@ -80,9 +80,9 @@ func f질의값_처리(질의 *xt.S질의) {
 	case xt.TR코드별_전송_제한:
 		TR코드별_전송_제한(질의)
 	case xt.TR소켓_테스트:
-		질의.Ch응답 <- xt.New응답(lib.P신호_OK)
+		질의.Ch응답 <- New응답(lib.P신호_OK)
 	case xt.TR서버_구분:
-		질의.Ch응답 <- xt.New응답(xt.F서버_구분())
+		질의.Ch응답 <- New응답(xt.F서버_구분())
 	case xt.TR종료:
 		F종료_질의_처리(질의)
 	default:
@@ -90,9 +90,9 @@ func f질의값_처리(질의 *xt.S질의) {
 	}
 }
 
-func F조회_및_주문_질의_처리(질의 *xt.S질의) {
+func F조회_및_주문_질의_처리(질의 *S질의) {
 	var 에러 error
-	defer lib.S예외처리{M에러: &에러, M함수: func() { 질의.Ch응답 <- xt.New응답(에러) }}.S실행()
+	defer lib.S예외처리{M에러: &에러, M함수: func() { 질의.Ch응답 <- New응답(에러) }}.S실행()
 
 	var c데이터 unsafe.Pointer
 	defer lib.F조건부_실행(c데이터 != nil, c.F메모리_해제, c데이터)
@@ -262,7 +262,7 @@ func F조회_및_주문_질의_처리(질의 *xt.S질의) {
 	식별번호, 에러 := F질의(TR코드, c데이터, 길이, 연속_조회_여부, 연속_조회_키, lib.P30초)
 	lib.F확인(에러)
 
-	질의.Ch응답 <- xt.New응답(lib.F조건부_값(식별번호 > 0, 식별번호, lib.New에러("TR호출 실패. 반환된 식별번호가 음수임. '%v' '%v'", TR코드, 식별번호)))
+	질의.Ch응답 <- New응답(lib.F조건부_값(식별번호 > 0, 식별번호, lib.New에러("TR호출 실패. 반환된 식별번호가 음수임. '%v' '%v'", TR코드, 식별번호)))
 
 	//case xt.TR기업정보_요약_t3320:
 	//	c데이터 = unsafe.Pointer(xt.NewT3320InBlock(질의값.(*lib.S질의값_단일_종목)))
@@ -306,7 +306,7 @@ func F조회_및_주문_질의_처리(질의 *xt.S질의) {
 }
 
 // 질의값 자료형을 'lib.S질의값_복수_종목'로 상정함.
-func F실시간_정보_구독_해지_처리(질의 *xt.S질의) {
+func F실시간_정보_구독_해지_처리(질의 *S질의) {
 	var 함수 func(string, string, int) error
 	var 전체_종목코드 string
 	var 단위_길이 int
@@ -337,24 +337,24 @@ func F실시간_정보_구독_해지_처리(질의 *xt.S질의) {
 
 	에러 := 함수(TR코드, 전체_종목코드, 단위_길이)
 
-	질의.Ch응답 <- xt.New응답(lib.F조건부_값(에러 == nil, lib.P신호_OK, 에러))
+	질의.Ch응답 <- New응답(lib.F조건부_값(에러 == nil, lib.P신호_OK, 에러))
 }
 
-func F접속_및_로그인_처리(질의 *xt.S질의) {
+func F접속_및_로그인_처리(질의 *S질의) {
 	접속_처리_잠금.Lock()
 	defer 접속_처리_잠금.Unlock()
 
 	if 에러 := F접속(); 에러 != nil {
-		질의.Ch응답 <- xt.New응답(에러)
+		질의.Ch응답 <- New응답(에러)
 	} else if 에러 := F로그인(); 에러 != nil {
-		질의.Ch응답 <- xt.New응답(에러)
+		질의.Ch응답 <- New응답(에러)
 	} else {
-		질의.Ch응답 <- xt.New응답(lib.P신호_OK)
+		질의.Ch응답 <- New응답(lib.P신호_OK)
 	}
 }
 
-func F종료_질의_처리(질의 *xt.S질의) {
-	질의.Ch응답 <- xt.New응답(lib.P신호_종료)
+func F종료_질의_처리(질의 *S질의) {
+	질의.Ch응답 <- New응답(lib.P신호_종료)
 	f종료()
 }
 

@@ -86,12 +86,12 @@ func go_HTTP서버(ch초기화, ch종료 chan lib.T신호) {
 
 	ch초기화 <- lib.P신호_초기화
 
-	//http.ListenAndServe(xt.F주소_C32_호출().G단축값(), nil)
+	//http.ListenAndServe(xt.F주소_C32().G단축값(), nil)
 
 	// 보안을 위해서 localhost로부터의 접속만 허용.
 	// 참고자료 : https://stackoverflow.com/questions/37896931/how-to-limit-client-ip-address-when-using-golang-http-package
 	HTTP서버 = &http.Server{
-		Addr: xt.F주소_C32_호출().G단축값(),
+		Addr: xt.F주소_C32().G단축값(),
 		Handler: http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 			// get the real IP of the user
 			addr := getRealAddr(req)

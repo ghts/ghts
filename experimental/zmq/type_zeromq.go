@@ -214,7 +214,7 @@ func (s *sZero소켓) S송신(변환_형식 lib.T변환, 값_모음 ...interface
 	return 에러
 }
 
-func (s *sZero소켓) S송신_검사(변환_형식 lib.T변환, 값_모음 ...interface{}) {
+func (s *sZero소켓) S송신_단순형(변환_형식 lib.T변환, 값_모음 ...interface{}) {
 	lib.F확인(s.S송신(변환_형식, 값_모음...))
 }
 
@@ -246,7 +246,7 @@ func (s *sZero소켓) G수신() (값 *lib.S바이트_변환_모음, 에러 error
 	}
 }
 
-func (s *sZero소켓) G수신_검사() *lib.S바이트_변환_모음 {
+func (s *sZero소켓) G수신_단순형() *lib.S바이트_변환_모음 {
 	return lib.F확인(s.G수신()).(*lib.S바이트_변환_모음)
 }
 

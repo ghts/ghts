@@ -65,8 +65,8 @@ func TR도우미(질의값 lib.I질의값, 결과값_포인터 interface{}) (에
 func http질의_도우미(url string, 질의값, 결과값_포인터 interface{}) (에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 결과값_포인터 = nil }}.S실행()
 
-	if !strings.HasPrefix(url, xt.F주소_C32_호출().HTTP주소()) {
-		url = xt.F주소_C32_호출().HTTP주소() + "/" + url
+	if !strings.HasPrefix(url, xt.F주소_C32().HTTP주소()) {
+		url = xt.F주소_C32().HTTP주소() + "/" + url
 	}
 
 	바이트_모음_질의, 에러 := json.Marshal(질의값)
@@ -155,7 +155,7 @@ func F계좌_상세명(계좌_번호 string) (계좌_상세명 string, 에러 er
 func F접속됨() (접속됨 bool, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 접속됨 = false }, M출력_숨김: true}.S실행()
 
-	if !lib.F포트_열림_확인(xt.F주소_C32_호출()) {
+	if !lib.F포트_열림_확인(xt.F주소_C32()) {
 		return false, lib.New에러("TCP 포트 닫혀있음.")
 	}
 

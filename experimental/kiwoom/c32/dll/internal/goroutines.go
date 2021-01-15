@@ -271,7 +271,7 @@ func go전달_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 
 	ch공통_종료 := lib.Ch공통_종료()
 
-	질의 := lib.New채널_질의_API(nil)
+	질의 := lib.New채널_질의(nil)
 
 	lib.F신호_전달_시도(ch초기화, lib.P신호_OK)
 

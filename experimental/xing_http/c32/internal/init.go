@@ -58,7 +58,7 @@ func f종료_질의_송신() {
 	defer lib.S예외처리{}.S실행()
 
 	select {
-	case <-xt.New질의_JSON(lib.New질의값_기본형(xt.TR종료, ""), Ch질의).Ch응답:
+	case <-New질의(lib.New질의값_기본형(xt.TR종료, ""), Ch질의).Ch응답:
 	case <-time.After(lib.P10초):
 	}
 
@@ -94,13 +94,13 @@ func F종료_대기() {
 }
 
 func F소켓_정리() error {
-	lib.F패닉억제_호출(소켓PUB_실시간_정보.Close)
+	//lib.F패닉억제_호출(소켓PUB_실시간_정보.Close)
 
-	for {
-		if lib.F포트_닫힘_확인(xt.F주소_실시간()) {
-			break
-		}
-	}
+	//for {
+	//	if lib.F포트_닫힘_확인(xt.F주소_실시간()) {
+	//		break
+	//	}
+	//}
 
 	lib.F대기(lib.P3초) // 소켓이 정리될 시간적 여유를 둠.
 
@@ -114,7 +114,7 @@ func F서버_접속_및_로그인() (에러 error) {
 	lib.F조건부_패닉(!lib.F인터넷에_접속됨(), "서버 접속이 불가 : 인터넷 접속을 확인하십시오.")
 
 	select {
-	case 응답 := <-xt.New질의_JSON(lib.New질의값_기본형(xt.TR접속_및_로그인, ""), Ch질의).Ch응답:
+	case 응답 := <-New질의(lib.New질의값_기본형(xt.TR접속_및_로그인, ""), Ch질의).Ch응답:
 		if 응답.Error() != nil {
 			lib.F문자열_출력("서버 접속 실패.")
 			return 에러
@@ -185,10 +185,10 @@ func f초기화_TR전송_제한() (에러 error) {
 	TR코드_모음 = lib.F중복_문자열_제거(TR코드_모음)
 
 	for {
-		var 응답 *xt.S응답_JSON
+		var 응답 *S응답
 
 		select {
-		case 응답 = <-xt.New질의_JSON(lib.New질의값_문자열_모음(xt.TR코드별_전송_제한, "", TR코드_모음), Ch질의).Ch응답:
+		case 응답 = <-New질의(lib.New질의값_문자열_모음(xt.TR코드별_전송_제한, "", TR코드_모음), Ch질의).Ch응답:
 		case <-time.After(lib.P10초):
 			return lib.New에러("f초기화_TR전송_제한() 타임아웃.")
 		}

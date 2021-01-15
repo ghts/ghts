@@ -35,7 +35,6 @@ package x32
 
 import (
 	"github.com/ghts/ghts/lib"
-	nano "github.com/ghts/ghts/lib/nanomsg"
 	xt "github.com/ghts/ghts/xing/base"
 	"go.nanomsg.org/mangos/v3"
 	"net/http"
@@ -80,14 +79,14 @@ var (
 
 // 다중 사용에 안전한 값들.
 var (
-	소켓PUB_실시간_정보 = nano.NewNano소켓PUB_단순형(xt.F주소_실시간())
+	//소켓PUB_실시간_정보 = nano.NewNano소켓PUB_단순형(xt.F주소_실시간())
 
 	접속_처리_잠금  sync.Mutex
 	api_호출_잠금 sync.Mutex
 
 	Ch로그인 = make(chan bool, 1)
 	Ch수신  = make(chan *mangos.Message, 1000)
-	Ch질의  = make(chan *xt.S질의_JSON, 100)
+	Ch질의  = make(chan *S질의, 100)
 	Ch콜백  = make(chan lib.I콜백, 100)
 
 	Ch관리_모듈_종료    = make(chan lib.T신호, 1)

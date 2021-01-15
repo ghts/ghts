@@ -43,7 +43,7 @@ import (
 )
 
 func F접속() {
-	질의 := lib.New채널_질의_API(lib.New질의값_기본형(kt.TR접속, ""))
+	질의 := lib.New채널_질의(lib.New질의값_기본형(kt.TR접속, ""))
 
 	Ch질의 <- 질의
 
