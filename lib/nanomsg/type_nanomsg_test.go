@@ -63,6 +63,7 @@ func 서버_REP(t lib.I안전한_테스트, 주소 lib.T주소, ch초기화, ch�
 
 	소켓_REP, 에러 := NewNano소켓REP(주소)
 	t.G에러없음(에러)
+	defer 소켓_REP.Close()
 
 	ch초기화 <- lib.P신호_초기화
 
@@ -177,6 +178,7 @@ func 서버_PULL(t lib.I안전한_테스트, 주소 lib.T주소, ch초기화, ch
 
 	소켓_PULL, 에러 := NewNano소켓PULL(주소)
 	t.G에러없음(에러)
+	defer 소켓_PULL.Close()
 
 	ch초기화 <- lib.P신호_초기화
 
