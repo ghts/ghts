@@ -329,7 +329,7 @@ func f자료형_문자열_해석(g *xt.TR_DATA) (자료형_문자열 string, 에
 	panic(lib.New에러("예상하지 못한 TR코드 & 길이 : '%v' '%v'", TR코드, 길이))
 }
 
-func f민감정보_삭제(raw값 []byte, 구분_문자열 string) []byte {
+func f민감정보_삭제(구분_문자열 string, 바이트_모음 []byte) []byte {
 
 	switch 구분_문자열 {
 	case xt.P자료형_CSPAQ12300OutBlock,
@@ -338,30 +338,30 @@ func f민감정보_삭제(raw값 []byte, 구분_문자열 string) []byte {
 		//xt.P자료형_CFOAQ00600OutBlock,
 		//xt.P자료형_CFOBQ10500OutBlock,
 		//xt.P자료형_CFOFQ02400OutBlock:
-		f민감정보_삭제_도우미(raw값, 25, 8)
+		f민감정보_삭제_도우미(바이트_모음, 25, 8)
 	//case xt.P자료형_CFOAT00100OutBlock,
 	//	xt.P자료형_CFOAT00200OutBlock,
 	//	xt.P자료형_CFOAT00300OutBlock:
-	//	f민감정보_삭제_도우미(raw값, 27, 8)
+	//	f민감정보_삭제_도우미(바이트_모음, 27, 8)
 	case xt.P자료형_CSPAQ22200OutBlock1,
 		xt.P자료형_CSPAQ22200OutBlock,
 		xt.P자료형_CSPAQ12200OutBlock1,
 		xt.P자료형_CSPAQ12200OutBlock:
-		f민감정보_삭제_도우미(raw값, 28, 8)
+		f민감정보_삭제_도우미(바이트_모음, 28, 8)
 	case xt.P자료형_CSPAT00700OutBlock,
 		xt.P자료형_CSPAT00800OutBlock:
-		f민감정보_삭제_도우미(raw값, 35, 8)
+		f민감정보_삭제_도우미(바이트_모음, 35, 8)
 	case xt.RT현물_주문_접수_SC0:
-		f민감정보_삭제_도우미(raw값, 277, 8)
+		f민감정보_삭제_도우미(바이트_모음, 277, 8)
 
 	}
 
-	return raw값
+	return 바이트_모음
 }
 
-func f민감정보_삭제_도우미(raw값 []byte, 시작_인덱스, 길이 int) {
+func f민감정보_삭제_도우미(바이트_모음 []byte, 시작_인덱스, 길이 int) {
 	for i := 시작_인덱스; i < (시작_인덱스 + 길이); i++ {
-		raw값[i] = 0
+		바이트_모음[i] = 0
 	}
 }
 

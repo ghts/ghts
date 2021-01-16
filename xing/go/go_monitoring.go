@@ -31,56 +31,45 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package x32
+package xing
 
 import (
-	"sync"
-	"time"
+	"github.com/ghts/ghts/lib"
 )
 
-func New콜백_대기_항목(식별번호 int, TR코드 string, 값 interface{}) *S콜백_대기_항목 {
-	s := new(S콜백_대기_항목)
-	s.M식별번호 = 식별번호
-	s.M생성_시각 = time.Now()
-	s.M값 = 값
+func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
+	lib.S예외처리{M에러: &에러, M함수_항상: func() {
+		Ch모니터링_루틴_종료 <- lib.P신호_종료
+	}}.S실행()
 
-	return s
-}
+	ch도우미_초기화 := make(chan lib.T신호, V콜백_처리_도우미_수량 + V실시간_정보_수신_도우미_수량)
+	ch콜백_처리_도우미_종료 := make(chan lib.T신호, V콜백_처리_도우미_수량)
+	ch실시간_정보_수신_도우미_종료 := make(chan lib.T신호, V실시간_정보_수신_도우미_수량)
 
-type S콜백_대기_항목 struct {
-	M식별번호  int
-	M생성_시각 time.Time
-	TR코드   string
-	M값     interface{}
-}
+	for i := 0; i < V콜백_처리_도우미_수량; i++ {
+		go go콜백_처리(ch도우미_초기화, ch콜백_처리_도우미_종료)
+	}
 
-type S콜백_대기_저장소 struct {
-	sync.Mutex
-	저장소 map[int]*S콜백_대기_항목
-}
+	for i := 0; i < V실시간_정보_수신_도우미_수량; i++ {
+		go go실시간_정보_수신(ch도우미_초기화, ch실시간_정보_수신_도우미_종료)
+	}
 
-func (s *S콜백_대기_저장소) G대기_항목(식별번호 int) *S콜백_대기_항목 {
-	s.Lock()
-	defer s.Unlock()
+	for i := 0; i < (V콜백_처리_도우미_수량+V실시간_정보_수신_도우미_수량); i++ {
+		<-ch도우미_초기화
+	}
 
-	return s.저장소[식별번호]
-}
+	ch공통_종료 := lib.Ch공통_종료()
 
-func (s *S콜백_대기_저장소) S추가(식별번호 int, 대기_항목 *S콜백_대기_항목) {
-	s.Lock()
-	defer s.Unlock()
+	ch초기화 <- lib.P신호_초기화
 
-	s.저장소[식별번호] = 대기_항목
-}
-
-func (s *S콜백_대기_저장소) S삭제(식별번호 int) {
-	s.Lock()
-	defer s.Unlock()
-
-	delete(s.저장소, 식별번호)
-}
-
-type RAW실시간_정보 struct {
-	TR코드 string
-	데이터  []byte
+	for {
+		select {
+		case <-ch공통_종료:
+			return
+		case <-ch콜백_처리_도우미_종료:
+			go go콜백_처리(ch도우미_초기화, ch콜백_처리_도우미_종료)
+		case <-ch실시간_정보_수신_도우미_종료:
+			go go실시간_정보_수신(ch도우미_초기화, ch실시간_정보_수신_도우미_종료)
+		}
+	}
 }

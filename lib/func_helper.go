@@ -968,3 +968,10 @@ func F3년전() time.Time {
 func F금일() time.Time {
 	return F2일자(time.Now())
 }
+
+func F신호_전달_시도(ch신호 chan T신호, 신호 T신호) {
+	select {
+	case ch신호 <- 신호:
+	default:
+	}
+}

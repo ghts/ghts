@@ -55,6 +55,7 @@ type I소켓 interface {
 type I소켓with컨텍스트 interface {
 	I소켓
 	G컨텍스트() (I송수신, error)
+	G컨텍스트_단순형() I송수신
 }
 
 type I소켓_질의 interface {

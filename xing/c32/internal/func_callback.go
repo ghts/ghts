@@ -40,64 +40,12 @@ import (
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/lib/c"
 	"github.com/ghts/ghts/xing/base"
-	"strings"
 	"unsafe"
 )
 
 func F콜백(콜백값 lib.I콜백) (에러 error) {
 	ch콜백 <- 콜백값
 	return nil
-}
-
-func go콜백_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
-	ch공통_종료 := lib.Ch공통_종료()
-
-	defer func() {
-		select {
-		case <-ch공통_종료:
-			Ch콜백_도우미_종료 <- lib.P신호_종료
-		default:
-		}
-	}()
-
-	defer lib.S예외처리{M에러: &에러, M함수: func() {
-		select {
-		case <-ch공통_종료:
-			에러 = nil
-			return
-		default:
-		}
-
-		if 에러 != nil &&
-			!strings.Contains(에러.Error(), "connection closed") &&
-			!strings.Contains(에러.Error(), "object closed") {
-			lib.F에러_출력(에러)
-		}
-
-		ch종료 <- lib.P신호_종료
-	}}.S실행()
-
-	for {
-		if lib.F포트_열림_확인(xt.F주소_콜백()) {
-			break
-		}
-
-		lib.F대기(lib.P500밀리초)
-	}
-
-	select {
-	case ch초기화 <- lib.P신호_초기화:
-	default:
-	}
-
-	for {
-		select {
-		case <-ch공통_종료:
-			return nil
-		case i콜백 := <-ch콜백:
-			f콜백_동기식(i콜백)
-		}
-	}
 }
 
 func f콜백_동기식(콜백값 lib.I콜백) (에러 error) {
@@ -173,7 +121,7 @@ func OnTrData(TR데이터 unsafe.Pointer) {
 	추가_연속조회_필요_문자열 := lib.F2문자열(g.Cont)
 	추가_연속조회_필요 := false
 	연속키 := ""
-	raw값 = f민감정보_삭제(raw값, 자료형_문자열)
+	raw값 = f민감정보_삭제(자료형_문자열, raw값)
 
 	switch 추가_연속조회_필요_문자열 {
 	case "", "0", "N":
@@ -256,16 +204,19 @@ func OnRealtimeData(실시간_데이터 unsafe.Pointer) {
 	// uint32형식을 통해서 uintptr형식으로 변환해서 버그 회피.
 	var 주소값 uint32
 	binary.Read(버퍼, binary.LittleEndian, &주소값)
-	g.Data = uintptr(주소값)
 
-	// KeyData, RegKey등이 불필요한 듯 해서 전송 안 함. 필요하면 추가할 것.
+	// KeyData, RegKey등은 불필요한 듯 해서 생략.
 
-	raw값 := c.F2Go바이트_모음(unsafe.Pointer(g.Data), int(g.DataLength))
-	raw값 = f민감정보_삭제(raw값, lib.F2문자열_공백제거(g.TrCode))
-	바이트_변환값 := lib.F확인(lib.New바이트_변환Raw(lib.F2문자열(g.TrCode), raw값, false)).(*lib.S바이트_변환)
+	TR코드 := lib.F2문자열_공백제거(g.TrCode)
+	raw값 := c.F2Go바이트_모음(unsafe.Pointer(uintptr(주소값)), int(g.DataLength))
 
-	if 에러 := 소켓PUB_실시간_정보.S송신(lib.Raw, 바이트_변환값); 에러 != nil {
-		lib.F에러_출력(에러)
+	// F2Go바이트_모음()을 통해서 복사되었으므로 함수 외부로 전달해도 메모리 에러 발생하지 않음.
+	// https://golang.org/cmd/cgo/ : special functions convert between Go and C types `by making copies of the data`.
+	select {
+	case ch실시간_정보 <- &RAW실시간_정보{TR코드: TR코드, 데이터: raw값}:
+		// 이후 모든 부가적 처리는 'go실시간_정보_도우미()'에서 수행 한다.
+	default:
+		lib.F체크포인트("실시간 정보 채널 전달 누락 발생.")
 	}
 }
 

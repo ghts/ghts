@@ -34,53 +34,46 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package x32
 
 import (
-	"sync"
-	"time"
+	"github.com/ghts/ghts/lib"
+	nano "github.com/ghts/ghts/lib/nanomsg"
+	xt "github.com/ghts/ghts/xing/base"
 )
 
-func New콜백_대기_항목(식별번호 int, TR코드 string, 값 interface{}) *S콜백_대기_항목 {
-	s := new(S콜백_대기_항목)
-	s.M식별번호 = 식별번호
-	s.M생성_시각 = time.Now()
-	s.M값 = 값
+func go실시간_정보_도우미(ch초기화, ch종료 chan lib.T신호) {
+	if lib.F공통_종료_채널_닫힘() {
+		return
+	}
 
-	return s
-}
+	소켓PUSH_실시간_정보 := nano.NewNano소켓PUSH_단순형(xt.F주소_실시간(), lib.P3초)
 
-type S콜백_대기_항목 struct {
-	M식별번호  int
-	M생성_시각 time.Time
-	TR코드   string
-	M값     interface{}
-}
+	defer lib.S예외처리{M함수_항상: func() {
+		if 소켓PUSH_실시간_정보 != nil {
+			lib.F패닉억제_호출(소켓PUSH_실시간_정보.Close)
+		}
 
-type S콜백_대기_저장소 struct {
-	sync.Mutex
-	저장소 map[int]*S콜백_대기_항목
-}
+		if lib.F공통_종료_채널_닫힘() {
+			Ch실시간_정보_도우미_종료 <- lib.P신호_종료
+		} else {
+			lib.F신호_전달_시도(ch종료, lib.P신호_종료)
+		}
+	}}.S실행()
 
-func (s *S콜백_대기_저장소) G대기_항목(식별번호 int) *S콜백_대기_항목 {
-	s.Lock()
-	defer s.Unlock()
+	ch공통_종료 := lib.Ch공통_종료()
 
-	return s.저장소[식별번호]
-}
+	lib.F신호_전달_시도(ch초기화, lib.P신호_초기화)
 
-func (s *S콜백_대기_저장소) S추가(식별번호 int, 대기_항목 *S콜백_대기_항목) {
-	s.Lock()
-	defer s.Unlock()
+	for {
+		select {
+		case <-ch공통_종료:
+			return
+		case 값 := <-ch실시간_정보:
+			값.데이터 = f민감정보_삭제(값.TR코드, 값.데이터)
 
-	s.저장소[식별번호] = 대기_항목
-}
-
-func (s *S콜백_대기_저장소) S삭제(식별번호 int) {
-	s.Lock()
-	defer s.Unlock()
-
-	delete(s.저장소, 식별번호)
-}
-
-type RAW실시간_정보 struct {
-	TR코드 string
-	데이터  []byte
+			if 바이트_변환값, 에러 := lib.New바이트_변환Raw(값.TR코드, 값.데이터, false); 에러 != nil {
+				lib.F에러_출력(에러)
+			} else if 에러 = 소켓PUSH_실시간_정보.S송신(lib.Raw, 바이트_변환값); 에러 != nil {
+				lib.F에러_출력(에러)
+			}
+		}
+	}
 }

@@ -45,8 +45,7 @@ func go수신_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 		return nil
 	}
 
-	var ctx lib.I송수신
-	var 바이트_변환_모음 *lib.S바이트_변환_모음
+	ctx := 소켓REP_TR수신.G컨텍스트_단순형()
 
 	defer lib.S예외처리{
 		M에러:    &에러,
@@ -66,19 +65,13 @@ func go수신_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 			if lib.F공통_종료_채널_닫힘() {
 				Ch수신_도우미_종료 <- lib.P신호_종료
 			} else {
-				ch종료 <- lib.P신호_종료
+				lib.F신호_전달_시도(ch종료, lib.P신호_종료)
 			}
 		}}.S실행()
 
-	if ctx, 에러 = 소켓REP_TR수신.G컨텍스트(); 에러 != nil {
-		ctx = nil
-		return lib.New에러(에러)
-	}
+	lib.F신호_전달_시도(ch초기화, lib.P신호_초기화)
 
-	select {
-	case ch초기화 <- lib.P신호_초기화:
-	default:
-	}
+	var 바이트_변환_모음 *lib.S바이트_변환_모음
 
 	for {
 		if lib.F공통_종료_채널_닫힘() {
@@ -102,7 +95,7 @@ func go수신_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 			질의 := lib.New채널_질의(질의값)
 
 			// 질의 수행.
-			Ch질의 <- 질의
+			ch질의 <- 질의
 
 			select {
 			case 회신값 := <-질의.Ch회신값:

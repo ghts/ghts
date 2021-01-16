@@ -25,62 +25,42 @@ the Free Software Foundation, version 2.1 of the License.
 
 GHTS is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+MERCHANTABILITY or FITNESS FOR A PAxt.RTICULAR PURPOSE.  See the
 GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package x32
+package xing
 
 import (
-	"sync"
+	"github.com/ghts/ghts/lib"
+	xt "github.com/ghts/ghts/xing/base"
+	"testing"
 	"time"
 )
 
-func New콜백_대기_항목(식별번호 int, TR코드 string, 값 interface{}) *S콜백_대기_항목 {
-	s := new(S콜백_대기_항목)
-	s.M식별번호 = 식별번호
-	s.M생성_시각 = time.Now()
-	s.M값 = 값
+func TestF실시간_작동(t *testing.T) {
+	ch수신 := make(chan lib.I_TR코드, 10)
 
-	return s
-}
+	실시간_정보_구독_정보_저장소.S구독(xt.RT코스피_호가_잔량_H1, ch수신)
 
-type S콜백_대기_항목 struct {
-	M식별번호  int
-	M생성_시각 time.Time
-	TR코드   string
-	M값     interface{}
-}
+	lib.F테스트_에러없음(t, F실시간_정보_구독_복수_종목(
+		xt.RT코스피_호가_잔량_H1,
+		[]string {
+			"252670",	// KODEX 200선물인버스2X
+			"114800",	// KODEX 인버스
+			"122630", 	// KODEX 레버리지
+			"251340",	// KODEX 코스닥150선물인버스
+			"233740",	// KODEX 코스닥150 레버리지
+			"069500", 	// KODEX 200
+		}))
 
-type S콜백_대기_저장소 struct {
-	sync.Mutex
-	저장소 map[int]*S콜백_대기_항목
-}
-
-func (s *S콜백_대기_저장소) G대기_항목(식별번호 int) *S콜백_대기_항목 {
-	s.Lock()
-	defer s.Unlock()
-
-	return s.저장소[식별번호]
-}
-
-func (s *S콜백_대기_저장소) S추가(식별번호 int, 대기_항목 *S콜백_대기_항목) {
-	s.Lock()
-	defer s.Unlock()
-
-	s.저장소[식별번호] = 대기_항목
-}
-
-func (s *S콜백_대기_저장소) S삭제(식별번호 int) {
-	s.Lock()
-	defer s.Unlock()
-
-	delete(s.저장소, 식별번호)
-}
-
-type RAW실시간_정보 struct {
-	TR코드 string
-	데이터  []byte
+	select {
+	case 값 := <-ch수신:
+		lib.F문자열_출력("%v %T\n%v", 값.TR코드(), 값, 값)
+	case <-time.After(lib.P30초):
+		lib.F체크포인트("타임아웃")
+		t.FailNow()
+	}
 }

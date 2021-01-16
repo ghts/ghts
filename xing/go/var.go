@@ -44,11 +44,13 @@ import (
 
 var (
 	소켓REP_TR콜백   lib.I소켓with컨텍스트
-	소켓SUB_실시간_정보 lib.I소켓
+	소켓PULL_실시간_정보 lib.I소켓with컨텍스트
 
 	소켓REQ_저장소 = lib.New소켓_저장소(20, func() lib.I소켓_질의 {
 		return nano.NewNano소켓REQ_단순형(xt.F주소_C32(), lib.P30초)
 	})
+
+	실시간_정보_구독_정보_저장소 = New실시간_정보_구독_정보_저장소()
 
 	ch질의         = make(chan *lib.S작업, 1000)
 	ch신호_접속유지_종료 = make(chan lib.T신호, 1)
@@ -58,10 +60,12 @@ var (
 
 	대기소_C32 = newC32_콜백_대기_저장소()
 
-	V콜백_도우미_수량 = lib.F최대값_정수(runtime.NumCPU(), 2)
+	V콜백_처리_도우미_수량     = lib.F최대값_정수(runtime.NumCPU(), 2)
+	V실시간_정보_수신_도우미_수량 = lib.F최대값_정수(runtime.NumCPU(), 2)
 
 	Ch모니터링_루틴_종료 = make(chan lib.T신호, 1)
-	Ch콜백_도우미_종료  = make(chan lib.T신호, V콜백_도우미_수량)
+	Ch콜백_도우미_종료  = make(chan lib.T신호, V콜백_처리_도우미_수량)
+	Ch실시간_정보_수신_도우미_종료 = make(chan lib.T신호, V실시간_정보_수신_도우미_수량)
 
 	전송_제한_정보_모음          *xt.TR코드별_전송_제한_정보_모음
 	tr코드별_전송_제한_초당_1회_미만 = make(map[string]lib.I전송_권한)
