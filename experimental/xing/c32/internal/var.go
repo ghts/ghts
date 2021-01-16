@@ -86,7 +86,7 @@ var (
 
 	Ch로그인 = make(chan bool, 1)
 	Ch수신  = make(chan *mangos.Message, 1000)
-	Ch질의  = make(chan *S질의, 100)
+	Ch질의  = make(chan *lib.S채널_질의, 100)
 	Ch콜백  = make(chan lib.I콜백, 100)
 
 	Ch관리_모듈_종료    = make(chan lib.T신호, 1)

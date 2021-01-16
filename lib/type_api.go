@@ -389,7 +389,7 @@ type S문자열_모음 struct {
 
 func New채널_질의(질의값 I질의값) *S채널_질의 {
 	s := &S채널_질의{
-		M질의값:  질의값,
+		M값:    질의값,
 		Ch회신값: make(chan interface{}, 1),
 		Ch에러:  make(chan error, 1)}
 
@@ -397,7 +397,7 @@ func New채널_질의(질의값 I질의값) *S채널_질의 {
 }
 
 type S채널_질의 struct {
-	M질의값  I질의값
+	M값    I질의값
 	Ch회신값 chan interface{}
 	Ch에러  chan error
 }

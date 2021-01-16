@@ -185,9 +185,9 @@ func OnRealtimeData(실시간_데이터 unsafe.Pointer) {
 
 	raw값 := c.F2Go바이트_모음(unsafe.Pointer(g.Data), int(g.DataLength))
 	raw값 = f민감정보_삭제(raw값, lib.F2문자열_공백제거(g.TrCode))
-	바이트_변환값 := lib.F확인(lib.New바이트_변환Raw(lib.F2문자열(g.TrCode), raw값, false)).(*lib.S바이트_변환)
+	//바이트_변환값 := lib.F확인(lib.New바이트_변환Raw(lib.F2문자열(g.TrCode), raw값, false)).(*lib.S바이트_변환)
 
-	소켓PUB_실시간_정보.S송신_단순형(lib.Raw, 바이트_변환값)
+	//소켓PUB_실시간_정보.S송신_단순형(lib.Raw, 바이트_변환값)
 }
 
 func OnLogin(wParam, lParam unsafe.Pointer) {

@@ -57,8 +57,13 @@ func F초기화() {
 func f종료_질의_송신() {
 	defer lib.S예외처리{}.S실행()
 
+	질의 := lib.New채널_질의(lib.New질의값_기본형(xt.TR종료, ""))
+
+	Ch질의 <- 질의
+
 	select {
-	case <-New질의(lib.New질의값_기본형(xt.TR종료, ""), Ch질의).Ch응답:
+	case <-질의.Ch회신값:
+	case <-질의.Ch에러:
 	case <-time.After(lib.P10초):
 	}
 
@@ -113,23 +118,22 @@ func F서버_접속_및_로그인() (에러 error) {
 
 	lib.F조건부_패닉(!lib.F인터넷에_접속됨(), "서버 접속이 불가 : 인터넷 접속을 확인하십시오.")
 
-	select {
-	case 응답 := <-New질의(lib.New질의값_기본형(xt.TR접속_및_로그인, ""), Ch질의).Ch응답:
-		if 응답.Error() != nil {
-			lib.F문자열_출력("서버 접속 실패.")
-			return 에러
-		}
-	case <-time.After(lib.P30초):
-		return lib.New에러("접속 타임아웃")
-	}
+	질의 := lib.New채널_질의(lib.New질의값_기본형(xt.TR접속_및_로그인, ""))
+
+	Ch질의 <- 질의
 
 	select {
+	//case <-질의.Ch회신값:	// 회신값은 성공 여부에 무관함.
+	case <-질의.Ch에러:
+		lib.F문자열_출력("서버 접속 실패.")
+		return 에러
+
 	case 로그인_여부 := <-Ch로그인:
 		if 로그인_완료.S값(로그인_여부); !로그인_여부 {
 			return lib.New에러with출력("로그인 실패.")
 		}
 	case <-time.After(lib.P30초):
-		return lib.New에러with출력("로그인 타임아웃")
+		return lib.New에러("타임아웃")
 	}
 
 	return nil
@@ -184,36 +188,35 @@ func f초기화_TR전송_제한() (에러 error) {
 
 	TR코드_모음 = lib.F중복_문자열_제거(TR코드_모음)
 
+채널_질의_반복문:
 	for {
-		var 응답 *S응답
+		질의 := lib.New채널_질의(lib.New질의값_문자열_모음(xt.TR코드별_전송_제한, "", TR코드_모음))
+
+		Ch질의 <- 질의
+
+		var 응답 interface{}
 
 		select {
-		case 응답 = <-New질의(lib.New질의값_문자열_모음(xt.TR코드별_전송_제한, "", TR코드_모음), Ch질의).Ch응답:
+		case 에러 := <-질의.Ch에러:
+			lib.F에러_출력(에러)
+		case 응답 = <-질의.Ch회신값:
 		case <-time.After(lib.P10초):
 			return lib.New에러("f초기화_TR전송_제한() 타임아웃.")
 		}
 
-		if 응답.Error() != nil {
-			lib.F에러_출력(응답.Error())
-		} else if _, ok := 응답.V.(*xt.TR코드별_전송_제한_정보_모음); !ok {
-			lib.New에러with출력("예상하지 못한 자료형. '%T'", 응답.V)
-		} else if 전송_제한_정보_모음 = 응답.V.(*xt.TR코드별_전송_제한_정보_모음); len(TR코드_모음) != len(전송_제한_정보_모음.M맵) {
+		if _, ok := 응답.(*xt.TR코드별_전송_제한_정보_모음); !ok {
+			lib.New에러with출력("예상하지 못한 자료형. '%T'", 응답)
+		} else if 전송_제한_정보_모음 = 응답.(*xt.TR코드별_전송_제한_정보_모음); len(TR코드_모음) != len(전송_제한_정보_모음.M맵) {
 			lib.New에러with출력("서로 다른 길이 : '%v' '%v'", len(TR코드_모음), len(전송_제한_정보_모음.M맵))
-		} else {
-			정상 := false
-			for _, 전송_제한_정보 := range 전송_제한_정보_모음.M맵 {
-				if 전송_제한_정보.M초당_전송_제한 > 0 {
-					정상 = true
-					break
-				}
-			}
+		}
 
-			if 정상 {
-				break
-			} else {
-				lib.F대기(lib.P1초)
+		for _, 전송_제한_정보 := range 전송_제한_정보_모음.M맵 {
+			if 전송_제한_정보.M초당_전송_제한 > 0 {
+				break 채널_질의_반복문
 			}
 		}
+
+		lib.F대기(lib.P1초)
 	}
 
 	for TR코드, 전송_제한_정보 := range 전송_제한_정보_모음.M맵 {

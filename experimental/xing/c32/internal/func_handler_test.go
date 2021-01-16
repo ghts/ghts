@@ -37,7 +37,6 @@ import (
 	xing "github.com/ghts/ghts/experimental/xing/go"
 	"github.com/ghts/ghts/lib"
 	krx "github.com/ghts/ghts/lib/krx_time"
-	nano "github.com/ghts/ghts/lib/nanomsg"
 	xt "github.com/ghts/ghts/xing/base"
 	"math"
 	"strings"
@@ -338,17 +337,17 @@ func TestCSPAT00600_현물_정상_주문(t *testing.T) {
 		t.SkipNow()
 	}
 
-	소켓SUB_실시간 := nano.NewNano소켓SUB_단순형(xt.F주소_실시간())
-	lib.F대기(lib.P1초)
+	//소켓SUB_실시간 := nano.NewNano소켓SUB_단순형(xt.F주소_실시간())
+	//lib.F대기(lib.P1초)
 
-	lib.F테스트_에러없음(t, xing.F주문_응답_실시간_정보_구독())
+	//lib.F테스트_에러없음(t, xing.F주문_응답_실시간_정보_구독())
 
 	const 반복_횟수 = 10
 	const 수량 = 5 // 주문이 정상 작동하는 지만 확인하면 됨.
 	const 호가_유형 = lib.P호가_시장가
 
-	var 매수_주문_접수_확인_수량, 매도_주문_접수_확인_수량 int
-	var 매수_체결_수량, 매도_체결_수량 int64
+	//var 매수_주문_접수_확인_수량, 매도_주문_접수_확인_수량 int
+	//var 매수_체결_수량, 매도_체결_수량 int64
 	var 매수_주문번호_모음, 매도_주문번호_모음 = make([]int64, 반복_횟수), make([]int64, 반복_횟수)
 	var 종목 = lib.New종목("069500", "KODEX 200", lib.P시장구분_ETF)
 	var 가격_정상주문 = int64(0)
@@ -371,7 +370,7 @@ func TestCSPAT00600_현물_정상_주문(t *testing.T) {
 	for i := 0; i < 반복_횟수; i++ {
 		응답값, 에러 := xing.TrCSPAT00600_현물_정상주문(질의값_매수)
 
-		lib.F대기(lib.P100밀리초)
+		lib.F대기(lib.P300밀리초)
 
 		lib.F테스트_에러없음(t, 에러)
 		lib.F테스트_다름(t, 응답값.M응답1, nil)
@@ -391,37 +390,37 @@ func TestCSPAT00600_현물_정상_주문(t *testing.T) {
 	}
 
 	// 매수 주문 확인
-	for {
-		바이트_변환_모음, 에러 := 소켓SUB_실시간.G수신()
-		lib.F테스트_에러없음(t, 에러)
-
-		실시간_정보, ok := 바이트_변환_모음.S해석기(xt.F바이트_변환값_해석).G해석값_단순형(0).(*xt.S현물_주문_응답_실시간_정보)
-
-		switch {
-		case !ok:
-			continue
-		case !f주문번호_포함(실시간_정보.M주문번호, 매수_주문번호_모음):
-			continue
-		}
-
-		switch 실시간_정보.RT코드 {
-		case xt.RT현물_주문_거부_SC4:
-			lib.F문자열_출력("매수 주문 거부됨 : '%v'", 실시간_정보.M주문번호)
-			t.FailNow()
-		case xt.RT현물_주문_정정_SC2, xt.RT현물_주문_취소_SC3:
-			lib.F문자열_출력("예상하지 못한 TR코드 : '%v'", 실시간_정보.RT코드)
-			t.FailNow()
-		case xt.RT현물_주문_접수_SC0:
-			매수_주문_접수_확인_수량++
-		case xt.RT현물_주문_체결_SC1:
-			매수_체결_수량 = 매수_체결_수량 + 실시간_정보.M수량
-		}
-
-		if 매수_주문_접수_확인_수량 == 반복_횟수 &&
-			매수_체결_수량 == 반복_횟수*수량 {
-			break
-		}
-	}
+	//for {
+	//	바이트_변환_모음, 에러 := 소켓SUB_실시간.G수신()
+	//	lib.F테스트_에러없음(t, 에러)
+	//
+	//	실시간_정보, ok := 바이트_변환_모음.S해석기(xt.F바이트_변환값_해석).G해석값_단순형(0).(*xt.S현물_주문_응답_실시간_정보)
+	//
+	//	switch {
+	//	case !ok:
+	//		continue
+	//	case !f주문번호_포함(실시간_정보.M주문번호, 매수_주문번호_모음):
+	//		continue
+	//	}
+	//
+	//	switch 실시간_정보.RT코드 {
+	//	case xt.RT현물_주문_거부_SC4:
+	//		lib.F문자열_출력("매수 주문 거부됨 : '%v'", 실시간_정보.M주문번호)
+	//		t.FailNow()
+	//	case xt.RT현물_주문_정정_SC2, xt.RT현물_주문_취소_SC3:
+	//		lib.F문자열_출력("예상하지 못한 TR코드 : '%v'", 실시간_정보.RT코드)
+	//		t.FailNow()
+	//	case xt.RT현물_주문_접수_SC0:
+	//		매수_주문_접수_확인_수량++
+	//	case xt.RT현물_주문_체결_SC1:
+	//		매수_체결_수량 = 매수_체결_수량 + 실시간_정보.M수량
+	//	}
+	//
+	//	if 매수_주문_접수_확인_수량 == 반복_횟수 &&
+	//		매수_체결_수량 == 반복_횟수*수량 {
+	//		break
+	//	}
+	//}
 
 	질의값_매도 := xt.NewCSPAT00600_현물_정상_주문_질의값()
 	질의값_매도.M계좌번호 = 계좌번호
@@ -437,7 +436,7 @@ func TestCSPAT00600_현물_정상_주문(t *testing.T) {
 	for i := 0; i < 반복_횟수; i++ {
 		응답값, 에러 := xing.TrCSPAT00600_현물_정상주문(질의값_매도)
 
-		lib.F대기(lib.P100밀리초)
+		lib.F대기(lib.P300밀리초)
 
 		lib.F테스트_에러없음(t, 에러)
 		lib.F테스트_다름(t, 응답값.M응답1, nil)
@@ -457,37 +456,37 @@ func TestCSPAT00600_현물_정상_주문(t *testing.T) {
 	}
 
 	// 매도 주문 확인
-	for {
-		바이트_변환_모음, 에러 := 소켓SUB_실시간.G수신()
-		lib.F테스트_에러없음(t, 에러)
-
-		실시간_정보, ok := 바이트_변환_모음.S해석기(xt.F바이트_변환값_해석).G해석값_단순형(0).(*xt.S현물_주문_응답_실시간_정보)
-
-		switch {
-		case !ok:
-			continue
-		case !f주문번호_포함(실시간_정보.M주문번호, 매도_주문번호_모음):
-			continue
-		}
-
-		switch 실시간_정보.RT코드 {
-		case xt.RT현물_주문_거부_SC4:
-			lib.F문자열_출력("매도 주문 거부됨 : '%v'", 실시간_정보.M주문번호)
-			t.FailNow()
-		case xt.RT현물_주문_정정_SC2, xt.RT현물_주문_취소_SC3:
-			lib.F문자열_출력("예상하지 못한 TR코드 : '%v'", 실시간_정보.RT코드)
-			t.FailNow()
-		case xt.RT현물_주문_접수_SC0:
-			매도_주문_접수_확인_수량++
-		case xt.RT현물_주문_체결_SC1:
-			매도_체결_수량 = 매도_체결_수량 + 실시간_정보.M수량
-		}
-
-		if 매도_주문_접수_확인_수량 == 반복_횟수 &&
-			매도_체결_수량 == 반복_횟수*수량 {
-			break
-		}
-	}
+	//for {
+	//	바이트_변환_모음, 에러 := 소켓SUB_실시간.G수신()
+	//	lib.F테스트_에러없음(t, 에러)
+	//
+	//	실시간_정보, ok := 바이트_변환_모음.S해석기(xt.F바이트_변환값_해석).G해석값_단순형(0).(*xt.S현물_주문_응답_실시간_정보)
+	//
+	//	switch {
+	//	case !ok:
+	//		continue
+	//	case !f주문번호_포함(실시간_정보.M주문번호, 매도_주문번호_모음):
+	//		continue
+	//	}
+	//
+	//	switch 실시간_정보.RT코드 {
+	//	case xt.RT현물_주문_거부_SC4:
+	//		lib.F문자열_출력("매도 주문 거부됨 : '%v'", 실시간_정보.M주문번호)
+	//		t.FailNow()
+	//	case xt.RT현물_주문_정정_SC2, xt.RT현물_주문_취소_SC3:
+	//		lib.F문자열_출력("예상하지 못한 TR코드 : '%v'", 실시간_정보.RT코드)
+	//		t.FailNow()
+	//	case xt.RT현물_주문_접수_SC0:
+	//		매도_주문_접수_확인_수량++
+	//	case xt.RT현물_주문_체결_SC1:
+	//		매도_체결_수량 = 매도_체결_수량 + 실시간_정보.M수량
+	//	}
+	//
+	//	if 매도_주문_접수_확인_수량 == 반복_횟수 &&
+	//		매도_체결_수량 == 반복_횟수*수량 {
+	//		break
+	//	}
+	//}
 }
 
 func f주문번호_포함(주문번호 int64, 주문번호_모음 []int64) bool {
@@ -509,10 +508,10 @@ func TestCSPAT00700_현물_정정_주문(t *testing.T) {
 		t.SkipNow()
 	}
 
-	소켓SUB_실시간 := nano.NewNano소켓SUB_단순형(xt.F주소_실시간())
-	lib.F대기(lib.P1초)
+	//소켓SUB_실시간 := nano.NewNano소켓SUB_단순형(xt.F주소_실시간())
+	//lib.F대기(lib.P1초)
 
-	lib.F테스트_에러없음(t, xing.F주문_응답_실시간_정보_구독())
+	//lib.F테스트_에러없음(t, xing.F주문_응답_실시간_정보_구독())
 
 	const 반복_횟수 = 10
 	const 수량 = int64(5)
@@ -548,7 +547,7 @@ func TestCSPAT00700_현물_정정_주문(t *testing.T) {
 	lib.F테스트_에러없음(t, 에러)
 	lib.F테스트_참임(t, 정상주문_응답값.M응답2.M주문번호 > 0, 정상주문_응답값.M응답2.M주문번호)
 
-	lib.F대기(lib.P100밀리초)
+	lib.F대기(lib.P300밀리초)
 
 	원주문번호 := 정상주문_응답값.M응답2.M주문번호
 
@@ -585,7 +584,7 @@ func TestCSPAT00700_현물_정정_주문(t *testing.T) {
 		원주문번호 = 정정주문_응답값.M응답2.M주문번호
 		질의값_정정주문.M원주문번호 = 원주문번호
 
-		lib.F대기(lib.P100밀리초)
+		lib.F대기(lib.P300밀리초)
 	}
 
 	// 전량 취소
@@ -601,41 +600,41 @@ func TestCSPAT00700_현물_정정_주문(t *testing.T) {
 	lib.F테스트_에러없음(t, 에러)
 	lib.F테스트_참임(t, 취소주문_응답값.M응답2.M주문번호 > 0, 취소주문_응답값.M응답2.M주문번호)
 
-	lib.F대기(lib.P100밀리초)
+	lib.F대기(lib.P300밀리초)
 
 	// 취소 주문 확인
-	취소_주문_접수, 취소_주문_처리 := false, false
-
-	for {
-		바이트_변환_모음, 에러 := 소켓SUB_실시간.G수신()
-		lib.F테스트_에러없음(t, 에러)
-
-		실시간_정보, ok := 바이트_변환_모음.S해석기(xt.F바이트_변환값_해석).G해석값_단순형(0).(*xt.S현물_주문_응답_실시간_정보)
-
-		switch {
-		case !ok:
-			continue
-		case 실시간_정보.M원_주문번호 != 원주문번호:
-			continue
-		}
-
-		switch 실시간_정보.RT코드 {
-		case xt.RT현물_주문_거부_SC4:
-			lib.F문자열_출력("취소 주문 거부됨 : '%v'", 정상주문_응답값.M응답2.M주문번호)
-			t.FailNow()
-		case xt.RT현물_주문_체결_SC1, xt.RT현물_주문_정정_SC2:
-			lib.F문자열_출력("예상하지 못한 TR코드 : '%v'", 실시간_정보.RT코드)
-			t.FailNow()
-		case xt.RT현물_주문_접수_SC0:
-			취소_주문_접수 = true
-		case xt.RT현물_주문_취소_SC3:
-			취소_주문_처리 = true
-		}
-
-		if 취소_주문_접수 && 취소_주문_처리 {
-			break
-		}
-	}
+	//취소_주문_접수, 취소_주문_처리 := false, false
+	//
+	//for {
+	//	바이트_변환_모음, 에러 := 소켓SUB_실시간.G수신()
+	//	lib.F테스트_에러없음(t, 에러)
+	//
+	//	실시간_정보, ok := 바이트_변환_모음.S해석기(xt.F바이트_변환값_해석).G해석값_단순형(0).(*xt.S현물_주문_응답_실시간_정보)
+	//
+	//	switch {
+	//	case !ok:
+	//		continue
+	//	case 실시간_정보.M원_주문번호 != 원주문번호:
+	//		continue
+	//	}
+	//
+	//	switch 실시간_정보.RT코드 {
+	//	case xt.RT현물_주문_거부_SC4:
+	//		lib.F문자열_출력("취소 주문 거부됨 : '%v'", 정상주문_응답값.M응답2.M주문번호)
+	//		t.FailNow()
+	//	case xt.RT현물_주문_체결_SC1, xt.RT현물_주문_정정_SC2:
+	//		lib.F문자열_출력("예상하지 못한 TR코드 : '%v'", 실시간_정보.RT코드)
+	//		t.FailNow()
+	//	case xt.RT현물_주문_접수_SC0:
+	//		취소_주문_접수 = true
+	//	case xt.RT현물_주문_취소_SC3:
+	//		취소_주문_처리 = true
+	//	}
+	//
+	//	if 취소_주문_접수 && 취소_주문_처리 {
+	//		break
+	//	}
+	//}
 }
 
 func TestCSPAT00800_현물_취소_주문(t *testing.T) {
@@ -646,8 +645,6 @@ func TestCSPAT00800_현물_취소_주문(t *testing.T) {
 		!krx.F한국증시_정규_거래_시간임() {
 		t.SkipNow()
 	}
-
-	lib.F테스트_에러없음(t, xing.F주문_응답_실시간_정보_구독())
 
 	var 종목 = lib.New종목("069500", "KODEX 200", lib.P시장구분_ETF)
 
@@ -680,7 +677,7 @@ func TestCSPAT00800_현물_취소_주문(t *testing.T) {
 	lib.F테스트_에러없음(t, 에러)
 	lib.F테스트_참임(t, 정상주문_응답값.M응답2.M주문번호 > 0, 정상주문_응답값.M응답2.M주문번호)
 
-	lib.F대기(lib.P100밀리초)
+	lib.F대기(lib.P300밀리초)
 
 	질의값_취소주문 := lib.New질의값_취소_주문()
 	질의값_취소주문.M구분 = xt.TR주문
@@ -694,7 +691,7 @@ func TestCSPAT00800_현물_취소_주문(t *testing.T) {
 	lib.F테스트_에러없음(t, 에러)
 	lib.F테스트_참임(t, 취소주문_응답값.M응답2.M주문번호 > 0, 취소주문_응답값.M응답2.M주문번호)
 
-	lib.F대기(lib.P100밀리초)
+	lib.F대기(lib.P300밀리초)
 
 	// 전량 취소주문 TR 실행
 	질의값_취소주문 = lib.New질의값_취소_주문()

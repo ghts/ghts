@@ -92,21 +92,22 @@ func go_HTTP서버(ch초기화, ch종료 chan lib.T신호) {
 	// 참고자료 : https://stackoverflow.com/questions/37896931/how-to-limit-client-ip-address-when-using-golang-http-package
 	HTTP서버 = &http.Server{
 		Addr: xt.F주소_C32().G단축값(),
-		Handler: http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
-			// get the real IP of the user
-			addr := getRealAddr(req)
-
-			//lib.F체크포인트(addr)
-
-			// the actual vaildation
-			if addr != "127.0.0.1" {
-				http.Error(w, "Blocked", 401)
-				return
-			}
-
-			// pass the request to the mux
-			http.DefaultServeMux.ServeHTTP(w, req)
-		}),
+		//Handler: http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		//	// get the real IP of the user
+		//	addr := getRealAddr(req)
+		//
+		//	//lib.F체크포인트(addr)
+		//
+		//	// the actual vaildation
+		//	if addr != "127.0.0.1" {
+		//		http.Error(w, "Blocked", 401)
+		//		return
+		//	}
+		//
+		//	// pass the request to the mux
+		//	http.DefaultServeMux.ServeHTTP(w, req)
+		//}),
+		Handler: http.DefaultServeMux,
 	}
 
 	HTTP서버.ListenAndServe()

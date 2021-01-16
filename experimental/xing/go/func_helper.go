@@ -40,7 +40,7 @@ import (
 	"github.com/ghts/ghts/lib"
 	xt "github.com/ghts/ghts/xing/base"
 	"io/ioutil"
-	"net/http"
+	"log"
 	"reflect"
 	"strings"
 )
@@ -50,11 +50,12 @@ var (
 	F전일 = xt.F전일
 )
 
-func f2에러(값 string) error {
-	if strings.TrimSpace(값) == "" {
+
+func f2에러(문자열 string) error {
+	if strings.TrimSpace(문자열) == "" {
 		return nil
 	} else {
-		return errors.New(값)
+		return errors.New(문자열)
 	}
 }
 
@@ -63,17 +64,25 @@ func TR도우미(질의값 lib.I질의값, 결과값_포인터 interface{}) (에
 }
 
 func http질의_도우미(url string, 질의값, 결과값_포인터 interface{}) (에러 error) {
-	defer lib.S예외처리{M에러: &에러, M함수: func() { 결과값_포인터 = nil }}.S실행()
+	defer lib.S예외처리{
+		M에러: &에러,
+		M함수: func() { 결과값_포인터 = nil },
+		M함수_항상: func() { httpClient.CloseIdleConnections() },
+	}.S실행()
 
 	if !strings.HasPrefix(url, xt.F주소_C32().HTTP주소()) {
-		url = xt.F주소_C32().HTTP주소() + "/" + url
+		url = xt.F주소_C32().HTTP주소(url)
 	}
 
 	바이트_모음_질의, 에러 := json.Marshal(질의값)
 	lib.F확인(에러)
 
-	http응답, 에러 := (&http.Client{Timeout: lib.P30초}).Post(url, "application/json", bytes.NewBuffer(바이트_모음_질의))
-	lib.F확인(에러)
+	http응답, 에러 := httpClient.Post(url, "application/json", bytes.NewBuffer(바이트_모음_질의))
+	if 에러 != nil {
+		log.Printf("%T %+v\n", 에러, 에러)
+		return 에러
+	}
+	//lib.F확인(에러)
 
 	바이트_모음_응답, 에러 := ioutil.ReadAll(http응답.Body)
 	lib.F확인(에러)
@@ -84,7 +93,7 @@ func http질의_도우미(url string, 질의값, 결과값_포인터 interface{}
 
 	//디버깅용 출력 문자열
 	//if lib.F체크포인트(url); strings.Contains(url, "connected") {
-	//	응답 := &xt.S응답_JSON{}
+	//	응답 := &xt.JSON응답{}
 	//	lib.F체크포인트(url, 질의값)
 	//	lib.F체크포인트(바이트_모음_응답)
 	//	lib.F체크포인트(string(바이트_모음_응답))
