@@ -80,6 +80,8 @@ var (
 // 다중 사용에 안전한 값들.
 var (
 	소켓REP_TR수신 = nano.NewNano소켓REP_단순형(xt.F주소_C32())
+	소켓PUB_실시간_정보 = nano.NewNano소켓PUB_단순형(xt.F주소_실시간())
+
 	소켓REQ_저장소 = lib.New소켓_저장소(20, func() lib.I소켓_질의 {
 		return nano.NewNano소켓REQ_단순형(xt.F주소_콜백(), lib.P30초)
 	})
@@ -88,18 +90,17 @@ var (
 	api_호출_잠금 sync.Mutex
 
 	ch로그인 = make(chan bool, 1)
-	ch질의  = make(chan *lib.S채널_질의, 100)
+	Ch질의  = make(chan *lib.S채널_질의, 100)
 	ch콜백  = make(chan lib.I콜백, 100)
-	ch실시간_정보 = make(chan *RAW실시간_정보, 1000)
 
-	수신_도우미_수량     = lib.F최대값_정수(runtime.NumCPU(), 2)
-	콜백_도우미_수량     = lib.F최대값_정수(runtime.NumCPU(), 2)
+	수신_도우미_수량 = lib.F최대값_정수(runtime.NumCPU(), 2)
+	콜백_도우미_수량 = lib.F최대값_정수(runtime.NumCPU(), 2)
 
-	Ch모니터링_루틴_종료    = make(chan lib.T신호, 1)
-	Ch함수_호출_도우미_종료  = make(chan lib.T신호, 1)
-	Ch수신_도우미_종료     = make(chan lib.T신호, 수신_도우미_수량)
-	Ch콜백_도우미_종료     = make(chan lib.T신호, 콜백_도우미_수량)
-	Ch실시간_정보_도우미_종료 = make(chan lib.T신호, 1)
+	Ch모니터링_루틴_종료   = make(chan lib.T신호, 1)
+	Ch_HTTP서버_종료   = make(chan lib.T신호, 1)
+	Ch함수_호출_도우미_종료 = make(chan lib.T신호, 1)
+	Ch수신_도우미_종료    = make(chan lib.T신호, 수신_도우미_수량)
+	Ch콜백_도우미_종료    = make(chan lib.T신호, 콜백_도우미_수량)
 
 	TR_수신_중    = lib.New안전한_bool(false)
 	API_초기화_완료 = lib.New안전한_bool(false)

@@ -51,13 +51,15 @@ func go함수_호출_도우미(ch초기화, ch종료 chan lib.T신호) {
 		return
 	}
 
-	defer lib.S예외처리{M함수_항상: func() {
+	defer func() {
+		recover()
+
 		if lib.F공통_종료_채널_닫힘() {
 			Ch함수_호출_도우미_종료 <- lib.P신호_종료
 		} else {
-			lib.F신호_전달_시도(ch종료, lib.P신호_종료)
+			ch종료 <- lib.P신호_종료
 		}
-	}}.S실행()
+	}()
 
 	runtime.LockOSThread()
 	defer runtime.UnlockOSThread()
@@ -67,11 +69,14 @@ func go함수_호출_도우미(ch초기화, ch종료 chan lib.T신호) {
 
 	ch공통_종료 := lib.Ch공통_종료()
 
-	lib.F신호_전달_시도(ch초기화, lib.P신호_초기화)
+	select {
+	case ch초기화 <- lib.P신호_초기화:
+	default:
+	}
 
 	for {
 		select {
-		case 질의 := <-ch질의:
+		case 질의 := <-Ch질의:
 			f질의값_처리(질의)
 		case <-ch공통_종료:
 			return

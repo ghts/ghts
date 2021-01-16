@@ -79,8 +79,3 @@ func (s *S콜백_대기_저장소) S삭제(식별번호 int) {
 
 	delete(s.저장소, 식별번호)
 }
-
-type RAW실시간_정보 struct {
-	TR코드 string
-	데이터  []byte
-}

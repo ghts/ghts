@@ -99,7 +99,6 @@ func F초기화(값 xt.T서버_구분) {
 
 func F소켓_생성() {
 	소켓REP_TR콜백 = nano.NewNano소켓REP_단순형(xt.F주소_콜백())
-	소켓PULL_실시간_정보 = nano.NewNano소켓PULL_단순형(xt.F주소_실시간())
 }
 
 func F초기화_Go루틴() {
@@ -138,6 +137,8 @@ func f초기화_xing_C32() (에러 error) {
 }
 
 func F접속_로그인() (에러 error) {
+	소켓SUB_실시간_정보 = nano.NewNano소켓SUB_단순형(xt.F주소_실시간())
+
 	if !tr수신_소켓_동작_확인() {
 		return lib.New에러("C32 프로세스 REP소켓 접속 불가.")
 	}
@@ -315,18 +316,13 @@ func F종료() {
 
 	<-Ch모니터링_루틴_종료
 
-	for i := 0; i < V콜백_처리_도우미_수량; i++ {
+	for i := 0; i < V콜백_도우미_수량; i++ {
 		<-Ch콜백_도우미_종료
-	}
-
-	for i := 0; i < V실시간_정보_수신_도우미_수량; i++ {
-		<-Ch실시간_정보_수신_도우미_종료
 	}
 }
 
 func F소켓_정리() {
 	lib.F패닉억제_호출(소켓REP_TR콜백.Close)
-	lib.F패닉억제_호출(소켓PULL_실시간_정보.Close)
 	소켓REQ_저장소.S정리()
 }
 

@@ -39,12 +39,48 @@ import (
 	"strings"
 )
 
-func go콜백_처리(ch초기화, ch종료 chan lib.T신호) (에러 error) {
+func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
+	lib.S예외처리{M에러: &에러, M함수_항상: func() {
+		Ch모니터링_루틴_종료 <- lib.P신호_종료
+	}}.S실행()
+
+	ch도우미_초기화 := make(chan lib.T신호, V콜백_도우미_수량)
+	ch도우미_종료 := make(chan error, V콜백_도우미_수량)
+	ch공통_종료 := lib.Ch공통_종료()
+
+	for i := 0; i < V콜백_도우미_수량; i++ {
+		go go루틴_콜백_처리_도우미(ch도우미_초기화, ch도우미_종료)
+	}
+
+	for i := 0; i < V콜백_도우미_수량; i++ {
+		<-ch도우미_초기화
+	}
+
+	ch초기화 <- lib.P신호_초기화
+
+	for {
+		select {
+		case <-ch공통_종료:
+			return
+		case 에러 = <-ch도우미_종료:
+			if lib.F공통_종료_채널_닫힘() {
+				return
+			}
+
+			lib.F에러_출력(에러)
+			go go루틴_콜백_처리_도우미(ch도우미_초기화, ch도우미_종료)
+			<-ch도우미_초기화
+		}
+	}
+}
+
+func go루틴_콜백_처리_도우미(ch초기화 chan lib.T신호, ch도우미_종료 chan error) (에러 error) {
 	if lib.F공통_종료_채널_닫힘() {
 		return
 	}
 
-	ctx := 소켓REP_TR콜백.G컨텍스트_단순형()
+	var ctx lib.I송수신
+	var 바이트_변환_모음 *lib.S바이트_변환_모음
 
 	defer lib.S예외처리{
 		M에러: &에러,
@@ -57,13 +93,16 @@ func go콜백_처리(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 			if lib.F공통_종료_채널_닫힘() {
 				Ch콜백_도우미_종료 <- lib.P신호_종료
 			} else {
-				lib.F신호_전달_시도(ch종료, lib.P신호_종료)
+				ch도우미_종료 <- 에러
 			}
 		}}.S실행()
 
-	lib.F신호_전달_시도(ch초기화, lib.P신호_초기화)
+	if ctx, 에러 = 소켓REP_TR콜백.G컨텍스트(); 에러 != nil {
+		ctx = nil
+		return lib.New에러(에러)
+	}
 
-	var 바이트_변환_모음 *lib.S바이트_변환_모음
+	ch초기화 <- lib.P신호_초기화
 
 	for {
 		if lib.F공통_종료_채널_닫힘() {
@@ -73,8 +112,6 @@ func go콜백_처리(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 				!strings.Contains(에러.Error(), "object closed") {
 				lib.F에러_출력(에러)
 			}
-		} else if lib.F공통_종료_채널_닫힘() {
-			return
 		} else if 바이트_변환_모음 == nil {
 			continue
 		} else if 바이트_변환_모음.G수량() != 1 {
@@ -82,7 +119,7 @@ func go콜백_처리(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 		} else if i값, 에러 := 바이트_변환_모음.S해석기(xt.F바이트_변환값_해석).G해석값(0); 에러 != nil {
 			lib.F에러_출력(에러)
 		} else if 콜백값, ok := i값.(lib.I콜백); !ok {
-			lib.F에러_출력("'I콜백'형이 아님 : '%T'", i값)
+			panic(lib.New에러("'I콜백'형이 아님 : '%T'", i값))
 		} else {
 			변환_형식 := 바이트_변환_모음.G변환_형식(0)
 

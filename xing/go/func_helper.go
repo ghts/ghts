@@ -317,8 +317,6 @@ func c32_재시작_도우미() (에러 error) {
 
 	lib.F확인(C32_종료())
 	lib.F패닉억제_호출(소켓REP_TR콜백.Close)
-	lib.F패닉억제_호출(소켓PULL_실시간_정보.Close)
-
 	소켓REQ_저장소.S정리()
 
 	xt.F주소_재설정()

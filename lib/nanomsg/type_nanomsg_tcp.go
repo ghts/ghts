@@ -226,7 +226,7 @@ func NewNano소켓PULL(주소 lib.T주소, 옵션_모음 ...interface{}) (lib.I�
 	}
 }
 
-func NewNano소켓PULL_단순형(주소 lib.T주소, 옵션_모음 ...interface{}) lib.I소켓with컨텍스트 {
+func NewNano소켓PULL_단순형(주소 lib.T주소, 옵션_모음 ...interface{}) lib.I소켓 {
 	if 소켓, 에러 := NewNano소켓PULL(주소, 옵션_모음...); 에러 != nil {
 		lib.F에러_출력(에러)
 		return nil
@@ -334,10 +334,6 @@ func (s *sNano소켓) G수신() (값 *lib.S바이트_변환_모음, 에러 error
 	}
 }
 
-func (s *sNano소켓) G수신_단순형() *lib.S바이트_변환_모음 {
-	return lib.F확인(s.G수신()).(*lib.S바이트_변환_모음)
-}
-
 func (s *sNano소켓) G컨텍스트() (lib.I송수신, error) {
 	if ctx, 에러 := s.Socket.OpenContext(); 에러 != nil {
 		lib.F에러_출력(에러)
@@ -347,13 +343,8 @@ func (s *sNano소켓) G컨텍스트() (lib.I송수신, error) {
 	}
 }
 
-func (s *sNano소켓) G컨텍스트_단순형() lib.I송수신 {
-	if ctx, 에러 := s.G컨텍스트(); 에러 != nil {
-		lib.F에러_출력(에러)
-		return nil
-	} else {
-		return ctx
-	}
+func (s *sNano소켓) G수신_단순형() *lib.S바이트_변환_모음 {
+	return lib.F확인(s.G수신()).(*lib.S바이트_변환_모음)
 }
 
 func (s *sNano소켓) G질의_응답(변환_형식 lib.T변환, 값_모음 ...interface{}) (값 *lib.S바이트_변환_모음, 에러 error) {
