@@ -1,7 +1,7 @@
 package util
 
 import (
-	xing "github.com/ghts/ghts/experimental/xing_http/go"
+	xing "github.com/ghts/ghts/experimental/xing/go"
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/lib/daily_price_data"
 	"github.com/ghts/ghts/lib/krx_time"

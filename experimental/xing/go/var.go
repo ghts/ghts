@@ -31,43 +31,33 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package x32
+package xing
 
 import (
-	xing "github.com/ghts/ghts/experimental/xing_http/go"
 	"github.com/ghts/ghts/lib"
 	xt "github.com/ghts/ghts/xing/base"
-	"testing"
+	"sync"
+	"time"
 )
 
-func TestMain(m *testing.M) {
-	if lib.F환경변수("GOARCH") != "386" {
-		lib.New에러with출력("C32 모듈은 32비트 전용입니다.")
-		return
-	}
+var (
+	계좌번호_모음     []string
+	주문_응답_구독_중  = lib.New안전한_bool(false)
+	접속유지_실행_중   = lib.New안전한_bool(false)
+	서버_구분       xt.T서버_구분
+	xing_C32_경로 = lib.GOPATH() + `/src/github.com/ghts/ghts/xing/c32/xing_C32.bat`
+	프로세스ID_C32  int
+)
 
-	lib.F체크포인트()
-
-	f테스트_준비()
-	defer f테스트_정리()
-
-	lib.F체크포인트()
-
-	m.Run()
-}
-
-func f테스트_준비() {
-	defer lib.S예외처리{}.S실행()
-
-	lib.F테스트_모드_시작()
-
-	xt.F서버_구분_설정(xt.P서버_모의투자) //실거래)
-	F초기화()
-	xing.F전일_당일_설정()
-	xing.F종목_정보_설정()
-}
-
-func f테스트_정리() {
-	lib.F테스트_모드_종료()
-	f종료_질의_송신()
-}
+// 종목 관련 저장소는 초기화 이후에는 사실상 읽기 전용. 다중 사용에 문제가 없음.
+var (
+	종목모음_설정_잠금   sync.Mutex
+	종목모음_설정일     = lib.New안전한_시각(time.Time{})
+	종목맵_전체       = make(map[string]*lib.S종목)
+	종목모음_코스피     = make([]*lib.S종목, 0)
+	종목모음_코스닥     = make([]*lib.S종목, 0)
+	종목모음_ETF     = make([]*lib.S종목, 0)
+	종목모음_ETN     = make([]*lib.S종목, 0)
+	종목모음_ETF_ETN = make([]*lib.S종목, 0)
+	종목모음_전체      = make([]*lib.S종목, 0)
+)

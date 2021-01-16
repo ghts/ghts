@@ -34,7 +34,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package x32
 
 import (
-	xing "github.com/ghts/ghts/experimental/xing_http/go"
+	xing "github.com/ghts/ghts/experimental/xing/go"
 	"github.com/ghts/ghts/lib"
 	krx "github.com/ghts/ghts/lib/krx_time"
 	nano "github.com/ghts/ghts/lib/nanomsg"

@@ -36,7 +36,7 @@ package x32
 // #include "func_C.h"
 import "C"
 import (
-	xing "github.com/ghts/ghts/experimental/xing_http/go"
+	xing "github.com/ghts/ghts/experimental/xing/go"
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/lib/c"
 	"github.com/ghts/ghts/xing/base"
