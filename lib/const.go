@@ -231,11 +231,31 @@ func (p T주소) TCP주소() string {
 	return "tcp://" + p.G단축값()
 }
 
-func (p T주소) HTTP주소() string {
+func (p T주소) HTTP주소(추가_인수 ...string) string {
+	if len(추가_인수) > 0 {
+		추가url := 추가_인수[0]
+
+		if !strings.HasPrefix(추가url, "/") {
+			추가url = "/" + 추가url
+		}
+
+		return "http://" + p.G단축값() + 추가url
+	}
+
 	return "http://" + p.G단축값()
 }
 
-func (p T주소) WS주소() string {
+func (p T주소) WS주소(추가_인수 ...string) string {
+	if len(추가_인수) > 0 {
+		추가url := 추가_인수[0]
+
+		if !strings.HasPrefix(추가url, "/") {
+			추가url = "/" + 추가url
+		}
+
+		return "ws://" + p.G단축값() + 추가url
+	}
+
 	return "ws://" + p.G단축값()
 }
 
