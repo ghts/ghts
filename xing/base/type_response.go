@@ -34,8 +34,32 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package xt
 
 import (
+	"errors"
 	"github.com/ghts/ghts/lib"
+	"strings"
 )
+
+func NewJSON응답(값 interface{}) *JSON응답 {
+	switch 값.(type) {
+	case error:
+		return &JSON응답{V: nil, E: 값.(error).Error()}
+	default:
+		return &JSON응답{V: 값, E: ""}
+	}
+}
+
+type JSON응답 struct {
+	V interface{}
+	E string
+}
+
+func (s JSON응답) Error() error {
+	if strings.TrimSpace(s.E) == "" {
+		return nil
+	} else {
+		return errors.New(s.E)
+	}
+}
 
 type I이중_응답 interface {
 	I이중_응답1
