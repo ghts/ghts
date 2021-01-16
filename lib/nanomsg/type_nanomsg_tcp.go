@@ -209,6 +209,32 @@ func NewNano소켓PULL_단순형(주소 lib.T주소, 옵션_모음 ...interface{
 	}
 }
 
+func NewNano소켓PAIR클라이언트(주소 lib.T주소, 옵션_모음 ...interface{}) (lib.I소켓, error) {
+	return NewNano소켓(lib.P소켓_종류_PAIR, 주소.TCP주소(), lib.P소켓_접속_CONNECT, 옵션_모음...)
+}
+
+func NewNano소켓PAIR클라이언트_단순형(주소 lib.T주소, 옵션_모음 ...interface{}) lib.I소켓 {
+	if 소켓, 에러 := NewNano소켓PAIR클라이언트(주소, 옵션_모음...); 에러 != nil {
+		lib.F에러_출력(에러)
+		return nil
+	} else {
+		return 소켓
+	}
+}
+
+func NewNano소켓PAIR서버(주소 lib.T주소, 옵션_모음 ...interface{}) (lib.I소켓, error) {
+	return NewNano소켓(lib.P소켓_종류_PAIR, 주소.TCP주소(), lib.P소켓_접속_BIND, 옵션_모음...)
+}
+
+func NewNano소켓PAIR서버_단순형(주소 lib.T주소, 옵션_모음 ...interface{}) lib.I소켓 {
+	if 소켓, 에러 := NewNano소켓PAIR서버(주소, 옵션_모음...); 에러 != nil {
+		lib.F에러_출력(에러)
+		return nil
+	} else {
+		return 소켓
+	}
+}
+
 type sNano소켓 struct {
 	mangos.Socket
 	변환_형식 lib.T변환       // 전송하는 자료를 변환하는 형식.
