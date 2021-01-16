@@ -25,42 +25,50 @@ the Free Software Foundation, version 2.1 of the License.
 
 GHTS is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PAxt.RTICULAR PURPOSE.  See the
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package xing
+package x32
 
 import (
 	"github.com/ghts/ghts/lib"
-	xt "github.com/ghts/ghts/xing/base"
-	"testing"
-	"time"
 )
 
-func TestF실시간_작동(t *testing.T) {
-	ch수신 := make(chan lib.I_TR코드, 10)
 
-	실시간_정보_구독_정보_저장소.S구독(xt.RT코스피_호가_잔량_H1, ch수신)
+// 윈도우 메시지 루프 안에서 실행되는 OnRealtimeData()가
+//  최대한 빨리 마치도록 부가적인 처리를 대행해주는 고루틴.
+func go실시간_정보_도우미(ch초기화, ch종료 chan lib.T신호) {
+	if lib.F공통_종료_채널_닫힘() {
+		return
+	}
 
-	lib.F테스트_에러없음(t, F실시간_정보_구독_복수_종목(
-		xt.RT코스피_호가_잔량_H1,
-		[]string {
-			"252670",	// KODEX 200선물인버스2X
-			"114800",	// KODEX 인버스
-			"122630", 	// KODEX 레버리지
-			"251340",	// KODEX 코스닥150선물인버스
-			"233740",	// KODEX 코스닥150 레버리지
-			"069500", 	// KODEX 200
-		}))
+	defer lib.S예외처리{M함수_항상: func() {
+		if lib.F공통_종료_채널_닫힘() {
+			Ch실시간_정보_도우미_종료 <- lib.P신호_종료
+		} else {
+			lib.F신호_전달_시도(ch종료, lib.P신호_종료)
+		}
+	}}.S실행()
 
-	select {
-	case 값 := <-ch수신:
-		lib.F문자열_출력("%v %T\n%v", 값.TR코드(), 값, 값)
-	case <-time.After(lib.P30초):
-		lib.F체크포인트("타임아웃")
-		t.FailNow()
+	ch공통_종료 := lib.Ch공통_종료()
+
+	lib.F신호_전달_시도(ch초기화, lib.P신호_초기화)
+
+	for {
+		select {
+		case <-ch공통_종료:
+			return
+		case 값 := <-ch실시간_정보:
+			값.데이터 = f민감정보_삭제(값.TR코드, 값.데이터)
+
+			if 바이트_변환값, 에러 := lib.New바이트_변환Raw(값.TR코드, 값.데이터, false); 에러 != nil {
+				lib.F에러_출력(에러)
+			} else if 에러 = 소켓PUB_실시간_정보.S송신(lib.Raw, 바이트_변환값); 에러 != nil {
+				lib.F에러_출력(에러)
+			}
+		}
 	}
 }
