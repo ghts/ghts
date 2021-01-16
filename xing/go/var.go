@@ -44,7 +44,6 @@ import (
 
 var (
 	소켓REP_TR콜백   lib.I소켓with컨텍스트
-	소켓SUB_실시간_정보 lib.I소켓
 
 	소켓REQ_저장소 = lib.New소켓_저장소(20, func() lib.I소켓_질의 {
 		return nano.NewNano소켓REQ_단순형(xt.F주소_C32(), lib.P30초)

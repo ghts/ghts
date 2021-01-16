@@ -137,8 +137,6 @@ func f초기화_xing_C32() (에러 error) {
 }
 
 func F접속_로그인() (에러 error) {
-	소켓SUB_실시간_정보 = nano.NewNano소켓SUB_단순형(xt.F주소_실시간())
-
 	if !tr수신_소켓_동작_확인() {
 		return lib.New에러("C32 프로세스 REP소켓 접속 불가.")
 	}

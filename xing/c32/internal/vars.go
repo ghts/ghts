@@ -97,7 +97,6 @@ var (
 	콜백_도우미_수량 = lib.F최대값_정수(runtime.NumCPU(), 2)
 
 	Ch모니터링_루틴_종료   = make(chan lib.T신호, 1)
-	Ch_HTTP서버_종료   = make(chan lib.T신호, 1)
 	Ch함수_호출_도우미_종료 = make(chan lib.T신호, 1)
 	Ch수신_도우미_종료    = make(chan lib.T신호, 수신_도우미_수량)
 	Ch콜백_도우미_종료    = make(chan lib.T신호, 콜백_도우미_수량)
