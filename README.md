@@ -25,23 +25,27 @@ GHTS 라이브러리 설치
 
 설정화일 형식은 샘플 파일(config.ini.sample)을 참조할 것.
 
-(작성자는 GHTS를 GOPATH 방식으로만 사용하고 있으며, 
+(작성자는 GOPATH 방식으로만 사용하고 있으며, 
 
-향후 모듈 방식으로 사용하는 방법에 대해서 아직 궁리 중 입니다.
+모듈 방식으로 사용하는 방법에 대해서는 아직 궁리 중 입니다.
 
 Go언어 1.16부터는 기본값으로 GOPATH방식은 비활성화 되므로,
 
-GO111MODULE=OFF로 설정해 주야 합니다.
+GO111MODULE=OFF로 설정해서 수동으로 활성화 해줘야 합니다.
 
-코맨드 프롬프트에서 > echo %GOPATH% <엔터키> 
+코맨드 프롬프트에서 
+
+> echo %GOPATH% 
 
 를 실행하면 현재 설정된 GOPATH 값이 나옵니다.
 
-기본값은 %USERPROFILE%\go 입니다.
+(기본값은 %USERPROFILE%\go 입니다.)
 
-코맨드 프롬프트에서 > echo %USERPROFILE% <엔터키>
+사용자 홈디렉토리를 가리키는 USERPROFILE 값은 코맨드 프롬프트에서 
 
-를 실행하면 사용자 홈디렉토리 값이 나옵니다.
+> echo %USERPROFILE%
+
+를 실행하면 알 수 있습니다.
 
 추가 정보가 필요하면 인터넷에서 GOPATH, GO111MODULE에 대해서 검색해 보세요.)
 
