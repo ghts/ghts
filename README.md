@@ -8,6 +8,7 @@ GHTS
 사전준비물
 - Go언어 : https://golang.org/dl/
 - 이베스트 Xing API : https://www.ebestsec.co.kr/
+- Git : https://git-scm.com/download/win
 
 *********************************************************
 GHTS 라이브러리 설치
