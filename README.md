@@ -15,7 +15,7 @@ GHTS 라이브러리 설치
 <pre><code>go get -u github.com/ghts/ghts</code></pre>
  
 *********************************************************    
-이베스트투자증권 계정 정보 설정 (GOPATH 방식 기준)
+이베스트투자증권 로그인 계정 정보 설정 (GOPATH 방식 기준)
 
 %GOPATH%\src\github.com\ghts\ghts\xing\c32\internal 디렉토리 내
 
