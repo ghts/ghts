@@ -9,6 +9,8 @@ GHTS
 - Go언어 : https://golang.org/dl/
 - C/C++ 컴파일러 및 ZeroMQ (MSYS2) : https://www.msys2.org/
 
+
+<!--
 *********************************************************
 MSYS2 설치 후 추가 설정 ('MSYS2 MSYS' 터미널에서 아래 명령을 실행.)
 
@@ -20,6 +22,10 @@ pacman -S mingw-w64-i686-zeromq
 pacman -S mingw-w64-x86_64-zeromq
 pacman -S mingw-w64-x86_64-{git,git-doc-html,git-doc-man,curl} git-extra</code></pre>
 
+*********************************************************
+MSYS2 모든 패키지를 업데이트 ('MSYS2 MSYS' 터미널에서 아래 명령을 실행.)
+
+<pre><code>pacman -Syuu</code></pre>
 *********************************************************
 GHTS 라이브러리 설치
 

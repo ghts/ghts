@@ -31,49 +31,11 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package xing
+#include <windows.h>
 
-import (
-	"github.com/ghts/ghts/lib"
-	xt "github.com/ghts/ghts/xing/base"
-	"testing"
-)
+//void *XingApiDll();
+//void FreeXingApiDll();
 
-func TestF계좌_관련_함수(t *testing.T) {
-	t.Parallel()
-
-	계좌_수량, 에러 := F계좌_수량()
-	lib.F테스트_에러없음(t, 에러)
-	lib.F테스트_참임(t, 계좌_수량 > 0, 계좌_수량)
-
-	for i := 0; i < 계좌_수량; i++ {
-		계좌_번호, 에러 := F계좌_번호(i)
-		lib.F테스트_에러없음(t, 에러)
-		lib.F테스트_참임(t, len(계좌_번호) > 0)
-
-		계좌_이름, 에러 := F계좌_이름(계좌_번호)
-		lib.F테스트_에러없음(t, 에러)
-		lib.F테스트_참임(t, len(계좌_이름) > 0)
-
-		//계좌_상세명, 에러 := F계좌_상세명(계좌_번호)
-		//lib.F테스트_에러없음(t, 에러)
-		//lib.F테스트_참임(t, len(계좌_상세명) > 0)
-
-		계좌_별명, 에러 := F계좌_별명(계좌_번호)
-		lib.F테스트_에러없음(t, 에러)
-		lib.F테스트_참임(t, len(계좌_별명) >= 0)
-
-		//lib.F체크포인트(계좌_번호, 계좌_이름, 계좌_별명)
-	}
-}
-
-func TestF서버_이름(t *testing.T) {
-	서버_이름, 에러 := F서버_이름()
-	lib.F테스트_에러없음(t, 에러)
-	lib.F테스트_다름(t, 서버_이름, "")
-}
-
-func TestF서버_구분(t *testing.T) {
-	서버_구분 := F서버_구분()
-	lib.F테스트_같음(t, 서버_구분, xt.P서버_모의투자, xt.P서버_실거래)
-}
+//void GetAccountName(void *AccountNo, void *Buffer, int BufferSize);
+//void GetAcctDetailName(void *AccountNo, void *Buffer, int BufferSize);
+//void GetAcctNickName(void *AccountNo, void *Buffer, int BufferSize);

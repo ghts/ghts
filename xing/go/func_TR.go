@@ -1667,14 +1667,15 @@ func F계좌_이름(계좌_번호 string) (계좌_이름 string, 에러 error) {
 	return 계좌_이름, nil
 }
 
-func F계좌_상세명(계좌_번호 string) (계좌_상세명 string, 에러 error) {
-	defer lib.S예외처리{M에러: &에러, M함수: func() { 계좌_상세명 = "" }}.S실행()
-
-	회신_메시지 := F질의(lib.New질의값_문자열(xt.TR계좌_상세명, "", 계좌_번호))
-	계좌_상세명 = lib.F확인(회신_메시지.G해석값(0)).(string)
-
-	return 계좌_상세명, nil
-}
+// C32에서 syscall방식으로 에러 발생. cgo방식으로만 동작. C언어 컴파일러 의존성을 없애기 위해서 비활성화.
+//func F계좌_상세명(계좌_번호 string) (계좌_상세명 string, 에러 error) {
+//	defer lib.S예외처리{M에러: &에러, M함수: func() { 계좌_상세명 = "" }}.S실행()
+//
+//	회신_메시지 := F질의(lib.New질의값_문자열(xt.TR계좌_상세명, "", 계좌_번호))
+//	계좌_상세명 = lib.F확인(회신_메시지.G해석값(0)).(string)
+//
+//	return 계좌_상세명, nil
+//}
 
 func F계좌_별명(계좌_번호 string) (계좌_별명 string, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 계좌_별명 = "" }}.S실행()

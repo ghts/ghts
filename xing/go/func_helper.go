@@ -417,32 +417,32 @@ func F계좌번호_존재함(계좌번호 string) bool {
 	return false
 }
 
-func 현물_계좌번호() (계좌번호 string, 에러 error) {
-	if 서버_구분 == xt.P서버_모의투자 {
-		return F계좌번호by상세명("위탁")
-	} else {
-		return F계좌번호by상세명("종합매매")
-	}
-}
+//func F계좌_번호(0) (계좌번호 string, 에러 error) {
+//	if 서버_구분 == xt.P서버_모의투자 {
+//		return F계좌번호by상세명("위탁")
+//	} else {
+//		return F계좌번호by상세명("종합매매")
+//	}
+//}
 
-func 선물옵션_계좌번호() (계좌번호 string, 에러 error) {
-	return F계좌번호by상세명("선물옵션")
-}
+//func 선물옵션_계좌번호() (계좌번호 string, 에러 error) {
+//	return F계좌번호by상세명("선물옵션")
+//}
 
-func F계좌번호by상세명(상세명 string) (계좌번호 string, 에러 error) {
-	defer lib.S예외처리{M에러: &에러}.S실행()
-
-	계좌번호_모음, 에러 := F계좌번호_모음()
-	lib.F확인(에러)
-
-	for _, 계좌번호 := range 계좌번호_모음 {
-		계좌_상세명, 에러 := F계좌_상세명(계좌번호)
-		lib.F확인(에러)
-
-		if 계좌_상세명 == 상세명 {
-			return 계좌번호, nil
-		}
-	}
-
-	return "", nil
-}
+//func F계좌번호by상세명(상세명 string) (계좌번호 string, 에러 error) {
+//	defer lib.S예외처리{M에러: &에러}.S실행()
+//
+//	계좌번호_모음, 에러 := F계좌번호_모음()
+//	lib.F확인(에러)
+//
+//	for _, 계좌번호 := range 계좌번호_모음 {
+//		계좌_상세명, 에러 := F계좌_상세명(계좌번호)
+//		lib.F확인(에러)
+//
+//		if 계좌_상세명 == 상세명 {
+//			return 계좌번호, nil
+//		}
+//	}
+//
+//	return "", nil
+//}

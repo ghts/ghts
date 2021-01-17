@@ -32,10 +32,6 @@ You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
 #include <windows.h>
+#include <stdio.h>
 
-void *XingApiDll();
-void FreeXingApiDll();
-
-void GetAccountName(void *AccountNo, void *Buffer, int BufferSize);
-void GetAcctDetailName(void *AccountNo, void *Buffer, int BufferSize);
-void GetAcctNickName(void *AccountNo, void *Buffer, int BufferSize);
+//ㅓ

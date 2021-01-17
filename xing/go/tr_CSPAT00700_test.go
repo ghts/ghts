@@ -38,8 +38,6 @@ import (
 	krx "github.com/ghts/ghts/lib/krx_time"
 	"github.com/ghts/ghts/lib/nanomsg"
 	"github.com/ghts/ghts/xing/base"
-	"strings"
-
 	"testing"
 )
 
@@ -77,12 +75,12 @@ func TestCSPAT00700_현물_정정_주문(t *testing.T) {
 	최소_호가단위, 에러 := F최소_호가단위by종목(종목)
 	lib.F테스트_에러없음(t, 에러)
 
-	계좌번호, 에러 := 현물_계좌번호()
+	계좌번호, 에러 := F계좌_번호(0)
 	lib.F테스트_에러없음(t, 에러)
 
-	계좌_상세명, 에러 := F계좌_상세명(계좌번호)
-	lib.F확인(에러)
-	lib.F테스트_거짓임(t, strings.Contains(계좌_상세명, "선물옵션")) // 현물 계좌이어야 함.
+	//계좌_상세명, 에러 := F계좌_상세명(계좌번호)
+	//lib.F확인(에러)
+	//lib.F테스트_거짓임(t, strings.Contains(계좌_상세명, "선물옵션")) // 현물 계좌이어야 함.
 
 	질의값 := xt.NewCSPAT00600_현물_정상_주문_질의값()
 	질의값.M계좌번호 = 계좌번호
