@@ -20,9 +20,9 @@ GHTS 라이브러리 설치
 
 %GOPATH%\src\github.com\ghts\ghts\xing\c32\internal 디렉토리 내
 
-계정 정보 설정 화일(config.ini)을 생성. 
+계정 정보 설정 화일 'config.ini'을 생성. 
 
-설정화일 형식은 샘플 파일(config.ini.sample)을 참조할 것.
+형식은 샘플 파일(config.ini.sample)을 참조할 것.
 
 (작성자는 GOPATH 방식으로만 사용하고 있으며, 
 
