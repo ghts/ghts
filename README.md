@@ -7,10 +7,9 @@ GHTS
 
 사전준비물
 - Go언어 : https://golang.org/dl/
-- C/C++ 컴파일러 및 ZeroMQ (MSYS2) : https://www.msys2.org/
-
 
 <!--
+- C/C++ 컴파일러 및 ZeroMQ (MSYS2) : https://www.msys2.org/
 *********************************************************
 MSYS2 설치 후 추가 설정 ('MSYS2 MSYS' 터미널에서 아래 명령을 실행.)
 
@@ -26,23 +25,36 @@ pacman -S mingw-w64-x86_64-{git,git-doc-html,git-doc-man,curl} git-extra</code><
 MSYS2 모든 패키지를 업데이트 ('MSYS2 MSYS' 터미널에서 아래 명령을 실행.)
 
 <pre><code>pacman -Syuu</code></pre>
+-->
 *********************************************************
 GHTS 라이브러리 설치
 
 <pre><code>go get -u github.com/ghts/ghts</code></pre>
  
 *********************************************************    
-이베스트투자증권 계정 정보 설정
+이베스트투자증권 계정 정보 설정 (GOPATH 방식 기준)
 
-ghts\xing\c32\internal 디렉토리 내
-
-설정화일 샘플(config.ini.sample)을 참조해서
+%GOPATH%\src\github.com\ghts\ghts\xing\c32\internal 디렉토리 내
 
 계정 정보 설정 화일(config.ini)을 생성. 
 
+설정화일 형식은 샘플 파일(config.ini.sample)을 참조할 것.
+
 (작성자는 GHTS를 GOPATH 형식으로만 사용하고 있으며, 
 
-모듈 방식으로 사용하는 방법에 대해서 아직 궁리 중.)
+향후 모듈 방식으로 사용하는 방법에 대해서 아직 궁리 중 입니다.
+
+인터넷에서 GOPATH, GO111MODULE에 대해서 검색해 보세요.
+
+코맨드 프롬프트에서 > echo %GOPATH% <엔터키> 
+
+를 실행하면 현재 설정된 GOPATH 값이 나옵니다.
+
+기본값은 %USERPROFILE%\go 입니다.
+
+코맨드 프롬프트에서 > echo %USERPROFILE% <엔터키>
+
+를 실행하면 사용자 홈디렉토리 값이 나옵니다.)
 
 *********************************************************
 
