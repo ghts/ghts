@@ -86,6 +86,26 @@ API 사용 관련 파일
 
 - xing/go/func_TR.go : TR호출 함수.
 - xing/go/tr_<TR코드>_test.go : 개별 TR코드 함수 사용법.
+- xing/go/test_main_test.go : 
+
+*********************************************************
+
+GHTS 사용 전 초기화
+
+<pre><code>import (
+    xt "github.com/ghts/ghts/xing/base"
+    xing "github.com/ghts/ghts/xing/go"
+    
+    <... 기타 의존성 라이브러리 ...>
+)
+
+func main() {
+    xing.F초기화(xt.P서버_실거래)  // 혹은 xt.P서버_모의투자
+    defer xing.F종료()
+    
+    <... 이하 Xing API 호출 코드 ...>
+}
+</code></pre>
 
 *********************************************************
 
