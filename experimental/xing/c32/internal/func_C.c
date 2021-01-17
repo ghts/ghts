@@ -38,18 +38,18 @@ typedef void (__stdcall *ETK_GetAccountName)(const char* pszAcc, char* pszAccNam
 typedef void (__stdcall *ETK_GetAcctDetailName)(const char* pszAcc, char* pszAccName, int nAccNameSize);
 typedef void (__stdcall *ETK_GetAcctNickName)(const char* pszAcc, char* pszAccName, int nAccNameSize);
 
-HMODULE hModule = NULL;
+// HMODULE hModule = NULL;
 ETK_GetAccountName etkGetAccountName = NULL;
 ETK_GetAcctDetailName etkGetAcctDetailName = NULL;
 ETK_GetAcctNickName etkGetAcctNickName = NULL;
 
-void *XingApiDll() {
-    if (hModule == NULL) {
-        hModule = LoadLibrary(TEXT("XingAPI.dll"));
-    }
-
-    return (void *)hModule;
-}
+//void *XingApiDll() {
+//    if (hModule == NULL) {
+//        hModule = LoadLibrary(TEXT("XingAPI.dll"));
+//    }
+//
+//    return (void *)hModule;
+//}
 
 void GetAccountName(void *AccountNo, void *Buffer, int BufferSize) {
     memset(Buffer, 0, BufferSize);

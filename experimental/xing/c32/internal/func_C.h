@@ -33,8 +33,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
 #include <windows.h>
 
-void *XingApiDll();
-void FreeXingApiDll();
+//void *XingApiDll();
 
 void GetAccountName(void *AccountNo, void *Buffer, int BufferSize);
 void GetAcctDetailName(void *AccountNo, void *Buffer, int BufferSize);

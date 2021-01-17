@@ -73,9 +73,9 @@ func f초기화_XingAPI() {
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
-	xing_api_dll = syscall.Handle(uintptr(C.XingApiDll()))
-	//xing_api_dll, 에러 := syscall.LoadLibrary("xingAPI.dll")
-	//lib.F확인(에러)
+	//xing_api_dll = syscall.Handle(uintptr(C.XingApiDll()))
+	xing_api_dll, 에러 := syscall.LoadLibrary("xingAPI.dll")
+	lib.F확인(에러)
 
 	// 원래 디렉토리로 이동
 	lib.F확인(os.Chdir(원래_디렉토리))
