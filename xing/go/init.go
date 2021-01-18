@@ -175,25 +175,6 @@ func c32_빌드() error {
 	return exec.Command("go", "build", "github.com/ghts/ghts/xing/c32").Run()
 }
 
-// 실행파일 디렉토리 내 'c32.exe'파일이 존재하면 바로 실행. 없으면 컴파일 후 실행.
-func Xing32_경로() (string, bool) {
-	실행_화일_경로, 에러 := os.Executable()
-	if 에러 != nil {
-		return xing32_경로_기본값, false
-	}
-
-	실행_화일_디렉토리 := filepath.Dir(실행_화일_경로)
-	c32_경로 := filepath.Join(실행_화일_디렉토리, "c32.exe")
-
-	if lib.F파일_존재함(c32_경로) {
-		lib.F문자열_출력("C32 실행 파일 찾았음 : '%v'", c32_경로)
-		return c32_경로, true
-	} else {
-		lib.F문자열_출력("C32 실행 파일 못 찾음. 컴파일 후 실행 시도.")
-		return xing32_경로_기본값, false
-	}
-}
-
 func F접속_로그인() (에러 error) {
 	if !tr수신_소켓_동작_확인() {
 		return lib.New에러("C32 프로세스 REP소켓 접속 불가.")
