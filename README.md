@@ -30,7 +30,7 @@ pacman -S mingw-w64-x86_64-toolchain</code></pre>
 
 *********************************************************
 
-GHTS 라이브러리 설치
+GHTS 라이브러리 설치 (명령 프롬프트 창에서 아래 명령을 실행.)
 
 <pre><code>go get -u github.com/ghts/ghts</code></pre>
  
