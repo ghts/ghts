@@ -56,25 +56,25 @@ var (
 	etkLogin       uintptr
 	etkLogout      uintptr
 	//etkDisconnect           uintptr	// syscall, cgo 방식 모두 에러 발생.
-	etkRequest             uintptr
-	etkAdviseRealData      uintptr
-	etkUnadviseRealData    uintptr
-	etkUnadviseWindow      uintptr
-	etkGetAccountListCount uintptr
-	etkGetAccountList      uintptr
-	etkGetAccountName      uintptr
-	etkGetAccountDetailName uintptr		// syscall 방식은 에러 발생. cgo 방식은 정상 작동.
-	etkGetAccountNickName uintptr
-	etkGetServerName      uintptr
-	etkGetLastError       uintptr
-	etkGetErrorMessage    uintptr
-	etkGetTRCountPerSec   uintptr
-	etkGetTRCountBaseSec  uintptr
-	etkGetTRCountLimit    uintptr
-	etkGetTRCountRequest  uintptr
-	etkReleaseRequestData uintptr
-	etkReleaseMessageData uintptr
-	etkDecompress         uintptr
+	etkRequest              uintptr
+	etkAdviseRealData       uintptr
+	etkUnadviseRealData     uintptr
+	etkUnadviseWindow       uintptr
+	etkGetAccountListCount  uintptr
+	etkGetAccountList       uintptr
+	etkGetAccountName       uintptr
+	etkGetAccountDetailName uintptr // syscall 방식은 에러 발생. cgo 방식은 정상 작동.
+	etkGetAccountNickName   uintptr
+	etkGetServerName        uintptr
+	etkGetLastError         uintptr
+	etkGetErrorMessage      uintptr
+	etkGetTRCountPerSec     uintptr
+	etkGetTRCountBaseSec    uintptr
+	etkGetTRCountLimit      uintptr
+	etkGetTRCountRequest    uintptr
+	etkReleaseRequestData   uintptr
+	etkReleaseMessageData   uintptr
+	etkDecompress           uintptr
 )
 
 // 다중 사용에 안전한 값들.

@@ -56,30 +56,30 @@ var (
 	etkLogin       uintptr
 	etkLogout      uintptr
 	//etkDisconnect           uintptr	// syscall, cgo 방식 모두 에러 발생.
-	etkRequest             uintptr
-	etkAdviseRealData      uintptr
-	etkUnadviseRealData    uintptr
-	etkUnadviseWindow      uintptr
-	etkGetAccountListCount uintptr
-	etkGetAccountList      uintptr
-	etkGetAccountName      uintptr
-	etkGetAccountDetailName uintptr		// syscall 방식은 에러 발생. cgo 방식은 정상 작동.
-	etkGetAccountNickName uintptr
-	etkGetServerName      uintptr
-	etkGetLastError       uintptr
-	etkGetErrorMessage    uintptr
-	etkGetTRCountPerSec   uintptr
-	etkGetTRCountBaseSec  uintptr
-	etkGetTRCountLimit    uintptr
-	etkGetTRCountRequest  uintptr
-	etkReleaseRequestData uintptr
-	etkReleaseMessageData uintptr
-	etkDecompress         uintptr
+	etkRequest              uintptr
+	etkAdviseRealData       uintptr
+	etkUnadviseRealData     uintptr
+	etkUnadviseWindow       uintptr
+	etkGetAccountListCount  uintptr
+	etkGetAccountList       uintptr
+	etkGetAccountName       uintptr
+	etkGetAccountDetailName uintptr // syscall 방식은 에러 발생. cgo 방식은 정상 작동.
+	etkGetAccountNickName   uintptr
+	etkGetServerName        uintptr
+	etkGetLastError         uintptr
+	etkGetErrorMessage      uintptr
+	etkGetTRCountPerSec     uintptr
+	etkGetTRCountBaseSec    uintptr
+	etkGetTRCountLimit      uintptr
+	etkGetTRCountRequest    uintptr
+	etkReleaseRequestData   uintptr
+	etkReleaseMessageData   uintptr
+	etkDecompress           uintptr
 )
 
 // 다중 사용에 안전한 값들.
 var (
-	소켓REP_TR수신 = nano.NewNano소켓REP_단순형(xt.F주소_C32())
+	소켓REP_TR수신   = nano.NewNano소켓REP_단순형(xt.F주소_C32())
 	소켓PUB_실시간_정보 = nano.NewNano소켓PUB_단순형(xt.F주소_실시간())
 
 	소켓REQ_저장소 = lib.New소켓_저장소(20, func() lib.I소켓_질의 {
@@ -113,4 +113,3 @@ var (
 	계좌_비밀번호   string
 	서버_구분     xt.T서버_구분
 )
-

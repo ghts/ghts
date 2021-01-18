@@ -1694,4 +1694,3 @@ func F서버_이름() (서버_이름 string, 에러 error) {
 
 	return 서버_이름, nil
 }
-

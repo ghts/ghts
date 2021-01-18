@@ -26,9 +26,9 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package main
 
 import (
+	x32 "github.com/ghts/ghts/experimental/xing/c32/internal"
 	"github.com/ghts/ghts/lib"
 	xt "github.com/ghts/ghts/xing/base"
-	x32 "github.com/ghts/ghts/experimental/xing/c32/internal"
 )
 
 func main() {

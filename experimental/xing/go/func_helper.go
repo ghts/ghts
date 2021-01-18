@@ -50,7 +50,6 @@ var (
 	F전일 = xt.F전일
 )
 
-
 func f2에러(문자열 string) error {
 	if strings.TrimSpace(문자열) == "" {
 		return nil
@@ -65,8 +64,8 @@ func TR도우미(질의값 lib.I질의값, 결과값_포인터 interface{}) (에
 
 func http질의_도우미(url string, 질의값, 결과값_포인터 interface{}) (에러 error) {
 	defer lib.S예외처리{
-		M에러: &에러,
-		M함수: func() { 결과값_포인터 = nil },
+		M에러:    &에러,
+		M함수:    func() { 결과값_포인터 = nil },
 		M함수_항상: func() { httpClient.CloseIdleConnections() },
 	}.S실행()
 

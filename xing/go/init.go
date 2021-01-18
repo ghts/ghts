@@ -129,7 +129,7 @@ func f초기화_xing_C32() (에러 error) {
 		}
 
 		GOARCH_원래값 := os.Getenv("GOARCH")
-		os.Setenv("GOARCH", "386")	// 64비트에서 컴파일을 막는 루틴을 회피하기 위해서 32비트인척 함.
+		os.Setenv("GOARCH", "386") // 64비트에서 컴파일을 막는 루틴을 회피하기 위해서 32비트인척 함.
 		defer os.Setenv("GOARCH", GOARCH_원래값)
 
 		// 자식 프로세스는 부모 프로세스의 환경 변수를 그대로 물려받음.
@@ -155,8 +155,8 @@ func c32_실행_화일_경로() string {
 }
 
 func c32_빌드() error {
-	if lib.F파일_존재함(c32_실행_화일_경로())  {
-		os.Remove(c32_실행_화일_경로())	// 테스트 중일 때는 무조건 재컴파일.
+	if lib.F파일_존재함(c32_실행_화일_경로()) {
+		os.Remove(c32_실행_화일_경로()) // 테스트 중일 때는 무조건 재컴파일.
 
 	}
 	//
@@ -169,11 +169,11 @@ func c32_빌드() error {
 	//}
 
 	GOARCH_원래값 := os.Getenv("GOARCH")
-	os.Setenv("GOARCH", "386")	// 32비트 컴파일.
+	os.Setenv("GOARCH", "386") // 32비트 컴파일.
 	defer os.Setenv("GOARCH", GOARCH_원래값)
 
 	CGO_ENABLED_원래값 := os.Getenv("CGO_ENABLED")
-	os.Setenv("CGO_ENABLED", "1")	// cgo 활성화
+	os.Setenv("CGO_ENABLED", "1") // cgo 활성화
 	defer os.Setenv("CGO_ENABLED", CGO_ENABLED_원래값)
 
 	PATH_원래값 := os.Getenv("PATH")
