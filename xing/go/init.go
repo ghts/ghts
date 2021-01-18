@@ -42,6 +42,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 
 	"fmt"
 	"runtime"
@@ -156,9 +157,12 @@ func c32_실행_화일_경로() string {
 }
 
 func c32_빌드() error {
-	if lib.F파일_존재함(c32_실행_화일_경로()) {
-		//os.Remove(c32_실행_화일_경로())
-		return nil
+	if 현재_디렉토리, 에러 := os.Getwd(); 에러 != nil {
+		return lib.New에러(에러)
+	} else if strings.HasSuffix(현재_디렉토리, `github.com\ghts\ghts\xing\go`) && lib.F파일_존재함(c32_실행_화일_경로()) {
+		os.Remove(c32_실행_화일_경로())	// 테스트 중일 때는 무조건 재컴파일.
+	} else if lib.F파일_존재함(c32_실행_화일_경로())  {
+		return nil	// 테스트가 아닐 때는 존재하는 실행 파일 그대로 사용.
 	}
 
 	GOARCH_원래값 := os.Getenv("GOARCH")
