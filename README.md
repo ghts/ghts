@@ -15,6 +15,10 @@ GHTS
 - Git : https://git-scm.com/download/win
 - 이베스트 Xing API : https://www.ebestsec.co.kr/
 
+Xing API 관련 기능은 개발 편의성을 위해서 <br>
+Go언어, MSYS2, Xing API가 기본 위치에 설치된 것을 상정하고 있습니다. <br>
+( Go언어 : C:\Go, MSYS2 : C:\msys64, Xing API : C:\eBEST\xingAPI )
+
 *********************************************************
 MSYS2에서 C 컴파일러 설치 ('MSYS2 -> MSYS' 터미널에서 아래 명령을 실행.)
 
