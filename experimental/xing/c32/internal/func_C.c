@@ -34,14 +34,14 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 #include <windows.h>
 #include <stdio.h>
 
-typedef void (__stdcall *ETK_GetAccountName)(const char* pszAcc, char* pszAccName, int nAccNameSize);
-typedef void (__stdcall *ETK_GetAcctDetailName)(const char* pszAcc, char* pszAccName, int nAccNameSize);
-typedef void (__stdcall *ETK_GetAcctNickName)(const char* pszAcc, char* pszAccName, int nAccNameSize);
+//typedef void (__stdcall *ETK_GetAccountName)(const char* pszAcc, char* pszAccName, int nAccNameSize);
+//typedef void (__stdcall *ETK_GetAcctDetailName)(const char* pszAcc, char* pszAccName, int nAccNameSize);
+//typedef void (__stdcall *ETK_GetAcctNickName)(const char* pszAcc, char* pszAccName, int nAccNameSize);
 
 // HMODULE hModule = NULL;
-ETK_GetAccountName etkGetAccountName = NULL;
-ETK_GetAcctDetailName etkGetAcctDetailName = NULL;
-ETK_GetAcctNickName etkGetAcctNickName = NULL;
+//ETK_GetAccountName etkGetAccountName = NULL;
+//ETK_GetAcctDetailName etkGetAcctDetailName = NULL;
+//ETK_GetAcctNickName etkGetAcctNickName = NULL;
 
 //void *XingApiDll() {
 //    if (hModule == NULL) {
@@ -51,65 +51,65 @@ ETK_GetAcctNickName etkGetAcctNickName = NULL;
 //    return (void *)hModule;
 //}
 
-void GetAccountName(void *AccountNo, void *Buffer, int BufferSize) {
-    memset(Buffer, 0, BufferSize);
-
-    if (BufferSize < 41) {
-        printf("C.GetAccountName() : BufferSize too small. %d\n", BufferSize);
-        return;
-    }
-
-    if (etkGetAccountName == NULL) {
-        FARPROC proc = GetProcAddress(hModule, "ETK_GetAccountName");
-        if (proc == NULL) {
-            printf("'ETK_GetAccountName' not found.\n");
-            return;
-        }
-
-        etkGetAccountName = (ETK_GetAccountName)(proc);
-    }
-
-    etkGetAccountName((LPCTSTR)AccountNo, (LPSTR)Buffer, BufferSize);
-}
-
-void GetAcctDetailName(void *AccountNo, void *Buffer, int BufferSize) {
-    memset(Buffer, 0, BufferSize);
-
-    if (BufferSize < 41) {
-        printf("C.GetAcctDetailName() : BufferSize too small. %d\n", BufferSize);
-        return;
-    }
-
-    if (etkGetAcctDetailName == NULL) {
-        FARPROC proc = GetProcAddress(hModule, "ETK_GetAcctDetailName");
-        if (proc == NULL) {
-            printf("'ETK_GetAcctDetailName' not found.\n");
-            return;
-        }
-
-        etkGetAcctDetailName = (ETK_GetAcctDetailName)(proc);
-    }
-
-    etkGetAcctDetailName((LPCTSTR)AccountNo, (LPSTR)Buffer, BufferSize);
-}
-
-void GetAcctNickName(void *AccountNo, void *Buffer, int BufferSize) {
-    memset(Buffer, 0, BufferSize);
-
-    if (BufferSize < 41) {
-        printf("C.GetAcctNickName() : BufferSize too small. %d\n", BufferSize);
-        return;
-    }
-
-    if (etkGetAcctNickName == NULL) {
-        FARPROC proc = GetProcAddress(hModule, "ETK_GetAcctNickname");
-        if (proc == NULL) {
-            printf("'ETK_GetAcctNickName' not found.\n");
-            return;
-        }
-
-        etkGetAcctNickName = (ETK_GetAcctNickName)(proc);
-    }
-
-    etkGetAcctNickName((LPCTSTR)AccountNo, (LPSTR)Buffer, BufferSize);
-}
+//void GetAccountName(void *AccountNo, void *Buffer, int BufferSize) {
+//    memset(Buffer, 0, BufferSize);
+//
+//    if (BufferSize < 41) {
+//        printf("C.GetAccountName() : BufferSize too small. %d\n", BufferSize);
+//        return;
+//    }
+//
+//    if (etkGetAccountName == NULL) {
+//        FARPROC proc = GetProcAddress(hModule, "ETK_GetAccountName");
+//        if (proc == NULL) {
+//            printf("'ETK_GetAccountName' not found.\n");
+//            return;
+//        }
+//
+//        etkGetAccountName = (ETK_GetAccountName)(proc);
+//    }
+//
+//    etkGetAccountName((LPCTSTR)AccountNo, (LPSTR)Buffer, BufferSize);
+//}
+//
+//void GetAcctDetailName(void *AccountNo, void *Buffer, int BufferSize) {
+//    memset(Buffer, 0, BufferSize);
+//
+//    if (BufferSize < 41) {
+//        printf("C.GetAcctDetailName() : BufferSize too small. %d\n", BufferSize);
+//        return;
+//    }
+//
+//    if (etkGetAcctDetailName == NULL) {
+//        FARPROC proc = GetProcAddress(hModule, "ETK_GetAcctDetailName");
+//        if (proc == NULL) {
+//            printf("'ETK_GetAcctDetailName' not found.\n");
+//            return;
+//        }
+//
+//        etkGetAcctDetailName = (ETK_GetAcctDetailName)(proc);
+//    }
+//
+//    etkGetAcctDetailName((LPCTSTR)AccountNo, (LPSTR)Buffer, BufferSize);
+//}
+//
+//void GetAcctNickName(void *AccountNo, void *Buffer, int BufferSize) {
+//    memset(Buffer, 0, BufferSize);
+//
+//    if (BufferSize < 41) {
+//        printf("C.GetAcctNickName() : BufferSize too small. %d\n", BufferSize);
+//        return;
+//    }
+//
+//    if (etkGetAcctNickName == NULL) {
+//        FARPROC proc = GetProcAddress(hModule, "ETK_GetAcctNickname");
+//        if (proc == NULL) {
+//            printf("'ETK_GetAcctNickName' not found.\n");
+//            return;
+//        }
+//
+//        etkGetAcctNickName = (ETK_GetAcctNickName)(proc);
+//    }
+//
+//    etkGetAcctNickName((LPCTSTR)AccountNo, (LPSTR)Buffer, BufferSize);
+//}

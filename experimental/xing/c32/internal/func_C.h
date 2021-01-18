@@ -35,6 +35,6 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
 //void *XingApiDll();
 
-void GetAccountName(void *AccountNo, void *Buffer, int BufferSize);
-void GetAcctDetailName(void *AccountNo, void *Buffer, int BufferSize);
-void GetAcctNickName(void *AccountNo, void *Buffer, int BufferSize);
+//void GetAccountName(void *AccountNo, void *Buffer, int BufferSize);
+//void GetAcctDetailName(void *AccountNo, void *Buffer, int BufferSize);
+//void GetAcctNickName(void *AccountNo, void *Buffer, int BufferSize);

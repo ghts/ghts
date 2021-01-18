@@ -46,7 +46,7 @@ var (
 	주문_응답_구독_중  = lib.New안전한_bool(false)
 	접속유지_실행_중   = lib.New안전한_bool(false)
 	서버_구분       xt.T서버_구분
-	xing_C32_경로 = lib.GOPATH() + `/src/github.com/ghts/ghts/experimental/xing/c32/xing_C32.bat`
+	xing_C32_경로 = lib.GOPATH() + `/src/github.com/ghts/ghts/experimental/xing/c32/c32.bat`
 	프로세스ID_C32  int
 	httpClient  = &http.Client{Timeout: lib.P30초}
 )
