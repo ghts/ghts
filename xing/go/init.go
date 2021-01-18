@@ -157,7 +157,8 @@ func c32_실행_화일_경로() string {
 
 func c32_빌드() error {
 	if lib.F파일_존재함(c32_실행_화일_경로()) {
-		os.Remove(c32_실행_화일_경로())
+		//os.Remove(c32_실행_화일_경로())
+		return nil
 	}
 
 	GOARCH_원래값 := os.Getenv("GOARCH")
