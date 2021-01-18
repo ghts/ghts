@@ -40,16 +40,27 @@ import (
 	"os"
 )
 
-func F로그인_설정_화일_읽기(설정_화일_경로 string) (로그인_ID, 로그인_암호, 인증서_암호, 계좌_암호 string, 에러 error) {
+func F로그인_설정_화일_경로_설정(경로 string) {
+	os.Setenv(P환경변수_설정_화일_경로, 경로)
+}
+
+func F로그인_설정_화일_경로() string {
+	return os.Getenv(P환경변수_설정_화일_경로)
+}
+
+func F로그인_설정_화일_읽기() (로그인_ID, 로그인_암호, 인증서_암호, 계좌_암호 string, 에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
+
+	설정_화일_경로 := F로그인_설정_화일_경로()
 
 	if lib.F파일_없음(설정_화일_경로) {
 		버퍼 := new(bytes.Buffer)
-		버퍼.WriteString("Xing 설정화일 없음\n")
-		버퍼.WriteString("%v가 존재하지 않습니다.\n")
+		버퍼.WriteString("Xing 설정화일 찾을 수없음\n")
+		버퍼.WriteString("'%v'가 존재하지 않습니다.\n")
+		버퍼.WriteString("환경변수 '%v'에 설정화일 경로를 설정하십시오.\n")
 		버퍼.WriteString("xing_config.ini.sample을 참조하여 새로 생성하십시오.")
 
-		return "", "", "", "", lib.New에러(버퍼.String(), 설정_화일_경로)
+		return "", "", "", "", lib.New에러(버퍼.String(), 설정_화일_경로, P환경변수_설정_화일_경로)
 	}
 
 	cfg파일 := lib.F확인(ini.Load(설정_화일_경로)).(*ini.File)
