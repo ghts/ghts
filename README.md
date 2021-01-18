@@ -11,10 +11,20 @@ GHTS
 
 사전준비물
 - Go언어 : https://golang.org/dl/
-- 이베스트 Xing API : https://www.ebestsec.co.kr/
+- C 컴파일러 (MSYS2) : https://www.msys2.org/ 
 - Git : https://git-scm.com/download/win
+- 이베스트 Xing API : https://www.ebestsec.co.kr/
 
 *********************************************************
+MSYS2에서 C 컴파일러 설치 ('MSYS2 -> MSYS' 터미널에서 아래 명령을 실행.)
+
+<pre><code>pacman -Syuu 
+pacman -S base-devel
+pacman -S mingw-w64-i686-toolchain
+pacman -S mingw-w64-x86_64-toolchain</code></pre>
+
+*********************************************************
+
 GHTS 라이브러리 설치
 
 <pre><code>go get -u github.com/ghts/ghts</code></pre>
@@ -71,6 +81,8 @@ API 사용 관련 파일
 *********************************************************
 
 GHTS 사용 전 초기화
+ 
+- 문자열 상수 사용
 
 <pre><code>import (
     xt "github.com/ghts/ghts/xing/base"
@@ -80,11 +92,10 @@ GHTS 사용 전 초기화
 )
 
 func main() {
-    // 'xt.P서버_실거래' 대신 'xt.P서버_모의투자' 사용 가능.
-    // %% 자리에 계좌 정보 문자열 설정.
-    // 초기화 정보를 별도의 ini파일로 분리하려면 xt.F로그인_설정_화일_읽기() 편의 함수 참조할 것.     
+    // %% 자리에 계좌 정보 문자열 상수 설정.
+    // 'xt.P서버_실거래' 대신 'xt.P서버_모의투자' 사용 가능.    
     xing.F초기화(xt.P서버_실거래, %로그인_ID%, %로그인_암호%, %인증서_암호%, %계좌_암호%)  
-    defer xing.F종료()
+    defer xing.F종료()    
        
     <... 이하 Xing API 호출 코드 ...>
 }
