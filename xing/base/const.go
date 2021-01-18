@@ -40,11 +40,16 @@ import (
 )
 
 const (
-	P서버_구분_환경변수명  = "SERVER_Class"
-	P주소_TR_환경변수명  = "ADDRESS_TR"
-	P주소_콜백_환경변수명  = "ADDRESS_CALLBACK"
-	P주소_실시간_환경변수명 = "ADDRESS_REALTIME"
+	P환경변수_서버_구분  = "SERVER_CLASS"
+	P환경변수_주소_TR  = "ADDRESS_TR"
+	P환경변수_주소_콜백  = "ADDRESS_CALLBACK"
+	P환경변수_주소_실시간 = "ADDRESS_REALTIME"
+	P환경변수_로그인_ID = "XING_LOG_IN_ID"
+	P환경변수_로그인_암호 = "XING_LOG_IN_PWD"
+	P환경변수_인증서_암호 = "XING_CERT_PWD"
+	P환경변수_계좌_암호 = "XING_ACCOUNT_PWD"
 )
+
 
 const (
 	Sizeof_TR_DATA          = 104 // unsafe.Sizeof(xt.TR_DATA{})

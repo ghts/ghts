@@ -59,7 +59,7 @@ func f속성값_초기화(질의값 interface{}) interface{} {
 }
 
 func F서버_구분() T서버_구분 {
-	if 구분값, 에러 := lib.F2정수(os.Getenv(P서버_구분_환경변수명)); 에러 == nil && T서버_구분(구분값) == P서버_실거래 {
+	if 구분값, 에러 := lib.F2정수(os.Getenv(P환경변수_서버_구분)); 에러 == nil && T서버_구분(구분값) == P서버_실거래 {
 		return P서버_실거래
 	} else {
 		return P서버_모의투자
@@ -67,13 +67,13 @@ func F서버_구분() T서버_구분 {
 }
 
 func F서버_구분_설정(서버_구분 T서버_구분) {
-	os.Setenv(P서버_구분_환경변수명, strconv.Itoa(int(서버_구분)))
+	os.Setenv(P환경변수_서버_구분, strconv.Itoa(int(서버_구분)))
 }
 
 func F주소_C32() lib.T주소 {
 	for {
 		// 환경변수를 통하면 자동으로 자식 프로세스에 같은 값이 전달된다.
-		if 주소, 에러 := lib.F2정수(os.Getenv(P주소_TR_환경변수명)); 에러 != nil {
+		if 주소, 에러 := lib.F2정수(os.Getenv(P환경변수_주소_TR)); 에러 != nil {
 			F주소_설정()
 		} else {
 			return lib.T주소(주소)
@@ -84,7 +84,7 @@ func F주소_C32() lib.T주소 {
 func F주소_콜백() lib.T주소 {
 	for {
 		// 환경변수를 통하면 자동으로 자식 프로세스에 같은 값이 전달된다.
-		if 주소, 에러 := lib.F2정수(os.Getenv(P주소_콜백_환경변수명)); 에러 != nil {
+		if 주소, 에러 := lib.F2정수(os.Getenv(P환경변수_주소_콜백)); 에러 != nil {
 			F주소_설정()
 		} else {
 			return lib.T주소(주소)
@@ -95,7 +95,7 @@ func F주소_콜백() lib.T주소 {
 func F주소_실시간() lib.T주소 {
 	for {
 		// 환경변수를 통하면 자동으로 자식 프로세스에 같은 값이 전달된다.
-		if 주소, 에러 := lib.F2정수(os.Getenv(P주소_실시간_환경변수명)); 에러 != nil {
+		if 주소, 에러 := lib.F2정수(os.Getenv(P환경변수_주소_실시간)); 에러 != nil {
 			F주소_설정()
 		} else {
 			return lib.T주소(주소)
@@ -123,9 +123,9 @@ func F주소_설정() {
 			lib.F포트_닫힘_확인(주소_콜백) &&
 			lib.F포트_닫힘_확인(주소_실시간) {
 			// 환경변수를 통하면 자동으로 자식 프로세스에 같은 값이 전달된다.
-			os.Setenv(P주소_TR_환경변수명, strconv.Itoa(int(주소_TR)))
-			os.Setenv(P주소_콜백_환경변수명, strconv.Itoa(int(주소_콜백)))
-			os.Setenv(P주소_실시간_환경변수명, strconv.Itoa(int(주소_실시간)))
+			os.Setenv(P환경변수_주소_TR, strconv.Itoa(int(주소_TR)))
+			os.Setenv(P환경변수_주소_콜백, strconv.Itoa(int(주소_콜백)))
+			os.Setenv(P환경변수_주소_실시간, strconv.Itoa(int(주소_실시간)))
 
 			//버퍼 := bytes.Buffer{}
 			//문자열 := lib.F2문자열("* Xing API 호출 HTTP주소 : '%v' *", F주소_C32().HTTP주소())

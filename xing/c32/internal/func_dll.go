@@ -40,13 +40,11 @@ import (
 	"github.com/ghts/ghts/lib/c"
 	"github.com/ghts/ghts/xing/base"
 	xing "github.com/ghts/ghts/xing/go"
-	"gopkg.in/ini.v1"
 	"strings"
 	"syscall"
 
 	"bytes"
 	"os"
-	"path/filepath"
 	"time"
 	"unsafe"
 )
@@ -230,40 +228,21 @@ func f접속됨() (bool, error) {
 }
 
 func F로그인(서버_구분 xt.T서버_구분) (에러 error) {
-	defer lib.S예외처리{M에러: &에러}.S실행()
+	defer lib.S예외처리{M에러: &에러, M함수_항상: xt.F로그인_정보_환경_변수_삭제}.S실행()
 
-	if lib.F파일_없음(설정파일_경로) {
-		버퍼 := new(bytes.Buffer)
-		버퍼.WriteString("Xing 설정화일 없음\n")
-		버퍼.WriteString("%v가 존재하지 않습니다.\n")
-		버퍼.WriteString("sample_config.ini를 참조하여 새로 생성하십시오.")
+	var 로그인_ID, 로그인_암호, 인증서_암호 string
 
-		return lib.New에러(버퍼.String(), 설정파일_경로)
-	}
+	로그인_ID, 로그인_암호, 인증서_암호, 계좌_비밀번호, 에러 = xt.F로그인_정보_환경_변수_읽기()
+	lib.F확인(에러)
 
-	설정파일_복사본_이름 := lib.F2문자열("config_%v.ini", lib.F지금().Format("20060102_150406"))
-	설정파일_복사본_경로 := filepath.Join(설정파일_디렉토리, 설정파일_복사본_이름)
-	lib.F확인(lib.F파일_복사(설정파일_경로, 설정파일_복사본_경로))
-	defer lib.F파일_삭제(설정파일_복사본_경로)
-
-	cfg파일 := lib.F확인(ini.Load(설정파일_복사본_경로)).(*ini.File)
-	섹션 := lib.F확인(cfg파일.GetSection("XingAPI_LogIn_Info")).(*ini.Section)
-
-	키_ID := lib.F확인(섹션.GetKey("ID")).(*ini.Key)
-	c아이디 := c.F2C문자열(키_ID.String())
+	c아이디 := c.F2C문자열(로그인_ID)
 	defer c.F메모리_해제(unsafe.Pointer(c아이디))
 
-	키_PWD := lib.F확인(섹션.GetKey("PWD")).(*ini.Key)
-	c암호 := c.F2C문자열(키_PWD.String())
+	c암호 := c.F2C문자열(로그인_암호)
 	defer c.F메모리_해제(unsafe.Pointer(c암호))
 
-	키_CertPWD := lib.F확인(섹션.GetKey("CertPWD")).(*ini.Key)
-	공인인증서_암호 := lib.F조건부_문자열(서버_구분 == xt.P서버_실거래, 키_CertPWD.String(), "")
-	c공인인증서_암호 := c.F2C문자열(공인인증서_암호)
+	c공인인증서_암호 := c.F2C문자열(인증서_암호)
 	defer c.F메모리_해제(unsafe.Pointer(c공인인증서_암호))
-
-	키_AcctPWD := lib.F확인(섹션.GetKey("AcctPWD")).(*ini.Key)
-	계좌_비밀번호 = lib.F조건부_문자열(서버_구분 == xt.P서버_실거래, 키_AcctPWD.String(), "0000")
 
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
@@ -535,7 +514,7 @@ func F계좌_이름(질의 *lib.S채널_질의) {
 	//질의.Ch회신값 <- 계좌_이름
 
 	// syscall 방식 호출은 에러 발생
-	버퍼 := "                                         "	// 41 바이트
+	버퍼 := "                                         " // 41 바이트
 	c버퍼 := c.F2C문자열(버퍼)
 	버퍼_길이 := len(버퍼)
 
@@ -621,7 +600,7 @@ func F계좌_별명(질의 *lib.S채널_질의) {
 	//질의.Ch회신값 <- 계좌_별명
 
 	// syscall 방식 호출은 에러 발생
-	버퍼 := "                                         "	// 41 바이트
+	버퍼 := "                                         " // 41 바이트
 	c버퍼 := c.F2C문자열(버퍼)
 	버퍼_길이 := len(버퍼)
 

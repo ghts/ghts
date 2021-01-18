@@ -35,7 +35,6 @@ package xing
 
 import (
 	"github.com/ghts/ghts/lib"
-	xt "github.com/ghts/ghts/xing/base"
 	"testing"
 )
 
@@ -71,9 +70,4 @@ func TestF서버_이름(t *testing.T) {
 	서버_이름, 에러 := F서버_이름()
 	lib.F테스트_에러없음(t, 에러)
 	lib.F테스트_다름(t, 서버_이름, "")
-}
-
-func TestF서버_구분(t *testing.T) {
-	서버_구분 := F서버_구분()
-	lib.F테스트_같음(t, 서버_구분, xt.P서버_모의투자, xt.P서버_실거래)
 }

@@ -1695,6 +1695,3 @@ func F서버_이름() (서버_이름 string, 에러 error) {
 	return 서버_이름, nil
 }
 
-func F서버_구분() xt.T서버_구분 {
-	return 서버_구분
-}

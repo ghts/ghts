@@ -51,7 +51,7 @@ func TestCSPAT00700_현물_정정_주문_질의값(t *testing.T) {
 func TestCSPAT00700_현물_정정_주문(t *testing.T) {
 	t.Parallel()
 
-	if 서버_구분 == xt.P서버_실거래 ||
+	if xt.F서버_구분() == xt.P서버_실거래 ||
 		!F금일_한국증시_개장() ||
 		!krx.F한국증시_정규_거래_시간임() {
 		t.SkipNow()

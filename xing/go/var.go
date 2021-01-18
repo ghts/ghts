@@ -92,6 +92,5 @@ var (
 	기준가_맵        = make(map[string]int64)
 	하한가_맵        = make(map[string]int64)
 	계좌번호_모음      []string
-	서버_구분        xt.T서버_구분
 	프로세스ID_C32   int
 )
