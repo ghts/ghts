@@ -39,6 +39,8 @@ import (
 	"github.com/ghts/ghts/lib/nanomsg"
 	"github.com/ghts/ghts/xing/base"
 	"github.com/mitchellh/go-ps"
+	"os"
+	"path/filepath"
 
 	"fmt"
 	"runtime"
@@ -123,7 +125,16 @@ func f초기화_xing_C32() (에러 error) {
 
 	switch runtime.GOOS {
 	case "windows":
-		프로세스ID_C32 = lib.F확인(external_process.F외부_프로세스_실행(xing_C32_경로)).(int)
+		c32_경로, 실행_화일_찾았음 := Xing_C32_경로()
+
+		if 실행_화일_찾았음 {
+			GOARCH_원래값 := os.Getenv("GOARCH")
+			os.Setenv("GOARCH", "386")	// 64비트에서 컴파일을 막는 루틴을 회피하기 위해서 32비트인척 함.
+			defer os.Setenv("GOARCH", GOARCH_원래값)
+		}
+
+		프로세스ID_C32 = lib.F확인(external_process.F외부_프로세스_실행(c32_경로)).(int)
+
 		<-ch신호_C32_초기화
 	default:
 		lib.F문자열_출력("*********************************************\n"+
@@ -132,6 +143,25 @@ func f초기화_xing_C32() (에러 error) {
 	}
 
 	return nil
+}
+
+// 실행파일 디렉토리 내 'xing_C32.exe'파일이 존재하면 바로 실행. 없으면 컴파일 후 실행.
+func Xing_C32_경로() (string, bool) {
+	실행_화일_경로, 에러 := os.Executable()
+	if 에러 != nil {
+		return xing_C32_경로_기본값, false
+	}
+
+	실행_화일_디렉토리 := filepath.Dir(실행_화일_경로)
+	c32_경로 := filepath.Join(실행_화일_디렉토리, "xing_C32.exe")
+
+	if lib.F파일_존재함(c32_경로) {
+		lib.F문자열_출력("C32 실행 파일 찾았음 : '%v'", c32_경로)
+		return c32_경로, true
+	} else {
+		lib.F문자열_출력("C32 실행 파일 못 찾음. 컴파일 후 실행 시도.")
+		return xing_C32_경로_기본값, false
+	}
 }
 
 func F접속_로그인() (에러 error) {
