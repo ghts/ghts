@@ -270,6 +270,8 @@ func TrCSPAT00600_현물_정상주문(질의값 *xt.CSPAT00600_현물_정상_주
 		return nil, lib.New에러with출력("%v %v 지정가 주문 단가 0.", 질의값.M계좌번호, 질의값.M종목코드)
 	} else if strings.HasPrefix(질의값.M종목코드, "5") {
 		질의값.M종목코드 = "Q" + 질의값.M종목코드 // ETN 종목코드 보정
+	} else if 질의값.M주문수량 <= 0 {
+		return nil, lib.New에러with출력("%v %v 잘못된 주문 수량 %v", 질의값.M계좌번호, 질의값.M코드, 질의값.M주문수량)
 	}
 
 	i응답값, 에러 := F질의_단일TR(질의값)
