@@ -183,6 +183,14 @@ func c32_빌드() error {
 	return exec.Command("go", "build", "github.com/ghts/ghts/xing/c32").Run()
 }
 
+func c32_삭제() (에러 error) {
+	if lib.F파일_존재함(c32_실행_화일_경로()) {
+		return os.Remove(c32_실행_화일_경로())
+	}
+
+	return nil
+}
+
 func F접속_로그인() (에러 error) {
 	if !tr수신_소켓_동작_확인() {
 		return lib.New에러("C32 프로세스 REP소켓 접속 불가.")
@@ -338,20 +346,19 @@ func C32_종료() (에러 error) {
 
 	select {
 	case <-ch신호_C32_종료:
-	case <-ch타임아웃:
-		return lib.New에러with출력("C32 종료 타임아웃")
+	case <-ch타임아웃:	//return lib.New에러with출력("C32 종료 타임아웃")
 	}
 
 	for i := 0; i < 10; i++ {
 		if C32_종료됨() {
-			return nil
+			break
 		}
 
 		external_process.F프로세스_종료by프로세스ID(프로세스ID_C32)
 		lib.F대기(lib.P1초)
 	}
 
-	return lib.New에러with출력("C32 종료 실패")
+	return c32_삭제()
 }
 
 func F종료() {
