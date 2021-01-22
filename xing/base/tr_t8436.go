@@ -87,7 +87,7 @@ func NewT8436_현물_종목조회_응답_반복값_모음(b []byte) (값 *T8436_
 
 		s := new(T8436_현물_종목조회_응답_반복값)
 		s.M종목명 = lib.F2문자열_EUC_KR_공백제거(g.HName)
-		s.M종목코드 = lib.F2문자열_공백제거(g.ShCode)
+		s.M종목코드 = lib.F2문자열_공백_제거(g.ShCode)
 		s.M주문수량단위 = lib.F2정수_단순형(g.MeMeDan)
 		s.M상한가 = lib.F2정수64_단순형(g.UpLmtPrice)
 		s.M하한가 = lib.F2정수64_단순형(g.DnLmtPrice)
@@ -96,8 +96,8 @@ func NewT8436_현물_종목조회_응답_반복값_모음(b []byte) (값 *T8436_
 		s.M증권그룹 = T증권그룹(lib.F2정수_단순형(g.Bu12Gubun))
 		s.M기업인수목적회사여부 = lib.F2참거짓(lib.F2문자열(g.SpacGubun), "Y", true)
 
-		ETF구분 := lib.F2문자열_공백제거(g.EtfGubun)
-		시장구분 := lib.F2문자열_공백제거(g.Gubun)
+		ETF구분 := lib.F2문자열_공백_제거(g.EtfGubun)
+		시장구분 := lib.F2문자열_공백_제거(g.Gubun)
 
 		switch {
 		case ETF구분 == "1":

@@ -169,7 +169,7 @@ func OnTrData(TR데이터 unsafe.Pointer) {
 	}
 
 	자료형_문자열 := lib.F확인(f자료형_문자열_해석(g)).(string)
-	TR코드 := lib.F2문자열_공백제거(g.TrCode)
+	TR코드 := lib.F2문자열_공백_제거(g.TrCode)
 	추가_연속조회_필요_문자열 := lib.F2문자열(g.Cont)
 	추가_연속조회_필요 := false
 	연속키 := ""
@@ -180,7 +180,7 @@ func OnTrData(TR데이터 unsafe.Pointer) {
 		추가_연속조회_필요 = false
 	case "1", "Y":
 		추가_연속조회_필요 = true
-		연속키 = lib.F2문자열_공백제거(g.ContKey)
+		연속키 = lib.F2문자열_공백_제거(g.ContKey)
 	default:
 		panic(lib.New에러with출력("예상하지 못한 경우. '%v' '%v'", TR코드, 추가_연속조회_필요_문자열))
 	}
@@ -224,7 +224,7 @@ func OnMessageAndError(MSG데이터 unsafe.Pointer) {
 	콜백값 := new(lib.S콜백_메시지_및_에러)
 	콜백값.S콜백_기본형 = lib.New콜백_기본형(lib.P콜백_메시지_및_에러)
 	콜백값.M식별번호 = int(g.RequestID)
-	콜백값.M코드 = lib.F2문자열_공백제거(g.MsgCode)
+	콜백값.M코드 = lib.F2문자열_공백_제거(g.MsgCode)
 	콜백값.M내용 = c.F2문자열_EUC_KR(unsafe.Pointer(g.MsgData))
 	콜백값.M에러여부 = 에러여부
 
@@ -261,7 +261,7 @@ func OnRealtimeData(실시간_데이터 unsafe.Pointer) {
 	// KeyData, RegKey등이 불필요한 듯 해서 전송 안 함. 필요하면 추가할 것.
 
 	raw값 := c.F2Go바이트_모음(unsafe.Pointer(g.Data), int(g.DataLength))
-	raw값 = f민감정보_삭제(raw값, lib.F2문자열_공백제거(g.TrCode))
+	raw값 = f민감정보_삭제(raw값, lib.F2문자열_공백_제거(g.TrCode))
 	바이트_변환값 := lib.F확인(lib.New바이트_변환Raw(lib.F2문자열(g.TrCode), raw값, false)).(*lib.S바이트_변환)
 
 	if 에러 := 소켓PUB_실시간_정보.S송신(lib.Raw, 바이트_변환값); 에러 != nil {

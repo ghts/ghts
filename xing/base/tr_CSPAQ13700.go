@@ -171,10 +171,10 @@ func NewCSPAQ13700_현물계좌_주문체결내역_헤더1(b []byte) (값 *CSPAQ
 
 	값 = new(CSPAQ13700_현물계좌_주문체결내역_헤더1)
 	값.M레코드_수량 = lib.F2정수_단순형(g.RecCnt)
-	값.M계좌번호 = lib.F2문자열_공백제거(g.AcntNo)
+	값.M계좌번호 = lib.F2문자열_공백_제거(g.AcntNo)
 	값.M주문시장코드 = lib.F2문자열(g.OrdMktCode)
 	값.M매매구분 = lib.F2문자열(g.BnsTpCode)
-	값.M종목코드 = lib.F2문자열_공백제거(g.IsuNo)
+	값.M종목코드 = lib.F2문자열_공백_제거(g.IsuNo)
 	값.M체결여부 = lib.F2문자열(g.ExecYn)
 	값.M주문일 = lib.F2포맷된_일자_단순형("20060102", g.OrdDt)
 	값.M연속키 = lib.F2정수64_단순형(g.SrtOrdNo2)
@@ -228,7 +228,7 @@ func NewCSPAQ13700_현물계좌_주문체결내역_반복값_모음(b []byte) (�
 		주문시각_문자열 := lib.F2문자열(g.OrdTime)
 		주문시각_문자열 = 주문시각_문자열[:6] + "." + 주문시각_문자열[6:]
 
-		if 대출일_문자열 := lib.F2문자열_공백제거(g.LoanDt); 대출일_문자열 != "" {
+		if 대출일_문자열 := lib.F2문자열_공백_제거(g.LoanDt); 대출일_문자열 != "" {
 			lib.F체크포인트(대출일_문자열)
 		}
 
@@ -238,7 +238,7 @@ func NewCSPAQ13700_현물계좌_주문체결내역_반복값_모음(b []byte) (�
 		값.M주문시장코드 = lib.F2문자열(g.OrdMktCode)
 		값.M주문번호 = lib.F2정수64_단순형(g.OrdNo)
 		값.M원주문번호 = lib.F2정수64_단순형(g.OrgOrdNo)
-		값.M종목코드 = lib.F2문자열_공백제거(g.IsuNo)
+		값.M종목코드 = lib.F2문자열_공백_제거(g.IsuNo)
 		값.M종목명 = lib.F2문자열_EUC_KR_공백제거(g.IsuNm)
 
 		switch lib.F2문자열(g.BnsTpCode) {
@@ -279,7 +279,7 @@ func NewCSPAQ13700_현물계좌_주문체결내역_반복값_모음(b []byte) (�
 		값.M회원번호 = lib.F2문자열(g.MbrNo)
 		값.M예약주문여부 = T예약주문_CSPAQ13700(lib.F2정수_단순형(g.RsvOrdYn))
 
-		if lib.F2문자열_공백제거(g.LoanDt) != "" {
+		if lib.F2문자열_공백_제거(g.LoanDt) != "" {
 			lib.F체크포인트(lib.F2문자열(g.LoanDt))
 			값.M대출일 = lib.F2포맷된_일자_단순형_공백은_초기값("??", g.LoanDt)
 		}

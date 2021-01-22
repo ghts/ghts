@@ -124,7 +124,7 @@ func NewCSPAQ12200_현물계좌_총평가_응답(b []byte) (값 *CSPAQ12200_현�
 	g2 := g_all.OutBlock2
 
 	값 = new(CSPAQ12200_현물계좌_총평가_응답)
-	값.M계좌번호 = lib.F2문자열_공백제거(g1.AcntNo)
+	값.M계좌번호 = lib.F2문자열_공백_제거(g1.AcntNo)
 	값.M계좌명 = lib.F2문자열_EUC_KR_공백제거(g2.AcntNm)
 	//값.M현금주문가능금액 = lib.F2정수64_단순형(g2.MnyOrdAbleAmt)
 	값.M출금가능금액 = lib.F2정수64_단순형(g2.MnyoutAbleAmt)

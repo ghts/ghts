@@ -53,7 +53,7 @@ type T1101_현물_호가_조회_응답 struct {
 	M저가           int64
 	M전일대비구분       T전일대비_구분
 	M전일대비등락폭      int64
-	M등락율          float64
+	M전일대비등락율      float64
 	M거래량          int64
 	M전일종가         int64
 	M매도_호가_모음     []int64
@@ -94,19 +94,19 @@ func NewT1101_현물_호가_조회_응답(b []byte) (s *T1101_현물_호가_조�
 	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
 
 	s = new(T1101_현물_호가_조회_응답)
-	s.M종목코드 = lib.F2문자열_공백제거(g.Shcode)
+	s.M종목코드 = lib.F2문자열_공백_제거(g.Shcode)
 
-	if 시각_문자열 := lib.F2문자열_공백제거(g.Hotime); len(시각_문자열) <= 6 {
+	if 시각_문자열 := lib.F2문자열_공백_제거(g.Hotime); len(시각_문자열) <= 6 {
 		s.M시각 = time.Time{}
 	} else {
 		s.M시각 = lib.F2일자별_시각_단순형_공백은_초기값(당일.G값(), "150405.999", 시각_문자열[:6]+"."+시각_문자열[6:])
 	}
 
-	s.M종목명 = lib.F2문자열_EUC_KR(g.Hname)
+	s.M종목명 = lib.F2문자열_EUC_KR_공백제거(g.Hname)
 	s.M현재가 = lib.F2정수64_단순형(g.Price)
 	s.M전일대비구분 = T전일대비_구분(lib.F2정수64_단순형(g.Sign))
-	s.M전일대비등락폭 = lib.F2정수64_단순형(g.Change)
-	s.M등락율 = lib.F2실수_소숫점_추가_단순형(g.Diff, 2)
+	s.M전일대비등락폭 = s.M전일대비구분.G부호보정_정수64(lib.F2정수64_단순형(g.Change))
+	s.M전일대비등락율 = s.M전일대비구분.G부호보정_실수64(lib.F2실수_소숫점_추가_단순형(g.Diff, 2))
 	s.M거래량 = lib.F2정수64_단순형(g.Volume)
 	s.M전일종가 = lib.F2정수64_단순형(g.Jnilclose)
 	s.M매도_호가_모음 = []int64{

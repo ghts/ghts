@@ -104,7 +104,7 @@ func NewCSPAQ22200_현물계좌_예수금_주문가능금액_응답(b []byte) (�
 	g2 := g_all.OutBlock2
 
 	값 = new(CSPAQ22200_현물계좌_예수금_주문가능금액_응답)
-	값.M계좌번호 = lib.F2문자열_공백제거(g1.AcntNo)
+	값.M계좌번호 = lib.F2문자열_공백_제거(g1.AcntNo)
 	값.M지점명 = lib.F2문자열_EUC_KR_공백제거(g2.BrnNm)
 	값.M계좌명 = lib.F2문자열_EUC_KR_공백제거(g2.AcntNm)
 	값.M현금주문가능금액 = lib.F2정수64_단순형(g2.MnyOrdAbleAmt)

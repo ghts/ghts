@@ -2480,6 +2480,12 @@ typedef struct {
     char    last_sdate          [   8];    char    _last_sdate          ;    // [string,    8] ETN만기상환가격결정시작일       StartPos 1172, Length 8
     char    last_edate          [   8];    char    _last_edate          ;    // [string,    8] ETN만기상환가격결정종료일       StartPos 1181, Length 8
     char    lp_holdvol          [  12];    char    _lp_holdvol          ;    // [string,   12] ETNLP보유수량                   StartPos 1190, Length 12
+    char    listdate            [   8];    char    _listdate            ;    // [string,    8] 상장일                          StartPos 1203, Length 8
+    char    etp_gb              [   1];    char    _etp_gb              ;    // [string,    1] ETP상품구분코드                 StartPos 1212, Length 1
+    char    etn_elback_yn       [   1];    char    _etn_elback_yn       ;    // [string,    1] ETN조기상환가능여부             StartPos 1214, Length 1
+    char    settletype          [   2];    char    _settletype          ;    // [string,    2] 최종결제                        StartPos 1216, Length 2
+    char    idx_asset_class1    [   2];    char    _idx_asset_class1    ;    // [string,    2] 지수자산분류코드(대분류)        StartPos 1219, Length 2
+    char    ty_text             [   8];    char    _ty_text             ;    // [string,    8] ETF/ETN투자유의                 StartPos 1222, Length 8
 } T1901OutBlock;
 
 //------------------------------------------------------------------------------

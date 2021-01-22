@@ -106,7 +106,7 @@ func NewT1902_ETF시간별_추이_응답_헤더(b []byte) (s *T1902_ETF시간별
 	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
 
 	s = new(T1902_ETF시간별_추이_응답_헤더)
-	s.M연속키 = lib.F2문자열_공백제거(g.Time)
+	s.M연속키 = lib.F2문자열_공백_제거(g.Time)
 	s.M종목명 = lib.F2문자열_EUC_KR_공백제거(g.HName)
 	s.M업종지수명 = lib.F2문자열_EUC_KR_공백제거(g.UpName)
 

@@ -406,8 +406,8 @@ func F바이트_변환값_해석(바이트_변환값 *lib.S바이트_변환) (�
 		s := new(T1405_투자경고_조회_질의값)
 		lib.F확인(바이트_변환값.G값(s))
 		return s, nil
-	case P자료형_T1901_ETF_현재가_조회_응답:
-		s := new(T1901_ETF_현재가_조회_응답)
+	case P자료형_T1901_ETF_시세_조회_응답:
+		s := new(T1901_ETF_시세_조회_응답)
 		lib.F확인(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T1902_ETF시간별_추이_응답:
@@ -645,6 +645,8 @@ func F바이트_변환값_해석_Raw(바이트_변환값 *lib.S바이트_변환)
 		return NewT1405_투자경고_조회_응답_헤더(b)
 	case P자료형_T1405OutBlock1:
 		return NewT1405_투자경고_조회_응답_반복값_모음(b)
+	case P자료형_T1901_ETF_시세_조회_응답:
+		return NewT1901_ETF_시세_조회_응답(b)
 	case P자료형_T1902OutBlock:
 		return NewT1902_ETF시간별_추이_응답_헤더(b)
 	case P자료형_T1902OutBlock1:

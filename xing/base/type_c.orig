@@ -34,7 +34,7 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package xt
 
 // #cgo CFLAGS: -Wall
-// #include "./types_c.h"
+// #include "./type_c.h"
 import "C"
 
 // '#pragma pack(push, 1)'을 적용한 메모리 압축 자료형은 Go언어에서 직접 읽을 수 없음

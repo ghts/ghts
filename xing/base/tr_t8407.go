@@ -99,7 +99,7 @@ func NewT8407_현물_멀티_현재가_조회_응답_반복값_모음(b []byte) (
 		lib.F확인(binary.Read(버퍼, binary.BigEndian, g))
 
 		s := new(T8407_현물_멀티_현재가_조회_응답)
-		s.M종목코드 = lib.F2문자열_공백제거(g.Shcode)
+		s.M종목코드 = lib.F2문자열_공백_제거(g.Shcode)
 		s.M종목명 = lib.F2문자열_EUC_KR_공백제거(g.Hname)
 		s.M현재가 = lib.F2정수64_단순형(g.Price)
 		s.M전일종가대비구분 = T전일대비_구분(lib.F2정수64_단순형(g.Sign))

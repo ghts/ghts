@@ -73,7 +73,7 @@ func XingAPI디렉토리() (string, error) {
 func f자료형_문자열_해석(g *xt.TR_DATA) (자료형_문자열 string, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 자료형_문자열 = "" }}.S실행()
 
-	TR코드 := lib.F2문자열_공백제거(g.TrCode)
+	TR코드 := lib.F2문자열_공백_제거(g.TrCode)
 	길이 := lib.F2정수_단순형(g.DataLength)
 
 	switch TR코드 {
@@ -258,6 +258,8 @@ func f자료형_문자열_해석(g *xt.TR_DATA) (자료형_문자열 string, 에
 		case 길이%xt.SizeT1405OutBlock1 == 0:
 			return xt.P자료형_T1405OutBlock1, nil
 		}
+	case xt.TR_ETF_시세_조회_t1901:
+		return xt.P자료형_T1901_ETF_시세_조회_응답, nil
 	case xt.TR_ETF_시간별_추이_t1902:
 		switch {
 		case 길이 == xt.SizeT1902OutBlock:

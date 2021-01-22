@@ -151,6 +151,8 @@ const (
 	SizeT1405InBlock        = int(unsafe.Sizeof(T1405InBlock{}))
 	SizeT1405OutBlock       = int(unsafe.Sizeof(T1405OutBlock{}))
 	SizeT1405OutBlock1      = int(unsafe.Sizeof(T1405OutBlock1{}))
+	SizeT1901InBlock        = int(unsafe.Sizeof(T1901InBlock{}))
+	SizeT1901OutBlock       = int(unsafe.Sizeof(T1901OutBlock{}))
 	SizeT1902InBlock        = int(unsafe.Sizeof(T1902InBlock{}))
 	SizeT1902OutBlock       = int(unsafe.Sizeof(T1902OutBlock{}))
 	SizeT1902OutBlock1      = int(unsafe.Sizeof(T1902OutBlock1{}))
@@ -255,11 +257,12 @@ const (
 	P자료형_T1405_투자경고_조회_질의값           = "T1405_투자경고_조회_질의값"
 	P자료형_T1405OutBlock               = "T1405OutBlock"
 	P자료형_T1405OutBlock1              = "T1405OutBlock1"
-	P자료형_T1901_ETF_현재가_조회_응답         = "T1901_ETF_현재가_조회_응답"
+	P자료형_T1901_ETF_시세_조회_응답          = "T1901_ETF_시세_조회_응답"
 	P자료형_T1902_ETF시간별_추이_응답          = "T1902_ETF시간별_추이_응답"
 	P자료형_T1902_ETF시간별_추이_응답_헤더       = "T1902_ETF시간별_추이_응답_헤더"
 	P자료형_T1902_ETF시간별_추이_응답_반복값      = "T1902_ETF시간별_추이_응답_반복값"
 	P자료형_T1902_ETF시간별_추이_응답_반복값_모음   = "T1902_ETF시간별_추이_응답_반복값_모음"
+	P자료형_T1901OutBlock               = "T1901OutBlock"
 	P자료형_T1902OutBlock               = "T1902OutBlock"
 	P자료형_T1902OutBlock1              = "T1902OutBlock1"
 	P자료형_T1906_ETF_LP_호가_조회_응답       = "T1906_ETF_LP_호가_조회_응답"
@@ -335,6 +338,7 @@ const (
 	TR현물_당일_전일_분틱_조회_t1310    = "t1310"
 	TR관리_불성실_투자유의_조회_t1404    = "t1404"
 	TR투자경고_매매정지_정리매매_조회_t1405 = "t1405"
+	TR_ETF_시세_조회_t1901        = "t1901"
 	TR_ETF_시간별_추이_t1902       = "t1902"
 	TR_ETF_LP호가_조회_t1906      = "t1906"
 	//TR기업정보_요약_t3320           = "t3320"
