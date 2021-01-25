@@ -198,20 +198,20 @@ func NewT1901_ETF_시세_조회_응답(b []byte) (s *T1901_ETF_시세_조회_응
 	s.M업종코드 = lib.F2문자열(g.Upcode)
 	s.M업종_현재가 = lib.F2실수_소숫점_추가_단순형_공백은_0(g.Upprice, 2)
 	s.M업종_전일대비구분 = T전일대비_구분(lib.F2정수64_단순형(g.Upsign))
-	s.M업종_전일대비등락폭 = s.M업종_전일대비구분.G부호보정_실수64(lib.F2실수_소숫점_추가_단순형(g.Upchange, 2))
-	s.M업종_전일대비등락율 = s.M업종_전일대비구분.G부호보정_실수64(lib.F2실수_소숫점_추가_단순형(g.Updiff, 2))
+	s.M업종_전일대비등락폭 = s.M업종_전일대비구분.G부호보정_실수64(lib.F2실수_소숫점_추가_단순형_공백은_0(g.Upchange, 2))
+	s.M업종_전일대비등락율 = s.M업종_전일대비구분.G부호보정_실수64(lib.F2실수_소숫점_추가_단순형_공백은_0(g.Updiff, 2))
 	s.M선물_최근_월물명 = lib.F2문자열(g.Futname)
 	s.M선물_최근_월물_코드 = lib.F2문자열(g.Futcode)
 	s.M선물_현재가 = lib.F2실수_소숫점_추가_단순형(g.Futprice, 2)
 	s.M선물_전일대비구분 = T전일대비_구분(lib.F2정수64_단순형(g.Futsign))
-	s.M선물_전일대비등락폭 = s.M선물_전일대비구분.G부호보정_실수64(lib.F2실수_소숫점_추가_단순형(g.Futchange, 2))
-	s.M선물_전일대비등락율 = s.M선물_전일대비구분.G부호보정_실수64(lib.F2실수_소숫점_추가_단순형(g.Futdiff, 2))
+	s.M선물_전일대비등락폭 = s.M선물_전일대비구분.G부호보정_실수64(lib.F2실수_소숫점_추가_단순형_공백은_0(g.Futchange, 2))
+	s.M선물_전일대비등락율 = s.M선물_전일대비구분.G부호보정_실수64(lib.F2실수_소숫점_추가_단순형_공백은_0(g.Futdiff, 2))
 	s.NAV = lib.F2실수_소숫점_추가_단순형(g.Nav, 2)
 	s.NAV_전일대비구분 = T전일대비_구분(lib.F2정수64_단순형(g.Navsign))
-	s.NAV_전일대비등락폭 = s.NAV_전일대비구분.G부호보정_실수64(lib.F2실수_소숫점_추가_단순형(g.Navchange, 2))
-	s.NAV_전일대비등락율 = s.NAV_전일대비구분.G부호보정_실수64(lib.F2실수_소숫점_추가_단순형(g.Navdiff, 2))
-	s.M추적_오차율 = lib.F2실수_소숫점_추가_단순형(g.Cocrate, 2)
-	s.M괴리율 = lib.F2실수_소숫점_추가_단순형(g.Kasis, 2)
+	s.NAV_전일대비등락폭 = s.NAV_전일대비구분.G부호보정_실수64(lib.F2실수_소숫점_추가_단순형_공백은_0(g.Navchange, 2))
+	s.NAV_전일대비등락율 = s.NAV_전일대비구분.G부호보정_실수64(lib.F2실수_소숫점_추가_단순형_공백은_0(g.Navdiff, 2))
+	s.M추적_오차율 = lib.F2실수_소숫점_추가_단순형_공백은_0(g.Cocrate, 2)
+	s.M괴리율 = lib.F2실수_소숫점_추가_단순형_공백은_0(g.Kasis, 2)
 	s.M대용가 = lib.F2정수64_단순형(g.Subprice)
 	s.M매도_증권사_코드 = []string{
 		lib.F2문자열(g.Offerno1),
@@ -270,23 +270,23 @@ func NewT1901_ETF_시세_조회_응답(b []byte) (s *T1901_ETF_시세_조회_응
 
 	s.M외국계_매도_합계_수량 = lib.F2정수64_단순형(g.Fwdvl)
 	s.M외국계_매도_직전_대비 = T전일대비_구분(lib.F2정수64_단순형(g.Ftradmdcha))
-	s.M외국계_매도_비율 = lib.F2실수_소숫점_추가_단순형(g.Ftradmddiff, 2)
+	s.M외국계_매도_비율 = lib.F2실수_소숫점_추가_단순형_공백은_0(g.Ftradmddiff, 2)
 
 	s.M외국계_매수_합계_수량 = lib.F2정수64_단순형(g.Fwsvl)
 	s.M외국계_매수_직전_대비 = T전일대비_구분(lib.F2정수64_단순형(g.Ftradmscha))
-	s.M외국계_매수_비율 = lib.F2실수_소숫점_추가_단순형(g.Ftradmsdiff, 2)
+	s.M외국계_매수_비율 = lib.F2실수_소숫점_추가_단순형_공백은_0(g.Ftradmsdiff, 2)
 
 	s.M참고지수명 = lib.F2문자열(g.Upname2)
 	s.M참고지수코드 = lib.F2문자열(g.Upcode2)
-	s.M참고지수현재가 = lib.F2실수_소숫점_추가_단순형(g.Upprice2, 2)
+	s.M참고지수현재가 = lib.F2실수_소숫점_추가_단순형_공백은_0(g.Upprice2, 2)
 
 	s.M전일NAV = lib.F2실수_소숫점_추가_단순형(g.Jnilnav, 2)
 	s.M전일NAV_전일대비구분 = T전일대비_구분(lib.F2정수64_단순형(g.Jnilnavsign))
-	s.M전일NAV_전일대비등락폭 = lib.F2실수_소숫점_추가_단순형(g.Jnilnavchange, 2)
-	s.M전일NAV_전일대비등락율 = lib.F2실수_소숫점_추가_단순형(g.Jnilnavdiff, 2)
+	s.M전일NAV_전일대비등락폭 = lib.F2실수_소숫점_추가_단순형_공백은_0(g.Jnilnavchange, 2)
+	s.M전일NAV_전일대비등락율 = lib.F2실수_소숫점_추가_단순형_공백은_0(g.Jnilnavdiff, 2)
 
 	s.M순자산총액_억 = lib.F2정수64_단순형(g.Etftotcap)
-	s.M스프레드 = lib.F2실수_소숫점_추가_단순형(g.Spread, 2)
+	s.M스프레드 = lib.F2실수_소숫점_추가_단순형_공백은_0(g.Spread, 2)
 	s.M레버리지 = lib.F2정수64_단순형(g.Leverage)
 	s.M과세구분 = uint8(lib.F2정수64_단순형(g.Taxgubun))
 	s.M운용사 = lib.F2문자열(g.Opcom_nmk)
@@ -306,7 +306,7 @@ func NewT1901_ETF_시세_조회_응답(b []byte) (s *T1901_ETF_시세_조회_응
 	if lib.F2문자열(g.Payday) == "00000000" {
 		s.ETN지급일 = time.Time{}
 	} else {
-		s.ETN지급일 = lib.F2포맷된_일자_단순형("20060102", g.Payday)
+		s.ETN지급일 = lib.F2포맷된_일자_단순형_공백은_초기값("20060102", g.Payday)
 	}
 
 	if lib.F2문자열(g.Lastdate) == "00000000" {
