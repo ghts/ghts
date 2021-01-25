@@ -196,7 +196,7 @@ func NewT1901_ETF_시세_조회_응답(b []byte) (s *T1901_ETF_시세_조회_응
 	s.M연중_최저일자 = lib.F2포맷된_일자_단순형("20060102", g.Lowyeardate)
 	s.M업종명 = lib.F2문자열(g.Upname)
 	s.M업종코드 = lib.F2문자열(g.Upcode)
-	s.M업종_현재가 = lib.F2실수_소숫점_추가_단순형(g.Upprice, 2)
+	s.M업종_현재가 = lib.F2실수_소숫점_추가_단순형_공백은_0(g.Upprice, 2)
 	s.M업종_전일대비구분 = T전일대비_구분(lib.F2정수64_단순형(g.Upsign))
 	s.M업종_전일대비등락폭 = s.M업종_전일대비구분.G부호보정_실수64(lib.F2실수_소숫점_추가_단순형(g.Upchange, 2))
 	s.M업종_전일대비등락율 = s.M업종_전일대비구분.G부호보정_실수64(lib.F2실수_소숫점_추가_단순형(g.Updiff, 2))
