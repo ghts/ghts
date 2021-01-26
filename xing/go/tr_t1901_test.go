@@ -144,7 +144,6 @@ func TestT1901_ETF_시세_조회(t *testing.T) {
 	//s.M선물_전일대비등락폭 = lib.F2실수_소숫점_추가_단순형(g.Futchange, 2)
 	//s.M선물_전일대비등락율 = lib.F2실수_소숫점_추가_단순형(g.Futdiff, 2)
 
-
 	lib.F테스트_참임(t, 값.NAV > 0)
 
 	lib.F체크포인트(값.NAV)

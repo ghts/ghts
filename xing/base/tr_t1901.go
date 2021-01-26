@@ -137,8 +137,8 @@ type T1901_ETF_시세_조회_응답 struct {
 	ETP상품구분코드       string
 	ETN조기상환가능여부     bool
 	M최종결제           string
-	M지수자산대분류코드 string
-	ETF_ETN_투자유의 string
+	M지수자산대분류코드      string
+	ETF_ETN_투자유의    string
 }
 
 func NewT1901InBlock(질의값 *lib.S질의값_단일_종목) (g *T1901InBlock) {

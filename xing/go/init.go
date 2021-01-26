@@ -162,7 +162,7 @@ func c32_빌드() error {
 	if lib.F파일_존재함(c32_실행_화일_경로()) {
 		if lib.F파일_없음(c32_소스_코드_화일_경로()) {
 			lib.F체크포인트("c32.exe 그대로 사용.")
-			return nil	// 컴파일 준비되어 있지 않으면 이미 존재하는 실행 화일 그대로 사용.
+			return nil // 컴파일 준비되어 있지 않으면 이미 존재하는 실행 화일 그대로 사용.
 		} else {
 			lib.F체크포인트("c32.exe 삭제.")
 			os.Remove(c32_실행_화일_경로())
@@ -347,7 +347,7 @@ func C32_종료() (에러 error) {
 
 	select {
 	case <-ch신호_C32_종료:
-	case <-ch타임아웃:	//return lib.New에러with출력("C32 종료 타임아웃")
+	case <-ch타임아웃: //return lib.New에러with출력("C32 종료 타임아웃")
 	}
 
 	for i := 0; i < 10; i++ {
