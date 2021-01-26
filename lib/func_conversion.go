@@ -502,6 +502,8 @@ func F2실수(값 interface{}) (float64, error) {
 	switch strings.Replace(strings.ToUpper(문자열), ".", "", -1) {
 	case "INF":
 		return math.Inf(1), nil
+	case "NAN":
+		return math.NaN(), nil
 	}
 
 	실수64, 에러 := strconv.ParseFloat(문자열, 64)
@@ -532,6 +534,7 @@ func F2실수_소숫점_추가(값 interface{}, 소숫점_이하_자릿수 int) 
 
 	F조건부_패닉(!strings.Contains(문자열, ".") && len(문자열) < 소숫점_이하_자릿수,
 		"문자열 길이가 소숫점_이하_자릿수 보다 짧습니다. '%v', '%v'", 문자열, 소숫점_이하_자릿수)
+
 
 	var 소숫점_추가_문자열 string
 
