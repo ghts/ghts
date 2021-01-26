@@ -38,6 +38,7 @@ import (
 	"github.com/ghts/ghts/lib"
 	"gopkg.in/ini.v1"
 	"os"
+	"path/filepath"
 )
 
 func F로그인_설정_화일_경로_설정(경로 string) {
@@ -45,6 +46,12 @@ func F로그인_설정_화일_경로_설정(경로 string) {
 }
 
 func F로그인_설정_화일_경로() string {
+	if 현재_디렉토리, 에러 := os.Getwd(); 에러 == nil {
+		if 경로 := filepath.Join(현재_디렉토리, "xing_config.ini"); lib.F파일_존재함(경로) {
+			return 경로
+		}
+	}
+
 	return os.Getenv(P환경변수_설정_화일_경로)
 }
 

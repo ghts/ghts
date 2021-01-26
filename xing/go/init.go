@@ -154,19 +154,20 @@ func c32_실행_화일_경로() string {
 	}
 }
 
+func c32_소스_코드_화일_경로() string {
+	return filepath.Join(os.Getenv("USERPROFILE"), `go\src\github.com\ghts\ghts\xing\c32\c32.go`)
+}
+
 func c32_빌드() error {
 	if lib.F파일_존재함(c32_실행_화일_경로()) {
-		os.Remove(c32_실행_화일_경로()) // 테스트 중일 때는 무조건 재컴파일.
-
+		if lib.F파일_없음(c32_소스_코드_화일_경로()) {
+			lib.F체크포인트("c32.exe 그대로 사용.")
+			return nil	// 컴파일 준비되어 있지 않으면 이미 존재하는 실행 화일 그대로 사용.
+		} else {
+			lib.F체크포인트("c32.exe 삭제.")
+			os.Remove(c32_실행_화일_경로())
+		}
 	}
-	//
-	//if 현재_디렉토리, 에러 := os.Getwd(); 에러 != nil {
-	//	return lib.New에러(에러)
-	//} else if strings.HasSuffix(현재_디렉토리, `github.com\ghts\ghts\xing\go`) && lib.F파일_존재함(c32_실행_화일_경로()) {
-	//	os.Remove(c32_실행_화일_경로())	// 테스트 중일 때는 무조건 재컴파일.
-	//} else if lib.F파일_존재함(c32_실행_화일_경로())  {
-	//	return nil	// 테스트가 아닐 때는 존재하는 실행 파일 그대로 사용.
-	//}
 
 	GOARCH_원래값 := os.Getenv("GOARCH")
 	os.Setenv("GOARCH", "386") // 32비트 컴파일.
@@ -358,7 +359,7 @@ func C32_종료() (에러 error) {
 		lib.F대기(lib.P1초)
 	}
 
-	return c32_삭제()
+	return nil
 }
 
 func F종료() {
