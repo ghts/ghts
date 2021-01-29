@@ -1,7 +1,9 @@
 @echo off
 
-IF NOT DEFINED GOROOT (
+IF EXIST C:\Go\bin\go.exe (
     SET GOROOT=C:\Go
+) ELSE IF EXIST %ProgramFiles%\Go\bin\go.exe (
+    SET GOROOT=%ProgramFiles%\Go
 )
 
 IF NOT DEFINED GOPATH (
