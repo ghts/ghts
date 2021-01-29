@@ -911,16 +911,14 @@ func GOPATH() string {
 	return GOPATH
 }
 
-func GOROOT() string {
-	GOROOT := F환경변수("GOROOT")
-
-	if GOROOT == "" {
-		GO실행화일_경로_기본값 := `C:\Go\bin\go.exe`
-
-		if F파일_존재함(GO실행화일_경로_기본값) {
+func GOROOT() (GOROOT string) {
+	if GOROOT = F환경변수("GOROOT"); GOROOT == "" {
+		if F파일_존재함(`C:\Go\bin\go.exe`) {
 			GOROOT = `C:\Go`
+		} else if F파일_존재함(`C:\Program Files\Go\bin\go.exe`) {
+			GOROOT = `C:\Program Files\Go`
 		} else {
-			GO실행화일_경로 := F확인(F파일_검색(`C:\Go`, "go.exe")).(string)
+			GO실행화일_경로 := F확인(F파일_검색(`C:\`, "go.exe")).(string)
 			GO실행화일_경로 = strings.TrimSpace(GO실행화일_경로)
 
 			GOROOT = strings.Replace(GO실행화일_경로, `\bin\go.exe`, "", -1)
