@@ -176,7 +176,7 @@ func c32_빌드() error {
 	defer os.Setenv("CGO_ENABLED", CGO_ENABLED_원래값)
 
 	PATH_원래값 := os.Getenv("PATH")
-	os.Setenv("PATH", `C:\Go\bin;C:\msys64\mingw32\bin;C:\msys64\usr\bin`)
+	os.Setenv("PATH", lib.GOROOT() + `\bin;C:\msys64\mingw32\bin;C:\msys64\usr\bin`)
 	defer os.Setenv("PATH", PATH_원래값)
 
 	return exec.Command("go", "build", "github.com/ghts/ghts/xing/c32").Run()
