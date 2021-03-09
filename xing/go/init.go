@@ -176,7 +176,7 @@ func c32_빌드() error {
 	defer os.Setenv("CGO_ENABLED", CGO_ENABLED_원래값)
 
 	PATH_원래값 := os.Getenv("PATH")
-	os.Setenv("PATH", lib.GOROOT() + `\bin;C:\msys64\mingw32\bin;C:\msys64\usr\bin`)
+	os.Setenv("PATH", lib.GOROOT()+`\bin;C:\msys64\mingw32\bin;C:\msys64\usr\bin`)
 	defer os.Setenv("PATH", PATH_원래값)
 
 	return exec.Command("go", "build", "github.com/ghts/ghts/xing/c32").Run()
@@ -338,7 +338,11 @@ func C32_종료() (에러 error) {
 	ch신호_접속유지_종료 <- lib.P신호_종료
 
 	if !C32_종료됨() {
-		F질의(lib.New질의값_기본형(lib.TR종료, ""))
+		소켓REQ := 소켓REQ_저장소.G소켓()
+		소켓REQ.S송신(lib.P변환형식_기본값, lib.New질의값_기본형(lib.TR종료, ""))
+		소켓REQ_저장소.S회수(소켓REQ)
+
+		lib.F대기(lib.P20초)
 	}
 
 	ch타임아웃 := time.After(lib.P1분)
