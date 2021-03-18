@@ -395,6 +395,11 @@ func TrCSPAQ12300_현물계좌_잔고내역_조회(계좌번호 string, 단가_�
 		lib.F조건부_패닉(!ok, "TrCSPAQ12300() 예상하지 못한 자료형 : '%T'", i응답값)
 
 		for _, 반복값 := range 수신값.M반복값_모음 {
+			if strings.HasPrefix(반복값.M종목코드, "Q") ||
+				strings.HasPrefix(반복값.M종목코드, "A") {
+				반복값.M종목코드 = 반복값.M종목코드[1:]
+			}
+
 			값_모음[반복값.M종목코드] = 반복값
 		}
 
@@ -404,14 +409,6 @@ func TrCSPAQ12300_현물계좌_잔고내역_조회(계좌번호 string, 단가_�
 
 		연속조회_여부 = 수신값.M추가_연속조회_필요
 		연속키 = 수신값.M연속키
-	}
-
-	for i, 값 := range 값_모음 {
-		if strings.HasPrefix(값.M종목코드, "Q") ||
-			strings.HasPrefix(값.M종목코드, "A") {
-			값.M종목코드 = 값.M종목코드[1:]
-			값_모음[i] = 값
-		}
 	}
 
 	return 값_모음, nil
