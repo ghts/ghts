@@ -90,8 +90,13 @@ func (s *S내재가치_정보_모음) DB읽기(db *sql.DB) (에러 error) {
 		lib.F확인(rows.Scan(&code, &date, &json))
 
 		if 에러 = lib.F디코딩(lib.JSON, []byte(json), &값); 에러 != nil {
-			lib.F체크포인트(code, date.Format(lib.P일자_형식))
-			lib.F에러_출력(에러)
+			lib.F문자열_출력("%v %v : 디코딩 에러\n%v", code, date.Format(lib.P일자_형식), 에러)
+			continue
+		} else if 값 == nil {
+			lib.F문자열_출력("%v %v : nil 값", code, date.Format(lib.P일자_형식))
+			continue
+		} else if 값.S내재가치_식별정보 == nil {
+			lib.F문자열_출력("%v %v : nil 식별정보", code, date.Format(lib.P일자_형식))
 			continue
 		}
 
