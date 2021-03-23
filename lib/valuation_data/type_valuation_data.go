@@ -54,6 +54,15 @@ func (s *S내재가치_정보_모음) G종목별_차최신_정보(종목코드 s
 	return nil
 }
 
+func (s *S내재가치_정보_모음) S상장주식수_업데이트(db *sql.DB, 종목코드 string, 수량 int64) error {
+	if 값 := s.G종목별_최신_정보(종목코드); 값 != nil {
+		값.M상장주식수 = float64(수량)
+		return F내재가치_정보_모음_DB저장(db, []*S내재가치_정보{값})
+	}
+
+	return nil
+}
+
 func (s *S내재가치_정보_모음) S파일_읽기(파일명 string) error {
 	return lib.JSON_파일_읽기(파일명, s)
 }
