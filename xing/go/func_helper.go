@@ -161,7 +161,7 @@ func f에러_발생(TR코드, 코드, 내용 string) bool {
 		xt.TR_ETF_시세_조회_t1901,
 		xt.TR_ETF_시간별_추이_t1902,
 		xt.TR_ETF_LP호가_조회_t1906,
-		//xt.TR기업정보_요약_t3320,
+		xt.TR기업정보_요약_t3320,
 		xt.TR재무순위_종합_t3341,
 		xt.TR현물_멀티_현재가_조회_t8407,
 		xt.TR현물_차트_틱_t8411,

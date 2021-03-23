@@ -2663,6 +2663,7 @@ typedef struct {
     char    cashrate            [  13];    char    _cashrate            ;    // [float , 13.2] 배당수익율                      StartPos 457, Length 13
     char    price               [   8];    char    _price               ;    // [long  ,    8] 현재가                          StartPos 471, Length 8
     char    jnilclose           [   8];    char    _jnilclose           ;    // [long  ,    8] 전일종가                        StartPos 480, Length 8
+    char    padding_added       [   6]; // 수동 추가한 패딩
 } T3320OutBlock;
 
 typedef struct {
@@ -2680,11 +2681,11 @@ typedef struct {
     char    sps                 [  13];    char    _sps                 ;    // [float , 13.2] SPS                             StartPos 129, Length 13
     char    cps                 [  13];    char    _cps                 ;    // [float , 13.2] CPS                             StartPos 143, Length 13
     char    bps                 [  13];    char    _bps                 ;    // [float ,   13] BPS                             StartPos 157, Length 13
-    char    tper               [  13];    char    _tper               ;    // [float , 13.2] T.PER                           StartPos 171, Length 13
-    char    teps               [  13];    char    _teps               ;    // [float ,   13] T.EPS                           StartPos 185, Length 13
+    char    tper               [  13];    char    _t_per               ;    // [float , 13.2] T.PER                           StartPos 171, Length 13
+    char    teps               [  13];    char    _t_eps               ;    // [float ,   13] T.EPS                           StartPos 185, Length 13
     char    peg                 [  13];    char    _peg                 ;    // [float , 13.2] PEG                             StartPos 199, Length 13
-    char    tpeg               [  13];    char    _tpeg               ;    // [float , 13.2] T.PEG                           StartPos 213, Length 13
-    char    tgsym              [   6];    char    _tgsym              ;    // [string,    6] 최근분기년도                    StartPos 227, Length 6
+    char    tpeg               [  13];    char    _t_peg               ;    // [float , 13.2] T.PEG                           StartPos 213, Length 13
+    char    tgsym              [   6];    char    _t_gsym              ;    // [string,    6] 최근분기년도                    StartPos 227, Length 6
 } T3320OutBlock1;
 
 //------------------------------------------------------------------------------

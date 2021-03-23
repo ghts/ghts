@@ -283,9 +283,9 @@ func F조회_및_주문_질의_처리(질의 *lib.S채널_질의) {
 	case xt.TR_ETF_LP호가_조회_t1906:
 		c데이터 = unsafe.Pointer(xt.NewT1906InBlock(질의값.(*lib.S질의값_단일_종목)))
 		길이 = xt.SizeT1906InBlock
-	//case xt.TR기업정보_요약_t3320:
-	//	c데이터 = unsafe.Pointer(xt.NewT3320InBlock(질의값.(*lib.S질의값_단일_종목)))
-	//	길이 = xt.SizeT3320InBlock
+	case xt.TR기업정보_요약_t3320:
+		c데이터 = unsafe.Pointer(xt.NewT3320InBlock(질의값.(*lib.S질의값_단일_종목)))
+		길이 = xt.SizeT3320InBlock
 	case xt.TR재무순위_종합_t3341:
 		c데이터 = unsafe.Pointer(xt.NewT3341InBlock(질의값.(*xt.T3341_재무순위_질의값)))
 		길이 = xt.SizeT3341InBlock
