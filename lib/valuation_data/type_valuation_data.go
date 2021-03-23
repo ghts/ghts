@@ -9,9 +9,8 @@ import (
 	"time"
 )
 
-func New내재가치_정보_모음_DB읽기(db *sql.DB) *S내재가치_정보_모음 {
-	s := new(S내재가치_정보_모음)
-	s.M저장소 = make(map[string]*S내재가치_정보)
+func F내재가치_정보_모음_DB읽기(db *sql.DB) *S내재가치_정보_모음 {
+	s := New내재가치_정보_모음()
 	s.DB읽기(db)
 
 	return s
