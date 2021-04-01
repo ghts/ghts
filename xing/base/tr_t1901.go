@@ -280,7 +280,7 @@ func NewT1901_ETF_시세_조회_응답(b []byte) (s *T1901_ETF_시세_조회_응
 	s.M참고지수코드 = lib.F2문자열(g.Upcode2)
 	s.M참고지수현재가 = lib.F2실수_소숫점_추가_단순형_공백은_0(g.Upprice2, 2)
 
-	s.M전일NAV = lib.F2실수_소숫점_추가_단순형(g.Jnilnav, 2)
+	s.M전일NAV = lib.F2실수_소숫점_추가_단순형_공백은_0(g.Jnilnav, 2)
 	s.M전일NAV_전일대비구분 = T전일대비_구분(lib.F2정수64_단순형(g.Jnilnavsign))
 	s.M전일NAV_전일대비등락폭 = lib.F2실수_소숫점_추가_단순형_공백은_0(g.Jnilnavchange, 2)
 	s.M전일NAV_전일대비등락율 = lib.F2실수_소숫점_추가_단순형_공백은_0(g.Jnilnavdiff, 2)
