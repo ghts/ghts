@@ -344,11 +344,7 @@ func TrCSPAT00800_현물_취소주문(질의값 *lib.S질의값_취소_주문) (
 		}
 	}
 
-	if 에러 != nil {
-		return nil, 에러
-	} else {
-		return nil, lib.New에러("취소 주문 TR 실행 실패.")
-	}
+	return nil, 에러
 }
 
 func TrCSPAQ12200_현물계좌_총평가(계좌번호 string) (값 *xt.CSPAQ12200_현물계좌_총평가_응답, 에러 error) {
