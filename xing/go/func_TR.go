@@ -391,7 +391,9 @@ func TrCSPAQ12300_현물계좌_잔고내역_조회(계좌번호 string, 단가_�
 		lib.F조건부_패닉(!ok, "TrCSPAQ12300() 예상하지 못한 자료형 : '%T'", i응답값)
 
 		for _, 반복값 := range 수신값.M반복값_모음 {
-			if strings.HasPrefix(반복값.M종목코드, "Q") ||
+			if strings.TrimSpace(반복값.M종목코드) == "" {
+				continue
+			} else if strings.HasPrefix(반복값.M종목코드, "Q") ||
 				strings.HasPrefix(반복값.M종목코드, "A") {
 				반복값.M종목코드 = 반복값.M종목코드[1:]
 			}
@@ -1055,7 +1057,7 @@ func TrT1906_ETF_LP_호가_조회(종목코드 string) (응답값 *xt.T1906_ETF_
 	return 응답값, nil
 }
 
-// HTS 3302 화면. t3320 은 참고자료로서 정보의 정확성이나 완전성은 보장하기는 어렵습니다. 숫자 엉망이다.
+// HTS 3302 화면. t3320 은 참고자료로서 정보의 정확성이나 완전성은 보장하기는 어렵습니다.
 func TrT3320_F기업정보_요약(종목코드 string) (응답값 *xt.T3320_기업정보_요약_응답, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 응답값 = nil }}.S실행()
 
@@ -1069,7 +1071,7 @@ func TrT3320_F기업정보_요약(종목코드 string) (응답값 *xt.T3320_기�
 
 	// TR전송 제한이 걸리면, 타임아웃이 되면서 데이터 수집에 오히려 방해가 됨.
 	// TR전송 제한 소모 속도를 늦추어서, 타임아웃이 되지 않게 하는 것이 오히려 도움이 됨.
-	lib.F대기(lib.P5초)
+	lib.F대기(lib.P1초*6)
 
 	응답값, ok := i응답값.(*xt.T3320_기업정보_요약_응답)
 	lib.F조건부_패닉(!ok, "TrT3320() 예상하지 못한 자료형 : '%T'", i응답값)
