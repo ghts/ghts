@@ -173,11 +173,23 @@ func NewT1901_ETF_시세_조회_응답(b []byte) (s *T1901_ETF_시세_조회_응
 	s.M전일_거래량 = lib.F2실수_단순형(g.Jnilvolume)
 	s.M거래량차 = lib.F2정수64_단순형(g.Volumediff)
 	s.M시가 = lib.F2정수64_단순형(g.Open)
-	s.M시가시각 = lib.F2금일_시각_단순형("150405", g.Opentime)
+
+	if s.M시가시각, 에러 = lib.F2금일_시각("150405", g.Opentime); 에러 != nil {
+		s.M시가시각 = lib.F2금일_시각_단순형("150405", "090000")
+	}
+
 	s.M고가 = lib.F2정수64_단순형(g.High)
-	s.M고가시각 = lib.F2금일_시각_단순형("150405", g.Hightime)
+
+	if s.M고가시각, 에러 = lib.F2금일_시각("150405", g.Opentime); 에러 != nil {
+		s.M고가시각 = lib.F2금일_시각_단순형("150405", "090000")
+	}
+
 	s.M저가 = lib.F2정수64_단순형(g.Low)
-	s.M저가시각 = lib.F2금일_시각_단순형("150405", g.Lowtime)
+
+	if s.M저가시각, 에러 = lib.F2금일_시각("150405", g.Opentime); 에러 != nil {
+		s.M저가시각 = lib.F2금일_시각_단순형("150405", "090000")
+	}
+
 	s.M52주_최고가 = lib.F2정수64_단순형(g.High52w)
 	s.M52주_최고가일 = lib.F2포맷된_일자_단순형("20060102", g.High52wdate)
 	s.M52주_최저가 = lib.F2정수64_단순형(g.Low52w)
