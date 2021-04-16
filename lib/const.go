@@ -819,18 +819,18 @@ func (v T주문조건) G검사() {
 }
 
 const (
-	P포지션_롱 = T포지션(byte('L'))
-	P포지션_숏 = T포지션(byte('S'))
+	P롱 = T롱숏(byte('L'))
+	P숏 = T롱숏(byte('S'))
 )
 
-type T포지션 byte
+type T롱숏 byte
 
-func (v T포지션) String() string {
+func (v T롱숏) String() string {
 	switch v {
-	case P포지션_롱:
-		return "롱(매수)"
-	case P포지션_숏:
-		return "숏(매도)"
+	case P롱:
+		return "롱"
+	case P숏:
+		return "숏"
 	default:
 		return F2문자열("예상하지 못한 값 : '%v'", byte(v))
 	}
