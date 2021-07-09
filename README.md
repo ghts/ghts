@@ -11,22 +11,12 @@ GHTS
 
 사전준비물
 - Go언어 : https://golang.org/dl/
-- C 컴파일러 (MSYS2) : https://www.msys2.org/ 
-- Git : https://git-scm.com/download/win
+ - Git : https://git-scm.com/download/win
 - 이베스트 Xing API : https://www.ebestsec.co.kr/
 
 Xing API 관련 기능은 개발 편의성을 위해서 <br>
-Go언어, MSYS2, Xing API가 기본 위치에 설치된 것을 상정하고 있습니다. <br>
-( MSYS2 : C:\msys64, Xing API : C:\eBEST\xingAPI )
-
-*********************************************************
-
-MSYS2에서 C 컴파일러 설치 ('MSYS2 -> MSYS' 터미널에서 아래 명령을 실행.)
-
-<pre><code>pacman -Syuu 
-pacman -S base-devel
-pacman -S mingw-w64-i686-toolchain
-pacman -S mingw-w64-x86_64-toolchain</code></pre>
+Go언어, Xing API가 기본 위치에 설치된 것을 상정하고 있습니다. <br>
+( Xing API : C:\eBEST\xingAPI )
 
 *********************************************************
 
@@ -123,6 +113,22 @@ xing32 모듈은 API호출 결과를 네트워크를 통해서 전달하는 동�
  멀웨어(MDP.Connect.M1924)로 잘못 진단되며,<br>
 AST에서 '위협 행위 차단'을 해제해야 정상 작동합니다.<br>
 윈도우 기본 백신인 '윈도우 디펜더'에서는 이런 문제가 발생하지 않습니다.
+
+*********************************************************
+
+일반적인 사용에 필요하지 않지만, <br>
+소스코드를 수정할 때 이베스트 API 자료형과 동기화가 필요한 경우에는 <br>
+C언어 컴파일러가 추가로 필요합니다.  <br>
+
+- C 컴파일러 (MSYS2) : https://www.msys2.org/
+- MSYS2 설치 디렉토리 : C:\msys64,
+
+MSYS2에서 C 컴파일러 설치 ('MSYS2 -> MSYS' 터미널에서 아래 명령을 실행.)
+
+<pre><code>pacman -Syuu 
+pacman -S base-devel
+pacman -S mingw-w64-i686-toolchain
+pacman -S mingw-w64-x86_64-toolchain</code></pre>
 
 *********************************************************
 
