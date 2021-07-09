@@ -31,40 +31,29 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package c
+package dll
 
-// #cgo CFLAGS: -Wall
-// #include <stdlib.h>
-import "C"
 import (
 	"golang.org/x/text/encoding/korean"
 	"strings"
 	"unsafe"
 )
 
+const 단위_오프셋 = unsafe.Sizeof(byte(0))
+
+// ANSI형식 DLL호출 문자열 변환
+func F2ANSI문자열(go문자열 string) uintptr {
+	ASCII_문자열 := append([]byte(go문자열), 0)
+
+	return uintptr(unsafe.Pointer(&ASCII_문자열[0]))
+}
+
 func F2Go문자열(c문자열_포인터 unsafe.Pointer) string {
-	return C.GoString((*C.char)(c문자열_포인터))
+	return string(F2Go바이트_모음(c문자열_포인터))
 }
 
 func F2문자열_EUC_KR(c문자열_포인터 unsafe.Pointer) string {
-	const 단위 = 32
-
-	var 바이트_모음 []byte
-	길이 := 단위
-
-	for {
-		바이트_모음 = F2Go바이트_모음(c문자열_포인터, 길이)
-
-		null문자_인덱스 := strings.Index(string(바이트_모음), "\x00")
-
-		if null문자_인덱스 >= 0 {
-			break
-		}
-
-		길이 += 단위
-	}
-
-	return strings.TrimSpace(f2문자열_EUC_KR(바이트_모음))
+	return f2문자열_EUC_KR(F2Go바이트_모음(c문자열_포인터))
 }
 
 func f2문자열_EUC_KR(바이트_모음 []byte) string {
@@ -86,7 +75,30 @@ func f2문자열_EUC_KR(바이트_모음 []byte) string {
 	return string(바이트_모음_utf8)
 }
 
-func F2Go바이트_모음(c데이터 unsafe.Pointer, 길이 int) []byte {
-	return C.GoBytes(c데이터, C.int(길이))
+func F2Go바이트_모음(c데이터 unsafe.Pointer) []byte {
+	바이트_모음 := make([]byte, 0)
+
+	for i:=0 ; i<2048 ; i++ {
+		포인터 := (*byte)(unsafe.Pointer(uintptr(c데이터) + uintptr(i)*단위_오프셋))
+		바이트 := *포인터
+
+		if 바이트 == 0 {
+			return 바이트_모음
+		}
+
+		바이트_모음 = append(바이트_모음, 바이트)
+	}
+
+	return 바이트_모음
 }
 
+func F2Go바이트_모음with길이(c데이터 unsafe.Pointer, 길이 int) []byte {
+	바이트_모음 := make([]byte, 길이)
+
+	for i:=0 ; i<길이 ; i++ {
+		포인터 := (*byte)(unsafe.Pointer(uintptr(c데이터) + uintptr(i)*단위_오프셋))
+		바이트_모음[i] = *포인터
+	}
+
+	return 바이트_모음
+}
