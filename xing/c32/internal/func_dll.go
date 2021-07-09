@@ -178,9 +178,6 @@ func F접속(서버_구분 xt.T서버_구분) error {
 		포트_번호 = 0
 	}
 
-	c서버_이름 := c.F2C문자열(서버_이름)
-	defer c.F메모리_해제(unsafe.Pointer(c서버_이름))
-
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
@@ -235,23 +232,14 @@ func F로그인(서버_구분 xt.T서버_구분) (에러 error) {
 	로그인_ID, 로그인_암호, 인증서_암호, 계좌_비밀번호, 에러 = xt.F로그인_정보_환경_변수_읽기()
 	lib.F확인(에러)
 
-	c아이디 := c.F2C문자열(로그인_ID)
-	defer c.F메모리_해제(unsafe.Pointer(c아이디))
-
-	c암호 := c.F2C문자열(로그인_암호)
-	defer c.F메모리_해제(unsafe.Pointer(c암호))
-
-	c공인인증서_암호 := c.F2C문자열(인증서_암호)
-	defer c.F메모리_해제(unsafe.Pointer(c공인인증서_암호))
-
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
 	참거짓, _, 에러_번호 := syscall.Syscall6(etkLogin, 6,
 		메시지_윈도우,
-		uintptr(unsafe.Pointer(c아이디)),
-		uintptr(unsafe.Pointer(c암호)),
-		uintptr(unsafe.Pointer(c공인인증서_암호)),
+		dll문자열(로그인_ID),
+		dll문자열(로그인_암호),
+		dll문자열(인증서_암호),
 		0,
 		uintptr(FALSE))
 
@@ -309,22 +297,16 @@ func F질의(TR코드 string, c데이터 unsafe.Pointer, 길이 int,
 		return -1, 에러
 	}
 
-	cTR코드 := c.F2C문자열(TR코드)
-	defer c.F메모리_해제(unsafe.Pointer(cTR코드))
-
-	c연속_조회_키 := c.F2C문자열(연속키)
-	defer c.F메모리_해제(unsafe.Pointer(c연속_조회_키))
-
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
 	질의ID, _, 에러_번호 := syscall.Syscall9(etkRequest, 7,
 		메시지_윈도우,
-		uintptr(unsafe.Pointer(cTR코드)),
+		dll문자열(TR코드),
 		uintptr(c데이터),
 		uintptr(길이),
 		uintptr(lib.F조건부_정수(연속_조회_여부, TRUE, FALSE)),
-		uintptr(unsafe.Pointer(c연속_조회_키)),
+		dll문자열(연속키),
 		uintptr(타임아웃/time.Second),
 		0, 0)
 
@@ -344,19 +326,13 @@ func F질의(TR코드 string, c데이터 unsafe.Pointer, 길이 int,
 }
 
 func F실시간_정보_구독(TR코드 string, 전체_종목코드 string, 단위_길이 int) error {
-	cTR코드 := c.F2C문자열(TR코드)
-	defer c.F메모리_해제(unsafe.Pointer(cTR코드))
-
-	c전체_종목코드 := c.F2C문자열(전체_종목코드)
-	defer c.F메모리_해제(unsafe.Pointer(c전체_종목코드))
-
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
 	참거짓, _, 에러_번호 := syscall.Syscall6(etkAdviseRealData, 4,
 		메시지_윈도우,
-		uintptr(unsafe.Pointer(cTR코드)),
-		uintptr(unsafe.Pointer(c전체_종목코드)),
+		dll문자열(TR코드),
+		dll문자열(전체_종목코드),
 		uintptr(단위_길이),
 		0, 0)
 
@@ -368,19 +344,13 @@ func F실시간_정보_구독(TR코드 string, 전체_종목코드 string, 단�
 }
 
 func F실시간_정보_해지(TR코드 string, 전체_종목코드 string, 단위_길이 int) error {
-	cTR코드 := c.F2C문자열(TR코드)
-	defer c.F메모리_해제(unsafe.Pointer(cTR코드))
-
-	c전체_종목코드 := c.F2C문자열(전체_종목코드)
-	defer c.F메모리_해제(unsafe.Pointer(c전체_종목코드))
-
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
 	참거짓, _, 에러_번호 := syscall.Syscall6(etkUnadviseRealData, 4,
 		메시지_윈도우,
-		uintptr(unsafe.Pointer(cTR코드)),
-		uintptr(unsafe.Pointer(c전체_종목코드)),
+		dll문자열(TR코드),
+		dll문자열(전체_종목코드),
 		uintptr(단위_길이),
 		0, 0)
 
@@ -495,8 +465,6 @@ func F계좌_이름(질의 *lib.S채널_질의) {
 	}}.S실행()
 
 	계좌_번호 := 질의.M값.(*lib.S질의값_문자열).M문자열
-	c계좌번호 := c.F2C문자열(계좌_번호)
-	defer c.F메모리_해제(unsafe.Pointer(c계좌번호))
 
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
@@ -519,7 +487,7 @@ func F계좌_이름(질의 *lib.S채널_질의) {
 	버퍼_길이 := len(버퍼)
 
 	_, _, 에러_번호 := syscall.Syscall(etkGetAccountName, 3,
-		uintptr(unsafe.Pointer(c계좌번호)),
+		dll문자열(계좌_번호),
 		uintptr(unsafe.Pointer(c버퍼)),
 		uintptr(버퍼_길이))
 
@@ -581,8 +549,6 @@ func F계좌_별명(질의 *lib.S채널_질의) {
 	}}.S실행()
 
 	계좌_번호 := 질의.M값.(*lib.S질의값_문자열).M문자열
-	c계좌번호 := c.F2C문자열(계좌_번호)
-	defer c.F메모리_해제(unsafe.Pointer(c계좌번호))
 
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
@@ -605,7 +571,7 @@ func F계좌_별명(질의 *lib.S채널_질의) {
 	버퍼_길이 := len(버퍼)
 
 	_, _, 에러_번호 := syscall.Syscall(etkGetAccountNickName, 3,
-		uintptr(unsafe.Pointer(c계좌번호)),
+		dll문자열(계좌_번호),
 		uintptr(unsafe.Pointer(c버퍼)),
 		uintptr(버퍼_길이))
 
@@ -702,14 +668,11 @@ func TR코드별_전송_제한(질의 *lib.S채널_질의) {
 }
 
 func f초당_TR쿼터(TR코드 string) int {
-	cTR코드 := c.F2C문자열(TR코드)
-	defer c.F메모리_해제(unsafe.Pointer(cTR코드))
-
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
 	초당_전송_가능_횟수, _, 에러_번호 := syscall.Syscall(etkGetTRCountPerSec, 1,
-		uintptr(unsafe.Pointer(cTR코드)),
+		dll문자열(TR코드),
 		0, 0)
 
 	if 에러_번호 != 0 {
@@ -720,14 +683,11 @@ func f초당_TR쿼터(TR코드 string) int {
 }
 
 func f초당_TR쿼터_역수(TR코드 string) int {
-	cTR코드 := c.F2C문자열(TR코드)
-	defer c.F메모리_해제(unsafe.Pointer(cTR코드))
-
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
 	초당_전송_가능_횟수_역수, _, 에러_번호 := syscall.Syscall(etkGetTRCountBaseSec, 1,
-		uintptr(unsafe.Pointer(cTR코드)),
+		dll문자열(TR코드),
 		0, 0)
 
 	if 에러_번호 != 0 {
@@ -756,14 +716,11 @@ func f10분당_TR쿼터(TR코드 string) int {
 }
 
 func f10분간_요청한_TR수량(TR코드 string) int {
-	cTR코드 := c.F2C문자열(TR코드)
-	defer c.F메모리_해제(unsafe.Pointer(cTR코드))
-
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
 	십분간_요청한_TR수량, _, 에러_번호 := syscall.Syscall(etkGetTRCountRequest, 1,
-		uintptr(unsafe.Pointer(cTR코드)),
+		dll문자열(TR코드),
 		0, 0)
 
 	if 에러_번호 != 0 {
