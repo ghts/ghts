@@ -37,15 +37,10 @@ package c
 // #include <stdlib.h>
 import "C"
 import (
-	"golang.org/x/sys/windows"
 	"golang.org/x/text/encoding/korean"
 	"strings"
 	"unsafe"
 )
-
-func F2DLL문자열(go문자열 string) uintptr {
-	return uintptr(unsafe.Pointer(windows.StringToUTF16Ptr(go문자열)))
-}
 
 func F2C문자열(go문자열 string) *C.char {
 	return C.CString(go문자열)

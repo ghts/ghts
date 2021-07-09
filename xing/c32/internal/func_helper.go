@@ -37,7 +37,15 @@ import (
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/xing/base"
 	"os"
+	"unsafe"
 )
+
+// ANSI형식 DLL호출 문자열 변환
+func dll문자열(go문자열 string) uintptr {
+	ASCII_문자열 := append([]byte(go문자열), 0)
+
+	return uintptr(unsafe.Pointer(&ASCII_문자열[0]))
+}
 
 func XingAPI디렉토리() (string, error) {
 	파일경로, 에러 := lib.F실행파일_검색(xing_dll)

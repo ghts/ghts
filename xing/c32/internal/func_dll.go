@@ -188,7 +188,7 @@ func F접속(서버_구분 xt.T서버_구분) error {
 
 	참거짓, _, 에러_번호 := syscall.Syscall6(etkConnect, 6,
 		메시지_윈도우,
-		uintptr(unsafe.Pointer(c서버_이름)),
+		dll문자열(서버_이름),
 		uintptr(포트_번호),
 		WM_USER,
 		uintptr(unsafe.Pointer(&마이너스_일)),
