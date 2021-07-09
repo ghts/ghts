@@ -35,7 +35,6 @@ package x32
 
 import (
 	"github.com/ghts/ghts/lib"
-	"github.com/ghts/ghts/lib/c"
 	"github.com/ghts/ghts/lib/w32"
 	xt "github.com/ghts/ghts/xing/base"
 	"runtime"
@@ -139,7 +138,6 @@ func F조회_및_주문_질의_처리(질의 *lib.S채널_질의) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 질의.Ch에러 <- 에러 }}.S실행()
 
 	var c데이터 unsafe.Pointer
-	defer lib.F조건부_실행(c데이터 != nil, c.F메모리_해제, c데이터)
 
 	var 길이 int
 	연속_조회_여부 := false

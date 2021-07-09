@@ -417,16 +417,14 @@ func f계좌_수량() (int, error) {
 func f계좌_번호(인덱스 int) (string, error) {
 	버퍼_초기값 := "            " // 12자리 공백문자열
 	버퍼_길이 := len(버퍼_초기값)
-
-	c버퍼 := c.F2C문자열(버퍼_초기값)
-	defer c.F메모리_해제(unsafe.Pointer(c버퍼))
+	c버퍼 := dll문자열(버퍼_초기값)
 
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
 	참거짓, _, 에러_번호 := syscall.Syscall(etkGetAccountList, 3,
 		uintptr(인덱스),
-		uintptr(unsafe.Pointer(c버퍼)),
+		c버퍼,
 		uintptr(버퍼_길이))
 
 	if 에러_번호 != 0 {
@@ -483,12 +481,12 @@ func F계좌_이름(질의 *lib.S채널_질의) {
 
 	// syscall 방식 호출은 에러 발생
 	버퍼 := "                                         " // 41 바이트
-	c버퍼 := c.F2C문자열(버퍼)
+	c버퍼 := dll문자열(버퍼)
 	버퍼_길이 := len(버퍼)
 
 	_, _, 에러_번호 := syscall.Syscall(etkGetAccountName, 3,
 		dll문자열(계좌_번호),
-		uintptr(unsafe.Pointer(c버퍼)),
+		c버퍼,
 		uintptr(버퍼_길이))
 
 	switch 에러_번호 {
@@ -567,12 +565,12 @@ func F계좌_별명(질의 *lib.S채널_질의) {
 
 	// syscall 방식 호출은 에러 발생
 	버퍼 := "                                         " // 41 바이트
-	c버퍼 := c.F2C문자열(버퍼)
+	c버퍼 := dll문자열(버퍼)
 	버퍼_길이 := len(버퍼)
 
 	_, _, 에러_번호 := syscall.Syscall(etkGetAccountNickName, 3,
 		dll문자열(계좌_번호),
-		uintptr(unsafe.Pointer(c버퍼)),
+		c버퍼,
 		uintptr(버퍼_길이))
 
 	switch 에러_번호 {
@@ -585,14 +583,13 @@ func F계좌_별명(질의 *lib.S채널_질의) {
 
 func F서버_이름(질의 *lib.S채널_질의) {
 	버퍼 := "                                                   "
-	c버퍼 := c.F2C문자열(버퍼)
-	defer c.F메모리_해제(unsafe.Pointer(c버퍼))
+	c버퍼 := dll문자열(버퍼)
 
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
 	_, _, 에러_번호 := syscall.Syscall(etkGetServerName, 1,
-		uintptr(unsafe.Pointer(c버퍼)),
+		c버퍼,
 		0, 0)
 
 	switch 에러_번호 {
@@ -627,8 +624,7 @@ func F에러_메시지(질의 *lib.S채널_질의) {
 
 	버퍼 := go버퍼.String()
 	버퍼_길이 := len(버퍼)
-	c버퍼 := c.F2C문자열(버퍼)
-	defer c.F메모리_해제(unsafe.Pointer(c버퍼))
+	c버퍼 := dll문자열(버퍼)
 
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
@@ -698,14 +694,11 @@ func f초당_TR쿼터_역수(TR코드 string) int {
 }
 
 func f10분당_TR쿼터(TR코드 string) int {
-	cTR코드 := c.F2C문자열(TR코드)
-	defer c.F메모리_해제(unsafe.Pointer(cTR코드))
-
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
 	십분당_TR쿼터, _, 에러_번호 := syscall.Syscall(etkGetTRCountLimit, 1,
-		uintptr(unsafe.Pointer(cTR코드)),
+		dll문자열(TR코드),
 		0, 0)
 
 	if 에러_번호 != 0 {
