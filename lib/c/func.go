@@ -42,10 +42,6 @@ import (
 	"unsafe"
 )
 
-func F2C문자열(go문자열 string) *C.char {
-	return C.CString(go문자열)
-}
-
 func F2Go문자열(c문자열_포인터 unsafe.Pointer) string {
 	return C.GoString((*C.char)(c문자열_포인터))
 }
@@ -94,6 +90,3 @@ func F2Go바이트_모음(c데이터 unsafe.Pointer, 길이 int) []byte {
 	return C.GoBytes(c데이터, C.int(길이))
 }
 
-func F메모리_해제(포인터 unsafe.Pointer) {
-	C.free(포인터)
-}
