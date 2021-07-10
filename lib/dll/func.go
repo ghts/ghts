@@ -78,7 +78,7 @@ func f2문자열_EUC_KR(바이트_모음 []byte) string {
 func F2Go바이트_모음(c데이터 unsafe.Pointer) []byte {
 	바이트_모음 := make([]byte, 0)
 
-	for i:=0 ; i<2048 ; i++ {
+	for i:=0 ; i<4096 ; i++ {
 		포인터 := (*byte)(unsafe.Pointer(uintptr(c데이터) + uintptr(i)*단위_오프셋))
 		바이트 := *포인터
 
