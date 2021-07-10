@@ -417,6 +417,7 @@ func f종료() {
 	f실시간_정보_일괄_해지()
 	F로그아웃()
 	F소켓_정리() // F공통_종료_채널_닫기() 포함.
+
 	w32.PostQuitMessage(0)
 	w32.DestroyWindow(메시지_윈도우)
 	syscall.FreeLibrary(xing_api_dll)

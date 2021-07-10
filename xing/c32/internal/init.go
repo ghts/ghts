@@ -35,7 +35,9 @@ package x32
 
 import (
 	"github.com/ghts/ghts/lib"
+	nano "github.com/ghts/ghts/lib/nanomsg"
 	xt "github.com/ghts/ghts/xing/base"
+	"runtime"
 	"time"
 )
 
@@ -67,6 +69,7 @@ func f종료_질의_송신() {
 }
 
 func F종료_대기() {
+	<-lib.Ch공통_종료()
 	<-Ch모니터링_루틴_종료
 	<-Ch함수_호출_도우미_종료
 
@@ -82,10 +85,20 @@ func F종료_대기() {
 func F소켓_정리() error {
 	lib.F공통_종료_채널_닫기()
 
-	소켓REQ_저장소.S정리()
+	// TR수신 고루틴이 소켓 수신 후 공통 종료 채널이 닫혀있는 지 확인 후 종료하도록 유도.
+	반복_횟수 := lib.F최대값_정수(runtime.NumCPU()*2, 30)
+	질의값 := &lib.S질의값_기본형{M구분: xt.TR조회, M코드: xt.TR시간_조회_t0167}
+	소켓REQ := nano.NewNano소켓REQ_단순형(xt.F주소_C32(), lib.P1초)
 
-	lib.F패닉억제_호출(소켓REP_TR수신.Close)
+	for i := 0; i < 반복_횟수; i++ {
+		소켓REQ.S송신(lib.P변환형식_기본값, 질의값)
+		lib.F대기(lib.P100밀리초)
+	}
+
+	소켓REQ.Close()
+	소켓REQ_저장소.S정리()
 	lib.F패닉억제_호출(소켓PUB_실시간_정보.Close)
+	lib.F패닉억제_호출(소켓REP_TR수신.Close)
 
 	lib.F대기(lib.P3초) // 소켓이 정리될 시간적 여유를 둠.
 

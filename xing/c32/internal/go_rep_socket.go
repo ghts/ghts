@@ -52,6 +52,10 @@ func go수신_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 		M에러:    &에러,
 		M출력_숨김: true,
 		M함수: func() {
+			if lib.F공통_종료_채널_닫힘() {
+				return
+			}
+
 			if 에러 != nil &&
 				!strings.Contains(에러.Error(), "connection closed") &&
 				!strings.Contains(에러.Error(), "object closed") {
@@ -64,7 +68,10 @@ func go수신_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 		},
 		M함수_항상: func() {
 			if lib.F공통_종료_채널_닫힘() {
-				Ch수신_도우미_종료 <- lib.P신호_종료
+				select {
+				case Ch수신_도우미_종료 <- lib.P신호_종료:
+				default:
+				}
 			} else {
 				ch종료 <- lib.P신호_종료
 			}
@@ -84,10 +91,14 @@ func go수신_도우미(ch초기화, ch종료 chan lib.T신호) (에러 error) {
 		if lib.F공통_종료_채널_닫힘() {
 			return
 		} else if 바이트_변환_모음, 에러 = ctx.G수신(); 에러 != nil {
-			if !strings.Contains(에러.Error(), "connection closed") &&
+			if lib.F공통_종료_채널_닫힘() {
+				return
+			} else if !strings.Contains(에러.Error(), "connection closed") &&
 				!strings.Contains(에러.Error(), "object closed") {
 				lib.F에러_출력(에러)
 			}
+		} else if lib.F공통_종료_채널_닫힘() {
+			return
 		} else if 바이트_변환_모음 == nil {
 			continue
 		} else if 바이트_변환_모음.G수량() != 1 {
