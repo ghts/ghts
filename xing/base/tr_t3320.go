@@ -134,7 +134,7 @@ func NewT3320_기업정보_요약_응답1(b []byte) (값 *T3320_기업정보_요
 	값.M주담전화 = lib.F2문자열(g.Irtel)
 	값.M자본금_억 = lib.F2실수_단순형_공백은_0(g.Capital)
 	값.M시가총액 = lib.F2실수_단순형_공백은_0(g.Sigavalue)
-	값.M배당금 = lib.F2실수_단순형(g.Cashsis)
+	값.M배당금 = lib.F2실수_단순형_공백은_0(g.Cashsis)
 	값.M배당수익율 = lib.F2실수_소숫점_추가_단순형(g.Cashrate, 2)
 	값.M현재가 = lib.F2정수64_단순형(g.Price)
 	값.M전일종가 = lib.F2정수64_단순형(g.Jnilclose)
