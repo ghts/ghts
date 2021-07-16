@@ -127,17 +127,6 @@ func F주소_설정() {
 			os.Setenv(P환경변수_주소_콜백, strconv.Itoa(int(주소_콜백)))
 			os.Setenv(P환경변수_주소_실시간, strconv.Itoa(int(주소_실시간)))
 
-			//버퍼 := bytes.Buffer{}
-			//문자열 := lib.F2문자열("* Xing API 호출 HTTP주소 : '%v' *", F주소_C32().HTTP주소())
-			//
-			//for i := 0; i < len(문자열)-3; i++ {
-			//	버퍼.WriteString("*")
-			//}
-			//
-			//fmt.Println(버퍼.String())
-			//fmt.Println(문자열)
-			//fmt.Println(버퍼.String())
-
 			return
 		}
 	}
