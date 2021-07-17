@@ -516,13 +516,19 @@ func F특수_종목_여부(종목코드 string) bool {
 	종목명 := 종목.G이름()
 
 	switch {
-	case strings.Contains(종목명, "스팩") &&
-		strings.Contains(종목명, "호"):
-		return true
-	case strings.HasPrefix(종목명, "하이골드") &&
-		strings.Contains(종목명, "호"):
-		return true
-	case strings.Contains(종목명, "리츠"):
+	case strings.Contains(종목명, "리츠"),
+		strings.Contains(종목명, "스팩"),
+		strings.Contains(종목명, "하이골드"),
+		strings.Contains(종목명, "1호"),
+		strings.Contains(종목명, "2호"),
+		strings.Contains(종목명, "3호"),
+		strings.Contains(종목명, "4호"),
+		strings.Contains(종목명, "5호"),
+		strings.Contains(종목명, "6호"),
+		strings.Contains(종목명, "7호"),
+		strings.Contains(종목명, "8호"),
+		strings.Contains(종목명, "9호"),
+		strings.Contains(종목명, "10호"):
 		return true
 	}
 
