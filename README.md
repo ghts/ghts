@@ -15,7 +15,8 @@ GHTS
 
 Xing API 관련 기능은 개발 편의성을 위해서 <br>
 Go언어, Xing API가 기본 위치에 설치된 것을 상정하고 있습니다. <br>
-( Xing API : C:\eBEST\xingAPI )
+- Go언어 : C:\Program Files\Go
+- Xing API : C:\eBEST\xingAPI
 
 *********************************************************
 
@@ -120,7 +121,7 @@ AST에서 '위협 행위 차단'을 해제해야 정상 작동합니다.<br>
 C언어 컴파일러가 추가로 필요합니다.  <br>
 
 - C 컴파일러 (MSYS2) : https://www.msys2.org/
-- MSYS2 설치 디렉토리 : C:\msys64,
+- MSYS2 설치 디렉토리 : C:\msys64
 
 MSYS2에서 C 컴파일러 설치 ('MSYS2 -> MSYS' 터미널에서 아래 명령을 실행.)
 
