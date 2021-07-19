@@ -203,7 +203,7 @@ type S재무제표_정보_내용 struct {
 	M유동자산     float64 // NCAV 전략에 필요함.
 	M현금및현금성자산 float64 // EV계산에 필요함.
 	M부채       float64
-	M유동부채     float64 // NCAV 전략에 필요함.
+	M유동부채     float64
 	M자본       float64
 	M영업_현금흐름  float64
 	M투자_현금흐름  float64
