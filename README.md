@@ -10,7 +10,7 @@ GHTS
 
 사전준비물
 - Go언어 : https://golang.org/dl/
- - Git : https://git-scm.com/download/win
+- Git : https://git-scm.com/download/win
 - 이베스트 Xing API : https://www.ebestsec.co.kr/
 
 Xing API 관련 기능은 개발 편의성을 위해서 <br>
@@ -69,7 +69,7 @@ Xing API 사용 전 준비 (초기화)
 )
 
 func main() {
-    // <...> 자리에 계좌 정보 문자열 상수 설정.
+    // "..." 자리에 계좌 정보 문자열 상수 설정.
     // 'xt.P서버_실거래' 대신 'xt.P서버_모의투자' 사용 가능.    
     xing.F초기화(xt.P서버_실거래, "로그인_ID", "로그인_암호", "인증서_암호", "계좌_비밀번호")  
     defer xing.F종료()    
