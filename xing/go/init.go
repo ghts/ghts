@@ -502,4 +502,3 @@ func F초기화_TR전송_제한() (에러 error) {
 
 	return nil
 }
-
