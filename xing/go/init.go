@@ -36,7 +36,7 @@ package xing
 import (
 	"fmt"
 	"github.com/ghts/ghts/lib"
-	"github.com/ghts/ghts/lib/external_process"
+	ep "github.com/ghts/ghts/lib/external_process"
 	"github.com/ghts/ghts/lib/nanomsg"
 	"github.com/ghts/ghts/xing/base"
 	"github.com/mitchellh/go-ps"
@@ -122,19 +122,19 @@ func f초기화_xing_C32() (에러 error) {
 
 	switch runtime.GOOS {
 	case "windows":
+		GOARCH_원래값 := os.Getenv("GOARCH")
+		os.Setenv("GOARCH", "386") // 64비트에서 컴파일을 막는 루틴을 회피하기 위해서 32비트인척 함.
+		defer os.Setenv("GOARCH", GOARCH_원래값)
+
 		if 에러 := c32_빌드(); 에러 != nil {
 			panic(lib.New에러with출력("c32.exe 빌드 에러 발생.\n%v", 에러))
 		} else if lib.F파일_없음(c32_실행_화일_경로()) {
 			panic(lib.New에러with출력("빌드된 실행 화일 찾을 수 없음. '%v'", c32_실행_화일_경로()))
 		}
 
-		GOARCH_원래값 := os.Getenv("GOARCH")
-		os.Setenv("GOARCH", "386") // 64비트에서 컴파일을 막는 루틴을 회피하기 위해서 32비트인척 함.
-		defer os.Setenv("GOARCH", GOARCH_원래값)
-
 		// 자식 프로세스는 부모 프로세스의 환경 변수를 그대로 물려받음.
 		// 로그인 정보는 환경 변수를 통해서 전달.
-		프로세스ID_C32 = lib.F확인(external_process.F외부_프로세스_실행(c32_실행_화일_경로())).(int)
+		프로세스ID_C32 = lib.F확인(ep.F외부_프로세스_실행(c32_실행_화일_경로())).(int)
 
 		<-ch신호_C32_초기화
 	default:
@@ -172,7 +172,6 @@ func c32_빌드() error {
 	defer os.Setenv("GOARCH", GOARCH_원래값)
 
 	CGO_ENABLED_원래값 := os.Getenv("CGO_ENABLED")
-	//os.Setenv("CGO_ENABLED", "1") // cgo 활성화
 	os.Setenv("CGO_ENABLED", "0") // cgo 비활성화
 	defer os.Setenv("CGO_ENABLED", CGO_ENABLED_원래값)
 
@@ -358,7 +357,7 @@ func C32_종료() (에러 error) {
 			break
 		}
 
-		external_process.F프로세스_종료by프로세스ID(프로세스ID_C32)
+		ep.F프로세스_종료by프로세스ID(프로세스ID_C32)
 		lib.F대기(lib.P1초)
 	}
 

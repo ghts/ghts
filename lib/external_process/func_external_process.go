@@ -38,6 +38,7 @@ import (
 	"github.com/mitchellh/go-ps"
 	"os"
 	"os/exec"
+	"strings"
 	"sync"
 	"time"
 )
@@ -200,4 +201,22 @@ func F프로세스_종료by프로세스ID(프로세스ID int) (에러 error) {
 	} else {
 		return 프로세스.Kill()
 	}
+}
+
+func F프로세스_종료by프로세스_이름(프로세스_이름 string) (에러 error) {
+	defer lib.S예외처리{M에러: &에러, M출력_숨김: true}.S실행()
+
+	프로세스_이름 = strings.TrimSpace(프로세스_이름)
+	프로세스_모음, 에러 := ps.Processes()
+	lib.F확인(에러)
+
+	for _, 프로세스 := range 프로세스_모음 {
+		if 프로세스.Executable() == 프로세스_이름 {
+			lib.F체크포인트(프로세스.Pid(), "프로세스 종료")
+
+			F프로세스_종료by프로세스ID(프로세스.Pid())
+		}
+	}
+
+	return nil
 }

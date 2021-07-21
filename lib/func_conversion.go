@@ -660,8 +660,9 @@ func F2포맷된_일자(포맷 string, 값 interface{}) (time.Time, error) {
 	return 일자, nil
 }
 
-// defer(), recover()로 패닉에 대처할 수 있는 경우에만 사용할 것.
-func F2포맷된_일자_단순형(포맷 string, 값 interface{}) time.Time {
+func F2포맷된_일자_단순형(포맷 string, 값 interface{}) (일자 time.Time) {
+	defer S예외처리{M함수: func() { 일자 = time.Time{} }, M출력_숨김: true}.S실행()
+
 	시각 := F확인(F2포맷된_시각(포맷, 값)).(time.Time)
 
 	return time.Date(시각.Year(), 시각.Month(), 시각.Day(),
