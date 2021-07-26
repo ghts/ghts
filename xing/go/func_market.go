@@ -308,6 +308,8 @@ func F종목_정보_설정() (에러 error) {
 func F종목by코드(종목코드 string) (종목 *lib.S종목, 에러 error) {
 	if len(종목맵_전체) == 0 {
 		return nil, lib.New에러("Xing API가 초기화 되어 있지 않습니다.")
+	} else if strings.HasPrefix(종목코드, "B") {
+		return nil, lib.New에러("%v : B로 시작하는 채권 종목입니다.", 종목코드)
 	}
 
 	종목코드 = trade.F종목코드_보정(종목코드)
