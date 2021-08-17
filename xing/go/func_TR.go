@@ -1715,11 +1715,11 @@ func F계좌_별명(계좌_번호 string) (계좌_별명 string, 에러 error) {
 	return 계좌_별명, nil
 }
 
-func F서버_이름() (서버_이름 string, 에러 error) {
-	defer lib.S예외처리{M에러: &에러, M함수: func() { 서버_이름 = "" }}.S실행()
-
-	회신_메시지 := F질의(lib.New질의값_기본형(xt.TR서버_이름, ""))
-	서버_이름 = lib.F확인(회신_메시지.G해석값(0)).(string)
-
-	return 서버_이름, nil
-}
+//func F서버_이름() (서버_이름 string, 에러 error) {
+//	defer lib.S예외처리{M에러: &에러, M함수: func() { 서버_이름 = "" }}.S실행()
+//
+//	회신_메시지 := F질의(lib.New질의값_기본형(xt.TR서버_이름, ""))
+//	서버_이름 = lib.F확인(회신_메시지.G해석값(0)).(string)
+//
+//	return 서버_이름, nil
+//}

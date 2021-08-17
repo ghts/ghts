@@ -66,8 +66,8 @@ func TestF계좌_관련_함수(t *testing.T) {
 	}
 }
 
-func TestF서버_이름(t *testing.T) {
-	서버_이름, 에러 := F서버_이름()
-	lib.F테스트_에러없음(t, 에러)
-	lib.F테스트_다름(t, 서버_이름, "")
-}
+//func TestF서버_이름(t *testing.T) {
+//	서버_이름, 에러 := F서버_이름()
+//	lib.F테스트_에러없음(t, 에러)
+//	lib.F테스트_다름(t, 서버_이름, "")
+//}
