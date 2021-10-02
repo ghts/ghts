@@ -219,7 +219,7 @@ type S재무비율_정보_내용 struct {
 	M매출총이익율    float64
 	M세전계속사업이익율 float64
 	M영업이익율     float64
-	EBITDA마진율  float64
+	//EBITDA마진율  float64	// EBITDA가 왜 싫으세요?" (워런버핏, 찰리멍거) https://youtu.be/7Fze3RRyQTw
 	ROA        float64
 	ROE        float64
 	ROIC       float64
@@ -232,7 +232,7 @@ type S재무비율_정보_내용 struct {
 type S투자지표_정보_내용 struct {
 	M상장주식수    float64
 	EPS       float64
-	EBITDAPS  float64
+	//EBITDAPS  float64	// EBITDA가 왜 싫으세요?" (워런버핏, 찰리멍거) https://youtu.be/7Fze3RRyQTw
 	CFPS      float64
 	SPS       float64
 	BPS       float64
