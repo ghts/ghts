@@ -249,9 +249,7 @@ func F인터넷에_접속됨() bool {
 	URL모음 := []string{
 		"http://finance.daum.net",
 		"http://finance.naver.com",
-		"http://stock.nate.com",
-		"http://finance.yahoo.com",
-		"http://www.google.com/finance"}
+		"http://finance.yahoo.com"}
 
 	ch회신 := make(chan bool, len(URL모음))
 
