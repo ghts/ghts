@@ -41,7 +41,12 @@ func (s *S내재가치_정보_모음) G종목별_최신_정보(종목코드 stri
 }
 
 func (s *S내재가치_정보_모음) G종목별_차최신_정보(종목코드 string) *S내재가치_정보 {
-	차최신_연도 := s.G종목별_최신_정보(종목코드).S내재가치_식별정보.G일자2().Year() - 1
+	최신_정보 := s.G종목별_최신_정보(종목코드)
+	if 최신_정보 == nil {
+		return nil
+	}
+
+	차최신_연도 := 최신_정보.S내재가치_식별정보.G일자2().Year() - 1
 	for 연도 := 차최신_연도; 연도 > 2015; 연도-- {
 		for 월 := 12; 월 > 0; 월-- {
 			키 := 종목코드 + lib.F2문자열(연도*100+월)
@@ -55,7 +60,12 @@ func (s *S내재가치_정보_모음) G종목별_차최신_정보(종목코드 s
 }
 
 func (s *S내재가치_정보_모음) G종목별_차차최신_정보(종목코드 string) *S내재가치_정보 {
-	차차최신_연도 := s.G종목별_최신_정보(종목코드).S내재가치_식별정보.G일자2().Year() - 2
+	최신_정보 := s.G종목별_최신_정보(종목코드)
+	if 최신_정보 == nil {
+		return nil
+	}
+
+	차차최신_연도 := 최신_정보.S내재가치_식별정보.G일자2().Year() - 2
 	for 연도 := 차차최신_연도; 연도 > 2015; 연도-- {
 		for 월 := 12; 월 > 0; 월-- {
 			키 := 종목코드 + lib.F2문자열(연도*100+월)
@@ -219,14 +229,14 @@ type S재무비율_정보_내용 struct {
 	M매출총이익율    float64
 	M세전계속사업이익율 float64
 	M영업이익율     float64
-	EBITDA마진율  float64	// EBITDA가 왜 싫으세요?" (워런버핏, 찰리멍거) https://youtu.be/7Fze3RRyQTw
-	ROA       float64
-	ROE       float64
-	ROIC      float64
-	M총자산회전율   float64
-	M총부채회전율   float64
-	M총자본회전율   float64
-	M순운전자본회전율 float64
+	EBITDA마진율  float64 // EBITDA가 왜 싫으세요?" (워런버핏, 찰리멍거) https://youtu.be/7Fze3RRyQTw
+	ROA        float64
+	ROE        float64
+	ROIC       float64
+	M총자산회전율    float64
+	M총부채회전율    float64
+	M총자본회전율    float64
+	M순운전자본회전율  float64
 }
 
 type S투자지표_정보_내용 struct {
