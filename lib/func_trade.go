@@ -35,6 +35,7 @@ package lib
 
 import (
 	"math"
+	"sort"
 )
 
 func F합계(값_모음 []float64) float64 {
@@ -80,6 +81,19 @@ func F최소값_실수(값_모음 []float64) float64 {
 	}
 
 	return 최소값
+}
+
+func F중간값_실수(값_모음 []float64) float64 {
+	sort.Float64s(값_모음)
+
+	if len(값_모음) % 2 == 1 {
+		return 값_모음[(len(값_모음) - 1) / 2]
+	} else {
+		값1 := 값_모음[len(값_모음) / 2 - 1]
+		값2 := 값_모음[len(값_모음) / 2]
+
+		return (값1 + 값2) / 2
+	}
 }
 
 func F최대값_정수64(값_모음 []int64) int64 {
