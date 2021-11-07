@@ -206,15 +206,30 @@ func (s S내재가치_식별정보) G일자2() time.Time {
 type S재무제표_정보_내용 struct {
 	M매출액      float64
 	M매출총이익    float64
+	M연구개발비    float64
+	M광고선전비    float64
+	M감가상각비    float64
 	M영업이익     float64
+	M이자비용     float64
+	M이자수익     float64
 	M세전계속사업이익 float64
+	M법인세비용    float64
 	M당기순이익    float64
 	M자산       float64
 	M유동자산     float64 // NCAV 전략에 필요함.
-	M현금및현금성자산 float64 // EV계산에 필요함.
+	M비유동자산    float64
+	M현금성자산    float64 // EV계산에 필요함.
+	M재고자산     float64
+	M매출채권     float64
 	M부채       float64
 	M유동부채     float64
+	M비유동부채    float64
+	M단기이자발생부채 float64
+	M장기이자발생부채 float64
 	M자본       float64
+	M자본금      float64
+	M자본잉여금    float64
+	M이익잉여금    float64
 	M영업_현금흐름  float64
 	M투자_현금흐름  float64
 	M재무_현금흐름  float64
