@@ -52,6 +52,9 @@ func TestT8407_F현물_멀티_현재가_조회(t *testing.T) {
 
 func testT8407_F현물_멀티_현재가_조회_반복값_도우미(t *testing.T,
 	응답값_맵 map[string]*xt.T8407_현물_멀티_현재가_조회_응답) {
+	if lib.F지금().Hour() < 9 {
+		t.SkipNow()
+	}
 
 	for 종목코드, 값 := range 응답값_맵 {
 		lib.F테스트_같음(t, 값.M종목코드, 종목코드)
