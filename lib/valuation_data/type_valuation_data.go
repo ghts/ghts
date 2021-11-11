@@ -9,13 +9,6 @@ import (
 	"time"
 )
 
-func F내재가치_정보_모음_DB읽기(db *sql.DB) (s *S내재가치_정보_모음, 에러 error) {
-	s = New내재가치_정보_모음()
-	에러 = s.DB읽기(db)
-
-	return s, 에러
-}
-
 func New내재가치_정보_모음() *S내재가치_정보_모음 {
 	s := new(S내재가치_정보_모음)
 	s.M저장소 = make(map[string]*S내재가치_정보)
@@ -81,7 +74,11 @@ func (s *S내재가치_정보_모음) G종목별_차차최신_정보(종목코�
 func (s *S내재가치_정보_모음) S상장주식수_업데이트(db *sql.DB, 종목코드 string, 수량 int64) error {
 	if 값 := s.G종목별_최신_정보(종목코드); 값 != nil {
 		값.M상장주식수 = float64(수량)
-		return F내재가치_정보_모음_DB저장(db, []*S내재가치_정보{값})
+
+		값_맵 := make(map[string]*S내재가치_정보)
+		값_맵[종목코드] = 값
+
+		return F내재가치_정보_모음_DB저장(db, 값_맵)
 	}
 
 	return nil
@@ -122,13 +119,13 @@ func (s *S내재가치_정보_모음) DB읽기(db *sql.DB) (에러 error) {
 		lib.F확인(rows.Scan(&code, &date, &json))
 
 		if 에러 = lib.F디코딩(lib.JSON, []byte(json), &값); 에러 != nil {
-			lib.F문자열_출력("%v %v : 디코딩 에러\n%v", code, date.Format(lib.P일자_형식), 에러)
+			lib.New에러with출력("%v %v : 디코딩 에러\n%v", code, date.Format(lib.P일자_형식), 에러)
 			continue
 		} else if 값 == nil {
-			lib.F문자열_출력("%v %v : nil 값", code, date.Format(lib.P일자_형식))
+			lib.New에러with출력("%v %v : nil 값", code, date.Format(lib.P일자_형식))
 			continue
 		} else if 값.S내재가치_식별정보 == nil {
-			lib.F문자열_출력("%v %v : nil 식별정보", code, date.Format(lib.P일자_형식))
+			lib.New에러with출력("%v %v : nil 식별정보", code, date.Format(lib.P일자_형식))
 			continue
 		}
 
@@ -139,17 +136,7 @@ func (s *S내재가치_정보_모음) DB읽기(db *sql.DB) (에러 error) {
 }
 
 func (s *S내재가치_정보_모음) DB저장(db *sql.DB) error {
-	// 맵 데이터를 슬라이스 형태로 변환
-	값_모음 := make([]*S내재가치_정보, len(s.M저장소))
-
-	i := 0
-	for _, 값 := range s.M저장소 {
-		값_모음[i] = 값
-		i++
-	}
-
-	// 슬라이스 데이터 DB에 저장
-	return F내재가치_정보_모음_DB저장(db, 값_모음)
+	return F내재가치_정보_모음_DB저장(db, s.M저장소)
 }
 
 type S내재가치_정보 struct {
@@ -237,17 +224,17 @@ type S재무제표_정보_내용 struct {
 }
 
 type S재무비율_정보_내용 struct {
-	M유동_비율     float64
-	M당좌_비율     float64
-	M부채_비율     float64
-	M이자보상배율    float64
-	M매출총이익율    float64
-	M세전계속사업이익율 float64
-	M영업이익율     float64
-	EBITDA마진율  float64 // EBITDA가 왜 싫으세요?" (워런버핏, 찰리멍거) https://youtu.be/7Fze3RRyQTw
-	ROA        float64
-	ROE        float64
-	ROIC       float64
+	//M유동_비율     float64
+	//M당좌_비율     float64
+	//M부채_비율     float64
+	//M이자보상배율    float64
+	//M매출총이익율    float64
+	//M세전계속사업이익율 float64
+	//M영업이익율     float64
+	//EBITDA마진율  float64 // EBITDA가 왜 싫으세요?" (워런버핏, 찰리멍거) https://youtu.be/7Fze3RRyQTw
+	//ROA        float64
+	//ROE        float64
+	//ROIC       float64
 	M총자산회전율    float64
 	M총부채회전율    float64
 	M총자본회전율    float64
@@ -257,7 +244,7 @@ type S재무비율_정보_내용 struct {
 type S투자지표_정보_내용 struct {
 	M상장주식수    float64
 	EPS       float64
-	EBITDAPS  float64 // EBITDA가 왜 싫으세요?" (워런버핏, 찰리멍거) https://youtu.be/7Fze3RRyQTw
+	//EBITDAPS  float64 // EBITDA가 왜 싫으세요?" (워런버핏, 찰리멍거) https://youtu.be/7Fze3RRyQTw
 	CFPS      float64
 	SPS       float64
 	BPS       float64
@@ -270,7 +257,14 @@ type S투자지표_정보_내용 struct {
 	FCFF      float64
 }
 
-func F내재가치_정보_모음_DB저장(db *sql.DB, 값_모음 []*S내재가치_정보) (에러 error) {
+func F내재가치_정보_모음_DB읽기(db *sql.DB) (s *S내재가치_정보_모음, 에러 error) {
+	s = New내재가치_정보_모음()
+	에러 = s.DB읽기(db)
+
+	return s, 에러
+}
+
+func F내재가치_정보_모음_DB저장(db *sql.DB, 값_맵 map[string]*S내재가치_정보) (에러 error) {
 	var tx *sql.Tx
 	defer lib.S예외처리{M에러: &에러, M함수: func() { lib.F조건부_실행(tx != nil, tx.Rollback) }}.S실행()
 
@@ -302,14 +296,14 @@ func F내재가치_정보_모음_DB저장(db *sql.DB, 값_모음 []*S내재가�
 	lib.F확인(에러)
 	defer stmt수정.Close()
 
-	for _, 값 := range 값_모음 {
+	for 종목코드, 값 := range 값_맵 {
 		json, 에러 := lib.F인코딩(lib.JSON, 값)
 		lib.F확인(에러)
 
-		_, 에러 = stmt생성.Exec(값.M종목코드, 값.G일자())
+		_, 에러 = stmt생성.Exec(종목코드, 값.G일자())
 		lib.F확인(에러)
 
-		_, 에러 = stmt수정.Exec(string(json), 값.M종목코드, 값.G일자())
+		_, 에러 = stmt수정.Exec(string(json), 종목코드, 값.G일자())
 		lib.F확인(에러)
 	}
 
