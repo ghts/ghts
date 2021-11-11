@@ -520,6 +520,7 @@ func F특수_종목_여부(종목코드 string) bool {
 	switch {
 	case strings.Contains(종목명, "리츠"),
 		strings.Contains(종목명, "스팩"),
+		strings.Contains(종목명, "SPAC"),
 		strings.Contains(종목명, "하이골드"),
 		strings.Contains(종목명, "1호"),
 		strings.Contains(종목명, "2호"),
