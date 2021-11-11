@@ -224,26 +224,26 @@ type S재무제표_정보_내용 struct {
 }
 
 type S재무비율_정보_내용 struct {
-	M유동_비율     float64
+	M유동_비율 float64
 	//M당좌_비율     float64
-	M부채_비율     float64
+	M부채_비율 float64
 	//M이자보상배율    float64
 	//M매출총이익율    float64
 	//M세전계속사업이익율 float64
-	M영업이익율     float64
+	M영업이익율 float64
 	//EBITDA마진율  float64 // EBITDA가 왜 싫으세요?" (워런버핏, 찰리멍거) https://youtu.be/7Fze3RRyQTw
-	ROA        float64
-	ROE        float64
-	ROIC       float64
-	M총자산회전율    float64
-	M총부채회전율    float64
-	M총자본회전율    float64
-	M순운전자본회전율  float64
+	ROA       float64
+	ROE       float64
+	ROIC      float64
+	M총자산회전율   float64
+	M총부채회전율   float64
+	M총자본회전율   float64
+	M순운전자본회전율 float64
 }
 
 type S투자지표_정보_내용 struct {
-	M상장주식수    float64
-	EPS       float64
+	M상장주식수 float64
+	EPS    float64
 	//EBITDAPS  float64 // EBITDA가 왜 싫으세요?" (워런버핏, 찰리멍거) https://youtu.be/7Fze3RRyQTw
 	CFPS      float64
 	SPS       float64
