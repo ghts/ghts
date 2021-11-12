@@ -36,6 +36,7 @@ package xing
 import (
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/lib/trade"
+	xt "github.com/ghts/ghts/xing/base"
 	"strings"
 	"time"
 )
@@ -245,6 +246,7 @@ func F종목_정보_설정() (에러 error) {
 			종목모음_ETF = make([]*lib.S종목, 0)
 			종목모음_ETN = make([]*lib.S종목, 0)
 			종목모음_ETF_ETN = make([]*lib.S종목, 0)
+			특수_종목_맵 = make(map[string]*lib.S종목)
 			종목모음_전체 = make([]*lib.S종목, 0)
 			종목맵_전체 = make(map[string]*lib.S종목)
 			기준가_맵 = make(map[string]int64)
@@ -273,6 +275,7 @@ func F종목_정보_설정() (에러 error) {
 	종목모음_ETF = make([]*lib.S종목, 0)
 	종목모음_ETN = make([]*lib.S종목, 0)
 	종목모음_ETF_ETN = make([]*lib.S종목, 0)
+	특수_종목_맵 = make(map[string]*lib.S종목)
 	종목모음_전체 = make([]*lib.S종목, 0)
 	종목맵_전체 = make(map[string]*lib.S종목)
 	기준가_맵 = make(map[string]int64)
@@ -297,6 +300,17 @@ func F종목_정보_설정() (에러 error) {
 		case lib.P시장구분_ETN:
 			종목모음_ETN = append(종목모음_ETN, 종목)
 			종목모음_ETF_ETN = append(종목모음_ETF_ETN, 종목)
+		}
+
+		switch s.M증권그룹 {
+		case xt.P증권그룹_예탁증서,
+			xt.P증권그룹_증권투자회사_뮤추얼펀드,
+			xt.P증권그룹_Reits종목,
+			xt.P증권그룹_선박투자회사,
+			xt.P증권그룹_인프라투융자회사,
+			xt.P증권그룹_해외ETF,
+			xt.P증권그룹_해외원주:
+			특수_종목_맵[s.M종목코드] = 종목
 		}
 	}
 
@@ -510,6 +524,10 @@ func F지주회사_종목_여부(종목코드 string) bool {
 }
 
 func F특수_종목_여부(종목코드 string) bool {
+	if _, 존재함 := 특수_종목_맵[종목코드]; 존재함 {
+		return true
+	}
+
 	종목, 에러 := F종목by코드(종목코드)
 	if 에러 != nil {
 		return false

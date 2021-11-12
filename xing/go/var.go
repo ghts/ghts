@@ -88,6 +88,7 @@ var (
 	종목모음_ETN     = make([]*lib.S종목, 0)
 	종목모음_ETF_ETN = make([]*lib.S종목, 0)
 	종목모음_전체      = make([]*lib.S종목, 0)
+	특수_종목_맵      = make(map[string]*lib.S종목)
 	기준가_맵        = make(map[string]int64)
 	하한가_맵        = make(map[string]int64)
 	계좌번호_모음      []string
