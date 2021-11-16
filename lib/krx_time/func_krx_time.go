@@ -5,7 +5,13 @@ import (
 	"time"
 )
 
-const p임시_지연_시간 = 0 * lib.P1시간
+func F임시_지연_시간() time.Duration {
+	if 지금 := time.Now(); 지금.Year() == 2021 && 지금.Month() == time.November && 지금.Day() == 18 {
+		return time.Hour	// 2021년 11월 16일 수능으로 인해 1시간 순연.
+	} else {
+		return 0
+	}
+}
 
 func F한국증시_정규_거래_시간임() bool {
 	return f한국증시_거래시간_도우미(9, 0, 15, 20)
@@ -66,9 +72,9 @@ func f한국증시_거래시간_도우미(시작_시간, 시작_분, 종료_시�
 	시작_시각 := time.Date(값.Year(), 값.Month(), 값.Day(), 시작_시간, 시작_분, 0, 0, 로케일)
 	종료_시각 := time.Date(값.Year(), 값.Month(), 값.Day(), 종료_시간, 종료_분, 0, 0, 로케일)
 
-	if int64(p임시_지연_시간) != 0 {
-		시작_시각 = 시작_시각.Add(p임시_지연_시간)
-		종료_시각 = 종료_시각.Add(p임시_지연_시간)
+	if int64(F임시_지연_시간()) != 0 {
+		시작_시각 = 시작_시각.Add(F임시_지연_시간())
+		종료_시각 = 종료_시각.Add(F임시_지연_시간())
 	}
 
 	if 지금.After(시작_시각) && 지금.Before(종료_시각) {
