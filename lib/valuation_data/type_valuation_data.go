@@ -297,14 +297,14 @@ func F내재가치_정보_모음_DB저장(db *sql.DB, 값_맵 map[string]*S내�
 	lib.F확인(에러)
 	defer stmt수정.Close()
 
-	for 종목코드, 값 := range 값_맵 {
+	for _, 값 := range 값_맵 {
 		json, 에러 := lib.F인코딩(lib.JSON, 값)
 		lib.F확인(에러)
 
-		_, 에러 = stmt생성.Exec(종목코드, 값.G일자())
+		_, 에러 = stmt생성.Exec(값.M종목코드, 값.G일자())
 		lib.F확인(에러)
 
-		_, 에러 = stmt수정.Exec(string(json), 종목코드, 값.G일자())
+		_, 에러 = stmt수정.Exec(string(json), 값.M종목코드, 값.G일자())
 		lib.F확인(에러)
 	}
 
