@@ -99,7 +99,7 @@ func F초기화(서버_구분 xt.T서버_구분, 로그인_ID, 로그인_암호,
 	lib.F확인(F전일_당일_설정())
 	//f접속유지_실행()
 
-	fmt.Println("**     Xing 초기화 완료     **")
+	fmt.Println("** Xing API 초기화 완료 **")
 }
 
 func F소켓_생성() {
@@ -225,7 +225,7 @@ func f초기화_작동_확인() (작동_여부 bool) {
 		return false
 	}
 
-	fmt.Println("**     C32 동작 확인 완료     **")
+	fmt.Println("** x32 동작 확인 완료**")
 
 	return true
 }
