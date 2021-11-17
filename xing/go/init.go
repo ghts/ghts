@@ -225,7 +225,7 @@ func f초기화_작동_확인() (작동_여부 bool) {
 		return false
 	}
 
-	fmt.Println("** x32 동작 확인 완료**")
+	//fmt.Println("** x32 동작 확인 완료**")
 
 	return true
 }

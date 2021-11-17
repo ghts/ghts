@@ -36,7 +36,6 @@ package x32
 import (
 	"bytes"
 	"encoding/binary"
-	"fmt"
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/lib/dll"
 	"github.com/ghts/ghts/xing/base"
@@ -275,7 +274,7 @@ func OnLogin(wParam, lParam unsafe.Pointer) {
 	로그인_성공_여부 := 에러 == nil && 정수 == 0
 
 	if 로그인_성공_여부 {
-		fmt.Println("** Xing LOGIN SUCCESS **")
+		//fmt.Println("** Xing LOGIN SUCCESS **")
 
 		F콜백(lib.New콜백_신호(lib.P신호_C32_LOGIN))
 	} else {
