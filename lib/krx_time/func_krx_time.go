@@ -84,7 +84,6 @@ func f한국증시_거래시간_도우미(시작_시간, 시작_분, 종료_시�
 	return false
 }
 
-
 func F대기_한국_시각(시, 분, 초 int) {
 	목표_시각 := lib.F2금일_한국_시각_단순형(시, 분, 초).Add(F임시_지연_시간())
 	지금 := lib.F지금()
@@ -93,4 +92,8 @@ func F대기_한국_시각(시, 분, 초 int) {
 		대기_시간 := 목표_시각.Sub(지금)
 		lib.F대기(대기_시간)
 	}
+}
+
+func F금일_보정_시각(시, 분, 초 int) time.Time {
+	return lib.F금일().Add(F임시_지연_시간() + time.Duration(시)*lib.P1시간 + time.Duration(분)*lib.P1분 + time.Duration(초)*lib.P1초)
 }
