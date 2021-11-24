@@ -335,6 +335,16 @@ func F종목by코드(종목코드 string) (종목 *lib.S종목, 에러 error) {
 	}
 }
 
+func F종목명by코드(종목코드 string) (종목명 string, 에러 error) {
+	if 종목, 에러 := F종목by코드(종목코드); 에러 != nil {
+		return "", 에러
+	} else if 종목명 := 종목.G이름(); 종목명 == "" {
+		return "", lib.New에러("%v : 종목명 없음", 종목코드)
+	} else {
+		return 종목명, nil
+	}
+}
+
 func F임의_종목() *lib.S종목 {
 	return f임의_종목_추출(종목모음_전체)
 }
@@ -559,11 +569,43 @@ func F지주회사_종목_여부(종목코드 string) bool {
 		return true
 	}
 
-	if 종목, 존재함 := 종목맵_전체[종목코드]; 존재함 {
-		if 종목명 := 종목.G이름(); strings.HasSuffix(종목명, "홀딩스") ||
-			strings.HasSuffix(종목명, "지주") {
-			return true
-		}
+	if 종목명, 에러 := F종목명by코드(종목코드); 에러 != nil {
+		return false
+	} else if strings.HasSuffix(종목명, "홀딩스") ||
+		strings.HasSuffix(종목명, "지주") {
+		return true
+	}
+
+	return false
+}
+
+func F금융사_종목_여부(종목코드 string) bool {
+	if 종목명, 에러 := F종목명by코드(종목코드); 에러 != nil {
+		return false
+	} else if strings.Contains(종목명, "금융") ||
+		strings.HasSuffix(종목명, "은행") ||
+		strings.HasSuffix(종목명, "뱅크") ||
+		strings.Contains(종목명, "저축") ||
+		strings.HasSuffix(종목명, "증권") ||
+		strings.Contains(종목명, "카드") ||
+		strings.Contains(종목명, "보험") ||
+		strings.Contains(종목명, "생명") ||
+		strings.Contains(종목명, "손해") ||
+		strings.Contains(종목명, "화재") ||
+		strings.Contains(종목명, "해상") ||
+		strings.Contains(종목명, "캐피탈") ||
+		strings.Contains(종목명, "인베스트") ||
+		strings.Contains(종목명, "투자") ||
+		strings.HasPrefix(종목명, "신한") ||
+		strings.HasPrefix(종목명, "하나") ||
+		strings.HasPrefix(종목명, "KB") ||
+		strings.HasPrefix(종목명, "BNK") ||
+		strings.HasPrefix(종목명, "DGB") ||
+		strings.HasPrefix(종목명, "JB") ||
+		strings.HasPrefix(종목명, "메리츠") ||
+		strings.Contains(종목명, "리드코프") ||
+		strings.Contains(종목명, "코리안리") {
+		return true
 	}
 
 	return false
