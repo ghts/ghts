@@ -115,3 +115,13 @@ func F최소값_정수64(값_모음 []int64) int64 {
 
 	return 최소값
 }
+
+func F중간값_정수64(값_모음 []int64) int64 {
+	실수값_모음 := make([]float64, len(값_모음))
+
+	for i, 값 := range 값_모음 {
+		실수값_모음[i] = float64(값)
+	}
+
+	return int64(F중간값_실수(실수값_모음))
+}
