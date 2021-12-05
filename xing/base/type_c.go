@@ -3766,6 +3766,8 @@ type HA_OutBlock struct {
 	X_shcode      byte
 	Gubun         [1]byte
 	X_alloc_gubun byte
+	Volume        [12]byte
+	X_volume      byte
 }
 type S3_OutBlock struct {
 	Chetime      [6]byte
