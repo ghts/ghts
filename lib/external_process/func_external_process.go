@@ -63,7 +63,7 @@ func (s *s안전한_프로세스ID_저장소) S추가(프로세스ID int) {
 	s.Lock()
 	defer s.Unlock()
 
-	s.저장소[프로세스ID] = lib.S비어있음{}
+	s.저장소[프로세스ID] = lib.F비어있는_값()
 	lib.F확인(lib.F파일에_값_저장(s.저장소, s.파일명, nil))
 }
 

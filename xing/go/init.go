@@ -432,7 +432,7 @@ func F초기화_TR전송_제한() (에러 error) {
 	TR코드_맵 := make(map[string]lib.S비어있음)
 
 	for _, TR코드 := range TR코드_모음 {
-		TR코드_맵[TR코드] = lib.S비어있음{}
+		TR코드_맵[TR코드] = lib.F비어있는_값()
 	}
 
 	TR코드_모음 = make([]string, 0)
