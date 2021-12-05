@@ -136,9 +136,7 @@ C언어 컴파일러가 추가로 필요합니다.  <br>
 MSYS2에서 C 컴파일러 설치 ('MSYS2 -> MSYS' 터미널에서 아래 명령을 실행.)
 
 <pre><code>pacman -Syuu 
-pacman -S base-devel
-pacman -S mingw-w64-i686-toolchain
-pacman -S mingw-w64-x86_64-toolchain</code></pre>
+pacman -S base-devel mingw-w64-i686-toolchain mingw-w64-x86_64-toolchain</code></pre>
 
 *********************************************************
 
