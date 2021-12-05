@@ -199,6 +199,7 @@ func New코스피_호가_잔량(b []byte) (값 *S호가_잔량_실시간_정보,
 	값.M시각 = lib.F2금일_시각_단순형("150405", g.Hotime)
 	값.M동시호가_구분 = T동시호가_구분(lib.F2정수64_단순형(g.Donsigubun))
 	값.M배분적용_구분 = lib.F2참거짓(g.Gubun, " ", false)
+	값.M누적_거래량 = lib.F2정수64_단순형(g.Volume)
 
 	매도호가_모음 := []int64{
 		lib.F2정수64_단순형(g.Offerho1), lib.F2정수64_단순형(g.Offerho2), lib.F2정수64_단순형(g.Offerho3),
@@ -294,6 +295,7 @@ func New코스닥_호가_잔량(b []byte) (값 *S호가_잔량_실시간_정보,
 	값.M시각 = lib.F2금일_시각_단순형("150405", g.Hotime)
 	값.M동시호가_구분 = T동시호가_구분(lib.F2정수64_단순형(g.Donsigubun))
 	값.M배분적용_구분 = lib.F2참거짓(g.Gubun, " ", false)
+	값.M누적_거래량 = lib.F2정수64_단순형(g.Volume)
 
 	매도호가_모음 := []int64{
 		lib.F2정수64_단순형(g.Offerho1), lib.F2정수64_단순형(g.Offerho2), lib.F2정수64_단순형(g.Offerho3),
@@ -353,6 +355,25 @@ func New코스닥_호가_잔량(b []byte) (값 *S호가_잔량_실시간_정보,
 
 	값.M매도_총잔량 = lib.F2정수64_단순형(g.Totofferrem)
 	값.M매수_총잔량 = lib.F2정수64_단순형(g.Totbidrem)
+
+	return 값, nil
+}
+
+func New코스닥_시간외_호가_잔량(b []byte) (값 *S코스닥_시간외_호가_잔량_실시간_정보, 에러 error) {
+	defer lib.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+
+	lib.F조건부_패닉(len(b) != SizeHB_OutBlock, "예상하지 못한 길이 : '%v", len(b))
+
+	g := new(H2_OutBlock)
+	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
+
+	값 = new(S코스닥_시간외_호가_잔량_실시간_정보)
+	값.M종목코드 = lib.F2문자열(g.Shcode)
+	값.M시각 = lib.F2금일_시각_단순형("150405", g.Hotime)
+	값.M매도잔량 = lib.F2정수64_단순형(g.Tmofferrem)
+	값.M매수잔량 = lib.F2정수64_단순형(g.Tmbidrem)
+	값.M매도수량_직전대비 = lib.F2정수64_단순형(g.Pretmoffercha)
+	값.M매수수량_직전대비 = lib.F2정수64_단순형(g.Pretmbidcha)
 
 	return 값, nil
 }

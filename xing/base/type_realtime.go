@@ -59,6 +59,7 @@ type S호가_잔량_실시간_정보 struct {
 	M시각      time.Time
 	M동시호가_구분 T동시호가_구분
 	M배분적용_구분 bool
+	M누적_거래량  int64
 	M매도호가_모음 []int64
 	M매도잔량_모음 []int64
 	M매수호가_모음 []int64
@@ -69,7 +70,7 @@ type S호가_잔량_실시간_정보 struct {
 
 func (s S호가_잔량_실시간_정보) TR코드() string { return s.RT코드 }
 
-type S코스피_시간외_호가_잔량_실시간_정보 struct {
+type s시간외_호가_잔량_실시간_정보 struct {
 	M종목코드      string
 	M시각        time.Time
 	M매도잔량      int64
@@ -78,8 +79,16 @@ type S코스피_시간외_호가_잔량_실시간_정보 struct {
 	M매수수량_직전대비 int64
 }
 
+type S코스피_시간외_호가_잔량_실시간_정보 s시간외_호가_잔량_실시간_정보
+
 func (s S코스피_시간외_호가_잔량_실시간_정보) TR코드() string {
 	return RT코스피_시간외_호가_잔량_H2
+}
+
+type S코스닥_시간외_호가_잔량_실시간_정보 s시간외_호가_잔량_실시간_정보
+
+func (s S코스닥_시간외_호가_잔량_실시간_정보) TR코드() string {
+	return RT코스닥_시간외_호가_잔량_HB
 }
 
 type S코스피_체결 struct {
