@@ -3769,6 +3769,20 @@ type HA_OutBlock struct {
 	Volume        [12]byte
 	X_volume      byte
 }
+type HB_OutBlock struct {
+	Hotime          [6]byte
+	X_hotime        byte
+	Tmofferrem      [12]byte
+	X_tmofferrem    byte
+	Tmbidrem        [12]byte
+	X_tmbidrem      byte
+	Pretmoffercha   [12]byte
+	X_pretmoffercha byte
+	Pretmbidcha     [12]byte
+	X_pretmbidcha   byte
+	Shcode          [6]byte
+	X_shcode        byte
+}
 type S3_OutBlock struct {
 	Chetime      [6]byte
 	X_chetime    byte
