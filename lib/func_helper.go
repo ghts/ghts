@@ -152,7 +152,6 @@ func F중간값_정수(값_모음 ...int) int {
 	}
 }
 
-
 func F절대값_정수(값 int) int {
 	return F조건부_정수(값 < 0, -1*값, 값)
 }

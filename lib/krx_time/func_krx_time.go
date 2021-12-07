@@ -7,7 +7,7 @@ import (
 
 func F임시_지연_시간() time.Duration {
 	if 지금 := time.Now(); 지금.Year() == 2021 && 지금.Month() == time.November && 지금.Day() == 18 {
-		return time.Hour	// 2021년 11월 16일 수능으로 인해 1시간 순연.
+		return time.Hour // 2021년 11월 16일 수능으로 인해 1시간 순연.
 	} else {
 		return 0
 	}
