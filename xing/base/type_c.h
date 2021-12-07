@@ -3164,6 +3164,55 @@ typedef struct {
 } YS3OutBlock;
 
 //------------------------------------------------------------------------------
+// 코스닥 체결 (K3_)
+//------------------------------------------------------------------------------
+typedef struct {
+    char    chetime             [   6];    char    _chetime             ;    // [string,    6] 체결시간                        StartPos 0, Length 6
+    char    sign                [   1];    char    _sign                ;    // [string,    1] 전일대비구분                    StartPos 7, Length 1
+    char    change              [   8];    char    _change              ;    // [long  ,    8] 전일대비                        StartPos 9, Length 8
+    char    drate               [   6];    char    _drate               ;    // [float ,  6.2] 등락율                          StartPos 18, Length 6
+    char    price               [   8];    char    _price               ;    // [long  ,    8] 현재가                          StartPos 25, Length 8
+    char    opentime            [   6];    char    _opentime            ;    // [string,    6] 시가시간                        StartPos 34, Length 6
+    char    open                [   8];    char    _open                ;    // [long  ,    8] 시가                            StartPos 41, Length 8
+    char    hightime            [   6];    char    _hightime            ;    // [string,    6] 고가시간                        StartPos 50, Length 6
+    char    high                [   8];    char    _high                ;    // [long  ,    8] 고가                            StartPos 57, Length 8
+    char    lowtime             [   6];    char    _lowtime             ;    // [string,    6] 저가시간                        StartPos 66, Length 6
+    char    low                 [   8];    char    _low                 ;    // [long  ,    8] 저가                            StartPos 73, Length 8
+    char    cgubun              [   1];    char    _cgubun              ;    // [string,    1] 체결구분                        StartPos 82, Length 1
+    char    cvolume             [   8];    char    _cvolume             ;    // [long  ,    8] 체결량                          StartPos 84, Length 8
+    char    volume              [  12];    char    _volume              ;    // [long  ,   12] 누적거래량                      StartPos 93, Length 12
+    char    value               [  12];    char    _value               ;    // [long  ,   12] 누적거래대금                    StartPos 106, Length 12
+    char    mdvolume            [  12];    char    _mdvolume            ;    // [long  ,   12] 매도누적체결량                  StartPos 119, Length 12
+    char    mdchecnt            [   8];    char    _mdchecnt            ;    // [long  ,    8] 매도누적체결건수                StartPos 132, Length 8
+    char    msvolume            [  12];    char    _msvolume            ;    // [long  ,   12] 매수누적체결량                  StartPos 141, Length 12
+    char    mschecnt            [   8];    char    _mschecnt            ;    // [long  ,    8] 매수누적체결건수                StartPos 154, Length 8
+    char    cpower              [   9];    char    _cpower              ;    // [float ,  9.2] 체결강도                        StartPos 163, Length 9
+    char    wAvrg              [   8];    char    _w_avrg              ;    // [long  ,    8] 가중평균가                      StartPos 173, Length 8
+    char    offerho             [   8];    char    _offerho             ;    // [long  ,    8] 매도호가                        StartPos 182, Length 8
+    char    bidho               [   8];    char    _bidho               ;    // [long  ,    8] 매수호가                        StartPos 191, Length 8
+    char    status              [   2];    char    _status              ;    // [string,    2] 장정보                          StartPos 200, Length 2
+    char    jnilvolume          [  12];    char    _jnilvolume          ;    // [long  ,   12] 전일동시간대거래량              StartPos 203, Length 12
+    char    shcode              [   6];    char    _shcode              ;    // [string,    6] 단축코드                        StartPos 216, Length 6
+} K3_OutBlock;
+
+//------------------------------------------------------------------------------
+// 코스닥 예상 체결 (YK3)
+//------------------------------------------------------------------------------
+typedef struct {
+    char    hotime              [   6];    char    _hotime              ;    // [string,    6] 호가시간                        StartPos 0, Length 6
+    char    yeprice             [   8];    char    _yeprice             ;    // [long  ,    8] 예상체결가격                    StartPos 7, Length 8
+    char    yevolume            [  12];    char    _yevolume            ;    // [long  ,   12] 예상체결수량                    StartPos 16, Length 12
+    char    jnilysign           [   1];    char    _jnilysign           ;    // [string,    1] 예상체결가전일종가대비구분      StartPos 29, Length 1
+    char    preychange          [   8];    char    _preychange          ;    // [long  ,    8] 예상체결가전일종가대비          StartPos 31, Length 8
+    char    jnilydrate          [   6];    char    _jnilydrate          ;    // [float ,  6.2] 예상체결가전일종가등락율        StartPos 40, Length 6
+    char    yofferho0           [   8];    char    _yofferho0           ;    // [long  ,    8] 예상매도호가                    StartPos 47, Length 8
+    char    ybidho0             [   8];    char    _ybidho0             ;    // [long  ,    8] 예상매수호가                    StartPos 56, Length 8
+    char    yofferrem0          [  12];    char    _yofferrem0          ;    // [long  ,   12] 예상매도호가수량                StartPos 65, Length 12
+    char    ybidrem0            [  12];    char    _ybidrem0            ;    // [long  ,   12] 예상매수호가수량                StartPos 78, Length 12
+    char    shcode              [   6];    char    _shcode              ;    // [string,    6] 단축코드                        StartPos 91, Length 6
+} YK3OutBlock;
+
+//------------------------------------------------------------------------------
 // 코스피 ETF종목 실시간 NAV (I5_)
 //------------------------------------------------------------------------------
 typedef struct {

@@ -579,6 +579,10 @@ func F바이트_변환값_해석_Raw(바이트_변환값 *lib.S바이트_변환)
 		return New코스피_체결(b)
 	case RT코스피_예상_체결_YS3:
 		return New코스피_예상_체결(b)
+	case RT코스닥_체결_K3:
+		return New코스닥_체결(b)
+	case RT코스닥_예상_체결_YK3:
+		return New코스닥_예상_체결(b)
 	case RT코스피_ETF_NAV_I5:
 		return New코스피_ETF_NAV(b)
 	case RT주식_VI발동해제_VI:
@@ -587,8 +591,7 @@ func F바이트_변환값_해석_Raw(바이트_변환값 *lib.S바이트_변환)
 		return New시간외_단일가VI발동해제(b)
 	case RT장_운영정보_JIF:
 		return New장_운영정보(b)
-	case RT코스닥_체결, RT코스닥_예상_체결, RT코스피_거래원, RT코스닥_거래원,
-		RT코스피_기세, RT코스닥_LP호가,
+	case RT코스피_거래원, RT코스닥_거래원, RT코스피_기세, RT코스닥_LP호가,
 		RT지수, RT예상지수, RT실시간_뉴스_제목_패킷, RT업종별_투자자별_매매_현황:
 		return nil, lib.New에러("미구현 RT코드 : '%v'", 자료형_문자열)
 	//case P자료형_CFOAQ00600OutBlock:

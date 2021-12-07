@@ -91,7 +91,7 @@ func (s S코스닥_시간외_호가_잔량_실시간_정보) TR코드() string {
 	return RT코스닥_시간외_호가_잔량_HB
 }
 
-type S코스피_체결 struct {
+type S체결 struct {
 	M종목코드      string
 	M시각        time.Time
 	M전일대비구분    T전일대비_구분
@@ -120,9 +120,15 @@ type S코스피_체결 struct {
 	M전일동시간대거래량 int64
 }
 
+type S코스피_체결 S체결
+
 func (s S코스피_체결) TR코드() string { return RT코스피_체결_S3 }
 
-type S코스피_예상_체결 struct {
+type S코스닥_체결 S체결
+
+func (s S코스닥_체결) TR코드() string { return RT코스닥_체결_K3 }
+
+type S예상_체결 struct {
 	M종목코드           string
 	M시각             time.Time
 	M예상체결가격         int64
@@ -136,7 +142,13 @@ type S코스피_예상_체결 struct {
 	M예상매수호가수량       int64
 }
 
+type S코스피_예상_체결 S예상_체결
+
 func (s S코스피_예상_체결) TR코드() string { return RT코스피_예상_체결_YS3 }
+
+type S코스닥_예상_체결 S예상_체결
+
+func (s S코스닥_예상_체결) TR코드() string { return RT코스닥_예상_체결_YK3 }
 
 type S코스피_ETF_NAV struct {
 	M종목코드      string

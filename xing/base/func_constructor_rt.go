@@ -461,6 +461,89 @@ func New코스피_예상_체결(b []byte) (값 *S코스피_예상_체결, 에러
 	return 값, nil
 }
 
+func New코스닥_체결(b []byte) (값 *S코스닥_체결, 에러 error) {
+	defer lib.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+
+	lib.F조건부_패닉(len(b) != SizeK3_OutBlock, "예상하지 못한 길이 : '%v", len(b))
+
+	g := new(K3_OutBlock)
+	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
+
+	값 = new(S코스닥_체결)
+	값.M종목코드 = lib.F2문자열(g.Shcode)
+	값.M시각 = lib.F2금일_시각_단순형("150405", g.Chetime)
+	값.M전일대비구분 = T전일대비_구분(lib.F2정수64_단순형(g.Sign))
+	값.M전일대비등락폭 = lib.F2정수64_단순형(g.Change)
+	값.M전일대비등락율 = lib.F2실수_단순형(g.Drate)
+	값.M현재가 = lib.F2정수64_단순형(g.Price)
+	값.M시가시각 = lib.F2금일_시각_단순형("150405", g.Opentime)
+	값.M시가 = lib.F2정수64_단순형(g.Open)
+	값.M고가시각 = lib.F2금일_시각_단순형("150405", g.Hightime)
+	값.M고가 = lib.F2정수64_단순형(g.High)
+	값.M저가시각 = lib.F2금일_시각_단순형("150405", g.Lowtime)
+	값.M저가 = lib.F2정수64_단순형(g.Low)
+
+	switch lib.F2문자열(g.Cgubun) {
+	case "+":
+		값.M매도_매수_구분 = lib.P매수
+	case "-":
+		값.M매도_매수_구분 = lib.P매도
+	default:
+		panic(lib.New에러("예상하지 못한 체결구분 값 : '%v'", lib.F2문자열(g.Cgubun)))
+	}
+
+	값.M체결량 = lib.F2정수64_단순형(g.Cvolume)
+	값.M누적거래량 = lib.F2정수64_단순형(g.Volume)
+	값.M누적거래대금 = lib.F2정수64_단순형(g.Value)
+	값.M매도누적체결량 = lib.F2정수64_단순형(g.Mdvolume)
+	값.M매도누적체결건수 = lib.F2정수64_단순형(g.Mdchecnt)
+	값.M매수누적체결량 = lib.F2정수64_단순형(g.Msvolume)
+	값.M매수누적체결건수 = lib.F2정수64_단순형(g.Mschecnt)
+	값.M체결강도 = lib.F2실수_단순형(g.Cpower)
+	값.M가중평균가 = lib.F2정수64_단순형(g.WAvrg)
+	값.M매도호가 = lib.F2정수64_단순형(g.Offerho)
+	값.M매수호가 = lib.F2정수64_단순형(g.Bidho)
+
+	switch lib.F2문자열_공백_제거(g.Status) {
+	case "0", "00":
+		값.M장_정보 = lib.P장_중
+	case "4", "04":
+		값.M장_정보 = lib.P장_후_시간외
+	case "10":
+		값.M장_정보 = lib.P장_전_시간외
+	default:
+		panic(lib.New에러("예상하지 못한 장 정보 값 : '%v'", lib.F2문자열_공백_제거(g.Status)))
+	}
+
+	값.M전일동시간대거래량 = lib.F2정수64_단순형(g.Jnilvolume)
+
+	return 값, nil
+}
+
+func New코스닥_예상_체결(b []byte) (값 *S코스닥_예상_체결, 에러 error) {
+	defer lib.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+
+	lib.F조건부_패닉(len(b) != SizeYK3OutBlock, "예상하지 못한 길이 : '%v", len(b))
+
+	g := new(YK3OutBlock)
+	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
+
+	값 = new(S코스닥_예상_체결)
+	값.M종목코드 = lib.F2문자열(g.Shcode)
+	값.M시각 = lib.F2금일_시각_단순형("150405", g.Hotime)
+	값.M예상체결가격 = lib.F2정수64_단순형(g.Yeprice)
+	값.M예상체결수량 = lib.F2정수64_단순형(g.Yevolume)
+	값.M예상체결가전일종가대비구분 = T전일대비_구분(lib.F2정수64_단순형(g.Jnilysign))
+	값.M예상체결가전일종가대비등락폭 = lib.F2정수64_단순형(g.Preychange)
+	값.M예상체결가전일종가대비등락율 = lib.F2실수_단순형(g.Jnilydrate)
+	값.M예상매도호가 = lib.F2정수64_단순형(g.Yofferho0)
+	값.M예상매수호가 = lib.F2정수64_단순형(g.Ybidho0)
+	값.M예상매도호가수량 = lib.F2정수64_단순형(g.Yofferrem0)
+	값.M예상매수호가수량 = lib.F2정수64_단순형(g.Ybidrem0)
+
+	return 값, nil
+}
+
 func New코스피_ETF_NAV(b []byte) (값 *S코스피_ETF_NAV, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
 

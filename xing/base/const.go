@@ -66,6 +66,8 @@ const (
 	SizeHB_OutBlock         = int(unsafe.Sizeof(HB_OutBlock{}))
 	SizeS3_OutBlock         = int(unsafe.Sizeof(S3_OutBlock{}))
 	SizeYS3OutBlock         = int(unsafe.Sizeof(YS3OutBlock{}))
+	SizeK3_OutBlock         = int(unsafe.Sizeof(K3_OutBlock{}))
+	SizeYK3OutBlock         = int(unsafe.Sizeof(YK3OutBlock{}))
 	SizeI5_OutBlock         = int(unsafe.Sizeof(I5_OutBlock{}))
 	SizeVI_OutBlock         = int(unsafe.Sizeof(VI_OutBlock{}))
 	SizeDVIOutBlock         = int(unsafe.Sizeof(DVIOutBlock{}))
@@ -365,6 +367,8 @@ const (
 	RT코스닥_시간외_호가_잔량_HB  = "HB_"
 	RT코스피_체결_S3         = "S3_"
 	RT코스피_예상_체결_YS3     = "YS3"
+	RT코스닥_체결_K3         = "K3_"
+	RT코스닥_예상_체결_YK3     = "YK3"
 	RT코스피_ETF_NAV_I5    = "I5_"
 	RT주식_VI발동해제_VI      = "VI_"
 	RT시간외_단일가VI발동해제_DVI = "DVI"
@@ -381,14 +385,12 @@ const (
 	//TR주식계좌_기간별_수익률_상세_FOCCQ33600     = "FOCCQ33600"
 
 	// 미구현 RT코드
-	RT코스닥_체결         = "K3_"
 	RT코스피_거래원        = "K1_"
 	RT코스닥_거래원        = "OK_"
 	RT코스피_기세         = "S4_"
 	RT코스닥_LP호가       = "B7_"
 	RT지수             = "IJ_"
 	RT예상지수           = "YJ_"
-	RT코스닥_예상_체결      = "YK3"
 	RT실시간_뉴스_제목_패킷   = "NWS"
 	RT업종별_투자자별_매매_현황 = "BM_"
 )

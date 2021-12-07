@@ -3861,6 +3861,84 @@ type YS3OutBlock struct {
 	Shcode       [6]byte
 	X_shcode     byte
 }
+type K3_OutBlock struct {
+	Chetime      [6]byte
+	X_chetime    byte
+	Sign         [1]byte
+	X_sign       byte
+	Change       [8]byte
+	X_change     byte
+	Drate        [6]byte
+	X_drate      byte
+	Price        [8]byte
+	X_price      byte
+	Opentime     [6]byte
+	X_opentime   byte
+	Open         [8]byte
+	X_open       byte
+	Hightime     [6]byte
+	X_hightime   byte
+	High         [8]byte
+	X_high       byte
+	Lowtime      [6]byte
+	X_lowtime    byte
+	Low          [8]byte
+	X_low        byte
+	Cgubun       [1]byte
+	X_cgubun     byte
+	Cvolume      [8]byte
+	X_cvolume    byte
+	Volume       [12]byte
+	X_volume     byte
+	Value        [12]byte
+	X_value      byte
+	Mdvolume     [12]byte
+	X_mdvolume   byte
+	Mdchecnt     [8]byte
+	X_mdchecnt   byte
+	Msvolume     [12]byte
+	X_msvolume   byte
+	Mschecnt     [8]byte
+	X_mschecnt   byte
+	Cpower       [9]byte
+	X_cpower     byte
+	WAvrg        [8]byte
+	X_w_avrg     byte
+	Offerho      [8]byte
+	X_offerho    byte
+	Bidho        [8]byte
+	X_bidho      byte
+	Status       [2]byte
+	X_status     byte
+	Jnilvolume   [12]byte
+	X_jnilvolume byte
+	Shcode       [6]byte
+	X_shcode     byte
+}
+type YK3OutBlock struct {
+	Hotime       [6]byte
+	X_hotime     byte
+	Yeprice      [8]byte
+	X_yeprice    byte
+	Yevolume     [12]byte
+	X_yevolume   byte
+	Jnilysign    [1]byte
+	X_jnilysign  byte
+	Preychange   [8]byte
+	X_preychange byte
+	Jnilydrate   [6]byte
+	X_jnilydrate byte
+	Yofferho0    [8]byte
+	X_yofferho0  byte
+	Ybidho0      [8]byte
+	X_ybidho0    byte
+	Yofferrem0   [12]byte
+	X_yofferrem0 byte
+	Ybidrem0     [12]byte
+	X_ybidrem0   byte
+	Shcode       [6]byte
+	X_shcode     byte
+}
 type I5_OutBlock struct {
 	Time        [8]byte
 	X_time      byte
