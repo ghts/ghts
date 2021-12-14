@@ -339,6 +339,7 @@ func C32_종료() (에러 error) {
 
 	if !C32_종료됨() {
 		소켓REQ := 소켓REQ_저장소.G소켓()
+
 		소켓REQ.S송신(lib.P변환형식_기본값, lib.New질의값_기본형(lib.TR종료, ""))
 		소켓REQ_저장소.S회수(소켓REQ)
 
