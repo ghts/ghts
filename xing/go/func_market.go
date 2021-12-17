@@ -292,8 +292,10 @@ func F종목_정보_설정() (에러 error) {
 		switch s.M시장구분 {
 		case lib.P시장구분_코스피:
 			종목모음_코스피 = append(종목모음_코스피, 종목)
+			종목맵_코스피[종목.G코드()] = 종목
 		case lib.P시장구분_코스닥:
 			종목모음_코스닥 = append(종목모음_코스닥, 종목)
+			종목맵_코스닥[종목.G코드()] = 종목
 		case lib.P시장구분_ETF:
 			종목모음_ETF = append(종목모음_ETF, 종목)
 			종목모음_ETF_ETN = append(종목모음_ETF_ETN, 종목)
@@ -365,20 +367,16 @@ func f임의_종목_추출(종목_모음 []*lib.S종목) *lib.S종목 {
 	return 종목_모음[lib.F임의_범위_이내_정수값(0, len(종목_모음))].G복제본()
 }
 
-func F코스피_종목_여부(종목_코드 string) bool {
-	if 종목, 에러 := F종목by코드(종목_코드); 에러 != nil {
-		return false
-	} else {
-		return 종목.G시장구분() == lib.P시장구분_코스피
-	}
+func F코스피_종목_여부(종목코드 string) bool {
+	_, 존재함 := 종목맵_코스피[종목코드]
+
+	return 존재함
 }
 
-func F코스닥_종목_여부(종목_코드 string) bool {
-	if 종목, 에러 := F종목by코드(종목_코드); 에러 != nil {
-		return false
-	} else {
-		return 종목.G시장구분() == lib.P시장구분_코스닥
-	}
+func F코스닥_종목_여부(종목코드 string) bool {
+	_, 존재함 := 종목맵_코스닥[종목코드]
+
+	return 존재함
 }
 
 func ETF_ETN_종목_여부(종목_코드 string) bool {
