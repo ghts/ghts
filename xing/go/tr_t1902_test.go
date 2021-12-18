@@ -67,7 +67,7 @@ func TestT1902_ETF_시간별_추이(t *testing.T) {
 		lib.F테스트_같음(t, 값.M시각.Day(), 당일.Day())
 		if 이전_시각 != 초기값 {
 			lib.F테스트_참임(t, 값.M시각.After(이전_시각), 값.M시각, 이전_시각)
-			lib.F테스트_같음(t, 값.M시각.Sub(이전_시각), lib.P1초)
+			lib.F테스트_같음(t, 값.M시각.Sub(이전_시각), lib.P1초, lib.P10초)
 		}
 		이전_시각 = 값.M시각
 		lib.F테스트_참임(t, 값.M현재가 > 0)
