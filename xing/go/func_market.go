@@ -651,8 +651,22 @@ func F특수_종목_여부(종목코드 string) bool {
 		strings.Contains(종목명, "7호"),
 		strings.Contains(종목명, "8호"),
 		strings.Contains(종목명, "9호"),
-		strings.Contains(종목명, "10호"):
+		strings.Contains(종목명, "10호"),
+		strings.HasSuffix(종목.G이름(), "우") ||
+		strings.HasSuffix(종목.G이름(), "B") ||
+		strings.HasSuffix(종목.G이름(), "C") ||
+		strings.Contains(종목.G이름(), "전환") ||
+		strings.HasSuffix(종목.G이름(), "1") ||
+		strings.HasSuffix(종목.G이름(), "2") ||
+		strings.HasSuffix(종목.G이름(), "3") ||
+		strings.HasSuffix(종목.G이름(), "4") ||
+		strings.HasSuffix(종목.G이름(), "5") ||
+		strings.HasSuffix(종목.G이름(), "6") ||
+		strings.HasSuffix(종목.G이름(), "7") ||
+		strings.HasSuffix(종목.G이름(), "8") ||
+		strings.HasSuffix(종목.G이름(), "9"):
 		return true
+
 	}
 
 	return false
