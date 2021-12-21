@@ -64,6 +64,10 @@ func F표준_편차(값_모음 []float64) float64 {
 }
 
 func F최대값_실수(값_모음 []float64) float64 {
+	if len(값_모음) <= 0 {
+		return 0
+	}
+
 	최대값 := 값_모음[0]
 
 	for i := 1; i < len(값_모음); i++ {
@@ -74,6 +78,10 @@ func F최대값_실수(값_모음 []float64) float64 {
 }
 
 func F최소값_실수(값_모음 []float64) float64 {
+	if len(값_모음) <= 0 {
+		return 0
+	}
+
 	최소값 := 값_모음[0]
 
 	for i := 1; i < len(값_모음); i++ {
