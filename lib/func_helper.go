@@ -870,7 +870,7 @@ func CSV쓰기(레코드_모음 [][]string, 파일명 string, 파일_잠금 sync
 	return nil
 }
 
-func CSV읽기(파일명 string, 파일_잠금 sync.Locker) (레코드_모음 [][]string, 에러 error) {
+func CSV읽기(파일명, 구분자 string, 파일_잠금 sync.Locker) (레코드_모음 [][]string, 에러 error) {
 	defer S예외처리{M에러: &에러, M함수: func() { 레코드_모음 = nil }}.S실행()
 
 	switch 잠금 := 파일_잠금.(type) {
