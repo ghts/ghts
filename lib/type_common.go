@@ -157,13 +157,14 @@ type S종목 struct {
 	기준가   int64
 }
 
-func (s S종목) G코드() string   { return s.코드 }
-func (s S종목) G이름() string   { return s.이름 }
-func (s S종목) G시장구분() T시장구분  { return s.시장_구분 }
-func (s S종목) G전일_종가() int64 { return s.전일_종가 }
-func (s S종목) G상한가() int64   { return s.상한가 }
-func (s S종목) G하한가() int64   { return s.하한가 }
-func (s S종목) G기준가() int64   { return s.기준가 }
+func (s S종목) G코드() string     { return s.코드 }
+func (s S종목) G이름() string     { return s.이름 }
+func (s S종목) G식별_문자열() string { return F2문자열("%v[%v]", s.G이름(), s.G코드()) }
+func (s S종목) G시장구분() T시장구분    { return s.시장_구분 }
+func (s S종목) G전일_종가() int64   { return s.전일_종가 }
+func (s S종목) G상한가() int64     { return s.상한가 }
+func (s S종목) G하한가() int64     { return s.하한가 }
+func (s S종목) G기준가() int64     { return s.기준가 }
 
 func (s S종목) String() string {
 	버퍼 := new(bytes.Buffer)

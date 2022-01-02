@@ -451,7 +451,7 @@ func F계좌번호_존재함(계좌번호 string) bool {
 
 func F종목_식별_문자열(종목코드 string) string {
 	if 종목, 에러 := F종목by코드(종목코드); 에러 == nil {
-		return lib.F2문자열("%v[%v]", 종목.G이름(), 종목코드)
+		return 종목.G식별_문자열()
 	} else {
 		return lib.F2문자열("[%v]", 종목코드)
 	}
