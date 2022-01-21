@@ -36,10 +36,8 @@ package x32
 import (
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/lib/dll"
-	"github.com/ghts/ghts/lib/w32"
 	xt "github.com/ghts/ghts/xing/base"
 	"runtime"
-	"syscall"
 	"unsafe"
 )
 
@@ -416,9 +414,6 @@ func f종료() {
 	f콜백_동기식(lib.New콜백_신호(lib.P신호_C32_종료))
 	f실시간_정보_일괄_해지()
 	F로그아웃()
-	F소켓_정리() // F공통_종료_채널_닫기() 포함.
-
-	w32.PostQuitMessage(0)
-	w32.DestroyWindow(메시지_윈도우)
-	syscall.FreeLibrary(xing_api_dll)
+	F소켓_정리()
+	OnDestroy()
 }

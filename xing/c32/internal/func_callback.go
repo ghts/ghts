@@ -38,8 +38,10 @@ import (
 	"encoding/binary"
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/lib/dll"
+	"github.com/ghts/ghts/lib/w32"
 	"github.com/ghts/ghts/xing/base"
 	"strings"
+	"syscall"
 	"unsafe"
 )
 
@@ -321,4 +323,11 @@ func OnLinkData() {
 
 func OnRealtimeDataChart() {
 	F콜백(lib.New콜백_기본형(lib.P콜백_실시간_차트_데이터)) // TODO
+}
+
+func OnDestroy() {
+	lib.F공통_종료_채널_닫기()
+	syscall.FreeLibrary(xing_api_dll)
+	w32.DestroyWindow(메시지_윈도우)
+	w32.PostQuitMessage(0)
 }

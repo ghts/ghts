@@ -116,7 +116,7 @@ func WndProc(hWnd w32.HWND, msg uint32, wParam, lParam uintptr) uintptr {
 		OnRealtimeDataChart()
 		return TRUE
 	case w32.WM_DESTROY:
-		w32.PostQuitMessage(0)
+		OnDestroy()
 		return TRUE
 	}
 
