@@ -596,6 +596,10 @@ func F2일자(값 time.Time) time.Time {
 	return time.Date(값.Year(), 값.Month(), 값.Day(), 0, 0, 0, 0, 값.Location())
 }
 
+func F2한국_일자(값 time.Time) (한국_시간 time.Time) {
+	return time.Date(값.Year(), 값.Month(), 값.Day(), 0, 0, 0, 0, 한국)
+}
+
 func F일자2정수(일자 time.Time) uint32 {
 	return uint32(F2정수64_단순형(일자.Format("20060102")))
 }
