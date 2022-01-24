@@ -5,9 +5,15 @@
 *.dll
  
 # Folders 
-_obj 
+_obj
 _test
 venv
+__pycache__
+.project
+.pydevproject
+.settings
+.idea
+.vscode
 
 # Architecture specific extensions/prefixes 
 *.[568vq] 
@@ -18,8 +24,7 @@ venv
 _cgo_defun.c 
 _cgo_gotypes.go 
 _cgo_export.* 
-
-_testmain.go 
+_testmain.go
 
 *.exe
 *.test
@@ -29,9 +34,4 @@ _testmain.go
 *.csv
 *.lock
 *.ini
-
-.project
-.pydevproject
-.settings
-.idea
-.vscode
+*.pyc
