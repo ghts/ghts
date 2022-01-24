@@ -3,6 +3,7 @@ module github.com/ghts/ghts
 go 1.16
 
 require (
+	github.com/go-ole/go-ole v1.2.6
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/smartystreets/goconvey v1.6.4 // indirect
