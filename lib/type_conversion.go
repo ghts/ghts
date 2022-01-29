@@ -231,7 +231,7 @@ func (s *S바이트_변환) MarshalBinary() (바이트_모음 []byte, 에러 err
 	defer S예외처리{M에러: &에러, M함수: func() { 바이트_모음 = nil }}.S실행()
 
 	자료형_문자열_길이 := make([]byte, 2)
-	binary.LittleEndian.PutUint16(자료형_문자열_길이, uint16(len(s.자료형_문자열))) // 인텔 계열 CPU는 리틀 엔디언
+	binary.LittleEndian.PutUint16(자료형_문자열_길이, uint16(len(s.자료형_문자열))) // 인텔 및 AMD 계열 CPU는 리틀 엔디언
 
 	바이트_모음_길이 := make([]byte, 4)
 	binary.LittleEndian.PutUint32(바이트_모음_길이, uint32(len(s.값)))
@@ -265,7 +265,7 @@ func (s *S바이트_변환) UnmarshalBinary(바이트_모음 []byte) (에러 err
 		return New에러with출력("너무 짧은 M값. %v", len(바이트_모음))
 	}
 
-	자료형_문자열_길이 := int(binary.LittleEndian.Uint16(바이트_모음[1:3])) // 인텔 계열 CPU는 리틀 엔디언
+	자료형_문자열_길이 := int(binary.LittleEndian.Uint16(바이트_모음[1:3])) // 인텔 및 AMD 계열 CPU는 리틀 엔디언
 	바이트_모음_길이 := int(binary.LittleEndian.Uint32(바이트_모음[3:7]))
 
 	총_길이 := 헤더_길이 + 자료형_문자열_길이 + 바이트_모음_길이
@@ -409,7 +409,7 @@ func (s *S바이트_변환_모음) MarshalBinary() (바이트_모음 []byte, 에
 	defer S예외처리{M에러: &에러, M함수: func() { 바이트_모음 = nil }}.S실행()
 
 	수량 := make([]byte, 2)
-	binary.LittleEndian.PutUint16(수량, uint16(len(s.M바이트_변환_모음))) // 인텔 계열 CPU는 리틀 엔디언
+	binary.LittleEndian.PutUint16(수량, uint16(len(s.M바이트_변환_모음))) // 인텔 및 AMD 계열 CPU는 리틀 엔디언
 
 	버퍼 := new(bytes.Buffer)
 	버퍼.Write(수량)
@@ -435,7 +435,7 @@ func (s *S바이트_변환_모음) UnmarshalBinary(바이트_모음 []byte) (에
 		return New에러with출력("너무 짧은 M값. %v", len(바이트_모음))
 	}
 
-	수량 := int(binary.LittleEndian.Uint16(바이트_모음[0:2])) // 인텔 계열 CPU는 리틀 엔디언
+	수량 := int(binary.LittleEndian.Uint16(바이트_모음[0:2])) // 인텔 및 AMD 계열 CPU는 리틀 엔디언
 	s.M바이트_변환_모음 = make([]*S바이트_변환, 수량)
 	시작점 := 2
 

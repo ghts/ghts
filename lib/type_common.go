@@ -197,7 +197,7 @@ func (s S종목) MarshalBinary() ([]byte, error) {
 	속성[0] = byte(uint8(s.시장_구분))
 
 	코드_길이 := make([]byte, 2)
-	binary.LittleEndian.PutUint16(코드_길이, uint16(len(s.코드))) // 인텔 계열 CPU는 리틀 엔디언
+	binary.LittleEndian.PutUint16(코드_길이, uint16(len(s.코드))) // 인텔 및 AMD 계열 CPU는 리틀 엔디언
 
 	이름_길이 := make([]byte, 2)
 	binary.LittleEndian.PutUint16(이름_길이, uint16(len(s.이름)))
@@ -234,7 +234,7 @@ func (s *S종목) UnmarshalBinary(값 []byte) (에러 error) {
 	속성 := 값[:1]
 	s.시장_구분 = T시장구분(속성[0])
 
-	코드_길이 := int(binary.LittleEndian.Uint16(값[1:3])) // 인텔 계열 CPU는 리틀 엔디언
+	코드_길이 := int(binary.LittleEndian.Uint16(값[1:3])) // 인텔 및 AMD 계열 CPU는 리틀 엔디언
 	이름_길이 := int(binary.LittleEndian.Uint16(값[3:5]))
 
 	총_길이 := 헤더_길이 + 코드_길이 + 이름_길이
