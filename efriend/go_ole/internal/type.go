@@ -41,6 +41,7 @@ import (
 )
 
 // 대신증권 API Go언어 바인딩 코드 참조 : https://github.com/hspan/creon
+// 환경 변수에 'GOARCH=386' 설정 필수
 
 func New한투() (s *S한투, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { s = nil }}.S실행()
@@ -48,7 +49,6 @@ func New한투() (s *S한투, 에러 error) {
 	s = new(S한투)
 
 	s.unknown, 에러 = ole.CreateInstance(CLASS_ITGExpertCtl, ole.IID_IUnknown)
-	//s.unknown, 에러 = ole.CreateInstance(LIBID_ITGExpertCtlLib, ole.IID_IUnknown)
 	lib.F확인(에러)
 
 	s.IDispatch, 에러 = s.unknown.QueryInterface(ole.IID_IDispatch)

@@ -40,7 +40,10 @@ import (
 )
 
 func TestMain(m *testing.M) {
-	defer lib.S예외처리{}.S실행()
+	if lib.F환경변수("GOARCH") != "386" {
+		lib.New에러with출력("C32 모듈은 32비트 전용입니다.")
+		return
+	}
 
 	lib.F테스트_모드_시작()
 	defer lib.F테스트_모드_종료()
