@@ -1,4 +1,4 @@
-/* Copyright (C) 2015-2020 김운하 (unha.kim@ghts.org)
+/* Copyright (C) 2015-2022 김운하 (unha.kim@ghts.org)
 
 이 파일은 GHTS의 일부입니다.
 
@@ -16,7 +16,7 @@ GNU LGPL 2.1판은 이 프로그램과 함께 제공됩니다.
 (자유 소프트웨어 재단 : Free Software Foundation, Inc.,
 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA)
 
-Copyright (C) 2015-2020년 UnHa Kim (unha.kim@ghts.org)
+Copyright (C) 2015-2022년 UnHa Kim (unha.kim@ghts.org)
 
 This file is part of GHTS.
 
@@ -47,7 +47,7 @@ func New현물_주문_접수(b []byte) (값 *S현물_주문_응답_실시간_정
 	lib.F조건부_패닉(len(b) != SizeSC0_OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
 	g := new(SC0_OutBlock)
-	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
+	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	시각_문자열 := lib.F2문자열(g.Ordtm)
 	시각_문자열 = 시각_문자열[:6] + "." + 시각_문자열[7:]
@@ -77,7 +77,7 @@ func New현물_주문_체결(b []byte) (값 *S현물_주문_응답_실시간_정
 	lib.F조건부_패닉(len(b) != SizeSC1_OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
 	g := new(SC1_OutBlock)
-	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
+	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	시각_문자열 := lib.F2문자열(g.Exectime)
 	시각_문자열 = 시각_문자열[:6] + "." + 시각_문자열[7:]
@@ -106,7 +106,7 @@ func New현물_주문_정정(b []byte) (값 *S현물_주문_응답_실시간_정
 	lib.F조건부_패닉(len(b) != SizeSC2_OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
 	g := new(SC2_OutBlock)
-	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
+	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	시각_문자열 := lib.F2문자열(g.Exectime)
 	시각_문자열 = 시각_문자열[:6] + "." + 시각_문자열[7:]
@@ -135,7 +135,7 @@ func New현물_주문_취소(b []byte) (값 *S현물_주문_응답_실시간_정
 	lib.F조건부_패닉(len(b) != SizeSC3_OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
 	g := new(SC3_OutBlock)
-	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
+	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	시각_문자열 := lib.F2문자열(g.Exectime)
 	시각_문자열 = 시각_문자열[:6] + "." + 시각_문자열[7:]
@@ -163,7 +163,7 @@ func New현물_주문_거부(b []byte) (값 *S현물_주문_응답_실시간_정
 	lib.F조건부_패닉(len(b) != SizeSC4_OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
 	g := new(SC4_OutBlock)
-	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
+	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	시각_문자열 := lib.F2문자열(g.Exectime)
 	시각_문자열 = 시각_문자열[:6] + "." + 시각_문자열[7:]
@@ -192,7 +192,7 @@ func New코스피_호가_잔량(b []byte) (값 *S호가_잔량_실시간_정보,
 	lib.F조건부_패닉(len(b) != SizeH1_OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
 	g := new(H1_OutBlock)
-	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
+	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	값 = new(S호가_잔량_실시간_정보)
 	값.M종목코드 = lib.F2문자열(g.Shcode)
@@ -269,7 +269,7 @@ func New코스피_시간외_호가_잔량(b []byte) (값 *S코스피_시간외_�
 	lib.F조건부_패닉(len(b) != SizeH2_OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
 	g := new(H2_OutBlock)
-	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
+	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	값 = new(S코스피_시간외_호가_잔량_실시간_정보)
 	값.M종목코드 = lib.F2문자열(g.Shcode)
@@ -288,7 +288,7 @@ func New코스닥_호가_잔량(b []byte) (값 *S호가_잔량_실시간_정보,
 	lib.F조건부_패닉(len(b) != SizeHA_OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
 	g := new(HA_OutBlock)
-	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
+	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	값 = new(S호가_잔량_실시간_정보)
 	값.M종목코드 = lib.F2문자열(g.Shcode)
@@ -365,7 +365,7 @@ func New코스닥_시간외_호가_잔량(b []byte) (값 *S코스닥_시간외_�
 	lib.F조건부_패닉(len(b) != SizeHB_OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
 	g := new(H2_OutBlock)
-	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
+	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	값 = new(S코스닥_시간외_호가_잔량_실시간_정보)
 	값.M종목코드 = lib.F2문자열(g.Shcode)
@@ -384,7 +384,7 @@ func New코스피_체결(b []byte) (값 *S코스피_체결, 에러 error) {
 	lib.F조건부_패닉(len(b) != SizeS3_OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
 	g := new(S3_OutBlock)
-	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
+	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	값 = new(S코스피_체결)
 	값.M종목코드 = lib.F2문자열(g.Shcode)
@@ -443,7 +443,7 @@ func New코스피_예상_체결(b []byte) (값 *S코스피_예상_체결, 에러
 	lib.F조건부_패닉(len(b) != SizeYS3OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
 	g := new(YS3OutBlock)
-	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
+	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	값 = new(S코스피_예상_체결)
 	값.M종목코드 = lib.F2문자열(g.Shcode)
@@ -467,7 +467,7 @@ func New코스닥_체결(b []byte) (값 *S코스닥_체결, 에러 error) {
 	lib.F조건부_패닉(len(b) != SizeK3_OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
 	g := new(K3_OutBlock)
-	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
+	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	값 = new(S코스닥_체결)
 	값.M종목코드 = lib.F2문자열(g.Shcode)
@@ -526,7 +526,7 @@ func New코스닥_예상_체결(b []byte) (값 *S코스닥_예상_체결, 에러
 	lib.F조건부_패닉(len(b) != SizeYK3OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
 	g := new(YK3OutBlock)
-	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
+	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	값 = new(S코스닥_예상_체결)
 	값.M종목코드 = lib.F2문자열(g.Shcode)
@@ -550,7 +550,7 @@ func New코스피_ETF_NAV(b []byte) (값 *S코스피_ETF_NAV, 에러 error) {
 	lib.F조건부_패닉(len(b) != SizeI5_OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
 	g := new(I5_OutBlock)
-	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
+	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	값 = new(S코스피_ETF_NAV)
 	값.M종목코드 = lib.F2문자열(g.Shcode)
@@ -577,7 +577,7 @@ func New주식_VI발동해제(b []byte) (값 *S주식_VI발동해제, 에러 err
 	lib.F조건부_패닉(len(b) != SizeVI_OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
 	g := new(VI_OutBlock)
-	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
+	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	값 = new(S주식_VI발동해제)
 	값.M종목코드 = lib.F2문자열(g.Shcode)
@@ -597,7 +597,7 @@ func New시간외_단일가VI발동해제(b []byte) (값 *S시간외_단일가VI
 	lib.F조건부_패닉(len(b) != SizeDVIOutBlock, "예상하지 못한 길이 : '%v", len(b))
 
 	g := new(DVIOutBlock)
-	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
+	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	값 = new(S시간외_단일가VI발동해제)
 	값.M종목코드 = lib.F2문자열(g.Shcode)
@@ -617,7 +617,7 @@ func New장_운영정보(b []byte) (값 *S장_운영정보, 에러 error) {
 	lib.F조건부_패닉(len(b) != SizeJIFOutBlock, "예상하지 못한 길이 : '%v", len(b))
 
 	g := new(JIFOutBlock)
-	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
+	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	값 = new(S장_운영정보)
 	값.M장_구분 = T시장구분(lib.F2문자열(g.Jangubun))

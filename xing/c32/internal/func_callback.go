@@ -1,4 +1,4 @@
-/* Copyright (C) 2015-2020 김운하 (unha.kim@ghts.org)
+/* Copyright (C) 2015-2022 김운하 (unha.kim@ghts.org)
 
 이 파일은 GHTS의 일부입니다.
 
@@ -15,7 +15,7 @@ GNU LGPL 2.1판은 이 프로그램과 함께 제공됩니다.
 (자유 소프트웨어 재단 : Free Software Foundation, Inc.,
 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA)
 
-Copyright (C) 2015-2020년 UnHa Kim (unha.kim@ghts.org)
+Copyright (C) 2015-2022년 UnHa Kim (unha.kim@ghts.org)
 
 This file is part of GHTS.
 
@@ -126,7 +126,7 @@ func OnTrData(TR데이터 unsafe.Pointer) {
 	버퍼 := bytes.NewBuffer(c데이터)
 	g := new(xt.TR_DATA)
 
-	binary.Read(버퍼, binary.LittleEndian, &g.RequestID)
+	binary.Read(버퍼, binary.LittleEndian, &g.RequestID) // 인텔 계열 CPU는 리틀 엔디언
 	binary.Read(버퍼, binary.LittleEndian, &g.DataLength)
 	binary.Read(버퍼, binary.LittleEndian, &g.TotalDataBufferSize)
 	binary.Read(버퍼, binary.LittleEndian, &g.ElapsedTime)
@@ -199,7 +199,7 @@ func OnMessageAndError(MSG데이터 unsafe.Pointer) {
 	버퍼 := bytes.NewBuffer(c데이터)
 	g := new(xt.MSG_DATA)
 
-	binary.Read(버퍼, binary.LittleEndian, &g.RequestID)
+	binary.Read(버퍼, binary.LittleEndian, &g.RequestID) // 인텔 계열 CPU는 리틀 엔디언
 	binary.Read(버퍼, binary.LittleEndian, &g.SystemError)
 	binary.Read(버퍼, binary.LittleEndian, &g.MsgCode)
 	binary.Read(버퍼, binary.LittleEndian, &g.X_MsgCode)
@@ -244,7 +244,7 @@ func OnRealtimeData(실시간_데이터 unsafe.Pointer) {
 	버퍼 := bytes.NewBuffer(c데이터)
 	g := new(xt.REALTIME_DATA)
 
-	binary.Read(버퍼, binary.LittleEndian, &g.TrCode)
+	binary.Read(버퍼, binary.LittleEndian, &g.TrCode) // 인텔 계열 CPU는 리틀 엔디언
 	binary.Read(버퍼, binary.LittleEndian, &g.X_TrCode)
 	binary.Read(버퍼, binary.LittleEndian, &g.KeyLength)
 	binary.Read(버퍼, binary.LittleEndian, &g.KeyData)

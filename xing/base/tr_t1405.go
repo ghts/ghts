@@ -1,4 +1,4 @@
-/* Copyright (C) 2015-2020 김운하 (unha.kim@ghts.org)
+/* Copyright (C) 2015-2022 김운하 (unha.kim@ghts.org)
 
 이 파일은 GHTS의 일부입니다.
 
@@ -15,7 +15,7 @@ GNU LGPL 2.1판은 이 프로그램과 함께 제공됩니다.
 (자유 소프트웨어 재단 : Free Software Foundation, Inc.,
 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA)
 
-Copyright (C) 2015-2020년 UnHa Kim (unha.kim@ghts.org)
+Copyright (C) 2015-2022년 UnHa Kim (unha.kim@ghts.org)
 
 This file is part of GHTS.
 
@@ -106,7 +106,7 @@ func NewT1405_투자경고_조회_응답_헤더(b []byte) (값 *T1405_투자경�
 	lib.F조건부_패닉(len(b) != SizeT1405OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
 	g := new(T1405OutBlock)
-	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
+	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	값 = new(T1405_투자경고_조회_응답_헤더)
 	값.M연속키 = lib.F2문자열(g.Shcode)
@@ -129,7 +129,7 @@ func NewT1405_투자경고_조회_응답_반복값_모음(b []byte) (값_모음 
 
 	for i, g := range g_모음 {
 		g = new(T1405OutBlock1)
-		lib.F확인(binary.Read(버퍼, binary.BigEndian, g))
+		lib.F확인(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 		값 := new(T1405_투자경고_조회_응답_반복값)
 		값.M종목코드 = lib.F2문자열(g.Shcode)

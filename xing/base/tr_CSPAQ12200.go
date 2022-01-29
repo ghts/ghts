@@ -1,4 +1,4 @@
-/* Copyright (C) 2015-2020 김운하 (unha.kim@ghts.org)
+/* Copyright (C) 2015-2022 김운하 (unha.kim@ghts.org)
 
 이 파일은 GHTS의 일부입니다.
 
@@ -15,7 +15,7 @@ GNU LGPL 2.1판은 이 프로그램과 함께 제공됩니다.
 (자유 소프트웨어 재단 : Free Software Foundation, Inc.,
 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA)
 
-Copyright (C) 2015-2020년 UnHa Kim (unha.kim@ghts.org)
+Copyright (C) 2015-2022년 UnHa Kim (unha.kim@ghts.org)
 
 This file is part of GHTS.
 
@@ -118,7 +118,7 @@ func NewCSPAQ12200_현물계좌_총평가_응답(b []byte) (값 *CSPAQ12200_현�
 	lib.F조건부_패닉(len(b) != SizeCSPAQ12200OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
 	g_all := new(CSPAQ12200OutBlock)
-	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g_all))
+	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g_all)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	g1 := g_all.OutBlock1
 	g2 := g_all.OutBlock2

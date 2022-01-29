@@ -1,4 +1,4 @@
-/* Copyright (C) 2015-2020 김운하 (unha.kim@ghts.org)
+/* Copyright (C) 2015-2022 김운하 (unha.kim@ghts.org)
 
 이 파일은 GHTS의 일부입니다.
 
@@ -15,7 +15,7 @@ GNU LGPL 2.1판은 이 프로그램과 함께 제공됩니다.
 (자유 소프트웨어 재단 : Free Software Foundation, Inc.,
 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA)
 
-Copyright (C) 2015-2020년 UnHa Kim (unha.kim@ghts.org)
+Copyright (C) 2015-2022년 UnHa Kim (unha.kim@ghts.org)
 
 This file is part of GHTS.
 
@@ -151,7 +151,7 @@ func newCFOBQ10500_선물옵션_예탁금_증거금_조회_응답1(b []byte) (�
 	lib.F조건부_패닉(len(b) != SizeCFOBQ10500OutBlock1, "예상하지 못한 길이 : '%v", len(b))
 
 	g := new(CFOBQ10500OutBlock1)
-	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
+	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	값 = new(CFOBQ10500_선물옵션_예탁금_증거금_조회_응답1)
 	값.M레코드수량 = lib.F2정수64_단순형(g.RecCnt)
@@ -166,7 +166,7 @@ func newCFOBQ10500_선물옵션_예탁금_증거금_조회_응답2(b []byte) (�
 	lib.F조건부_패닉(len(b) != SizeCFOBQ10500OutBlock2, "예상하지 못한 길이 : '%v", len(b))
 
 	g := new(CFOBQ10500OutBlock2)
-	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
+	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	값 = new(CFOBQ10500_선물옵션_예탁금_증거금_조회_응답2)
 	값.M레코드수량 = lib.F2정수64_단순형(g.RecCnt)
@@ -210,7 +210,7 @@ func newCFOBQ10500_선물옵션_예탁금_증거금_조회_반복값_모음(b []
 
 	for i, g := range g_모음 {
 		g = new(CFOBQ10500OutBlock3)
-		lib.F확인(binary.Read(버퍼, binary.BigEndian, g))
+		lib.F확인(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 		값 := new(CFOBQ10500_선물옵션_예탁금_증거금_조회_반복값)
 		값.M상품군_코드명 = lib.F2문자열(g.PdGrpCodeNm)

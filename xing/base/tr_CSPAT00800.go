@@ -1,4 +1,4 @@
-/* Copyright (C) 2015-2020 김운하 (unha.kim@ghts.org)
+/* Copyright (C) 2015-2022 김운하 (unha.kim@ghts.org)
 
 이 파일은 GHTS의 일부입니다.
 
@@ -15,7 +15,7 @@ GNU LGPL 2.1판은 이 프로그램과 함께 제공됩니다.
 (자유 소프트웨어 재단 : Free Software Foundation, Inc.,
 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA)
 
-Copyright (C) 2015-2020년 UnHa Kim (unha.kim@ghts.org)
+Copyright (C) 2015-2022년 UnHa Kim (unha.kim@ghts.org)
 
 This file is part of GHTS.
 
@@ -128,7 +128,7 @@ func NewCSPAT00800_현물_취소_주문_응답1(b []byte) (s *CSPAT00800_현물_
 		"예상하지 못한 길이 : '%v", len(b))
 
 	g := new(CSPAT00800OutBlock1)
-	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
+	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	s = new(CSPAT00800_현물_취소_주문_응답1)
 	s.M레코드_수량 = lib.F2정수_단순형(g.RecCnt)
@@ -156,7 +156,7 @@ func NewCSPAT00800_현물_취소_주문_응답2(b []byte) (s *CSPAT00800_S현물
 		"예상하지 못한 길이 : '%v", len(b))
 
 	g := new(CSPAT00800OutBlock2)
-	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g))
+	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	if lib.F2문자열_공백_제거(g.OrdNo) == "" { // 주문 에러발생시 공백 문자열이 수신됨.
 		return nil, lib.New에러("NewCSPAT00800_현물_취소_주문_응답2() : 주문번호 생성 에러.")
