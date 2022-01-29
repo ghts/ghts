@@ -36,12 +36,16 @@ package internal
 import (
 	"github.com/ghts/ghts/lib"
 	"github.com/go-ole/go-ole"
+	"runtime"
 	"testing"
 )
 
 func TestMain(m *testing.M) {
 	lib.F테스트_모드_시작()
 	defer lib.F테스트_모드_종료()
+
+	runtime.LockOSThread()
+	defer runtime.UnlockOSThread()
 
 	ole.CoInitializeEx(0, ole.COINIT_MULTITHREADED)
 	defer ole.CoUninitialize()

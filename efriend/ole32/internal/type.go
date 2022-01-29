@@ -35,29 +35,37 @@ package internal
 
 import (
 	"github.com/ghts/ghts/lib"
+	"github.com/ghts/ghts/lib/w32"
 	"github.com/go-ole/go-ole"
+	"github.com/go-ole/go-ole/oleutil"
 	"syscall"
 	"unsafe"
 )
 
-// 대신증권 API Go언어 바인딩 코드 참조 : https://github.com/hspan/creon
-// 환경 변수에 'GOARCH=386' 설정 필수
+// 대신증권 API Go언어 바인딩 소스 코드 참고하여 한국투자증권 API에 맞게 수정.
+// 참고 자료 : https://github.com/hspan/creon
 
 func New한투() (s *S한투, 에러 error) {
 	if lib.F환경변수("GOARCH") != "386" {
 		lib.New에러with출력("32비트 전용 모듈입니다. 'GOARCH'환경변수를 '386'으로 설정한 후 실행하십시오.")
-		return
+		return nil, 에러
+	} else if 관리자_여부, 에러 := w32.IsUserAnAdmin(); 에러 != nil {
+		lib.New에러with출력("w32.IsUserAnAdmin() 호출 에러.\n%v", 에러)
+		return nil, 에러
+	} else if !관리자_여부 {
+		lib.New에러with출력("관리자 권한이 필요합니다.")
+		return nil, 에러
 	}
 
 	defer lib.S예외처리{M에러: &에러, M함수: func() { s = nil }}.S실행()
 
 	s = new(S한투)
 
-	s.unknown, 에러 = ole.CreateInstance(CLASS_ITGExpertCtl, ole.IID_IUnknown)
-	lib.F확인(에러)
-
-	s.IDispatch, 에러 = s.unknown.QueryInterface(ole.IID_IDispatch)
-	lib.F확인(에러)
+	if s.unknown, 에러 = ole.CreateInstance(CLASS_ITGExpertCtl, ole.IID_IUnknown); 에러 != nil {
+		return nil, 에러
+	} else if s.IDispatch, 에러 = s.unknown.QueryInterface(ole.IID_IDispatch); 에러 != nil {
+		return nil, 에러
+	}
 
 	return s, nil
 }
@@ -260,6 +268,9 @@ func (s *S한투) IsMoreNextData() int8 {
 
 func (s *S한투) GetAccountCount() int16 {
 	값, 에러 := s.IDispatch.Invoke(dispid_GetAccountCount, ole.DISPATCH_METHOD)
+	//값, 에러 := s.IDispatch.Invoke(dispid_GetAccountCount, ole.DISPATCH_PROPERTYGET)
+	//값, 에러 := s.IDispatch.Invoke(dispid_GetAccountCount, ole.DISPATCH_PROPERTYPUT)
+	//값, 에러 := s.IDispatch.Invoke(dispid_GetAccountCount, ole.DISPATCH_PROPERTYPUTREF)
 
 	if 에러 != nil {
 		lib.F에러_출력(에러)
@@ -388,14 +399,17 @@ func (s *S한투) GetRecvRqID() *ole.VARIANT {
 }
 
 func (s *S한투) ConnectID() *ole.VARIANT {
-	값, 에러 := s.IDispatch.Invoke(dispid_ConnectID, ole.DISPATCH_PROPERTYGET)
+	return oleutil.MustCallMethod(s.IDispatch, "ConnectID")
+	//return oleutil.MustGetProperty(s.IDispatch, "ConnectID")
 
-	if 에러 != nil {
-		lib.F에러_출력(에러)
-		return nil
-	}
-
-	return 값
+	//값, 에러 := s.IDispatch.Invoke(dispid_ConnectID, ole.DISPATCH_PROPERTYGET)
+	//
+	//if 에러 != nil {
+	//	lib.F에러_출력(에러)
+	//	return nil
+	//}
+	//
+	//return 값
 }
 
 func (s *S한투) ResetConnection() {
@@ -429,7 +443,12 @@ func (s *S한투) SetConnectID(값 *ole.VARIANT) {
 }
 
 func (s *S한투) AboutBox() {
-	s.IDispatch.Invoke(dispid_AboutBox, ole.DISPATCH_METHOD)
+	값, 에러 := s.IDispatch.Invoke(dispid_AboutBox, ole.DISPATCH_METHOD)
+	lib.F체크포인트(값, 에러)
+
+	if 에러 != nil {
+		lib.F에러_출력(에러)
+	}
 }
 
 func (s *S한투) Release() {

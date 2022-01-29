@@ -38,9 +38,62 @@ import (
 	"testing"
 )
 
-func TestS한투(t *testing.T) {
+func TestNew한투(t *testing.T) {
 	s, 에러 := New한투()
 	lib.F테스트_에러없음(t, 에러)
+	defer s.Release()
 
-	s.AboutBox()
+	type v struct {
+		함수명 string
+		dispID int32
+	}
+
+	v값_모음 := []v {
+		v{"SetSingleData", dispid_SetSingleData},
+		v{"SetMultiData", dispid_SetMultiData},
+		v{"GetSingleFieldCount", dispid_GetSingleFieldCount},
+		v{"GetMultiBlockCount", dispid_GetMultiBlockCount},
+		v{"GetMultiRecordCount", dispid_GetMultiRecordCount},
+		v{"GetMultiBlockCount", dispid_GetMultiBlockCount},
+		v{"GetSingleData", dispid_GetSingleData},
+		v{"GetMultiData", dispid_GetMultiData},
+		v{"GetReqMsgCode", dispid_GetReqMsgCode},
+		v{"GetReqMessage", dispid_GetReqMessage},
+		v{"RequestData", dispid_RequestData},
+		v{"RequestNextData", dispid_RequestNextData},
+		v{"RequestRealData", dispid_RequestRealData},
+		v{"UnRequestRealData", dispid_UnRequestRealData},
+		v{"UnRequestAllRealData", dispid_UnRequestAllRealData},
+		v{"SetMultiBlockData", dispid_SetMultiBlockData},
+		v{"IsMoreNextData", dispid_IsMoreNextData},
+		v{"GetAccountCount", dispid_GetAccountCount},
+		v{"GetAccount", dispid_GetAccount},
+		v{"GetAccountBrcode", dispid_GetAccountBrcode},
+		v{"GetEncryptPassword", dispid_GetEncryptPassword},
+		v{"SetSingleDataEx", dispid_SetSingleDataEx},
+		v{"GetSingleDataEx", dispid_GetSingleDataEx},
+		v{"GetSingleFieldCountEx", dispid_GetSingleFieldCountEx},
+		v{"GetRtCode", dispid_GetRtCode},
+		v{"GetOverSeasStockSise", dispid_GetOverSeasStockSise},
+		v{"IsMoreNextData2", dispid_IsMoreNextData2},
+		v{"GetSendRqID", dispid_GetSendRqID},
+		v{"GetRecvRqID", dispid_GetRecvRqID},
+		v{"ConnectID", dispid_ConnectID},
+		v{"ResetConnection", dispid_ResetConnection},
+		v{"IsVTS", dispid_IsVTS},
+		v{"GetSingleDataStockMaster", dispid_GetSingleDataStockMaster},
+		v{"SetConnectID", dispid_SetConnectID},
+		v{"AboutBox", dispid_AboutBox},
+	}
+
+	for _, v값 := range v값_모음 {
+		dispID, 에러 := s.IDispatch.GetSingleIDOfName(v값.함수명)
+		lib.F테스트_에러없음(t,에러)
+		lib.F테스트_같음(t, dispID, v값.dispID)
+	}
+
+	s.GetAccountCount()
 }
+
+
+
