@@ -44,6 +44,11 @@ import (
 // 환경 변수에 'GOARCH=386' 설정 필수
 
 func New한투() (s *S한투, 에러 error) {
+	if lib.F환경변수("GOARCH") != "386" {
+		lib.New에러with출력("32비트 전용 모듈입니다. 'GOARCH'환경변수를 '386'으로 설정한 후 실행하십시오.")
+		return
+	}
+
 	defer lib.S예외처리{M에러: &에러, M함수: func() { s = nil }}.S실행()
 
 	s = new(S한투)
