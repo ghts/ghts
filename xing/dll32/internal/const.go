@@ -35,11 +35,12 @@ package dll32
 
 const (
 	xing_dll = "xingAPI.dll"
-	WM_USER  = 0x0400
-)
 
-const (
-	XM_INIT                    = 1024
+	FALSE = 0
+	TRUE  = 1
+
+	WM_USER                    = 0x0400
+	XM_INIT                    = WM_USER
 	XM_DISCONNECT              = XM_INIT + 1
 	XM_RECEIVE_DATA            = XM_INIT + 3
 	XM_RECEIVE_REAL_DATA       = XM_INIT + 4
@@ -48,16 +49,9 @@ const (
 	XM_TIMEOUT                 = XM_INIT + 7
 	XM_RECEIVE_LINK_DATA       = XM_INIT + 8
 	XM_RECEIVE_REAL_DATA_CHART = XM_INIT + 10
-)
 
-const (
 	RCV_TR_DATA      = 1
 	RCV_MSG_DATA     = 2
 	RCV_SYSTEM_ERROR = 3
 	RCV_RELEASE      = 4
-)
-
-const (
-	FALSE = 0
-	TRUE  = 1
 )
