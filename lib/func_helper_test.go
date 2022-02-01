@@ -165,7 +165,7 @@ func TestCSV파일에_값_저장_및_읽기(t *testing.T) {
 
 	const 파일명 = "csv_test.csv"
 	CSV쓰기(원본, 파일명, nil)
-	복제본, 에러 := CSV읽기(파일명, nil)
+	복제본, 에러 := CSV읽기(파일명, ",", nil)
 	F테스트_에러없음(t, 에러)
 	F테스트_같음(t, len(복제본), len(원본))
 	F테스트_같음(t, len(복제본[0]), len(원본[0]))
