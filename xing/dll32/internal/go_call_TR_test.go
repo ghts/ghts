@@ -12,7 +12,7 @@
 보다 자세한 사항에 대해서는 GNU LGPL 2.1판을 참고하시기 바랍니다.
 GNU LGPL 2.1판은 이 프로그램과 함께 제공됩니다.
 만약, 이 문서가 누락되어 있다면 자유 소프트웨어 재단으로 문의하시기 바랍니다.
-(자유 소프트웨어 재단 : Free Software Foundation, In,
+(자유 소프트웨어 재단 : Free Software Foundation, Inc.,
 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA)
 
 Copyright (C) 2015-2022년 UnHa Kim (unha.kim@ghts.org)
@@ -31,52 +31,54 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package x32
+package dll32
 
 import (
 	"github.com/ghts/ghts/lib"
+	"github.com/ghts/ghts/lib/nanomsg"
+	xt "github.com/ghts/ghts/xing/base"
+	xing "github.com/ghts/ghts/xing/go"
+	"testing"
+	"time"
 )
 
-func Go루틴_관리(ch초기화 chan lib.T신호) (에러 error) {
-	lib.S예외처리{M에러: &에러, M함수_항상: func() {
-		Ch모니터링_루틴_종료 <- lib.P신호_종료
-	}}.S실행()
+func TestF접속됨(t *testing.T) {
+	t.Parallel()
 
-	ch도우미_초기화 := make(chan lib.T신호, 1+수신_도우미_수량+콜백_도우미_수량)
-	ch호출_도우미_종료 := make(chan lib.T신호, 1)
-	ch수신_도우미_종료 := make(chan lib.T신호, 수신_도우미_수량)
-	ch콜백_도우미_종료 := make(chan lib.T신호, 콜백_도우미_수량)
-
-	go go함수_호출_도우미(ch도우미_초기화, ch호출_도우미_종료)
-	<-ch도우미_초기화
-
-	for i := 0; i < 수신_도우미_수량; i++ {
-		go go수신_도우미(ch도우미_초기화, ch수신_도우미_종료)
+	if !lib.F인터넷에_접속됨() {
+		t.SkipNow()
 	}
 
-	for i := 0; i < 콜백_도우미_수량; i++ {
-		go go콜백_도우미(ch도우미_초기화, ch콜백_도우미_종료)
-	}
+	소켓REQ, 에러 := nano.NewNano소켓REQ(xt.F주소_C32(), lib.P10초)
+	lib.F테스트_에러없음(t, 에러)
 
-	// Go루틴 초기화 대기
-	for i := 0; i < (수신_도우미_수량 + 콜백_도우미_수량); i++ {
-		<-ch도우미_초기화
-	}
+	defer 소켓REQ.Close()
 
-	ch공통_종료 := lib.Ch공통_종료()
-	ch초기화 <- lib.P신호_초기화
+	질의값 := lib.New질의값_기본형(lib.TR접속됨, "")
 
-	// 종료 되는 Go루틴 재생성.
-	for {
-		select {
-		case <-ch공통_종료:
-			return nil
-		case <-ch수신_도우미_종료:
-			go go수신_도우미(ch도우미_초기화, ch수신_도우미_종료)
-		case <-ch호출_도우미_종료:
-			go go함수_호출_도우미(ch도우미_초기화, ch호출_도우미_종료)
-		case <-ch콜백_도우미_종료:
-			go go콜백_도우미(ch도우미_초기화, ch콜백_도우미_종료)
-		}
-	}
+	응답 := 소켓REQ.G질의_응답_검사(lib.P변환형식_기본값, 질의값)
+	lib.F테스트_에러없음(t, 응답.G에러())
+	lib.F테스트_같음(t, 응답.G수량(), 1)
+
+	접속됨, 에러 := f접속됨()
+	lib.F테스트_에러없음(t, 에러)
+
+	참거짓, ok := 응답.G해석값_단순형(0).(bool)
+	lib.F테스트_참임(t, ok)
+	lib.F테스트_같음(t, 참거짓, 접속됨)
+}
+
+func TestT0167_시각_조회(t *testing.T) {
+	t.Parallel()
+
+	시각, 에러 := (<-xing.TrT0167_시각_조회()).G값()
+
+	lib.F테스트_에러없음(t, 에러)
+	lib.F테스트_같음(t, 시각.Year(), time.Now().Year())
+	lib.F테스트_같음(t, 시각.Month(), time.Now().Month())
+	lib.F테스트_같음(t, 시각.Day(), time.Now().Day())
+
+	지금 := time.Now()
+	차이 := 시각.Sub(지금)
+	lib.F테스트_참임(t, 차이 > (-1*lib.P1시간) && 차이 < lib.P1시간, 시각, 지금)
 }

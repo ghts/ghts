@@ -31,16 +31,51 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package x32
+package dll32
 
 import (
-	"github.com/ghts/ghts/lib"
-
-	"testing"
+	"sync"
+	"time"
 )
 
-func TestC컴파일러_의존성_확인(t *testing.T) {
-	t.Parallel()
+func New콜백_대기_항목(식별번호 int, TR코드 string, 값 interface{}) *S콜백_대기_항목 {
+	s := new(S콜백_대기_항목)
+	s.M식별번호 = 식별번호
+	s.M생성_시각 = time.Now()
+	s.M값 = 값
 
-	lib.F테스트_참임(t, lib.F파일_존재함(`C:\msys64\\mingw32\bin\gcc.exe`))
+	return s
+}
+
+type S콜백_대기_항목 struct {
+	M식별번호  int
+	M생성_시각 time.Time
+	TR코드   string
+	M값     interface{}
+}
+
+type S콜백_대기_저장소 struct {
+	sync.Mutex
+	저장소 map[int]*S콜백_대기_항목
+}
+
+func (s *S콜백_대기_저장소) G대기_항목(식별번호 int) *S콜백_대기_항목 {
+	s.Lock()
+	defer s.Unlock()
+
+	return s.저장소[식별번호]
+}
+
+func (s *S콜백_대기_저장소) S추가(식별번호 int, 대기_항목 *S콜백_대기_항목) {
+	s.Lock()
+	defer s.Unlock()
+
+	s.저장소[식별번호] = 대기_항목
+}
+
+func (s *S콜백_대기_저장소) S삭제(식별번호 int) {
+	s.Lock()
+	defer s.Unlock()
+
+	delete(s.저장소, 식별번호)
 }

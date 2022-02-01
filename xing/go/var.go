@@ -55,7 +55,7 @@ var (
 	ch신호_C32_로그인 = make(chan lib.T신호_32비트_모듈, 1)
 	ch신호_C32_종료  = make(chan lib.T신호_32비트_모듈, 1)
 
-	대기소_C32 = newC32_콜백_대기_저장소()
+	대기소_C32 = newDLL32_콜백_대기_저장소()
 
 	V콜백_도우미_수량 = lib.F최대값_정수(runtime.NumCPU(), 2)
 

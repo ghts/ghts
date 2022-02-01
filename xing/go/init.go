@@ -126,15 +126,15 @@ func f초기화_xing_C32() (에러 error) {
 		os.Setenv("GOARCH", "386") // 64비트에서 컴파일을 막는 루틴을 회피하기 위해서 32비트인척 함.
 		defer os.Setenv("GOARCH", GOARCH_원래값)
 
-		if 에러 := c32_빌드(); 에러 != nil {
-			panic(lib.New에러with출력("c32.exe 빌드 에러 발생.\n%v", 에러))
-		} else if lib.F파일_없음(c32_실행_화일_경로()) {
-			panic(lib.New에러with출력("빌드된 실행 화일 찾을 수 없음. '%v'", c32_실행_화일_경로()))
+		if 에러 := dll32_빌드(); 에러 != nil {
+			panic(lib.New에러with출력("dll32_xing.exe 빌드 에러 발생.\n%v", 에러))
+		} else if lib.F파일_없음(dll32_실행_화일_경로()) {
+			panic(lib.New에러with출력("빌드된 실행 화일 찾을 수 없음. '%v'", dll32_실행_화일_경로()))
 		}
 
 		// 자식 프로세스는 부모 프로세스의 환경 변수를 그대로 물려받음.
 		// 로그인 정보는 환경 변수를 통해서 전달.
-		프로세스ID_C32 = lib.F확인(ep.F외부_프로세스_실행(c32_실행_화일_경로())).(int)
+		프로세스ID_C32 = lib.F확인(ep.F외부_프로세스_실행(dll32_실행_화일_경로())).(int)
 
 		<-ch신호_C32_초기화
 	default:
@@ -146,24 +146,24 @@ func f초기화_xing_C32() (에러 error) {
 	return nil
 }
 
-func c32_실행_화일_경로() string {
+func dll32_실행_화일_경로() string {
 	if 현재_디렉토리, 에러 := os.Getwd(); 에러 != nil {
 		return ""
 	} else {
-		return filepath.Join(현재_디렉토리, "c32.exe")
+		return filepath.Join(현재_디렉토리, "dll32_xing.exe")
 	}
 }
 
-func c32_소스_코드_화일_경로() string {
-	return filepath.Join(os.Getenv("USERPROFILE"), `go\src\github.com\ghts\ghts\xing\c32\c32.go`)
+func dll32_소스_코드_화일_경로() string {
+	return filepath.Join(os.Getenv("USERPROFILE"), `go\src\github.com\ghts\ghts\xing\dll32\dll32_xing.go`)
 }
 
-func c32_빌드() error {
-	if lib.F파일_존재함(c32_실행_화일_경로()) {
-		if lib.F파일_없음(c32_소스_코드_화일_경로()) {
+func dll32_빌드() error {
+	if lib.F파일_존재함(dll32_실행_화일_경로()) {
+		if lib.F파일_없음(dll32_소스_코드_화일_경로()) {
 			return nil // 컴파일 준비되어 있지 않으면 이미 존재하는 실행 화일 그대로 사용.
 		} else {
-			os.Remove(c32_실행_화일_경로()) // 컴파일 준비되어 있으면 삭제 후 최신 버전 재생성
+			os.Remove(dll32_실행_화일_경로()) // 컴파일 준비되어 있으면 삭제 후 최신 버전 재생성
 		}
 	}
 
@@ -179,12 +179,12 @@ func c32_빌드() error {
 	os.Setenv("PATH", lib.GOROOT()+`\bin;C:\msys64\mingw32\bin;C:\msys64\usr\bin`)
 	defer os.Setenv("PATH", PATH_원래값)
 
-	return exec.Command("go", "build", "github.com/ghts/ghts/xing/c32").Run()
+	return exec.Command("go", "build", "github.com/ghts/ghts/xing/dll32").Run()
 }
 
-func c32_삭제() (에러 error) {
-	if lib.F파일_존재함(c32_실행_화일_경로()) {
-		return os.Remove(c32_실행_화일_경로())
+func dll32_삭제() (에러 error) {
+	if lib.F파일_존재함(dll32_실행_화일_경로()) {
+		return os.Remove(dll32_실행_화일_경로())
 	}
 
 	return nil
@@ -225,7 +225,7 @@ func f초기화_작동_확인() (작동_여부 bool) {
 		return false
 	}
 
-	//fmt.Println("** x32 동작 확인 완료**")
+	//fmt.Println("** dll32 동작 확인 완료**")
 
 	return true
 }

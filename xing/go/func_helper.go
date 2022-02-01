@@ -192,7 +192,7 @@ func f에러_발생(TR코드, 코드, 내용 string) bool {
 	}
 }
 
-func f데이터_복원_이중_응답(대기_항목 *c32_콜백_대기_항목, 수신값 *lib.S바이트_변환) (에러 error) {
+func f데이터_복원_이중_응답(대기_항목 *dll32_콜백_대기_항목, 수신값 *lib.S바이트_변환) (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
 	완전값 := new(xt.S이중_응답_일반형)
@@ -243,7 +243,7 @@ func f데이터_복원_이중_응답(대기_항목 *c32_콜백_대기_항목, �
 	return nil
 }
 
-func f데이터_복원_반복_조회(대기_항목 *c32_콜백_대기_항목, 수신값 *lib.S바이트_변환) (에러 error) {
+func f데이터_복원_반복_조회(대기_항목 *dll32_콜백_대기_항목, 수신값 *lib.S바이트_변환) (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
 	완전값 := new(xt.S헤더_반복값)
@@ -305,14 +305,14 @@ func C32_재시작() (에러 error) {
 
 	fmt.Printf("**     C32 재시작 %v     **\n", time.Now().Format(lib.P간략한_시간_형식))
 
-	lib.F확인(c32_재시작_도우미())
+	lib.F확인(dll32_재시작_도우미())
 
 	return nil
 }
 
-func c32_재시작_도우미() (에러 error) {
+func dll32_재시작_도우미() (에러 error) {
 	// 재귀 반복 시도.
-	defer lib.S예외처리{M함수: func() { 에러 = c32_재시작_도우미() }}.S실행()
+	defer lib.S예외처리{M함수: func() { 에러 = dll32_재시작_도우미() }}.S실행()
 
 	C32_재시작_실행_중.S값(true)
 

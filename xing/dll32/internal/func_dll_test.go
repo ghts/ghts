@@ -31,11 +31,16 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-#include <windows.h>
+package dll32
 
-//void *XingApiDll();
-//void FreeXingApiDll();
+import (
+	"github.com/ghts/ghts/lib"
 
-//void GetAccountName(void *AccountNo, void *Buffer, int BufferSize);
-//void GetAcctDetailName(void *AccountNo, void *Buffer, int BufferSize);
-//void GetAcctNickName(void *AccountNo, void *Buffer, int BufferSize);
+	"testing"
+)
+
+func TestC컴파일러_의존성_확인(t *testing.T) {
+	t.Parallel()
+
+	lib.F테스트_참임(t, lib.F파일_존재함(`C:\msys64\\mingw32\bin\gcc.exe`))
+}

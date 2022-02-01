@@ -24,7 +24,7 @@
 //------------------------------------------------------------------------------
 // '#pragma pack(push, 1)'이 적용된 기본 구조체들은 Go언어에서 읽을 수 없으며, C언어에서만 사용함..
 //  Go언어에서 읽을 때는 '#pragma pack(push, 1)'이 적용되지 않은 UNPACKED 자료형으로 변환해서 사용함.
-//  메모리 저장 방식으로 변환은 c32 패키지 내 콜백 Go함수에서 binary.encoding 로 수행.
+//  메모리 저장 방식으로 변환은 dll32 패키지 내 콜백 Go함수에서 binary.encoding 로 수행.
 typedef struct {    // 조회TR 수신 패킷
 	int					RequestID;					// Request ID
 	int					DataLength;				    // 받은 데이터 크기

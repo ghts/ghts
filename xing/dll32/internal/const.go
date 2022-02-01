@@ -31,7 +31,33 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-#include <windows.h>
-#include <stdio.h>
+package dll32
 
-//ㅓ
+const (
+	xing_dll = "xingAPI.dll"
+	WM_USER  = 0x0400
+)
+
+const (
+	XM_INIT                    = 1024
+	XM_DISCONNECT              = XM_INIT + 1
+	XM_RECEIVE_DATA            = XM_INIT + 3
+	XM_RECEIVE_REAL_DATA       = XM_INIT + 4
+	XM_LOGIN                   = XM_INIT + 5
+	XM_LOGOUT                  = XM_INIT + 6
+	XM_TIMEOUT                 = XM_INIT + 7
+	XM_RECEIVE_LINK_DATA       = XM_INIT + 8
+	XM_RECEIVE_REAL_DATA_CHART = XM_INIT + 10
+)
+
+const (
+	RCV_TR_DATA      = 1
+	RCV_MSG_DATA     = 2
+	RCV_SYSTEM_ERROR = 3
+	RCV_RELEASE      = 4
+)
+
+const (
+	FALSE = 0
+	TRUE  = 1
+)
