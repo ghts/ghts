@@ -54,7 +54,7 @@ func f초기화_XingAPI() {
 		API_초기화_완료.S값(true)
 	}
 
-	lib.F조건부_패닉(lib.F환경변수("GOARCH") != "386", "C32 모듈은 32비트 전용입니다.")
+	lib.F조건부_패닉(lib.F환경변수("GOARCH") != "386", "DLL32 모듈은 32비트 전용입니다.")
 
 	// DLL파일이 있는 디렉토리로 이동. (빼먹으면 안 됨)
 	원래_디렉토리, 에러 := os.Getwd()
@@ -69,7 +69,7 @@ func f초기화_XingAPI() {
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
-	xing_api_dll, 에러 := syscall.LoadLibrary("xingAPI.dll")
+	xing_api_dll, 에러 = syscall.LoadLibrary(xing_dll)
 	lib.F확인(에러)
 
 	// 원래 디렉토리로 이동
