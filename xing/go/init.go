@@ -139,7 +139,7 @@ func f초기화_xing_C32() (에러 error) {
 		<-ch신호_C32_초기화
 	default:
 		lib.F문자열_출력("*********************************************\n"+
-			"현재 OS(%v)에서는 'xing_C32'를 수동으로 실행해야 합니다.\n"+
+			"현재 OS(%v)에서는 'dll32_xing.exe'를 수동으로 실행해야 합니다.\n"+
 			"*********************************************", runtime.GOOS)
 	}
 
@@ -179,7 +179,7 @@ func dll32_빌드() error {
 	os.Setenv("PATH", lib.GOROOT()+`\bin;C:\msys64\mingw32\bin;C:\msys64\usr\bin`)
 	defer os.Setenv("PATH", PATH_원래값)
 
-	return exec.Command("go", "build", "github.com/ghts/ghts/xing/dll32").Run()
+	return exec.Command("go", "build", "-o", "dll32_xing.exe", "github.com/ghts/ghts/xing/dll32").Run()
 }
 
 func dll32_삭제() (에러 error) {
