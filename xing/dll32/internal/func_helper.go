@@ -45,7 +45,7 @@ func XingAPI디렉토리() (string, error) {
 		return lib.F디렉토리명(파일경로)
 	}
 
-	기본_위치 := `C:\eBEST\xingAPI\xingAPI.dll`
+	기본_위치 := `C:\eBEST\xingAPI\` + xing_dll
 	if _, 에러 := os.Stat(기본_위치); 에러 == nil {
 		lib.F실행경로_추가(기본_위치)
 
