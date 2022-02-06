@@ -964,3 +964,21 @@ func F10분전() time.Time {
 func F금일() time.Time {
 	return F2일자(time.Now())
 }
+
+func F금월() time.Month {
+	return time.Now().Month()
+}
+
+func F금월_1일() time.Time {
+	지금 := time.Now()
+
+	return time.Date(지금.Year(), 지금.Month(), 1, 0, 0, 0, 0, 지금.Location())
+}
+
+func F전월_마지막일() time.Time {
+	return F금월_1일().Add(-1 * P1일)
+}
+
+func F전월() time.Month {
+	return F전월_마지막일().Month()
+}

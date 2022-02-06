@@ -78,6 +78,7 @@ const (
 	P50분    = 50 * time.Minute
 	P1시간    = time.Hour
 	P1일     = 24 * time.Hour
+	P1주     = 7 * P1일
 	P1년     = 365 * P1일
 	P무기한    = 9999 * time.Hour
 
