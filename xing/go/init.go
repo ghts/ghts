@@ -85,13 +85,13 @@ func init() {
 
 func F초기화(서버_구분 xt.T서버_구분, 로그인_ID, 로그인_암호, 인증서_암호, 계좌_비밀번호 string) {
 	// 자식 프로세스는 부모 프로세스의 환경 변수를 그대로 물려받음.
-	// 로그인 정보는 환경 변수를 통해서 C32 모듈로 전달.
+	// 로그인 정보는 환경 변수를 통해서 DLL32 모듈로 전달.
 	xt.F서버_구분_설정(서버_구분)
 	xt.F로그인_정보_환경_변수_설정(로그인_ID, 로그인_암호, 인증서_암호, 계좌_비밀번호)
 
 	F소켓_생성()
 	F초기화_Go루틴()
-	lib.F확인(f초기화_xing_C32())
+	lib.F확인(f초기화_DLL32())
 	lib.F확인(F접속_로그인())
 	lib.F조건부_패닉(!f초기화_작동_확인(), "초기화 작동 확인 실패.")
 	lib.F확인(F초기화_TR전송_제한())
@@ -112,7 +112,7 @@ func F초기화_Go루틴() {
 	<-ch초기화
 }
 
-func f초기화_xing_C32() (에러 error) {
+func f초기화_DLL32() (에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수_항상: xt.F로그인_정보_환경_변수_삭제}.S실행()
 
 	if !lib.F인터넷에_접속됨() {
@@ -126,17 +126,17 @@ func f초기화_xing_C32() (에러 error) {
 		os.Setenv("GOARCH", "386") // 64비트에서 컴파일을 막는 루틴을 회피하기 위해서 32비트인척 함.
 		defer os.Setenv("GOARCH", GOARCH_원래값)
 
-		if 에러 := dll32_빌드(); 에러 != nil {
+		if 에러 := DLL32_빌드(); 에러 != nil {
 			panic(lib.New에러with출력("dll32_xing.exe 빌드 에러 발생.\n%v", 에러))
-		} else if lib.F파일_없음(dll32_실행_화일_경로()) {
-			panic(lib.New에러with출력("빌드된 실행 화일 찾을 수 없음. '%v'", dll32_실행_화일_경로()))
+		} else if lib.F파일_없음(DLL32_실행_화일_경로()) {
+			panic(lib.New에러with출력("빌드된 실행 화일 찾을 수 없음. '%v'", DLL32_실행_화일_경로()))
 		}
 
 		// 자식 프로세스는 부모 프로세스의 환경 변수를 그대로 물려받음.
 		// 로그인 정보는 환경 변수를 통해서 전달.
-		프로세스ID_C32 = lib.F확인(ep.F외부_프로세스_실행(dll32_실행_화일_경로())).(int)
+		프로세스ID_DLL32 = lib.F확인(ep.F외부_프로세스_실행(DLL32_실행_화일_경로())).(int)
 
-		<-ch신호_C32_초기화
+		<-ch신호_DLL32_초기화
 	default:
 		lib.F문자열_출력("*********************************************\n"+
 			"현재 OS(%v)에서는 'dll32_xing.exe'를 수동으로 실행해야 합니다.\n"+
@@ -146,7 +146,7 @@ func f초기화_xing_C32() (에러 error) {
 	return nil
 }
 
-func dll32_실행_화일_경로() string {
+func DLL32_실행_화일_경로() string {
 	if 현재_디렉토리, 에러 := os.Getwd(); 에러 != nil {
 		return ""
 	} else {
@@ -154,16 +154,16 @@ func dll32_실행_화일_경로() string {
 	}
 }
 
-func dll32_소스_코드_화일_경로() string {
+func DLL32_소스_코드_화일_경로() string {
 	return filepath.Join(os.Getenv("USERPROFILE"), `go\src\github.com\ghts\ghts\xing\dll32\dll32_xing.go`)
 }
 
-func dll32_빌드() error {
-	if lib.F파일_존재함(dll32_실행_화일_경로()) {
-		if lib.F파일_없음(dll32_소스_코드_화일_경로()) {
+func DLL32_빌드() error {
+	if lib.F파일_존재함(DLL32_실행_화일_경로()) {
+		if lib.F파일_없음(DLL32_소스_코드_화일_경로()) {
 			return nil // 컴파일 준비되어 있지 않으면 이미 존재하는 실행 화일 그대로 사용.
 		} else {
-			os.Remove(dll32_실행_화일_경로()) // 컴파일 준비되어 있으면 삭제 후 최신 버전 재생성
+			os.Remove(DLL32_실행_화일_경로()) // 컴파일 준비되어 있으면 삭제 후 최신 버전 재생성
 		}
 	}
 
@@ -182,9 +182,9 @@ func dll32_빌드() error {
 	return exec.Command("go", "build", "-o", "dll32_xing.exe", "github.com/ghts/ghts/xing/dll32").Run()
 }
 
-func dll32_삭제() (에러 error) {
-	if lib.F파일_존재함(dll32_실행_화일_경로()) {
-		return os.Remove(dll32_실행_화일_경로())
+func DLL32_삭제() (에러 error) {
+	if lib.F파일_존재함(DLL32_실행_화일_경로()) {
+		return os.Remove(DLL32_실행_화일_경로())
 	}
 
 	return nil
@@ -192,7 +192,7 @@ func dll32_삭제() (에러 error) {
 
 func F접속_로그인() (에러 error) {
 	if !tr수신_소켓_동작_확인() {
-		return lib.New에러("C32 프로세스 REP소켓 접속 불가.")
+		return lib.New에러("DLL32 프로세스 REP소켓 접속 불가.")
 	}
 
 	질의값 := lib.New질의값_정수(lib.TR접속, "", int(xt.F서버_구분()))
@@ -204,7 +204,7 @@ func F접속_로그인() (에러 error) {
 		return lib.New에러("예상하지 못한 응답값 : '%v'", 응답값)
 	}
 
-	<-ch신호_C32_로그인
+	<-ch신호_DLL32_로그인
 
 	return nil
 }
@@ -325,19 +325,19 @@ func F전일_당일_설정() (에러 error) {
 	}
 }
 
-func C32_종료됨() bool {
-	프로세스, 에러 := ps.FindProcess(프로세스ID_C32)
-	포트_닫힘_C함수_호출 := lib.F포트_닫힘_확인(xt.F주소_C32())
+func DLL32_종료됨() bool {
+	프로세스, 에러 := ps.FindProcess(프로세스ID_DLL32)
+	포트_닫힘_C함수_호출 := lib.F포트_닫힘_확인(xt.F주소_DLL32())
 
 	return 프로세스 == nil && 에러 == nil && 포트_닫힘_C함수_호출
 }
 
-func C32_종료() (에러 error) {
+func DLL32_종료() (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
 	ch신호_접속유지_종료 <- lib.P신호_종료
 
-	if !C32_종료됨() {
+	if !DLL32_종료됨() {
 		소켓REQ := 소켓REQ_저장소.G소켓()
 
 		소켓REQ.S송신(lib.P변환형식_기본값, lib.New질의값_기본형(lib.TR종료, ""))
@@ -349,16 +349,16 @@ func C32_종료() (에러 error) {
 	ch타임아웃 := time.After(lib.P1분)
 
 	select {
-	case <-ch신호_C32_종료:
-	case <-ch타임아웃: //return lib.New에러with출력("C32 종료 타임아웃")
+	case <-ch신호_DLL32_종료:
+	case <-ch타임아웃: //return lib.New에러with출력("DLL32 종료 타임아웃")
 	}
 
 	for i := 0; i < 10; i++ {
-		if C32_종료됨() {
+		if DLL32_종료됨() {
 			break
 		}
 
-		ep.F프로세스_종료by프로세스ID(프로세스ID_C32)
+		ep.F프로세스_종료by프로세스ID(프로세스ID_DLL32)
 		lib.F대기(lib.P1초)
 	}
 
@@ -366,7 +366,7 @@ func C32_종료() (에러 error) {
 }
 
 func F종료() {
-	C32_종료()
+	DLL32_종료()
 	lib.F공통_종료_채널_닫기()
 	F소켓_정리()
 

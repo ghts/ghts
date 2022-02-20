@@ -81,9 +81,9 @@ func TestF영업일_기준_전일_당일(t *testing.T) {
 	lib.F테스트_같음(t, 당일.Nanosecond(), 0)
 }
 
-func TestC32_재시작(t *testing.T) {
-	lib.F중복없는_문자열_출력("C32 재시작 디버깅 필요함.")
+func TestDLL32_재시작(t *testing.T) {
+	lib.F중복없는_문자열_출력("DLL32 재시작 디버깅 필요함.")
 	t.SkipNow()
 
-	lib.F테스트_에러없음(t, C32_재시작())
+	lib.F테스트_에러없음(t, DLL32_재시작())
 }

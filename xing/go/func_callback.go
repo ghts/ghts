@@ -43,7 +43,7 @@ func f콜백_TR데이터_처리기(값 lib.I콜백) (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
 	var 식별번호 int
-	var 대기_항목 *dll32_콜백_대기_항목
+	var 대기_항목 *DLL32_콜백_대기_항목
 	var TR코드 string
 
 	// 최대 10초 대기.
@@ -100,17 +100,17 @@ func f콜백_TR데이터_처리기(값 lib.I콜백) (에러 error) {
 	// TR응답 데이터 수신 및 완료 확인이 되었는 지 확인.
 	switch {
 	case 대기_항목.에러 != nil && 대기_항목.메시지_수신 && 대기_항목.응답_완료:
-		대기소_C32.S회신(식별번호)
+		대기소_DLL32.S회신(식별번호)
 	case !대기_항목.데이터_수신, !대기_항목.응답_완료, !대기_항목.메시지_수신:
 		return
 	default:
-		대기소_C32.S회신(식별번호)
+		대기소_DLL32.S회신(식별번호)
 	}
 
 	return
 }
 
-func f콜백_데이터_식별번호(값 lib.I콜백) (식별번호 int, 대기_항목 *dll32_콜백_대기_항목, TR코드 string) {
+func f콜백_데이터_식별번호(값 lib.I콜백) (식별번호 int, 대기_항목 *DLL32_콜백_대기_항목, TR코드 string) {
 	switch 변환값 := 값.(type) {
 	case *lib.S콜백_TR데이터:
 		식별번호 = 변환값.M식별번호
@@ -122,7 +122,7 @@ func f콜백_데이터_식별번호(값 lib.I콜백) (식별번호 int, 대기_�
 		panic(lib.New에러("예상하지 못한 경우. 콜백 구분 : '%v', 자료형 : '%T'", 값.G콜백(), 값))
 	}
 
-	대기_항목 = 대기소_C32.G값(식별번호)
+	대기_항목 = 대기소_DLL32.G값(식별번호)
 
 	if 대기_항목 != nil {
 		TR코드 = 대기_항목.TR코드
@@ -131,7 +131,7 @@ func f콜백_데이터_식별번호(값 lib.I콜백) (식별번호 int, 대기_�
 	return 식별번호, 대기_항목, TR코드
 }
 
-func f콜백_데이터_복원(대기_항목 *dll32_콜백_대기_항목, 수신값 *lib.S바이트_변환) error {
+func f콜백_데이터_복원(대기_항목 *DLL32_콜백_대기_항목, 수신값 *lib.S바이트_변환) error {
 	switch 대기_항목.TR코드 {
 	// 선물옵션 관련 TR들 비활성화
 	// xt.TR선물옵션_주문체결내역조회_CFOAQ00600, xt.TR선물옵션_정상주문_CFOAT00100, xt.TR선물옵션_정정주문_CFOAT00200, xt.TR선물옵션_취소주문_CFOAT00300,
@@ -161,7 +161,7 @@ func f콜백_데이터_복원(대기_항목 *dll32_콜백_대기_항목, 수신�
 }
 
 // 10자리 TR코드의 연속 조회는 좀 특이하다.
-func f콜백_데이터_추가_설정(대기_항목 *dll32_콜백_대기_항목, 콜백_데이터 *lib.S콜백_TR데이터) {
+func f콜백_데이터_추가_설정(대기_항목 *DLL32_콜백_대기_항목, 콜백_데이터 *lib.S콜백_TR데이터) {
 	switch 대기_항목.TR코드 {
 	case xt.TR현물계좌_잔고내역_조회_CSPAQ12300:
 		if 대기_항목.대기값 != nil {
@@ -188,23 +188,23 @@ func f콜백_신호_처리기(콜백 lib.I콜백) (에러 error) {
 	신호 := lib.T신호_32비트_모듈(정수값)
 
 	switch 신호 {
-	case lib.P신호_C32_초기화:
+	case lib.P신호_DLL32_초기화:
 		select {
-		case ch신호_C32_초기화 <- 신호:
+		case ch신호_DLL32_초기화 <- 신호:
 		default:
 		}
-	case lib.P신호_C32_LOGIN:
+	case lib.P신호_DLL32_LOGIN:
 		select {
-		case ch신호_C32_로그인 <- 신호:
+		case ch신호_DLL32_로그인 <- 신호:
 		default:
 		}
-	case lib.P신호_C32_재시작_필요:
-		lib.F문자열_출력("C32_재시작_필요 신호 수신")
-		C32_재시작()
-	case lib.P신호_C32_종료:
-		lib.F문자열_출력("C32_종료 신호 수신")
+	case lib.P신호_DLL32_재시작_필요:
+		lib.F문자열_출력("DLL32_재시작_필요 신호 수신")
+		DLL32_재시작()
+	case lib.P신호_DLL32_종료:
+		lib.F문자열_출력("DLL32_종료 신호 수신")
 		select {
-		case ch신호_C32_종료 <- 신호:
+		case ch신호_DLL32_종료 <- 신호:
 		default:
 		}
 	default:

@@ -284,7 +284,7 @@ func F질의(TR코드 string, c데이터 unsafe.Pointer, 길이 int,
 		if 접속됨, 에러 = f접속됨(); 에러 != nil {
 			return -1, 에러
 		} else if !접속됨 {
-			if 에러 := xing.C32_재시작(); 에러 == nil {
+			if 에러 := xing.DLL32_재시작(); 에러 == nil {
 				break
 			}
 		}
@@ -312,9 +312,9 @@ func F질의(TR코드 string, c데이터 unsafe.Pointer, 길이 int,
 
 		if strings.Contains(에러.Error(), "Access is denied.") {
 			lib.F체크포인트("재시작 콜백 신호 송신")
-			f콜백_동기식(lib.New콜백_신호(lib.P신호_C32_재시작_필요))
+			f콜백_동기식(lib.New콜백_신호(lib.P신호_DLL32_재시작_필요))
 
-			lib.F체크포인트("C32 자체 종료.")
+			lib.F체크포인트("DLL32 자체 종료.")
 			f종료()
 		}
 	}

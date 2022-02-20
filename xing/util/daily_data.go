@@ -52,7 +52,7 @@ func F일개월_일일_가격정보_수집(db *sql.DB, 종목코드_모음 []str
 
 	for i, 종목코드 := range 종목코드_모음 {
 		for {
-			if xing.C32_재시작_실행_중.G값() {
+			if xing.DLL32_재시작_실행_중.G값() {
 				lib.F대기(lib.P10초)
 				continue
 			}
@@ -87,7 +87,7 @@ func F일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string) (에�
 
 	for i, 종목코드 := range 종목코드_모음 {
 		for {
-			if xing.C32_재시작_실행_중.G값() {
+			if xing.DLL32_재시작_실행_중.G값() {
 				lib.F대기(lib.P10초)
 				continue
 			}

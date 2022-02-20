@@ -49,7 +49,7 @@ func F초기화() {
 	ch초기화 := make(chan lib.T신호)
 	go Go루틴_관리(ch초기화)
 	<-ch초기화
-	F콜백(lib.New콜백_신호(lib.P신호_C32_초기화))
+	F콜백(lib.New콜백_신호(lib.P신호_DLL32_초기화))
 }
 
 func f종료_질의_송신() {
@@ -86,7 +86,7 @@ func F소켓_정리() error {
 	// TR수신 고루틴이 소켓 수신 후 공통 종료 채널이 닫혀있는 지 확인 후 종료하도록 유도.
 	반복_횟수 := lib.F최대값_정수(runtime.NumCPU()*2, 30)
 	질의값 := &lib.S질의값_기본형{M구분: xt.TR조회, M코드: xt.TR시간_조회_t0167}
-	소켓REQ := nano.NewNano소켓REQ_단순형(xt.F주소_C32(), lib.P1초)
+	소켓REQ := nano.NewNano소켓REQ_단순형(xt.F주소_DLL32(), lib.P1초)
 
 	for i := 0; i < 반복_횟수; i++ {
 		소켓REQ.S송신(lib.P변환형식_기본값, 질의값)

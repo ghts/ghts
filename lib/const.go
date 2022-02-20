@@ -305,21 +305,21 @@ func (t T신호) String() string {
 type T신호_32비트_모듈 uint8
 
 const (
-	P신호_C32_초기화 = iota
-	P신호_C32_LOGIN
-	P신호_C32_재시작_필요
-	P신호_C32_종료
+	P신호_DLL32_초기화 = iota
+	P신호_DLL32_LOGIN
+	P신호_DLL32_재시작_필요
+	P신호_DLL32_종료
 )
 
 func (p T신호_32비트_모듈) String() string {
 	switch p {
-	case P신호_C32_초기화:
+	case P신호_DLL32_초기화:
 		return "C32 READY"
-	case P신호_C32_LOGIN:
+	case P신호_DLL32_LOGIN:
 		return "C32 LOGIN"
-	case P신호_C32_재시작_필요:
+	case P신호_DLL32_재시작_필요:
 		return "C32 재시작 필요"
-	case P신호_C32_종료:
+	case P신호_DLL32_종료:
 		return "C32 종료"
 	default:
 		return F2문자열("예상하지 못한 T신호_32비트_모듈 값 : '%v'", p)

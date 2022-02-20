@@ -70,7 +70,7 @@ func F서버_구분_설정(서버_구분 T서버_구분) {
 	os.Setenv(P환경변수_서버_구분, strconv.Itoa(int(서버_구분)))
 }
 
-func F주소_C32() lib.T주소 {
+func F주소_DLL32() lib.T주소 {
 	for {
 		// 환경변수를 통하면 자동으로 자식 프로세스에 같은 값이 전달된다.
 		if 주소, 에러 := lib.F2정수(os.Getenv(P환경변수_주소_TR)); 에러 != nil {

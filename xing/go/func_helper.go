@@ -131,9 +131,9 @@ func go접속유지_도우미() {
 			에러_연속_발생_횟수++
 		}
 
-		// 3회 연속 에러 발생하면 API 연결에 문제 있다고 판단하고, C32 API 모듈 재시작.
+		// 3회 연속 에러 발생하면 API 연결에 문제 있다고 판단하고, DLL32 API 모듈 재시작.
 		if 에러_연속_발생_횟수 >= 3 {
-			C32_재시작()
+			DLL32_재시작()
 			에러_연속_발생_횟수 = 0
 		}
 	}
@@ -192,7 +192,7 @@ func f에러_발생(TR코드, 코드, 내용 string) bool {
 	}
 }
 
-func f데이터_복원_이중_응답(대기_항목 *dll32_콜백_대기_항목, 수신값 *lib.S바이트_변환) (에러 error) {
+func f데이터_복원_이중_응답(대기_항목 *DLL32_콜백_대기_항목, 수신값 *lib.S바이트_변환) (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
 	완전값 := new(xt.S이중_응답_일반형)
@@ -243,7 +243,7 @@ func f데이터_복원_이중_응답(대기_항목 *dll32_콜백_대기_항목, 
 	return nil
 }
 
-func f데이터_복원_반복_조회(대기_항목 *dll32_콜백_대기_항목, 수신값 *lib.S바이트_변환) (에러 error) {
+func f데이터_복원_반복_조회(대기_항목 *DLL32_콜백_대기_항목, 수신값 *lib.S바이트_변환) (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
 	완전값 := new(xt.S헤더_반복값)
@@ -291,38 +291,38 @@ func f데이터_복원_반복_조회(대기_항목 *dll32_콜백_대기_항목, 
 	return nil
 }
 
-func C32_재시작() (에러 error) {
+func DLL32_재시작() (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
 	// 동시 다발 실행 방지.
-	xing_C32_재실행_잠금.Lock()
-	defer xing_C32_재실행_잠금.Unlock()
+	xing_DLL32_재실행_잠금.Lock()
+	defer xing_DLL32_재실행_잠금.Unlock()
 
 	// 중복 재실행 방지.
-	if 최근_재시작 := xing_C32_재실행_시각.G값().After(lib.F지금().Add(-1 * lib.P3분)); 최근_재시작 {
+	if 최근_재시작 := xing_DLL32_재실행_시각.G값().After(lib.F지금().Add(-1 * lib.P3분)); 최근_재시작 {
 		return
 	}
 
-	fmt.Printf("**     C32 재시작 %v     **\n", time.Now().Format(lib.P간략한_시간_형식))
+	fmt.Printf("**     DLL32 재시작 %v     **\n", time.Now().Format(lib.P간략한_시간_형식))
 
-	lib.F확인(dll32_재시작_도우미())
+	lib.F확인(DLL32_재시작_도우미())
 
 	return nil
 }
 
-func dll32_재시작_도우미() (에러 error) {
+func DLL32_재시작_도우미() (에러 error) {
 	// 재귀 반복 시도.
-	defer lib.S예외처리{M함수: func() { 에러 = dll32_재시작_도우미() }}.S실행()
+	defer lib.S예외처리{M함수: func() { 에러 = DLL32_재시작_도우미() }}.S실행()
 
-	C32_재시작_실행_중.S값(true)
+	DLL32_재시작_실행_중.S값(true)
 
-	lib.F확인(C32_종료())
+	lib.F확인(DLL32_종료())
 	lib.F패닉억제_호출(소켓REP_TR콜백.Close)
 	소켓REQ_저장소.S정리()
 
 	xt.F주소_재설정()
 	F소켓_생성()
-	lib.F확인(f초기화_xing_C32())
+	lib.F확인(f초기화_DLL32())
 	lib.F확인(F접속_로그인())
 	lib.F조건부_패닉(!f초기화_작동_확인(), "초기화 작동 확인 실패.")
 	lib.F확인(F초기화_TR전송_제한())
@@ -330,10 +330,10 @@ func dll32_재시작_도우미() (에러 error) {
 	lib.F확인(F전일_당일_설정())
 	f접속유지_실행()
 
-	C32_재시작_실행_중.S값(false)
-	xing_C32_재실행_시각.S값(lib.F지금())
+	DLL32_재시작_실행_중.S값(false)
+	xing_DLL32_재실행_시각.S값(lib.F지금())
 
-	fmt.Println("**     C32 재시작 완료     **")
+	fmt.Println("**     DLL32 재시작 완료     **")
 
 	return nil
 }

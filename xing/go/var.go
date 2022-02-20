@@ -46,16 +46,16 @@ var (
 	소켓REP_TR콜백 lib.I소켓with컨텍스트
 
 	소켓REQ_저장소 = lib.New소켓_저장소(20, func() lib.I소켓_질의 {
-		return nano.NewNano소켓REQ_단순형(xt.F주소_C32(), lib.P30초)
+		return nano.NewNano소켓REQ_단순형(xt.F주소_DLL32(), lib.P30초)
 	})
 
-	ch질의         = make(chan *lib.S작업, 1000)
-	ch신호_접속유지_종료 = make(chan lib.T신호, 1)
-	ch신호_C32_초기화 = make(chan lib.T신호_32비트_모듈, 1)
-	ch신호_C32_로그인 = make(chan lib.T신호_32비트_모듈, 1)
-	ch신호_C32_종료  = make(chan lib.T신호_32비트_모듈, 1)
+	ch질의           = make(chan *lib.S작업, 1000)
+	ch신호_접속유지_종료   = make(chan lib.T신호, 1)
+	ch신호_DLL32_초기화 = make(chan lib.T신호_32비트_모듈, 1)
+	ch신호_DLL32_로그인 = make(chan lib.T신호_32비트_모듈, 1)
+	ch신호_DLL32_종료  = make(chan lib.T신호_32비트_모듈, 1)
 
-	대기소_C32 = newDLL32_콜백_대기_저장소()
+	대기소_DLL32 = newDLL32_콜백_대기_저장소()
 
 	V콜백_도우미_수량 = lib.F최대값_정수(runtime.NumCPU(), 2)
 
@@ -69,12 +69,12 @@ var (
 
 	최근_영업일_모음 []time.Time
 
-	xing_C32_재실행_잠금 sync.Mutex
-	xing_C32_재실행_시각 = lib.New안전한_시각(time.Time{})
+	xing_DLL32_재실행_잠금 sync.Mutex
+	xing_DLL32_재실행_시각 = lib.New안전한_시각(time.Time{})
 
-	접속유지_실행_중    = lib.New안전한_bool(false)
-	주문_응답_구독_중   = lib.New안전한_bool(false)
-	C32_재시작_실행_중 = lib.New안전한_bool(false)
+	접속유지_실행_중      = lib.New안전한_bool(false)
+	주문_응답_구독_중     = lib.New안전한_bool(false)
+	DLL32_재시작_실행_중 = lib.New안전한_bool(false)
 )
 
 // 종목 관련 저장소는 초기화 이후에는 사실상 읽기 전용. 다중 사용에 문제가 없음.
@@ -94,5 +94,5 @@ var (
 	기준가_맵        = make(map[string]int64)
 	하한가_맵        = make(map[string]int64)
 	계좌번호_모음      []string
-	프로세스ID_C32   int
+	프로세스ID_DLL32 int
 )

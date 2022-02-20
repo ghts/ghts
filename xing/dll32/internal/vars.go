@@ -79,7 +79,7 @@ var (
 
 // 다중 사용에 안전한 값들.
 var (
-	소켓REP_TR수신   = nano.NewNano소켓REP_단순형(xt.F주소_C32())
+	소켓REP_TR수신   = nano.NewNano소켓REP_단순형(xt.F주소_DLL32())
 	소켓PUB_실시간_정보 = nano.NewNano소켓PUB_단순형(xt.F주소_실시간())
 
 	소켓REQ_저장소 = lib.New소켓_저장소(20, func() lib.I소켓_질의 {

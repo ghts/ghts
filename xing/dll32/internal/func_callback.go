@@ -278,7 +278,7 @@ func OnLogin(wParam, lParam unsafe.Pointer) {
 	if 로그인_성공_여부 {
 		//fmt.Println("** Xing LOGIN SUCCESS **")
 
-		F콜백(lib.New콜백_신호(lib.P신호_C32_LOGIN))
+		F콜백(lib.New콜백_신호(lib.P신호_DLL32_LOGIN))
 	} else {
 		if 에러 == nil {
 			lib.F문자열_출력("에러 코드 : %v", 정수)
@@ -310,7 +310,7 @@ func OnLogout() {
 func OnDisconnected() {
 	lib.F체크포인트("OnDisconnected.")
 
-	F콜백(lib.New콜백_신호(lib.P신호_C32_재시작_필요))
+	F콜백(lib.New콜백_신호(lib.P신호_DLL32_재시작_필요))
 }
 
 func OnTimeout(c int) {

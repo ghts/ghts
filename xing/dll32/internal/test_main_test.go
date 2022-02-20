@@ -41,7 +41,7 @@ import (
 
 func TestMain(m *testing.M) {
 	if lib.F환경변수("GOARCH") != "386" {
-		lib.New에러with출력("C32 모듈은 32비트 전용입니다.")
+		lib.New에러with출력("DLL32 모듈은 32비트 전용입니다.")
 		return
 	}
 

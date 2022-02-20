@@ -1599,7 +1599,7 @@ func F질의_단일TR(질의값 lib.I질의값, 옵션_모음 ...interface{}) (�
 	}
 
 	식별번호 := i식별번호.(int)
-	ch회신 := 대기소_C32.S추가(식별번호, 질의값.TR코드())
+	ch회신 := 대기소_DLL32.S추가(식별번호, 질의값.TR코드())
 
 	select {
 	case 값 := <-ch회신:
@@ -1613,7 +1613,7 @@ func F질의_단일TR(질의값 lib.I질의값, 옵션_모음 ...interface{}) (�
 				return nil, 변환값
 			} else if strings.Contains(변환값.Error(), "XingAPI에 접속되어 있지 않습니다.") {
 				lib.F문자열_출력("[%v] XingAPI 재접속 시도.", lib.F지금().Format(lib.P간략한_시간_형식))
-				C32_재시작()
+				DLL32_재시작()
 				lib.F대기(lib.P10초)
 				return F질의_단일TR(질의값, 옵션_모음...)
 			}
@@ -1696,7 +1696,7 @@ func F계좌_이름(계좌_번호 string) (계좌_이름 string, 에러 error) {
 	return 계좌_이름, nil
 }
 
-// C32에서 syscall방식으로 에러 발생. cgo방식으로만 동작. C언어 컴파일러 의존성을 없애기 위해서 비활성화.
+// syscall 호출 시 에러 발생. cgo방식으로만 정상 동작함. C언어 컴파일러 의존성을 없애기 위해서 비활성화.
 //func F계좌_상세명(계좌_번호 string) (계좌_상세명 string, 에러 error) {
 //	defer lib.S예외처리{M에러: &에러, M함수: func() { 계좌_상세명 = "" }}.S실행()
 //
