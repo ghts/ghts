@@ -982,3 +982,21 @@ func F전월_마지막일() time.Time {
 func F전월() time.Month {
 	return F전월_마지막일().Month()
 }
+
+func F명월() time.Month {
+	if 금월 := F금월(); 금월 == time.December {
+		return time.January
+	} else {
+		return 금월 + 1
+	}
+}
+
+func F명월_1일() time.Time {
+	지금 := time.Now()
+
+	if 금월 := F금월(); 금월 == time.December {
+		return time.Date(지금.Year()+1, time.January, 1, 0, 0, 0, 0, 지금.Location())
+	} else {
+		return time.Date(지금.Year(), 금월+1, 1, 0, 0, 0, 0, 지금.Location())
+	}
+}
