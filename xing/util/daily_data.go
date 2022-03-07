@@ -45,56 +45,32 @@ func F당일_일일_가격정보_수집(db *sql.DB) (에러 error) {
 }
 
 func F일개월_일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string) (에러 error) {
-	var 시작일, 종료일 time.Time
-	var 종목별_일일_가격정보_모음 *daily_price_data.S종목별_일일_가격정보_모음
+	return f고정_기간_일일_가격정보_수집(db, 종목코드_모음, 31*lib.P1일)
+}
 
+func F일년_일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string) (에러 error) {
+	return f고정_기간_일일_가격정보_수집(db, 종목코드_모음, lib.P1년)
+}
+
+func f고정_기간_일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string, 기간 time.Duration) (에러 error) {
 	daily_price_data.F일일_가격정보_테이블_생성(db)
 
+	시작일 := lib.F금일().Add(-1*기간)
+
 	for i, 종목코드 := range 종목코드_모음 {
-		for {
-			if xing.DLL32_재시작_실행_중.G값() {
-				lib.F대기(lib.P10초)
-				continue
-			}
-
-			break
-		}
-
-		종목별_일일_가격정보_모음, 에러 = daily_price_data.New종목별_일일_가격정보_모음_DB읽기(db, 종목코드)
-		lib.F확인(에러)
-
-		// 시작일 설정. 데이터 수량이 1개이나 100개이나 소요 시간은 비슷함.
-		시작일 = lib.F지금().AddDate(0, 0, -31)
-
-		// 종료일 설정
-		if lib.F지금().After(xing.F당일().Add(15*lib.P1시간 + lib.P30분)) {
-			종료일 = xing.F당일()
-		} else {
-			종료일 = xing.F전일()
-		}
-
-		f일일_가격정보_수집_도우미(db, 종목코드, 시작일, 종료일, 종목별_일일_가격정보_모음, i)
+		f일일_가격정보_수집_도우미(db, 종목코드, 시작일, i)
 	}
 
 	return nil
 }
 
 func F일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string) (에러 error) {
-	var 시작일, 종료일, 마지막_저장일 time.Time
+	var 시작일, 마지막_저장일 time.Time
 	var 종목별_일일_가격정보_모음 *daily_price_data.S종목별_일일_가격정보_모음
 
 	daily_price_data.F일일_가격정보_테이블_생성(db)
 
 	for i, 종목코드 := range 종목코드_모음 {
-		for {
-			if xing.DLL32_재시작_실행_중.G값() {
-				lib.F대기(lib.P10초)
-				continue
-			}
-
-			break
-		}
-
 		종목별_일일_가격정보_모음, 에러 = daily_price_data.New종목별_일일_가격정보_모음_DB읽기(db, 종목코드)
 		lib.F확인(에러)
 
@@ -109,35 +85,34 @@ func F일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string) (에�
 		if 시작일.After(xing.F당일()) {
 			//lib.F문자열_출력("%v [%v] : 최신 데이터 업데이트.", i, 종목코드)
 			continue
-		}
-
-		// 종료일 설정
-		if lib.F지금().After(xing.F당일().Add(15*lib.P1시간 + lib.P30분)) {
-			종료일 = xing.F당일()
-		} else {
-			종료일 = xing.F전일()
-		}
-
-		if 시작일.After(종료일) {
-			continue
-		} else if 시작일.Equal(종료일) { // 시작일과 종료일이 같으면 수천 개의 데이터를 불러오는 현상이 있음.
-			시작일 = 시작일.AddDate(0, 0, -1)
-		}
-
-		// 데이터 수량이 1개이나 100개이나 소요 시간은 비슷함.
-		if 시작일.After(lib.F금일().AddDate(0, 0, -14)) {
+		} else if 시작일.After(lib.F금일().AddDate(0, 0, -14)) {
+			// 데이터 수량이 1개이나 100개이나 소요 시간은 비슷함.
 			시작일 = lib.F금일().AddDate(0, 0, -14)
 		}
 
-		f일일_가격정보_수집_도우미(db, 종목코드, 시작일, 종료일, 종목별_일일_가격정보_모음, i)
+		f일일_가격정보_수집_도우미(db, 종목코드, 시작일, i)
 	}
 
 	return nil
 }
 
-func f일일_가격정보_수집_도우미(db *sql.DB,
-	종목코드 string, 시작일, 종료일 time.Time,
-	종목별_일일_가격정보_모음 *daily_price_data.S종목별_일일_가격정보_모음, i int) {
+func f일일_가격정보_수집_도우미(db *sql.DB, 종목코드 string, 시작일 time.Time, i int) {
+	var 종료일 time.Time
+
+	// 종료일 설정
+	if lib.F지금().After(xing.F당일().Add(15*lib.P1시간 + lib.P30분)) {
+		종료일 = xing.F당일()
+	} else {
+		종료일 = xing.F전일()
+	}
+
+	// 시작일 오류 확인
+	if 시작일 = lib.F2일자(시작일); 시작일.After(종료일) {
+		return
+	} else if 시작일.Equal(종료일) { // 시작일과 종료일이 같으면 수천 개의 데이터를 불러오는 현상이 있음.
+		시작일 = 시작일.AddDate(0, 0, -1)
+	}
+
 	// 데이터 수집
 	값_모음, 에러 := xing.TrT8413_현물_차트_일주월(종목코드, 시작일, 종료일, xt.P일주월_일)
 	if 에러 != nil {
@@ -163,7 +138,7 @@ func f일일_가격정보_수집_도우미(db *sql.DB,
 
 	lib.F문자열_출력("%v %v %v~%v %v개", i, 종목코드, 시작일.Format(lib.P일자_형식), 종료일.Format(lib.P일자_형식), len(값_모음))
 
-	종목별_일일_가격정보_모음, 에러 = daily_price_data.New종목별_일일_가격정보_모음(일일_가격정보_슬라이스)
+	종목별_일일_가격정보_모음, 에러 := daily_price_data.New종목별_일일_가격정보_모음(일일_가격정보_슬라이스)
 	if 에러 != nil {
 		lib.F에러_출력(에러)
 		return
