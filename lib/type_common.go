@@ -44,9 +44,14 @@ import (
 )
 
 var 비어있는_값 = S비어있음{}
+var 비어있는_일자값 = time.Time{}
 
 func F비어있는_값() S비어있음 {
 	return 비어있는_값
+}
+
+func F비어있는_일자값() time.Time {
+	return 비어있는_일자값
 }
 
 type S비어있음 struct{}
