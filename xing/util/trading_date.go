@@ -7,6 +7,7 @@ import (
 
 	"database/sql"
 	"sort"
+	"time"
 )
 
 func New개장일_모음(db *sql.DB) (개장일_모음 *S개장일_모음, 에러 error) {
@@ -62,6 +63,10 @@ func (s S개장일_모음) G인덱스(일자 uint32) int {
 	} else {
 		return -1
 	}
+}
+
+func (s S개장일_모음) G인덱스2(일자 time.Time) int {
+	return s.G인덱스(lib.F일자2정수(일자))
 }
 
 func (s S개장일_모음) G증분_개장일(일자 uint32, 증분 int) (uint32, error) {
