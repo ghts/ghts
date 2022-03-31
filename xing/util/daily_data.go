@@ -55,7 +55,7 @@ func F일년_일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string
 func f고정_기간_일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string, 기간 time.Duration) (에러 error) {
 	daily_price_data.F일일_가격정보_테이블_생성(db)
 
-	시작일 := lib.F금일().Add(-1*기간)
+	시작일 := lib.F금일().Add(-1 * 기간)
 
 	for i, 종목코드 := range 종목코드_모음 {
 		f일일_가격정보_수집_도우미(db, 종목코드, 시작일, i)
