@@ -608,6 +608,10 @@ func F정수2일자(일자_정수값 uint32) (일자 time.Time, 에러 error) {
 	return F2포맷된_일자("20060102", F2문자열(일자_정수값))
 }
 
+func F정수2일자_단순형(일자_정수값 uint32) time.Time {
+	return F2포맷된_일자_단순형("20060102", F2문자열(일자_정수값))
+}
+
 func F2포맷된_시각(포맷 string, 값 interface{}) (time.Time, error) {
 	문자열 := ""
 
