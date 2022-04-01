@@ -136,7 +136,7 @@ func f일일_가격정보_수집_도우미(db *sql.DB, 종목코드 string, 시�
 			일일_데이터.M거래량)
 	}
 
-	lib.F문자열_출력("%v %v %v~%v %v개", i, 종목코드, 시작일.Format(lib.P일자_형식), 종료일.Format(lib.P일자_형식), len(값_모음))
+	lib.F문자열_출력("%v %v %v~%v %v개", i+1, 종목코드, 시작일.Format(lib.P일자_형식), 종료일.Format(lib.P일자_형식), len(값_모음))
 
 	종목별_일일_가격정보_모음, 에러 := daily_price_data.New종목별_일일_가격정보_모음(일일_가격정보_슬라이스)
 	if 에러 != nil {
