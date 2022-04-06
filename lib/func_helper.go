@@ -341,6 +341,14 @@ func F조건부_값(조건 bool, 참값, 거짓값 interface{}) interface{} {
 	return 거짓값
 }
 
+func F조건부_참거짓(조건, 참값, 거짓값 bool) bool {
+	if 조건 {
+		return 참값
+	}
+
+	return 거짓값
+}
+
 func F조건부_문자열(조건 bool, 참값, 거짓값 string) string {
 	if 조건 {
 		return 참값
@@ -975,12 +983,22 @@ func F금월_1일() time.Time {
 	return time.Date(지금.Year(), 지금.Month(), 1, 0, 0, 0, 0, 지금.Location())
 }
 
-func F전월_마지막일() time.Time {
-	return F금월_1일().Add(-1 * P1일)
+func F금월_마지막일() time.Time {
+	return F명월_1일().Add(-1 * P1일)
 }
 
 func F전월() time.Month {
 	return F전월_마지막일().Month()
+}
+
+func F전월_1일() time.Time {
+	전월 := F전월_마지막일()
+
+	return time.Date(전월.Year(), 전월.Month(), 1, 0, 0, 0, 0, 전월.Location())
+}
+
+func F전월_마지막일() time.Time {
+	return F금월_1일().Add(-1 * P1일)
 }
 
 func F명월() time.Month {
