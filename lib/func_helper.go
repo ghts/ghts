@@ -81,7 +81,6 @@ func F같음(값, 비교값 interface{}) bool {
 	return false
 }
 
-
 func f2실수값_모음(값_모음 ...interface{}) (실수값_모음 []float64) {
 	실수값_모음 = make([]float64, 0)
 
@@ -234,7 +233,6 @@ func F중간값_정수(임의형식_값_모음 ...interface{}) int {
 func F중간값_정수64(임의형식_값_모음 ...interface{}) int64 {
 	return int64(F중간값(임의형식_값_모음...))
 }
-
 
 func F절대값_정수(값 int) int {
 	return F조건부_정수(값 < 0, -1*값, 값)
