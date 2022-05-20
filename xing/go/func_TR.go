@@ -1398,9 +1398,8 @@ func TrT8413_현물_차트_일주월(종목코드 string, 시작일, 종료일 t
 	var 간격 time.Duration
 
 	if 전송_제한_정보_모음.M맵[xt.TR현물_차트_일주월_t8413].M10분당_전송_제한 != 0 {
-		간격 = time.Duration(lib.F최대값_정수64([]int64{
-			int64(lib.P10분)/int64(전송_제한_정보_모음.M맵[xt.TR현물_차트_일주월_t8413].M10분당_전송_제한) - int64(lib.P500밀리초),
-			0}))
+		간격 = time.Duration(lib.F최대값_정수64(int64(lib.P10분)/int64(전송_제한_정보_모음.M맵[xt.TR현물_차트_일주월_t8413].M10분당_전송_제한)-int64(lib.P500밀리초),
+			0))
 	}
 
 	for {
