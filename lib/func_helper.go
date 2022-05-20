@@ -81,66 +81,141 @@ func F같음(값, 비교값 interface{}) bool {
 	return false
 }
 
-func F최소값(값 interface{}, 값_모음 ...interface{}) (최소값 float64, 에러 error) {
-	defer S예외처리{M에러: &에러, M함수: func() { 최소값 = 0.0 }}.S실행()
 
-	값_모음 = append(값_모음, 값)
-	실수값_모음 := make([]float64, len(값_모음))
-
-	for i := 0; i < len(값_모음); i++ {
-		실수값_모음[i] = F2실수_단순형(값_모음[i])
-	}
-
-	return F최소값_실수(실수값_모음), nil
-}
-
-func F최대값(값 interface{}, 값_모음 ...interface{}) (최대값 float64, 에러 error) {
-	defer S예외처리{M에러: &에러, M함수: func() { 최대값 = 0.0 }}.S실행()
-
-	값_모음 = append(값_모음, 값)
-	실수값_모음 := make([]float64, len(값_모음))
-
-	for i := 0; i < len(값_모음); i++ {
-		실수값_모음[i] = F2실수_단순형(값_모음[i])
-	}
-
-	return F최대값_실수(실수값_모음), nil
-}
-
-func F최소값_정수(값_모음 ...int) int {
-	if len(값_모음) == 0 {
-		panic("비어있는 M값 모음.")
-	}
-
-	최소값 := 값_모음[0]
+func f2실수값_모음(값_모음 ...interface{}) (실수값_모음 []float64) {
+	실수값_모음 = make([]float64, 0)
 
 	for _, 값 := range 값_모음 {
-		if 값 < 최소값 {
-			최소값 = 값
+		switch 변환값 := 값.(type) {
+		case float64:
+			실수값_모음 = append(실수값_모음, 변환값)
+		case []float64:
+			for _, 값 := range 변환값 {
+				실수값_모음 = append(실수값_모음, 값)
+			}
+		case float32:
+			실수값 := float64(변환값)
+			실수값_모음 = append(실수값_모음, 실수값)
+		case []float32:
+			for _, 값 := range 변환값 {
+				실수값 := float64(값)
+				실수값_모음 = append(실수값_모음, 실수값)
+			}
+		case int64:
+			실수값 := float64(변환값)
+			실수값_모음 = append(실수값_모음, 실수값)
+		case []int64:
+			for _, 값 := range 변환값 {
+				실수값 := float64(값)
+				실수값_모음 = append(실수값_모음, 실수값)
+			}
+		case int32:
+			실수값 := float64(변환값)
+			실수값_모음 = append(실수값_모음, 실수값)
+		case []int32:
+			for _, 값 := range 변환값 {
+				실수값 := float64(값)
+				실수값_모음 = append(실수값_모음, 실수값)
+			}
+		case int:
+			실수값 := float64(변환값)
+			실수값_모음 = append(실수값_모음, 실수값)
+		case []int:
+			for _, 값 := range 변환값 {
+				실수값 := float64(값)
+				실수값_모음 = append(실수값_모음, 실수값)
+			}
+		default:
+			if 실수값, 에러 := F2실수(변환값); 에러 != nil {
+				panic(New에러("%v\n예상하지 못한 경우. %T, %v", 에러, 값, 값))
+				실수값_모음 = append(실수값_모음, 실수값)
+			}
 		}
 	}
 
-	return 최소값
+	return 실수값_모음
 }
 
-func F최대값_정수(값_모음 ...int) int {
-	if len(값_모음) == 0 {
-		panic("비어있는 M값 모음.")
-	}
-
-	최대값 := 값_모음[0]
+func F합계(임의형식_값_모음 ...interface{}) float64 {
+	값_모음 := f2실수값_모음(임의형식_값_모음...)
+	합계 := 0.0
 
 	for _, 값 := range 값_모음 {
-		if 값 > 최대값 {
-			최대값 = 값
-		}
+		합계 += 값
+	}
+
+	return 합계
+}
+
+func F평균(임의형식_값_모음 ...interface{}) float64 {
+	값_모음 := f2실수값_모음(임의형식_값_모음...)
+
+	return F합계(값_모음) / float64(len(값_모음))
+}
+
+func F표준_편차(임의형식_값_모음 ...interface{}) float64 {
+	값_모음 := f2실수값_모음(임의형식_값_모음...)
+	평균 := F평균(값_모음)
+	분산 := 0.0
+
+	for _, 값 := range 값_모음 {
+		분산 += math.Pow(값-평균, 2)
+	}
+
+	return math.Sqrt(분산 / float64(len(값_모음)))
+}
+
+func F최대값(임의형식_값_모음 ...interface{}) float64 {
+	값_모음 := f2실수값_모음(임의형식_값_모음...)
+
+	if len(값_모음) <= 0 {
+		return math.NaN()
+	}
+
+	최대값 := math.Inf(-1)
+
+	for _, 값 := range 값_모음 {
+		최대값 = math.Max(최대값, 값)
 	}
 
 	return 최대값
 }
 
-func F중간값_정수(값_모음 ...int) int {
-	sort.Ints(값_모음)
+func F최대값_정수(임의형식_값_모음 ...interface{}) int {
+	return int(F최대값(임의형식_값_모음...))
+}
+
+func F최대값_정수64(임의형식_값_모음 ...interface{}) int64 {
+	return int64(F최대값(임의형식_값_모음...))
+}
+
+func F최소값(임의형식_값_모음 ...interface{}) float64 {
+	값_모음 := f2실수값_모음(임의형식_값_모음...)
+
+	if len(값_모음) <= 0 {
+		return math.NaN()
+	}
+
+	최소값 := math.Inf(1)
+
+	for _, 값 := range 값_모음 {
+		최소값 = math.Min(최소값, 값)
+	}
+
+	return 최소값
+}
+
+func F최소값_정수(임의형식_값_모음 ...interface{}) int {
+	return int(F최소값(임의형식_값_모음...))
+}
+
+func F최소값_정수64(임의형식_값_모음 ...interface{}) int64 {
+	return int64(F최소값(임의형식_값_모음...))
+}
+
+func F중간값(임의형식_값_모음 ...interface{}) float64 {
+	값_모음 := f2실수값_모음(임의형식_값_모음...)
+	sort.Float64s(값_모음)
 
 	if len(값_모음)%2 == 1 {
 		return 값_모음[(len(값_모음)-1)/2]
@@ -152,20 +227,21 @@ func F중간값_정수(값_모음 ...int) int {
 	}
 }
 
+func F중간값_정수(임의형식_값_모음 ...interface{}) int {
+	return int(F중간값(임의형식_값_모음...))
+}
+
+func F중간값_정수64(임의형식_값_모음 ...interface{}) int64 {
+	return int64(F중간값(임의형식_값_모음...))
+}
+
+
 func F절대값_정수(값 int) int {
 	return F조건부_정수(값 < 0, -1*값, 값)
 }
 
 func F절대값_정수64(값 int64) int64 {
 	return F조건부_정수64(값 < 0, -1*값, 값)
-}
-
-func F절대값_Duration(값 time.Duration) time.Duration {
-	if 값 < 0 {
-		return 값 * -1
-	}
-
-	return 값
 }
 
 func F절대값_실수(값 interface{}) float64 {
@@ -184,6 +260,14 @@ func F절대값_실수(값 interface{}) float64 {
 	}
 
 	return math.Abs(실수값)
+}
+
+func F절대값_Duration(값 time.Duration) time.Duration {
+	if 값 < 0 {
+		return 값 * -1
+	}
+
+	return 값
 }
 
 func F대기(시간 time.Duration) { time.Sleep(시간) }
