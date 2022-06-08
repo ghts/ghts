@@ -55,6 +55,7 @@ const (
 	P500밀리초 = 500 * time.Millisecond
 	P1초     = 1 * time.Second
 	P3초     = 3 * time.Second
+	P4초     = 4 * time.Second
 	P5초     = 5 * time.Second
 	P10초    = 10 * time.Second
 	P20초    = 20 * time.Second
