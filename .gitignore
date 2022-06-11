@@ -4,16 +4,24 @@
 *.so
 *.dll
  
-# Folders 
+# Folders
 _obj
 _test
-venv
-__pycache__
+
+# IDE
 .project
-.pydevproject
 .settings
 .idea
 .vscode
+
+# Rust
+target
+
+# Python
+venv
+__pycache__
+.pydevproject
+.ipynb_checkpoints
 
 # Architecture specific extensions/prefixes 
 *.[568vq] 
