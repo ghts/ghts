@@ -13,8 +13,6 @@
 * 구조체 멤버 필드의 경우 Go언어의 변수명명 규칙을 여기에서도 적용해서 첫 글자를 대문자로 함.
 * 그 외 최근 주류 언어인 Java, C#의 관례에 따라 CamelCase를 적용함. */
 
-# include <windef.h>
-
 // '#pragma pack()'으로 지정된 PACKED C구조체는 Go언어에서 직접 사용할 수 없음.
 // binary.Read()를 이용해서 Go 구조체로 읽어들인 후 사용할 수 있음.
 #pragma pack(push, 1)
