@@ -82,3 +82,11 @@ type TR코드별_전송_제한_정보 struct {
 type TR코드별_전송_제한_정보_모음 struct {
 	M맵 map[string]*TR코드별_전송_제한_정보
 }
+
+type S로그인_정보 struct {
+	M로그인_ID  string
+	M로그인_암호  string
+	M인증서_암호  string
+	M계좌_암호   string
+	M모의투자_암호 string
+}
