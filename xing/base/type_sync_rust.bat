@@ -1,9 +1,11 @@
 @echo off
 
-cls
+REM 즌비믈
+REM Visual Studio BuildTools 에서 clang 설치.
+REM >cargo install bindgen                    # bindgen 설치
+REM >rustup target add i686-pc-windows-msvc   # Xing API는 32비트 윈도우 DLL
 
-REM 32비트에 맞게 하려면.
-REM >rustup target add i686-pc-windows-msvc
+cls
 
 SET LIBCLANG_PATH=C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Tools\Llvm\x64\bin
 SET PATH_ORIG=%PATH%
