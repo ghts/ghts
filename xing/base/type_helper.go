@@ -87,6 +87,6 @@ type S로그인_정보 struct {
 	M로그인_ID  string
 	M로그인_암호  string
 	M인증서_암호  string
-	M계좌_암호   string
+	M계좌_비밀번호 string
 	M모의투자_암호 string
 }

@@ -48,7 +48,8 @@ const (
 	P환경변수_로그인_ID   = "XING_LOG_IN_ID"
 	P환경변수_로그인_암호   = "XING_LOG_IN_PWD"
 	P환경변수_인증서_암호   = "XING_CERT_PWD"
-	P환경변수_계좌_암호    = "XING_ACCOUNT_PWD"
+	P환경변수_계좌_비밀번호  = "XING_ACCOUNT_PWD"
+	P환경변수_모의투자_암호  = "XING_TEST_PWD"
 )
 
 const (
