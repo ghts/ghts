@@ -46,14 +46,14 @@ func F당일_일일_가격정보_수집(db *sql.DB) (에러 error) {
 }
 
 func F일개월_일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string) (에러 error) {
-	return f고정_기간_일일_가격정보_수집(db, 종목코드_모음, 31*lib.P1일)
+	return F고정_기간_일일_가격정보_수집(db, 종목코드_모음, 31*lib.P1일)
 }
 
 func F일년_일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string) (에러 error) {
-	return f고정_기간_일일_가격정보_수집(db, 종목코드_모음, lib.P1년)
+	return F고정_기간_일일_가격정보_수집(db, 종목코드_모음, lib.P1년)
 }
 
-func f고정_기간_일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string, 기간 time.Duration) (에러 error) {
+func F고정_기간_일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string, 기간 time.Duration) (에러 error) {
 	daily_price_data.F일일_가격정보_테이블_생성(db)
 
 	시작일 := lib.F금일().Add(-1 * 기간)
