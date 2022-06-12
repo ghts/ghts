@@ -9,10 +9,10 @@ _obj
 _test
 
 # IDE
+/.idea
+/.vscode
 .project
 .settings
-.idea
-.vscode
 
 # Rust
 target
