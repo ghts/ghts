@@ -178,35 +178,35 @@ func F조회_및_주문_질의_처리(질의 *lib.S채널_질의) {
 	case xt.TR현물계좌_총평가_CSPAQ12200:
 		계좌번호 := 질의값.(*lib.S질의값_문자열).M문자열
 
-		c데이터 = unsafe.Pointer(xt.NewCSPAQ12200InBlock(계좌번호, 계좌_비밀번호))
+		c데이터 = unsafe.Pointer(xt.NewCSPAQ12200InBlock(계좌번호, f계좌_비밀번호()))
 		길이 = xt.SizeCSPAQ12200InBlock1
 	case xt.TR현물계좌_잔고내역_조회_CSPAQ12300:
 		질의값_CSPAQ12300 := 질의값.(*xt.CSPAQ12300_현물계좌_잔고내역_질의값)
 		연속_조회_여부 = 질의값_CSPAQ12300.M연속조회_여부
 		연속_조회_키 = 질의값_CSPAQ12300.M연속키
 
-		c데이터 = unsafe.Pointer(xt.NewCSPAQ12300InBlock(질의값.(*xt.CSPAQ12300_현물계좌_잔고내역_질의값), 계좌_비밀번호))
+		c데이터 = unsafe.Pointer(xt.NewCSPAQ12300InBlock(질의값.(*xt.CSPAQ12300_현물계좌_잔고내역_질의값), f계좌_비밀번호()))
 		길이 = xt.SizeCSPAQ12300InBlock1
 	case xt.TR현물계좌_주문체결내역_조회_CSPAQ13700:
 		질의값_CSPAQ13700 := 질의값.(*xt.CSPAQ13700_현물계좌_주문체결내역_질의값)
 		연속_조회_여부 = 질의값_CSPAQ13700.M연속조회_여부
 		연속_조회_키 = 질의값_CSPAQ13700.M연속키
 
-		c데이터 = unsafe.Pointer(xt.NewCSPAQ13700InBlock(질의값_CSPAQ13700, 계좌_비밀번호))
+		c데이터 = unsafe.Pointer(xt.NewCSPAQ13700InBlock(질의값_CSPAQ13700, f계좌_비밀번호()))
 		길이 = xt.SizeCSPAQ13700InBlock1
 	case xt.TR현물계좌_예수금_주문가능금액_CSPAQ22200:
 		계좌번호 := 질의값.(*lib.S질의값_문자열).M문자열
 
-		c데이터 = unsafe.Pointer(xt.NewCSPAQ22200InBlock(계좌번호, 계좌_비밀번호))
+		c데이터 = unsafe.Pointer(xt.NewCSPAQ22200InBlock(계좌번호, f계좌_비밀번호()))
 		길이 = xt.SizeCSPAQ22200InBlock1
 	case xt.TR현물_정상_주문_CSPAT00600:
-		c데이터 = unsafe.Pointer(xt.NewCSPAT00600InBlock(질의값.(*xt.CSPAT00600_현물_정상_주문_질의값), 계좌_비밀번호))
+		c데이터 = unsafe.Pointer(xt.NewCSPAT00600InBlock(질의값.(*xt.CSPAT00600_현물_정상_주문_질의값), f계좌_비밀번호()))
 		길이 = xt.SizeCSPAT00600InBlock1
 	case xt.TR현물_정정_주문_CSPAT00700:
-		c데이터 = unsafe.Pointer(xt.NewCSPAT00700InBlock(질의값.(*xt.CSPAT00700_현물_정정_주문_질의값), 계좌_비밀번호))
+		c데이터 = unsafe.Pointer(xt.NewCSPAT00700InBlock(질의값.(*xt.CSPAT00700_현물_정정_주문_질의값), f계좌_비밀번호()))
 		길이 = xt.SizeCSPAT00700InBlock1
 	case xt.TR현물_취소_주문_CSPAT00800:
-		c데이터 = unsafe.Pointer(xt.NewCSPAT00800InBlock(질의값.(*lib.S질의값_취소_주문), 계좌_비밀번호))
+		c데이터 = unsafe.Pointer(xt.NewCSPAT00800InBlock(질의값.(*lib.S질의값_취소_주문), f계좌_비밀번호()))
 		길이 = xt.SizeCSPAT00800InBlock1
 	case xt.TR현물_당일_매매일지_t0150:
 		c데이터 = unsafe.Pointer(xt.NewT0150InBlock(질의값.(*xt.T0150_현물_당일_매매일지_질의값)))
@@ -218,7 +218,7 @@ func F조회_및_주문_질의_처리(질의 *lib.S채널_질의) {
 		c데이터 = unsafe.Pointer(dll.F2ANSI문자열(""))
 		길이 = 0
 	case xt.TR현물_체결_미체결_조회_t0425:
-		c데이터 = unsafe.Pointer(xt.NewT0425InBlock(질의값.(*xt.T0425_현물_체결_미체결_조회_질의값), 계좌_비밀번호))
+		c데이터 = unsafe.Pointer(xt.NewT0425InBlock(질의값.(*xt.T0425_현물_체결_미체결_조회_질의값), f계좌_비밀번호()))
 		길이 = xt.SizeT0425InBlock
 	//case xt.TR선물옵션_체결_미체결_조회_t0434:
 	//	c데이터 = unsafe.Pointer(xt.NewT0434InBlock(질의값.(*xt.T0434_선물옵션_체결_미체결_조회_질의값), 계좌_비밀번호))

@@ -70,6 +70,14 @@ func XingAPI디렉토리() (string, error) {
 	return "", lib.New에러("DLL파일을 찾을 수 없습니다.")
 }
 
+func f계좌_비밀번호() string {
+	if xt.F서버_구분() == xt.P서버_실거래 && 계좌_비밀번호 == "" {
+		panic(lib.New에러("계좌 비밀번호가 설정되어 있지 않습니다."))
+	}
+
+	return 계좌_비밀번호
+}
+
 func f자료형_문자열_해석(g *xt.TR_DATA) (자료형_문자열 string, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 자료형_문자열 = "" }}.S실행()
 
