@@ -161,7 +161,7 @@ func F표준_편차(임의형식_값_모음 ...interface{}) float64 {
 		분산 += math.Pow(값-평균, 2)
 	}
 
-	return math.Sqrt(분산 / float64(len(값_모음)))
+	return math.Sqrt(분산 / float64(len(값_모음)-1))
 }
 
 func F최대값(임의형식_값_모음 ...interface{}) float64 {
