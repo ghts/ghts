@@ -46,13 +46,13 @@ func F로그인_설정_화일_경로_설정(경로 string) {
 }
 
 func F로그인_설정_화일_경로() string {
-	if 현재_디렉토리, 에러 := os.Getwd(); 에러 == nil {
-		if 경로 := filepath.Join(현재_디렉토리, "xing_config.ini"); lib.F파일_존재함(경로) {
-			return 경로
-		}
+	if lib.F파일_존재함(os.Getenv(P환경변수_설정_화일_경로)) {
+		return os.Getenv(P환경변수_설정_화일_경로)
+	} else if 현재_디렉토리, 에러 := os.Getwd(); 에러 == nil && lib.F파일_존재함(filepath.Join(현재_디렉토리, "xing_config.ini")) {
+		return filepath.Join(현재_디렉토리, "xing_config.ini")
+	} else {
+		return `.\xing_config.ini`
 	}
-
-	return os.Getenv(P환경변수_설정_화일_경로)
 }
 
 func F로그인_설정_화일_읽기() (로그인_정보 *S로그인_정보, 에러 error) {
