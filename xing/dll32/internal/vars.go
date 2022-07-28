@@ -37,8 +37,6 @@ import (
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/lib/nanomsg"
 	xt "github.com/ghts/ghts/xing/base"
-	"path/filepath"
-	"reflect"
 	"runtime"
 	"sync"
 	"syscall"
@@ -107,8 +105,6 @@ var (
 
 // 초기화 이후에는 사실상 읽기 전용이어서, 다중 사용에 문제가 없는 값들.
 var (
-	설정파일_디렉토리 = filepath.Join(lib.GOPATH(), "src", reflect.TypeOf(S콜백_대기_저장소{}).PkgPath())
-	설정파일_경로   = filepath.Join(설정파일_디렉토리, "xing_config.ini")
 	계좌번호_모음   []string
 	계좌_비밀번호   string
 	서버_구분     xt.T서버_구분
