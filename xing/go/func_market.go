@@ -472,6 +472,7 @@ func F지주회사_종목_여부(종목코드 string) bool {
 		"004990", // 롯데지주
 		"005250", // 녹십자홀딩스
 		"005257", // 녹십자홀딩스2우
+		"005490", // POSCO홀딩스
 		"005720", // 넥센
 		"005725", // 넥센우
 		"005740", // 크라운해태홀딩스
@@ -603,7 +604,7 @@ func F금융사_종목_여부(종목코드 string) bool {
 		strings.HasSuffix(종목명, "증권") ||
 		strings.Contains(종목명, "카드") ||
 		strings.Contains(종목명, "보험") ||
-		strings.Contains(종목명, "생명") ||
+		strings.HasSuffix(종목명, "생명") ||
 		strings.Contains(종목명, "손해") ||
 		strings.Contains(종목명, "화재") ||
 		strings.Contains(종목명, "해상") ||
