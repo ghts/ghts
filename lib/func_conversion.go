@@ -589,7 +589,7 @@ func F2십진수_소숫점_추가_단순형(값 interface{}, 소숫점_이하_�
 }
 
 func F2한국_시간(값 time.Time) (한국_시간 time.Time) {
-	return 값.In(한국)
+	return 값.In(P한국)
 }
 
 func F2일자(값 time.Time) time.Time {
@@ -597,7 +597,7 @@ func F2일자(값 time.Time) time.Time {
 }
 
 func F2한국_일자(값 time.Time) (한국_시간 time.Time) {
-	return time.Date(값.Year(), 값.Month(), 값.Day(), 0, 0, 0, 0, 한국)
+	return time.Date(값.Year(), 값.Month(), 값.Day(), 0, 0, 0, 0, P한국)
 }
 
 func F일자2정수(일자 time.Time) uint32 {

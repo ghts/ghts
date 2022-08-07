@@ -72,5 +72,5 @@ var (
 
 	체크포인트_잠금 = new(sync.Mutex)
 
-	한국 = time.FixedZone("UTC+9", 9*60*60)
+	P한국 = time.FixedZone("UTC+9", 9*60*60)
 )

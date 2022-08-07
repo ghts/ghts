@@ -1069,8 +1069,20 @@ func F금월_마지막일() time.Time {
 	return F명월_1일().Add(-1 * P1일)
 }
 
-func F전월() time.Month {
-	return F전월_마지막일().Month()
+func F전월(인수_모음 ...time.Month) time.Month {
+	var 기준월 time.Month
+
+	if len(인수_모음) > 0 {
+		기준월 = 인수_모음[0]
+	} else {
+		기준월 = F금월()
+	}
+
+	if 기준월 == time.January {
+		return time.December
+	} else {
+		return 기준월 - 1
+	}
 }
 
 func F전월_1일() time.Time {
@@ -1083,11 +1095,19 @@ func F전월_마지막일() time.Time {
 	return F금월_1일().Add(-1 * P1일)
 }
 
-func F명월() time.Month {
-	if 금월 := F금월(); 금월 == time.December {
+func F명월(인수_모음 ...time.Month) time.Month {
+	var 기준월 time.Month
+
+	if len(인수_모음) > 0 {
+		기준월 = 인수_모음[0]
+	} else {
+		기준월 = F금월()
+	}
+
+	if 기준월 == time.December {
 		return time.January
 	} else {
-		return 금월 + 1
+		return 기준월 + 1
 	}
 }
 
