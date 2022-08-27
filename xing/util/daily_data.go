@@ -68,7 +68,7 @@ func F고정_기간_일일_가격정보_수집(db *sql.DB, 종목코드_모음 [
 	i := 0
 
 	for 종목코드 := range 종목코드_맵 {
-		f일일_가격정보_수집_도우미(db, 종목코드, 시작일, i)
+		f일일_가격정보_수집_도우미(db, 종목코드, 시작일, i, len(종목코드_맵))
 		i++
 
 		lib.F대기(lib.P4초)	// TR 한도 초과 관련.
@@ -105,7 +105,7 @@ func F일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string) (에�
 			시작일 = lib.F금일().AddDate(0, 0, -14)
 		}
 
-		f일일_가격정보_수집_도우미(db, 종목코드, 시작일, i, 출력_문자열_버퍼)
+		f일일_가격정보_수집_도우미(db, 종목코드, 시작일, i, len(종목코드_모음), 출력_문자열_버퍼)
 	}
 
 	lib.F문자열_출력(출력_문자열_버퍼.String())
@@ -113,7 +113,7 @@ func F일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string) (에�
 	return nil
 }
 
-func f일일_가격정보_수집_도우미(db *sql.DB, 종목코드 string, 시작일 time.Time, i int, 버퍼 ...*bytes.Buffer) {
+func f일일_가격정보_수집_도우미(db *sql.DB, 종목코드 string, 시작일 time.Time, i, 전체_수량 int, 버퍼 ...*bytes.Buffer) {
 	var 종료일 time.Time
 
 	// 종료일 설정
@@ -153,13 +153,15 @@ func f일일_가격정보_수집_도우미(db *sql.DB, 종목코드 string, 시�
 			일일_데이터.M거래량)
 	}
 
-	출력_문자열 := lib.F2문자열("%v %v %v~%v %v개\n", i+1, xing.F종목_식별_문자열(종목코드), 시작일.Format(lib.P일자_형식), 종료일.Format(lib.P일자_형식), len(값_모음))
-
 	if len(버퍼) > 0 && 버퍼[0] != nil {
 		// 버퍼가 존재하면 버퍼에 출력
-		버퍼[0].WriteString(출력_문자열)
+		버퍼[0].WriteString(lib.F2문자열("%v 일일 가격 정보 수집 (%v/%v) : %v %v~%v %v개\n",
+			lib.F지금().Format("15:04"), i+1, 전체_수량,
+			xing.F종목_식별_문자열(종목코드), 시작일.Format(lib.P일자_형식), 종료일.Format(lib.P일자_형식), len(값_모음)))
 	} else {
-		lib.F문자열_출력(출력_문자열)
+		lib.F문자열_출력("%v 일일 가격 정보 수집 (%v/%v) %.1f%% : %v %v~%v %v개\n",
+			lib.F지금().Format("15:04"), i+1, 전체_수량, float64(i+1)/float64(전체_수량)*100,
+			xing.F종목_식별_문자열(종목코드), 시작일.Format(lib.P일자_형식), 종료일.Format(lib.P일자_형식), len(값_모음))
 	}
 
 	종목별_일일_가격정보_모음, 에러 := daily_price_data.New종목별_일일_가격정보_모음(일일_가격정보_슬라이스)
