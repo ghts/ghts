@@ -1098,10 +1098,10 @@ func F전월_마지막일() time.Time {
 func F명월(인수_모음 ...time.Month) time.Month {
 	var 기준월 time.Month
 
-	if len(인수_모음) > 0 {
-		기준월 = 인수_모음[0]
-	} else {
+	if len(인수_모음) == 0 {
 		기준월 = F금월()
+	} else {
+		기준월 = 인수_모음[0]
 	}
 
 	if 기준월 == time.December {
