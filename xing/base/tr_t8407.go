@@ -83,6 +83,7 @@ func NewT8407InBlock(질의값 *lib.S질의값_복수_종목) (g *T8407InBlock) 
 
 	return g
 }
+
 func NewT8407_현물_멀티_현재가_조회_응답_반복값_모음(b []byte) (값_모음 []*T8407_현물_멀티_현재가_조회_응답, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 값_모음 = nil }}.S실행()
 
