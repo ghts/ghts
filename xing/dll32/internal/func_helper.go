@@ -36,6 +36,7 @@ package dll32
 import (
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/xing/base"
+	xing "github.com/ghts/ghts/xing/go"
 	"os"
 )
 
@@ -376,4 +377,30 @@ func f민감정보_삭제_도우미(raw값 []byte, 시작_인덱스, 길이 int)
 
 func f모의투자서버_접속_중() bool {
 	return 서버_구분 == xt.P서버_모의투자
+}
+
+func f재접속() (에러 error) {
+	lib.S예외처리{M에러: &에러}.S실행()
+
+	// 동시 다발 실행 방지.
+	재접속_잠금.Lock()
+	defer func() {
+		재접속_시각.S값(lib.F지금())
+		재접속_잠금.Unlock()
+	}()
+
+	// 중복 재실행 방지.
+	if 최근_재시작 := lib.F지금().Before(재접속_시각.G값().Add(lib.P1분)); 최근_재시작 {
+		return
+	}
+
+	for i := 0; i < 100; i++ {
+		if 에러 := xing.F접속_로그인(); 에러 == nil {
+			return nil
+		}
+
+		lib.F대기(lib.P30초)
+	}
+
+	return lib.New에러with출력("%v : 재접속 실패.", lib.F지금().Format("15:04"))
 }

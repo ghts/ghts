@@ -310,7 +310,7 @@ func OnLogout() {
 func OnDisconnected() {
 	lib.F체크포인트("OnDisconnected.")
 
-	F콜백(lib.New콜백_신호(lib.P신호_DLL32_재시작_필요))
+	go f재접속()
 }
 
 func OnTimeout(c int) {

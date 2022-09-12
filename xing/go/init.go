@@ -191,7 +191,7 @@ func DLL32_삭제() (에러 error) {
 }
 
 func F접속_로그인() (에러 error) {
-	if !tr수신_소켓_동작_확인() {
+	if !F확인_TR소켓() {
 		return lib.New에러("DLL32 프로세스 REP소켓 접속 불가.")
 	}
 
@@ -230,7 +230,7 @@ func f초기화_작동_확인() (작동_여부 bool) {
 	return true
 }
 
-func tr수신_소켓_동작_확인() bool {
+func F확인_TR소켓() bool {
 	for i := 0; i < 100; i++ {
 		if 응답 := F질의(lib.New질의값_기본형(xt.TR소켓_테스트, ""), lib.P5초); 응답.G에러() == nil {
 			return true
