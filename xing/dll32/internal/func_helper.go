@@ -395,6 +395,8 @@ func f재접속() (에러 error) {
 	}
 
 	for i := 0; i < 100; i++ {
+		lib.F문자열_출력("%v 재접속 시도 %v회", lib.F지금().Format("15:04"), i+1)
+
 		if 에러 := xing.F접속_로그인(); 에러 == nil {
 			return nil
 		}
