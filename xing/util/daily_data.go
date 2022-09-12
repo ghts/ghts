@@ -53,13 +53,16 @@ func F일년_일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string
 	return F고정_기간_일일_가격정보_수집(db, 종목코드_모음, lib.P1년)
 }
 
-func F고정_기간_일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string, 기간 time.Duration) (에러 error) {
+func F고정_기간_일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string, 기간 time.Duration, 추가_인수 ...bool) (에러 error) {
+	if len(종목코드_모음) == 0 {
+		return nil
+	}
+
 	daily_price_data.F일일_가격정보_테이블_생성(db)
 
 	시작일 := lib.F금일().Add(-1 * 기간)
-
-	// 종목 순서를 매번 랜덤화 시켜서 반복 실행 시 나중 종목만 누락되는 현상을 방지하기 위해서 맵에 대입.
-	종목코드_맵 := make(map[string]lib.S비어있음)
+	출력_여부 := lib.F조건부_참거짓(len(추가_인수) > 0, 추가_인수[0], true)
+	종목코드_맵 := make(map[string]lib.S비어있음) // 종목 순서를 랜덤화
 
 	for _, 종목코드 := range 종목코드_모음 {
 		종목코드_맵[종목코드] = lib.F비어있는_값()
@@ -68,7 +71,7 @@ func F고정_기간_일일_가격정보_수집(db *sql.DB, 종목코드_모음 [
 	i := 0
 
 	for 종목코드 := range 종목코드_맵 {
-		f일일_가격정보_수집_도우미(db, 종목코드, 시작일, i, len(종목코드_맵))
+		f일일_가격정보_수집_도우미(db, 종목코드, 시작일, i, len(종목코드_맵), 출력_여부)
 		i++
 
 		lib.F대기(lib.P4초) // TR 한도 초과 관련.
@@ -77,12 +80,13 @@ func F고정_기간_일일_가격정보_수집(db *sql.DB, 종목코드_모음 [
 	return nil
 }
 
-func F일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string) (에러 error) {
+func F일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string, 추가_인수 ...bool) (에러 error) {
 	var 시작일, 마지막_저장일 time.Time
 	var 종목별_일일_가격정보_모음 *daily_price_data.S종목별_일일_가격정보_모음
 
 	daily_price_data.F일일_가격정보_테이블_생성(db)
 
+	출력_여부 := lib.F조건부_참거짓(len(추가_인수) > 0, 추가_인수[0], true)
 	출력_문자열_버퍼 := new(bytes.Buffer)
 
 	for i, 종목코드 := range 종목코드_모음 {
@@ -105,7 +109,7 @@ func F일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string) (에�
 			시작일 = lib.F금일().AddDate(0, 0, -14)
 		}
 
-		f일일_가격정보_수집_도우미(db, 종목코드, 시작일, i, len(종목코드_모음), 출력_문자열_버퍼)
+		f일일_가격정보_수집_도우미(db, 종목코드, 시작일, i, len(종목코드_모음), 출력_여부, 출력_문자열_버퍼)
 	}
 
 	lib.F문자열_출력(출력_문자열_버퍼.String())
@@ -113,7 +117,7 @@ func F일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string) (에�
 	return nil
 }
 
-func f일일_가격정보_수집_도우미(db *sql.DB, 종목코드 string, 시작일 time.Time, i, 전체_수량 int, 버퍼 ...*bytes.Buffer) {
+func f일일_가격정보_수집_도우미(db *sql.DB, 종목코드 string, 시작일 time.Time, i, 전체_수량 int, 출력_여부 bool, 버퍼 ...*bytes.Buffer) {
 	var 종료일 time.Time
 
 	// 종료일 설정
@@ -153,7 +157,9 @@ func f일일_가격정보_수집_도우미(db *sql.DB, 종목코드 string, 시�
 			일일_데이터.M거래량)
 	}
 
-	if len(버퍼) > 0 && 버퍼[0] != nil {
+	if !출력_여부 {
+		// PASS
+	} else if len(버퍼) > 0 && 버퍼[0] != nil {
 		// 버퍼가 존재하면 버퍼에 출력
 		버퍼[0].WriteString(lib.F2문자열("%v 일일 가격 정보 수집 (%v/%v) : %v %v~%v %v개\n",
 			lib.F지금().Format("15:04"), i+1, 전체_수량,
