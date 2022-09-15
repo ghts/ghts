@@ -306,7 +306,7 @@ type T신호_32비트_모듈 uint8
 const (
 	P신호_DLL32_초기화 = iota
 	P신호_DLL32_LOGIN
-	P신호_DLL32_재시작_필요
+	P신호_DLL32_접속_끊김
 	P신호_DLL32_종료
 )
 
@@ -316,8 +316,8 @@ func (p T신호_32비트_모듈) String() string {
 		return "C32 READY"
 	case P신호_DLL32_LOGIN:
 		return "C32 LOGIN"
-	case P신호_DLL32_재시작_필요:
-		return "C32 재시작 필요"
+	case P신호_DLL32_접속_끊김:
+		return "C32 접속 끊김"
 	case P신호_DLL32_종료:
 		return "C32 종료"
 	default:

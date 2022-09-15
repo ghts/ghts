@@ -40,7 +40,6 @@ import (
 	"runtime"
 	"sync"
 	"syscall"
-	"time"
 )
 
 // 전역 변수는 항상 동시 액세스로 인한 오류의 위험이 있어서 한 군데 몰아서 관리함.
@@ -109,10 +108,4 @@ var (
 	계좌번호_모음 []string
 	계좌_비밀번호 string
 	서버_구분   xt.T서버_구분
-)
-
-// 재시작
-var (
-	재접속_잠금 sync.Mutex
-	재접속_시각 = lib.New안전한_시각(time.Time{})
 )

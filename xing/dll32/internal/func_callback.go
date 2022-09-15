@@ -308,9 +308,9 @@ func OnLogout() {
 }
 
 func OnDisconnected() {
-	lib.F체크포인트("OnDisconnected.")
+	lib.F문자열_출력("OnDisconnected : 연결 끊김.")
 
-	go f재접속()
+	F콜백(lib.New콜백_신호(lib.P신호_DLL32_접속_끊김))
 }
 
 func OnTimeout(c int) {

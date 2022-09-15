@@ -50,7 +50,6 @@ var (
 	})
 
 	ch질의           = make(chan *lib.S작업, 1000)
-	ch신호_접속유지_종료   = make(chan lib.T신호, 1)
 	ch신호_DLL32_초기화 = make(chan lib.T신호_32비트_모듈, 1)
 	ch신호_DLL32_로그인 = make(chan lib.T신호_32비트_모듈, 1)
 	ch신호_DLL32_종료  = make(chan lib.T신호_32비트_모듈, 1)
@@ -61,20 +60,18 @@ var (
 
 	Ch모니터링_루틴_종료 = make(chan lib.T신호, 1)
 	Ch콜백_도우미_종료  = make(chan lib.T신호, V콜백_도우미_수량)
+	Ch접속_끊김      = make(chan lib.T신호)
 
 	전송_제한_정보_모음          *xt.TR코드별_전송_제한_정보_모음
 	tr코드별_전송_제한_초당_1회_미만 = make(map[string]lib.I전송_권한)
 	tr코드별_전송_제한_1초       = make(map[string]lib.I전송_권한)
 	tr코드별_전송_제한_10분      = make(map[string]lib.I전송_권한)
 
-	최근_영업일_모음 []time.Time
+	최근_영업일_모음  []time.Time
+	주문_응답_구독_중 = lib.New안전한_bool(false)
 
-	xing_DLL32_재실행_잠금 sync.Mutex
-	xing_DLL32_재실행_시각 = lib.New안전한_시각(time.Time{})
-
-	접속유지_실행_중      = lib.New안전한_bool(false)
-	주문_응답_구독_중     = lib.New안전한_bool(false)
-	DLL32_재시작_실행_중 = lib.New안전한_bool(false)
+	종료_잠금 = sync.Mutex{}
+	종료_시각 = lib.New안전한_시각(time.Time{})
 )
 
 // 종목 관련 저장소는 초기화 이후에는 사실상 읽기 전용. 다중 사용에 문제가 없음.

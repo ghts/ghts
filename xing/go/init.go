@@ -88,7 +88,6 @@ func F초기화(서버_구분 xt.T서버_구분, 로그인_정보 *xt.S로그인
 	// 로그인 정보는 환경 변수를 통해서 DLL32 모듈로 전달.
 	xt.F서버_구분_설정(서버_구분)
 	xt.F로그인_정보_환경_변수_설정(로그인_정보)
-
 	F소켓_생성()
 	F초기화_Go루틴()
 	lib.F확인(f초기화_DLL32())
@@ -97,13 +96,16 @@ func F초기화(서버_구분 xt.T서버_구분, 로그인_정보 *xt.S로그인
 	lib.F확인(F초기화_TR전송_제한())
 	lib.F확인(F종목_정보_설정())
 	lib.F확인(F전일_당일_설정())
-	//f접속유지_실행()
 
 	fmt.Println("** Xing API 초기화 완료 **")
 }
 
 func F소켓_생성() {
 	소켓REP_TR콜백 = nano.NewNano소켓REP_단순형(xt.F주소_콜백())
+
+	소켓REQ_저장소 = lib.New소켓_저장소(20, func() lib.I소켓_질의 {
+		return nano.NewNano소켓REQ_단순형(xt.F주소_DLL32(), lib.P30초)
+	})
 }
 
 func F초기화_Go루틴() {
@@ -135,7 +137,6 @@ func f초기화_DLL32() (에러 error) {
 		// 자식 프로세스는 부모 프로세스의 환경 변수를 그대로 물려받음.
 		// 로그인 정보는 환경 변수를 통해서 전달.
 		프로세스ID_DLL32 = lib.F확인(ep.F외부_프로세스_실행(DLL32_실행_화일_경로())).(int)
-
 		<-ch신호_DLL32_초기화
 	default:
 		lib.F문자열_출력("*********************************************\n"+
@@ -335,8 +336,6 @@ func DLL32_종료됨() bool {
 func DLL32_종료() (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
-	ch신호_접속유지_종료 <- lib.P신호_종료
-
 	if !DLL32_종료됨() {
 		소켓REQ := 소켓REQ_저장소.G소켓()
 
@@ -346,11 +345,12 @@ func DLL32_종료() (에러 error) {
 		lib.F대기(lib.P20초)
 	}
 
-	ch타임아웃 := time.After(lib.P1분)
+	ch타임아웃 := time.After(lib.P2분)
 
 	select {
 	case <-ch신호_DLL32_종료:
-	case <-ch타임아웃: //return lib.New에러with출력("DLL32 종료 타임아웃")
+	case <-ch타임아웃:
+		return lib.New에러with출력("DLL32 종료 타임아웃")
 	}
 
 	for i := 0; i < 10; i++ {
@@ -366,15 +366,41 @@ func DLL32_종료() (에러 error) {
 }
 
 func F종료() {
+	종료_잠금.Lock()
+	defer func() {
+		종료_시각.S값(lib.F지금())
+		종료_잠금.Unlock()
+	}()
+
+	if lib.F지금().Before(종료_시각.G값().Add(lib.P3분)) {
+		return // 중복 실행 방지.
+	}
+
 	DLL32_종료()
 	lib.F공통_종료_채널_닫기()
 	F소켓_정리()
 
-	<-Ch모니터링_루틴_종료
+	타임_아웃 := time.After(lib.P1분)
+
+	select {
+	case <-Ch모니터링_루틴_종료:
+		//lib.F문자열_출력("모니터링 루틴 종료.")
+	case <-타임_아웃:
+		//lib.F문자열_출력("종료 타임아웃.")
+	}
 
 	for i := 0; i < V콜백_도우미_수량; i++ {
-		<-Ch콜백_도우미_종료
+		select {
+		case <-Ch콜백_도우미_종료:
+			//lib.F문자열_출력("콜백 루틴 %v/%v 종료.", i+1, V콜백_도우미_수량)
+		case <-타임_아웃:
+			//lib.F문자열_출력("종료 타임아웃.")
+		}
 	}
+
+	//lib.F문자열_출력("정상 종료.")
+
+	os.Exit(0)
 }
 
 func F소켓_정리() {

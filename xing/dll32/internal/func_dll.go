@@ -37,7 +37,6 @@ import (
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/lib/dll"
 	"github.com/ghts/ghts/xing/base"
-	xing "github.com/ghts/ghts/xing/go"
 	"strings"
 	"syscall"
 
@@ -222,15 +221,14 @@ func f접속됨() (bool, error) {
 }
 
 func F로그인(서버_구분 xt.T서버_구분) (에러 error) {
-	defer lib.S예외처리{M에러: &에러, M함수_항상: xt.F로그인_정보_환경_변수_삭제}.S실행()
+	defer lib.S예외처리{M에러: &에러}.S실행()
 
-	로그인_정보, 에러 := xt.F로그인_정보_환경_변수_읽기()
-	lib.F확인(에러)
+	lib.F확인(xt.F로그인_정보_설정())
 
-	로그인_ID := 로그인_정보.M로그인_ID
-	로그인_암호 := lib.F조건부_문자열(xt.F서버_구분() == xt.P서버_실거래, 로그인_정보.M로그인_암호, 로그인_정보.M모의투자_암호)
-	인증서_암호 := lib.F조건부_문자열(xt.F서버_구분() == xt.P서버_실거래, 로그인_정보.M인증서_암호, "")
-	계좌_비밀번호 = lib.F조건부_문자열(xt.F서버_구분() == xt.P서버_실거래, 로그인_정보.M계좌_비밀번호, "")
+	로그인_ID := xt.V로그인_정보.M로그인_ID
+	로그인_암호 := lib.F조건부_문자열(xt.F서버_구분() == xt.P서버_실거래, xt.V로그인_정보.M로그인_암호, xt.V로그인_정보.M모의투자_암호)
+	인증서_암호 := lib.F조건부_문자열(xt.F서버_구분() == xt.P서버_실거래, xt.V로그인_정보.M인증서_암호, "")
+	계좌_비밀번호 = lib.F조건부_문자열(xt.F서버_구분() == xt.P서버_실거래, xt.V로그인_정보.M계좌_비밀번호, "")
 
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
@@ -283,17 +281,7 @@ func F질의(TR코드 string, c데이터 unsafe.Pointer, 길이 int,
 
 	접속됨 := false
 
-	for i := 0; i < 3; i++ {
-		if 접속됨, 에러 = f접속됨(); 에러 != nil {
-			return -1, 에러
-		} else if !접속됨 {
-			if 에러 := xing.DLL32_재시작(); 에러 == nil {
-				break
-			}
-		}
-	}
-
-	if !접속됨 {
+	if 접속됨, 에러 = f접속됨(); 에러 != nil || !접속됨 {
 		return -1, 에러
 	}
 
@@ -315,7 +303,7 @@ func F질의(TR코드 string, c데이터 unsafe.Pointer, 길이 int,
 
 		if strings.Contains(에러.Error(), "Access is denied.") {
 			lib.F체크포인트("재시작 콜백 신호 송신")
-			f콜백_동기식(lib.New콜백_신호(lib.P신호_DLL32_재시작_필요))
+			f콜백_동기식(lib.New콜백_신호(lib.P신호_DLL32_접속_끊김))
 
 			lib.F체크포인트("DLL32 자체 종료.")
 			f종료()

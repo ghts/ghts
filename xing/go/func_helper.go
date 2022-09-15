@@ -34,7 +34,6 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package xing
 
 import (
-	"fmt"
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/xing/base"
 	"strings"
@@ -95,48 +94,6 @@ func F2당일_시각(포맷 string, 값 interface{}) (time.Time, error) {
 
 func F2당일_시각_단순형(포맷 string, 값 interface{}) time.Time {
 	return lib.F확인(F2당일_시각(포맷, 값)).(time.Time)
-}
-
-func f접속유지_실행() {
-	if lib.F인터넷에_접속됨() && !접속유지_실행_중.G값() {
-		go go접속유지_도우미()
-	}
-}
-
-func go접속유지_도우미() {
-	defer 접속유지_실행_중.S값(false)
-
-	// 채널 비우기. (중복 종료 방지)
-	for i := 0; i < len(ch신호_접속유지_종료); i++ {
-		<-ch신호_접속유지_종료
-	}
-
-	에러_연속_발생_횟수 := 0
-	ch공통_종료 := lib.Ch공통_종료()
-
-	for {
-		lib.F대기(13 * lib.P1초)
-
-		select {
-		case <-ch신호_접속유지_종료:
-			return
-		case <-ch공통_종료:
-			return
-		default:
-		}
-
-		if _, 에러 := (<-TrT0167_시각_조회()).G값(); 에러 == nil {
-			에러_연속_발생_횟수 = 0
-		} else {
-			에러_연속_발생_횟수++
-		}
-
-		// 3회 연속 에러 발생하면 API 연결에 문제 있다고 판단하고, DLL32 API 모듈 재시작.
-		if 에러_연속_발생_횟수 >= 3 {
-			DLL32_재시작()
-			에러_연속_발생_횟수 = 0
-		}
-	}
 }
 
 func f에러_발생(TR코드, 코드, 내용 string) bool {
@@ -291,53 +248,6 @@ func f데이터_복원_반복_조회(대기_항목 *DLL32_콜백_대기_항목, 
 	return nil
 }
 
-func DLL32_재시작() (에러 error) {
-	defer lib.S예외처리{M에러: &에러}.S실행()
-
-	// 동시 다발 실행 방지.
-	xing_DLL32_재실행_잠금.Lock()
-	defer xing_DLL32_재실행_잠금.Unlock()
-
-	// 중복 재실행 방지.
-	if 최근_재시작 := xing_DLL32_재실행_시각.G값().After(lib.F지금().Add(-1 * lib.P3분)); 최근_재시작 {
-		return
-	}
-
-	fmt.Printf("**     DLL32 재시작 %v     **\n", time.Now().Format(lib.P간략한_시간_형식))
-
-	lib.F확인(DLL32_재시작_도우미())
-
-	return nil
-}
-
-func DLL32_재시작_도우미() (에러 error) {
-	// 재귀 반복 시도.
-	defer lib.S예외처리{M함수: func() { 에러 = DLL32_재시작_도우미() }}.S실행()
-
-	DLL32_재시작_실행_중.S값(true)
-
-	lib.F확인(DLL32_종료())
-	lib.F패닉억제_호출(소켓REP_TR콜백.Close)
-	소켓REQ_저장소.S정리()
-
-	xt.F주소_재설정()
-	F소켓_생성()
-	lib.F확인(f초기화_DLL32())
-	lib.F확인(F접속_로그인())
-	lib.F조건부_패닉(!f초기화_작동_확인(), "초기화 작동 확인 실패.")
-	lib.F확인(F초기화_TR전송_제한())
-	lib.F확인(F종목_정보_설정())
-	lib.F확인(F전일_당일_설정())
-	f접속유지_실행()
-
-	DLL32_재시작_실행_중.S값(false)
-	xing_DLL32_재실행_시각.S값(lib.F지금())
-
-	fmt.Println("**     DLL32 재시작 완료     **")
-
-	return nil
-}
-
 func f전송_권한_획득(TR코드 string) {
 	switch TR코드 {
 	case "", xt.RT현물_주문_접수_SC0, xt.RT현물_주문_체결_SC1, xt.RT현물_주문_정정_SC2, xt.RT현물_주문_취소_SC3, xt.RT현물_주문_거부_SC4,
@@ -454,5 +364,24 @@ func F종목_식별_문자열(종목코드 string) string {
 		return 종목.G식별_문자열()
 	} else {
 		return lib.F2문자열("[%v]", 종목코드)
+	}
+}
+
+func F접속_끊김_설정() {
+	select {
+	case <-Ch접속_끊김: // 이미 닫혔음.
+		return
+	default:
+		close(Ch접속_끊김)
+
+	}
+}
+
+func F접속_끊김_여부() bool {
+	select {
+	case <-Ch접속_끊김:
+		return true
+	default:
+		return false
 	}
 }
