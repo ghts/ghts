@@ -166,17 +166,15 @@ func f일일_가격정보_수집_도우미(db *sql.DB, 종목코드 string, 시�
 			일일_데이터.M거래량)
 	}
 
-	if 출력_여부 {
-		if len(버퍼) > 0 && 버퍼[0] != nil {
-			// 버퍼가 존재하면 버퍼에 출력
-			버퍼[0].WriteString(lib.F2문자열("%v 일일 가격 정보 수집 (%v/%v) : %v %v~%v %v개\n",
-				lib.F지금().Format("15:04"), i+1, 전체_수량,
-				xing.F종목_식별_문자열(종목코드), 시작일.Format(lib.P일자_형식), 종료일.Format(lib.P일자_형식), len(값_모음)))
-		} else {
-			lib.F문자열_출력("%v 일일 가격 정보 수집 (%v/%v) %.1f%% : %v %v~%v %v개\n",
-				lib.F지금().Format("15:04"), i+1, 전체_수량, float64(i+1)/float64(전체_수량)*100,
-				xing.F종목_식별_문자열(종목코드), 시작일.Format(lib.P일자_형식), 종료일.Format(lib.P일자_형식), len(값_모음))
-		}
+	if 출력_여부 && len(버퍼) > 0 && 버퍼[0] != nil {
+		// 버퍼가 존재하면 버퍼에 출력
+		버퍼[0].WriteString(lib.F2문자열("%v 일일 가격 정보 수집 (%v/%v) : %v %v~%v %v개\n",
+			lib.F지금().Format("15:04"), i+1, 전체_수량,
+			xing.F종목_식별_문자열(종목코드), 시작일.Format(lib.P일자_형식), 종료일.Format(lib.P일자_형식), len(값_모음)))
+	} else if 출력_여부 {
+		lib.F문자열_출력("%v 일일 가격 정보 수집 (%v/%v) %.1f%% : %v %v~%v %v개\n",
+			lib.F지금().Format("15:04"), i+1, 전체_수량, float64(i+1)/float64(전체_수량)*100,
+			xing.F종목_식별_문자열(종목코드), 시작일.Format(lib.P일자_형식), 종료일.Format(lib.P일자_형식), len(값_모음))
 	} else if i%100 == 0 {
 		lib.F문자열_출력("%v 일일 가격 정보 수집 (%v/%v) %.1f%%",
 			lib.F지금().Format("15:04"), i+1, 전체_수량, float64(i+1)/float64(전체_수량)*100)
