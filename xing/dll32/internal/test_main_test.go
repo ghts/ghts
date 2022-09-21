@@ -36,13 +36,22 @@ package dll32
 import (
 	"github.com/ghts/ghts/lib"
 	xing "github.com/ghts/ghts/xing/go"
+	"os"
+	"strings"
 	"testing"
 )
 
 func TestMain(m *testing.M) {
+	const GODEBUG = "GODEBUG"
+	const GODEBUG_필수값 = "asyncpreemptoff=1"
+
 	if lib.F환경변수("GOARCH") != "386" {
 		lib.New에러with출력("DLL32 모듈은 32비트 전용입니다.")
 		return
+	} else if 값 := os.Getenv(GODEBUG); 값 == "" {
+		os.Setenv(GODEBUG, GODEBUG_필수값)
+	} else if !strings.Contains(값, GODEBUG_필수값) {
+		os.Setenv(GODEBUG, 값+","+GODEBUG_필수값)
 	}
 
 	f테스트_준비()

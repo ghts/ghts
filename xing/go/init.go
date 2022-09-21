@@ -44,10 +44,20 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
+	"strings"
 	"time"
 )
 
 func init() {
+	const GODEBUG = "GODEBUG"
+	const GODEBUG_필수값 = "asyncpreemptoff=1"
+
+	if 값 := os.Getenv(GODEBUG); 값 == "" {
+		os.Setenv(GODEBUG, GODEBUG_필수값)
+	} else if !strings.Contains(값, GODEBUG_필수값) {
+		os.Setenv(GODEBUG, 값+","+GODEBUG_필수값)
+	}
+
 	//TR현물_호가_조회_t1101 = "t1101"	// HTS 1101 화면,  DevCenter 소숫점 비교 확인 완료.
 	//TR현물_시세_조회_t1102 = "t1102"	// HTS 1101 화면,  DevCenter 소숫점 비교 확인 완료.
 	//TR현물_기간별_조회_t1305      = "t1305"	// HTS 1305 화면,  DevCenter 소숫점 비교 확인 완료.
