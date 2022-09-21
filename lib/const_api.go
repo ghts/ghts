@@ -35,7 +35,7 @@ package lib
 
 import "fmt"
 
-//TR 및 응답 종류
+// TR 및 응답 종류
 const (
 	TR조회 TR구분 = iota
 	TR주문

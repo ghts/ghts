@@ -35,7 +35,7 @@ package xing
 
 import (
 	"github.com/ghts/ghts/lib"
-	"github.com/ghts/ghts/xing/base"
+	xt "github.com/ghts/ghts/xing/base"
 	"strings"
 	"time"
 )
