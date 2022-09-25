@@ -47,10 +47,14 @@ import (
 )
 
 func f초기화_XingAPI() {
+	API_초기화_잠금.Lock()
+	defer func() {
+		API_초기화_완료.S값(true)
+		API_초기화_잠금.Unlock()
+	}()
+
 	if API_초기화_완료.G값() {
 		return
-	} else {
-		API_초기화_완료.S값(true)
 	}
 
 	lib.F조건부_패닉(lib.F환경변수("GOARCH") != "386", "DLL32 모듈은 32비트 전용입니다.")
