@@ -84,7 +84,7 @@ func F종료_대기() {
 
 func F소켓_정리() error {
 	// TR수신 고루틴이 소켓 수신 후 공통 종료 채널이 닫혀있는 지 확인 후 종료하도록 유도.
-	반복_횟수 := lib.F최대값_정수(runtime.NumCPU()*2, 30)
+	반복_횟수 := lib.F최대값(runtime.NumCPU()*2, 30)
 	질의값 := &lib.S질의값_기본형{M구분: xt.TR조회, M코드: xt.TR시간_조회_t0167}
 	소켓REQ := nano.NewNano소켓REQ_단순형(xt.F주소_DLL32(), lib.P1초)
 

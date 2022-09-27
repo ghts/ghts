@@ -35,7 +35,7 @@ package xing
 
 import (
 	"github.com/ghts/ghts/lib"
-	"github.com/ghts/ghts/lib/nanomsg"
+	nano "github.com/ghts/ghts/lib/nanomsg"
 	xt "github.com/ghts/ghts/xing/base"
 	"runtime"
 	"sync"
@@ -56,7 +56,7 @@ var (
 
 	대기소_DLL32 = newDLL32_콜백_대기_저장소()
 
-	V콜백_도우미_수량 = lib.F최대값_정수(runtime.NumCPU(), 2)
+	V콜백_도우미_수량 = lib.F최대값(runtime.NumCPU(), 2)
 
 	Ch모니터링_루틴_종료 = make(chan lib.T신호, 1)
 	Ch콜백_도우미_종료  = make(chan lib.T신호, V콜백_도우미_수량)

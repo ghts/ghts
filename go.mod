@@ -1,7 +1,6 @@
 module github.com/ghts/ghts
 
-go 1.17
-
+go 1.19
 require (
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/mitchellh/go-ps v1.0.0

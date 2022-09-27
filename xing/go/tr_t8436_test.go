@@ -35,8 +35,7 @@ package xing
 
 import (
 	"github.com/ghts/ghts/lib"
-	"github.com/ghts/ghts/xing/base"
-
+	xt "github.com/ghts/ghts/xing/base"
 	"testing"
 )
 
@@ -53,7 +52,7 @@ func TestT8436_주식종목_조회(t *testing.T) {
 		종목, 에러 := F종목by코드(응답값.M종목코드)
 		lib.F테스트_에러없음(t, 에러)
 
-		인덱스 := lib.F최소값_정수(len(응답값.M종목명), len(종목.G이름()))
+		인덱스 := lib.F최소값(len(응답값.M종목명), len(종목.G이름()))
 		lib.F테스트_같음(t, 응답값.M종목명[:인덱스], 종목.G이름()[:인덱스])
 
 		switch 응답값.M시장구분 {

@@ -35,7 +35,7 @@ package dll32
 
 import (
 	"github.com/ghts/ghts/lib"
-	"github.com/ghts/ghts/lib/nanomsg"
+	nano "github.com/ghts/ghts/lib/nanomsg"
 	xt "github.com/ghts/ghts/xing/base"
 	"runtime"
 	"sync"
@@ -91,8 +91,8 @@ var (
 	Ch질의  = make(chan *lib.S채널_질의, 100)
 	ch콜백  = make(chan lib.I콜백, 100)
 
-	수신_도우미_수량 = lib.F최대값_정수(runtime.NumCPU(), 2)
-	콜백_도우미_수량 = lib.F최대값_정수(runtime.NumCPU(), 2)
+	수신_도우미_수량 = lib.F최대값(runtime.NumCPU(), 2)
+	콜백_도우미_수량 = lib.F최대값(runtime.NumCPU(), 2)
 
 	Ch모니터링_루틴_종료   = make(chan lib.T신호, 1)
 	Ch함수_호출_도우미_종료 = make(chan lib.T신호, 1)

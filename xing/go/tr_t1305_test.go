@@ -61,7 +61,7 @@ func TestT1305_기간별_주가_조회(t *testing.T) {
 		이전_일자 = 값.M일자
 
 		if i > 0 {
-			차이 := lib.F절대값_실수(값.M일자.Sub(값_모음[i-1].M일자).Hours() / 24)
+			차이 := lib.F절대값(값.M일자.Sub(값_모음[i-1].M일자).Hours() / 24)
 
 			switch 일주월_구분 {
 			case xt.P일주월_일:

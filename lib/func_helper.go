@@ -81,63 +81,18 @@ func F같음(값, 비교값 interface{}) bool {
 	return false
 }
 
-func f2실수값_모음(값_모음 ...interface{}) (실수값_모음 []float64) {
-	실수값_모음 = make([]float64, 0)
+func f2실수값_모음[T T숫자](값_모음 ...T) (실수값_모음 []float64) {
+	실수값_모음 = make([]float64, len(값_모음))
 
-	for _, 값 := range 값_모음 {
-		switch 변환값 := 값.(type) {
-		case float64:
-			실수값_모음 = append(실수값_모음, 변환값)
-		case []float64:
-			for _, 값 := range 변환값 {
-				실수값_모음 = append(실수값_모음, 값)
-			}
-		case float32:
-			실수값 := float64(변환값)
-			실수값_모음 = append(실수값_모음, 실수값)
-		case []float32:
-			for _, 값 := range 변환값 {
-				실수값 := float64(값)
-				실수값_모음 = append(실수값_모음, 실수값)
-			}
-		case int64:
-			실수값 := float64(변환값)
-			실수값_모음 = append(실수값_모음, 실수값)
-		case []int64:
-			for _, 값 := range 변환값 {
-				실수값 := float64(값)
-				실수값_모음 = append(실수값_모음, 실수값)
-			}
-		case int32:
-			실수값 := float64(변환값)
-			실수값_모음 = append(실수값_모음, 실수값)
-		case []int32:
-			for _, 값 := range 변환값 {
-				실수값 := float64(값)
-				실수값_모음 = append(실수값_모음, 실수값)
-			}
-		case int:
-			실수값 := float64(변환값)
-			실수값_모음 = append(실수값_모음, 실수값)
-		case []int:
-			for _, 값 := range 변환값 {
-				실수값 := float64(값)
-				실수값_모음 = append(실수값_모음, 실수값)
-			}
-		default:
-			if 실수값, 에러 := F2실수(변환값); 에러 != nil {
-				panic(New에러("%v\n예상하지 못한 경우. %T, %v", 에러, 값, 값))
-				실수값_모음 = append(실수값_모음, 실수값)
-			}
-		}
+	for i, 값 := range 값_모음 {
+		실수값_모음[i] = float64(값)
 	}
 
 	return 실수값_모음
 }
 
-func F합계(임의형식_값_모음 ...interface{}) float64 {
-	값_모음 := f2실수값_모음(임의형식_값_모음...)
-	합계 := 0.0
+func F합계[T T숫자](값_모음 ...T) T {
+	합계 := T(0)
 
 	for _, 값 := range 값_모음 {
 		합계 += 값
@@ -146,118 +101,72 @@ func F합계(임의형식_값_모음 ...interface{}) float64 {
 	return 합계
 }
 
-func F평균(임의형식_값_모음 ...interface{}) float64 {
-	값_모음 := f2실수값_모음(임의형식_값_모음...)
+func F평균[T T숫자](값_모음 ...T) float64 {
+	실수값_모음 := f2실수값_모음(값_모음...)
 
-	return F합계(값_모음) / float64(len(값_모음))
+	return F합계(실수값_모음...) / float64(len(실수값_모음))
 }
 
-func F표준_편차(임의형식_값_모음 ...interface{}) float64 {
-	값_모음 := f2실수값_모음(임의형식_값_모음...)
-	평균 := F평균(값_모음)
+func F표준_편차[T T숫자](값_모음 ...T) float64 {
+	실수값_모음 := f2실수값_모음(값_모음...)
+	평균 := F평균(실수값_모음...)
 	분산 := 0.0
 
-	for _, 값 := range 값_모음 {
+	for _, 값 := range 실수값_모음 {
 		분산 += math.Pow(값-평균, 2)
 	}
 
 	return math.Sqrt(분산 / float64(len(값_모음)-1))
 }
 
-func F최대값(임의형식_값_모음 ...interface{}) float64 {
-	값_모음 := f2실수값_모음(임의형식_값_모음...)
-
-	if len(값_모음) <= 0 {
-		return math.NaN()
+func F최대값[T T숫자](값_모음 ...T) T {
+	if len(값_모음) == 0 {
+		panic(New에러("입력값이 없습니다."))
 	}
 
-	최대값 := math.Inf(-1)
+	var 최대값 T
 
-	for _, 값 := range 값_모음 {
-		최대값 = math.Max(최대값, 값)
+	for i, 값 := range 값_모음 {
+		if i == 0 || 값 > 최대값 {
+			최대값 = 값
+		}
 	}
 
 	return 최대값
 }
 
-func F최대값_정수(임의형식_값_모음 ...interface{}) int {
-	return int(F최대값(임의형식_값_모음...))
-}
-
-func F최대값_정수64(임의형식_값_모음 ...interface{}) int64 {
-	return int64(F최대값(임의형식_값_모음...))
-}
-
-func F최소값(임의형식_값_모음 ...interface{}) float64 {
-	값_모음 := f2실수값_모음(임의형식_값_모음...)
-
-	if len(값_모음) <= 0 {
-		return math.NaN()
+func F최소값[T T숫자](값_모음 ...T) T {
+	if len(값_모음) == 0 {
+		panic(New에러("입력값이 없습니다."))
 	}
 
-	최소값 := math.Inf(1)
+	var 최소값 T
 
-	for _, 값 := range 값_모음 {
-		최소값 = math.Min(최소값, 값)
+	for i, 값 := range 값_모음 {
+		if i == 0 || 값 < 최소값 {
+			최소값 = 값
+		}
 	}
 
 	return 최소값
 }
 
-func F최소값_정수(임의형식_값_모음 ...interface{}) int {
-	return int(F최소값(임의형식_값_모음...))
-}
+func F중간값[T T숫자](값_모음 ...T) T {
+	실수값_모음 := f2실수값_모음(값_모음...)
+	sort.Float64s(실수값_모음)
 
-func F최소값_정수64(임의형식_값_모음 ...interface{}) int64 {
-	return int64(F최소값(임의형식_값_모음...))
-}
-
-func F중간값(임의형식_값_모음 ...interface{}) float64 {
-	값_모음 := f2실수값_모음(임의형식_값_모음...)
-	sort.Float64s(값_모음)
-
-	if len(값_모음)%2 == 1 {
-		return 값_모음[(len(값_모음)-1)/2]
+	if len(실수값_모음)%2 == 1 {
+		return T(실수값_모음[(len(실수값_모음)-1)/2])
 	} else {
-		값1 := 값_모음[len(값_모음)/2-1]
-		값2 := 값_모음[len(값_모음)/2]
+		값1 := 실수값_모음[len(실수값_모음)/2-1]
+		값2 := 실수값_모음[len(실수값_모음)/2]
 
-		return (값1 + 값2) / 2
+		return T((값1 + 값2) / 2)
 	}
 }
 
-func F중간값_정수(임의형식_값_모음 ...interface{}) int {
-	return int(F중간값(임의형식_값_모음...))
-}
-
-func F중간값_정수64(임의형식_값_모음 ...interface{}) int64 {
-	return int64(F중간값(임의형식_값_모음...))
-}
-
-func F절대값_정수(값 int) int {
-	return F조건부_정수(값 < 0, -1*값, 값)
-}
-
-func F절대값_정수64(값 int64) int64 {
-	return F조건부_정수64(값 < 0, -1*값, 값)
-}
-
-func F절대값_실수(값 interface{}) float64 {
-	실수값 := float64(0.0)
-	switch 값.(type) {
-	case int:
-		실수값 = float64(값.(int))
-	case int64:
-		실수값 = float64(값.(int64))
-	case float32:
-		실수값 = float64(값.(float32))
-	case float64:
-		실수값 = 값.(float64)
-	default:
-		panic(New에러("예상치 못한 자료형 : '%T' '%v'", 값, 값))
-	}
-
-	return math.Abs(실수값)
+func F절대값[T T숫자](값 T) T {
+	return T(math.Abs(float64(값)))
 }
 
 func F절대값_Duration(값 time.Duration) time.Duration {
