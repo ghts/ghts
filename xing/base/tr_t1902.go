@@ -103,7 +103,7 @@ func NewT1902_ETF시간별_추이_응답_헤더(b []byte) (s *T1902_ETF시간별
 		"예상하지 못한 길이 : '%v", len(b))
 
 	g := new(T1902OutBlock)
-	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
+	lib.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	s = new(T1902_ETF시간별_추이_응답_헤더)
 	s.M연속키 = lib.F2문자열_공백_제거(g.Time)
@@ -128,25 +128,25 @@ func NewT1902_ETF시간별_추이_응답_반복값_모음(b []byte) (값_모음 
 
 	for i, g := range g_모음 {
 		g = new(T1902OutBlock1)
-		lib.F확인(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
+		lib.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 		값 := new(T1902_ETF시간별_추이_응답_반복값)
 
 		if 값.M시각, 에러 = lib.F2일자별_시각(당일.G값(), "15:04:05", g.Time); 에러 != nil {
 			값.M시각 = time.Time{} // ETF_시간별_추이_t1902() 에서 수정
 		}
-		값.M현재가 = lib.F2정수64_단순형(g.Price)
-		값.M전일대비구분 = T전일대비_구분(lib.F2정수_단순형(g.Sign))
-		값.M전일대비등락폭 = 값.M전일대비구분.G부호보정_정수64(lib.F2정수64_단순형(g.Change))
-		값.M누적_거래량 = lib.F2정수64_단순형(g.Volume)
-		값.M현재가_NAV_차이 = lib.F2실수_소숫점_추가_단순형(g.NavDiff, 2)
-		값.NAV = lib.F2실수_소숫점_추가_단순형(g.Nav, 2)
-		값.NAV전일대비등락폭 = lib.F2실수_소숫점_추가_단순형(g.NavChange, 2)
-		값.M추적오차 = lib.F2실수_소숫점_추가_단순형(g.Crate, 2)
-		값.M괴리율 = lib.F2실수_소숫점_추가_단순형(g.Grate, 2)
-		값.M지수 = lib.F2실수_소숫점_추가_단순형(g.Jisu, 2)
-		값.M지수_전일대비등락폭 = lib.F2실수_소숫점_추가_단순형(g.JiChange, 2)
-		값.M지수_전일대비등락율 = lib.F2실수_소숫점_추가_단순형(g.JiRate, 2)
+		값.M현재가 = lib.F확인2(lib.F2정수64(g.Price))
+		값.M전일대비구분 = T전일대비_구분(lib.F확인2(lib.F2정수(g.Sign)))
+		값.M전일대비등락폭 = 값.M전일대비구분.G부호보정_정수64(lib.F확인2(lib.F2정수64(g.Change)))
+		값.M누적_거래량 = lib.F확인2(lib.F2정수64(g.Volume))
+		값.M현재가_NAV_차이 = lib.F확인2(lib.F2실수_소숫점_추가(g.NavDiff, 2))
+		값.NAV = lib.F확인2(lib.F2실수_소숫점_추가(g.Nav, 2))
+		값.NAV전일대비등락폭 = lib.F확인2(lib.F2실수_소숫점_추가(g.NavChange, 2))
+		값.M추적오차 = lib.F확인2(lib.F2실수_소숫점_추가(g.Crate, 2))
+		값.M괴리율 = lib.F확인2(lib.F2실수_소숫점_추가(g.Grate, 2))
+		값.M지수 = lib.F확인2(lib.F2실수_소숫점_추가(g.Jisu, 2))
+		값.M지수_전일대비등락폭 = lib.F확인2(lib.F2실수_소숫점_추가(g.JiChange, 2))
+		값.M지수_전일대비등락율 = lib.F확인2(lib.F2실수_소숫점_추가(g.JiRate, 2))
 
 		if g.X_jichange == 160 && 값.M지수_전일대비등락폭 > 0 {
 			값.M지수_전일대비등락폭 = -1 * 값.M지수_전일대비등락폭

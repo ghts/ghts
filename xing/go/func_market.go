@@ -267,8 +267,7 @@ func F종목_정보_설정() (에러 error) {
 		return nil
 	}
 
-	종목_정보_모음, 에러 := TrT8436_주식종목_조회(lib.P시장구분_전체)
-	lib.F확인(에러)
+	종목_정보_모음 := lib.F확인2(TrT8436_주식종목_조회(lib.P시장구분_전체))
 
 	종목모음_코스피 = make([]*lib.S종목, 0)
 	종목모음_코스닥 = make([]*lib.S종목, 0)
@@ -676,7 +675,7 @@ func F특수_종목_여부(종목코드 string) bool {
 func F최소_호가단위by종목코드(종목코드 string) (값 int64, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 값 = 0 }}.S실행()
 
-	종목 := lib.F확인(F종목by코드(종목코드)).(*lib.S종목)
+	종목 := lib.F확인2(F종목by코드(종목코드))
 
 	return F최소_호가단위by종목(종목)
 }

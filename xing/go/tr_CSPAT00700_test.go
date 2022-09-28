@@ -57,7 +57,7 @@ func TestCSPAT00700_현물_정정_주문(t *testing.T) {
 		t.SkipNow()
 	}
 
-	소켓SUB_실시간 := nano.NewNano소켓SUB_단순형(xt.F주소_실시간())
+	소켓SUB_실시간 := lib.F확인2(nano.NewNano소켓SUB(xt.F주소_실시간()))
 	lib.F대기(lib.P1초)
 
 	lib.F테스트_에러없음(t, F주문_응답_실시간_정보_구독())
@@ -159,7 +159,7 @@ func TestCSPAT00700_현물_정정_주문(t *testing.T) {
 		바이트_변환_모음, 에러 := 소켓SUB_실시간.G수신()
 		lib.F테스트_에러없음(t, 에러)
 
-		실시간_정보, ok := 바이트_변환_모음.S해석기(xt.F바이트_변환값_해석).G해석값_단순형(0).(*xt.S현물_주문_응답_실시간_정보)
+		실시간_정보, ok := lib.F확인2(바이트_변환_모음.S해석기(xt.F바이트_변환값_해석).G해석값(0)).(*xt.S현물_주문_응답_실시간_정보)
 
 		switch {
 		case !ok:

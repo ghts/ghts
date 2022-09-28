@@ -70,10 +70,6 @@ func F2전일_시각(포맷 string, 값 interface{}) (time.Time, error) {
 	return 전일_시각, nil
 }
 
-func F2전일_시각_단순형(포맷 string, 값 interface{}) time.Time {
-	return lib.F확인(F2전일_시각(포맷, 값)).(time.Time)
-}
-
 func F2당일_시각(포맷 string, 값 interface{}) (time.Time, error) {
 	if strings.Contains(포맷, "2") {
 		return time.Time{}, lib.New에러("포맷에 이미 날짜가 포함되어 있습니다. %v", 포맷)
@@ -90,10 +86,6 @@ func F2당일_시각(포맷 string, 값 interface{}) (time.Time, error) {
 		시각.Hour(), 시각.Minute(), 시각.Second(), 시각.Nanosecond(), 시각.Location())
 
 	return 당일_시각, nil
-}
-
-func F2당일_시각_단순형(포맷 string, 값 interface{}) time.Time {
-	return lib.F확인(F2당일_시각(포맷, 값)).(time.Time)
 }
 
 func f에러_발생(TR코드, 코드, 내용 string) bool {
@@ -168,7 +160,7 @@ func f데이터_복원_이중_응답(대기_항목 *DLL32_콜백_대기_항목, 
 		}
 	}
 
-	switch 변환값 := 수신값.S해석기(xt.F바이트_변환값_해석).G해석값_단순형().(type) {
+	switch 변환값 := lib.F확인2(수신값.S해석기(xt.F바이트_변환값_해석).G해석값()).(type) {
 	case nil:
 		대기_항목.대기값 = nil
 		대기_항목.데이터_수신 = true
@@ -219,7 +211,7 @@ func f데이터_복원_반복_조회(대기_항목 *DLL32_콜백_대기_항목, 
 		}
 	}
 
-	switch 변환값 := 수신값.S해석기(xt.F바이트_변환값_해석).G해석값_단순형().(type) {
+	switch 변환값 := lib.F확인2(수신값.S해석기(xt.F바이트_변환값_해석).G해석값()).(type) {
 	default:
 		panic(lib.New에러with출력("f데이터_복원_반복_조회() 예상하지 못한 자료형 : '%T' '%v'", 변환값, 수신값.G자료형_문자열()))
 	case error:
@@ -320,7 +312,7 @@ func f전송_시각_기록(TR코드 string) {
 }
 
 func F계좌번호_존재함(계좌번호 string) bool {
-	계좌번호_모음 := lib.F확인(F계좌번호_모음()).([]string)
+	계좌번호_모음 := lib.F확인2(F계좌번호_모음())
 
 	for _, 계좌번호_값 := range 계좌번호_모음 {
 		if 계좌번호 == 계좌번호_값 {

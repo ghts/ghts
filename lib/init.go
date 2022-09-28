@@ -65,8 +65,8 @@ func f인코딩_디코딩_초기화() (에러 error) {
 	for i, 자료형 := range 자료형_모음 {
 		인덱스 := uint64(i + 1)
 
-		F확인(json처리기.SetInterfaceExt(자료형, 인덱스, s변환기{자료형.String()}))
-		F확인(msgPack처리기.SetBytesExt(자료형, 인덱스, s변환기{자료형.String()}))
+		F확인1(json처리기.SetInterfaceExt(자료형, 인덱스, s변환기{자료형.String()}))
+		F확인1(msgPack처리기.SetBytesExt(자료형, 인덱스, s변환기{자료형.String()}))
 	}
 
 	return nil

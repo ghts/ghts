@@ -380,38 +380,26 @@ func F조건부_시간(조건 bool, 참값, 거짓값 time.Time) time.Time {
 	return 거짓값
 }
 
-func F확인(에러_후보_모음 ...interface{}) interface{} {
-	switch 변환값 := 에러_후보_모음[len(에러_후보_모음)-1].(type) {
-	case nil: // PASS
-	case error:
-		if 변환값 != nil {
-			panic(New에러(변환값))
-		}
-	case *S바이트_변환:
-		if 변환값.G에러() != nil {
-			panic(New에러(변환값.G에러()))
-		}
-	case *S바이트_변환_모음:
-		if 변환값.G에러() != nil {
-			panic(New에러(변환값.G에러()))
-		}
-	default:
-		panic(New에러("F확인() 예상하지 못한 자료형. %T", 에러_후보_모음[len(에러_후보_모음)-1]))
+func F확인1(에러 error) {
+	if 에러 != nil {
+		panic(에러)
 	}
-
-	return f에러_제외한_값_추출(에러_후보_모음...)
 }
 
-func F첫번째_실수값(값_모음 ...interface{}) float64 {
-	for _, 값 := range 값_모음 {
-		if 실수64, ok := 값.(float64); ok {
-			return 실수64
-		} else if 실수32, ok := 값.(float32); ok {
-			return float64(실수32)
-		}
+func F확인2[T any](값 T, 에러 error) T {
+	if 에러 != nil {
+		panic(에러)
 	}
 
-	panic(New에러("실수값을 찾을 수 없습니다."))
+	return 값
+}
+
+func F확인3[T1 any, T2 any](값1 T1, 값2 T2, 에러 error) (T1, T2) {
+	if 에러 != nil {
+		panic(에러)
+	}
+
+	return 값1, 값2
 }
 
 func f에러_제외한_값_추출(에러_후보_모음 ...interface{}) interface{} {
@@ -597,14 +585,14 @@ func F파일_삭제(파일경로 string) error {
 func F파일_복사(소스_경로, 복사본_경로 string) (에러 error) {
 	defer S예외처리{M에러: &에러}.S실행()
 
-	소스_파일 := F확인(os.Open(소스_경로)).(*os.File)
+	소스_파일 := F확인2(os.Open(소스_경로))
 	defer 소스_파일.Close()
 
-	복사본_파일 := F확인(os.Create(복사본_경로)).(*os.File)
+	복사본_파일 := F확인2(os.Create(복사본_경로))
 	defer 복사본_파일.Close()
 
-	F확인(io.Copy(복사본_파일, 소스_파일))
-	F확인(복사본_파일.Sync())
+	F확인2(io.Copy(복사본_파일, 소스_파일))
+	F확인1(복사본_파일.Sync())
 
 	return nil
 }
@@ -716,7 +704,7 @@ func F디렉토리명(파일경로 string) (string, error) {
 }
 
 func F현재_디렉토리() string {
-	return F확인(os.Getwd()).(string)
+	return F확인2(os.Getwd())
 }
 
 func F문자열_삽입(대상_문자열 string, 삽입할_문자열 string, 위치 int) string {
@@ -750,10 +738,10 @@ func F파일에_값_저장(값 interface{}, 파일명 string, 파일_잠금 sync
 		defer 파일_잠금.Unlock()
 	}
 
-	파일 := F확인(os.Create(파일명)).(*os.File)
+	파일 := F확인2(os.Create(파일명))
 	defer 파일.Close()
 
-	F확인(gob.NewEncoder(파일).Encode(값))
+	F확인1(gob.NewEncoder(파일).Encode(값))
 
 	for i := 0; i < 10; i++ {
 		if 에러 = 파일.Sync(); 에러 == nil {
@@ -780,7 +768,7 @@ func F파일에서_값_읽기(값_포인터 interface{}, 파일명 string, 파�
 
 	F조건부_패닉(F종류(값_포인터) != reflect.Ptr, "포인터형이 아님. %T", 값_포인터)
 
-	파일 := F확인(os.Open(파일명)).(*os.File)
+	파일 := F확인2(os.Open(파일명))
 	defer 파일.Close()
 
 	에러 = gob.NewDecoder(파일).Decode(값_포인터)
@@ -854,17 +842,17 @@ func CSV쓰기(레코드_모음 [][]string, 파일명 string, 파일_잠금 sync
 		파일_잠금.Unlock()
 	}
 
-	파일 := F확인(os.Create(파일명)).(*os.File)
+	파일 := F확인2(os.Create(파일명))
 	defer 파일.Close()
 
 	csv기록기 := csv.NewWriter(파일)
 
 	for _, 레코드 := range 레코드_모음 {
-		F확인(csv기록기.Write(레코드))
+		F확인1(csv기록기.Write(레코드))
 	}
 
 	csv기록기.Flush()
-	F확인(csv기록기.Error())
+	F확인1(csv기록기.Error())
 
 	return nil
 }
@@ -883,7 +871,7 @@ func CSV읽기(파일명, 구분자 string, 파일_잠금 sync.Locker) (레코�
 		defer 파일_잠금.Unlock()
 	}
 
-	파일 := F확인(os.Open(파일명)).(*os.File)
+	파일 := F확인2(os.Open(파일명))
 	defer 파일.Close()
 
 	return csv.NewReader(파일).ReadAll()
@@ -919,7 +907,7 @@ func GOROOT() (GOROOT string) {
 		} else if F파일_존재함(`C:\Program Files\Go\bin\go.exe`) {
 			GOROOT = `C:\Program Files\Go`
 		} else {
-			GO실행화일_경로 := F확인(F파일_검색(`C:\`, "go.exe")).(string)
+			GO실행화일_경로 := F확인2(F파일_검색(`C:\`, "go.exe"))
 			GO실행화일_경로 = strings.TrimSpace(GO실행화일_경로)
 
 			GOROOT = strings.Replace(GO실행화일_경로, `\bin\go.exe`, "", -1)

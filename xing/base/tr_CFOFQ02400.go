@@ -148,14 +148,14 @@ package xt
 //	값.M응답2, 에러 = newCFOFQ02400_선물옵션_미결제약정_응답2(버퍼.Next(SizeCFOFQ02400OutBlock2))
 //	lib.F확인(에러)
 //
-//	수량1 := lib.F2정수_단순형(버퍼.Next(5))
+//	수량1 := lib.F확인2(lib.F2정수(버퍼.Next(5))
 //	lib.F조건부_패닉(버퍼.Len() < 5+수량1*SizeCFOFQ02400OutBlock3, "예상하지 못한 길이 : '%v' '%v'",
 //		버퍼.Len(), 5+수량1*SizeCFOFQ02400OutBlock3)
 //
 //	값.M반복값1_모음, 에러 = newCFOFQ02400_선물옵션_미결제약정_반복값1_모음(버퍼.Next(수량1 * SizeCFOFQ02400OutBlock3))
 //	lib.F확인(에러)
 //
-//	수량2 := lib.F2정수_단순형(버퍼.Next(5))
+//	수량2 := lib.F확인2(lib.F2정수(버퍼.Next(5))
 //	lib.F조건부_패닉(버퍼.Len() != 수량2*SizeCFOFQ02400OutBlock4, "예상하지 못한 길이 : '%v' '%v'",
 //		버퍼.Len(), 수량2*SizeCFOFQ02400OutBlock4)
 //
@@ -171,13 +171,13 @@ package xt
 //	lib.F조건부_패닉(len(b) != SizeCFOFQ02400OutBlock1, "예상하지 못한 길이 : '%v'", len(b))
 //
 //	g := new(CFOFQ02400OutBlock1)
-//	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
+//	lib.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 //
 //	값 = new(CFOFQ02400_선물옵션_미결제약정_응답1)
-//	값.M레코드수량 = lib.F2정수64_단순형(g.RecCnt)
+//	값.M레코드수량 = lib.F확인2(lib.F2정수64(g.RecCnt)
 //	값.M계좌번호 = lib.F2문자열_공백제거(g.AcntNo)
-//	값.M등록시장 = CFOFQ02400_등록시장(lib.F2정수_단순형(g.RegMktCode))
-//	값.M매수일자 = lib.F2포맷된_일자_단순형("20060102", g.BuyDt)
+//	값.M등록시장 = CFOFQ02400_등록시장(lib.F확인2(lib.F2정수(g.RegMktCode))
+//	값.M매수일자 = lib.F확인2(lib.F2포맷된_일자("20060102", g.BuyDt)
 //
 //	return 값, nil
 //}
@@ -188,29 +188,29 @@ package xt
 //	lib.F조건부_패닉(len(b) != SizeCFOFQ02400OutBlock2, "예상하지 못한 길이 : '%v", len(b))
 //
 //	g := new(CFOFQ02400OutBlock2)
-//	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
+//	lib.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 //
 //	값 = new(CFOFQ02400_선물옵션_미결제약정_응답2)
-//	값.M레코드수량 = lib.F2정수64_단순형(g.RecCnt)
+//	값.M레코드수량 = lib.F확인2(lib.F2정수64(g.RecCnt)
 //	값.M계좌명 = lib.F2문자열_EUC_KR_공백제거(g.AcntNm)
-//	값.M선물약정수량 = lib.F2정수64_단순형(g.FutsCtrctQty)
-//	값.M옵션약정수량 = lib.F2정수64_단순형(g.OptCtrctQty)
-//	값.M약정수량 = lib.F2정수64_단순형(g.CtrctQty)
-//	값.M선물약정금액 = lib.F2정수64_단순형(g.FutsCtrctAmt)
-//	값.M선물매수약정금액 = lib.F2정수64_단순형(g.FutsBuyctrAmt)
-//	값.M선물매도약정금액 = lib.F2정수64_단순형(g.FutsSlctrAmt)
-//	값.M콜옵션약정금액 = lib.F2정수64_단순형(g.CalloptCtrctAmt)
-//	값.M콜매수금액 = lib.F2정수64_단순형(g.CallBuyAmt)
-//	값.M콜매도금액 = lib.F2정수64_단순형(g.CallSellAmt)
-//	값.M풋옵션약정금액 = lib.F2정수64_단순형(g.PutoptCtrctAmt)
-//	값.M풋매수금액 = lib.F2정수64_단순형(g.PutBuyAmt)
-//	값.M풋매도금액 = lib.F2정수64_단순형(g.PutSellAmt)
-//	값.M전체약정금액 = lib.F2정수64_단순형(g.AllCtrctAmt)
-//	값.M매수약정누계금액 = lib.F2정수64_단순형(g.BuyctrAsmAmt)
-//	값.M매도약정누계금액 = lib.F2정수64_단순형(g.SlctrAsmAmt)
-//	값.M선물손익합계 = lib.F2정수64_단순형(g.FutsPnlSum)
-//	값.M옵션손익합계 = lib.F2정수64_단순형(g.OptPnlSum)
-//	값.M전체손익합계 = lib.F2정수64_단순형(g.AllPnlSum)
+//	값.M선물약정수량 = lib.F확인2(lib.F2정수64(g.FutsCtrctQty)
+//	값.M옵션약정수량 = lib.F확인2(lib.F2정수64(g.OptCtrctQty)
+//	값.M약정수량 = lib.F확인2(lib.F2정수64(g.CtrctQty)
+//	값.M선물약정금액 = lib.F확인2(lib.F2정수64(g.FutsCtrctAmt)
+//	값.M선물매수약정금액 = lib.F확인2(lib.F2정수64(g.FutsBuyctrAmt)
+//	값.M선물매도약정금액 = lib.F확인2(lib.F2정수64(g.FutsSlctrAmt)
+//	값.M콜옵션약정금액 = lib.F확인2(lib.F2정수64(g.CalloptCtrctAmt)
+//	값.M콜매수금액 = lib.F확인2(lib.F2정수64(g.CallBuyAmt)
+//	값.M콜매도금액 = lib.F확인2(lib.F2정수64(g.CallSellAmt)
+//	값.M풋옵션약정금액 = lib.F확인2(lib.F2정수64(g.PutoptCtrctAmt)
+//	값.M풋매수금액 = lib.F확인2(lib.F2정수64(g.PutBuyAmt)
+//	값.M풋매도금액 = lib.F확인2(lib.F2정수64(g.PutSellAmt)
+//	값.M전체약정금액 = lib.F확인2(lib.F2정수64(g.AllCtrctAmt)
+//	값.M매수약정누계금액 = lib.F확인2(lib.F2정수64(g.BuyctrAsmAmt)
+//	값.M매도약정누계금액 = lib.F확인2(lib.F2정수64(g.SlctrAsmAmt)
+//	값.M선물손익합계 = lib.F확인2(lib.F2정수64(g.FutsPnlSum)
+//	값.M옵션손익합계 = lib.F확인2(lib.F2정수64(g.OptPnlSum)
+//	값.M전체손익합계 = lib.F확인2(lib.F2정수64(g.AllPnlSum)
 //
 //	return 값, nil
 //}
@@ -228,22 +228,22 @@ package xt
 //
 //	for i, g := range g_모음 {
 //		g = new(CFOFQ02400OutBlock3)
-//		lib.F확인(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
+//		lib.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 //
 //		값 := new(CFOFQ02400_선물옵션_미결제약정_반복값1)
-//		값.M선물옵션품목구분 = T선물옵션품목(lib.F2정수_단순형(g.FnoClssCode))
-//		값.M선물매도수량 = lib.F2정수64_단순형(g.FutsSellQty)
-//		값.M선물매도손익 = lib.F2정수64_단순형(g.FutsSellPnl)
-//		값.M선물매수수량 = lib.F2정수64_단순형(g.FutsBuyQty)
-//		값.M선물매수손익 = lib.F2정수64_단순형(g.FutsBuyPnl)
-//		값.M콜매도수량 = lib.F2정수64_단순형(g.CallSellQty)
-//		값.M콜매도손익 = lib.F2정수64_단순형(g.CallSellPnl)
-//		값.M콜매수수량 = lib.F2정수64_단순형(g.CallBuyQty)
-//		값.M콜매수손익 = lib.F2정수64_단순형(g.CallBuyPnl)
-//		값.M풋매도수량 = lib.F2정수64_단순형(g.PutSellQty)
-//		값.M풋매도손익 = lib.F2정수64_단순형(g.PutSellPnl)
-//		값.M풋매수수량 = lib.F2정수64_단순형(g.PutBuyQty)
-//		값.M풋매수손익 = lib.F2정수64_단순형(g.PutBuyPnl)
+//		값.M선물옵션품목구분 = T선물옵션품목(lib.F확인2(lib.F2정수(g.FnoClssCode))
+//		값.M선물매도수량 = lib.F확인2(lib.F2정수64(g.FutsSellQty)
+//		값.M선물매도손익 = lib.F확인2(lib.F2정수64(g.FutsSellPnl)
+//		값.M선물매수수량 = lib.F확인2(lib.F2정수64(g.FutsBuyQty)
+//		값.M선물매수손익 = lib.F확인2(lib.F2정수64(g.FutsBuyPnl)
+//		값.M콜매도수량 = lib.F확인2(lib.F2정수64(g.CallSellQty)
+//		값.M콜매도손익 = lib.F확인2(lib.F2정수64(g.CallSellPnl)
+//		값.M콜매수수량 = lib.F확인2(lib.F2정수64(g.CallBuyQty)
+//		값.M콜매수손익 = lib.F확인2(lib.F2정수64(g.CallBuyPnl)
+//		값.M풋매도수량 = lib.F확인2(lib.F2정수64(g.PutSellQty)
+//		값.M풋매도손익 = lib.F확인2(lib.F2정수64(g.PutSellPnl)
+//		값.M풋매수수량 = lib.F확인2(lib.F2정수64(g.PutBuyQty)
+//		값.M풋매수손익 = lib.F확인2(lib.F2정수64(g.PutBuyPnl)
 //
 //		값_모음[i] = 값
 //	}
@@ -264,20 +264,20 @@ package xt
 //
 //	for i, g := range g_모음 {
 //		g = new(CFOFQ02400OutBlock4)
-//		lib.F확인(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
+//		lib.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 //
 //		값 := new(CFOFQ02400_선물옵션_미결제약정_반복값2)
 //		값.M종목코드 = lib.F2문자열_공백제거(g.IsuNo)
 //		값.M종목명 = lib.F2문자열_EUC_KR_공백제거(g.IsuNm)
-//		값.M매도_매수_구분 = lib.T매도_매수_구분(lib.F2정수_단순형(g.BnsTpCode))
-//		값.M잔고수량 = lib.F2정수64_단순형(g.BalQty)
-//		값.M평균가 = lib.F2실수_소숫점_추가_단순형(g.FnoAvrPrc, 8)
-//		값.M당초금액 = lib.F2정수64_단순형(g.BgnAmt)
-//		값.M당일청산수량 = lib.F2정수64_단순형(g.ThdayLqdtQty)
-//		값.M현재가 = lib.F2실수_소숫점_추가_단순형(g.Curprc, 2)
-//		값.M평가금액 = lib.F2정수64_단순형(g.EvalAmt)
-//		값.M평가손익금액 = lib.F2정수64_단순형(g.EvalPnlAmt)
-//		값.M평가수익률 = lib.F2실수_소숫점_추가_단순형(g.EvalErnrat, 6)
+//		값.M매도_매수_구분 = lib.T매도_매수_구분(lib.F확인2(lib.F2정수(g.BnsTpCode))
+//		값.M잔고수량 = lib.F확인2(lib.F2정수64(g.BalQty)
+//		값.M평균가 = lib.F확인2(lib.F2실수_소숫점_추가(g.FnoAvrPrc, 8)
+//		값.M당초금액 = lib.F확인2(lib.F2정수64(g.BgnAmt)
+//		값.M당일청산수량 = lib.F확인2(lib.F2정수64(g.ThdayLqdtQty)
+//		값.M현재가 = lib.F확인2(lib.F2실수_소숫점_추가(g.Curprc, 2)
+//		값.M평가금액 = lib.F확인2(lib.F2정수64(g.EvalAmt)
+//		값.M평가손익금액 = lib.F확인2(lib.F2정수64(g.EvalPnlAmt)
+//		값.M평가수익률 = lib.F확인2(lib.F2실수_소숫점_추가(g.EvalErnrat, 6)
 //
 //		값_모음[i] = 값
 //	}

@@ -130,7 +130,7 @@ func NewT1310_현물_당일전일분틱조회_응답_헤더(b []byte) (값 *T131
 		"예상하지 못한 길이 : '%v", len(b))
 
 	g := new(T1310OutBlock)
-	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
+	lib.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	값 = new(T1310_현물_전일당일분틱조회_응답_헤더)
 	값.M연속키 = lib.F2문자열(g.Time)
@@ -153,23 +153,23 @@ func NewT1310_현물_당일전일분틱조회_응답_반복값_모음(b []byte) 
 
 	for i, g := range g_모음 {
 		g = new(T1310OutBlock1)
-		lib.F확인(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
+		lib.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 		s := new(T1310_현물_전일당일분틱조회_응답_반복값)
-		s.M시각 = lib.F2금일_시각_단순형("150405", g.Chetime[:6])
-		s.M현재가 = lib.F2정수64_단순형(g.Price)
-		s.M전일대비구분 = T전일대비_구분(lib.F2정수64_단순형(g.Sign))
-		s.M전일대비등락폭 = s.M전일대비구분.G부호보정_정수64(lib.F2정수64_단순형(g.Change))
-		s.M전일대비등락율 = s.M전일대비구분.G부호보정_실수64(lib.F2실수_소숫점_추가_단순형(g.Diff, 2))
-		s.M체결수량 = lib.F2정수64_단순형(g.Cvolume)
-		s.M체결강도 = lib.F2실수_소숫점_추가_단순형(g.Chdegree, 2)
-		s.M거래량 = lib.F2정수64_단순형(g.Volume)
-		s.M매도체결수량 = lib.F2정수64_단순형(g.Mdvolume)
-		s.M매도체결건수 = lib.F2정수64_단순형(g.Mdchecnt)
-		s.M매수체결수량 = lib.F2정수64_단순형(g.Msvolume)
-		s.M매수체결건수 = lib.F2정수64_단순형(g.Mschecnt)
-		s.M순체결량 = lib.F2정수64_단순형(g.Revolume)
-		s.M순체결건수 = lib.F2정수64_단순형(g.Rechecnt)
+		s.M시각 = lib.F확인2(lib.F2금일_시각("150405", g.Chetime[:6]))
+		s.M현재가 = lib.F확인2(lib.F2정수64(g.Price))
+		s.M전일대비구분 = T전일대비_구분(lib.F확인2(lib.F2정수64(g.Sign)))
+		s.M전일대비등락폭 = s.M전일대비구분.G부호보정_정수64(lib.F확인2(lib.F2정수64(g.Change)))
+		s.M전일대비등락율 = s.M전일대비구분.G부호보정_실수64(lib.F확인2(lib.F2실수_소숫점_추가(g.Diff, 2)))
+		s.M체결수량 = lib.F확인2(lib.F2정수64(g.Cvolume))
+		s.M체결강도 = lib.F확인2(lib.F2실수_소숫점_추가(g.Chdegree, 2))
+		s.M거래량 = lib.F확인2(lib.F2정수64(g.Volume))
+		s.M매도체결수량 = lib.F확인2(lib.F2정수64(g.Mdvolume))
+		s.M매도체결건수 = lib.F확인2(lib.F2정수64(g.Mdchecnt))
+		s.M매수체결수량 = lib.F확인2(lib.F2정수64(g.Msvolume))
+		s.M매수체결건수 = lib.F확인2(lib.F2정수64(g.Mschecnt))
+		s.M순체결량 = lib.F확인2(lib.F2정수64(g.Revolume))
+		s.M순체결건수 = lib.F확인2(lib.F2정수64(g.Rechecnt))
 
 		값.M배열[i] = s
 	}

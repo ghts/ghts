@@ -152,7 +152,7 @@ package xt
 //	값.M응답2, 에러 = newCFOAQ00600_선물옵션_계좌주문체결내역_응답2(버퍼.Next(SizeCFOAQ00600OutBlock2))
 //	lib.F확인(에러)
 //
-//	수량 := lib.F2정수_단순형(버퍼.Next(5))
+//	수량 := lib.F확인2(lib.F2정수(버퍼.Next(5))
 //	lib.F조건부_패닉(버퍼.Len() != 수량*SizeCFOAQ00600OutBlock3, "예상하지 못한 길이 : '%v' '%v'",
 //		버퍼.Len(), 수량*SizeCFOAQ00600OutBlock3)
 //
@@ -168,25 +168,25 @@ package xt
 //	lib.F조건부_패닉(len(b) != SizeCFOAQ00600OutBlock1, "예상하지 못한 길이 : '%v", len(b))
 //
 //	g := new(CFOAQ00600OutBlock1)
-//	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
+//	lib.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 //
 //	값 = new(CFOAQ00600_선물옵션_계좌주문체결내역_응답1)
-//	값.M레코드갯수 = lib.F2정수64_단순형(g.RecCnt)
+//	값.M레코드갯수 = lib.F확인2(lib.F2정수64(g.RecCnt)
 //	값.M계좌번호 = lib.F2문자열_공백제거(g.AcntNo)
-//	값.M조회_시작일 = lib.F2포맷된_일자_단순형("20060102", g.QrySrtDt)
-//	값.M조회_종료일 = lib.F2포맷된_일자_단순형("20060102", g.QryEndDt)
-//	값.M선물옵션분류 = CFOAQ00600_선물옵션분류(lib.F2정수_단순형(g.FnoClssCode))
-//	값.M상품군분류 = T선옵_상품군(lib.F2정수_단순형(g.PrdgrpCode))
-//	값.M체결구분 = lib.T체결_구분(lib.F2정수_단순형(g.PrdtExecTpCode))
-//	//값.M통신매체 = T통신매체구분(lib.F2정수_단순형(g.CommdaCode))
+//	값.M조회_시작일 = lib.F확인2(lib.F2포맷된_일자("20060102", g.QrySrtDt)
+//	값.M조회_종료일 = lib.F확인2(lib.F2포맷된_일자("20060102", g.QryEndDt)
+//	값.M선물옵션분류 = CFOAQ00600_선물옵션분류(lib.F확인2(lib.F2정수(g.FnoClssCode))
+//	값.M상품군분류 = T선옵_상품군(lib.F확인2(lib.F2정수(g.PrdgrpCode))
+//	값.M체결구분 = lib.T체결_구분(lib.F확인2(lib.F2정수(g.PrdtExecTpCode))
+//	//값.M통신매체 = T통신매체구분(lib.F확인2(lib.F2정수(g.CommdaCode))
 //
-//	switch CFOAQ00600_정렬구분(lib.F2정수_단순형(g.StnlnSeqTp)) {
+//	switch CFOAQ00600_정렬구분(lib.F확인2(lib.F2정수(g.StnlnSeqTp)) {
 //	case CFOAQ00600_역순:
 //		값.M정렬순서 = lib.P정렬_역순
 //	case CFOAQ00600_정순:
 //		값.M정렬순서 = lib.P정렬_정순
 //	default:
-//		panic(lib.New에러with출력("예상하지 못한 값 : '%v'", lib.F2정수_단순형(g.StnlnSeqTp)))
+//		panic(lib.New에러with출력("예상하지 못한 값 : '%v'", lib.F확인2(lib.F2정수(g.StnlnSeqTp)))
 //	}
 //
 //	return 값, nil
@@ -198,15 +198,15 @@ package xt
 //	lib.F조건부_패닉(len(b) != SizeCFOAQ00600OutBlock2, "예상하지 못한 길이 : '%v", len(b))
 //
 //	g := new(CFOAQ00600OutBlock2)
-//	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
+//	lib.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 //
 //	값 = new(CFOAQ00600_선물옵션_계좌주문체결내역_응답2)
-//	값.M레코드갯수 = lib.F2정수64_단순형(g.RecCnt)
+//	값.M레코드갯수 = lib.F확인2(lib.F2정수64(g.RecCnt)
 //	값.M계좌명 = lib.F2문자열_EUC_KR_공백제거(g.AcntNm)
-//	값.M선물주문수량 = lib.F2정수64_단순형(g.FutsOrdQty)
-//	값.M선물체결수량 = lib.F2정수64_단순형(g.FutsExecQty)
-//	값.M옵션주문수량 = lib.F2정수64_단순형(g.OptOrdQty)
-//	값.M옵션체결수량 = lib.F2정수64_단순형(g.OptExecQty)
+//	값.M선물주문수량 = lib.F확인2(lib.F2정수64(g.FutsOrdQty)
+//	값.M선물체결수량 = lib.F확인2(lib.F2정수64(g.FutsExecQty)
+//	값.M옵션주문수량 = lib.F확인2(lib.F2정수64(g.OptOrdQty)
+//	값.M옵션체결수량 = lib.F확인2(lib.F2정수64(g.OptExecQty)
 //
 //	return 값, nil
 //}
@@ -224,16 +224,16 @@ package xt
 //
 //	for i, g := range g_모음 {
 //		g = new(CFOAQ00600OutBlock3)
-//		lib.F확인(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
+//		lib.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 //
-//		주문일 := lib.F2포맷된_일자_단순형("20060102", g.OrdDt)
+//		주문일 := lib.F확인2(lib.F2포맷된_일자("20060102", g.OrdDt)
 //		주문시각 := lib.F2문자열(g.OrdTime)
 //		약정시각 := lib.F2문자열(g.CtrctTime)
 //
 //		값 := new(CFOAQ00600_선물옵션_계좌주문체결내역_반복값)
-//		값.M주문시각 = lib.F2일자별_시각_단순형(주문일, "150405.999", 주문시각[:6]+"."+주문시각[6:])
-//		값.M주문번호 = lib.F2정수64_단순형(g.OrdNo)
-//		값.M원주문번호 = lib.F2정수64_단순형(g.OrgOrdNo)
+//		값.M주문시각 = lib.F확인2(lib.F2일자별_시각(주문일, "150405.999", 주문시각[:6]+"."+주문시각[6:])
+//		값.M주문번호 = lib.F확인2(lib.F2정수64(g.OrdNo)
+//		값.M원주문번호 = lib.F확인2(lib.F2정수64(g.OrgOrdNo)
 //		값.M종목코드 = lib.F2문자열_공백제거(g.FnoIsuNo)
 //		값.M종목명 = lib.F2문자열_EUC_KR_공백제거(g.IsuNm)
 //
@@ -246,10 +246,10 @@ package xt
 //			panic(lib.New에러("예상하지 못한 값 : '%v'", lib.F2문자열_EUC_KR_공백제거(g.BnsTpNm)))
 //		}
 //
-//		값.M정정취소구분 = lib.T신규_정정_취소(lib.F2정수64_단순형(g.MrcTpNm))
-//		값.M호가유형 = T호가유형(lib.F2정수_단순형(g.FnoOrdprcPtnCode))
+//		값.M정정취소구분 = lib.T신규_정정_취소(lib.F확인2(lib.F2정수64(g.MrcTpNm))
+//		값.M호가유형 = T호가유형(lib.F확인2(lib.F2정수(g.FnoOrdprcPtnCode))
 //		값.M주문가 = lib.F2실수_소숫점_추가_단순형_공백은_0(g.OrdPrc, 2)
-//		값.M주문수량 = lib.F2정수64_단순형(g.OrdQty)
+//		값.M주문수량 = lib.F확인2(lib.F2정수64(g.OrdQty)
 //
 //		switch lib.F2문자열(g.OrdTpNm) {
 //		case "확인":
@@ -285,15 +285,15 @@ package xt
 //			panic(lib.New에러("예상하지 못한 값 : '%v'", lib.F2문자열_EUC_KR_공백제거(g.ExecTpNm)))
 //		}
 //
-//		값.M체결가 = lib.F2실수_소숫점_추가_단순형(g.ExecPrc, 2)
-//		값.M체결수량 = lib.F2정수64_단순형(g.ExecQty)
-//		값.M약정시각 = lib.F2일자별_시각_단순형(주문일, "150405.999", 약정시각[:6]+"."+약정시각[6:])
-//		값.M약정번호 = lib.F2정수64_단순형(g.CtrctNo)
-//		값.M체결번호 = lib.F2정수64_단순형(g.ExecNo)
-//		값.M매매손익금액 = lib.F2정수64_단순형(g.BnsplAmt)
-//		값.M미체결수량 = lib.F2정수64_단순형(g.UnercQty)
+//		값.M체결가 = lib.F확인2(lib.F2실수_소숫점_추가(g.ExecPrc, 2)
+//		값.M체결수량 = lib.F확인2(lib.F2정수64(g.ExecQty)
+//		값.M약정시각 = lib.F확인2(lib.F2일자별_시각(주문일, "150405.999", 약정시각[:6]+"."+약정시각[6:])
+//		값.M약정번호 = lib.F확인2(lib.F2정수64(g.CtrctNo)
+//		값.M체결번호 = lib.F확인2(lib.F2정수64(g.ExecNo)
+//		값.M매매손익금액 = lib.F확인2(lib.F2정수64(g.BnsplAmt)
+//		값.M미체결수량 = lib.F확인2(lib.F2정수64(g.UnercQty)
 //		값.M사용자ID = lib.F2문자열_공백제거(g.UserId)
-//		//값.M통신매체 = T통신매체구분(lib.F2정수_단순형(g.CommdaCode))
+//		//값.M통신매체 = T통신매체구분(lib.F확인2(lib.F2정수(g.CommdaCode))
 //
 //		값_모음[i] = 값
 //	}

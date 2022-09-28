@@ -103,7 +103,7 @@ func NewT0434_선물옵션_체결_미체결_조회_응답(b []byte) (값 *T0434_
 	값 = new(T0434_선물옵션_체결_미체결_조회_응답)
 	값.M연속키 = lib.F2문자열_공백제거(버퍼.Next(SizeT0434OutBlock))
 
-	수량 := lib.F2정수_단순형(버퍼.Next(5))
+	수량 := lib.F확인2(lib.F2정수(버퍼.Next(5))
 	lib.F조건부_패닉(버퍼.Len() != 수량*SizeT0434OutBlock1,
 		"예상하지 못한 길이 : '%v' '%v'", 버퍼.Len(), 수량*SizeT0434OutBlock1)
 
@@ -126,26 +126,26 @@ func newT0434_선물옵션_체결_미체결_반복값_모음(b []byte) (값_모�
 
 	for i, g := range g_모음 {
 		g = new(T0434OutBlock1)
-		lib.F확인(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
+		lib.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 		주문시간_문자열 := string(g.Ordtime[:])
 		주문시간_문자열 = 주문시간_문자열[:6] + "." + 주문시간_문자열[6:]
 
 		값 := new(T0434_선물옵션_체결_미체결_조회_반복값)
-		값.M주문번호 = lib.F2정수64_단순형(g.Ordno)
-		값.M원주문번호 = lib.F2정수64_단순형(g.Orgordno)
+		값.M주문번호 = lib.F확인2(lib.F2정수64(g.Ordno)
+		값.M원주문번호 = lib.F확인2(lib.F2정수64(g.Orgordno)
 		값.M매매_구분 = lib.T매도_매수_구분(0).F해석(g.Medosu)
 		//값.M호가유형 = lib.F2문자열_EUC_KR_공백제거(g.Ordgb)
-		값.M주문수량 = lib.F2정수64_단순형(g.Qty)
-		값.M주문가격 = lib.F2실수_단순형(g.Price)
-		값.M체결수량 = lib.F2정수64_단순형(g.Cheqty)
-		값.M체결가격 = lib.F2실수_단순형(g.Cheprice)
-		값.M미체결_잔량 = lib.F2정수64_단순형(g.Ordrem)
+		값.M주문수량 = lib.F확인2(lib.F2정수64(g.Qty)
+		값.M주문가격 = lib.F확인2(lib.F2실수(g.Price)
+		값.M체결수량 = lib.F확인2(lib.F2정수64(g.Cheqty)
+		값.M체결가격 = lib.F확인2(lib.F2실수(g.Cheprice)
+		값.M미체결_잔량 = lib.F확인2(lib.F2정수64(g.Ordrem)
 		값.M상태 = lib.F2문자열_EUC_KR_공백제거(g.Status)
-		값.M주문시각 = lib.F2일자별_시각_단순형(당일.TCP주소(), "150405.99", 주문시간_문자열)
+		값.M주문시각 = lib.F확인2(lib.F2일자별_시각(당일.TCP주소(), "150405.99", 주문시간_문자열)
 		값.M종목코드 = lib.F2문자열_공백제거(g.Expcode)
 		값.M사유코드 = lib.F2문자열_공백제거(g.Rtcode)
-		값.M처리순번 = lib.F2정수64_단순형(g.Sysprocseq)
+		값.M처리순번 = lib.F확인2(lib.F2정수64(g.Sysprocseq)
 
 		switch lib.F2문자열_EUC_KR_공백제거(g.Ordgb) {
 		case "지정가(IOC)":

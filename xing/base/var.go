@@ -36,7 +36,6 @@ package xt
 import (
 	"github.com/ghts/ghts/lib"
 	"sync"
-	"time"
 )
 
 var (
@@ -47,24 +46,3 @@ var (
 	주소_설정_완료 = lib.New안전한_bool(false)
 	주소_설정_잠금 sync.Mutex
 )
-
-func F전일_당일_설정(전일값, 당일값 time.Time) {
-	전일 = lib.New안전한_시각(전일값)
-	당일 = lib.New안전한_시각(당일값)
-}
-
-func F당일() time.Time {
-	if 당일 == nil || 당일.G값().Equal(time.Time{}) {
-		panic("Xing API가 초기화 되지 않았습니다.")
-	}
-
-	return 당일.G값()
-}
-
-func F전일() time.Time {
-	if 전일 == nil || 전일.G값().Equal(time.Time{}) {
-		panic("Xing API가 초기화 되지 않았습니다.")
-	}
-
-	return 전일.G값()
-}

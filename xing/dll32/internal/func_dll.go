@@ -60,100 +60,55 @@ func f초기화_XingAPI() {
 	lib.F조건부_패닉(lib.F환경변수("GOARCH") != "386", "DLL32 모듈은 32비트 전용입니다.")
 
 	// DLL파일이 있는 디렉토리로 이동. (빼먹으면 안 됨)
-	원래_디렉토리, 에러 := os.Getwd()
-	lib.F확인(에러)
-
-	xing디렉토리, 에러 := XingAPI디렉토리()
-	lib.F확인(에러)
-
-	lib.F확인(os.Chdir(xing디렉토리))
+	원래_디렉토리 := lib.F현재_디렉토리()
+	xing디렉토리 := lib.F확인2(XingAPI디렉토리())
+	lib.F확인1(os.Chdir(xing디렉토리))
 
 	// XingAPI 초기화 ('반드시' DLL파일이 있는 디렉토리에서 실행해야 함.)
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
-	xing_api_dll, 에러 = syscall.LoadLibrary(xing_dll)
-	lib.F확인(에러)
+	xing_api_dll = lib.F확인2(syscall.LoadLibrary(xing_dll))
 
 	// 원래 디렉토리로 이동
-	lib.F확인(os.Chdir(원래_디렉토리))
+	lib.F확인1(os.Chdir(원래_디렉토리))
 
 	// Xing API 함수 포인터
-	etkConnect, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_Connect")
-	lib.F확인(에러)
-
-	etkIsConnected, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_IsConnected")
-	lib.F확인(에러)
-
-	etkLogin, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_Login")
-	lib.F확인(에러)
-
-	etkLogout, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_Logout")
-	lib.F확인(에러)
+	etkConnect = lib.F확인2(syscall.GetProcAddress(xing_api_dll, "ETK_Connect"))
+	etkIsConnected = lib.F확인2(syscall.GetProcAddress(xing_api_dll, "ETK_IsConnected"))
+	etkLogin = lib.F확인2(syscall.GetProcAddress(xing_api_dll, "ETK_Login"))
+	etkLogout = lib.F확인2(syscall.GetProcAddress(xing_api_dll, "ETK_Logout"))
 
 	// syscall, cgo 방식 모두 에러 발생.
 	//etkDisconnect, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_Disconnect")
 	//lib.F확인(에러)
 
-	etkRequest, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_Request")
-	lib.F확인(에러)
-
-	etkAdviseRealData, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_AdviseRealData")
-	lib.F확인(에러)
-
-	etkUnadviseRealData, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_UnadviseRealData")
-	lib.F확인(에러)
-
-	etkUnadviseWindow, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_UnadviseWindow")
-	lib.F확인(에러)
-
-	etkGetAccountListCount, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_GetAccountListCount")
-	lib.F확인(에러)
-
-	etkGetAccountList, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_GetAccountList")
-	lib.F확인(에러)
+	etkRequest = lib.F확인2(syscall.GetProcAddress(xing_api_dll, "ETK_Request"))
+	etkAdviseRealData = lib.F확인2(syscall.GetProcAddress(xing_api_dll, "ETK_AdviseRealData"))
+	etkUnadviseRealData = lib.F확인2(syscall.GetProcAddress(xing_api_dll, "ETK_UnadviseRealData"))
+	etkUnadviseWindow = lib.F확인2(syscall.GetProcAddress(xing_api_dll, "ETK_UnadviseWindow"))
+	etkGetAccountListCount = lib.F확인2(syscall.GetProcAddress(xing_api_dll, "ETK_GetAccountListCount"))
+	etkGetAccountList = lib.F확인2(syscall.GetProcAddress(xing_api_dll, "ETK_GetAccountList"))
 
 	// syscall 방식은 에러 발생. cgo 방식은 정상 작동.
-	etkGetAccountName, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_GetAccountName")
-	lib.F확인(에러)
+	etkGetAccountName = lib.F확인2(syscall.GetProcAddress(xing_api_dll, "ETK_GetAccountName"))
 
 	// syscall 방식은 에러 발생. cgo 방식은 정상 작동.
-	etkGetAccountDetailName, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_GetAcctDetailName")
-	lib.F확인(에러)
+	etkGetAccountDetailName = lib.F확인2(syscall.GetProcAddress(xing_api_dll, "ETK_GetAcctDetailName"))
 
 	// syscall 방식은 에러 발생. cgo 방식은 정상 작동.
-	etkGetAccountNickName, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_GetAcctNickname")
-	lib.F확인(에러)
+	etkGetAccountNickName = lib.F확인2(syscall.GetProcAddress(xing_api_dll, "ETK_GetAcctNickname"))
 
-	etkGetServerName, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_GetServerName")
-	lib.F확인(에러)
-
-	etkGetLastError, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_GetLastError")
-	lib.F확인(에러)
-
-	etkGetErrorMessage, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_GetErrorMessage")
-	lib.F확인(에러)
-
-	etkGetTRCountPerSec, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_GetTRCountPerSec")
-	lib.F확인(에러)
-
-	etkGetTRCountBaseSec, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_GetTRCountBaseSec")
-	lib.F확인(에러)
-
-	etkGetTRCountLimit, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_GetTRCountLimit")
-	lib.F확인(에러)
-
-	etkGetTRCountRequest, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_GetTRCountRequest")
-	lib.F확인(에러)
-
-	etkReleaseRequestData, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_ReleaseRequestData")
-	lib.F확인(에러)
-
-	etkReleaseMessageData, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_ReleaseMessageData")
-	lib.F확인(에러)
-
-	etkDecompress, 에러 = syscall.GetProcAddress(xing_api_dll, "ETK_Decompress")
-	lib.F확인(에러)
+	etkGetServerName = lib.F확인2(syscall.GetProcAddress(xing_api_dll, "ETK_GetServerName"))
+	etkGetLastError = lib.F확인2(syscall.GetProcAddress(xing_api_dll, "ETK_GetLastError"))
+	etkGetErrorMessage = lib.F확인2(syscall.GetProcAddress(xing_api_dll, "ETK_GetErrorMessage"))
+	etkGetTRCountPerSec = lib.F확인2(syscall.GetProcAddress(xing_api_dll, "ETK_GetTRCountPerSec"))
+	etkGetTRCountBaseSec = lib.F확인2(syscall.GetProcAddress(xing_api_dll, "ETK_GetTRCountBaseSec"))
+	etkGetTRCountLimit = lib.F확인2(syscall.GetProcAddress(xing_api_dll, "ETK_GetTRCountLimit"))
+	etkGetTRCountRequest = lib.F확인2(syscall.GetProcAddress(xing_api_dll, "ETK_GetTRCountRequest"))
+	etkReleaseRequestData = lib.F확인2(syscall.GetProcAddress(xing_api_dll, "ETK_ReleaseRequestData"))
+	etkReleaseMessageData = lib.F확인2(syscall.GetProcAddress(xing_api_dll, "ETK_ReleaseMessageData"))
+	etkDecompress = lib.F확인2(syscall.GetProcAddress(xing_api_dll, "ETK_Decompress"))
 }
 
 func F접속(서버_구분 xt.T서버_구분) error {
@@ -227,7 +182,7 @@ func f접속됨() (bool, error) {
 func F로그인(서버_구분 xt.T서버_구분) (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
-	lib.F확인(xt.F로그인_정보_설정())
+	lib.F확인1(xt.F로그인_정보_설정())
 
 	로그인_ID := xt.V로그인_정보.M로그인_ID
 	로그인_암호 := lib.F조건부_문자열(xt.F서버_구분() == xt.P서버_실거래, xt.V로그인_정보.M로그인_암호, xt.V로그인_정보.M모의투자_암호)

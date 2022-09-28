@@ -314,9 +314,9 @@ func F2문자열(값_모음 ...interface{}) string {
 	case *big.Rat:
 		return f숫자_문자열_정리(변환값.FloatString(100))
 	case big.Float:
-		return string(F확인(변환값.MarshalText()).([]byte))
+		return string(F확인2(변환값.MarshalText()))
 	case *big.Float:
-		return string(F확인(변환값.MarshalText()).([]byte))
+		return string(F확인2(변환값.MarshalText()))
 	case error:
 		return 변환값.Error()
 	case reflect.Type:
@@ -397,15 +397,6 @@ func F2정수(값 interface{}) (int, error) {
 	return 반환값, nil
 }
 
-// defer(), recover()로 패닉에 대처할 수 있는 경우에만 사용할 것.
-func F2정수_단순형(값 interface{}) int {
-	if F2문자열_공백_제거(값) == "" {
-		return 0
-	}
-
-	return F확인(F2정수(값)).(int)
-}
-
 func F2정수64(값 interface{}) (int64, error) {
 	문자열 := ""
 
@@ -434,13 +425,12 @@ func F2정수64(값 interface{}) (int64, error) {
 	}
 }
 
-// defer(), recover()로 패닉에 대처할 수 있는 경우에만 사용할 것.
-func F2정수64_단순형(값 interface{}) int64 {
+func F2정수64_공백은_0(값 interface{}) (int64, error) {
 	if F2문자열_공백_제거(값) == "" {
-		return 0
+		return 0, nil
 	}
 
-	return F확인(F2정수64(값)).(int64)
+	return F2정수64(값)
 }
 
 func F2정수64_모음(값_모음 []interface{}) ([]int64, error) {
@@ -459,16 +449,6 @@ func F2정수64_모음(값_모음 []interface{}) ([]int64, error) {
 	return 정수64_모음, nil
 }
 
-func F2정수64_모음_단순형(값_모음 []interface{}) []int64 {
-	정수64_모음 := make([]int64, len(값_모음), len(값_모음))
-
-	for i, 값 := range 값_모음 {
-		정수64_모음[i] = F2정수64_단순형(값)
-	}
-
-	return 정수64_모음
-}
-
 func F2큰_정수(값 interface{}) (*big.Int, error) {
 	정수64, 에러 := F2정수64(값)
 	if 에러 != nil {
@@ -476,11 +456,6 @@ func F2큰_정수(값 interface{}) (*big.Int, error) {
 	}
 
 	return big.NewInt(정수64), nil
-}
-
-// defer(), recover()로 패닉에 대처할 수 있는 경우에만 사용할 것.
-func F2큰_정수_단순형(값 interface{}) *big.Int {
-	return F확인(F2큰_정수(값)).(*big.Int)
 }
 
 func F2실수(값 interface{}) (float64, error) {
@@ -514,17 +489,12 @@ func F2실수(값 interface{}) (float64, error) {
 	return 실수64, nil
 }
 
-// defer(), recover()로 패닉에 대처할 수 있는 경우에만 사용할 것.
-func F2실수_단순형(값 interface{}) float64 {
-	return F확인(F2실수(값)).(float64)
-}
-
 func F2실수_단순형_공백은_0(값 interface{}) float64 {
 	if F2문자열_공백_제거(값) == "" {
 		return 0.0
 	}
 
-	return F2실수_단순형(값)
+	return F확인2(F2실수(값))
 }
 
 func F2실수_소숫점_추가(값 interface{}, 소숫점_이하_자릿수 int) (실수값 float64, 에러 error) {
@@ -546,25 +516,17 @@ func F2실수_소숫점_추가(값 interface{}, 소숫점_이하_자릿수 int) 
 	return F2실수(소숫점_추가_문자열)
 }
 
-func F2실수_소숫점_추가_단순형(값 interface{}, 소숫점_이하_자릿수 int) float64 {
-	return F확인(F2실수_소숫점_추가(값, 소숫점_이하_자릿수)).(float64)
-}
-
 func F2실수_소숫점_추가_단순형_공백은_0(값 interface{}, 소숫점_이하_자릿수 int) float64 {
 	if strings.TrimSpace(F2문자열(값)) == "" {
 		return 0
 	}
 
-	return F확인(F2실수_소숫점_추가(값, 소숫점_이하_자릿수)).(float64)
+	return F확인2(F2실수_소숫점_추가(값, 소숫점_이하_자릿수))
 }
 
 func F2십진수(값 interface{}) (십진수 *big.Float, 에러 error) {
 	십진수, _, 에러 = big.NewFloat(0).Parse(F2문자열(값), 0)
 	return
-}
-
-func F2십진수_단순형(값 interface{}) (십진수 *big.Float) {
-	return F확인(F2십진수(값)).(*big.Float)
 }
 
 func F2십진수_소숫점_추가(값 interface{}, 소숫점_이하_자릿수 int) (십진수 *big.Float, 에러 error) {
@@ -584,10 +546,6 @@ func F2십진수_소숫점_추가(값 interface{}, 소숫점_이하_자릿수 in
 	return F2십진수(소숫점_추가_문자열)
 }
 
-func F2십진수_소숫점_추가_단순형(값 interface{}, 소숫점_이하_자릿수 int) *big.Float {
-	return F확인(F2십진수_소숫점_추가(값, 소숫점_이하_자릿수)).(*big.Float)
-}
-
 func F2한국_시간(값 time.Time) (한국_시간 time.Time) {
 	return 값.In(P한국)
 }
@@ -601,15 +559,11 @@ func F2한국_일자(값 time.Time) (한국_시간 time.Time) {
 }
 
 func F일자2정수(일자 time.Time) uint32 {
-	return uint32(F2정수64_단순형(일자.Format("20060102")))
+	return uint32(F확인2(F2정수64(일자.Format("20060102"))))
 }
 
 func F정수2일자(일자_정수값 uint32) (일자 time.Time, 에러 error) {
 	return F2포맷된_일자("20060102", F2문자열(일자_정수값))
-}
-
-func F정수2일자_단순형(일자_정수값 uint32) time.Time {
-	return F2포맷된_일자_단순형("20060102", F2문자열(일자_정수값))
 }
 
 func F2포맷된_시각(포맷 string, 값 interface{}) (time.Time, error) {
@@ -643,16 +597,12 @@ func F2포맷된_시각(포맷 string, 값 interface{}) (time.Time, error) {
 	return 시각, 에러
 }
 
-func F2포맷된_시각_단순형(포맷 string, 값 interface{}) time.Time {
-	return F확인(F2포맷된_시각(포맷, 값)).(time.Time)
-}
-
 func F2포맷된_시각_단순형_공백은_초기값(포맷 string, 값 interface{}) time.Time {
 	if F2문자열_공백_제거(값) == "" {
 		return time.Time{}
 	}
 
-	return F2포맷된_시각_단순형(포맷, 값)
+	return F확인2(F2포맷된_시각(포맷, 값))
 }
 
 func F2포맷된_일자(포맷 string, 값 interface{}) (time.Time, error) {
@@ -668,21 +618,12 @@ func F2포맷된_일자(포맷 string, 값 interface{}) (time.Time, error) {
 	return 일자, nil
 }
 
-func F2포맷된_일자_단순형(포맷 string, 값 interface{}) (일자 time.Time) {
-	defer S예외처리{M함수: func() { 일자 = time.Time{} }, M출력_숨김: true}.S실행()
-
-	시각 := F확인(F2포맷된_시각(포맷, 값)).(time.Time)
-
-	return time.Date(시각.Year(), 시각.Month(), 시각.Day(),
-		0, 0, 0, 0, 시각.Location())
-}
-
 func F2포맷된_일자_단순형_공백은_초기값(포맷 string, 값 interface{}) time.Time {
 	if F2문자열_공백_제거(값) == "" {
 		return time.Time{}
 	}
 
-	return F2포맷된_일자_단순형(포맷, 값)
+	return F확인2(F2포맷된_일자(포맷, 값))
 }
 
 func F2일자별_시각(일자 time.Time, 포맷 string, 값 interface{}) (time.Time, error) {
@@ -701,24 +642,16 @@ func F2일자별_시각(일자 time.Time, 포맷 string, 값 interface{}) (time.
 	return 반환값, nil
 }
 
-func F2일자별_시각_단순형(일자 time.Time, 포맷 string, 값 interface{}) time.Time {
-	return F확인(F2일자별_시각(일자, 포맷, 값)).(time.Time)
-}
-
 func F2일자별_시각_단순형_공백은_초기값(일자 time.Time, 포맷 string, 값 interface{}) time.Time {
 	if F2문자열_공백_제거(값) == "" {
 		return time.Time{}
 	}
 
-	return F2일자별_시각_단순형(일자, 포맷, 값)
+	return F확인2(F2일자별_시각(일자, 포맷, 값))
 }
 
 func F2금일_시각(포맷 string, 값 interface{}) (time.Time, error) {
 	return F2일자별_시각(F금일(), 포맷, 값)
-}
-
-func F2금일_시각_단순형(포맷 string, 값 interface{}) time.Time {
-	return F확인(F2금일_시각(포맷, 값)).(time.Time)
 }
 
 func F2금일_시각_단순형_공백은_초기값(포맷 string, 값 interface{}) time.Time {
@@ -726,7 +659,7 @@ func F2금일_시각_단순형_공백은_초기값(포맷 string, 값 interface{
 		return time.Time{}
 	}
 
-	return F2금일_시각_단순형(포맷, 값)
+	return F확인2(F2금일_시각(포맷, 값))
 }
 
 func F2금일_한국_시각(시, 분, 초 int) (금일_시각 time.Time, 에러 error) {
@@ -748,14 +681,6 @@ func F2금일_한국_시각(시, 분, 초 int) (금일_시각 time.Time, 에러 
 	시각_문자열 := F2문자열("%v:%v:%v +0900 KST", 시_문자열, 분_문자열, 초_문자열)
 
 	return F2금일_시각("15:04:05 -0700 MST", 시각_문자열)
-}
-
-func F2금일_한국_시각_단순형(시, 분, 초 int) time.Time {
-	if 금일_시각, 에러 := F2금일_한국_시각(시, 분, 초); 에러 != nil {
-		panic(에러)
-	} else {
-		return 금일_시각
-	}
 }
 
 func F2참거짓(값 interface{}, 조건 interface{}, 결과 bool) bool {
@@ -951,109 +876,109 @@ func F바이트_변환값_해석(바이트_변환값 *S바이트_변환) (해석
 	switch 자료형_문자열 {
 	case P자료형_Int:
 		var s int
-		F확인(바이트_변환값.G값(&s))
+		F확인1(바이트_변환값.G값(&s))
 		return s, nil
 	case P자료형_Int64:
 		var s int64
-		F확인(바이트_변환값.G값(&s))
+		F확인1(바이트_변환값.G값(&s))
 		return s, nil
 	case P자료형_Float64:
 		var s float64
-		F확인(바이트_변환값.G값(&s))
+		F확인1(바이트_변환값.G값(&s))
 		return s, nil
 	case P자료형_Bool:
 		var s bool
-		F확인(바이트_변환값.G값(&s))
+		F확인1(바이트_변환값.G값(&s))
 		return s, nil
 	case P자료형_String:
 		var s string
-		F확인(바이트_변환값.G값(&s))
+		F확인1(바이트_변환값.G값(&s))
 		return s, nil
 	case P자료형_StringArray:
 		var s []string
-		F확인(바이트_변환값.G값(&s))
+		F확인1(바이트_변환값.G값(&s))
 		return s, nil
 	case P자료형_Time:
 		var s time.Time
-		F확인(바이트_변환값.G값(&s))
+		F확인1(바이트_변환값.G값(&s))
 		return s, nil
 	case P자료형_Error:
 		var s error
-		F확인(바이트_변환값.G값(&s))
+		F확인1(바이트_변환값.G값(&s))
 		return s, nil
 	case P자료형_T신호:
 		var s T신호
-		F확인(바이트_변환값.G값(&s))
+		F확인1(바이트_변환값.G값(&s))
 		return s, nil
 	case P자료형_S질의값_기본형:
 		s := new(S질의값_기본형)
-		F확인(바이트_변환값.G값(s))
+		F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_S질의값_정수:
 		s := new(S질의값_정수)
-		F확인(바이트_변환값.G값(s))
+		F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_S질의값_문자열:
 		s := new(S질의값_문자열)
-		F확인(바이트_변환값.G값(s))
+		F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_S질의값_문자열_모음:
 		s := new(S질의값_문자열_모음)
-		F확인(바이트_변환값.G값(s))
+		F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_S질의값_바이트_변환:
 		s := new(S질의값_바이트_변환)
 		s.M바이트_변환 = new(S바이트_변환)
-		F확인(바이트_변환값.G값(s))
+		F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_S질의값_바이트_변환_모음:
 		s := new(S질의값_바이트_변환_모음)
 		s.M바이트_변환_모음 = new(S바이트_변환_모음)
-		F확인(바이트_변환값.G값(s))
+		F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_S질의값_단일_종목:
 		s := new(S질의값_단일_종목)
-		F확인(바이트_변환값.G값(s))
+		F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_S질의값_단일종목_연속키:
 		s := new(S질의값_단일종목_연속키)
-		F확인(바이트_변환값.G값(s))
+		F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_S질의값_복수_종목:
 		s := new(S질의값_복수_종목)
-		F확인(바이트_변환값.G값(s))
+		F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_S질의값_정상_주문:
 		s := new(S질의값_정상_주문)
-		F확인(바이트_변환값.G값(s))
+		F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_S질의값_정정_주문:
 		s := new(S질의값_정정_주문)
-		F확인(바이트_변환값.G값(s))
+		F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_S질의값_취소_주문:
 		s := new(S질의값_취소_주문)
-		F확인(바이트_변환값.G값(s))
+		F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_S콜백_기본형:
 		s := new(S콜백_기본형)
-		F확인(바이트_변환값.G값(s))
+		F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_S콜백_정수값:
 		s := New콜백_정수값_기본형()
-		F확인(바이트_변환값.G값(s))
+		F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_S콜백_문자열:
 		s := new(S콜백_문자열)
-		F확인(바이트_변환값.G값(s))
+		F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_S콜백_TR데이터:
 		s := new(S콜백_TR데이터)
-		F확인(바이트_변환값.G값(s))
+		F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_S콜백_메시지_및_에러:
 		s := new(S콜백_메시지_및_에러)
-		F확인(바이트_변환값.G값(s))
+		F확인1(바이트_변환값.G값(s))
 		return s, nil
 	}
 

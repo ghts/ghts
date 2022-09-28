@@ -45,8 +45,6 @@ type I송수신 interface {
 
 type I소켓 interface {
 	I송수신
-	S송신_단순형(변환_형식 T변환, 값_모음 ...interface{})
-	G수신_단순형() *S바이트_변환_모음
 	S타임아웃(타임아웃 time.Duration) I소켓
 	S옵션(옵션_모음 ...interface{})
 	Close() error
@@ -60,7 +58,6 @@ type I소켓with컨텍스트 interface {
 type I소켓_질의 interface {
 	I소켓
 	G질의_응답(변환_형식 T변환, 값_모음 ...interface{}) (*S바이트_변환_모음, error)
-	G질의_응답_검사(변환_형식 T변환, 값_모음 ...interface{}) *S바이트_변환_모음
 }
 
 func New소켓_저장소(수량 int, 생성함수 func() I소켓_질의) *s소켓_저장소 {

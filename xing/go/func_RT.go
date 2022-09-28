@@ -77,7 +77,7 @@ func F실시간_데이터_구독_ETF(종목코드 string, 종목코드_모음 ..
 		xt.RT코스피_예상_체결_YS3}
 
 	for _, RT코드 := range RT코드_모음 {
-		lib.F확인(F실시간_정보_구독_복수_종목(RT코드, 종목코드_모음))
+		lib.F확인1(F실시간_정보_구독_복수_종목(RT코드, 종목코드_모음))
 	}
 
 	return nil
@@ -94,7 +94,7 @@ func F실시간_데이터_해지_ETF(종목코드_모음 []string) (에러 error
 		xt.RT코스피_예상_체결_YS3}
 
 	for _, RT코드 := range RT코드_모음 {
-		lib.F확인(F실시간_정보_해지_복수_종목(RT코드, 종목코드_모음))
+		lib.F확인1(F실시간_정보_해지_복수_종목(RT코드, 종목코드_모음))
 	}
 
 	return nil
@@ -107,11 +107,11 @@ func F주문_응답_실시간_정보_구독() (에러 error) {
 		return
 	}
 
-	lib.F확인(F실시간_정보_구독_단순TR(xt.RT현물_주문_접수_SC0))
-	lib.F확인(F실시간_정보_구독_단순TR(xt.RT현물_주문_체결_SC1))
-	lib.F확인(F실시간_정보_구독_단순TR(xt.RT현물_주문_정정_SC2))
-	lib.F확인(F실시간_정보_구독_단순TR(xt.RT현물_주문_취소_SC3))
-	lib.F확인(F실시간_정보_구독_단순TR(xt.RT현물_주문_거부_SC4))
+	lib.F확인1(F실시간_정보_구독_단순TR(xt.RT현물_주문_접수_SC0))
+	lib.F확인1(F실시간_정보_구독_단순TR(xt.RT현물_주문_체결_SC1))
+	lib.F확인1(F실시간_정보_구독_단순TR(xt.RT현물_주문_정정_SC2))
+	lib.F확인1(F실시간_정보_구독_단순TR(xt.RT현물_주문_취소_SC3))
+	lib.F확인1(F실시간_정보_구독_단순TR(xt.RT현물_주문_거부_SC4))
 
 	return nil
 }
@@ -125,11 +125,11 @@ func F주문_응답_실시간_정보_해지() (에러 error) {
 
 	defer 주문_응답_구독_중.S값(false)
 
-	lib.F확인(F실시간_정보_해지_단순TR(xt.RT현물_주문_접수_SC0))
-	lib.F확인(F실시간_정보_해지_단순TR(xt.RT현물_주문_체결_SC1))
-	lib.F확인(F실시간_정보_해지_단순TR(xt.RT현물_주문_정정_SC2))
-	lib.F확인(F실시간_정보_해지_단순TR(xt.RT현물_주문_취소_SC3))
-	lib.F확인(F실시간_정보_해지_단순TR(xt.RT현물_주문_거부_SC4))
+	lib.F확인1(F실시간_정보_해지_단순TR(xt.RT현물_주문_접수_SC0))
+	lib.F확인1(F실시간_정보_해지_단순TR(xt.RT현물_주문_체결_SC1))
+	lib.F확인1(F실시간_정보_해지_단순TR(xt.RT현물_주문_정정_SC2))
+	lib.F확인1(F실시간_정보_해지_단순TR(xt.RT현물_주문_취소_SC3))
+	lib.F확인1(F실시간_정보_해지_단순TR(xt.RT현물_주문_거부_SC4))
 
 	return nil
 }
@@ -137,8 +137,7 @@ func F주문_응답_실시간_정보_해지() (에러 error) {
 func F호가_잔량_실시간_정보_구독(종목코드 string) (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
-	종목, 에러 := F종목by코드(종목코드)
-	lib.F확인(에러)
+	종목 := lib.F확인2(F종목by코드(종목코드))
 
 	switch 종목.G시장구분() {
 	case lib.P시장구분_코스피, lib.P시장구분_ETF, lib.P시장구분_ETN:
@@ -153,8 +152,7 @@ func F호가_잔량_실시간_정보_구독(종목코드 string) (에러 error) 
 func F호가_잔량_실시간_정보_해지(종목코드 string) (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
-	종목, 에러 := F종목by코드(종목코드)
-	lib.F확인(에러)
+	종목 := lib.F확인2(F종목by코드(종목코드))
 
 	switch 종목.G시장구분() {
 	case lib.P시장구분_코스피, lib.P시장구분_ETF, lib.P시장구분_ETN:
@@ -169,8 +167,7 @@ func F호가_잔량_실시간_정보_해지(종목코드 string) (에러 error) 
 func F체결_실시간_정보_구독(종목코드 string) (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
-	종목, 에러 := F종목by코드(종목코드)
-	lib.F확인(에러)
+	종목 := lib.F확인2(F종목by코드(종목코드))
 
 	switch 종목.G시장구분() {
 	case lib.P시장구분_코스피, lib.P시장구분_ETF, lib.P시장구분_ETN:
@@ -185,8 +182,7 @@ func F체결_실시간_정보_구독(종목코드 string) (에러 error) {
 func F체결_실시간_정보_해지(종목코드 string) (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
-	종목, 에러 := F종목by코드(종목코드)
-	lib.F확인(에러)
+	종목 := lib.F확인2(F종목by코드(종목코드))
 
 	switch 종목.G시장구분() {
 	case lib.P시장구분_코스피, lib.P시장구분_ETF, lib.P시장구분_ETN:

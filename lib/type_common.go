@@ -501,7 +501,7 @@ func (s *S통화) UnmarshalBinary(값 []byte) (에러 error) {
 
 	s.단위 = T통화(값[1])
 
-	F확인(s.금액.UnmarshalText(값[2:]))
+	F확인1(s.금액.UnmarshalText(값[2:]))
 
 	return
 }
@@ -511,7 +511,7 @@ func (s S통화) MarshalText() ([]byte, error) {
 	버퍼.WriteString("{")
 	버퍼.WriteString(s.단위.String())
 	버퍼.WriteString(",")
-	금액 := F확인(s.금액.MarshalText()).([]byte)
+	금액 := F확인2(s.금액.MarshalText())
 	버퍼.Write(금액)
 	버퍼.WriteString(",")
 	if s.변경불가 {
@@ -546,7 +546,7 @@ func (s *S통화) UnmarshalText(값 []byte) (에러 error) {
 		s.금액 = new(big.Float)
 	}
 	금액_문자열 := strings.TrimSpace(문자열_모음[1])
-	F확인(s.금액.UnmarshalText([]byte(금액_문자열)))
+	F확인1(s.금액.UnmarshalText([]byte(금액_문자열)))
 
 	switch strings.TrimSpace(문자열_모음[2])[:1] {
 	case "T", "t":
@@ -565,7 +565,7 @@ func New달러(금액 float64) *S통화 { return New통화(USD, 금액) }
 func New유로(금액 float64) *S통화 { return New통화(EUR, 금액) }
 func New위안(금액 float64) *S통화 { return New통화(CNY, 금액) }
 func New통화(단위 T통화, 금액 float64) *S통화 {
-	F확인(F통화단위_검사(단위))
+	F확인1(F통화단위_검사(단위))
 
 	s := new(S통화)
 	s.단위 = 단위

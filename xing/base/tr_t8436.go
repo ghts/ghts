@@ -83,17 +83,17 @@ func NewT8436_현물_종목조회_응답_반복값_모음(b []byte) (값 *T8436_
 
 	for i, g := range g_모음 {
 		g = new(T8436OutBlock)
-		lib.F확인(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
+		lib.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 		s := new(T8436_현물_종목조회_응답_반복값)
 		s.M종목명 = lib.F2문자열_EUC_KR_공백제거(g.HName)
 		s.M종목코드 = lib.F2문자열_공백_제거(g.ShCode)
-		s.M주문수량단위 = lib.F2정수_단순형(g.MeMeDan)
-		s.M상한가 = lib.F2정수64_단순형(g.UpLmtPrice)
-		s.M하한가 = lib.F2정수64_단순형(g.DnLmtPrice)
-		s.M전일가 = lib.F2정수64_단순형(g.JnilClose)
-		s.M기준가 = lib.F2정수64_단순형(g.RecPrice)
-		s.M증권그룹 = T증권그룹(lib.F2정수_단순형(g.Bu12Gubun))
+		s.M주문수량단위 = lib.F확인2(lib.F2정수(g.MeMeDan))
+		s.M상한가 = lib.F확인2(lib.F2정수64(g.UpLmtPrice))
+		s.M하한가 = lib.F확인2(lib.F2정수64(g.DnLmtPrice))
+		s.M전일가 = lib.F확인2(lib.F2정수64(g.JnilClose))
+		s.M기준가 = lib.F확인2(lib.F2정수64(g.RecPrice))
+		s.M증권그룹 = T증권그룹(lib.F확인2(lib.F2정수(g.Bu12Gubun)))
 		s.M기업인수목적회사여부 = lib.F2참거짓(lib.F2문자열(g.SpacGubun), "Y", true)
 
 		ETF구분 := lib.F2문자열_공백_제거(g.EtfGubun)

@@ -21,8 +21,7 @@ func F당일_일일_가격정보_수집(db *sql.DB) (에러 error) {
 	daily_price_data.F일일_가격정보_테이블_생성(db)
 
 	당일 := lib.F일자2정수(xing.F당일())
-	현재가_맵, 에러 := xing.TrT8407_현물_멀티_현재가_조회_전종목()
-	lib.F확인(에러)
+	현재가_맵 := lib.F확인2(xing.TrT8407_현물_멀티_현재가_조회_전종목())
 
 	for 종목코드, 값 := range 현재가_맵 {
 		s := new(daily_price_data.S일일_가격정보)
@@ -34,10 +33,8 @@ func F당일_일일_가격정보_수집(db *sql.DB) (에러 error) {
 		s.M종가 = float64(값.M현재가)
 		s.M거래량 = float64(값.M누적_거래량)
 
-		종목별_일일_가격정보_모음, 에러 := daily_price_data.New종목별_일일_가격정보_모음([]*daily_price_data.S일일_가격정보{s})
-		lib.F확인(에러)
-
-		lib.F확인(종목별_일일_가격정보_모음.DB저장(db))
+		종목별_일일_가격정보_모음 := lib.F확인2(daily_price_data.New종목별_일일_가격정보_모음([]*daily_price_data.S일일_가격정보{s}))
+		lib.F확인1(종목별_일일_가격정보_모음.DB저장(db))
 	}
 
 	lib.F문자열_출력("당일 가격정보 수집 완료.")
@@ -99,8 +96,7 @@ func F일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string, 추�
 	출력_문자열_버퍼 := new(bytes.Buffer)
 
 	for i, 종목코드 := range 종목코드_모음 {
-		종목별_일일_가격정보_모음, 에러 = daily_price_data.New종목별_일일_가격정보_모음_DB읽기(db, 종목코드)
-		lib.F확인(에러)
+		종목별_일일_가격정보_모음 = lib.F확인2(daily_price_data.New종목별_일일_가격정보_모음_DB읽기(db, 종목코드))
 
 		// 시작일 설정
 		시작일 = lib.F지금().AddDate(-30, 0, 0)
@@ -186,5 +182,5 @@ func f일일_가격정보_수집_도우미(db *sql.DB, 종목코드 string, 시�
 		return
 	}
 
-	lib.F확인(종목별_일일_가격정보_모음.DB저장(db))
+	lib.F확인1(종목별_일일_가격정보_모음.DB저장(db))
 }

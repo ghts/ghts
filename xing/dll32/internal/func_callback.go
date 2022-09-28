@@ -107,7 +107,7 @@ func f콜백_동기식(콜백값 lib.I콜백) (에러 error) {
 	소켓REQ := 소켓REQ_저장소.G소켓()
 	defer 소켓REQ_저장소.S회수(소켓REQ)
 
-	i값 := 소켓REQ.G질의_응답_검사(lib.P변환형식_기본값, 콜백값).G해석값_단순형(0)
+	i값 := lib.F확인2(lib.F확인2(소켓REQ.G질의_응답(lib.P변환형식_기본값, 콜백값)).G해석값(0))
 
 	switch 값 := i값.(type) {
 	case error:
@@ -169,7 +169,7 @@ func OnTrData(TR데이터 unsafe.Pointer) {
 		raw값 = dll.F2Go바이트_모음with길이(unsafe.Pointer(g.Data), int(g.DataLength))
 	}
 
-	자료형_문자열 := lib.F확인(f자료형_문자열_해석(g)).(string)
+	자료형_문자열 := lib.F확인2(f자료형_문자열_해석(g))
 	TR코드 := lib.F2문자열_공백_제거(g.TrCode)
 	추가_연속조회_필요_문자열 := lib.F2문자열(g.Cont)
 	추가_연속조회_필요 := false
@@ -186,7 +186,7 @@ func OnTrData(TR데이터 unsafe.Pointer) {
 		panic(lib.New에러with출력("예상하지 못한 경우. '%v' '%v'", TR코드, 추가_연속조회_필요_문자열))
 	}
 
-	바이트_변환값 := lib.F확인(lib.New바이트_변환Raw(자료형_문자열, raw값, true)).(*lib.S바이트_변환)
+	바이트_변환값 := lib.F확인2(lib.New바이트_변환Raw(자료형_문자열, raw값, true))
 	콜백값 := lib.New콜백_TR데이터(int(g.RequestID), 바이트_변환값, TR코드, 추가_연속조회_필요, 연속키)
 
 	F콜백(콜백값)
@@ -263,7 +263,7 @@ func OnRealtimeData(실시간_데이터 unsafe.Pointer) {
 
 	raw값 := dll.F2Go바이트_모음with길이(unsafe.Pointer(g.Data), int(g.DataLength))
 	raw값 = f민감정보_삭제(raw값, lib.F2문자열_공백_제거(g.TrCode))
-	바이트_변환값 := lib.F확인(lib.New바이트_변환Raw(lib.F2문자열(g.TrCode), raw값, false)).(*lib.S바이트_변환)
+	바이트_변환값 := lib.F확인2(lib.New바이트_변환Raw(lib.F2문자열(g.TrCode), raw값, false))
 
 	if 에러 := 소켓PUB_실시간_정보.S송신(lib.Raw, 바이트_변환값); 에러 != nil {
 		lib.F에러_출력(에러)

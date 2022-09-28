@@ -53,8 +53,8 @@ type s컨텍스트 struct {
 func (s *s컨텍스트) S송신(변환_형식 lib.T변환, 값_모음 ...interface{}) (에러 error) {
 	defer lib.S예외처리{M에러: &에러, M출력_숨김: true}.S실행()
 
-	매개체 := lib.New바이트_변환_모음_단순형(변환_형식, 값_모음...)
-	바이트_모음 := lib.F확인(매개체.MarshalBinary()).([]byte)
+	매개체 := lib.F확인2(lib.New바이트_변환_모음(변환_형식, 값_모음...))
+	바이트_모음 := lib.F확인2(매개체.MarshalBinary())
 
 	return s.ctx.Send(바이트_모음)
 }

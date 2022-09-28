@@ -58,16 +58,11 @@ func SQL실행(db *sql.DB, sql문자열 string, 추가_인수 ...interface{}) (i
 		return
 	}
 
-	stmt, 에러 := tx.Prepare(sql문자열)
-	F확인(에러)
+	stmt := F확인2(tx.Prepare(sql문자열))
 	defer stmt.Close()
 
-	결과, 에러 := stmt.Exec(추가_인수...)
-	F확인(에러)
-
-	id, 에러 = 결과.LastInsertId()
-	F확인(에러)
-
+	결과 := F확인2(stmt.Exec(추가_인수...))
+	id = F확인2(결과.LastInsertId())
 	에러 = tx.Commit()
 
 	return

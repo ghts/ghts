@@ -80,11 +80,11 @@ func F패닉억제_호출(함수 interface{}, 추가_매개변수 ...interface{}
 }
 
 func F오차(값1 interface{}, 값2 interface{}) float64 {
-	return math.Abs(F2실수_단순형(값1) - F2실수_단순형(값2))
+	return math.Abs(F확인2(F2실수(값1)) - F확인2(F2실수(값2)))
 }
 
 func F오차율_퍼센트(값1 interface{}, 값2 interface{}) float64 {
-	실수1, 실수2 := F2실수_단순형(값1), F2실수_단순형(값2)
+	실수1, 실수2 := F확인2(F2실수(값1)), F확인2(F2실수(값2))
 	오차율1, 오차율2 := float64(0), float64(0)
 
 	if 실수1 != 0 {
@@ -529,10 +529,7 @@ func F중복없는_문자열_출력(포맷_문자열 string, 인수 ...interface
 func F화면_출력_중지() (화면_출력_장치 *os.File) {
 	화면_출력_잠금.Lock()
 
-	//입력_파이프, 출력_파이프, 에러 := os.Pipe()
-	_, 출력_파이프, 에러 := os.Pipe()
-	F확인(에러)
-
+	_, 출력_파이프 := F확인3(os.Pipe())
 	화면_출력_장치 = os.Stdout
 	os.Stdout = 출력_파이프
 
@@ -555,8 +552,7 @@ func F출력_문자열_확보(함수 func()) (문자열 string, 에러 error) {
 	defer S예외처리{M에러: &에러, M함수: func() { 문자열 = "" }}.S실행()
 
 	원래_출력장치 := os.Stdout
-	임시_입력장치, 임시_출력장치, 에러 := os.Pipe()
-	F확인(에러)
+	임시_입력장치, 임시_출력장치 := F확인3(os.Pipe())
 	os.Stdout = 임시_출력장치
 
 	함수()

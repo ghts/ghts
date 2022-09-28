@@ -56,7 +56,7 @@ func NewT0167_시각_조회_응답(b []byte) (값 time.Time, 에러 error) {
 		"예상하지 못한 길이 : '%v", len(b))
 
 	g := new(T0167OutBlock)
-	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
+	lib.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	날짜_문자열 := lib.F2문자열(g.Date)
 	시간_문자열 := lib.F2문자열(g.Time)

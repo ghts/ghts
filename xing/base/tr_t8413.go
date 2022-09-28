@@ -155,26 +155,26 @@ func NewT8413_현물_차트_일주월_응답_헤더(b []byte) (값 *T8413_현물
 		"예상하지 못한 길이 : '%v", len(b))
 
 	g := new(T8413OutBlock)
-	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
+	lib.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	값 = new(T8413_현물_차트_일주월_응답_헤더)
 	값.M종목코드 = lib.F2문자열(g.Shcode)
-	값.M전일시가 = lib.F2정수64_단순형(g.Jisiga)
-	값.M전일고가 = lib.F2정수64_단순형(g.Jihigh)
-	값.M전일저가 = lib.F2정수64_단순형(g.Jilow)
-	값.M전일종가 = lib.F2정수64_단순형(g.Jiclose)
-	값.M전일거래량 = lib.F2정수64_단순형(g.Jivolume)
-	값.M당일시가 = lib.F2정수64_단순형(g.Disiga)
-	값.M당일고가 = lib.F2정수64_단순형(g.Dihigh)
-	값.M당일저가 = lib.F2정수64_단순형(g.Dilow)
-	값.M당일종가 = lib.F2정수64_단순형(g.Diclose)
-	값.M상한가 = lib.F2정수64_단순형(g.Highend)
-	값.M하한가 = lib.F2정수64_단순형(g.Lowend)
+	값.M전일시가 = lib.F확인2(lib.F2정수64(g.Jisiga))
+	값.M전일고가 = lib.F확인2(lib.F2정수64(g.Jihigh))
+	값.M전일저가 = lib.F확인2(lib.F2정수64(g.Jilow))
+	값.M전일종가 = lib.F확인2(lib.F2정수64(g.Jiclose))
+	값.M전일거래량 = lib.F확인2(lib.F2정수64(g.Jivolume))
+	값.M당일시가 = lib.F확인2(lib.F2정수64(g.Disiga))
+	값.M당일고가 = lib.F확인2(lib.F2정수64(g.Dihigh))
+	값.M당일저가 = lib.F확인2(lib.F2정수64(g.Dilow))
+	값.M당일종가 = lib.F확인2(lib.F2정수64(g.Diclose))
+	값.M상한가 = lib.F확인2(lib.F2정수64(g.Highend))
+	값.M하한가 = lib.F확인2(lib.F2정수64(g.Lowend))
 	값.M연속일자 = lib.F2문자열(g.Cts_date)
-	값.M장시작시간 = lib.F2일자별_시각_단순형(당일.G값(), "150405", g.S_time)
-	값.M장종료시간 = lib.F2일자별_시각_단순형(당일.G값(), "150405", g.E_time)
-	값.M동시호가처리시간 = lib.F2정수_단순형(g.Dshmin)
-	값.M수량 = lib.F2정수64_단순형(g.Rec_count)
+	값.M장시작시간 = lib.F확인2(lib.F2일자별_시각(당일.G값(), "150405", g.S_time))
+	값.M장종료시간 = lib.F확인2(lib.F2일자별_시각(당일.G값(), "150405", g.E_time))
+	값.M동시호가처리시간 = lib.F확인2(lib.F2정수(g.Dshmin))
+	값.M수량 = lib.F확인2(lib.F2정수64(g.Rec_count))
 
 	return 값, nil
 }
@@ -194,21 +194,21 @@ func NewT8413_현물_차트_일주월_응답_반복값_모음(b []byte) (값 *T8
 
 	for i, g := range g_모음 {
 		g = new(T8413OutBlock1)
-		lib.F확인(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
+		lib.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 		s := new(T8413_현물_차트_일주월_응답_반복값)
-		s.M일자 = lib.F2포맷된_시각_단순형("20060102", lib.F2문자열_공백_제거(g.Date))
-		s.M시가 = lib.F2정수64_단순형(g.Open)
-		s.M고가 = lib.F2정수64_단순형(g.High)
-		s.M저가 = lib.F2정수64_단순형(g.Low)
-		s.M종가 = lib.F2정수64_단순형(g.Close)
-		s.M거래량 = lib.F2정수64_단순형(g.Vol)
-		s.M거래대금_백만 = lib.F2정수64_단순형(g.Value)
-		s.M수정구분 = lib.F2정수64_단순형(g.Jongchk)
+		s.M일자 = lib.F확인2(lib.F2포맷된_시각("20060102", lib.F2문자열_공백_제거(g.Date)))
+		s.M시가 = lib.F확인2(lib.F2정수64(g.Open))
+		s.M고가 = lib.F확인2(lib.F2정수64(g.High))
+		s.M저가 = lib.F확인2(lib.F2정수64(g.Low))
+		s.M종가 = lib.F확인2(lib.F2정수64(g.Close))
+		s.M거래량 = lib.F확인2(lib.F2정수64(g.Vol))
+		s.M거래대금_백만 = lib.F확인2(lib.F2정수64(g.Value))
+		s.M수정구분 = lib.F확인2(lib.F2정수64(g.Jongchk))
 		s.M수정비율 = lib.F2실수_소숫점_추가_단순형_공백은_0(g.Rate, 2)
-		s.M수정주가반영항목 = lib.F2정수64_단순형(g.Pricechk)
-		s.M수정비율반영거래대금 = lib.F2정수64_단순형(g.Ratevalue)
-		s.M종가등락구분 = T전일대비_구분(lib.F2정수_단순형(g.Sign))
+		s.M수정주가반영항목 = lib.F확인2(lib.F2정수64_공백은_0(g.Pricechk))
+		s.M수정비율반영거래대금 = lib.F확인2(lib.F2정수64_공백은_0(g.Ratevalue))
+		s.M종가등락구분 = T전일대비_구분(lib.F확인2(lib.F2정수(g.Sign)))
 
 		값.M배열[i] = s
 	}

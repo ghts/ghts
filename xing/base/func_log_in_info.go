@@ -70,14 +70,14 @@ func F로그인_설정_화일_읽기() (로그인_정보 *S로그인_정보, 에
 		return nil, lib.New에러(버퍼.String(), 설정_화일_경로, P환경변수_설정_화일_경로)
 	}
 
-	cfg파일 := lib.F확인(ini.Load(설정_화일_경로)).(*ini.File)
-	섹션 := lib.F확인(cfg파일.GetSection("XingAPI_LogIn_Info")).(*ini.Section)
+	cfg파일 := lib.F확인2(ini.Load(설정_화일_경로))
+	섹션 := lib.F확인2(cfg파일.GetSection("XingAPI_LogIn_Info"))
 
 	로그인_정보 = new(S로그인_정보)
-	로그인_정보.M로그인_ID = lib.F확인(섹션.GetKey("ID")).(*ini.Key).String()
-	로그인_정보.M로그인_암호 = lib.F확인(섹션.GetKey("PWD")).(*ini.Key).String()
-	로그인_정보.M인증서_암호 = lib.F확인(섹션.GetKey("CertPWD")).(*ini.Key).String()
-	로그인_정보.M계좌_비밀번호 = lib.F확인(섹션.GetKey("AcctPWD")).(*ini.Key).String()
+	로그인_정보.M로그인_ID = lib.F확인2(섹션.GetKey("ID")).String()
+	로그인_정보.M로그인_암호 = lib.F확인2(섹션.GetKey("PWD")).String()
+	로그인_정보.M인증서_암호 = lib.F확인2(섹션.GetKey("CertPWD")).String()
+	로그인_정보.M계좌_비밀번호 = lib.F확인2(섹션.GetKey("AcctPWD")).String()
 
 	// 모의투자 암호는 선택사항.
 	if 키, 에러 := 섹션.GetKey("TestPWD"); 에러 != nil {
@@ -94,11 +94,11 @@ func F로그인_설정_화일_읽기() (로그인_정보 *S로그인_정보, 에
 func F로그인_정보_환경_변수_설정(로그인_정보 *S로그인_정보) (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
-	lib.F확인(os.Setenv(P환경변수_로그인_ID, 로그인_정보.M로그인_ID))
-	lib.F확인(os.Setenv(P환경변수_로그인_암호, 로그인_정보.M로그인_암호))
-	lib.F확인(os.Setenv(P환경변수_인증서_암호, 로그인_정보.M인증서_암호))
-	lib.F확인(os.Setenv(P환경변수_계좌_비밀번호, 로그인_정보.M계좌_비밀번호))
-	lib.F확인(os.Setenv(P환경변수_모의투자_암호, 로그인_정보.M모의투자_암호))
+	lib.F확인1(os.Setenv(P환경변수_로그인_ID, 로그인_정보.M로그인_ID))
+	lib.F확인1(os.Setenv(P환경변수_로그인_암호, 로그인_정보.M로그인_암호))
+	lib.F확인1(os.Setenv(P환경변수_인증서_암호, 로그인_정보.M인증서_암호))
+	lib.F확인1(os.Setenv(P환경변수_계좌_비밀번호, 로그인_정보.M계좌_비밀번호))
+	lib.F확인1(os.Setenv(P환경변수_모의투자_암호, 로그인_정보.M모의투자_암호))
 
 	return nil
 }

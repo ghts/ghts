@@ -42,22 +42,12 @@ import (
 	"time"
 )
 
-func TestF2정수64_단순형(t *testing.T) {
-	t.Parallel()
-	F테스트_같음(t, F2정수64_단순형("1234567.00"), 1234567)
-}
-
 func TestF2실수_소숫점_추가(t *testing.T) {
 	t.Parallel()
 
 	실수값, 에러 := F2실수_소숫점_추가("1234567", 2)
 	F테스트_에러없음(t, 에러)
 	F테스트_같음(t, 실수값, 12345.67)
-}
-
-func TestF2실수_소숫점_추가_단순형(t *testing.T) {
-	t.Parallel()
-	F테스트_같음(t, F2실수_소숫점_추가_단순형("1234567", 2), 12345.67)
 }
 
 func TestF바이트2참거짓(t *testing.T) {

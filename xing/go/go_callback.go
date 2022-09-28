@@ -125,7 +125,7 @@ func go루틴_콜백_처리_도우미(ch초기화 chan lib.T신호, ch도우미_
 
 			switch 콜백값.G콜백() {
 			case lib.P콜백_TR데이터, lib.P콜백_메시지_및_에러, lib.P콜백_TR완료, lib.P콜백_타임아웃:
-				lib.F확인(f콜백_TR데이터_처리기(콜백값))
+				lib.F확인1(f콜백_TR데이터_처리기(콜백값))
 			case lib.P콜백_신호:
 				if 에러 = f콜백_신호_처리기(콜백값); 에러 != nil {
 					lib.F에러_출력(에러)

@@ -13,12 +13,8 @@ import (
 func New개장일_모음(db *sql.DB) (개장일_모음 *S개장일_모음, 에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
-	일일_가격정보_모음_KODEX200, 에러 := daily_price_data.New종목별_일일_가격정보_모음_DB읽기(db, "069500")
-	lib.F확인(에러)
-
-	일일_가격정보_모음_삼성전자, 에러 := daily_price_data.New종목별_일일_가격정보_모음_DB읽기(db, "005930")
-	lib.F확인(에러)
-
+	일일_가격정보_모음_KODEX200 := lib.F확인2(daily_price_data.New종목별_일일_가격정보_모음_DB읽기(db, "069500"))
+	일일_가격정보_모음_삼성전자 := lib.F확인2(daily_price_data.New종목별_일일_가격정보_모음_DB읽기(db, "005930"))
 	개장일_맵 := make(map[uint32]int)
 
 	for _, 일일_정보 := range 일일_가격정보_모음_KODEX200.M저장소 {

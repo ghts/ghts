@@ -124,11 +124,8 @@ func NewT0425_현물_체결_미체결_조회_응답(b []byte) (s *T0425_현물_�
 	lib.F조건부_패닉((len(b)-(SizeT0425OutBlock+5))%SizeT0425OutBlock1 != 0, "예상하지 못한 길이 : '%v", len(b))
 
 	s = new(T0425_현물_체결_미체결_조회_응답)
-	s.M헤더, 에러 = NewT0425_현물_체결_미체결_조회_응답_헤더(b[:SizeT0425OutBlock])
-	lib.F확인(에러)
-
-	s.M반복값_모음, 에러 = NewT0425_현물_체결_미체결_조회_응답_반복값_모음(b[SizeT0425OutBlock+5:])
-	lib.F확인(에러)
+	s.M헤더 = lib.F확인2(NewT0425_현물_체결_미체결_조회_응답_헤더(b[:SizeT0425OutBlock]))
+	s.M반복값_모음 = lib.F확인2(NewT0425_현물_체결_미체결_조회_응답_반복값_모음(b[SizeT0425OutBlock+5:]))
 
 	return s, nil
 }
@@ -139,17 +136,17 @@ func NewT0425_현물_체결_미체결_조회_응답_헤더(b []byte) (s *T0425_�
 	lib.F조건부_패닉(len(b) != SizeT0425OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
 	g := new(T0425OutBlock)
-	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
+	lib.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	s = new(T0425_현물_체결_미체결_조회_응답_헤더)
-	s.M총_주문_수량 = lib.F2정수64_단순형(g.Tqty)
-	s.M총_체결_수량 = lib.F2정수64_단순형(g.Tcheqty)
-	s.M총_미체결_수량 = lib.F2정수64_단순형(g.Tordrem)
-	s.M추정_수수료 = lib.F2정수64_단순형(g.Cmss)
-	s.M총_주문_금액 = lib.F2정수64_단순형(g.Tamt)
-	s.M총_매도_체결_금액 = lib.F2정수64_단순형(g.Tmdamt)
-	s.M총_매수_체결_금액 = lib.F2정수64_단순형(g.Tmsamt)
-	s.M추정_제세금 = lib.F2정수64_단순형(g.Tax)
+	s.M총_주문_수량 = lib.F확인2(lib.F2정수64(g.Tqty))
+	s.M총_체결_수량 = lib.F확인2(lib.F2정수64(g.Tcheqty))
+	s.M총_미체결_수량 = lib.F확인2(lib.F2정수64(g.Tordrem))
+	s.M추정_수수료 = lib.F확인2(lib.F2정수64(g.Cmss))
+	s.M총_주문_금액 = lib.F확인2(lib.F2정수64(g.Tamt))
+	s.M총_매도_체결_금액 = lib.F확인2(lib.F2정수64(g.Tmdamt))
+	s.M총_매수_체결_금액 = lib.F확인2(lib.F2정수64(g.Tmsamt))
+	s.M추정_제세금 = lib.F확인2(lib.F2정수64(g.Tax))
 	s.M연속키 = lib.F2문자열(g.Ordno)
 
 	return s, nil
@@ -168,31 +165,31 @@ func NewT0425_현물_체결_미체결_조회_응답_반복값_모음(b []byte) (
 
 	for i, g := range g_모음 {
 		g = new(T0425OutBlock1)
-		lib.F확인(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
+		lib.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 		주문시간_문자열 := string(g.Ordtime[:])
 		주문시간_문자열 = 주문시간_문자열[:6] + "." + 주문시간_문자열[6:]
 
 		값 := new(T0425_현물_체결_미체결_조회_응답_반복값)
-		값.M주문_번호 = lib.F2정수64_단순형(g.Ordno)
+		값.M주문_번호 = lib.F확인2(lib.F2정수64(g.Ordno))
 		값.M종목코드 = lib.F2문자열_공백_제거(g.Expcode)
 		값.M매매_구분 = lib.F2문자열_EUC_KR_공백제거(g.Medosu)
-		값.M주문_수량 = lib.F2정수64_단순형(g.Qty)
-		값.M주문_가격 = lib.F2정수64_단순형(g.Price)
-		값.M체결_수량 = lib.F2정수64_단순형(g.Cheqty)
-		값.M체결_가격 = lib.F2정수64_단순형(g.Cheprice)
-		값.M미체결_잔량 = lib.F2정수64_단순형(g.Ordrem)
-		값.M확인_수량 = lib.F2정수64_단순형(g.Cfmqty)
+		값.M주문_수량 = lib.F확인2(lib.F2정수64(g.Qty))
+		값.M주문_가격 = lib.F확인2(lib.F2정수64(g.Price))
+		값.M체결_수량 = lib.F확인2(lib.F2정수64(g.Cheqty))
+		값.M체결_가격 = lib.F확인2(lib.F2정수64(g.Cheprice))
+		값.M미체결_잔량 = lib.F확인2(lib.F2정수64(g.Ordrem))
+		값.M확인_수량 = lib.F확인2(lib.F2정수64(g.Cfmqty))
 		값.M상태 = lib.F2문자열_EUC_KR_공백제거(g.Status)
-		값.M원_주문_번호 = lib.F2정수64_단순형(g.Orgordno)
+		값.M원_주문_번호 = lib.F확인2(lib.F2정수64(g.Orgordno))
 		값.M유형 = lib.F2문자열_EUC_KR_공백제거(g.Ordgb)
-		값.M주문_시간 = lib.F2일자별_시각_단순형(당일.G값(), "150405.99", 주문시간_문자열)
+		값.M주문_시간 = lib.F확인2(lib.F2일자별_시각(당일.G값(), "150405.99", 주문시간_문자열))
 		값.M주문_매체 = lib.F2문자열_EUC_KR_공백제거(g.Ordermtd)
-		값.M처리_순번 = lib.F2정수64_단순형(g.Sysprocseq)
-		값.M호가_유형 = T호가유형(lib.F2정수64_단순형(g.Hogagb))
-		값.M현재가 = lib.F2정수64_단순형(g.Price1)
-		값.M주문_구분 = T주문유형(lib.F2정수64_단순형(g.Orggb))
-		값.M신용_구분 = T신용_구분_t0425(lib.F2정수64_단순형(g.Singb))
+		값.M처리_순번 = lib.F확인2(lib.F2정수64(g.Sysprocseq))
+		값.M호가_유형 = T호가유형(lib.F확인2(lib.F2정수64(g.Hogagb)))
+		값.M현재가 = lib.F확인2(lib.F2정수64(g.Price1))
+		값.M주문_구분 = T주문유형(lib.F확인2(lib.F2정수64(g.Orggb)))
+		값.M신용_구분 = T신용_구분_t0425(lib.F확인2(lib.F2정수64(g.Singb)))
 		값.M대출_일자 = lib.F2포맷된_일자_단순형_공백은_초기값("20060102", g.Loandt)
 
 		if len(값.M종목코드) == 7 && strings.HasPrefix(값.M종목코드, "A") {

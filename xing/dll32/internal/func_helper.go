@@ -82,7 +82,7 @@ func f자료형_문자열_해석(g *xt.TR_DATA) (자료형_문자열 string, 에
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 자료형_문자열 = "" }}.S실행()
 
 	TR코드 := lib.F2문자열_공백_제거(g.TrCode)
-	길이 := lib.F2정수_단순형(g.DataLength)
+	길이 := lib.F확인2(lib.F2정수(g.DataLength))
 
 	switch TR코드 {
 	//case xt.TR선물옵션_주문체결내역조회_CFOAQ00600:

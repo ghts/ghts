@@ -64,7 +64,7 @@ func (s *s안전한_프로세스ID_저장소) S추가(프로세스ID int) {
 	defer s.Unlock()
 
 	s.저장소[프로세스ID] = lib.F비어있는_값()
-	lib.F확인(lib.F파일에_값_저장(s.저장소, s.파일명, nil))
+	lib.F확인1(lib.F파일에_값_저장(s.저장소, s.파일명, nil))
 }
 
 func (s *s안전한_프로세스ID_저장소) S제거(프로세스ID int) {
@@ -72,14 +72,14 @@ func (s *s안전한_프로세스ID_저장소) S제거(프로세스ID int) {
 	defer s.Unlock()
 
 	delete(s.저장소, 프로세스ID)
-	lib.F확인(lib.F파일에_값_저장(s.저장소, s.파일명, nil))
+	lib.F확인1(lib.F파일에_값_저장(s.저장소, s.파일명, nil))
 }
 
 func F파이썬_스크립트_실행(스크립트_경로 string, 실행옵션 ...interface{}) (프로세스ID int, 에러 error) {
 	defer lib.S예외처리{M함수: func() { 프로세스ID = -1 }}.S실행()
 
 	if 파이썬_경로.G값() == "" {
-		파일경로 := lib.F확인(lib.F파일_검색(lib.F홈_디렉토리(), "python.exe")).(string)
+		파일경로 := lib.F확인2(lib.F파일_검색(lib.F홈_디렉토리(), "python.exe"))
 		파이썬_경로.S값(파일경로)
 	}
 
@@ -96,7 +96,7 @@ func F외부_프로세스_실행(실행화일_경로 string, 실행옵션_모음
 
 	if !프로세스ID_목록_파일_초기화_완료.G값() {
 		if 에러 := 프로세스ID_목록_파일_초기화_완료.S값(true); 에러 == nil {
-			if 수량 := lib.F확인(f잔류_프로세스_정리_및_초기화()).(int); 수량 > 0 {
+			if 수량 := lib.F확인2(f잔류_프로세스_정리_및_초기화()); 수량 > 0 {
 				lib.F문자열_출력("%v개의 잔류 프로세스를 정리했습니다.", 수량)
 			}
 		}
@@ -123,7 +123,7 @@ func f외부_프로세스_생성(ch프로세스ID chan int, ch에러 chan error,
 	외부_명령어.Stdin = os.Stdin
 	외부_명령어.Stdout = os.Stdout
 	외부_명령어.Stderr = os.Stderr
-	lib.F확인(외부_명령어.Start())
+	lib.F확인1(외부_명령어.Start())
 
 	프로세스ID := 외부_명령어.Process.Pid // PID
 	ch프로세스ID <- 프로세스ID
@@ -137,12 +137,12 @@ func f외부_프로세스_생성(ch프로세스ID chan int, ch에러 chan error,
 func f프로세스ID_파일_읽기() (맵 map[int]lib.S비어있음, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 맵 = nil }}.S실행()
 
-	if 존재함 := lib.F확인(f프로세스ID_파일_존재함()).(bool); !존재함 {
-		lib.F확인(f프로세스ID_파일_초기화())
+	if 존재함 := lib.F확인2(f프로세스ID_파일_존재함()); !존재함 {
+		lib.F확인1(f프로세스ID_파일_초기화())
 	}
 
 	프로세스ID_저장소 := make(map[int]lib.S비어있음)
-	lib.F확인(lib.F파일에서_값_읽기(&프로세스ID_저장소, p프로세스ID_목록_파일명, nil))
+	lib.F확인1(lib.F파일에서_값_읽기(&프로세스ID_저장소, p프로세스ID_목록_파일명, nil))
 
 	return 프로세스ID_저장소, 에러
 }
@@ -174,7 +174,7 @@ func f프로세스ID_파일_초기화() error {
 func f잔류_프로세스_정리_및_초기화() (수량 int, 에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
-	프로세스ID_저장소 := lib.F확인(f프로세스ID_파일_읽기()).(map[int]lib.S비어있음)
+	프로세스ID_저장소 := lib.F확인2(f프로세스ID_파일_읽기())
 
 	수량 = 0
 	for 프로세스ID := range 프로세스ID_저장소 {
@@ -188,7 +188,7 @@ func f잔류_프로세스_정리_및_초기화() (수량 int, 에러 error) {
 		}
 	}
 
-	lib.F확인(f프로세스ID_파일_초기화())
+	lib.F확인1(f프로세스ID_파일_초기화())
 
 	return 수량, nil
 }
@@ -207,8 +207,7 @@ func F프로세스_종료by프로세스_이름(프로세스_이름 string) (에�
 	defer lib.S예외처리{M에러: &에러, M출력_숨김: true}.S실행()
 
 	프로세스_이름 = strings.TrimSpace(프로세스_이름)
-	프로세스_모음, 에러 := ps.Processes()
-	lib.F확인(에러)
+	프로세스_모음 := lib.F확인2(ps.Processes())
 
 	for _, 프로세스 := range 프로세스_모음 {
 		if 프로세스.Executable() == 프로세스_이름 {

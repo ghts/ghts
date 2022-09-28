@@ -73,18 +73,18 @@ func NewT8432_증시주변자금추이_응답_반복값_모음(b []byte) (값_�
 
 	for i, g := range g_모음 {
 		g = new(T8432OutBlock)
-		lib.F확인(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
+		lib.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 		s := new(T8432_지수선물_마스터_조회_반복값)
 		s.M종목명 = lib.F2문자열_EUC_KR_공백제거(g.Hname)
 		s.M종목코드 = lib.F2문자열_공백_제거(g.Shcode)
 		s.M확장코드 = lib.F2문자열_공백_제거(g.Expcode)
-		s.M상한가 = lib.F2실수_소숫점_추가_단순형(g.Uplmtprice, 2)
-		s.M하한가 = lib.F2실수_소숫점_추가_단순형(g.Dnlmtprice, 2)
-		s.M전일종가 = lib.F2실수_소숫점_추가_단순형(g.Jnilclose, 2)
-		s.M전일고가 = lib.F2실수_소숫점_추가_단순형(g.Jnilhigh, 2)
-		s.M전일저가 = lib.F2실수_소숫점_추가_단순형(g.Jnillow, 2)
-		s.M기준가 = lib.F2실수_소숫점_추가_단순형(g.Recprice, 2)
+		s.M상한가 = lib.F확인2(lib.F2실수_소숫점_추가(g.Uplmtprice, 2))
+		s.M하한가 = lib.F확인2(lib.F2실수_소숫점_추가(g.Dnlmtprice, 2))
+		s.M전일종가 = lib.F확인2(lib.F2실수_소숫점_추가(g.Jnilclose, 2))
+		s.M전일고가 = lib.F확인2(lib.F2실수_소숫점_추가(g.Jnilhigh, 2))
+		s.M전일저가 = lib.F확인2(lib.F2실수_소숫점_추가(g.Jnillow, 2))
+		s.M기준가 = lib.F확인2(lib.F2실수_소숫점_추가(g.Recprice, 2))
 
 		값_모음[i] = s
 	}

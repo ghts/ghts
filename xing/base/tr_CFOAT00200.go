@@ -130,29 +130,29 @@ func newCFOAT00200_선물옵션_정정주문_응답1(b []byte) (값 *CFOAT00200_
 	lib.F조건부_패닉(len(b) != SizeCFOAT00200OutBlock1, "예상하지 못한 길이 : '%v", len(b))
 
 	g := new(CFOAT00200OutBlock1)
-	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
+	lib.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	값 = new(CFOAT00200_선물옵션_정정주문_응답1)
-	값.M레코드갯수 = lib.F2정수_단순형(g.RecCnt)
-	//값.M주문시장 = T주문시장구분(lib.F2정수_단순형(g.OrdMktCode))
+	값.M레코드갯수 = lib.F확인2(lib.F2정수(g.RecCnt)
+	//값.M주문시장 = T주문시장구분(lib.F확인2(lib.F2정수(g.OrdMktCode))
 	값.M계좌번호 = lib.F2문자열_공백제거(g.AcntNo)
 	값.M종목코드 = lib.F2문자열_공백제거(g.FnoIsuNo)
-	//값.M주문유형 = T주문유형(lib.F2정수_단순형(g.FnoOrdPtnCode))
-	값.M원주문번호 = lib.F2정수64_단순형(g.OrgOrdNo)
-	값.M호가유형 = T호가유형(lib.F2정수_단순형(g.FnoOrdprcPtnCode))
-	값.M주문가격 = lib.F2실수_소숫점_추가_단순형(g.OrdPrc, 2)
-	값.M정정수량 = lib.F2정수64_단순형(g.MdfyQty)
-	//값.M통신매체 = T통신매체구분(lib.F2정수_단순형(g.CommdaCode))
+	//값.M주문유형 = T주문유형(lib.F확인2(lib.F2정수(g.FnoOrdPtnCode))
+	값.M원주문번호 = lib.F확인2(lib.F2정수64(g.OrgOrdNo)
+	값.M호가유형 = T호가유형(lib.F확인2(lib.F2정수(g.FnoOrdprcPtnCode))
+	값.M주문가격 = lib.F확인2(lib.F2실수_소숫점_추가(g.OrdPrc, 2)
+	값.M정정수량 = lib.F확인2(lib.F2정수64(g.MdfyQty)
+	//값.M통신매체 = T통신매체구분(lib.F확인2(lib.F2정수(g.CommdaCode))
 	값.M협의매매완료시각 = lib.F2일자별_시각_단순형_공백은_초기값(당일.TCP주소(), "150405.99", g.DscusBnsCmpltTime)
-	//값.M주문번호 = lib.F2정수64_단순형(g.OrdSeqno)
-	//값.M포트폴리오번호 = lib.F2정수64_단순형(g.PtflNo)
-	//값.M바스켓번호 = lib.F2정수64_단순형(g.BskNo)
-	//값.M트렌치번호 = lib.F2정수64_단순형(g.TrchNo)
-	//값.M항목번호 = lib.F2정수64_단순형(g.ItemNo)
+	//값.M주문번호 = lib.F확인2(lib.F2정수64(g.OrdSeqno)
+	//값.M포트폴리오번호 = lib.F확인2(lib.F2정수64(g.PtflNo)
+	//값.M바스켓번호 = lib.F확인2(lib.F2정수64(g.BskNo)
+	//값.M트렌치번호 = lib.F확인2(lib.F2정수64(g.TrchNo)
+	//값.M항목번호 = lib.F확인2(lib.F2정수64(g.ItemNo)
 	//값.M관리사원번호 = lib.F2문자열(g.MgempNo)
 	//값.M펀드ID = lib.F2문자열(g.FundId)
-	//값.M펀드원주문번호 = lib.F2정수64_단순형(g.FundOrgOrdNo)
-	//값.M펀드주문번호 = lib.F2정수64_단순형(g.FundOrdNo)
+	//값.M펀드원주문번호 = lib.F확인2(lib.F2정수64(g.FundOrgOrdNo)
+	//값.M펀드주문번호 = lib.F확인2(lib.F2정수64(g.FundOrdNo)
 
 	return 값, nil
 }
@@ -163,19 +163,19 @@ func newCFOAT00200_선물옵션_정정주문_응답2(b []byte) (값 *CFOAT00200_
 	lib.F조건부_패닉(len(b) != SizeCFOAT00200OutBlock2, "예상하지 못한 길이 : '%v", len(b))
 
 	g := new(CFOAT00200OutBlock2)
-	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
+	lib.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	값 = new(CFOAT00200_선물옵션_정정주문_응답2)
-	값.M레코드갯수 = lib.F2정수64_단순형(g.RecCnt)
-	값.M주문번호 = lib.F2정수64_단순형(g.OrdNo)
+	값.M레코드갯수 = lib.F확인2(lib.F2정수64(g.RecCnt)
+	값.M주문번호 = lib.F확인2(lib.F2정수64(g.OrdNo)
 	값.M지점명 = lib.F2문자열_EUC_KR_공백제거(g.BrnNm)
 	값.M계좌명 = lib.F2문자열_EUC_KR_공백제거(g.AcntNm)
 	값.M종목명 = lib.F2문자열_EUC_KR_공백제거(g.IsuNm)
-	값.M주문가능금액 = lib.F2정수64_단순형(g.OrdAbleAmt)
-	값.M현금주문가능금액 = lib.F2정수64_단순형(g.MnyOrdAbleAmt)
-	값.M주문증거금액 = lib.F2정수64_단순형(g.OrdMgn)
-	값.M현금주문증거금액 = lib.F2정수64_단순형(g.MnyOrdMgn)
-	값.M주문가능수량 = lib.F2정수64_단순형(g.OrdAbleQty)
+	값.M주문가능금액 = lib.F확인2(lib.F2정수64(g.OrdAbleAmt)
+	값.M현금주문가능금액 = lib.F확인2(lib.F2정수64(g.MnyOrdAbleAmt)
+	값.M주문증거금액 = lib.F확인2(lib.F2정수64(g.OrdMgn)
+	값.M현금주문증거금액 = lib.F확인2(lib.F2정수64(g.MnyOrdMgn)
+	값.M주문가능수량 = lib.F확인2(lib.F2정수64(g.OrdAbleQty)
 
 	return 값, nil
 }

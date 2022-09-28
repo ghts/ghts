@@ -112,7 +112,7 @@ func NewT1404_관리종목_조회_응답_헤더(b []byte) (값 *T1404_관리종�
 		"예상하지 못한 길이 : '%v", len(b))
 
 	g := new(T1404OutBlock)
-	lib.F확인(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
+	lib.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	값 = new(T1404_관리종목_조회_응답_헤더)
 	값.M연속키 = lib.F2문자열(g.Shcode)
@@ -135,21 +135,21 @@ func NewT1404_관리종목_조회_응답_반복값_모음(b []byte) (값_모음 
 
 	for i, g := range g_모음 {
 		g = new(T1404OutBlock1)
-		lib.F확인(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
+		lib.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 		값 := new(T1404_관리종목_조회_응답_반복값)
 		값.M종목코드 = lib.F2문자열(g.Shcode)
 		값.M종목명 = lib.F2문자열_EUC_KR_공백제거(g.Hname)
-		값.M현재가 = lib.F2정수64_단순형(g.Price)
-		값.M전일대비구분 = T전일대비_구분(lib.F2정수64_단순형(g.Sign))
-		값.M전일대비_등락폭 = 값.M전일대비구분.G부호보정_정수64(lib.F2정수64_단순형(g.Change))
-		값.M전일대비_등락율 = 값.M전일대비구분.G부호보정_실수64(lib.F2실수_소숫점_추가_단순형(g.Diff, 2))
-		값.M거래량 = lib.F2정수64_단순형(g.Volume)
-		값.M지정일 = lib.F2포맷된_일자_단순형("20060102", g.Date)
-		값.M지정일_주가 = lib.F2정수64_단순형(g.Tprice)
-		//값.M지정일_대비_등락폭 = lib.F2정수64_단순형(g.Tchange)
-		//값.M지정일_대비_등락율 = lib.F2실수_소숫점_추가_단순형(g.Tdiff, 2)
-		값.M사유 = T관리종목_지정_사유_구분(lib.F2정수64_단순형(g.Reason))
+		값.M현재가 = lib.F확인2(lib.F2정수64(g.Price))
+		값.M전일대비구분 = T전일대비_구분(lib.F확인2(lib.F2정수64(g.Sign)))
+		값.M전일대비_등락폭 = 값.M전일대비구분.G부호보정_정수64(lib.F확인2(lib.F2정수64(g.Change)))
+		값.M전일대비_등락율 = 값.M전일대비구분.G부호보정_실수64(lib.F확인2(lib.F2실수_소숫점_추가(g.Diff, 2)))
+		값.M거래량 = lib.F확인2(lib.F2정수64(g.Volume))
+		값.M지정일 = lib.F확인2(lib.F2포맷된_일자("20060102", g.Date))
+		값.M지정일_주가 = lib.F확인2(lib.F2정수64(g.Tprice))
+		//값.M지정일_대비_등락폭 = lib.F확인2(lib.F2정수64(g.Tchange)
+		//값.M지정일_대비_등락율 = lib.F확인2(lib.F2실수_소숫점_추가(g.Tdiff, 2)
+		값.M사유 = T관리종목_지정_사유_구분(lib.F확인2(lib.F2정수64(g.Reason)))
 		값.M해제일 = lib.F2포맷된_일자_단순형_공백은_초기값("20060102", g.Edate)
 
 		값_모음.M배열[i] = 값

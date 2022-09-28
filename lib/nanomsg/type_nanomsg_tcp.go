@@ -57,26 +57,24 @@ func NewNano소켓(종류 lib.T소켓_종류, 주소 string, 접속방식 lib.T�
 
 	switch 종류 {
 	case lib.P소켓_종류_REQ:
-		s.Socket, 에러 = req.NewSocket()
+		s.Socket = lib.F확인2(req.NewSocket())
 		s.타임아웃 = lib.P30초
 	case lib.P소켓_종류_REP:
-		s.Socket, 에러 = rep.NewSocket()
+		s.Socket = lib.F확인2(rep.NewSocket())
 	case lib.P소켓_종류_PUB:
-		s.Socket, 에러 = pub.NewSocket()
+		s.Socket = lib.F확인2(pub.NewSocket())
 	case lib.P소켓_종류_SUB:
-		s.Socket, 에러 = sub.NewSocket()
+		s.Socket = lib.F확인2(sub.NewSocket())
 		s.Socket.SetOption(mangos.OptionSubscribe, []byte(""))
 	case lib.P소켓_종류_PUSH:
-		s.Socket, 에러 = push.NewSocket()
+		s.Socket = lib.F확인2(push.NewSocket())
 	case lib.P소켓_종류_PULL:
-		s.Socket, 에러 = pull.NewSocket()
+		s.Socket = lib.F확인2(pull.NewSocket())
 	case lib.P소켓_종류_PAIR:
-		s.Socket, 에러 = pair.NewSocket()
+		s.Socket = lib.F확인2(pair.NewSocket())
 	default:
-		에러 = lib.New에러("예상하지 못한 소켓 종류 : '%v'", 종류)
+		panic(lib.New에러("예상하지 못한 소켓 종류 : '%v'", 종류))
 	}
-
-	lib.F확인(에러)
 
 	s.S옵션(옵션_모음...)
 
@@ -137,15 +135,6 @@ func NewNano소켓REQ(주소 lib.T주소, 옵션_모음 ...interface{}) (lib.I�
 	}
 }
 
-func NewNano소켓REQ_단순형(주소 lib.T주소, 옵션_모음 ...interface{}) lib.I소켓_질의 {
-	if 소켓, 에러 := NewNano소켓REQ(주소, 옵션_모음...); 에러 != nil {
-		lib.F에러_출력(에러)
-		return nil
-	} else {
-		return 소켓
-	}
-}
-
 func NewNano소켓REP(주소 lib.T주소, 옵션_모음 ...interface{}) (lib.I소켓with컨텍스트, error) {
 	if 소켓, 에러 := NewNano소켓(lib.P소켓_종류_REP, 주소.TCP주소(), lib.P소켓_접속_BIND, 옵션_모음...); 에러 != nil {
 		return nil, 에러
@@ -154,42 +143,16 @@ func NewNano소켓REP(주소 lib.T주소, 옵션_모음 ...interface{}) (lib.I�
 	}
 }
 
-func NewNano소켓REP_단순형(주소 lib.T주소, 옵션_모음 ...interface{}) lib.I소켓with컨텍스트 {
-	if 소켓, 에러 := NewNano소켓REP(주소, 옵션_모음...); 에러 != nil {
-		lib.F에러_출력(에러)
-		return nil
-	} else {
-		return 소켓.(lib.I소켓with컨텍스트)
-	}
-}
-
 func NewNano소켓PUB(주소 lib.T주소, 옵션_모음 ...interface{}) (소켓 lib.I소켓, 에러 error) {
 	return NewNano소켓(lib.P소켓_종류_PUB, 주소.TCP주소(), lib.P소켓_접속_BIND, 옵션_모음...)
-}
-
-func NewNano소켓PUB_단순형(주소 lib.T주소, 옵션_모음 ...interface{}) lib.I소켓 {
-	return lib.F확인(NewNano소켓PUB(주소, 옵션_모음...)).(lib.I소켓)
 }
 
 func NewNano소켓SUB(주소 lib.T주소, 옵션_모음 ...interface{}) (소켓 lib.I소켓, 에러 error) {
 	return NewNano소켓(lib.P소켓_종류_SUB, 주소.TCP주소(), lib.P소켓_접속_CONNECT, 옵션_모음...)
 }
 
-func NewNano소켓SUB_단순형(주소 lib.T주소, 옵션_모음 ...interface{}) lib.I소켓 {
-	return lib.F확인(NewNano소켓SUB(주소, 옵션_모음...)).(lib.I소켓)
-}
-
 func NewNano소켓PUSH(주소 lib.T주소, 옵션_모음 ...interface{}) (lib.I소켓, error) {
 	return NewNano소켓(lib.P소켓_종류_PUSH, 주소.TCP주소(), lib.P소켓_접속_CONNECT, 옵션_모음...)
-}
-
-func NewNano소켓PUSH_단순형(주소 lib.T주소, 옵션_모음 ...interface{}) lib.I소켓 {
-	if 소켓, 에러 := NewNano소켓PUSH(주소, 옵션_모음...); 에러 != nil {
-		lib.F에러_출력(에러)
-		return nil
-	} else {
-		return 소켓
-	}
 }
 
 func NewNano소켓PULL(주소 lib.T주소, 옵션_모음 ...interface{}) (lib.I소켓with컨텍스트, error) {
@@ -200,39 +163,12 @@ func NewNano소켓PULL(주소 lib.T주소, 옵션_모음 ...interface{}) (lib.I�
 	}
 }
 
-func NewNano소켓PULL_단순형(주소 lib.T주소, 옵션_모음 ...interface{}) lib.I소켓with컨텍스트 {
-	if 소켓, 에러 := NewNano소켓PULL(주소, 옵션_모음...); 에러 != nil {
-		lib.F에러_출력(에러)
-		return nil
-	} else {
-		return 소켓
-	}
-}
-
 func NewNano소켓PAIR클라이언트(주소 lib.T주소, 옵션_모음 ...interface{}) (lib.I소켓, error) {
 	return NewNano소켓(lib.P소켓_종류_PAIR, 주소.TCP주소(), lib.P소켓_접속_CONNECT, 옵션_모음...)
 }
 
-func NewNano소켓PAIR클라이언트_단순형(주소 lib.T주소, 옵션_모음 ...interface{}) lib.I소켓 {
-	if 소켓, 에러 := NewNano소켓PAIR클라이언트(주소, 옵션_모음...); 에러 != nil {
-		lib.F에러_출력(에러)
-		return nil
-	} else {
-		return 소켓
-	}
-}
-
 func NewNano소켓PAIR서버(주소 lib.T주소, 옵션_모음 ...interface{}) (lib.I소켓, error) {
 	return NewNano소켓(lib.P소켓_종류_PAIR, 주소.TCP주소(), lib.P소켓_접속_BIND, 옵션_모음...)
-}
-
-func NewNano소켓PAIR서버_단순형(주소 lib.T주소, 옵션_모음 ...interface{}) lib.I소켓 {
-	if 소켓, 에러 := NewNano소켓PAIR서버(주소, 옵션_모음...); 에러 != nil {
-		lib.F에러_출력(에러)
-		return nil
-	} else {
-		return 소켓
-	}
 }
 
 type sNano소켓 struct {
@@ -247,17 +183,13 @@ func (s *sNano소켓) S송신(변환_형식 lib.T변환, 값_모음 ...interface
 
 	// 소켓 타임아웃이 0초 이면 에러 발생.
 	if s.타임아웃 != 0 {
-		lib.F확인(s.Socket.SetOption(mangos.OptionSendDeadline, s.타임아웃))
+		lib.F확인1(s.Socket.SetOption(mangos.OptionSendDeadline, s.타임아웃))
 	}
 
-	매개체 := lib.New바이트_변환_모음_단순형(변환_형식, 값_모음...)
-	바이트_모음 := lib.F확인(매개체.MarshalBinary()).([]byte)
+	매개체 := lib.F확인2(lib.New바이트_변환_모음(변환_형식, 값_모음...))
+	바이트_모음 := lib.F확인2(매개체.MarshalBinary())
 
 	return s.Socket.Send(바이트_모음)
-}
-
-func (s *sNano소켓) S송신_단순형(변환_형식 lib.T변환, 값_모음 ...interface{}) {
-	lib.F확인(s.S송신(변환_형식, 값_모음...))
 }
 
 func (s *sNano소켓) G수신() (값 *lib.S바이트_변환_모음, 에러 error) {
@@ -267,7 +199,7 @@ func (s *sNano소켓) G수신() (값 *lib.S바이트_변환_모음, 에러 error
 	case lib.P소켓_종류_REP, lib.P소켓_종류_PUB:
 		// 타임아웃을 설정할 필요없는 경우.
 	default:
-		lib.F확인(s.Socket.SetOption(mangos.OptionRecvDeadline, s.타임아웃))
+		lib.F확인1(s.Socket.SetOption(mangos.OptionRecvDeadline, s.타임아웃))
 	}
 
 	if 바이트_모음, 에러 := s.Socket.Recv(); 에러 != nil {
@@ -288,10 +220,6 @@ func (s *sNano소켓) G수신() (값 *lib.S바이트_변환_모음, 에러 error
 	}
 }
 
-func (s *sNano소켓) G수신_단순형() *lib.S바이트_변환_모음 {
-	return lib.F확인(s.G수신()).(*lib.S바이트_변환_모음)
-}
-
 func (s *sNano소켓) G컨텍스트() (lib.I송수신, error) {
 	if ctx, 에러 := s.Socket.OpenContext(); 에러 != nil {
 		lib.F에러_출력(에러)
@@ -301,25 +229,12 @@ func (s *sNano소켓) G컨텍스트() (lib.I송수신, error) {
 	}
 }
 
-func (s *sNano소켓) G컨텍스트_단순형() lib.I송수신 {
-	if ctx, 에러 := s.G컨텍스트(); 에러 != nil {
-		lib.F에러_출력(에러)
-		return nil
-	} else {
-		return ctx
-	}
-}
-
 func (s *sNano소켓) G질의_응답(변환_형식 lib.T변환, 값_모음 ...interface{}) (값 *lib.S바이트_변환_모음, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
 
-	lib.F확인(s.S송신(변환_형식, 값_모음...))
+	lib.F확인1(s.S송신(변환_형식, 값_모음...))
 
 	return s.G수신()
-}
-
-func (s *sNano소켓) G질의_응답_검사(변환_형식 lib.T변환, 값_모음 ...interface{}) *lib.S바이트_변환_모음 {
-	return lib.F확인(s.G질의_응답(변환_형식, 값_모음...)).(*lib.S바이트_변환_모음)
 }
 
 func (s *sNano소켓) S타임아웃(타임아웃 time.Duration) lib.I소켓 {

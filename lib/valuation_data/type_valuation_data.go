@@ -96,19 +96,17 @@ func (s *S내재가치_정보_모음) S파일_저장(파일명 string) error {
 func (s *S내재가치_정보_모음) DB읽기(db *sql.DB) (에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { s = nil }}.S실행()
 
-	lib.F확인(F내재가치_정보_테이블_생성(db))
+	lib.F확인1(F내재가치_정보_테이블_생성(db))
 
 	SQL := new(bytes.Buffer)
 	SQL.WriteString("SELECT code, date, json ")
 	SQL.WriteString("FROM fundamental_data ")
 	SQL.WriteString("ORDER BY code, date")
 
-	stmt, 에러 := db.Prepare(SQL.String())
-	lib.F확인(에러)
+	stmt := lib.F확인2(db.Prepare(SQL.String()))
 	defer stmt.Close()
 
-	rows, 에러 := stmt.Query()
-	lib.F확인(에러)
+	rows := lib.F확인2(stmt.Query())
 	defer rows.Close()
 
 	for rows.Next() {
@@ -117,7 +115,7 @@ func (s *S내재가치_정보_모음) DB읽기(db *sql.DB) (에러 error) {
 		var json string
 		var 값 *S내재가치_정보
 
-		lib.F확인(rows.Scan(&code, &date, &json))
+		lib.F확인1(rows.Scan(&code, &date, &json))
 
 		if 에러 = lib.F디코딩(lib.JSON, []byte(json), &값); 에러 != nil {
 			lib.New에러with출력("%v %v : 디코딩 에러\n%v", code, date.Format(lib.P일자_형식), 에러)
@@ -188,7 +186,7 @@ func (s S내재가치_식별정보) G일자() uint32 {
 }
 
 func (s S내재가치_식별정보) G일자2() time.Time {
-	return lib.F2포맷된_일자_단순형("20060102", strconv.Itoa(int(s.M연도_월*100+1)))
+	return lib.F확인2(lib.F2포맷된_일자("20060102", strconv.Itoa(int(s.M연도_월*100+1))))
 }
 
 type S재무제표_정보_내용 struct {
@@ -269,7 +267,7 @@ func F내재가치_정보_모음_DB저장(db *sql.DB, 값_맵 map[string]*S내�
 	var tx *sql.Tx
 	defer lib.S예외처리{M에러: &에러, M함수: func() { lib.F조건부_실행(tx != nil, tx.Rollback) }}.S실행()
 
-	lib.F확인(F내재가치_정보_테이블_생성(db))
+	lib.F확인1(F내재가치_정보_테이블_생성(db))
 
 	SQL생성 := new(bytes.Buffer)
 	SQL생성.WriteString("INSERT IGNORE INTO fundamental_data (")
@@ -286,26 +284,18 @@ func F내재가치_정보_모음_DB저장(db *sql.DB, 값_맵 map[string]*S내�
 	txOpts.Isolation = sql.LevelDefault
 	txOpts.ReadOnly = false
 
-	tx, 에러 = db.BeginTx(context.TODO(), txOpts)
-	lib.F확인(에러)
+	tx = lib.F확인2(db.BeginTx(context.TODO(), txOpts))
 
-	stmt생성, 에러 := tx.Prepare(SQL생성.String())
-	lib.F확인(에러)
+	stmt생성 := lib.F확인2(tx.Prepare(SQL생성.String()))
 	defer stmt생성.Close()
 
-	stmt수정, 에러 := tx.Prepare(SQL수정.String())
-	lib.F확인(에러)
+	stmt수정 := lib.F확인2(tx.Prepare(SQL수정.String()))
 	defer stmt수정.Close()
 
 	for _, 값 := range 값_맵 {
-		json, 에러 := lib.F인코딩(lib.JSON, 값)
-		lib.F확인(에러)
-
-		_, 에러 = stmt생성.Exec(값.M종목코드, 값.G일자())
-		lib.F확인(에러)
-
-		_, 에러 = stmt수정.Exec(string(json), 값.M종목코드, 값.G일자())
-		lib.F확인(에러)
+		json := lib.F확인2(lib.F인코딩(lib.JSON, 값))
+		lib.F확인2(stmt생성.Exec(값.M종목코드, 값.G일자()))
+		lib.F확인2(stmt수정.Exec(string(json), 값.M종목코드, 값.G일자()))
 	}
 
 	tx.Commit()

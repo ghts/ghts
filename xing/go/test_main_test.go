@@ -42,7 +42,7 @@ import (
 func TestMain(m *testing.M) {
 	defer lib.S예외처리{}.S실행()
 
-	lib.F확인(f테스트_준비())
+	lib.F확인1(f테스트_준비())
 	defer f테스트_정리()
 
 	m.Run()
@@ -54,10 +54,10 @@ func f테스트_준비() (에러 error) {
 	lib.F테스트_모드_시작()
 	xt.F서버_구분_설정(xt.P서버_모의투자)
 
-	lib.F확인(xt.F로그인_정보_설정())
+	lib.F확인1(xt.F로그인_정보_설정())
 
 	F초기화(xt.P서버_모의투자, xt.V로그인_정보)
-	lib.F확인(F주문_응답_실시간_정보_구독())
+	lib.F확인1(F주문_응답_실시간_정보_구독())
 
 	return nil
 }
