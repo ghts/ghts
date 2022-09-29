@@ -25,6 +25,7 @@ func main() {
     for {
         cmd := exec.Command(<실행화일_경로>)
         cmd.Stdout = os.Stdout
+        cmd.Stderr = os.Stderr
         cmd.Run()
     }
 }
