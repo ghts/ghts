@@ -215,9 +215,6 @@ func F접속_로그인() (에러 error) {
 		return lib.New에러("예상하지 못한 응답값 : '%v'", 응답값)
 	}
 
-	lib.F문자열_출력("로그인 후 5초 대기. DLL32 모듈 초기화 시간 부여.")
-	lib.F대기(lib.P5초)
-
 	<-ch신호_DLL32_로그인
 
 	return nil
