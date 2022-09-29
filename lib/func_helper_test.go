@@ -53,6 +53,18 @@ func TestF문자열_검색_복수_정규식(t *testing.T) {
 	F테스트_같음(t, 검색_결과, "2006.01.02")
 }
 
+func TestF최대값(t *testing.T) {
+	t.Parallel()
+	F테스트_같음(t, F최대값(-1, 1), 1)
+	F테스트_같음(t, F최대값(1, -1), 1)
+}
+
+func TestF최소값(t *testing.T) {
+	t.Parallel()
+	F테스트_같음(t, F최소값(-1, 1), -1)
+	F테스트_같음(t, F최소값(1, -1), -1)
+}
+
 func TestF절대값(t *testing.T) {
 	t.Parallel()
 
