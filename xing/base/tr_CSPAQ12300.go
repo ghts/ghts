@@ -392,7 +392,7 @@ func NewCSPAQ12300_현물계좌_잔고내역_조회_응답_반복값_모음(b []
 		값.M미체결수량 = lib.F확인2(lib.F2정수64(g.UnercQty))
 		값.M전일종가 = lib.F확인2(lib.F2정수64(g.PrdayCprc))
 		값.M매입금액 = lib.F확인2(lib.F2정수64(g.PchsAmt))
-		값.M등록시장코드 = T등록_시장_CSPAQ12300(lib.F확인2(lib.F2정수64(g.RegMktCode)))
+		값.M등록시장코드 = T등록_시장_CSPAQ12300(lib.F확인2(lib.F2정수64_공백은_0(g.RegMktCode)))
 		값.M대출상세분류코드 = T대출상세분류_CSPAQ12300(lib.F확인2(lib.F2정수64_공백은_0(g.LoanDtlClssCode)))
 		값.M예탁담보대출수량 = lib.F확인2(lib.F2정수64(g.DpspdgLoanQty))
 
