@@ -47,8 +47,6 @@ func TestT1901_ETF_시세_조회(t *testing.T) {
 	값, 에러 := TrT1901_ETF_시세_조회(종목코드)
 	lib.F테스트_에러없음(t, 에러)
 
-	lib.F체크포인트(값.M종목명)
-
 	lib.F테스트_다름(t, 값.M종목명, "")
 	lib.F테스트_참임(t, 값.M현재가 >= 0)
 	lib.F테스트_같음(t, 값.M전일대비구분, xt.P구분_상한, xt.P구분_상승, xt.P구분_보합, xt.P구분_하한, xt.P구분_하락)
@@ -144,9 +142,7 @@ func TestT1901_ETF_시세_조회(t *testing.T) {
 	//s.M선물_전일대비등락폭 = lib.F확인2(lib.F2실수_소숫점_추가(g.Futchange, 2)
 	//s.M선물_전일대비등락율 = lib.F확인2(lib.F2실수_소숫점_추가(g.Futdiff, 2)
 
-	lib.F테스트_참임(t, 값.NAV > 0)
-
-	lib.F체크포인트(값.NAV)
+	lib.F테스트_참임(t, 값.NAV >= 0, 값.NAV)
 
 	//s.NAV_전일대비구분 = T전일대비_구분(lib.F확인2(lib.F2정수64(g.Navsign))
 	//s.NAV_전일대비등락폭 = lib.F확인2(lib.F2실수_소숫점_추가(g.Navchange, 2)
