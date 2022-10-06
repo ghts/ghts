@@ -56,6 +56,7 @@ const (
 	P4초     = 4 * time.Second
 	P5초     = 5 * time.Second
 	P10초    = 10 * time.Second
+	P15초    = 15 * time.Second
 	P20초    = 20 * time.Second
 	P30초    = 30 * time.Second
 	P40초    = 40 * time.Second
