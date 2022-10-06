@@ -213,16 +213,16 @@ func f콜백_신호_처리기(콜백 lib.I콜백) (에러 error) {
 		default:
 		}
 	case lib.P신호_DLL32_접속_끊김:
-		lib.F문자열_출력("접속 끊김 신호 수신")
+		lib.F문자열_출력("%v 접속 끊김 신호 수신", lib.F지금().Format("15:04"))
 		F접속_끊김_설정()
 	case lib.P신호_DLL32_종료:
-		lib.F문자열_출력("DLL32_종료 신호 수신")
+		lib.F문자열_출력("%v DLL32_종료 신호 수신", lib.F지금().Format("15:04"))
 		select {
 		case ch신호_DLL32_종료 <- 신호:
 		default:
 		}
 	default:
-		return lib.New에러with출력("예상하지 못한 신호 : '%v'", 신호)
+		return lib.New에러with출력("%v 예상하지 못한 신호 : '%v'", lib.F지금().Format("15:04"), 신호)
 	}
 
 	return nil
