@@ -126,8 +126,8 @@ func NewT3320_기업정보_요약_응답1(b []byte) (값 *T3320_기업정보_요
 	값.M최근결산년도 = lib.F2문자열(g.Gsyyyy)
 	값.M결산월 = lib.F2문자열(g.Gsmm)
 	값.M최근결산년월 = lib.F2문자열(g.Gsym)
-	값.M주당액면가 = lib.F확인2(lib.F2정수64(g.Lstprice))
-	값.M주식수 = lib.F확인2(lib.F2정수64(g.Gstock))
+	값.M주당액면가 = lib.F확인2(lib.F2정수64_공백은_0(g.Lstprice))
+	값.M주식수 = lib.F확인2(lib.F2정수64_공백은_0(g.Gstock))
 	값.M홈페이지 = lib.F2문자열(g.Homeurl)
 	값.M그룹명 = lib.F2문자열_EUC_KR(g.Grdnm)
 	값.M외국인_비중 = lib.F2실수_소숫점_추가_단순형_공백은_0(g.Foreignratio, 2)
@@ -136,8 +136,8 @@ func NewT3320_기업정보_요약_응답1(b []byte) (값 *T3320_기업정보_요
 	값.M시가총액 = lib.F2실수_단순형_공백은_0(g.Sigavalue)
 	값.M배당금 = lib.F2실수_단순형_공백은_0(g.Cashsis)
 	값.M배당수익율 = lib.F2실수_소숫점_추가_단순형_공백은_0(g.Cashrate, 2)
-	값.M현재가 = lib.F확인2(lib.F2정수64(g.Price))
-	값.M전일종가 = lib.F확인2(lib.F2정수64(g.Jnilclose))
+	값.M현재가 = lib.F확인2(lib.F2정수64_공백은_0(g.Price))
+	값.M전일종가 = lib.F확인2(lib.F2정수64_공백은_0(g.Jnilclose))
 
 	return 값, nil
 }
