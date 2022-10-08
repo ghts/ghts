@@ -203,16 +203,24 @@ func F프로세스_종료by프로세스ID(프로세스ID int) (에러 error) {
 	}
 }
 
-func F프로세스_종료by프로세스_이름(프로세스_이름 string) (에러 error) {
+func F프로세스_종료by프로세스_이름(프로세스_이름 string, 추가_인수_모음 ...bool) (에러 error) {
 	defer lib.S예외처리{M에러: &에러, M출력_숨김: true}.S실행()
 
 	프로세스_이름 = strings.TrimSpace(프로세스_이름)
 	프로세스_모음 := lib.F확인2(ps.Processes())
+	출력_여부 := true
+
+	if len(추가_인수_모음) > 0 {
+		출력_여부 = 추가_인수_모음[0]
+	}
 
 	for _, 프로세스 := range 프로세스_모음 {
 		if 프로세스.Executable() == 프로세스_이름 {
-			lib.F문자열_출력("PID %v : 프로세스 종료", 프로세스.Pid())
 			F프로세스_종료by프로세스ID(프로세스.Pid())
+
+			if 출력_여부 {
+				lib.F문자열_출력("PID %v : 프로세스 종료", 프로세스.Pid())
+			}
 		}
 	}
 
