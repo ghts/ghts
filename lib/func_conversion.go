@@ -375,13 +375,11 @@ func F2문자열_모음(인터페이스_모음 []interface{}) []string {
 func F2정수(값 interface{}) (int, error) {
 	var 문자열 string
 
-	switch 값.(type) {
+	switch 변환값 := 값.(type) {
 	case bool:
-		if !값.(bool) {
-			return 0, nil
-		} else {
-			return 1, nil
-		}
+		return F조건부_정수(변환값, 1, 0), nil
+	case time.Time:
+		return int(F일자2정수(변환값)), nil
 	case string:
 		문자열 = 값.(string)
 	default:
