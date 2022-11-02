@@ -387,31 +387,37 @@ func ETF_ETN_종목_여부(종목_코드 string) bool {
 	case 종목.G시장구분() == lib.P시장구분_ETF,
 		종목.G시장구분() == lib.P시장구분_ETN,
 		strings.Contains(종목.G이름(), "ETN"),
-		strings.HasPrefix(종목.G이름(), "KODEX"),
-		strings.HasPrefix(종목.G이름(), "TIGER"),
-		strings.HasPrefix(종목.G이름(), "KOSEF"),
-		strings.HasPrefix(종목.G이름(), "KINDEX"),
-		strings.HasPrefix(종목.G이름(), "KBSTAR"),
-		strings.HasPrefix(종목.G이름(), "HANARO"),
-		strings.HasPrefix(종목.G이름(), "ARIRANG"),
-		strings.HasPrefix(종목.G이름(), "SMART"),
-		strings.HasPrefix(종목.G이름(), "파워"),
-		strings.HasPrefix(종목.G이름(), "TREX"),
-		strings.HasPrefix(종목.G이름(), "KTOP"),
-		strings.HasPrefix(종목.G이름(), "마이티"),
-		strings.HasPrefix(종목.G이름(), "FOCUS"),
+		strings.HasPrefix(종목.G이름(), "KODEX "),
+		strings.HasPrefix(종목.G이름(), "TIGER "),
+		strings.HasPrefix(종목.G이름(), "KOSEF "),
+		strings.HasPrefix(종목.G이름(), "KINDEX "),
+		strings.HasPrefix(종목.G이름(), "KBSTAR "),
+		strings.HasPrefix(종목.G이름(), "HANARO "),
+		strings.HasPrefix(종목.G이름(), "ARIRANG "),
+		strings.HasPrefix(종목.G이름(), "SMART "),
+		strings.HasPrefix(종목.G이름(), "파워 "),
+		strings.HasPrefix(종목.G이름(), "TREX "),
+		strings.HasPrefix(종목.G이름(), "KTOP "),
+		strings.HasPrefix(종목.G이름(), "마이티 "),
+		strings.HasPrefix(종목.G이름(), "FOCUS "),
 		strings.HasPrefix(종목.G이름(), "QV "),
 		strings.HasPrefix(종목.G이름(), "TRUE "),
+		strings.HasPrefix(종목.G이름(), "ACE "),
 		strings.HasPrefix(종목.G이름(), "흥국 "),
 		strings.HasPrefix(종목.G이름(), "삼성 "),
 		strings.HasPrefix(종목.G이름(), "KB "),
 		strings.HasPrefix(종목.G이름(), "대신 "),
 		strings.HasPrefix(종목.G이름(), "신한 "),
-		strings.HasPrefix(종목.G이름(), "미래에셋 "):
+		strings.HasPrefix(종목.G이름(), "미래에셋 "),
+		strings.HasPrefix(종목.G이름(), "메리츠 "):
 		return true
 	default:
 		return false
 	}
+}
+
+func F채권_종목_여부(종목_코드 string) bool {
+	return strings.HasPrefix(종목_코드, "D") || (!F코스피_종목_여부(종목_코드) && !F코스닥_종목_여부(종목_코드))
 }
 
 func F레버리지_종목_여부(종목코드 string) bool {
