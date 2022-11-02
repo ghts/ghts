@@ -56,12 +56,16 @@ func F비어있는_일자값() time.Time {
 
 type S비어있음 struct{}
 
-type T숫자 interface {
-	int | int8 | int16 | int32 | int64 | uint | uint8 | uint16 | uint32 | uint64 | float32 | float64
+type T정수 interface {
+	int | int8 | int16 | int32 | int64 | uint | uint8 | uint16 | uint32 | uint64
 }
 
 type T실수 interface {
 	float32 | float64
+}
+
+type T숫자 interface {
+	T정수 | T실수
 }
 
 func New에러(포맷_문자열or에러 interface{}, 추가_매개변수 ...interface{}) error {
