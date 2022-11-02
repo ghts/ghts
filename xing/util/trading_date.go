@@ -37,14 +37,7 @@ func New개장일_모음(db *sql.DB) (개장일_모음 *S개장일_모음, 에�
 	sort.Ints(개장일_슬라이스)
 
 	개장일_모음 = new(S개장일_모음)
-	개장일_모음.M저장소 = make([]uint32, len(개장일_맵))
-	개장일_모음.인덱스_맵 = make(map[uint32]int)
-
-	for i, 개장일 := range 개장일_슬라이스 {
-		개장일_모음.M저장소[i] = uint32(개장일)
-	}
-
-	개장일_모음.S인덱스_맵_설정()
+	f개장일_모음_초기화(개장일_모음, 개장일_슬라이스)
 
 	return 개장일_모음, nil
 }
@@ -52,14 +45,6 @@ func New개장일_모음(db *sql.DB) (개장일_모음 *S개장일_모음, 에�
 type S개장일_모음 struct {
 	M저장소  []uint32
 	인덱스_맵 map[uint32]int
-}
-
-func (s *S개장일_모음) S인덱스_맵_설정() {
-	s.인덱스_맵 = make(map[uint32]int)
-
-	for i, 개장일 := range s.M저장소 {
-		s.인덱스_맵[uint32(개장일)] = i
-	}
 }
 
 func (s S개장일_모음) G인덱스(일자 uint32) int {
@@ -92,13 +77,17 @@ func (s S개장일_모음) G이전_개장일(기간 int) (이전_개장일 uint3
 
 func (s S개장일_모음) G복사본() *S개장일_모음 {
 	s2 := new(S개장일_모음)
-	s2.M저장소 = make([]uint32, len(s.M저장소))
-
-	for i, 값 := range s.M저장소 {
-		s2.M저장소[i] = 값
-	}
-
-	s2.S인덱스_맵_설정()
+	f개장일_모음_초기화(s2, s.M저장소)
 
 	return s2
+}
+
+func f개장일_모음_초기화[T lib.T정수](s *S개장일_모음, 값_모음 []T) {
+	s.M저장소 = make([]uint32, len(값_모음))
+	s.인덱스_맵 = make(map[uint32]int)
+
+	for i, 개장일 := range s.M저장소 {
+		s.M저장소[i] = uint32(개장일)
+		s.인덱스_맵[uint32(개장일)] = i
+	}
 }
