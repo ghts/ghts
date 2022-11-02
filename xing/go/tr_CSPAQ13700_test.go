@@ -49,7 +49,7 @@ func TestCSPAQ13700_현물계좌_주문체결내역_질의값(t *testing.T) {
 }
 
 func TestCSPAQ13700_현물계좌_주문체결내역(t *testing.T) {
-	t.Parallel()
+	t.Skip() // t.Parallel()
 
 	계좌번호, 에러 := F계좌_번호(0)
 	lib.F테스트_에러없음(t, 에러)
