@@ -114,8 +114,6 @@ func New종목별_일일_가격정보_모음_3년치_DB읽기(db *sql.DB, 종목
 		return nil, 에러
 	}
 
-	s.M백테스트 = &(S일일_가격_백테스트_도우미{d: s})
-
 	return s, nil
 }
 
@@ -125,8 +123,6 @@ func New종목별_일일_가격정보_모음_DB읽기(db *sql.DB, 종목코드 s
 	if 에러 = s.DB읽기(db, 종목코드); 에러 != nil {
 		return nil, 에러
 	}
-
-	s.M백테스트 = &(S일일_가격_백테스트_도우미{d: s})
 
 	return s, nil
 }
@@ -164,15 +160,12 @@ func New종목별_일일_가격정보_모음(값_모음 []*S일일_가격정보)
 	s = &S종목별_일일_가격정보_모음{M저장소: 값_모음}
 	s.S정렬_및_인덱스_설정()
 
-	s.M백테스트 = &(S일일_가격_백테스트_도우미{d: s})
-
 	return s, nil
 }
 
 type S종목별_일일_가격정보_모음 struct {
-	M저장소  []*S일일_가격정보
-	인덱스   map[uint32]int
-	M백테스트 *S일일_가격_백테스트_도우미
+	M저장소 []*S일일_가격정보
+	인덱스  map[uint32]int
 }
 
 func (s *S종목별_일일_가격정보_모음) CSV쓰기(파일명 string) {
@@ -1008,293 +1001,6 @@ func (s S종목별_일일_가격정보_모음) g월수익율_변동성_도우미
 	}
 
 	return lib.F표준_편차(월수익율...)
-}
-
-// 백테스팅 Look Ahead Bias를 방지하기 위해 1일 전 데이터를 이용함.
-type S일일_가격_백테스트_도우미 struct {
-	d *S종목별_일일_가격정보_모음 // d는 data의 첫 글자.
-}
-
-func (s S일일_가격_백테스트_도우미) G시가_모음() []float64 {
-	전일_시가_모음 := make([]float64, s.d.Len())
-	전일_시가_모음[0] = (s.d.M저장소[0].M시가 + s.d.M저장소[1].M시가 + s.d.M저장소[2].M시가) / 3.0 // 임의로 값을 채워넣음.
-
-	for i := 1; i < s.d.Len(); i++ {
-		전일_시가_모음[i] = s.d.M저장소[i-1].M시가
-	}
-
-	return 전일_시가_모음
-}
-
-func (s S일일_가격_백테스트_도우미) G고가_모음() []float64 {
-	전일_고가_모음 := make([]float64, s.d.Len())
-	전일_고가_모음[0] = (s.d.M저장소[0].M고가 + s.d.M저장소[1].M고가 + s.d.M저장소[2].M고가) / 3.0 // 임의로 값을 채워넣음.
-
-	for i := 1; i < s.d.Len(); i++ {
-		전일_고가_모음[i] = s.d.M저장소[i-1].M고가
-	}
-
-	return 전일_고가_모음
-}
-
-func (s S일일_가격_백테스트_도우미) G저가_모음() []float64 {
-	전일_저가_모음 := make([]float64, s.d.Len())
-	전일_저가_모음[0] = (s.d.M저장소[0].M저가 + s.d.M저장소[1].M저가 + s.d.M저장소[2].M저가) / 3.0 // 임의로 값을 채워넣음.
-
-	for i := 1; i < s.d.Len(); i++ {
-		전일_저가_모음[i] = s.d.M저장소[i-1].M저가
-	}
-
-	return 전일_저가_모음
-}
-
-func (s S일일_가격_백테스트_도우미) G종가_모음() []float64 {
-	전일_종가_모음 := make([]float64, s.d.Len())
-	전일_종가_모음[0] = (s.d.M저장소[0].M종가 + s.d.M저장소[1].M종가 + s.d.M저장소[2].M종가) / 3.0 // 임의로 값을 채워넣음.
-
-	for i := 1; i < s.d.Len(); i++ {
-		전일_종가_모음[i] = s.d.M저장소[i-1].M종가
-	}
-
-	return 전일_종가_모음
-}
-
-func (s S일일_가격_백테스트_도우미) G거래량_모음() []float64 {
-	전일_거래량_모음 := make([]float64, s.d.Len())
-	전일_거래량_모음[0] = (s.d.M저장소[0].M거래량 + s.d.M저장소[1].M거래량 + s.d.M저장소[2].M거래량) / 3.0 // 임의로 값을 채워넣음.
-
-	for i := 1; i < s.d.Len(); i++ {
-		전일_거래량_모음[i] = s.d.M저장소[i-1].M거래량
-	}
-
-	return 전일_거래량_모음
-}
-
-func (s S일일_가격_백테스트_도우미) G기간_고가_모음(윈도우_크기 int) []float64 {
-	고가_모음 := s.G고가_모음()
-
-	return trade.F이동_범위_최대값(고가_모음, 윈도우_크기)
-}
-
-func (s S일일_가격_백테스트_도우미) G기간_저가_모음(윈도우_크기 int) []float64 {
-	저가_모음 := s.G저가_모음()
-
-	return trade.F이동_범위_최소값(저가_모음, 윈도우_크기)
-}
-
-func (s *S일일_가격_백테스트_도우미) SMA(일자 time.Time, 윈도우_크기 int) (SMA float64, 에러 error) {
-	defer lib.S예외처리{M에러: &에러, M함수: func() { SMA = 0 }}.S실행()
-
-	if 윈도우_크기 <= 0 {
-		return 0, lib.New에러("너무 작은 윈도우 크기 %ㅍ.", 윈도우_크기)
-	}
-
-	인덱스 := lib.F확인2(s.d.G인덱스(lib.F일자2정수(일자)))
-	길이 := 인덱스 + 1
-	if 길이 < 윈도우_크기 {
-		return 0, lib.New에러("너무 짧은 인덱스.")
-	}
-
-	종가_합계 := 0.0
-
-	for i := 0; i < 윈도우_크기; i++ {
-		종가_합계 += s.d.M저장소[길이-윈도우_크기+i].M종가
-	}
-
-	return 종가_합계 / float64(윈도우_크기), nil
-}
-
-func (s *S일일_가격_백테스트_도우미) SMA_모음(윈도우_크기 int) []float64 {
-	if s.d.Len() <= 윈도우_크기 {
-		panic(lib.New에러("값_모음 길이가 너무 짦음. %v %v %v", s.d.G종목코드(), s.d.Len(), 윈도우_크기))
-	}
-
-	// Look Ahead Bias를 방지하기 위해서 전일 종가 기준으로 함.
-	return trade.F단순_이동_평균(s.G종가_모음(), 윈도우_크기)
-}
-
-func (s *S일일_가격_백테스트_도우미) EMA_모음(윈도우_크기 int) []float64 {
-	// Look Ahead Bias를 방지하기 위해서 전일 종가 기준으로 함.
-	return trade.F지수_이동_평균(s.G종가_모음(), 윈도우_크기)
-}
-
-func (s *S일일_가격_백테스트_도우미) VWMA_모음(윈도우_크기 int) []float64 {
-	return trade.F가중_이동_평균(s.G종가_모음(), s.G거래량_모음(), 윈도우_크기)
-}
-
-func (s S일일_가격_백테스트_도우미) G볼린저_밴드_모음(윈도우_크기 int, 표준편차_배율 float64) []float64 {
-	// Look Ahead Bias를 방지하기 위해서 전일 종가 기준으로 함.
-	return trade.F볼린저_밴드(s.G종가_모음(), 윈도우_크기, 표준편차_배율)
-}
-
-func (s S일일_가격_백테스트_도우미) G볼린저_밴드_폭(윈도우_크기 int, 표준편차_배율 float64) []float64 {
-	// Look Ahead Bias를 방지하기 위해서 전일 종가 기준으로 함.
-	return trade.F볼린저_밴드_폭(s.G종가_모음(), 윈도우_크기, 표준편차_배율)
-}
-
-// systrader79가 언급한 볼린저 밴드 폭 지수
-func (s S일일_가격_백테스트_도우미) G변동성_Z점수_모음(윈도우_크기 int) []float64 {
-	// Look Ahead Bias를 방지하기 위해서 전일 종가 기준으로 함.
-	return trade.F이동_Z점수(trade.F이동_표준_편차(s.G종가_모음(), 윈도우_크기), 윈도우_크기)
-}
-
-func (s S일일_가격_백테스트_도우미) G변동성_Z점수_최저값_모음(윈도우_크기 int) []float64 {
-	// Look Ahead Bias를 방지하기 위해서 전일 종가 기준으로 함.
-	return trade.F이동_범위_최소값(trade.F이동_Z점수(trade.F이동_표준_편차(s.G종가_모음(), 윈도우_크기), 윈도우_크기), 20)
-}
-
-// systrader79가 언급한 볼린저 밴드 폭 Z점수 보완 지수
-func (s S일일_가격_백테스트_도우미) G변동성_고점_대비_비율_모음(윈도우_크기 int, 표준편차_배율 float64) []float64 {
-	볼린저_밴드_폭 := trade.F볼린저_밴드_폭(s.G종가_모음(), 윈도우_크기, 표준편차_배율)
-	고점 := make([]float64, s.d.Len())
-	고점_대비_비율 := make([]float64, s.d.Len())
-
-	for i := 0; i < 윈도우_크기; i++ {
-		고점[i] = lib.F최대값(볼린저_밴드_폭[:i]...)
-	}
-
-	for i := 윈도우_크기; i < s.d.Len(); i++ {
-		고점[i] = lib.F최대값(볼린저_밴드_폭[i-윈도우_크기+1 : i]...)
-	}
-
-	for i := 0; i < s.d.Len(); i++ {
-		고점_대비_비율[i] = 볼린저_밴드_폭[i] / 고점[i]
-	}
-
-	return 고점_대비_비율
-}
-
-func (s S일일_가격_백테스트_도우미) ATR(일자 time.Time, 윈도우_크기 int) (ATR float64, 에러 error) {
-	defer lib.S예외처리{M에러: &에러, M함수: func() { ATR = 0 }}.S실행()
-
-	인덱스 := lib.F확인2(s.d.G인덱스(lib.F일자2정수(일자)))
-	길이 := 인덱스 + 1
-
-	if 길이 < 7 {
-		return 0, lib.New에러("너무 짧은 인덱스.")
-	}
-
-	TrueRange모음 := make([]float64, 길이)
-
-	for i := 2; i < 길이; i++ {
-		고가 := lib.F최대값([]float64{s.d.M저장소[i].M고가, s.d.M저장소[i-1].M종가}...)
-		저가 := lib.F최소값([]float64{s.d.M저장소[i].M저가, s.d.M저장소[i-1].M종가}...)
-		TrueRange모음[i] = 고가 - 저가
-	}
-
-	TrueRange모음[0] = (TrueRange모음[3] + TrueRange모음[4] + TrueRange모음[5]) / 3.0 // 임의로 값을 채워 넣음.
-	TrueRange모음[1] = (TrueRange모음[4] + TrueRange모음[5] + TrueRange모음[6]) / 3.0 // 임의로 값을 채워 넣음.
-
-	atr모음 := trade.F지수_이동_평균(TrueRange모음, 윈도우_크기)
-
-	return atr모음[len(atr모음)-1], nil
-}
-
-func (s *S일일_가격_백테스트_도우미) TrueRange_모음() []float64 {
-	// Look Ahead Bias를 방지하기 위해서 하루 늦추어서 전일 True Range 값으로 설정함.
-	TrueRange모음 := make([]float64, s.d.Len())
-
-	for i := 2; i < s.d.Len(); i++ {
-		고가 := lib.F최대값([]float64{s.d.M저장소[i-1].M고가, s.d.M저장소[i-2].M종가}...)
-		저가 := lib.F최소값([]float64{s.d.M저장소[i-1].M저가, s.d.M저장소[i-2].M종가}...)
-
-		TrueRange모음[i] = 고가 - 저가
-	}
-
-	return TrueRange모음
-}
-
-func (s *S일일_가격_백테스트_도우미) ATR_모음(윈도우_크기 int) []float64 {
-	TrueRange모음 := s.TrueRange_모음()
-	TrueRange모음[0] = (TrueRange모음[3] + TrueRange모음[4] + TrueRange모음[5]) / 3.0 // 임의로 값을 채워 넣음.
-	TrueRange모음[1] = (TrueRange모음[4] + TrueRange모음[5] + TrueRange모음[6]) / 3.0 // 임의로 값을 채워 넣음.
-
-	return trade.F지수_이동_평균(TrueRange모음, 윈도우_크기)
-}
-
-func (s *S일일_가격_백테스트_도우미) ATR채널_SMA_모음(윈도우_크기 int, atr증분 float64) []float64 {
-	ATR채널 := make([]float64, s.d.Len())
-	SMA := s.SMA_모음(윈도우_크기)
-	ATR := s.ATR_모음(윈도우_크기)
-
-	for i := 0; i < s.d.Len(); i++ {
-		ATR채널[i] = SMA[i] + atr증분*ATR[i]
-	}
-
-	return ATR채널
-}
-
-func (s *S일일_가격_백테스트_도우미) ATR채널_EMA_모음(윈도우_크기 int, atr증분 float64) []float64 {
-	ATR채널 := make([]float64, s.d.Len())
-	EMA := s.EMA_모음(윈도우_크기)
-	ATR := s.ATR_모음(윈도우_크기)
-
-	for i := 0; i < s.d.Len(); i++ {
-		ATR채널[i] = EMA[i] + atr증분*ATR[i]
-	}
-
-	return ATR채널
-}
-
-func (s *S일일_가격_백테스트_도우미) Chandelier청산_가격_모음(윈도우_크기 int, atr하락비율 float64) []float64 {
-	Chandelier청산선 := make([]float64, s.d.Len())
-
-	고가 := s.G기간_고가_모음(윈도우_크기)
-	ATR := s.ATR_모음(윈도우_크기)
-
-	for i := 0; i < s.d.Len(); i++ {
-		Chandelier청산선[i] = 고가[i] - math.Abs(atr하락비율)*ATR[i]
-	}
-
-	return Chandelier청산선
-}
-
-func (s *S일일_가격_백테스트_도우미) MFI_모음(윈도우_크기 int) []float64 {
-	return s.d.MFI_도우미(
-		윈도우_크기,
-		s.G고가_모음(),
-		s.G저가_모음(),
-		s.G종가_모음(),
-		s.G거래량_모음())
-}
-
-func (s *S일일_가격_백테스트_도우미) MFIs_모음(윈도우_크기_MFI, 윈도우_크기_이동평균 int) []float64 {
-	return trade.F가중_이동_평균(s.MFI_모음(윈도우_크기_MFI), s.G거래량_모음(), 윈도우_크기_이동평균)
-}
-
-func (s *S일일_가격_백테스트_도우미) VPCI_모음(단기, 장기 int) []float64 {
-	단기_VMWA_모음 := s.VWMA_모음(단기)
-	장기_VWMA_모음 := s.VWMA_모음(장기)
-	단기_SMA_모음 := s.SMA_모음(단기)
-	장기_SMA_모음 := s.SMA_모음(장기)
-	단기_거래량_SMA_모음 := trade.F단순_이동_평균(s.G거래량_모음(), 단기)
-	장기_거래량_SMA_모음 := trade.F단순_이동_평균(s.G거래량_모음(), 장기)
-
-	return s.d.VPCI_도우미(
-		단기, 장기,
-		단기_VMWA_모음, 장기_VWMA_모음,
-		단기_SMA_모음, 장기_SMA_모음,
-		단기_거래량_SMA_모음, 장기_거래량_SMA_모음)
-}
-
-func (s *S일일_가격_백테스트_도우미) VPCIs_모음(단기, 장기 int) []float64 {
-	// '거래량으로 투자하라'(Buff Dormeier 저) 제 17장
-	return trade.F가중_이동_평균(s.VPCI_모음(단기, 장기), s.G거래량_모음(), 단기)
-}
-
-func (s S일일_가격_백테스트_도우미) G월별_추세_점수_모음() []float64 {
-	추세_점수 := make([]float64, s.d.Len())
-
-	for i := 232; i < s.d.Len(); i++ {
-		기준_인덱스 := i - 1
-		추세_점수[i] = s.d.G월별_추세_점수_도우미(기준_인덱스, s.G종가_모음())
-	}
-
-	return 추세_점수
-}
-
-func (s S일일_가격_백테스트_도우미) G월별_추세_점수_평균_모음(윈도우_크기 int) []float64 {
-	return trade.F지수_이동_평균(s.G월별_추세_점수_모음(), 윈도우_크기)
 }
 
 func F일일_가격정보_테이블_생성(db *sql.DB) error {
