@@ -812,22 +812,6 @@ func JSON_파일_읽기(파일명 string, 반환값 interface{}) (에러 error) 
 	}
 }
 
-func MsgPack_파일_저장(값 interface{}, 파일명 string) (에러 error) {
-	if 바이트_모음, 에러 := F인코딩(MsgPack, 값); 에러 != nil {
-		return 에러
-	} else {
-		return ioutil.WriteFile(파일명, 바이트_모음, 0644)
-	}
-}
-
-func MsgPack_파일_읽기(파일명 string, 반환값 interface{}) (에러 error) {
-	if 바이트_모음, 에러 := ioutil.ReadFile(파일명); 에러 != nil {
-		return 에러
-	} else {
-		return F디코딩(MsgPack, 바이트_모음, 반환값)
-	}
-}
-
 func CSV쓰기(레코드_모음 [][]string, 파일명 string, 파일_잠금 sync.Locker) (에러 error) {
 	defer S예외처리{M에러: &에러}.S실행()
 

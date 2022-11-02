@@ -34,16 +34,12 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package lib
 
 import (
-	"github.com/ugorji/go/codec"
 	"sync"
 	"time"
 )
 
 var (
 	ch공통_종료_채널 = make(chan T신호)
-
-	json처리기    *codec.JsonHandle    = nil
-	msgPack처리기 *codec.MsgpackHandle = nil
 
 	한국증시_최근_개장일       = New안전한_시각(time.Time{})
 	한국증시_최근_개장일_갱신_시점 = New안전한_시각(time.Time{})

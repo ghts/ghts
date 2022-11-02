@@ -34,10 +34,8 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package lib
 
 import (
-	"github.com/ugorji/go/codec"
-	"strings"
-
 	"reflect"
+	"strings"
 	"testing"
 	"time"
 )
@@ -123,57 +121,44 @@ func TestF2문자열_EUC_KR(t *testing.T) {
 	F테스트_같음(t, "펩시콜라", F2문자열_EUC_KR("\xc6\xe9\xbd\xc3\xc4\xdd\xb6\xf3"))
 }
 
-func Test변환기(t *testing.T) {
-	t.Parallel()
-
-	// 인터페이스 규격 만족 여부만 테스트 함.
-	// 기능 테스트는 F인코딩(), F디코딩() 테스트에서 함께 할 것.
-
-	_, ok := (F2인터페이스(s변환기{})).(codec.BytesExt)
-	F테스트_참임(t, ok)
-
-	_, ok = (F2인터페이스(s변환기{})).(codec.Ext)
-	F테스트_참임(t, ok)
-}
-
-func TestF인코딩_디코딩(t *testing.T) {
-	t.Parallel()
-
-	변환형식_모음 := []T변환{JSON, MsgPack}
-
-	r := F임의값_생성기()
-
-	값_모음 := []interface{}{
-		r.Int(), r.Int63(), r.Float64(), r.Intn(1) == 0,
-		F임의_문자열(5, 100), []string{"test1", "test2"}, F임의_시각(),
-		[]int{r.Int(), r.Int(), r.Int()}}
-
-	for _, 변환형식 := range 변환형식_모음 {
-		for _, 값1 := range 값_모음 {
-			바이트_모음, 에러 := F인코딩(변환형식, 값1)
-			F테스트_에러없음(t, 에러)
-
-			값2 := reflect.New(reflect.TypeOf(값1)).Elem().Interface()
-			F디코딩(변환형식, 바이트_모음, &값2)
-
-			F테스트_같음(t, 값1, 값2, 변환형식)
-		}
-
-		// nil 대응
-		바이트_모음, 에러 := F인코딩(변환형식, nil)
-		F테스트_에러발생(t, 에러)
-
-		// 자료형 정보가 존재하면 구조체도 가능함. 그러나, interface{}로는 안 됨.
-		s1 := F샘플_구조체_1()
-		바이트_모음, 에러 = F인코딩(변환형식, s1)
-		F테스트_에러없음(t, 에러)
-
-		s1_복사본 := s샘플_구조체_1{}
-		F디코딩(변환형식, 바이트_모음, &s1_복사본)
-
-		F테스트_같음(t, s1, s1_복사본, 변환형식)
-	}
-}
+//func TestF인코딩_디코딩(t *testing.T) {
+//	t.Parallel()
+//
+//	변환형식_모음 := []T변환{GOB} //,JSON}
+//
+//	r := F임의값_생성기()
+//
+//	값_모음 := []interface{}{
+//		r.Int(), r.Int63(), r.Float64(), r.Intn(1) == 0,
+//		F임의_문자열(5, 100), []string{"test1", "test2"}, F임의_시각(),
+//		[]int{r.Int(), r.Int(), r.Int()}}
+//
+//	for _, 변환형식 := range 변환형식_모음 {
+//		for _, 값1 := range 값_모음 {
+//			바이트_모음, 에러 := F인코딩(변환형식, 값1)
+//			F테스트_에러없음(t, 에러)
+//
+//			값2 := reflect.New(reflect.TypeOf(값1)).Elem().Interface()
+//			F디코딩(변환형식, 바이트_모음, &값2)
+//
+//			F테스트_같음(t, 값1, 값2, 변환형식)
+//		}
+//
+//		// nil 대응
+//		바이트_모음, 에러 := F인코딩(변환형식, nil)
+//		F테스트_에러발생(t, 에러)
+//
+//		// 자료형 정보가 존재하면 구조체도 가능함. 그러나, interface{}로는 안 됨.
+//		s1 := F샘플_구조체_1()
+//		바이트_모음, 에러 = F인코딩(변환형식, s1)
+//		F테스트_에러없음(t, 에러)
+//
+//		s1_복사본 := s샘플_구조체_1{}
+//		F디코딩(변환형식, 바이트_모음, &s1_복사본)
+//
+//		F테스트_같음(t, s1, s1_복사본, 변환형식)
+//	}
+//}
 
 type s슬라이스를_포함한_구조체 struct {
 	M문자열  string
@@ -251,7 +236,7 @@ func TestF인코딩_디코딩_슬라이스를_포함한_구조체2(t *testing.T)
 func TestF바이트_변환값_해석(t *testing.T) {
 	t.Parallel()
 
-	변환_형식_모음 := []T변환{JSON, MsgPack}
+	변환_형식_모음 := []T변환{JSON, GOB}
 
 	원본값_모음 := []interface{}{
 		new(S콜백_기본형), New콜백_정수값_기본형(), new(S콜백_문자열), new(S콜백_TR데이터), new(S콜백_메시지_및_에러)}

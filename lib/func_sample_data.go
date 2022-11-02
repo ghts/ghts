@@ -223,7 +223,6 @@ type s샘플_구조체_1 struct {
 	M실수64 float64
 	M참거짓  bool
 	M문자열  string
-	//M시간   time.Time	// msgPack 포맷은 location 데이터를 상실.
 }
 
 // 간단한 테스트용 구조체
@@ -236,7 +235,6 @@ func F샘플_구조체_1() s샘플_구조체_1 {
 	s.M실수64 = r.Float64()
 	s.M참거짓 = F임의_참거짓()
 	s.M문자열 = F임의_문자열(5, 100)
-	//s.M시간 = F임의_시각()	// msgPack포맷은 location 데이터를 상실.
 
 	return s
 }
@@ -331,11 +329,11 @@ func f테스트용_변환가능한_전달값_모음() []interface{} {
 }
 
 func f테스트용_변환형식_모음() []T변환 {
-	return []T변환{JSON, MsgPack}
+	return []T변환{JSON, GOB}
 }
 
 func F임의_변환_형식() T변환 {
-	변환형식_모음 := []T변환{JSON, MsgPack}
+	변환형식_모음 := []T변환{JSON, GOB}
 
 	r := F임의값_생성기()
 

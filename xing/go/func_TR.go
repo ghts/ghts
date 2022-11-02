@@ -1504,7 +1504,7 @@ func F질의(질의값 lib.I질의값, 옵션_모음 ...interface{}) (값 *lib.S
 	var 에러 error
 
 	defer lib.S예외처리{M에러: &에러, M함수: func() {
-		값 = lib.F확인2(lib.New바이트_변환_모음(lib.MsgPack, 에러))
+		값 = lib.F확인2(lib.New바이트_변환_모음(lib.P변환형식_기본값, 에러))
 	}}.S실행()
 
 	lib.F확인1(F질의값_종목코드_검사(질의값))

@@ -34,7 +34,8 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package lib
 
 import (
-	"github.com/ugorji/go/codec"
+	"encoding/gob"
+	"encoding/json"
 	"golang.org/x/text/encoding/korean"
 
 	"bytes"
@@ -821,11 +822,9 @@ func F인코딩(변환_형식 T변환, 값 interface{}) (바이트_모음 []byte
 
 	switch 변환_형식 {
 	case JSON:
-		if 에러 = codec.NewEncoder(버퍼, json처리기).Encode(값); 에러 != nil {
-			return nil, 에러
-		}
-	case MsgPack:
-		if 에러 = codec.NewEncoder(버퍼, msgPack처리기).Encode(값); 에러 != nil {
+		return json.Marshal(값)
+	case GOB:
+		if 에러 = gob.NewEncoder(버퍼).Encode(값); 에러 != nil {
 			return nil, 에러
 		}
 	case Raw:
@@ -846,9 +845,9 @@ func F인코딩(변환_형식 T변환, 값 interface{}) (바이트_모음 []byte
 func F디코딩(변환_형식 T변환, 바이트_모음 []byte, 반환값 interface{}) (에러 error) {
 	switch 변환_형식 {
 	case JSON:
-		에러 = codec.NewDecoderBytes(바이트_모음, json처리기).Decode(반환값)
-	case MsgPack:
-		에러 = codec.NewDecoderBytes(바이트_모음, msgPack처리기).Decode(반환값)
+		에러 = json.Unmarshal(바이트_모음, 반환값)
+	case GOB:
+		에러 = gob.NewDecoder(bytes.NewBuffer(바이트_모음)).Decode(반환값)
 	case Raw:
 		if p바이트_모음, ok := 반환값.(*[]byte); !ok {
 			return New에러("*[]byte 형식만 가능합니다. '%T'", 반환값)

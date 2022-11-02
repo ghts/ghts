@@ -177,16 +177,16 @@ func (v T비교) String() string {
 
 const (
 	JSON      = T변환(byte('J'))
-	MsgPack   = T변환(byte('M'))
+	GOB       = T변환(byte('G'))
 	Raw       = T변환(byte('R'))
-	P변환형식_기본값 = MsgPack
+	P변환형식_기본값 = GOB
 )
 
 type T변환 byte
 
 func (t T변환) G검사() error {
 	switch t {
-	case JSON, MsgPack, Raw:
+	case JSON, GOB, Raw:
 		return nil
 	default:
 		return New에러with출력("예상하지 못한 변환 형식. '%v'", t)
@@ -197,8 +197,8 @@ func (t T변환) String() string {
 	switch t {
 	case JSON:
 		return "JSON"
-	case MsgPack:
-		return "MsgPack"
+	case GOB:
+		return "GOB"
 	case Raw:
 		return "Raw"
 	default:

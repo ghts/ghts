@@ -109,7 +109,7 @@ func REQ핸들러(t lib.I안전한_테스트, 소켓 lib.I소켓with컨텍스트
 		t.G같음(수신값, "테스트 REQ 질의")
 
 		응답값 := fmt.Sprintf("테스트 REP 응답 #%d %s", 반복_횟수, time.Now().String())
-		t.G에러없음(소켓.S송신(lib.MsgPack, 응답값))
+		t.G에러없음(소켓.S송신(lib.P변환형식_기본값, 응답값))
 
 		반복_횟수++
 	}
@@ -126,7 +126,7 @@ func SUB핸들러(t lib.I안전한_테스트, 소켓 lib.I소켓) {
 	반복_횟수 := 0
 	for {
 		배포값 := fmt.Sprintf("테스트 PUB 배포값 #%d %s", 반복_횟수, time.Now().String())
-		t.G에러없음(소켓.S송신(lib.MsgPack, 배포값))
+		t.G에러없음(소켓.S송신(lib.P변환형식_기본값, 배포값))
 
 		lib.F대기(lib.P1초)
 		반복_횟수++
@@ -149,7 +149,7 @@ func REQ클라이언트_노드(t lib.I안전한_테스트, 주소 lib.T주소, c
 	t.G에러없음(에러)
 	defer 소켓.Close()
 
-	t.G에러없음(소켓.S송신(lib.MsgPack, "테스트 REQ 질의"))
+	t.G에러없음(소켓.S송신(lib.P변환형식_기본값, "테스트 REQ 질의"))
 
 	바이트_변환_모음, 에러 := 소켓.G수신()
 	t.G에러없음(에러)

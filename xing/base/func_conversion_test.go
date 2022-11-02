@@ -40,7 +40,7 @@ import (
 )
 
 func TestF바이트_변환값_해석(t *testing.T) {
-	변환_형식_모음 := []lib.T변환{lib.JSON, lib.MsgPack}
+	변환_형식_모음 := []lib.T변환{lib.JSON, lib.GOB}
 
 	원본값_모음 := []interface{}{
 		new(S현물_주문_응답_실시간_정보),

@@ -34,25 +34,10 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package lib
 
 import (
-	"github.com/ugorji/go/codec"
 	"math/big"
 	"testing"
 	"time"
 )
-
-func TestS변환기(t *testing.T) {
-	t.Parallel()
-
-	var i변환기 interface{} = new(s변환기)
-
-	switch i변환기.(type) {
-	default:
-		F문자열_출력("예상하지 못한 경우.")
-		t.FailNow()
-	case codec.Ext:
-		// OK
-	}
-}
 
 func TestS바이트_변환_매개체(t *testing.T) {
 	t.Parallel()
