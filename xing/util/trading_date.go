@@ -100,5 +100,5 @@ func (s S개장일_모음) G복사본() *S개장일_모음 {
 
 	s2.S인덱스_맵_설정()
 
-	return s2f
+	return s2
 }
