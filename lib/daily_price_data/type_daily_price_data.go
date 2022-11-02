@@ -107,6 +107,19 @@ func (s S일일_가격정보) G일자2() time.Time {
 	return lib.F확인2(lib.F2포맷된_일자("20060102", lib.F2문자열(s.M일자)))
 }
 
+func (s S일일_가격정보) G복사본() *S일일_가격정보 {
+	s2 := S일일_가격정보{
+		s.M종목코드,
+		s.M일자,
+		s.M시가,
+		s.M고가,
+		s.M저가,
+		s.M종가,
+		s.M거래량}
+
+	return &s2
+}
+
 func New종목별_일일_가격정보_모음_3년치_DB읽기(db *sql.DB, 종목코드 string) (s *S종목별_일일_가격정보_모음, 에러 error) {
 	s = new(S종목별_일일_가격정보_모음)
 
@@ -166,6 +179,22 @@ func New종목별_일일_가격정보_모음(값_모음 []*S일일_가격정보)
 type S종목별_일일_가격정보_모음 struct {
 	M저장소 []*S일일_가격정보
 	인덱스  map[uint32]int
+}
+
+func (s *S종목별_일일_가격정보_모음) G복사본() *S종목별_일일_가격정보_모음 {
+	s2 := new(S종목별_일일_가격정보_모음)
+
+	s2.M저장소 = make([]*S일일_가격정보, len(s.M저장소))
+	for i, 가격정보 := range s.M저장소 {
+		s2.M저장소[i] = 가격정보.G복사본()
+	}
+
+	s2.인덱스 = make(map[uint32]int)
+	for 키, 값 := range s.인덱스 {
+		s2.인덱스[키] = 값
+	}
+
+	return s2
 }
 
 func (s *S종목별_일일_가격정보_모음) CSV쓰기(파일명 string) {
