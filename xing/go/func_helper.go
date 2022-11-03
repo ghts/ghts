@@ -89,6 +89,13 @@ func F2당일_시각(포맷 string, 값 interface{}) (time.Time, error) {
 }
 
 func f에러_발생(TR코드, 코드, 내용 string) bool {
+	코드 = strings.TrimSpace(코드)
+	내용 = strings.TrimSpace(내용)
+
+	if 코드 == "00000" && 내용 == "조회완료" {
+		return false
+	}
+
 	switch TR코드 {
 	case xt.TR현물_정상_주문_CSPAT00600:
 		return 코드 != "00000" && 코드 != "00039" && 코드 != "00040"
@@ -137,10 +144,6 @@ func f에러_발생(TR코드, 코드, 내용 string) bool {
 		// 조회내역이 없을 때 : 실서버(00200), 모의서버(09901)
 		return 코드 != "00133" && 코드 != "00136" && 코드 != "00200" && 코드 != "09901"
 	default: // 에러 출력 지우지 말 것.
-		if 코드 == "00000" && 내용 == "조회완료" {
-			return false
-		}
-
 		panic(lib.New에러with출력("판별 불가능한 TR코드 : '%v'\n코드 : '%v'\n내용 : '%v'", TR코드, 코드, 내용))
 	}
 }
