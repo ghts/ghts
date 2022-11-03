@@ -82,12 +82,20 @@ func (s S개장일_모음) G복사본() *S개장일_모음 {
 	return s2
 }
 
-func f개장일_모음_초기화[T lib.T정수](s *S개장일_모음, 값_모음 []T) {
-	s.M저장소 = make([]uint32, len(값_모음))
+func (s *S개장일_모음) S인덱스_재설정() {
 	s.인덱스_맵 = make(map[uint32]int)
 
 	for i, 개장일 := range s.M저장소 {
-		s.M저장소[i] = uint32(개장일)
 		s.인덱스_맵[uint32(개장일)] = i
 	}
+}
+
+func f개장일_모음_초기화[T lib.T정수](s *S개장일_모음, 값_모음 []T) {
+	s.M저장소 = make([]uint32, len(값_모음))
+
+	for i, 개장일 := range 값_모음 {
+		s.M저장소[i] = uint32(개장일)
+	}
+
+	s.S인덱스_재설정()
 }
