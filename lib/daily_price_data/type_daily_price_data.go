@@ -123,7 +123,17 @@ func (s S일일_가격정보) G복사본() *S일일_가격정보 {
 func New종목별_일일_가격정보_모음_3년치_DB읽기(db *sql.DB, 종목코드 string) (s *S종목별_일일_가격정보_모음, 에러 error) {
 	s = new(S종목별_일일_가격정보_모음)
 
-	if 에러 = s.DB읽기with시작일(db, 종목코드, lib.F지금().Add(-3*lib.P1년-30*lib.P1일)); 에러 != nil {
+	if 에러 = s.DB읽기with시작일(db, 종목코드, lib.F지금().Add(-3*365*lib.P1일)); 에러 != nil {
+		return nil, 에러
+	}
+
+	return s, nil
+}
+
+func New종목별_일일_가격정보_모음_2년치_DB읽기(db *sql.DB, 종목코드 string) (s *S종목별_일일_가격정보_모음, 에러 error) {
+	s = new(S종목별_일일_가격정보_모음)
+
+	if 에러 = s.DB읽기with시작일(db, 종목코드, lib.F지금().Add(-2*365*lib.P1일)); 에러 != nil {
 		return nil, 에러
 	}
 
