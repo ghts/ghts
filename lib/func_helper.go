@@ -1001,3 +1001,15 @@ func F명월_1일() time.Time {
 		return time.Date(지금.Year(), 금월+1, 1, 0, 0, 0, 0, 지금.Location())
 	}
 }
+
+func F키_모음[K comparable, V any](맵 map[K]V) []K {
+	키_모음 := make([]K, len(맵))
+
+	i := 0
+	for 키 := range 맵 {
+		키_모음[i] = 키
+		i++
+	}
+
+	return 키_모음
+}
