@@ -37,6 +37,7 @@ import (
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/lib/trade"
 	"github.com/ghts/ghts/xing/base"
+	"os"
 
 	"fmt"
 	"strconv"
@@ -435,7 +436,7 @@ func TrCSPAQ13700_현물계좌_주문체결내역(계좌번호 string, 주문일
 	}
 
 	const 역순구분 = "1"
-	시작주문번호 := lib.F조건부_정수64(역순구분 == "1", 000000000, 999999999)
+	시작주문번호 := int64(0) // lib.F조건부_정수64(역순구분 == "1", 000000000, 999999999)
 
 	for {
 		질의값 := new(xt.CSPAQ13700_현물계좌_주문체결내역_질의값)
@@ -1503,9 +1504,18 @@ func TrT8436_주식종목_조회(시장_구분 lib.T시장구분) (응답값_모
 func F질의(질의값 lib.I질의값, 옵션_모음 ...interface{}) (값 *lib.S바이트_변환_모음) {
 	var 에러 error
 
-	defer lib.S예외처리{M에러: &에러, M함수: func() {
-		값 = lib.F확인2(lib.New바이트_변환_모음(lib.P변환형식_기본값, 에러))
-	}}.S실행()
+	defer func() {
+		lib.S예외처리{M에러: &에러, M함수: func() { 값 = lib.F확인2(lib.New바이트_변환_모음(lib.P변환형식_기본값, 에러)) }}.S실행()
+
+		if 에러 != nil {
+			질의_에러_연속_발생_횟수.S값(질의_에러_연속_발생_횟수.G값() + 1)
+			if 질의_에러_연속_발생_횟수.G값() > 10 {
+				os.Exit(0)
+			}
+		} else {
+			질의_에러_연속_발생_횟수.S값(0)
+		}
+	}()
 
 	lib.F확인1(F질의값_종목코드_검사(질의값))
 
@@ -1631,15 +1641,6 @@ func F계좌_번호(인덱스 int) (계좌_번호 string, 에러 error) {
 	계좌_번호 = lib.F확인2(회신_메시지.G해석값(0)).([]string)[인덱스]
 
 	return 계좌_번호, nil
-}
-
-func F계좌_번호_단순형(인덱스 int) (계좌_번호 string) {
-	defer lib.S예외처리{M함수: func() { 계좌_번호 = "" }}.S실행()
-
-	회신_메시지 := F질의(lib.New질의값_정수(xt.TR계좌번호_모음, "", 인덱스))
-	계좌_번호 = lib.F확인2(회신_메시지.G해석값(0)).([]string)[인덱스]
-
-	return 계좌_번호
 }
 
 func F계좌_이름(계좌_번호 string) (계좌_이름 string, 에러 error) {

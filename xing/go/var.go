@@ -56,7 +56,8 @@ var (
 
 	대기소_DLL32 = newDLL32_콜백_대기_저장소()
 
-	V콜백_도우미_수량 = lib.F최대값(runtime.NumCPU(), 2)
+	질의_에러_연속_발생_횟수 = lib.New안전한_정수64(0)
+	V콜백_도우미_수량     = lib.F최대값(runtime.NumCPU(), 2)
 
 	Ch모니터링_루틴_종료 = make(chan lib.T신호, 1)
 	Ch콜백_도우미_종료  = make(chan lib.T신호, V콜백_도우미_수량)
