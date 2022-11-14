@@ -215,6 +215,7 @@ func f콜백_신호_처리기(콜백 lib.I콜백) (에러 error) {
 	case lib.P신호_DLL32_접속_끊김:
 		lib.F문자열_출력("%v 접속 끊김 신호 수신", lib.F지금().Format("15:04"))
 		F접속_끊김_설정()
+		go F종료()
 	case lib.P신호_DLL32_종료:
 		lib.F문자열_출력("%v DLL32_종료 신호 수신", lib.F지금().Format("15:04"))
 		select {
