@@ -936,6 +936,10 @@ func F금일() time.Time {
 	return F2일자(time.Now())
 }
 
+func F익일() time.Time {
+	return F금일().AddDate(0, 0, 1)
+}
+
 func F금월() time.Month {
 	return time.Now().Month()
 }
