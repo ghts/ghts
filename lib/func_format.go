@@ -2,8 +2,8 @@ package lib
 
 import "strconv"
 
-func F정수_쉼표_추가(값 int64) string {
-	return FormatInt(값, 3, ',')
+func F정수_쉼표_추가[T T숫자](값 T) string {
+	return FormatInt(int64(값), 3, ',')
 }
 
 // COPIED FROM 'github.com/icza/gox/fmtx'
