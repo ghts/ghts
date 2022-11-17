@@ -7,7 +7,6 @@ import (
 	xt "github.com/ghts/ghts/xing/base"
 	xing "github.com/ghts/ghts/xing/go"
 
-	"bytes"
 	"database/sql"
 	"time"
 )
@@ -68,11 +67,11 @@ func F당일_일일_가격정보_수집(db *sql.DB) (에러 error) {
 }
 
 func F일개월_일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string) (에러 error) {
-	return F고정_기간_일일_가격정보_수집(db, 종목코드_모음, 31*lib.P1일)
+	return F고정_기간_일일_가격정보_수집(db, 종목코드_모음, 31*lib.P1일, true)
 }
 
 func F일년_일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string) (에러 error) {
-	return F고정_기간_일일_가격정보_수집(db, 종목코드_모음, lib.P1년)
+	return F고정_기간_일일_가격정보_수집(db, 종목코드_모음, lib.P1년, true)
 }
 
 func F고정_기간_일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string, 기간 time.Duration, 추가_인수 ...bool) (에러 error) {
@@ -118,7 +117,6 @@ func F일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string, 추�
 	dpd.F일일_가격정보_테이블_생성(db)
 
 	출력_여부 := lib.F조건부_참거짓(len(추가_인수) > 0, 추가_인수[0], true)
-	출력_문자열_버퍼 := new(bytes.Buffer)
 
 	for i, 종목코드 := range 종목코드_모음 {
 		종목별_일일_가격정보_모음 = lib.F확인2(dpd.New종목별_일일_가격정보_모음_DB읽기(db, 종목코드))
@@ -139,15 +137,13 @@ func F일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string, 추�
 			시작일 = lib.F금일().AddDate(0, 0, -14)
 		}
 
-		f일일_가격정보_수집_도우미(db, 종목코드, 시작일, i, len(종목코드_모음), 출력_여부, 출력_문자열_버퍼)
+		f일일_가격정보_수집_도우미(db, 종목코드, 시작일, i, len(종목코드_모음), 출력_여부)
 	}
-
-	lib.F문자열_출력(출력_문자열_버퍼.String())
 
 	return nil
 }
 
-func f일일_가격정보_수집_도우미(db *sql.DB, 종목코드 string, 시작일 time.Time, i, 전체_수량 int, 출력_여부 bool, 버퍼 ...*bytes.Buffer) {
+func f일일_가격정보_수집_도우미(db *sql.DB, 종목코드 string, 시작일 time.Time, i, 전체_수량 int, 출력_여부 bool) {
 	var 종료일 time.Time
 
 	// 종료일 설정
@@ -187,22 +183,14 @@ func f일일_가격정보_수집_도우미(db *sql.DB, 종목코드 string, 시�
 			일일_데이터.M거래량)
 	}
 
-	부분_출력_여부 := false
-
-	if 출력_여부 && len(버퍼) > 0 && 버퍼[0] != nil {
-		// 버퍼가 존재하면 버퍼에 출력
-		버퍼[0].WriteString(lib.F2문자열("%v 일일 가격 정보 수집 (%v/%v) : %v %v~%v %v개\n",
+	if 출력_여부 {
+		lib.F문자열_출력("%v 일일 가격 정보 수집 (%v/%v) : %v %v~%v %v개\n",
 			lib.F지금().Format("15:04"), i+1, 전체_수량,
-			xing.F종목_식별_문자열(종목코드), 시작일.Format(lib.P일자_형식), 종료일.Format(lib.P일자_형식), len(값_모음)))
-	} else if 출력_여부 {
-		lib.F문자열_출력("%v 일일 가격 정보 수집 (%v/%v) %.1f%% : %v %v~%v %v개\n",
-			lib.F지금().Format("15:04"), i+1, 전체_수량, float64(i+1)/float64(전체_수량)*100,
 			xing.F종목_식별_문자열(종목코드), 시작일.Format(lib.P일자_형식), 종료일.Format(lib.P일자_형식), len(값_모음))
 	} else if i > 0 && i%100 == 0 {
-		부분_출력_여부 = true
 		lib.F문자열_출력("%v 일일 가격 정보 수집 (%v/%v) %.1f%%",
 			lib.F지금().Format("15:04"), i+1, 전체_수량, float64(i+1)/float64(전체_수량)*100)
-	} else if (출력_여부 || 부분_출력_여부) && i == 전체_수량-1 {
+	} else if (출력_여부 || 전체_수량 > 100) && i == 전체_수량-1 {
 		lib.F문자열_출력("%v 일일 가격 정보 수집 (%v/%v) 100%%", lib.F지금().Format("15:04"), 전체_수량, 전체_수량)
 	}
 
