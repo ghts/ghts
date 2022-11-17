@@ -48,10 +48,6 @@ func F전일() time.Time {
 	return xt.F전일()
 }
 
-func F최근_영업일_모음() []time.Time {
-	return lib.F슬라이스_복사(최근_영업일_모음, nil).([]time.Time)
-}
-
 func F2전일_시각(포맷 string, 값 interface{}) (time.Time, error) {
 	if strings.Contains(포맷, "2") {
 		return time.Time{}, lib.New에러("포맷에 이미 날짜가 포함되어 있습니다. %v", 포맷)

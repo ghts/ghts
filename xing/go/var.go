@@ -68,7 +68,6 @@ var (
 	tr코드별_전송_제한_1초       = make(map[string]lib.I전송_권한)
 	tr코드별_전송_제한_10분      = make(map[string]lib.I전송_권한)
 
-	최근_영업일_모음  []time.Time
 	주문_응답_구독_중 = lib.New안전한_bool(false)
 
 	종료_잠금 = sync.Mutex{}

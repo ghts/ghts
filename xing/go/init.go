@@ -288,9 +288,19 @@ func tr동작_확인(ch완료 chan lib.T신호) {
 }
 
 func F전일_당일_설정() (에러 error) {
+	for i := 0; i < 3; i++ {
+		if 에러 := f전일_당일_설정(); 에러 == nil {
+			return nil
+		}
+	}
+
+	return lib.New에러("전일/당일 설정 중 에러 발생.")
+}
+
+func f전일_당일_설정() (에러 error) {
 	lib.S예외처리{M에러: &에러}.S실행()
 
-	const 수량 = 30
+	const 수량 = 3
 
 	질의값_기간별_조회 := xt.NewT1305_현물_기간별_조회_질의값()
 	질의값_기간별_조회.M구분 = xt.TR조회
@@ -310,14 +320,7 @@ func F전일_당일_설정() (에러 error) {
 
 		당일 := 응답값.M반복값_모음.M배열[0].M일자
 		전일 := 응답값.M반복값_모음.M배열[1].M일자
-
 		xt.F전일_당일_설정(전일, 당일)
-
-		최근_영업일_모음 = make([]time.Time, 수량, 수량)
-
-		for i, 값 := range 응답값.M반복값_모음.M배열 {
-			최근_영업일_모음[i] = lib.F2일자(값.M일자)
-		}
 
 		return nil
 	default:
