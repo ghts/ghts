@@ -20,7 +20,7 @@ func F당일_일일_가격정보_수집(db *sql.DB) (에러 error) {
 		}
 	}()
 
-	if lib.F지금().Before(krx.F금일_보정_시각(15,31,0)) && lib.F금일().Equal(xing.F당일())  {
+	if lib.F지금().Hour() >= 7 && lib.F지금().Before(krx.F금일_보정_시각(15,31,0)) && lib.F금일().Equal(xing.F당일())  {
 		lib.F문자열_출력("폐장 대기 시작.")
 		krx.F대기_한국_시각(15, 31, 00)
 		lib.F문자열_출력("폐장 대기 완료.")
