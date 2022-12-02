@@ -145,3 +145,21 @@ func IsUserAnAdmin() (bool, error) {
 	}
 	return true, nil
 }
+
+func GetConsoleWindow() HWND {
+	ret, _, _ := syscall.Syscall(getConsoleWindow.Addr(), 0,
+		0,
+		0,
+		0)
+
+	return HWND(ret)
+}
+
+func SetForegroundWindow(hWnd HWND) bool {
+	ret, _, _ := syscall.Syscall(setForegroundWindow.Addr(), 1,
+		uintptr(hWnd),
+		0,
+		0)
+
+	return ret != 0
+}
