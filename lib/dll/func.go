@@ -93,12 +93,5 @@ func F2Go바이트_모음(c데이터 unsafe.Pointer) []byte {
 }
 
 func F2Go바이트_모음with길이(c데이터 unsafe.Pointer, 길이 int) []byte {
-	바이트_모음 := make([]byte, 길이)
-
-	for i := 0; i < 길이; i++ {
-		포인터 := (*byte)(unsafe.Pointer(uintptr(c데이터) + uintptr(i)*단위_오프셋))
-		바이트_모음[i] = *포인터
-	}
-
-	return 바이트_모음
+	return unsafe.Slice((*byte)(c데이터), 길이) // Go 1.17에 추가된 기능 사용.
 }
