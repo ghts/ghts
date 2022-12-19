@@ -940,3 +940,33 @@ func (p T콜백) String() string {
 		return F2문자열("예상하지 못한 콜백값 : '%v'", p)
 	}
 }
+
+const (
+	P리밸런싱_주기_연 T리밸런싱_주기 = iota
+	P리밸런싱_주기_반기
+	P리밸런싱_주기_분기
+	P리밸런싱_주기_월
+	P리밸런싱_주기_주
+	P리밸런싱_주기_일
+)
+
+type T리밸런싱_주기 uint8
+
+func (t T리밸런싱_주기) String() string {
+	switch t {
+	case P리밸런싱_주기_연:
+		return "연"
+	case P리밸런싱_주기_반기:
+		return "반기"
+	case P리밸런싱_주기_분기:
+		return "분기"
+	case P리밸런싱_주기_월:
+		return "월"
+	case P리밸런싱_주기_주:
+		return "주"
+	case P리밸런싱_주기_일:
+		return "일"
+	default:
+		return F2문자열("T리밸런싱_주기 예상하지 못한 값 : '%v'", int8(t))
+	}
+}
