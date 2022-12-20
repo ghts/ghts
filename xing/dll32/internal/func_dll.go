@@ -185,9 +185,9 @@ func F로그인(서버_구분 xt.T서버_구분) (에러 error) {
 	lib.F확인1(xt.F로그인_정보_설정())
 
 	로그인_ID := xt.V로그인_정보.M로그인_ID
-	로그인_암호 := lib.F조건부_문자열(xt.F서버_구분() == xt.P서버_실거래, xt.V로그인_정보.M로그인_암호, xt.V로그인_정보.M모의투자_암호)
-	인증서_암호 := lib.F조건부_문자열(xt.F서버_구분() == xt.P서버_실거래, xt.V로그인_정보.M인증서_암호, "")
-	계좌_비밀번호 = lib.F조건부_문자열(xt.F서버_구분() == xt.P서버_실거래, xt.V로그인_정보.M계좌_비밀번호, "")
+	로그인_암호 := lib.F조건값(xt.F서버_구분() == xt.P서버_실거래, xt.V로그인_정보.M로그인_암호, xt.V로그인_정보.M모의투자_암호)
+	인증서_암호 := lib.F조건값(xt.F서버_구분() == xt.P서버_실거래, xt.V로그인_정보.M인증서_암호, "")
+	계좌_비밀번호 = lib.F조건값(xt.F서버_구분() == xt.P서버_실거래, xt.V로그인_정보.M계좌_비밀번호, "")
 
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
@@ -252,7 +252,7 @@ func F질의(TR코드 string, c데이터 unsafe.Pointer, 길이 int,
 		dll.F2ANSI문자열(TR코드),
 		uintptr(c데이터),
 		uintptr(길이),
-		uintptr(lib.F조건부_정수(연속_조회_여부, TRUE, FALSE)),
+		uintptr(lib.F조건값(연속_조회_여부, TRUE, FALSE)),
 		dll.F2ANSI문자열(연속키),
 		uintptr(타임아웃/time.Second),
 		0, 0)
