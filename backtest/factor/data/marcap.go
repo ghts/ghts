@@ -16,7 +16,7 @@ func F시총_데이터_저장() (에러 error) {
 
 	레코드_모음 := make([][]string, 0)
 
-	for 연도:=1995;연도<=2022;연도++ {
+	for 연도 := 1995; 연도 <= 2022; 연도++ {
 		파일명 := lib.F2문자열("marcap-%v.csv", 연도)
 		연도별_레코드_모음 := lib.F확인2(csv파일_읽기(파일명))
 		레코드_모음 = append(레코드_모음, 연도별_레코드_모음...)
@@ -120,15 +120,13 @@ func db저장(db *sql.DB, 레코드_모음 [][]string) (에러 error) {
 			시가총액_백만,
 			시총순위))
 
-		if i>0 && i%100000 == 0 {
+		if i > 0 && i%100000 == 0 {
 			lib.F체크포인트(lib.F정수_쉼표_추가(i))
 		}
 	}
 
 	return tx.Commit()
 }
-
-
 
 func F시가총액_테이블_삭제(db *sql.DB) (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
@@ -146,7 +144,7 @@ func F시가총액_테이블_생성(db *sql.DB) (에러 error) {
 	SQL.WriteString("code CHAR(8) NOT NULL,")
 	SQL.WriteString("date DATE NOT NULL,")
 	SQL.WriteString("name VARCHAR(255) NOT NULL,")
-	SQL.WriteString("market VARCHAR(255) NOT NULL,")
+	SQL.WriteString("market CHAR(3) NOT NULL,")
 	SQL.WriteString("open DECIMAL(20,3) NOT NULL,")
 	SQL.WriteString("high DECIMAL(20,3) NOT NULL,")
 	SQL.WriteString("low DECIMAL(20,3) NOT NULL,")
