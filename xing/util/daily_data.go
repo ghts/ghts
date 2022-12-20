@@ -20,7 +20,7 @@ func F당일_일일_가격정보_수집(db *sql.DB) (에러 error) {
 		}
 	}()
 
-	if lib.F지금().Hour() >= 7 && lib.F지금().Before(krx.F금일_보정_시각(15,31,0)) && lib.F금일().Equal(xing.F당일())  {
+	if lib.F지금().Hour() >= 7 && lib.F지금().Before(krx.F금일_보정_시각(15, 31, 0)) && lib.F금일().Equal(xing.F당일()) {
 		lib.F문자열_출력("폐장 대기 시작.")
 		krx.F대기_한국_시각(15, 31, 00)
 		lib.F문자열_출력("폐장 대기 완료.")
@@ -117,7 +117,7 @@ func F일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string, 추�
 
 	dpd.F일일_가격정보_테이블_생성(db)
 
-	출력_여부 := lib.F조건부_참거짓(len(추가_인수) > 0, 추가_인수[0], true)
+	출력_여부 := lib.F조건값(len(추가_인수) > 0, 추가_인수[0], true)
 
 	for i, 종목코드 := range 종목코드_모음 {
 		종목별_일일_가격정보_모음 = lib.F확인2(dpd.New종목별_일일_가격정보_모음_DB읽기(db, 종목코드))

@@ -324,55 +324,7 @@ func F조건부_실행(조건 bool, 함수 interface{}, 추가_매개변수 ...i
 	}
 }
 
-func F조건부_값(조건 bool, 참값, 거짓값 interface{}) interface{} {
-	if 조건 {
-		return 참값
-	}
-
-	return 거짓값
-}
-
-func F조건부_참거짓(조건, 참값, 거짓값 bool) bool {
-	if 조건 {
-		return 참값
-	}
-
-	return 거짓값
-}
-
-func F조건부_문자열(조건 bool, 참값, 거짓값 string) string {
-	if 조건 {
-		return 참값
-	}
-
-	return 거짓값
-}
-
-func F조건부_정수(조건 bool, 참값, 거짓값 int) int {
-	if 조건 {
-		return 참값
-	}
-
-	return 거짓값
-}
-
-func F조건부_정수64(조건 bool, 참값, 거짓값 int64) int64 {
-	if 조건 {
-		return 참값
-	}
-
-	return 거짓값
-}
-
-func F조건부_실수64(조건 bool, 참값, 거짓값 float64) float64 {
-	if 조건 {
-		return 참값
-	}
-
-	return 거짓값
-}
-
-func F조건부_시간(조건 bool, 참값, 거짓값 time.Time) time.Time {
+func F조건값[T any](조건 bool, 참값, 거짓값 T) T {
 	if 조건 {
 		return 참값
 	}

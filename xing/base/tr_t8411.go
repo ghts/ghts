@@ -127,7 +127,7 @@ func NewT8411InBlock(질의값 *T8411_현물_차트_틱_질의값) (g *T8411InBl
 	lib.F바이트_복사_문자열(g.Edate[:], 질의값.M종료일자)
 	lib.F바이트_복사_문자열(g.Cts_date[:], 질의값.M연속일자)
 	lib.F바이트_복사_문자열(g.Cts_time[:], 질의값.M연속시간)
-	lib.F바이트_복사_문자열(g.Comp_yn[:], lib.F조건부_문자열(질의값.M압축여부, "Y", "N"))
+	lib.F바이트_복사_문자열(g.Comp_yn[:], lib.F조건값(질의값.M압축여부, "Y", "N"))
 
 	f속성값_초기화(g)
 
