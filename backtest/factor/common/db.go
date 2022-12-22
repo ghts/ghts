@@ -44,3 +44,33 @@ func F시가총액_테이블_삭제(db *sql.DB) (에러 error) {
 
 	return 에러
 }
+
+func F세종_재무_테이블_생성(db *sql.DB) (에러 error) {
+	defer lib.S예외처리{M에러: &에러}.S실행()
+
+	SQL := new(bytes.Buffer)
+	SQL.WriteString("CREATE TABLE IF NOT EXISTS sejong (")
+	SQL.WriteString("code CHAR(8) NOT NULL,")
+	SQL.WriteString("year INT NOT NULL,")
+	SQL.WriteString("quarter TINYINT NOT NULL,")
+	SQL.WriteString("sales DOUBLE NOT NULL,")
+	SQL.WriteString("operating_profit DOUBLE NOT NULL,")
+	SQL.WriteString("net_profit DOUBLE NOT NULL,")
+	SQL.WriteString("asset DOUBLE NOT NULL,")
+	SQL.WriteString("capital DOUBLE NOT NULL,")
+	SQL.WriteString("liability DOUBLE NOT NULL,")
+	SQL.WriteString("CONSTRAINT pk_sejong PRIMARY KEY (code,year,quarter)")
+	SQL.WriteString(")")
+
+	_, 에러 = db.Exec(SQL.String())
+
+	return 에러
+}
+
+func F세종_재무_테이블_삭제(db *sql.DB) (에러 error) {
+	defer lib.S예외처리{M에러: &에러}.S실행()
+
+	_, 에러 = db.Exec("DROP TABLE IF EXISTS sejong")
+
+	return 에러
+}

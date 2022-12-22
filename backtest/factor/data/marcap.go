@@ -24,9 +24,11 @@ func F시총_데이터_저장() (에러 error) {
 	}
 
 	db := lib.F확인2(sql.Open("sqlite", bfc.DB파일명()))
+	defer db.Close()
+
 	//lib.F확인1(bfc.F시가총액_테이블_삭제(db))
 	lib.F확인1(bfc.F시가총액_테이블_생성(db))
-	lib.F확인1(db저장(db, 레코드_모음))
+	lib.F확인1(db저장_marcap(db, 레코드_모음))
 
 	return nil
 }
@@ -40,7 +42,7 @@ func csv파일_읽기(파일명 string) (레코드_모음 [][]string, 에러 err
 	return 레코드_모음[1:], nil
 }
 
-func db저장(db *sql.DB, 레코드_모음 [][]string) (에러 error) {
+func db저장_marcap(db *sql.DB, 레코드_모음 [][]string) (에러 error) {
 	var tx *sql.Tx
 	defer lib.S예외처리{M에러: &에러, M함수: func() {
 		lib.F에러_출력(에러)
@@ -106,7 +108,7 @@ func db저장(db *sql.DB, 레코드_모음 [][]string) (에러 error) {
 			panic(lib.F2문자열("예상하지 못한 시장구분값 : '%v'", 시장구분))
 		}
 
-		lib.F확인2(stmt.Exec(종목코드,
+		stmt.Exec(종목코드,
 			일자,
 			종목명,
 			시장구분,
@@ -118,7 +120,7 @@ func db저장(db *sql.DB, 레코드_모음 [][]string) (에러 error) {
 			거래금액,
 			상장주식수량,
 			시가총액_백만,
-			시총순위))
+			시총순위)
 
 		if i > 0 && i%100000 == 0 {
 			lib.F체크포인트(lib.F정수_쉼표_추가(i))
