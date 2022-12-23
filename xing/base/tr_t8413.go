@@ -197,7 +197,7 @@ func NewT8413_현물_차트_일주월_응답_반복값_모음(b []byte) (값 *T8
 		lib.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 		s := new(T8413_현물_차트_일주월_응답_반복값)
-		s.M일자 = lib.F확인2(lib.F2포맷된_시각("20060102", lib.F2문자열_공백_제거(g.Date)))
+		s.M일자 = lib.F2일자(lib.F확인2(lib.F2포맷된_시각("20060102", lib.F2문자열_공백_제거(g.Date))))
 		s.M시가 = lib.F확인2(lib.F2정수64(g.Open))
 		s.M고가 = lib.F확인2(lib.F2정수64(g.High))
 		s.M저가 = lib.F확인2(lib.F2정수64(g.Low))

@@ -300,6 +300,7 @@ func (s *S종목별_일일_가격정보_모음) DB읽기with시작일(db *sql.DB
 
 	s.M저장소 = make([]*S일일_가격정보, 0)
 
+	금일 := lib.F일자2정수(lib.F금일())
 	var 일자 time.Time
 
 	for rows.Next() {
@@ -315,6 +316,10 @@ func (s *S종목별_일일_가격정보_모음) DB읽기with시작일(db *sql.DB
 			&일일_가격정보.M거래량))
 
 		일일_가격정보.M일자 = lib.F일자2정수(일자)
+
+		if 일일_가격정보.M일자 == 금일 && 일일_가격정보.M거래량 == 0 {
+			continue // 잘못된 데이터 제외
+		}
 
 		s.M저장소 = append(s.M저장소, 일일_가격정보)
 	}
