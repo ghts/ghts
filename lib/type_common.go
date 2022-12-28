@@ -43,12 +43,7 @@ import (
 	"time"
 )
 
-var 비어있는_값 = S비어있음{}
 var 비어있는_일자값 = time.Time{}
-
-func F비어있는_값() S비어있음 {
-	return 비어있는_값
-}
 
 func F비어있는_일자값() time.Time {
 	return 비어있는_일자값
@@ -634,7 +629,7 @@ func (s *s문자열_집합) G포함(값 string) bool {
 	return false
 }
 
-func (s *s문자열_집합) S추가(값 string) { s.맵[값] = 비어있는_값 }
+func (s *s문자열_집합) S추가(값 string) { s.맵[값] = S비어있음{} }
 
 func (s *s문자열_집합) S삭제(값 string) { delete(s.맵, 값) }
 
