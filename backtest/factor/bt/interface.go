@@ -18,8 +18,9 @@ type I데이터_처리기 interface {
 type I데이터_처리기_백테스트_전용 interface {
 	S준비(uint32, T가격_구분)
 	G일자() uint32
-	G가격(uint32, T가격_구분, string) float64                // 백테스트에서만 사용됨.
-	G가격_맵(uint32, T가격_구분, []string) map[string]float64 // 백테스트에서만 사용됨.
+	G가격(uint32, T가격_구분, string) float64
+	G가격_맵(uint32, T가격_구분, []string) map[string]float64
+	G기준일_시가_종가_평균(uint32, string) float64
 	G기준일_이전_전종목_가격_맵(uint32) map[string]*dpd.S종목별_일일_가격정보_모음
 }
 
