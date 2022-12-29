@@ -118,7 +118,7 @@ type T1901_ETF_시세_조회_응답 struct {
 	M전일NAV_전일대비등락율  float64
 	M순자산총액_억        int64
 	M스프레드           float64
-	M레버리지           int64
+	M레버리지           float64
 	M과세구분           uint8
 	M운용사            string
 	M유동성공급자         []string
@@ -153,7 +153,7 @@ func NewT1901InBlock(질의값 *lib.S질의값_단일_종목) (g *T1901InBlock) 
 func NewT1901_ETF_시세_조회_응답(b []byte) (s *T1901_ETF_시세_조회_응답, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { s = nil }}.S실행()
 
-	lib.F조건부_패닉(len(b) != SizeT1901OutBlock, "예상하지 못한 길이 : '%v", len(b))
+	lib.F조건부_패닉(len(b) != SizeT1901OutBlock, "예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(T1901OutBlock)
 	lib.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
@@ -301,7 +301,7 @@ func NewT1901_ETF_시세_조회_응답(b []byte) (s *T1901_ETF_시세_조회_응
 
 	s.M순자산총액_억 = lib.F확인2(lib.F2정수64(g.Etftotcap))
 	s.M스프레드 = lib.F2실수_소숫점_추가_단순형_공백은_0(g.Spread, 2)
-	s.M레버리지 = lib.F확인2(lib.F2정수64(g.Leverage))
+	s.M레버리지 = lib.F2실수_소숫점_추가_단순형_공백은_0(g.Leverage2, 2)
 	s.M과세구분 = uint8(lib.F확인2(lib.F2정수64(g.Taxgubun)))
 	s.M운용사 = lib.F2문자열(g.Opcom_nmk)
 	s.M유동성공급자 = []string{

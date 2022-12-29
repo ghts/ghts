@@ -224,7 +224,8 @@ func TestT1901_ETF_시세_조회(t *testing.T) {
 	//
 	//s.M순자산총액_억 = lib.F확인2(lib.F2정수64(g.Etftotcap)
 	//s.M스프레드 = lib.F확인2(lib.F2실수_소숫점_추가(g.Spread, 2)
-	//s.M레버리지 = lib.F확인2(lib.F2정수64(g.Leverage)
+
+	lib.F테스트_다름(t, 값.M레버리지, 0.0)
 	//s.M과세구분 = uint8(lib.F확인2(lib.F2정수64(g.Taxgubun))
 	//s.M운용사 = lib.F2문자열(g.Opcom_nmk)
 	//s.M유동성공급자 = []string{

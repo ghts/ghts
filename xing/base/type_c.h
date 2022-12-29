@@ -2484,6 +2484,7 @@ typedef struct {
     char    settletype          [   2];    char    _settletype          ;    // [string,    2] 최종결제                        StartPos 1216, Length 2
     char    idx_asset_class1    [   2];    char    _idx_asset_class1    ;    // [string,    2] 지수자산분류코드(대분류)        StartPos 1219, Length 2
     char    ty_text             [   8];    char    _ty_text             ;    // [string,    8] ETF/ETN투자유의                 StartPos 1222, Length 8
+    char    leverage2           [   6];    char    _leverage2           ;    // [float ,  6.2] 추적수익률배수                  StartPos 1231, Length 6
 } T1901OutBlock;
 
 //------------------------------------------------------------------------------
