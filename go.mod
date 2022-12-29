@@ -6,7 +6,7 @@ require (
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/mitchellh/go-ps v1.0.0
 	go.nanomsg.org/mangos/v3 v3.4.2
-	golang.org/x/sys v0.0.0-20220915200043-7b5979e65e41
+	golang.org/x/sys v0.3.0
 	golang.org/x/text v0.3.7
 	gopkg.in/ini.v1 v1.67.0
 	modernc.org/sqlite v1.20.0
