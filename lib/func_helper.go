@@ -382,6 +382,14 @@ func F확인3[T1 any, T2 any](값1 T1, 값2 T2, 에러 error) (T1, T2) {
 	return 값1, 값2
 }
 
+func F확인4[T1 any, T2 any, T3 any](값1 T1, 값2 T2, 값3 T3, 에러 error) (T1, T2, T3) {
+	if 에러 != nil {
+		panic(에러)
+	}
+
+	return 값1, 값2, 값3
+}
+
 func f에러_제외한_값_추출(에러_후보_모음 ...interface{}) interface{} {
 	switch len(에러_후보_모음) {
 	case 0, 1:
