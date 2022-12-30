@@ -1,6 +1,7 @@
-package bt
+package btft
 
 import (
+	btc "github.com/ghts/ghts/backtest/common"
 	"github.com/ghts/ghts/lib"
 	dpd "github.com/ghts/ghts/lib/daily_price_data"
 )
@@ -16,10 +17,10 @@ type I데이터_처리기 interface {
 
 // 백테스트에서만 사용됨. 실제 매매에서는 현재가/'현재가 맵'으로 충분함.
 type I데이터_처리기_백테스트_전용 interface {
-	S준비(uint32, T가격_구분)
+	S준비(uint32, btc.T가격_구분)
 	G일자() uint32
-	G가격(uint32, T가격_구분, string) float64
-	G가격_맵(uint32, T가격_구분, []string) map[string]float64
+	G가격(uint32, btc.T가격_구분, string) float64
+	G가격_맵(uint32, btc.T가격_구분, []string) map[string]float64
 	G기준일_시가_종가_평균(uint32, string) float64
 	G기준일_이전_전종목_가격_맵(uint32) map[string]*dpd.S종목별_일일_가격정보_모음
 }
@@ -43,7 +44,7 @@ type I포트폴리오 interface {
 }
 
 type I포트폴리오_백테스트_전용 interface {
-	S준비(uint32, T가격_구분)
+	S준비(uint32, btc.T가격_구분)
 	S일일_결산()
 	G투자_성과_계산() (float64, float64, float64) // CAGR/MDD/Sharpe
 }

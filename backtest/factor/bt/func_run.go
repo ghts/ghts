@@ -1,6 +1,7 @@
-package bt
+package btft
 
 import (
+	btc "github.com/ghts/ghts/backtest/common"
 	bfc "github.com/ghts/ghts/backtest/factor/common"
 	"github.com/ghts/ghts/lib"
 )
@@ -11,7 +12,7 @@ func F백테스트_실행[T팩터 T팩터_데이터, T재무 T재무_데이터](
 	포트폴리오 := 전략_인수.G포트폴리오()
 
 	for _, 일자 := range 데이터_처리기.G영업일_모음() {
-		for _, 가격구분 := range []T가격_구분{P시가, P저가, P고가, P종가} {
+		for _, 가격구분 := range []btc.T가격_구분{btc.P시가, btc.P저가, btc.P고가, btc.P종가} {
 			데이터_처리기.(I데이터_처리기_백테스트_전용).S준비(일자, 가격구분)
 			포트폴리오.(I포트폴리오_백테스트_전용).S준비(일자, 가격구분)
 			전략_실행기.G실행()
@@ -26,6 +27,7 @@ func New전략_인수_세종(전략 func(*S필터_정렬_처리기[*S팩터_세�
 	s.M계좌번호 = "없음"
 	s.M리밸런싱_주기 = lib.P리밸런싱_주기_분기
 	s.M종목_수량 = 20
+	s.M주식_비중_퍼센트 = 100
 	s.M복합_등급_계산_함수 = 전략
 	s.M급등_종목_제외 = true
 	s.M급락_종목_제외 = true

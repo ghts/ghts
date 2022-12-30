@@ -1,4 +1,4 @@
-package bt
+package btft
 
 import dpd "github.com/ghts/ghts/lib/daily_price_data"
 

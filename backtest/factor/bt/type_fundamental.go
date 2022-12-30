@@ -1,4 +1,4 @@
-package bt
+package btft
 
 import (
 	"fmt"

@@ -1,8 +1,9 @@
-package bt
+package btft
 
 import (
 	"bytes"
 	"database/sql"
+	btc "github.com/ghts/ghts/backtest/common"
 	bfc "github.com/ghts/ghts/backtest/factor/common"
 	"github.com/ghts/ghts/lib"
 	dpd "github.com/ghts/ghts/lib/daily_price_data"
@@ -15,7 +16,7 @@ import (
 // S데이터_처리기_백테스트 : 백테스트용 I데이터_처리기 구현체. 실제 매매의 경우에는 API를 통해서 증권사 서버에 질의하게 될 기능을 가상으로 구현.
 type S데이터_처리기_백테스트 struct {
 	M일자          uint32
-	M가격구분        T가격_구분
+	M가격구분        btc.T가격_구분
 	일일_가격정보_맵_원본 map[string]*dpd.S종목별_일일_가격정보_모음
 }
 
@@ -54,7 +55,7 @@ func (s *S데이터_처리기_백테스트) S상장_주식_수량_확인(종목�
 	return 종목코드_모음 // 백테스트에서는 확인할 필요 없음.
 }
 
-func (s *S데이터_처리기_백테스트) S준비(일자_정수값 uint32, 가격구분 T가격_구분) {
+func (s *S데이터_처리기_백테스트) S준비(일자_정수값 uint32, 가격구분 btc.T가격_구분) {
 	s.M일자 = 일자_정수값
 	s.M가격구분 = 가격구분
 }
@@ -63,7 +64,7 @@ func (s *S데이터_처리기_백테스트) G일자() time.Time {
 	return lib.F확인2(lib.F정수2일자(s.M일자))
 }
 
-func (s *S데이터_처리기_백테스트) G가격(기준일 uint32, 가격구분 T가격_구분, 종목코드 string) float64 {
+func (s *S데이터_처리기_백테스트) G가격(기준일 uint32, 가격구분 btc.T가격_구분, 종목코드 string) float64 {
 	가격정보, 에러 := s.일일_가격정보_맵_원본[종목코드].G값(기준일)
 
 	if 에러 != nil {
@@ -71,20 +72,20 @@ func (s *S데이터_처리기_백테스트) G가격(기준일 uint32, 가격구�
 	}
 
 	switch 가격구분 {
-	case P시가:
+	case btc.P시가:
 		return 가격정보.M시가
-	case P고가:
+	case btc.P고가:
 		return 가격정보.M고가
-	case P저가:
+	case btc.P저가:
 		return 가격정보.M저가
-	case P종가:
+	case btc.P종가:
 		return 가격정보.M종가
 	default:
 		panic(lib.New에러("예상하지 못한 가격구분 : '%v", int(s.M가격구분)))
 	}
 }
 
-func (s *S데이터_처리기_백테스트) G가격_맵(기준일 uint32, 가격구분 T가격_구분, 종목코드_모음 []string) (가격_맵 map[string]float64) {
+func (s *S데이터_처리기_백테스트) G가격_맵(기준일 uint32, 가격구분 btc.T가격_구분, 종목코드_모음 []string) (가격_맵 map[string]float64) {
 	가격_맵 = make(map[string]float64)
 
 	for _, 종목코드 := range 종목코드_모음 {
