@@ -1,4 +1,4 @@
-package btft
+package ftfw
 
 import (
 	btc "github.com/ghts/ghts/backtest/common"

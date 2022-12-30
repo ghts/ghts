@@ -1,4 +1,4 @@
-package btft
+package ftfw
 
 import "github.com/ghts/ghts/lib"
 

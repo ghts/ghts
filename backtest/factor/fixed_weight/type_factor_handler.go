@@ -1,4 +1,4 @@
-package btft
+package ftfw
 
 import (
 	bfc "github.com/ghts/ghts/backtest/factor/common"
