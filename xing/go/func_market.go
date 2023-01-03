@@ -690,71 +690,7 @@ func F최소_호가단위by종목(종목 *lib.S종목) (값 int64, 에러 error)
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 값 = 0 }}.S실행()
 
 	// 오류 발생 예방을 위해서 (기준가가 아닌) 상한가 기준으로 호가 단위 산출.
-	if lib.F지금().Year() <= 2022 {
-		return f최소_호가단위by시장구분_기준가_2022(종목.G시장구분(), 종목.G상한가())
-	} else {	// 2023년 1월부터 호가 단위 축소.
-		return f최소_호가단위by시장구분_기준가_2023(종목.G시장구분(), 종목.G상한가())
-	}
-}
-
-func f최소_호가단위by시장구분_기준가_2022(시장구분 lib.T시장구분, 기준가 int64) (값 int64, 에러 error) {
-	switch 시장구분 {
-	case lib.P시장구분_ETF, lib.P시장구분_ETN:
-		return 5, nil
-	case lib.P시장구분_코스피:
-		switch {
-		case 기준가 >= 0 && 기준가 < 1000:
-			return 1, nil
-		case 기준가 < 5000:
-			return 5, nil
-		case 기준가 < 10000:
-			return 10, nil
-		case 기준가 < 50000:
-			return 50, nil
-		case 기준가 < 100000:
-			return 100, nil
-		case 기준가 < 500000:
-			return 500, nil
-		case 기준가 >= 500000:
-			return 1000, nil
-		default:
-			panic(lib.New에러with출력("예상하지 못한 경우. %v", 기준가))
-		}
-	case lib.P시장구분_코스닥:
-		switch {
-		case 기준가 < 1000:
-			return 1, nil
-		case 기준가 >= 1000 && 기준가 < 5000:
-			return 5, nil
-		case 기준가 >= 5000 && 기준가 < 10000:
-			return 10, nil
-		case 기준가 >= 10000 && 기준가 < 50000:
-			return 50, nil
-		case 기준가 >= 50000:
-			return 100, nil
-		default:
-			panic(lib.New에러with출력("예상하지 못한 경우. %v", 기준가))
-		}
-	case lib.P시장구분_코넥스:
-		switch {
-		case 기준가 < 5000:
-			return 5, nil
-		case 기준가 >= 5000 && 기준가 < 10000:
-			return 10, nil
-		case 기준가 >= 10000 && 기준가 < 50000:
-			return 50, nil
-		case 기준가 >= 50000 && 기준가 < 100000:
-			return 100, nil
-		case 기준가 >= 100000 && 기준가 < 500000:
-			return 500, nil
-		case 기준가 >= 500000:
-			return 1000, nil
-		default:
-			panic(lib.New에러with출력("예상하지 못한 경우. %v", 기준가))
-		}
-	}
-
-	return 0, lib.New에러with출력("예상하지 못한 시장구분. %v", 시장구분)
+	return f최소_호가단위by시장구분_기준가_2023(종목.G시장구분(), 종목.G상한가())
 }
 
 func f최소_호가단위by시장구분_기준가_2023(시장구분 lib.T시장구분, 기준가 int64) (값 int64, 에러 error) {
@@ -767,15 +703,17 @@ func f최소_호가단위by시장구분_기준가_2023(시장구분 lib.T시장�
 			return 1, nil
 		case 기준가 < 5000:
 			return 5, nil
-		case 기준가 < 20000:
+		case 기준가 < 10_000:
 			return 10, nil
-		case 기준가 < 50000:
+		case 기준가 < 50_000:
 			return 50, nil
-		case 기준가 < 200000:
+		case 시장구분 != lib.P시장구분_코스피:
 			return 100, nil
-		case 기준가 < 500000:
+		case 기준가 < 100_000:
+			return 100, nil
+		case 기준가 < 500_000:
 			return 500, nil
-		case 기준가 >= 500000:
+		case 기준가 >= 500_000:
 			return 1000, nil
 		default:
 			panic(lib.New에러with출력("예상하지 못한 경우. %v", 기준가))
