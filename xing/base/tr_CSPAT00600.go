@@ -44,7 +44,7 @@ import (
 type CSPAT00600_현물_정상_주문_질의값 struct {
 	*lib.S질의값_정상_주문
 	//M계좌_비밀번호 string
-	M신용거래_구분 lib.T신용거래_구분
+	M신용거래_구분 T신용거래_구분
 	M대출일     string
 }
 
@@ -83,7 +83,7 @@ type CSPAT00600_현물_정상_주문_응답1 struct {
 	M공매도_가능     bool
 	M공매도_호가구분   string
 	M통신매체_코드    string
-	M신용거래_구분    lib.T신용거래_구분
+	M신용거래_구분    T신용거래_구분
 	M대출일        time.Time
 	M회원번호       string
 	M주문조건_구분    lib.T주문조건
@@ -140,11 +140,11 @@ func NewCSPAT00600InBlock(질의값 *CSPAT00600_현물_정상_주문_질의값, 
 	lib.F바이트_복사_실수(g.OrdPrc[:], 질의값.M주문단가, 2)
 	lib.F바이트_복사_문자열(g.BnsTpCode[:], lib.F2문자열(int(질의값.M매도_매수_구분)))
 	lib.F바이트_복사_정수(g.OrdprcPtnCode[:], int(F2Xing호가유형(질의값.M호가유형, 질의값.M주문조건)))
-	lib.F바이트_복사_정수(g.MgntrnCode[:], int(F2Xing신용거래_구분(질의값.M신용거래_구분)))
+	lib.F바이트_복사_정수(g.MgntrnCode[:], int(질의값.M신용거래_구분))
 
 	// 대출일 : YYYYMMDD, 신용주문이 아닐 경우는 SPACE
 	switch 질의값.M신용거래_구분 {
-	case lib.P신용거래_해당없음:
+	case P신용거래_해당없음:
 		lib.F바이트_복사_문자열(g.LoanDt[:], "        ")
 	default:
 		lib.F조건부_패닉(len(질의값.M대출일) < len(g.LoanDt), "대출일 내용이 부족합니다. '%v'", 질의값.M대출일)
@@ -195,7 +195,7 @@ func NewCSPAT00600_현물_정상_주문_응답1(b []byte) (s *CSPAT00600_현물_
 	s.M공매도_가능 = lib.F문자열_비교(g.StslAbleYn, "Y", true)
 	s.M공매도_호가구분 = lib.F2문자열_공백_제거(g.StslOrdprcTpCode)
 	s.M통신매체_코드 = lib.F2문자열_공백_제거(g.CommdaCode)
-	s.M신용거래_구분 = F2신용거래_구분(T신용거래_구분(lib.F확인2(lib.F2정수(g.MgntrnCode))))
+	s.M신용거래_구분 = T신용거래_구분(lib.F확인2(lib.F2정수(g.MgntrnCode)))
 	s.M대출일 = lib.F2포맷된_일자_단순형_공백은_초기값("20060102", g.LoanDt)
 	s.M회원번호 = lib.F2문자열_공백_제거(g.MbrNo)
 	s.M주문조건_구분 = lib.T주문조건(lib.F확인2(lib.F2정수(g.OrdCndiTpCode)))

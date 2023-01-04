@@ -64,54 +64,6 @@ import (
 //	}
 //}
 
-func F2Xing신용거래_구분(신용거래_구분 lib.T신용거래_구분) T신용거래_구분 {
-	switch 신용거래_구분 {
-	case lib.P신용거래_해당없음:
-		return P신용거래_아님
-	case lib.P신용거래_유통융자신규:
-		return P유통융자신규
-	case lib.P신용거래_자기융자신규:
-		return P자기융자신규
-	case lib.P신용거래_유통대주신규:
-		return P유통대주신규
-	case lib.P신용거래_자기대주신규:
-		return P자기대주신규
-	case lib.P신용거래_유통융자상환:
-		return P유통융자상환
-	case lib.P신용거래_자기융자상환:
-		return P자기융자상환
-	case lib.P신용거래_유통대주상환:
-		return P유통대주상환
-	case lib.P신용거래_자기대주상환:
-		return P자기대주상환
-	case lib.P신용거래_예탁담보대출상환:
-		return P예탁담보대출상환
-	default:
-		panic(lib.New에러("예상하지 못한 신용거래_구분 값. %v", 신용거래_구분))
-	}
-}
-
-func F2신용거래_구분(신용거래_구분 T신용거래_구분) lib.T신용거래_구분 {
-	switch 신용거래_구분 {
-	case P유통융자신규:
-		return lib.P신용거래_유통융자신규
-	case P자기융자신규:
-		return lib.P신용거래_자기융자신규
-	case P유통대주신규:
-		return lib.P신용거래_유통대주신규
-	case P자기대주신규:
-		return lib.P신용거래_자기대주신규
-	case P유통융자상환:
-		return lib.P신용거래_유통융자상환
-	case P자기융자상환:
-		return lib.P신용거래_자기융자상환
-	case P유통대주상환:
-		return lib.P신용거래_유통대주상환
-	}
-
-	return lib.P신용거래_해당없음
-}
-
 func F2Xing호가유형(호가_유형 lib.T호가유형, 주문_조건 lib.T주문조건) T호가유형 {
 	switch 주문_조건 {
 	case lib.P주문조건_없음:

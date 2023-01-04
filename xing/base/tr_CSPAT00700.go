@@ -88,7 +88,7 @@ type CSPAT00700_현물_정정_주문_응답2 struct {
 	M종목코드      string // 단축종목번호
 	M공매도_호가구분  string
 	M공매도_가능    bool
-	M신용거래_구분   lib.T신용거래_구분
+	M신용거래_구분   T신용거래_구분
 	M대출일       time.Time
 	M반대매매주문_구분 string
 	M유동성공급자여부  bool
@@ -205,7 +205,7 @@ func NewCSPAT00700_현물_정정_주문_응답2(b []byte) (s *CSPAT00700_현물_
 	s.M종목코드 = lib.F2문자열_공백_제거(g.ShtnIsuNo) // 단축종목번호
 	s.M공매도_호가구분 = lib.F2문자열_공백_제거(g.StslOrdprcTpCode)
 	s.M공매도_가능 = lib.F문자열_비교(g.StslAbleYn, "Y", true)
-	s.M신용거래_구분 = F2신용거래_구분(T신용거래_구분(lib.F확인2(lib.F2정수(g.MgntrnCode))))
+	s.M신용거래_구분 = T신용거래_구분(lib.F확인2(lib.F2정수(g.MgntrnCode)))
 	s.M대출일 = lib.F2포맷된_일자_단순형_공백은_초기값("20060102", g.LoanDt)
 	s.M반대매매주문_구분 = lib.F2문자열_공백_제거(g.CvrgOrdTp)
 	s.M관리사원_번호 = lib.F2문자열_공백_제거(g.MgempNo)
