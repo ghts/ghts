@@ -55,7 +55,7 @@ func F테스트_모드_실행_중() bool {
 
 func F테스트_모드_시작() error {
 	os.Setenv("LOG_MODE", "TEST")
-	F콘솔_로그_초기화()
+	F로그_설정_화면only()
 	return 테스트_모드.S값(true)
 }
 
@@ -593,11 +593,11 @@ func F마지막_에러값(값_모음 ...interface{}) error {
 
 var 로그_파일 *os.File
 
-func F콘솔_파일_동시_로그_초기화() {
+func F로그_설정_화면_파일_동시() {
 	f로그_파일_정리()
 
 	if F환경변수("LOG_MODE") == "TEST" {
-		F콘솔_로그_초기화()
+		F로그_설정_화면only()
 		return
 	}
 
@@ -612,7 +612,7 @@ func F콘솔_파일_동시_로그_초기화() {
 	}
 }
 
-func F콘솔_로그_초기화() {
+func F로그_설정_화면only() {
 	if 로그_파일 != nil {
 		로그_파일명 := 로그_파일.Name()
 		로그_파일.Close()
