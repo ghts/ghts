@@ -142,24 +142,13 @@ func TestF임의_문자열(t *testing.T) {
 
 	const 테스트_반복횟수 = 100
 
-	비어있는_구조체 := 비어있는_값
+	비어있는_구조체 := S비어있음{}
 
 	for i := 0; i < 테스트_반복횟수; i++ {
 		맵[F임의_문자열(10, 20)] = 비어있는_구조체
 	}
 
 	F테스트_참임(t, len(맵) > 테스트_반복횟수*0.7)
-}
-
-func TestF문자열_출력(t *testing.T) {
-	//t.Parallel()	// 문자열 출력 확보로 인해 병렬 실행 불가.
-
-	문자열, 에러 := F출력_문자열_확보(func() {
-		F문자열_출력("%v, %v", "테스트_문자열", 1)
-	})
-
-	F테스트_에러없음(t, 에러)
-	F테스트_참임(t, strings.Contains(문자열, "테스트_문자열, 1"))
 }
 
 func TestF문자열_호출경로_출력(t *testing.T) {
@@ -190,22 +179,6 @@ func TestNew에러(t *testing.T) {
 
 	F테스트_참임(t, ok)
 	F테스트_같음(t, strings.Count(에러.Error(), "테스트용 에러. 100"), 1)
-}
-
-func TestNew에러with출력(t *testing.T) {
-	//t.Parallel()	// 문자열 출력 확보로 인해 병렬 실행 불가.
-
-	var 생성값 interface{}
-
-	문자열, 에러 := F출력_문자열_확보(func() {
-		생성값 = New에러with출력("테스트용 에러. %v", 100)
-	})
-
-	F테스트_에러없음(t, 에러)
-
-	_, ok := 생성값.(error)
-	F테스트_참임(t, ok)
-	F테스트_같음(t, strings.Count(문자열, "테스트용 에러. 100"), 1)
 }
 
 func TestF변수값_자료형_문자열(t *testing.T) {

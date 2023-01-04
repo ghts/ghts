@@ -37,6 +37,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"log"
 	"math"
 	"os"
 	"path/filepath"
@@ -53,6 +54,7 @@ func F테스트_모드_실행_중() bool {
 }
 
 func F테스트_모드_시작() error {
+	F테스트용_로그_초기화()
 	return 테스트_모드.S값(true)
 }
 
@@ -402,21 +404,21 @@ func F문자열_출력(포맷_문자열 string, 추가_매개변수 ...interface
 
 	버퍼.WriteString("\n")
 
-	fmt.Printf(버퍼.String(), 추가_매개변수...)
+	log.Printf(버퍼.String(), 추가_매개변수...)
 }
 
 func F에러_출력(에러 interface{}, 추가_매개변수 ...interface{}) {
 	switch 변환값 := 에러.(type) {
 	case *S에러:
-		fmt.Println(변환값.Error())
+		log.Println(변환값.Error())
 		변환값.S출력_완료()
 	case S에러:
-		fmt.Println(변환값.Error())
+		log.Println(변환값.Error())
 		(&변환값).S출력_완료()
 	case error:
-		fmt.Println(변환값.Error())
+		log.Println(변환값.Error())
 	case string:
-		fmt.Println(New에러(변환값, 추가_매개변수...).Error())
+		log.Println(New에러(변환값, 추가_매개변수...).Error())
 	default:
 		panic(New에러("F에러_출력() 예상하지 못한 자료형 : '%T'", 에러))
 	}

@@ -38,6 +38,7 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
+	"log"
 	"math/big"
 	"strings"
 	"time"
@@ -104,10 +105,9 @@ func New에러with출력(포맷_문자열or에러 interface{}, 추가_매개변�
 	에러 := New에러(포맷_문자열or에러, 추가_매개변수...)
 
 	if !에러.(*S에러).G출력_완료() {
-		fmt.Println(에러.Error())
+		log.Println(에러.Error())
+		에러.(*S에러).출력_완료 = true
 	}
-
-	에러.(*S에러).출력_완료 = true
 
 	return 에러
 }
@@ -155,7 +155,7 @@ func (s S에러) Is(에러값 error) bool {
 
 func (s S에러) Unwrap() error { return s.원래_에러 }
 
-func (s S에러) G출력_완료() bool { return s.출력_완료 }
+func (s *S에러) G출력_완료() bool { return s.출력_완료 }
 
 func (s *S에러) S출력_완료() { s.출력_완료 = true }
 
