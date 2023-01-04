@@ -54,6 +54,7 @@ func F테스트_모드_실행_중() bool {
 }
 
 func F테스트_모드_시작() error {
+	os.Setenv("LOG_MODE", "TEST")
 	F테스트용_로그_초기화()
 	return 테스트_모드.S값(true)
 }

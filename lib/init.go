@@ -39,6 +39,11 @@ func f로그_파일_정리() {
 var 로그_파일 *os.File
 
 func f로그_초기화() {
+	if F환경변수("LOG_MODE") == "TEST" {
+		F테스트용_로그_초기화()
+		return
+	}
+
 	var 에러 error
 
 	로그_파일명 := fmt.Sprintf("log_%v.txt", F지금().Format("20060102150405"))
@@ -51,9 +56,11 @@ func f로그_초기화() {
 }
 
 func F테스트용_로그_초기화() {
-	로그_파일명 := 로그_파일.Name()
-	로그_파일.Close()
-	os.Remove(로그_파일명)
-
+	if 로그_파일 != nil {
+		로그_파일명 := 로그_파일.Name()
+		로그_파일.Close()
+		os.Remove(로그_파일명)
+	}
+	
 	log.SetOutput(os.Stdout)
 }
