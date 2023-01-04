@@ -235,7 +235,7 @@ func TestT1901_ETF_시세_조회(t *testing.T) {
 	//	lib.F2문자열(g.Lp_nm4),
 	//	lib.F2문자열(g.Lp_nm5)}
 	//
-	//s.M복제방법 = lib.F2문자열(g.Etf_cp)
+	lib.F테스트_같음(t, 값.M복제방법, "실물패시브", "합성패시브", "실물액티브", "합성액티브")
 	//s.M상품유형 = lib.F2문자열(g.Etf_kind)
 	//s.VI발동해제 = lib.F2문자열(g.Vi_gubun)
 	//s.ETN상품분류 = lib.F2문자열(g.Etn_kind_cd)
