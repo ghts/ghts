@@ -311,10 +311,10 @@ func NewT1901_ETF_시세_조회_응답(b []byte) (s *T1901_ETF_시세_조회_응
 		lib.F2문자열(g.Lp_nm4),
 		lib.F2문자열(g.Lp_nm5)}
 
-	s.M복제방법 = lib.F2문자열(g.Etf_cp)
-	s.M상품유형 = lib.F2문자열(g.Etf_kind)
-	s.VI발동해제 = lib.F2문자열(g.Vi_gubun)
-	s.ETN상품분류 = lib.F2문자열(g.Etn_kind_cd)
+	s.M복제방법 = lib.F2문자열_EUC_KR_공백제거(g.Etf_cp)
+	s.M상품유형 = lib.F2문자열_EUC_KR_공백제거(g.Etf_kind)
+	s.VI발동해제 = lib.F2문자열_EUC_KR_공백제거(g.Vi_gubun)
+	s.ETN상품분류 = lib.F2문자열_EUC_KR_공백제거(g.Etn_kind_cd)
 	s.ETN만기일 = lib.F2포맷된_일자_단순형_공백은_초기값("20060102", g.Lastymd)
 
 	if lib.F2문자열(g.Payday) == "00000000" {
@@ -329,7 +329,7 @@ func NewT1901_ETF_시세_조회_응답(b []byte) (s *T1901_ETF_시세_조회_응
 		s.ETN최종거래일 = lib.F2포맷된_일자_단순형_공백은_초기값("20060102", g.Lastdate)
 	}
 
-	s.ETN발행시장참가자 = lib.F2문자열(g.Issuernmk)
+	s.ETN발행시장참가자 = lib.F2문자열_EUC_KR_공백제거(g.Issuernmk)
 	s.ETN만기상환가격결정_시작일 = lib.F2포맷된_일자_단순형_공백은_초기값("20060102", g.Last_sdate)
 	s.ETN만기상환가격결정_종료일 = lib.F2포맷된_일자_단순형_공백은_초기값("20060102", g.Last_edate)
 	s.ETN유동성공급자_보유수량 = lib.F확인2(lib.F2정수64(g.Lp_holdvol))
@@ -337,8 +337,8 @@ func NewT1901_ETF_시세_조회_응답(b []byte) (s *T1901_ETF_시세_조회_응
 	s.ETP상품구분코드 = lib.F2문자열(g.Etp_gb)
 	s.ETN조기상환가능여부 = lib.F2문자열_공백_제거(lib.F2문자열(g.Etn_elback_yn)) != ""
 	s.M최종결제 = lib.F2문자열(g.Settletype)
-	s.M지수자산대분류코드 = lib.F2문자열(g.Idx_asset_class1)
-	s.ETF_ETN_투자유의 = lib.F2문자열(g.Ty_text)
+	s.M지수자산대분류코드 = lib.F2문자열_EUC_KR_공백제거(g.Idx_asset_class1)
+	s.ETF_ETN_투자유의 = lib.F2문자열_EUC_KR_공백제거(g.Ty_text)
 
 	f속성값_초기화(g)
 
