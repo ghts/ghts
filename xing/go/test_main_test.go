@@ -42,7 +42,10 @@ import (
 func TestMain(m *testing.M) {
 	defer lib.S예외처리{}.S실행()
 
-	lib.F확인1(f테스트_준비())
+	if 에러 := f테스트_준비(); 에러 != nil {
+		return
+	}
+	
 	defer f테스트_정리()
 
 	m.Run()
