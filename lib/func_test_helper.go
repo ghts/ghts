@@ -522,7 +522,7 @@ func F중복없는_문자열_출력(포맷_문자열 string, 인수 ...interface
 			continue
 		}
 
-		fmt.Println(f포맷된_문자열("%s %s", 문자열, 호출경로))
+		log.Println(f포맷된_문자열("%s %s", 문자열, 호출경로))
 		break
 	}
 

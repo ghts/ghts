@@ -37,8 +37,6 @@ import (
 	"bytes"
 	"encoding/binary"
 	"github.com/ghts/ghts/lib"
-	"math"
-	"strings"
 	"time"
 )
 
@@ -75,14 +73,7 @@ func (s *T8428_증시주변_자금추이_응답_헤더) G헤더_TR데이터() I�
 
 type T8428_증시주변_자금추이_응답_반복값 struct {
 	M일자       time.Time
-	M지수       float64
-	M전일대비_구분  T전일대비_구분
-	M전일대비_등락폭 float64
-	M전일대비_등락율 float64
-	M거래량      int64
 	M고객예탁금_억  int64
-	M예탁증감_억   int64
-	M회전율      float64
 	M미수금_억    int64
 	M신용잔고_억   int64
 	M선물예수금_억  int64
@@ -102,19 +93,8 @@ func (s *T8428_증시주변_자금추이_응답_반복값_모음) G반복값_모
 }
 
 func NewT8428InBlock(질의값 *T8428_증시주변_자금추이_질의값) (g *T8428InBlock) {
-	시장구분_문자열 := ""
-	switch 질의값.M시장구분 {
-	case lib.P시장구분_코스피:
-		시장구분_문자열 = "001"
-	case lib.P시장구분_코스닥:
-		시장구분_문자열 = "301"
-	default:
-		panic(lib.New에러("예상하지 못한 시장구분 값 : '%v'", 질의값.M시장구분))
-	}
-
 	g = new(T8428InBlock)
 	lib.F바이트_복사_문자열(g.KeyDate[:], 질의값.M연속키)
-	lib.F바이트_복사_문자열(g.Upcode[:], 시장구분_문자열)
 	lib.F바이트_복사_정수(g.Cnt[:], 질의값.M수량)
 
 	f속성값_초기화(g)
@@ -164,20 +144,7 @@ func NewT8428_증시주변자금추이_응답_반복값_모음(b []byte) (값 *T
 
 		s := new(T8428_증시주변_자금추이_응답_반복값)
 		s.M일자 = lib.F확인2(lib.F2포맷된_시각("20060102", lib.F2문자열(g.Date)))
-		s.M지수 = lib.F확인2(lib.F2실수_소숫점_추가(g.Jisu, 2))
-		s.M전일대비_구분 = T전일대비_구분(lib.F확인2(lib.F2정수64(g.Sign)))
-		s.M전일대비_등락폭 = s.M전일대비_구분.G부호보정_실수64(lib.F확인2(lib.F2실수_소숫점_추가(g.Change, 2)))
-		s.M전일대비_등락율 = s.M전일대비_구분.G부호보정_실수64(lib.F확인2(lib.F2실수_소숫점_추가(g.Diff, 2)))
-		s.M거래량 = lib.F확인2(lib.F2정수64(g.Volume))
 		s.M고객예탁금_억 = lib.F확인2(lib.F2정수64(g.Custmoney))
-		s.M예탁증감_억 = lib.F확인2(lib.F2정수64(g.Yecha))
-
-		if strings.Contains(strings.ToLower(lib.F2문자열(g.Vol)), "inf") {
-			s.M회전율 = math.Inf(1)
-		} else {
-			s.M회전율 = lib.F확인2(lib.F2실수_소숫점_추가(g.Vol, 2))
-		}
-
 		s.M미수금_억 = lib.F확인2(lib.F2정수64(g.Outmoney))
 		s.M신용잔고_억 = lib.F확인2(lib.F2정수64(g.Trjango))
 		s.M선물예수금_억 = lib.F확인2(lib.F2정수64(g.Futymoney))
