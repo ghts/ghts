@@ -34,7 +34,6 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package xing
 
 import (
-	"fmt"
 	"github.com/ghts/ghts/lib"
 	"testing"
 )
@@ -57,10 +56,5 @@ func TestT8428_증시주변_자금_추이(t *testing.T) {
 		lib.F테스트_참임(t, 값.M혼합형_채권_억 >= 0)
 		lib.F테스트_참임(t, 값.M채권형_억 >= 0)
 		lib.F테스트_참임(t, 값.MMF_억 >= 0)
-	}
-
-	for i := len(값_모음) - 1; i >= 0; i-- {
-		값 := 값_모음[i]
-		fmt.Printf("%v\t%v\t%v\t%.2f\n", 값.M일자.Format(lib.P일자_형식), 값.M고객예탁금_억, 값.M신용잔고_억, float64(값.M신용잔고_억)/float64(값.M고객예탁금_억)*100.0)
 	}
 }
