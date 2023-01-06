@@ -34,7 +34,7 @@ func F당일_일일_가격정보_수집(db *sql.DB) (에러 error) {
 		s := new(dpd.S종목별_일일_가격정보_모음)
 		s.DB읽기with시작일(db, 종목코드, 한달전)
 
-		if len(s.M저장소) > 0 && s.M저장소[len(s.M저장소)-1].M일자 == 당일 {
+		if len(s.M저장소) > 0 && s.M저장소[len(s.M저장소)-1].M일자 == 당일 && s.M저장소[len(s.M저장소)-1].M거래량 > 0 {
 			continue
 		}
 
