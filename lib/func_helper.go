@@ -1069,3 +1069,13 @@ func F키_모음[K comparable, V any](맵 map[K]V) []K {
 
 	return 키_모음
 }
+
+func F2맵[T comparable](값_모음 []T) (맵 map[T]S비어있음) {
+	맵 = make(map[T]S비어있음)
+
+	for _, 값 := range 값_모음 {
+		맵[값] = S비어있음{}
+	}
+
+	return 맵
+}
