@@ -438,7 +438,7 @@ func F확인2[T any](값 T, 에러 error) T {
 	return 값
 }
 
-func F확인3[T1 any, T2 any](값1 T1, 값2 T2, 에러 error) (T1, T2) {
+func F확인3[T1, T2 any](값1 T1, 값2 T2, 에러 error) (T1, T2) {
 	if 에러 != nil {
 		panic(에러)
 	}
@@ -446,12 +446,20 @@ func F확인3[T1 any, T2 any](값1 T1, 값2 T2, 에러 error) (T1, T2) {
 	return 값1, 값2
 }
 
-func F확인4[T1 any, T2 any, T3 any](값1 T1, 값2 T2, 값3 T3, 에러 error) (T1, T2, T3) {
+func F확인4[T1, T2, T3 any](값1 T1, 값2 T2, 값3 T3, 에러 error) (T1, T2, T3) {
 	if 에러 != nil {
 		panic(에러)
 	}
 
 	return 값1, 값2, 값3
+}
+
+func F확인5[T1, T2, T3, T4 any](값1 T1, 값2 T2, 값3 T3, 값4 T4, 에러 error) (T1, T2, T3, T4) {
+	if 에러 != nil {
+		panic(에러)
+	}
+
+	return 값1, 값2, 값3, 값4
 }
 
 func f에러_제외한_값_추출(에러_후보_모음 ...interface{}) interface{} {
