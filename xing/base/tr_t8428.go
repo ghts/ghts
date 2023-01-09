@@ -143,7 +143,13 @@ func NewT8428_증시주변자금추이_응답_반복값_모음(b []byte) (값 *T
 		lib.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 		s := new(T8428_증시주변_자금추이_응답_반복값)
-		s.M일자 = lib.F확인2(lib.F2포맷된_시각("20060102", lib.F2문자열(g.Date)))
+
+		if 일자_문자열 := lib.F2문자열_공백_제거(lib.F특수_공백문자_제거(lib.F2문자열(g.Date))); 일자_문자열 == "" {
+			continue
+		} else {
+			s.M일자 = lib.F확인2(lib.F2포맷된_시각("20060102", lib.F2문자열(g.Date)))
+		}
+
 		s.M고객예탁금_억 = lib.F확인2(lib.F2정수64(g.Custmoney))
 		s.M미수금_억 = lib.F확인2(lib.F2정수64(g.Outmoney))
 		s.M신용잔고_억 = lib.F확인2(lib.F2정수64(g.Trjango))
