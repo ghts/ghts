@@ -43,7 +43,7 @@ import (
 
 type T8410_현물_차트_일주월년_질의값 struct {
 	*lib.S질의값_단일_종목
-	M주기구분   T8410_주기_구분
+	M주기구분   T일주월년_구분
 	M요청건수   int // 최대 압축 2000, 비압축 500
 	M시작일자   string
 	M종료일자   string
@@ -91,7 +91,7 @@ func (s *T8410_현물_차트_일주월년_응답_헤더) G헤더_TR데이터() I
 }
 
 type T8410_현물_차트_일주월년_응답_반복값 struct {
-	M종목코드       string // TODO : 헤더값을 읽어서 일괄 설정할 것.
+	M종목코드       string
 	M일자         time.Time
 	M시가         int64
 	M고가         int64
@@ -122,7 +122,7 @@ func NewT8410InBlock(질의값 *T8410_현물_차트_일주월년_질의값) (g *
 	g = new(T8410InBlock)
 
 	lib.F바이트_복사_문자열(g.Shcode[:], 질의값.M종목코드)
-	lib.F바이트_복사_문자열(g.Gubun[:], strconv.Itoa(int(질의값.M주기구분)))
+	lib.F바이트_복사_문자열(g.Gubun[:], strconv.Itoa(int(uint8(질의값.M주기구분)+1)))
 	lib.F바이트_복사_정수(g.Qrycnt[:], 질의값.M요청건수)
 	lib.F바이트_복사_문자열(g.Sdate[:], 질의값.M시작일자)
 	lib.F바이트_복사_문자열(g.Edate[:], 질의값.M종료일자)

@@ -713,7 +713,7 @@ func TrT1102_현물_시세_조회(종목코드 string) (응답값 *xt.T1102_현�
 	return 응답값, nil
 }
 
-func TrT1305_기간별_주가_조회(종목코드 string, 일주월_구분 xt.T일주월_구분, 추가_옵션_모음 ...interface{}) (
+func TrT1305_기간별_주가_조회(종목코드 string, 일주월_구분 xt.T일주월년_구분, 추가_옵션_모음 ...interface{}) (
 	응답값_모음 []*xt.T1305_현물_기간별_조회_응답_반복값, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 응답값_모음 = nil }}.S실행()
 
@@ -1203,7 +1203,7 @@ func TrT8407_현물_멀티_현재가_조회(종목코드_모음_전체 []string)
 	return 응답값_맵, nil
 }
 
-func TrT8410_현물_차트_일주월년(종목코드 string, 시작일, 종료일 time.Time, 주기구분 xt.T8410_주기_구분, 수정_주가_여부 bool,
+func TrT8410_현물_차트_일주월년(종목코드 string, 시작일, 종료일 time.Time, 주기구분 xt.T일주월년_구분, 수정_주가_여부 bool,
 	추가_인수_모음 ...interface{}) (응답값_모음 []*xt.T8410_현물_차트_일주월년_응답_반복값, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 응답값_모음 = nil }}.S실행()
 
@@ -1399,7 +1399,7 @@ func TrT8412_현물_차트_분(종목코드 string, 시작일자, 종료일자 t
 	return 응답값_모음, nil
 }
 
-func TrT8413_현물_차트_일주월(종목코드 string, 시작일, 종료일 time.Time, 주기구분 xt.T일주월_구분,
+func TrT8413_현물_차트_일주월(종목코드 string, 시작일, 종료일 time.Time, 주기구분 xt.T일주월년_구분,
 	추가_인수_모음 ...interface{}) (응답값_모음 []*xt.T8413_현물_차트_일주월_응답_반복값, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 응답값_모음 = nil }}.S실행()
 

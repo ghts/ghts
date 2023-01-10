@@ -43,7 +43,7 @@ import (
 
 type T8413_현물_차트_일주월_질의값 struct {
 	*lib.S질의값_단일_종목
-	M주기구분 T일주월_구분
+	M주기구분 T일주월년_구분
 	M요청건수 int // 최대 압축 2000, 비압축 500
 	M시작일자 string
 	M종료일자 string
