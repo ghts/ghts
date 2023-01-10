@@ -288,6 +288,16 @@ func F조회_및_주문_질의_처리(질의 *lib.S채널_질의) {
 	case xt.TR현물_멀티_현재가_조회_t8407:
 		c데이터 = unsafe.Pointer(xt.NewT8407InBlock(질의값.(*lib.S질의값_복수_종목)))
 		길이 = xt.SizeT8407InBlock
+	case xt.TR현물_차트_일주월년_t8410:
+		연속키 := lib.F2문자열_공백_제거(질의값.(*xt.T8410_현물_차트_일주월년_질의값).M연속일자)
+
+		if 연속키 != "" {
+			연속_조회_여부 = true
+			연속_조회_키 = 연속키
+		}
+
+		c데이터 = unsafe.Pointer(xt.NewT8410InBlock(질의값.(*xt.T8410_현물_차트_일주월년_질의값)))
+		길이 = xt.SizeT8410InBlock
 	case xt.TR현물_차트_틱_t8411:
 		연속키 := lib.F2문자열_공백_제거(질의값.(*xt.T8411_현물_차트_틱_질의값).M연속일자) +
 			lib.F2문자열_공백_제거(질의값.(*xt.T8411_현물_차트_틱_질의값).M연속시간)

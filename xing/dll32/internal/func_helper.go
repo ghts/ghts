@@ -37,6 +37,7 @@ import (
 	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/xing/base"
 	"os"
+	"strings"
 )
 
 func XingAPI디렉토리() (string, error) {
@@ -82,6 +83,17 @@ func f자료형_문자열_해석(g *xt.TR_DATA) (자료형_문자열 string, 에
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 자료형_문자열 = "" }}.S실행()
 
 	TR코드 := lib.F2문자열_공백_제거(g.TrCode)
+
+	for {
+		if strings.HasSuffix(TR코드, "C#") {
+			TR코드 = TR코드[:len(TR코드)-2]
+		} else if strings.HasSuffix(TR코드, "#") {
+			TR코드 = TR코드[:len(TR코드)-1]
+		} else {
+			break
+		}
+	}
+
 	길이 := lib.F확인2(lib.F2정수(g.DataLength))
 
 	switch TR코드 {
@@ -295,6 +307,13 @@ func f자료형_문자열_해석(g *xt.TR_DATA) (자료형_문자열 string, 에
 		switch {
 		case 길이%xt.SizeT8407OutBlock1 == 0:
 			return xt.P자료형_T8407OutBlock1, nil
+		}
+	case xt.TR현물_차트_일주월년_t8410:
+		switch {
+		case 길이 == xt.SizeT8410OutBlock:
+			return xt.P자료형_T8410OutBlock, nil
+		case 길이%xt.SizeT8410OutBlock1 == 0:
+			return xt.P자료형_T8410OutBlock1, nil
 		}
 	case xt.TR현물_차트_틱_t8411:
 		switch {

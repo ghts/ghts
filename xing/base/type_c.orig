@@ -234,6 +234,11 @@ type T3341OutBlock1 C.T3341OutBlock1
 type T8407InBlock C.T8407InBlock
 type T8407OutBlock1 C.T8407OutBlock1
 
+// 현물 차트 일주월년 (t8410)
+type T8410InBlock C.T8410InBlock
+type T8410OutBlock C.T8410OutBlock
+type T8410OutBlock1 C.T8410OutBlock1
+
 // 현물 차트 틱 (t8411)
 type T8411InBlock C.T8411InBlock
 type T8411OutBlock C.T8411OutBlock

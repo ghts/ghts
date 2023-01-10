@@ -2753,6 +2753,57 @@ typedef struct {
 } T8407OutBlock1;
 
 //------------------------------------------------------------------------------
+// API전용 주식 차트 (일주월년) (t8410)
+//------------------------------------------------------------------------------
+typedef struct {
+    char    shcode              [   6];    char    _shcode              ;    // [string,    6] 단축코드                        StartPos 0, Length 6
+    char    gubun               [   1];    char    _gubun               ;    // [string,    1] 주기구분(2:일3:주4:월5:년)      StartPos 7, Length 1
+    char    qrycnt              [   4];    char    _qrycnt              ;    // [long  ,    4] 요청건수(최대-압축:2000비압축:5 StartPos 9, Length 4
+    char    sdate               [   8];    char    _sdate               ;    // [string,    8] 시작일자                        StartPos 14, Length 8
+    char    edate               [   8];    char    _edate               ;    // [string,    8] 종료일자                        StartPos 23, Length 8
+    char    cts_date            [   8];    char    _cts_date            ;    // [string,    8] 연속일자                        StartPos 32, Length 8
+    char    comp_yn             [   1];    char    _comp_yn             ;    // [string,    1] 압축여부(Y:압축N:비압축)        StartPos 41, Length 1
+    char    sujung              [   1];    char    _sujung              ;    // [string,    1] 수정주가여부(Y:적용N:비적용)    StartPos 43, Length 1
+} T8410InBlock;
+
+typedef struct {
+    char    shcode              [   6];    char    _shcode              ;    // [string,    6] 단축코드                        StartPos 0, Length 6
+    char    jisiga              [   8];    char    _jisiga              ;    // [long  ,    8] 전일시가                        StartPos 7, Length 8
+    char    jihigh              [   8];    char    _jihigh              ;    // [long  ,    8] 전일고가                        StartPos 16, Length 8
+    char    jilow               [   8];    char    _jilow               ;    // [long  ,    8] 전일저가                        StartPos 25, Length 8
+    char    jiclose             [   8];    char    _jiclose             ;    // [long  ,    8] 전일종가                        StartPos 34, Length 8
+    char    jivolume            [  12];    char    _jivolume            ;    // [long  ,   12] 전일거래량                      StartPos 43, Length 12
+    char    disiga              [   8];    char    _disiga              ;    // [long  ,    8] 당일시가                        StartPos 56, Length 8
+    char    dihigh              [   8];    char    _dihigh              ;    // [long  ,    8] 당일고가                        StartPos 65, Length 8
+    char    dilow               [   8];    char    _dilow               ;    // [long  ,    8] 당일저가                        StartPos 74, Length 8
+    char    diclose             [   8];    char    _diclose             ;    // [long  ,    8] 당일종가                        StartPos 83, Length 8
+    char    highend             [   8];    char    _highend             ;    // [long  ,    8] 상한가                          StartPos 92, Length 8
+    char    lowend              [   8];    char    _lowend              ;    // [long  ,    8] 하한가                          StartPos 101, Length 8
+    char    cts_date            [   8];    char    _cts_date            ;    // [string,    8] 연속일자                        StartPos 110, Length 8
+    char    s_time              [   6];    char    _s_time              ;    // [string,    6] 장시작시간(HHMMSS)              StartPos 119, Length 6
+    char    e_time              [   6];    char    _e_time              ;    // [string,    6] 장종료시간(HHMMSS)              StartPos 126, Length 6
+    char    dshmin              [   2];    char    _dshmin              ;    // [string,    2] 동시호가처리시간(MM:분)         StartPos 133, Length 2
+    char    rec_count           [   7];    char    _rec_count           ;    // [long  ,    7] 레코드카운트                    StartPos 136, Length 7
+    char    svi_uplmtprice      [   8];    char    _svi_uplmtprice      ;    // [long  ,    8] 정적VI상한가                    StartPos 144, Length 8
+    char    svi_dnlmtprice      [   8];    char    _svi_dnlmtprice      ;    // [long  ,    8] 정적VI하한가                    StartPos 153, Length 8
+} T8410OutBlock;
+
+typedef struct {
+    char    date                [   8];    char    _date                ;    // [string,    8] 날짜                            StartPos 0, Length 8
+    char    open                [  12];    char    _open                ;    // [long  ,   12] 시가                            StartPos 9, Length 12
+    char    high                [  12];    char    _high                ;    // [long  ,   12] 고가                            StartPos 22, Length 12
+    char    low                 [  12];    char    _low                 ;    // [long  ,   12] 저가                            StartPos 35, Length 12
+    char    close               [  12];    char    _close               ;    // [long  ,   12] 종가                            StartPos 48, Length 12
+    char    jdiff_vol           [  12];    char    _jdiff_vol           ;    // [long  ,   12] 거래량                          StartPos 61, Length 12
+    char    value               [  12];    char    _value               ;    // [long  ,   12] 거래대금                        StartPos 74, Length 12
+    char    jongchk             [  13];    char    _jongchk             ;    // [long  ,   13] 수정구분                        StartPos 87, Length 13
+    char    rate                [   6];    char    _rate                ;    // [double,  6.2] 수정비율                        StartPos 101, Length 6
+    char    pricechk            [  13];    char    _pricechk            ;    // [long  ,   13] 수정주가반영항목                StartPos 108, Length 13
+    char    ratevalue           [  12];    char    _ratevalue           ;    // [long  ,   12] 수정비율반영거래대금            StartPos 122, Length 12
+    char    sign                [   1];    char    _sign                ;    // [string,    1] 종가등락구분(1:상한2:상승3:보합 StartPos 135, Length 1
+} T8410OutBlock1;
+
+//------------------------------------------------------------------------------
 // 현물 차트 틱 (t8411)
 //------------------------------------------------------------------------------
 typedef struct {

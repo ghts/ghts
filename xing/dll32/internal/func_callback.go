@@ -148,8 +148,13 @@ func OnTrData(TR데이터 unsafe.Pointer) {
 
 	var raw값 []byte
 
-	// t8411, t8412, t8413 반복값은 압축되어 있음. 압축해제가 필요.
+	// t8410, t8411, t8412, t8413 반복값은 압축되어 있음. 압축해제가 필요.
 	switch lib.F2문자열(g.BlockName) {
+	case "t8410OutBlock1":
+		버퍼 := make([]byte, xt.SizeT8410OutBlock1*2000)
+		길이 := F압축_해제(unsafe.Pointer(g.Data), &버퍼[0], g.DataLength)
+		raw값 = dll.F2Go바이트_모음with길이(unsafe.Pointer(&버퍼[0]), 길이)
+		g.DataLength = int32(길이)
 	case "t8411OutBlock1":
 		버퍼 := make([]byte, xt.SizeT8411OutBlock1*2000)
 		길이 := F압축_해제(unsafe.Pointer(g.Data), &버퍼[0], g.DataLength)

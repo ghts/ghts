@@ -3221,6 +3221,91 @@ type T8407OutBlock1 struct {
 	X_dnlmtprice	byte
 }
 
+type T8410InBlock struct {
+	Shcode		[6]byte
+	X_shcode	byte
+	Gubun		[1]byte
+	X_gubun		byte
+	Qrycnt		[4]byte
+	X_qrycnt	byte
+	Sdate		[8]byte
+	X_sdate		byte
+	Edate		[8]byte
+	X_edate		byte
+	Cts_date	[8]byte
+	X_cts_date	byte
+	Comp_yn		[1]byte
+	X_comp_yn	byte
+	Sujung		[1]byte
+	X_sujung	byte
+}
+type T8410OutBlock struct {
+	Shcode			[6]byte
+	X_shcode		byte
+	Jisiga			[8]byte
+	X_jisiga		byte
+	Jihigh			[8]byte
+	X_jihigh		byte
+	Jilow			[8]byte
+	X_jilow			byte
+	Jiclose			[8]byte
+	X_jiclose		byte
+	Jivolume		[12]byte
+	X_jivolume		byte
+	Disiga			[8]byte
+	X_disiga		byte
+	Dihigh			[8]byte
+	X_dihigh		byte
+	Dilow			[8]byte
+	X_dilow			byte
+	Diclose			[8]byte
+	X_diclose		byte
+	Highend			[8]byte
+	X_highend		byte
+	Lowend			[8]byte
+	X_lowend		byte
+	Cts_date		[8]byte
+	X_cts_date		byte
+	S_time			[6]byte
+	X_s_time		byte
+	E_time			[6]byte
+	X_e_time		byte
+	Dshmin			[2]byte
+	X_dshmin		byte
+	Rec_count		[7]byte
+	X_rec_count		byte
+	Svi_uplmtprice		[8]byte
+	X_svi_uplmtprice	byte
+	Svi_dnlmtprice		[8]byte
+	X_svi_dnlmtprice	byte
+}
+type T8410OutBlock1 struct {
+	Date		[8]byte
+	X_date		byte
+	Open		[12]byte
+	X_open		byte
+	High		[12]byte
+	X_high		byte
+	Low		[12]byte
+	X_low		byte
+	Close		[12]byte
+	X_close		byte
+	Vol		[12]byte
+	X_jdiff_vol	byte
+	Value		[12]byte
+	X_value		byte
+	Jongchk		[13]byte
+	X_jongchk	byte
+	Rate		[6]byte
+	X_rate		byte
+	Pricechk	[13]byte
+	X_pricechk	byte
+	Ratevalue	[12]byte
+	X_ratevalue	byte
+	Sign		[1]byte
+	X_sign		byte
+}
+
 type T8411InBlock struct {
 	Shcode		[6]byte
 	X_shcode	byte
