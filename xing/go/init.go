@@ -102,11 +102,6 @@ func F초기화(서버_구분 xt.T서버_구분, 로그인_정보 *xt.S로그인
 	fmt.Println("** Xing API 초기화 완료 **")
 }
 
-// f초기화_DLL32() 호출 이전에 설정해야 함. 순서 중요.
-func f절전_모드_설정(절전_모드_여부 ...bool) {
-
-}
-
 func F소켓_생성() {
 	소켓REP_TR콜백 = lib.F확인2(nano.NewNano소켓REP(xt.F주소_콜백()))
 
