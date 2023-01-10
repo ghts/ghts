@@ -109,5 +109,4 @@ var (
 	계좌번호_모음 []string
 	계좌_비밀번호 string
 	서버_구분   xt.T서버_구분
-	V절전_모드  bool
 )

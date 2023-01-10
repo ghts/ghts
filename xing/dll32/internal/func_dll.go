@@ -53,9 +53,6 @@ func f초기화_XingAPI() {
 		API_초기화_잠금.Unlock()
 	}()
 
-	절전_여부_문자열 := strings.ToUpper(os.Getenv("POWER_SAVING"))
-	V절전_모드 = 절전_여부_문자열 == "T" || 절전_여부_문자열 == "TRUE"
-
 	if API_초기화_완료.G값() {
 		return
 	}

@@ -45,7 +45,7 @@ func TestMain(m *testing.M) {
 	if 에러 := f테스트_준비(); 에러 != nil {
 		return
 	}
-	
+
 	defer f테스트_정리()
 
 	m.Run()

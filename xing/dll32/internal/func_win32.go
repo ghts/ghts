@@ -34,7 +34,6 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package dll32
 
 import (
-	"github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/lib/w32"
 	"syscall"
 	"unsafe"
@@ -67,10 +66,6 @@ func F윈도우_메시지_처리() {
 	for {
 		switch {
 		case !w32.PeekMessage(&윈도우_메시지, 0, 0, 0, 1):
-			if V절전_모드 {
-				lib.F대기(lib.P300밀리초)
-			}
-
 			return
 		case 윈도우_메시지.Message == w32.WM_QUIT:
 			f종료_질의_송신()
