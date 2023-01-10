@@ -45,11 +45,7 @@ func init() {
 	lib.TR구분_String = xt.TR구분_String
 }
 
-func F초기화(절전_모드_여부 ...bool) {
-	if len(절전_모드_여부) == 1 {
-		V절전_모드 = 절전_모드_여부[0]
-	}
-
+func F초기화() {
 	ch초기화 := make(chan lib.T신호)
 	go Go루틴_관리(ch초기화)
 	<-ch초기화
