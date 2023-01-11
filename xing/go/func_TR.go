@@ -1157,15 +1157,24 @@ func TrT8407_현물_멀티_현재가_조회_전종목() (현재가_맵 map[strin
 func TrT8407_현물_멀티_현재가_조회(종목코드_모음_전체 []string) (응답값_맵 map[string]*xt.T8407_현물_멀티_현재가_조회_응답, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 응답값_맵 = nil }}.S실행()
 
-	if len(종목코드_모음_전체) == 0 {
-		return make(map[string]*xt.T8407_현물_멀티_현재가_조회_응답), nil
+	종목코드_맵 := make(map[string]lib.S비어있음)
+
+	for _, 종목코드 := range 종목코드_모음_전체 {
+		종목코드 = trade.F종목코드_보정(종목코드)
+
+		if strings.HasPrefix(종목코드, "D") {
+			continue // 채권 종목은 무시
+		} else if 에러 := F종목코드_검사(종목코드); 에러 != nil {
+			continue
+		}
+
+		종목코드_맵[종목코드] = lib.S비어있음{}
 	}
 
-	for i, 종목코드 := range 종목코드_모음_전체 {
-		종목코드 = trade.F종목코드_보정(종목코드)
-		종목코드_모음_전체[i] = 종목코드
+	종목코드_모음_전체 = lib.F키_모음(종목코드_맵) // 중복 및 오류 제거.
 
-		lib.F확인1(F종목코드_검사(종목코드))
+	if len(종목코드_모음_전체) == 0 {
+		return make(map[string]*xt.T8407_현물_멀티_현재가_조회_응답), nil
 	}
 
 	응답값_맵 = make(map[string]*xt.T8407_현물_멀티_현재가_조회_응답)
