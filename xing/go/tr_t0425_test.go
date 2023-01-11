@@ -1,4 +1,4 @@
-/* Copyright (C) 2015-2022 김운하 (unha.kim@ghts.org)
+/* Copyright (C) 2015-2023 김운하 (unha.kim@ghts.org)
 
 이 파일은 GHTS의 일부입니다.
 
@@ -15,7 +15,7 @@ GNU LGxt.PL 2.1판은 이 프로그램과 함께 제공됩니다.
 (자유 소프트웨어 재단 : Free Software Foundation, Inc.,
 59 Temple xt.Place - Suite 330, Boston, MA 02111-1307, USA)
 
-Copyright (C) 2015-2022년 UnHa Kim (unha.kim@ghts.org)
+Copyright (C) 2015-2023년 UnHa Kim (unha.kim@ghts.org)
 
 This file is part of GHTS.
 
