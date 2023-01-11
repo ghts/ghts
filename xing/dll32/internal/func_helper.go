@@ -278,6 +278,8 @@ func f자료형_문자열_해석(g *xt.TR_DATA) (자료형_문자열 string, 에
 		case 길이%xt.SizeT1405OutBlock1 == 0:
 			return xt.P자료형_T1405OutBlock1, nil
 		}
+	case xt.TR종목별_매매주체_동향_t1717:
+		return xt.P자료형_T1717OutBlock, nil
 	case xt.TR_ETF_시세_조회_t1901:
 		return xt.P자료형_T1901_ETF_시세_조회_응답, nil
 	case xt.TR_ETF_시간별_추이_t1902:
