@@ -261,10 +261,10 @@ func F질의(TR코드 string, c데이터 unsafe.Pointer, 길이 int,
 		에러 := lib.New에러with출력("F질의() 에러 발생. 에러 코드 : '%v'", 에러_번호)
 
 		if strings.Contains(에러.Error(), "Access is denied.") {
-			lib.F체크포인트("재시작 콜백 신호 송신")
+			lib.F문자열_출력("재시작 콜백 신호 송신")
 			f콜백_동기식(lib.New콜백_신호(lib.P신호_DLL32_접속_끊김))
 
-			lib.F체크포인트("DLL32 자체 종료.")
+			lib.F문자열_출력("DLL32 자체 종료.")
 			f종료()
 		}
 	}
@@ -449,7 +449,6 @@ func F계좌_이름(질의 *lib.S채널_질의) {
 //	//c버퍼 := dll.F2C문자열(버퍼)
 //	//버퍼_길이 := len(버퍼)
 //	//
-//	//lib.F체크포인트(버퍼_길이)
 //	//
 //	//_, _, 에러_번호 := syscall.Syscall(etkGetAccountDetailName, 3,
 //	//	uintptr(unsafe.Pointer(c계좌번호)),

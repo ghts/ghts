@@ -132,7 +132,6 @@ import (
 //
 //		if 에러 != nil && (strings.Contains(에러.Error(), "원주문번호를 잘못") ||
 //			strings.Contains(에러.Error(), "접수 대기 상태")) {
-//			lib.F체크포인트(에러.Error())
 //			continue // 재시도
 //		}
 //

@@ -357,22 +357,12 @@ func NewCSPAQ12300_현물계좌_잔고내역_조회_응답_반복값_모음(b []
 		값.M손익율 = lib.F확인2(lib.F2실수_소숫점_추가(g.PnlRat, 6))
 		값.M현재가 = lib.F확인2(lib.F2실수_소숫점_추가(g.NowPrc, 2))
 		값.M신용금액 = lib.F확인2(lib.F2정수64(g.CrdtAmt))
-
-		if lib.F2문자열_공백_제거(g.DueDt) != "" {
-			lib.F체크포인트(lib.F2문자열(g.DueDt))
-			값.M만기일 = lib.F2포맷된_일자_단순형_공백은_초기값("??", g.DueDt)
-		}
-
+		값.M만기일 = lib.F2포맷된_일자_단순형_공백은_초기값("20060102", g.DueDt)
 		값.M전일매도체결가 = lib.F확인2(lib.F2실수_소숫점_추가(g.PrdaySellExecPrc, 2))
 		값.M전일매도수량 = lib.F확인2(lib.F2정수64(g.PrdaySellQty))
 		값.M전일매수체결가 = lib.F확인2(lib.F2실수_소숫점_추가(g.PrdayBuyExecPrc, 2))
 		값.M전일매수수량 = lib.F확인2(lib.F2정수64(g.PrdayBuyQty))
-
-		if lib.F2문자열_공백_제거(g.LoanDt) != "" {
-			lib.F체크포인트(lib.F2문자열(g.LoanDt))
-			값.M대출일 = lib.F확인2(lib.F2포맷된_일자("??", g.LoanDt))
-		}
-
+		값.M대출일 = lib.F2포맷된_일자_단순형_공백은_초기값("20060102", g.LoanDt)
 		값.M평균단가 = lib.F확인2(lib.F2실수_소숫점_추가(g.AvrUprc, 2))
 		값.M매도가능수량 = lib.F확인2(lib.F2정수64(g.SellAbleQty))
 		값.M매도주문수량 = lib.F확인2(lib.F2정수64(g.SellOrdQty))

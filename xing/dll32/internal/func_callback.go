@@ -308,7 +308,6 @@ func OnLogin(wParam, lParam unsafe.Pointer) {
 }
 
 func OnLogout() {
-	lib.F체크포인트("OnLogout.")
 	// XingAPI가 신호를 보내오지 않음.  여기에 기능을 구현해 봤자 소용없음.
 }
 

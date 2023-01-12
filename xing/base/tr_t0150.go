@@ -177,7 +177,7 @@ func NewT0150_현물_당일_매매일지_응답_반복값_모음(b []byte) (값_
 		if 문자열 := lib.F2문자열_EUC_KR_공백제거(g.Medosu); 문자열 == "종목소계" {
 			continue
 		} else if 문자열 != "매도" && 문자열 != "매수" {
-			lib.F체크포인트(문자열)
+			lib.F에러_출력("예상하지 못한 값 : '%v'", 문자열)
 			continue
 		}
 

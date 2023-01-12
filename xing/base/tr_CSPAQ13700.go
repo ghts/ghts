@@ -225,10 +225,6 @@ func NewCSPAQ13700_현물계좌_주문체결내역_반복값_모음(b []byte) (�
 		주문시각_문자열 := lib.F2문자열(g.OrdTime)
 		주문시각_문자열 = 주문시각_문자열[:6] + "." + 주문시각_문자열[6:]
 
-		if 대출일_문자열 := lib.F2문자열_공백_제거(g.LoanDt); 대출일_문자열 != "" {
-			lib.F체크포인트(대출일_문자열)
-		}
-
 		값 := new(CSPAQ13700_현물계좌_주문체결내역_반복값)
 		값.M주문일 = lib.F확인2(lib.F2포맷된_일자("20060102", g.OrdDt))
 		값.M관리지점번호 = lib.F2문자열(g.MgmtBrnNo)
@@ -275,12 +271,7 @@ func NewCSPAQ13700_현물계좌_주문체결내역_반복값_모음(b []byte) (�
 		값.M통신매체 = T통신매체구분(lib.F확인2(lib.F2정수(g.RegCommdaCode)))
 		값.M회원번호 = lib.F2문자열(g.MbrNo)
 		값.M예약주문여부 = T예약주문_CSPAQ13700(lib.F확인2(lib.F2정수(g.RsvOrdYn)))
-
-		if lib.F2문자열_공백_제거(g.LoanDt) != "" {
-			lib.F체크포인트(lib.F2문자열(g.LoanDt))
-			값.M대출일 = lib.F2포맷된_일자_단순형_공백은_초기값("??", g.LoanDt)
-		}
-
+		값.M대출일 = lib.F2포맷된_일자_단순형_공백은_초기값("20060102", g.LoanDt)
 		값.M주문시각 = lib.F확인2(lib.F2일자별_시각(값.M주문일, "150405.999", 주문시각_문자열))
 		값.M운용지시번호 = lib.F2문자열(g.OpDrtnNo)
 		값.M주문자ID = lib.F2문자열(g.OdrrId)

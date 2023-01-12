@@ -123,7 +123,7 @@ func db저장_marcap(db *sql.DB, 레코드_모음 [][]string) (에러 error) {
 			시총순위)
 
 		if i > 0 && i%100000 == 0 {
-			lib.F체크포인트(lib.F정수_쉼표_추가(i))
+			lib.F문자열_출력("%v", lib.F정수_쉼표_추가(i))
 		}
 	}
 

@@ -222,7 +222,7 @@ func f초기화_작동_확인() (작동_여부 bool) {
 	select {
 	case <-ch확인:
 	case <-ch타임아웃:
-		lib.F체크포인트("F접속됨_확인() 타임아웃.")
+		lib.New에러with출력("F접속됨_확인() 타임아웃.")
 		return false
 	}
 

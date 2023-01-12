@@ -50,7 +50,6 @@ func go_RT_주문처리결과(ch초기화 chan lib.T신호) (에러 error) {
 	//ch초기화 <- lib.P신호_초기화
 	//
 	//if 소켓SUB_실시간_정보, 에러 = lib.NewNano소켓SUB(lib.P주소_Xing_실시간); 에러 != nil {
-	//	lib.F체크포인트()
 	//	return
 	//}
 	//

@@ -62,9 +62,9 @@ func f종료_질의_송신() {
 	select {
 	case <-질의.Ch회신값:
 	case 에러 := <-질의.Ch에러:
-		lib.F체크포인트(에러)
+		lib.F에러_출력(에러)
 	case <-time.After(lib.P10초):
-		lib.F체크포인트()
+		lib.New에러with출력("종료 질의 송신 타임아웃")
 	}
 }
 
