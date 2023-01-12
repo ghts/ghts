@@ -1,8 +1,8 @@
 package ftfw
 
-import dpd "github.com/ghts/ghts/lib/daily_price_data"
+import dd "github.com/ghts/ghts/lib/daily_data"
 
-func f최근_급등(일일_가격정보_모음 *dpd.S종목별_일일_가격정보_모음) (최근_급등_여부 bool, 최근_급등일 uint32) {
+func f최근_급등(일일_가격정보_모음 *dd.S종목별_일일_가격정보_모음) (최근_급등_여부 bool, 최근_급등일 uint32) {
 	if 일일_가격정보_모음 == nil {
 		return false, 0
 	}
@@ -30,7 +30,7 @@ func f급등(기준가, 전일_종가, 삼일전_종가 float64) bool {
 	return _1일_수익율 > 0.2 || _3일_수익율 > 0.25
 }
 
-func f최근_급락(일일_가격정보_모음 *dpd.S종목별_일일_가격정보_모음) (최근_급락_여부 bool, 최근_급락일 uint32) {
+func f최근_급락(일일_가격정보_모음 *dd.S종목별_일일_가격정보_모음) (최근_급락_여부 bool, 최근_급락일 uint32) {
 	if 일일_가격정보_모음 == nil {
 		return false, 0
 	}
