@@ -6,7 +6,6 @@ import (
 	btc "github.com/ghts/ghts/backtest/common"
 	bfc "github.com/ghts/ghts/backtest/factor/common"
 	"github.com/ghts/ghts/lib"
-	dpd "github.com/ghts/ghts/lib/daily_price_data"
 	xing "github.com/ghts/ghts/xing/go"
 	_ "modernc.org/sqlite"
 	"strings"
@@ -17,7 +16,7 @@ import (
 type S데이터_처리기_백테스트 struct {
 	M일자          uint32
 	M가격구분        btc.T가격_구분
-	일일_가격정보_맵_원본 map[string]*dpd.S종목별_일일_가격정보_모음
+	일일_가격정보_맵_원본 map[string]*dd.S종목별_일일_가격정보_모음
 }
 
 func (s *S데이터_처리기_백테스트) G영업일_모음() []uint32 {
@@ -103,8 +102,8 @@ func (s *S데이터_처리기_백테스트) G기준일_시가_종가_평균(기�
 	}
 }
 
-func (s *S데이터_처리기_백테스트) G기준일_이전_전종목_가격정보_맵(기준일 uint32) (추출본 map[string]*dpd.S종목별_일일_가격정보_모음) {
-	추출본 = make(map[string]*dpd.S종목별_일일_가격정보_모음)
+func (s *S데이터_처리기_백테스트) G기준일_이전_전종목_가격정보_맵(기준일 uint32) (추출본 map[string]*dd.S종목별_일일_가격정보_모음) {
+	추출본 = make(map[string]*dd.S종목별_일일_가격정보_모음)
 
 	for 키, 값 := range s.일일_가격정보_맵_원본 {
 		추출본[키] = 값.G기준일_이전_정보_복사본(기준일)

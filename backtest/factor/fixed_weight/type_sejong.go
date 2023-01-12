@@ -3,7 +3,6 @@ package ftfw
 import (
 	bfc "github.com/ghts/ghts/backtest/factor/common"
 	"github.com/ghts/ghts/lib"
-	dpd "github.com/ghts/ghts/lib/daily_price_data"
 	xing "github.com/ghts/ghts/xing/go"
 )
 
@@ -105,7 +104,7 @@ func (s S팩터_세종) G최근_급락() bool    { return s.M최근_급락 }
 func (s S팩터_세종) G복합_등급() float64 { return s.M복합_등급 }
 
 func New팩터_세종(종목코드 string, 기준일 uint32,
-	일일_가격정보_모음 *dpd.S종목별_일일_가격정보_모음,
+	일일_가격정보_모음 *dd.S종목별_일일_가격정보_모음,
 	재무_정보_저장소 *S재무_정보_저장소[*bfc.S재무_세종]) (s *S팩터_세종) {
 	var 에러 error
 	defer lib.S예외처리{M에러: &에러, M함수: func() { s = nil }}.S실행()

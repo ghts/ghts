@@ -35,7 +35,7 @@ package util
 
 import (
 	"github.com/ghts/ghts/lib"
-	dpd "github.com/ghts/ghts/lib/daily_price_data"
+	dd "github.com/ghts/ghts/lib/daily_data"
 	"github.com/ghts/ghts/lib/krx_time"
 	xt "github.com/ghts/ghts/xing/base"
 	xing "github.com/ghts/ghts/xing/go"
@@ -64,7 +64,7 @@ func F당일_일일_가격정보_수집(db *sql.DB) (에러 error) {
 	종목코드_모음 := make([]string, 0)
 
 	for _, 종목코드 := range xing.F종목코드_모음_전체() {
-		s := new(dpd.S종목별_일일_가격정보_모음)
+		s := new(dd.S종목별_일일_가격정보_모음)
 		s.DB읽기with시작일(db, 종목코드, 한달전)
 
 		if len(s.M저장소) > 0 && s.M저장소[len(s.M저장소)-1].M일자 == 당일 && s.M저장소[len(s.M저장소)-1].M거래량 > 0 {
@@ -79,12 +79,12 @@ func F당일_일일_가격정보_수집(db *sql.DB) (에러 error) {
 		return
 	}
 
-	dpd.F일일_가격정보_테이블_생성(db)
+	dd.F일일_가격정보_테이블_생성(db)
 
 	당일_가격정보_맵 := lib.F확인2(xing.TrT8407_현물_멀티_현재가_조회(종목코드_모음))
 
 	for 종목코드, 값 := range 당일_가격정보_맵 {
-		s := new(dpd.S일일_가격정보)
+		s := new(dd.S일일_가격정보)
 		s.M종목코드 = 종목코드
 		s.M일자 = 당일
 		s.M시가 = float64(값.M시가)
@@ -93,7 +93,7 @@ func F당일_일일_가격정보_수집(db *sql.DB) (에러 error) {
 		s.M종가 = float64(값.M현재가)
 		s.M거래량 = float64(값.M누적_거래량)
 
-		종목별_일일_가격정보_모음 := lib.F확인2(dpd.New종목별_일일_가격정보_모음([]*dpd.S일일_가격정보{s}))
+		종목별_일일_가격정보_모음 := lib.F확인2(dd.New종목별_일일_가격정보_모음([]*dd.S일일_가격정보{s}))
 		lib.F확인1(종목별_일일_가격정보_모음.DB저장(db))
 	}
 
@@ -113,7 +113,7 @@ func F고정_기간_일일_가격정보_수집(db *sql.DB, 종목코드_모음 [
 		return nil
 	}
 
-	dpd.F일일_가격정보_테이블_생성(db)
+	dd.F일일_가격정보_테이블_생성(db)
 
 	시작일 := lib.F금일().Add(-1 * 기간)
 
@@ -122,11 +122,7 @@ func F고정_기간_일일_가격정보_수집(db *sql.DB, 종목코드_모음 [
 		출력_여부 = 추가_인수[0]
 	}
 
-	종목코드_맵 := make(map[string]lib.S비어있음) // 종목 순서를 랜덤화
-
-	for _, 종목코드 := range 종목코드_모음 {
-		종목코드_맵[종목코드] = lib.S비어있음{}
-	}
+	종목코드_맵 := lib.F2맵(종목코드_모음) // 종목 순서를 랜덤화
 
 	i := 0
 
@@ -138,7 +134,7 @@ func F고정_기간_일일_가격정보_수집(db *sql.DB, 종목코드_모음 [
 		f일일_가격정보_수집_도우미(db, 종목코드, 시작일, i, len(종목코드_맵), 출력_여부)
 		i++
 
-		lib.F대기(lib.P4초) // TR 한도 초과 관련.
+		lib.F대기(lib.P4초) // TR 한도 초과 방지.
 	}
 
 	return nil
@@ -146,14 +142,14 @@ func F고정_기간_일일_가격정보_수집(db *sql.DB, 종목코드_모음 [
 
 func F일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string, 추가_인수 ...bool) (에러 error) {
 	var 시작일, 마지막_저장일 time.Time
-	var 종목별_일일_가격정보_모음 *dpd.S종목별_일일_가격정보_모음
+	var 종목별_일일_가격정보_모음 *dd.S종목별_일일_가격정보_모음
 
-	dpd.F일일_가격정보_테이블_생성(db)
+	dd.F일일_가격정보_테이블_생성(db)
 
 	출력_여부 := lib.F조건값(len(추가_인수) > 0, 추가_인수[0], true)
 
 	for i, 종목코드 := range 종목코드_모음 {
-		종목별_일일_가격정보_모음 = lib.F확인2(dpd.New종목별_일일_가격정보_모음_DB읽기(db, 종목코드))
+		종목별_일일_가격정보_모음 = lib.F확인2(dd.New종목별_일일_가격정보_모음_DB읽기(db, 종목코드))
 
 		// 시작일 설정
 		시작일 = lib.F지금().AddDate(-30, 0, 0)
@@ -200,19 +196,18 @@ func f일일_가격정보_수집_도우미(db *sql.DB, 종목코드 string, 시�
 		lib.F에러_출력(에러)
 		return
 	} else if len(값_모음) == 0 {
-		lib.F체크포인트(i, 종목코드, "추가 저장할 데이터가 없음.")
 		return // 추가 저장할 데이터가 없음.
 	}
 
 	금일 := lib.F금일()
-	일일_가격정보_슬라이스 := make([]*dpd.S일일_가격정보, len(값_모음))
+	일일_가격정보_슬라이스 := make([]*dd.S일일_가격정보, len(값_모음))
 
 	for j, 일일_데이터 := range 값_모음 {
-		if 일일_데이터.M거래량 == 0 && lib.F지금().Hour() < 6 && 일일_데이터.M일자.Equal(금일) {
-			continue // 새벽에 수집된 잘못된 데이터 제외.
+		if 일일_데이터.M거래량 == 0 && lib.F지금().Hour() < 9 && 일일_데이터.M일자.Equal(금일) {
+			continue // 개장 이전에 수집된 금일 데이터 제외.
 		}
 
-		일일_가격정보_슬라이스[j] = dpd.New일일_가격정보(
+		일일_가격정보_슬라이스[j] = dd.New일일_가격정보(
 			일일_데이터.M종목코드,
 			일일_데이터.M일자,
 			일일_데이터.M시가,
@@ -233,7 +228,7 @@ func f일일_가격정보_수집_도우미(db *sql.DB, 종목코드 string, 시�
 		lib.F문자열_출력("%v 일일 가격 정보 수집 (%v/%v) 100%%", lib.F지금().Format("15:04"), 전체_수량, 전체_수량)
 	}
 
-	종목별_일일_가격정보_모음, 에러 := dpd.New종목별_일일_가격정보_모음(일일_가격정보_슬라이스)
+	종목별_일일_가격정보_모음, 에러 := dd.New종목별_일일_가격정보_모음(일일_가격정보_슬라이스)
 	if 에러 != nil {
 		lib.F에러_출력(에러)
 		return

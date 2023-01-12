@@ -3,7 +3,6 @@ package ftfw
 import (
 	btc "github.com/ghts/ghts/backtest/common"
 	"github.com/ghts/ghts/lib"
-	dpd "github.com/ghts/ghts/lib/daily_price_data"
 )
 
 type I데이터_처리기 interface {
@@ -22,7 +21,7 @@ type I데이터_처리기_백테스트_전용 interface {
 	G가격(uint32, btc.T가격_구분, string) float64
 	G가격_맵(uint32, btc.T가격_구분, []string) map[string]float64
 	G기준일_시가_종가_평균(uint32, string) float64
-	G기준일_이전_전종목_가격_맵(uint32) map[string]*dpd.S종목별_일일_가격정보_모음
+	G기준일_이전_전종목_가격_맵(uint32) map[string]*dd.S종목별_일일_가격정보_모음
 }
 
 // 재무 데이터에서 생성된 '종목별 팩터 데이터'를 정렬/필터하는 자료형 생성

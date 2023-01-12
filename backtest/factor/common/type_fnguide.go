@@ -1,6 +1,6 @@
 package bfc
 
-import dpd "github.com/ghts/ghts/lib/daily_price_data"
+import dd "github.com/ghts/ghts/lib/daily_data"
 
 type S재무_FG struct {
 	S재무_정보_식별
@@ -26,7 +26,7 @@ func (s S팩터_FG) G최근_급락() bool    { return s.M최근_급락 }
 func (s S팩터_FG) G복합_등급() float64 { return s.M복합_등급 }
 
 func New종목_데이터_FG(종목코드 string, 기준일 uint32,
-	일일_가격정보_모음 *dpd.S종목별_일일_가격정보_모음,
+	일일_가격정보_모음 *dd.S종목별_일일_가격정보_모음,
 	재무_정보_저장소 *S재무_정보_저장소[*S재무_FG]) (s *S팩터_FG) {
 	panic("TODO")
 }

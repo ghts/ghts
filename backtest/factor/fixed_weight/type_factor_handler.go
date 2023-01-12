@@ -3,7 +3,6 @@ package ftfw
 import (
 	bfc "github.com/ghts/ghts/backtest/factor/common"
 	"github.com/ghts/ghts/lib"
-	dpd "github.com/ghts/ghts/lib/daily_price_data"
 )
 
 type T팩터_데이터 interface {
@@ -48,7 +47,7 @@ func (s *S팩터_데이터_처리기[T팩터, T재무]) g팩터_데이터_모음
 }
 
 func New팩터_데이터[T팩터 T팩터_데이터, T재무 T재무_데이터](종목코드 string, 기준일 uint32,
-	일일_가격정보 *dpd.S종목별_일일_가격정보_모음,
+	일일_가격정보 *dd.S종목별_일일_가격정보_모음,
 	재무정보_저장소 *S재무_정보_저장소[T재무]) (값 T팩터) {
 
 	switch interface{}(new(T팩터)).(type) {
