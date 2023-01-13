@@ -37,7 +37,7 @@ import (
 	"database/sql"
 	"github.com/ghts/ghts/lib"
 	dd "github.com/ghts/ghts/lib/daily_data"
-	krx "github.com/ghts/ghts/lib/krx_time"
+	mt "github.com/ghts/ghts/lib/market_time"
 	xt "github.com/ghts/ghts/xing/base"
 	xing "github.com/ghts/ghts/xing/go"
 	"time"
@@ -73,7 +73,7 @@ func f매매주체_동향_수집_도우미(db *sql.DB, 종목코드 string, 시�
 
 	종료일 := lib.F금일()
 
-	if lib.F지금().Before(krx.F금일_보정_시각(6, 0, 0)) {
+	if lib.F지금().Before(mt.F금일_보정_시각(6, 0, 0)) {
 		종료일 = 종료일.AddDate(0, 0, -1) // 폐장 이전 데이터는 확정 데이터가 아니다.
 	}
 

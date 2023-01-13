@@ -35,7 +35,7 @@ package xing
 
 import (
 	"github.com/ghts/ghts/lib"
-	krx "github.com/ghts/ghts/lib/krx_time"
+	mt "github.com/ghts/ghts/lib/market_time"
 	"github.com/ghts/ghts/lib/nanomsg"
 	xt "github.com/ghts/ghts/xing/base"
 	"testing"
@@ -44,7 +44,7 @@ import (
 func TestF체결_실시간_정보(t *testing.T) {
 	t.Parallel()
 
-	if !krx.F한국증시_정규_거래_시간임() {
+	if !mt.F한국증시_정규_거래_시간임() {
 		t.SkipNow()
 	}
 

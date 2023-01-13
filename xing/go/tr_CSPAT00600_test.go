@@ -36,7 +36,7 @@ package xing
 
 import (
 	"github.com/ghts/ghts/lib"
-	krx "github.com/ghts/ghts/lib/krx_time"
+	krx "github.com/ghts/ghts/lib/market_time"
 	"github.com/ghts/ghts/lib/nanomsg"
 	"github.com/ghts/ghts/xing/base"
 	"testing"

@@ -1,4 +1,4 @@
-package krx
+package market_time
 
 import (
 	"github.com/ghts/ghts/lib"

@@ -35,7 +35,7 @@ package xing
 
 import (
 	"github.com/ghts/ghts/lib"
-	krx "github.com/ghts/ghts/lib/krx_time"
+	mt "github.com/ghts/ghts/lib/market_time"
 	xt "github.com/ghts/ghts/xing/base"
 	"testing"
 	"time"
@@ -92,7 +92,7 @@ func TestT1906_ETF_LP_호가_조회(t *testing.T) {
 		매수호가수량합 = 매수호가수량합 + 값.M매수_잔량_모음[i]
 	}
 
-	if F금일_한국증시_개장() && krx.F한국증시_정규_거래_시간임() {
+	if F금일_한국증시_개장() && mt.F한국증시_정규_거래_시간임() {
 		lib.F테스트_참임(t, 값.M시각.After(time.Now().Add(-1*lib.P10분)),
 			값.M시각.Format("15:04:06"), time.Now().Add(-1*lib.P10분).Format("15:04:06"))
 		lib.F테스트_참임(t, 값.M시각.Before(time.Now().Add(lib.P10분)),
