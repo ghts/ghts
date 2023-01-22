@@ -541,22 +541,42 @@ func (s S종목별_일일_가격정보_모음) g거래량_모음() []float64 {
 // 실제 매매 용도
 
 func (s S종목별_일일_가격정보_모음) G시가() float64 {
+	if len(s.M저장소) == 0 {
+		return 0
+	}
+
 	return s.M저장소[len(s.M저장소)-1].M시가
 }
 
 func (s S종목별_일일_가격정보_모음) G고가() float64 {
+	if len(s.M저장소) == 0 {
+		return 0
+	}
+
 	return s.M저장소[len(s.M저장소)-1].M고가
 }
 
 func (s S종목별_일일_가격정보_모음) G저가() float64 {
+	if len(s.M저장소) == 0 {
+		return 0
+	}
+
 	return s.M저장소[len(s.M저장소)-1].M저가
 }
 
 func (s S종목별_일일_가격정보_모음) G종가() float64 {
+	if len(s.M저장소) == 0 {
+		return 0
+	}
+
 	return s.M저장소[len(s.M저장소)-1].M종가
 }
 
 func (s S종목별_일일_가격정보_모음) G거래량() float64 {
+	if len(s.M저장소) == 0 {
+		return 0
+	}
+
 	return s.M저장소[len(s.M저장소)-1].M거래량
 }
 
