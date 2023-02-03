@@ -68,7 +68,7 @@ func F매매주체_동향_수집(db *sql.DB, 종목코드_모음 []string, 시�
 	return nil
 }
 
-func f매매주체ㅁ_동향_수집_도우미(db *sql.DB, 종목코드 string, 시작일 time.Time, i, 전체_수량 int, 출력_여부 bool) (에러 error) {
+func f매매주체_동향_수집_도우미(db *sql.DB, 종목코드 string, 시작일 time.Time, i, 전체_수량 int, 출력_여부 bool) (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
 	종료일 := lib.F금일()
