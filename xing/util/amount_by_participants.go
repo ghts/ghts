@@ -68,7 +68,7 @@ func F매매주체_동향_수집(db *sql.DB, 종목코드_모음 []string, 시�
 	return nil
 }
 
-func f매매주체_동향_수집_도우미(db *sql.DB, 종목코드 string, 시작일 time.Time, i, 전체_수량 int, 출력_여부 bool) (에러 error) {
+func f매매주체ㅁ_동향_수집_도우미(db *sql.DB, 종목코드 string, 시작일 time.Time, i, 전체_수량 int, 출력_여부 bool) (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
 	종료일 := lib.F금일()
@@ -94,6 +94,11 @@ func f매매주체_동향_수집_도우미(db *sql.DB, 종목코드 string, 시�
 	금일 := lib.F금일()
 	매매주체_동향_모음 := make([]*dd.S종목별_매매주체_동향, len(값_모음))
 
+	일자 := 금일
+	if 금일.Weekday() == time.Saturday || 금일.Weekday() == time.Sunday {
+		일자 = xing.F당일()
+	}
+
 	for j, 값 := range 값_모음 {
 		if 값.M거래량 == 0 && lib.F지금().Hour() < 9 && 값.M일자.Equal(금일) {
 			continue // 새벽에 수집된 잘못된 데이터 제외.
@@ -101,7 +106,7 @@ func f매매주체_동향_수집_도우미(db *sql.DB, 종목코드 string, 시�
 
 		매매주체_동향_모음[j] = dd.New종목별_매매주체_동향(
 			값.M종목코드,
-			값.M일자,
+			일자,
 			float64(값.M기관_순매수량*값.M기관_단가),
 			float64(값.M외인계_순매수량*값.M외인계_단가),
 			float64(값.M개인_순매수량*값.M개인_단가))
