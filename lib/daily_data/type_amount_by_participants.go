@@ -96,7 +96,9 @@ func F종목별_매매주체_동향_DB읽기(db *sql.DB, 종목코드 string, �
 
 	값_모음 = make([]*S종목별_매매주체_동향, 0)
 
+	주말 := lib.F금일().Weekday() == time.Saturday || lib.F금일().Weekday() == time.Sunday
 	금일 := lib.F일자2정수(lib.F금일())
+
 	var 일자 time.Time
 
 	for rows.Next() {
@@ -111,8 +113,10 @@ func F종목별_매매주체_동향_DB읽기(db *sql.DB, 종목코드 string, �
 
 		값.M일자 = lib.F일자2정수(일자)
 
-		if 값.M일자 == 금일 && 값.G합계() == 0 {
-			continue // 잘못된 데이터 제외
+		if 주말 && 값.M일자 == 금일 {
+			continue // 주말 데이터 수집 중 발생할 수 있는 오류 건너뜀.
+		} else if 값.M기관_순매수액 == 0 && 값.M외국인_순매수액 == 0 && 값.M개인_순매수액 == 0 {
+			continue // 값이 비어있는 데이터 제외.
 		}
 
 		값_모음 = append(값_모음, 값)

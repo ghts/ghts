@@ -91,22 +91,18 @@ func f매매주체_동향_수집_도우미(db *sql.DB, 종목코드 string, 시�
 		return // 추가 저장할 데이터가 없음.
 	}
 
-	금일 := lib.F금일()
 	매매주체_동향_모음 := make([]*dd.S종목별_매매주체_동향, len(값_모음))
-
-	일자 := 금일
-	if 금일.Weekday() == time.Saturday || 금일.Weekday() == time.Sunday {
-		일자 = xing.F당일()
-	}
 
 	for j, 값 := range 값_모음 {
 		if 값.M거래량 == 0 || (값.M개인_순매수량 == 0 && 값.M기관_순매수량 == 0 && 값.M외인계_순매수량 == 0) {
-			continue	// 오류가 의심되거나 의미없는 데이터는 건너뜀.
+			continue // 오류가 의심되거나 의미없는 데이터는 건너뜀.
+		} else if 값.M일자.Weekday() == time.Saturday || 값.M일자.Weekday() == time.Sunday {
+			continue // 주말 데이터 수집 중 발생하는 데이터 오류 건너뜀.
 		}
 
 		매매주체_동향_모음[j] = dd.New종목별_매매주체_동향(
 			값.M종목코드,
-			일자,
+			값.M일자,
 			float64(값.M기관_순매수량*값.M기관_단가),
 			float64(값.M외인계_순매수량*값.M외인계_단가),
 			float64(값.M개인_순매수량*값.M개인_단가))
