@@ -65,6 +65,10 @@ type S종목별_매매주체_동향 struct {
 	M개인_순매수액  float64
 }
 
+func (s S종목별_매매주체_동향) G합계() float64 {
+	return s.M기관_순매수액 + s.M외국인_순매수액 + s.M개인_순매수액
+}
+
 func F종목별_매매주체_동향_DB읽기(db *sql.DB, 종목코드 string, 시작일 time.Time) (값_모음 []*S종목별_매매주체_동향, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 값_모음 = nil }}.S실행()
 
@@ -106,7 +110,7 @@ func F종목별_매매주체_동향_DB읽기(db *sql.DB, 종목코드 string, �
 
 		값.M일자 = lib.F일자2정수(일자)
 
-		if 값.M일자 == 금일 && (값.M개인_순매수액 == 0 || 값.M기관_순매수액 == 0 || 값.M외국인_순매수액 == 0) {
+		if 값.M일자 == 금일 && 값.G합계() == 0 {
 			continue // 잘못된 데이터 제외
 		}
 
