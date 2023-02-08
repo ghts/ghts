@@ -85,6 +85,7 @@ func F종목별_매매주체_동향_DB읽기(db *sql.DB, 종목코드 string, �
 	SQL.WriteString("FROM amount_by_participants ")
 	SQL.WriteString("WHERE code=?")
 	SQL.WriteString(" AND date>=? ")
+	SQL.WriteString(" AND (institution!=0 OR foreigner!=0 OR individual!=0) ")
 	SQL.WriteString("ORDER BY date")
 
 	stmt := lib.F확인2(db.Prepare(SQL.String()))
@@ -165,6 +166,10 @@ func F종목별_매매주체_동향_모음_DB저장(db *sql.DB, 값_모음 []*S�
 	defer stmt수정.Close()
 
 	for _, 값 := range 값_모음 {
+		if 값 == nil || (값.M기관_순매수액 == 0 && 값.M외국인_순매수액 == 0 && 값.M개인_순매수액 == 0) {
+			continue // 오류 발생한 데이터 무시.
+		}
+
 		lib.F확인2(stmt생성.Exec(값.M종목코드, 값.M일자))
 		lib.F확인2(stmt수정.Exec(값.M기관_순매수액, 값.M외국인_순매수액, 값.M개인_순매수액, 값.M종목코드, 값.M일자))
 	}
