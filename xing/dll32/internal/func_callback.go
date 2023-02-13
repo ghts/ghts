@@ -234,8 +234,6 @@ func OnMessageAndError(MSG데이터 unsafe.Pointer) {
 	콜백값.M내용 = dll.F2문자열_EUC_KR(unsafe.Pointer(g.MsgData))
 	콜백값.M에러여부 = 에러여부
 
-	lib.F조건부_실행(에러여부, lib.F체크포인트, 콜백값)
-
 	F콜백(콜백값)
 }
 
