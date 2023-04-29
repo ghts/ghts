@@ -7,7 +7,7 @@ import (
 	"fmt"
 	bfc "github.com/ghts/ghts/backtest/factor/common"
 	"github.com/ghts/ghts/lib"
-	_ "modernc.org/sqlite"
+	//_ "modernc.org/sqlite"
 	"path"
 )
 

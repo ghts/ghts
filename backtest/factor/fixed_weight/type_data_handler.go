@@ -6,8 +6,9 @@ import (
 	btc "github.com/ghts/ghts/backtest/common"
 	bfc "github.com/ghts/ghts/backtest/factor/common"
 	"github.com/ghts/ghts/lib"
+	dd "github.com/ghts/ghts/lib/daily_data"
 	xing "github.com/ghts/ghts/xing/go"
-	_ "modernc.org/sqlite"
+	//_ "modernc.org/sqlite"
 	"strings"
 	"time"
 )
