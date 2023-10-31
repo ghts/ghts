@@ -38,6 +38,7 @@ import (
 	"github.com/ghts/ghts/lib/dll"
 	xt "github.com/ghts/ghts/xing/base"
 	"runtime"
+	"time"
 	"unsafe"
 )
 
@@ -80,6 +81,7 @@ func go함수_호출_도우미(ch초기화, ch종료 chan lib.T신호) {
 			return
 		default:
 			F윈도우_메시지_처리()
+			time.Sleep(50)
 		}
 	}
 }
