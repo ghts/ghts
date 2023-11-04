@@ -515,6 +515,14 @@ func F2실수_소숫점_추가(값 interface{}, 소숫점_이하_자릿수 int) 
 	return F2실수(소숫점_추가_문자열)
 }
 
+func F2실수_소숫점_추가_공백은_0(값 interface{}, 소숫점_이하_자릿수 int) (float64, error) {
+	if strings.TrimSpace(F2문자열(값)) == "" {
+		return 0, nil
+	}
+
+	return F2실수_소숫점_추가(값, 소숫점_이하_자릿수)
+}
+
 func F2실수_소숫점_추가_단순형_공백은_0(값 interface{}, 소숫점_이하_자릿수 int) float64 {
 	if strings.TrimSpace(F2문자열(값)) == "" {
 		return 0
