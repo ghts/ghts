@@ -689,33 +689,53 @@ func F최소_호가단위by종목코드(종목코드 string) (값 int64, 에러 
 func F최소_호가단위by종목(종목 *lib.S종목) (값 int64, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 값 = 0 }}.S실행()
 
-	// 오류 발생 예방을 위해서 (기준가가 아닌) 상한가 기준으로 호가 단위 산출.
-	return f최소_호가단위by시장구분_기준가_20230125(종목.G시장구분(), 종목.G상한가())
-}
-
-func f최소_호가단위by시장구분_기준가_20230125(시장구분 lib.T시장구분, 기준가 int64) (값 int64, 에러 error) {
-	switch 시장구분 {
+	switch 종목.G시장구분() {
 	case lib.P시장구분_ETF, lib.P시장구분_ETN:
 		return 5, nil
 	}
 
+	// 오류 발생 예방을 위해서 (기준가가 아닌) 상한가 기준으로 호가 단위 산출.
+	return f호가_단위(종목.G상한가()), nil
+}
+
+func f호가_단위(기준가 int64) int64 {
 	switch {
 	case 기준가 < 2000:
-		return 1, nil
+		return 1
 	case 기준가 < 5000:
-		return 5, nil
+		return 5
 	case 기준가 < 20_000:
-		return 10, nil
+		return 10
 	case 기준가 < 50_000:
-		return 50, nil
+		return 50
 	case 기준가 < 200_000:
-		return 100, nil
+		return 100
 	case 기준가 < 500_000:
-		return 500, nil
-	case 기준가 >= 500_000:
-		return 1000, nil
+		return 500
 	default:
-		panic(lib.New에러with출력("예상하지 못한 경우. %v", 기준가))
+		return 1000
+	}
+}
+
+func F호가_필터(종목코드 string, 호가 int64) int64 {
+	if 호가 <= 0 {
+		return 0
+	} else if 종목, 에러 := F종목by코드(종목코드); 에러 != nil {
+		호가_단위 := f호가_단위(호가)
+		return 호가 / 호가_단위 * 호가_단위
+	} else {
+		return F호가_필터by종목(종목, 호가)
+	}
+}
+
+func F호가_필터by종목(종목 *lib.S종목, 호가 int64) int64 {
+	if 호가 <= 0 {
+		return 0
+	} else if 호가_단위, 에러 := F최소_호가단위by종목(종목); 에러 != nil {
+		호가_단위 = f호가_단위(호가)
+		return 호가 / 호가_단위 * 호가_단위
+	} else {
+		return 호가 / 호가_단위 * 호가_단위
 	}
 }
 
