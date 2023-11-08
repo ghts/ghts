@@ -202,10 +202,10 @@ func F조회_및_주문_질의_처리(질의 *lib.S채널_질의) {
 		c데이터 = unsafe.Pointer(xt.NewCSPAQ22200InBlock(계좌번호, f계좌_비밀번호()))
 		길이 = xt.SizeCSPAQ22200InBlock1
 	case xt.TR현물_정상_주문_CSPAT00600:
-		c데이터 = unsafe.Pointer(xt.NewCSPAT00600InBlock(질의값.(*xt.CSPAT00600_현물_정상_주문_질의값).S호가_확인(), f계좌_비밀번호()))
+		c데이터 = unsafe.Pointer(xt.NewCSPAT00600InBlock(질의값.(*xt.CSPAT00600_현물_정상_주문_질의값), f계좌_비밀번호()))
 		길이 = xt.SizeCSPAT00600InBlock1
 	case xt.TR현물_정정_주문_CSPAT00700:
-		c데이터 = unsafe.Pointer(xt.NewCSPAT00700InBlock(질의값.(*xt.CSPAT00700_현물_정정_주문_질의값).S호가_확인(), f계좌_비밀번호()))
+		c데이터 = unsafe.Pointer(xt.NewCSPAT00700InBlock(질의값.(*xt.CSPAT00700_현물_정정_주문_질의값), f계좌_비밀번호()))
 		길이 = xt.SizeCSPAT00700InBlock1
 	case xt.TR현물_취소_주문_CSPAT00800:
 		c데이터 = unsafe.Pointer(xt.NewCSPAT00800InBlock(질의값.(*lib.S질의값_취소_주문), f계좌_비밀번호()))
