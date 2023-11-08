@@ -37,6 +37,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"github.com/ghts/ghts/lib"
+	xing "github.com/ghts/ghts/xing/go"
 	"strings"
 	"time"
 )
@@ -46,6 +47,19 @@ type CSPAT00700_현물_정정_주문_질의값 struct {
 	//M계좌_비밀번호 string
 	M주문조건 lib.T주문조건
 	M호가유형 lib.T호가유형
+}
+
+func (s *CSPAT00700_현물_정정_주문_질의값) S호가_확인() *CSPAT00700_현물_정정_주문_질의값 {
+	s.M주문단가 = xing.F호가_필터(s.M종목코드, s.M주문단가)
+	return s
+}
+
+func (s *CSPAT00700_현물_정정_주문_질의값) String() string {
+	if s.M주문단가 == 0 {
+		return lib.F2문자열("%v %v %v %v주", s.M코드, s.M계좌번호, s.M종목코드, s.M주문수량)
+	} else {
+		return lib.F2문자열("%v %v %v %v원 %v주", s.M코드, s.M계좌번호, s.M종목코드, lib.F정수_쉼표_추가(s.M주문단가), s.M주문수량)
+	}
 }
 
 type CSPAT00700_현물_정정_주문_응답 struct {
