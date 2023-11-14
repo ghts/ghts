@@ -172,7 +172,7 @@ func NewCSPAT00800_현물_취소_주문_응답2(b []byte) (s *CSPAT00800_S현물
 	s.M주문번호 = lib.F확인2(lib.F2정수64(g.OrdNo))
 	s.M모_주문번호 = lib.F확인2(lib.F2정수64(g.PrntOrdNo))
 	s.M주문시각 = lib.F2금일_시각_단순형_공백은_초기값("150405.999999", 시각_문자열)
-	s.M주문시장_코드 = lib.F조건값(lib.F2문자열_공백_제거(g.OrdMktCode) == "", P주문시장_코스피, T주문시장구분(lib.F확인2(lib.F2정수64(g.OrdMktCode))))
+	s.M주문시장_코드 = lib.F조건값(lib.F2문자열_공백_제거(g.OrdMktCode) == "", P주문시장_코스피, T주문시장구분(lib.F확인2(lib.F2정수64_공백은_0(g.OrdMktCode))))
 	s.M주문유형_코드 = lib.F2문자열_공백_제거(g.OrdPtnCode)
 	s.M종목코드 = lib.F2문자열_공백_제거(g.ShtnIsuNo)
 	s.M공매도_호가구분 = lib.F2문자열_공백_제거(g.StslOrdprcTpCode)
