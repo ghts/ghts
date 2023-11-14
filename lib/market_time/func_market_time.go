@@ -6,8 +6,8 @@ import (
 )
 
 func F임시_지연_시간() time.Duration {
-	if 지금 := time.Now(); 지금.Year() == 2022 && 지금.Month() == time.January && 지금.Day() == 3 {
-		return time.Hour // 2022년 1월 3일 개장 1시간 순연.
+	if 지금 := time.Now(); 지금.Year() == 2023 && 지금.Month() == time.November && 지금.Day() == 16 {
+		return time.Hour // 2023년 11월 16일 수능으로 인해 개장 1시간 순연.
 	} else {
 		return 0
 	}
