@@ -1,5 +1,7 @@
 package ftfw
 
+import dd "github.com/ghts/ghts/lib/daily_data"
+
 type S재무_FG struct {
 	S재무_정보_식별
 	// TODO

@@ -57,7 +57,7 @@ func F메시지_윈도우_생성() {
 		0, 0, 0, 0, 0,
 		w32.HWND_MESSAGE, 0, hInstance, nil)
 
-	메시지_윈도우 = uintptr(윈도우_핸들)
+	메시지_윈도우 = 윈도우_핸들
 }
 
 func F윈도우_메시지_처리() {

@@ -1,5 +1,4 @@
 //go:build windows
-// +build windows
 
 // COPIED AND MODIFIED source code at https://github.com/lxn/win
 
@@ -58,7 +57,7 @@ func CreateWindowEx(dwExStyle uint32, lpClassName, lpWindowName *uint16, dwStyle
 		uintptr(hInstance),
 		uintptr(lpParam))
 
-	return uintptr(ret)
+	return ret
 }
 
 func PostQuitMessage(exitCode int32) {

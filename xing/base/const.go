@@ -663,8 +663,6 @@ func (s T동시호가_구분) String() string {
 	}
 
 	return lib.F2문자열("예상하지 못한 동시호가 구분. '%v'", int(s))
-
-	return ""
 }
 
 const (
@@ -738,7 +736,7 @@ func (p T전일대비_구분) String() string {
 		return "하락"
 	}
 
-	return strconv.Itoa(int(uint8(p)))
+	return strconv.Itoa(int(p))
 }
 
 const (
@@ -1049,7 +1047,7 @@ func (p T증권그룹) String() string {
 }
 
 func (p T증권그룹) XingCode() string {
-	코드 := strconv.Itoa(int(uint8(p)))
+	코드 := strconv.Itoa(int(p))
 
 	if len(코드) < 2 {
 		코드 = "0" + 코드

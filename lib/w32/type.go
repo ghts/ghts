@@ -1,5 +1,4 @@
 //go:build windows
-// +build windows
 
 // COPIED AND MODIFIED source code at https://github.com/lxn/win
 

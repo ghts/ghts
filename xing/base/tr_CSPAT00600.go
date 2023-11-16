@@ -58,8 +58,6 @@ func (s *CSPAT00600_현물_정상_주문_질의값) String() string {
 	} else {
 		return lib.F2문자열("%v %v %v %v원 %v주 %v", s.M코드, s.M계좌번호, s.M종목코드, lib.F정수_쉼표_추가(s.M주문단가), s.M주문수량, s.M매도_매수_구분)
 	}
-
-	return lib.F2문자열("%v %v %v %v %v", s.M코드, s.M계좌번호, s.M종목코드, s.M주문수량, s.M매도_매수_구분)
 }
 
 type CSPAT00600_현물_정상_주문_응답 struct {

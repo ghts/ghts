@@ -99,7 +99,6 @@ var (
 	Ch수신_도우미_종료    = make(chan lib.T신호, 수신_도우미_수량)
 	Ch콜백_도우미_종료    = make(chan lib.T신호, 콜백_도우미_수량)
 
-	TR_수신_중    = lib.New안전한_bool(false)
 	API_초기화_완료 = lib.New안전한_bool(false)
 	API_초기화_잠금 = new(sync.Mutex)
 )

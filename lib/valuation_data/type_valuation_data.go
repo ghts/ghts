@@ -94,7 +94,7 @@ func (s *S내재가치_정보_모음) S파일_저장(파일명 string) error {
 }
 
 func (s *S내재가치_정보_모음) DB읽기(db *sql.DB) (에러 error) {
-	defer lib.S예외처리{M에러: &에러, M함수: func() { s = nil }}.S실행()
+	defer lib.S예외처리{M에러: &에러}.S실행()
 
 	lib.F확인1(F내재가치_정보_테이블_생성(db))
 

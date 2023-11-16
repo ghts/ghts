@@ -41,10 +41,6 @@ import (
 var (
 	ch공통_종료_채널 = make(chan T신호)
 
-	한국증시_최근_개장일       = New안전한_시각(time.Time{})
-	한국증시_최근_개장일_갱신_시점 = New안전한_시각(time.Time{})
-	한국증기_최근_개장일_질의_잠금 sync.Mutex
-
 	파일경로_맵_잠금 = sync.RWMutex{}
 	파일경로_맵    = make(map[string]string)
 

@@ -3,6 +3,7 @@ package ftfw
 import (
 	btc "github.com/ghts/ghts/backtest/common"
 	"github.com/ghts/ghts/lib"
+	dd "github.com/ghts/ghts/lib/daily_data"
 )
 
 type I데이터_처리기 interface {

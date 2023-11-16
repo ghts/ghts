@@ -433,18 +433,18 @@ func (p T시장구분) String() string {
 	}
 }
 
-func (v T시장구분) Parse(값 string) error {
+func (v *T시장구분) Parse(값 string) error {
 	switch 값 {
 	case "코스피":
-		v = P시장구분_코스피
+		*v = P시장구분_코스피
 	case "코스닥":
-		v = P시장구분_코스닥
+		*v = P시장구분_코스닥
 	case "코넥스":
-		v = P시장구분_코넥스
+		*v = P시장구분_코넥스
 	case "ETF":
-		v = P시장구분_ETF
+		*v = P시장구분_ETF
 	case "ETN":
-		v = P시장구분_ETN
+		*v = P시장구분_ETN
 	default:
 		return New에러("예상하지 못한 M값. %v", 값)
 	}

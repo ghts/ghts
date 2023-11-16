@@ -119,7 +119,7 @@ func (s *S개장일_모음) S인덱스_재설정() {
 	s.인덱스_맵 = make(map[uint32]int)
 
 	for i, 개장일 := range s.M저장소 {
-		s.인덱스_맵[uint32(개장일)] = i
+		s.인덱스_맵[개장일] = i
 	}
 }
 

@@ -206,7 +206,7 @@ func (s S종목) MarshalBinary() ([]byte, error) {
 	// TODO : 추가된 항목에 맞게 업데이트 필요.
 
 	속성 := make([]byte, 1)
-	속성[0] = byte(uint8(s.시장_구분))
+	속성[0] = uint8(s.시장_구분)
 
 	코드_길이 := make([]byte, 2)
 	binary.LittleEndian.PutUint16(코드_길이, uint16(len(s.코드))) // 인텔 및 AMD 계열 CPU는 리틀 엔디언

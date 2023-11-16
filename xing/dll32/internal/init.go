@@ -118,7 +118,6 @@ func F서버_접속(서버_구분 xt.T서버_구분) (에러 error) {
 		// OK
 	case 에러 := <-질의.Ch에러:
 		return 에러
-		lib.F문자열_출력("접속 처리 실행 실패 후 재시도.")
 	case <-time.After(lib.P30초):
 		return lib.New에러("접속 타임아웃")
 	}

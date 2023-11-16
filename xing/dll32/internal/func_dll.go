@@ -541,7 +541,7 @@ func F에러_메시지(질의 *lib.S채널_질의) {
 
 	에러_메시지_길이, _, 에러_번호 := syscall.Syscall(etkGetErrorMessage, 3,
 		uintptr(에러_코드),
-		uintptr(unsafe.Pointer(c버퍼)),
+		c버퍼,
 		uintptr(버퍼_길이))
 
 	switch {
