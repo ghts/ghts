@@ -5,14 +5,6 @@ import (
 	"time"
 )
 
-func F임시_지연_시간() time.Duration {
-	if 지금 := time.Now(); 지금.Year() == 2023 && 지금.Month() == time.November && 지금.Day() == 16 {
-		return time.Hour // 2023년 11월 16일 수능으로 인해 개장 1시간 순연.
-	} else {
-		return 0
-	}
-}
-
 func F한국증시_정규_거래_시간임() bool {
 	return f한국증시_거래시간_도우미(9, 0, 15, 20)
 }
@@ -69,35 +61,30 @@ func F한국증시_폐장_시간임() bool {
 }
 
 func f한국증시_거래시간_도우미(시작_시간, 시작_분, 종료_시간, 종료_분 int) bool {
-	값 := lib.F금일()
 	지금 := time.Now()
-	로케일 := 지금.Location()
+	시작_시각 := F금일_보정_시각(시작_시간, 시작_분, 0)
+	종료_시각 := F금일_보정_시각(종료_시간, 종료_분, 0)
 
-	시작_시각 := time.Date(값.Year(), 값.Month(), 값.Day(), 시작_시간, 시작_분, 0, 0, 로케일)
-	종료_시각 := time.Date(값.Year(), 값.Month(), 값.Day(), 종료_시간, 종료_분, 0, 0, 로케일)
-
-	if int64(F임시_지연_시간()) != 0 {
-		시작_시각 = 시작_시각.Add(F임시_지연_시간())
-		종료_시각 = 종료_시각.Add(F임시_지연_시간())
-	}
-
-	if 지금.After(시작_시각) && 지금.Before(종료_시각) {
-		return true
-	}
-
-	return false
+	return 지금.After(시작_시각) && 지금.Before(종료_시각)
 }
 
 func F대기_한국_시각(시, 분, 초 int) {
-	목표_시각 := lib.F확인2(lib.F2금일_한국_시각(시, 분, 초)).Add(F임시_지연_시간())
+	목표_시각 := F금일_보정_시각(시, 분, 초)
 	지금 := lib.F지금()
 
 	if 목표_시각.After(지금) {
-		대기_시간 := 목표_시각.Sub(지금)
-		lib.F대기(대기_시간)
+		lib.F대기(목표_시각.Sub(지금))
 	}
 }
 
 func F금일_보정_시각(시, 분, 초 int) time.Time {
-	return lib.F금일().Add(F임시_지연_시간() + time.Duration(시)*lib.P1시간 + time.Duration(분)*lib.P1분 + time.Duration(초)*lib.P1초)
+	return lib.F금일().Add(f임시_지연_시간() + time.Duration(시)*lib.P1시간 + time.Duration(분)*lib.P1분 + time.Duration(초)*lib.P1초)
+}
+
+func f임시_지연_시간() time.Duration {
+	if 지금 := time.Now(); 지금.Year() == 2023 && 지금.Month() == time.November && 지금.Day() == 16 {
+		return time.Hour // 2023년 11월 16일 수능으로 인해 개장 1시간 순연.
+	} else {
+		return 0
+	}
 }
