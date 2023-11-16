@@ -612,12 +612,6 @@ func F로그_설정_화면_파일_동시() {
 	}
 }
 
-func F로그_파일_닫기() {
-	if 로그_파일 != nil {
-		로그_파일.Close()
-	}
-}
-
 func F로그_설정_화면only() {
 	if 로그_파일 != nil {
 		로그_파일명 := 로그_파일.Name()
@@ -626,6 +620,16 @@ func F로그_설정_화면only() {
 	}
 
 	log.SetOutput(os.Stdout)
+}
+
+func F로그_파일_닫기() {
+	if 로그_파일 != nil {
+		로그_파일.Close()
+	}
+}
+
+func F로그_메시지에서_타임_스탬프_없애기() {
+	log.SetFlags(log.Flags() &^ (log.Ldate | log.Ltime))
 }
 
 func f로그_파일_정리() {
