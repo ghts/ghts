@@ -44,6 +44,16 @@ import (
 
 // 참고자료 : https://statools.tistory.com/175
 func F상장_주식_수량_맵() (상장주식수량_맵 map[string]int64, 에러 error) {
+	for i := 0; i < 3; i++ {
+		if 상장주식수량_맵, 에러 = f상장_주식_수량_맵(); 에러 == nil && len(상장주식수량_맵) > 0 {
+			return
+		}
+	}
+
+	return nil, 에러
+}
+
+func f상장_주식_수량_맵() (상장주식수량_맵 map[string]int64, 에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
 	레코드_모음, 에러 := csv.NewReader(strings.NewReader(lib.F확인2(csv다운로드()))).ReadAll()
