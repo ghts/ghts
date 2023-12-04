@@ -1,0 +1,99 @@
+package daily_data
+
+import (
+	"github.com/PuerkitoBio/goquery"
+	"github.com/ghts/ghts/lib"
+	"io/ioutil"
+	"net/http"
+	"strings"
+	"time"
+)
+
+type S상장_법인_정보 struct {
+	M회사명  string
+	M종목코드 string
+	M업종   string
+	M주요제품 string
+	M상장일  time.Time
+	M결산월  time.Month
+}
+
+func F상장_법인_정보_맵() (법인정보_맵 map[string]*S상장_법인_정보, 에러 error) {
+	for i := 0; i < 3; i++ {
+		if 법인정보_맵, 에러 = f상장_법인_정보_맵(); 에러 == nil && len(법인정보_맵) > 0 {
+			return
+		}
+	}
+
+	return nil, 에러
+}
+
+func f상장_법인_정보_맵() (법인정보_맵 map[string]*S상장_법인_정보, 에러 error) {
+	defer lib.S예외처리{M에러: &에러, M함수: func() { 법인정보_맵 = nil }}.S실행()
+
+	url := `http://kind.krx.co.kr/corpgeneral/corpList.do?method=download&searchType=13`
+	응답 := lib.F확인2(http.Get(url))
+	defer 응답.Body.Close()
+
+	응답값 := lib.F확인2(ioutil.ReadAll(응답.Body))
+	문서 := lib.F확인2(goquery.NewDocumentFromReader(strings.NewReader(lib.F2문자열_EUC_KR(응답값))))
+	법인정보_맵 = make(map[string]*S상장_법인_정보)
+
+	문서.Find("body > table > tbody > tr").Each(func(행 int, s *goquery.Selection) {
+		법인_정보 := new(S상장_법인_정보)
+
+		s.Find("td").Each(func(열 int, s *goquery.Selection) {
+			문자열 := lib.F2문자열_공백_제거(s.Text())
+
+			switch 열 {
+			case 0:
+				법인_정보.M회사명 = 문자열
+			case 1:
+				법인_정보.M종목코드 = 문자열
+			case 2:
+				법인_정보.M업종 = 문자열
+			case 3:
+				법인_정보.M주요제품 = 문자열
+			case 4:
+				if 상장일, 에러 := lib.F2포맷된_일자(lib.P일자_형식, 문자열); 에러 == nil {
+					법인_정보.M상장일 = 상장일
+				} else {
+					lib.F문자열_출력("상장일 에러 : %v '%v'", 법인_정보.M종목코드, 문자열)
+				}
+			case 5:
+				if 월_정수, 에러 := lib.F2정수(lib.F정규식_검색(문자열, []string{`[0-9]+`})); 에러 == nil {
+					월_모음 := []time.Month{
+						time.January,
+						time.February,
+						time.March,
+						time.April,
+						time.May,
+						time.June,
+						time.July,
+						time.August,
+						time.September,
+						time.October,
+						time.November,
+						time.December}
+
+					for _, 월 := range 월_모음 {
+						if 월_정수 == int(월) {
+							법인_정보.M결산월 = 월
+							break
+						}
+					}
+				} else {
+					lib.F문자열_출력("결산월 에러 : %v '%v'", 법인_정보.M종목코드, 문자열)
+				}
+			default:
+				// PASS
+			}
+		})
+
+		if 법인_정보.M종목코드 != "" {
+			법인정보_맵[법인_정보.M종목코드] = 법인_정보
+		}
+	})
+
+	return 법인정보_맵, nil
+}
