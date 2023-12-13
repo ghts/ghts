@@ -65,6 +65,13 @@ func TestF최소값(t *testing.T) {
 	F테스트_같음(t, F최소값(1, -1), -1)
 }
 
+func TestF중간값(t *testing.T) {
+	t.Parallel()
+	F테스트_같음(t, F중간값(-1, 0, 1), 0)
+	F테스트_같음(t, F중간값(100, 100, 0), 100)
+	F테스트_같음(t, F중간값(100, 0, 0), 0)
+}
+
 func TestF절대값(t *testing.T) {
 	t.Parallel()
 
