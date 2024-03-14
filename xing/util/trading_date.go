@@ -68,7 +68,7 @@ func New개장일_모음(db *sql.DB) (개장일_모음 *S개장일_모음, 에�
 	return New개장일_모음from슬라이스(개장일_슬라이스), nil
 }
 
-func New개장일_모음from슬라이스[T lib.T정수](값_모음 []T) *S개장일_모음{
+func New개장일_모음from슬라이스[T lib.T정수](값_모음 []T) *S개장일_모음 {
 	정수값_모음 := make([]int, len(값_모음))
 
 	for i, 개장일 := range 값_모음 {
@@ -117,6 +117,10 @@ func (s S개장일_모음) G증분_개장일(일자 uint32, 증분 int) (uint32,
 }
 
 func (s S개장일_모음) G이전_개장일(기간 int) (이전_개장일 uint32, 에러 error) {
+	if len(s.M저장소)-1 < 기간 {
+		return lib.F일자2정수(time.Time{}), lib.New에러("Index out of range. %v %v", len(s.M저장소), 기간)
+	}
+
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 이전_개장일 = 0 }}.S실행()
 
 	return s.M저장소[len(s.M저장소)-기간-1], nil
