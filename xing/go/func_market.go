@@ -417,7 +417,7 @@ func ETF_ETN_종목_여부(종목_코드 string) bool {
 }
 
 func F채권_종목_여부(종목_코드 string) bool {
-	return strings.HasPrefix(종목_코드, "D") || (!F코스피_종목_여부(종목_코드) && !F코스닥_종목_여부(종목_코드))
+	return strings.HasPrefix(종목_코드, "D")
 }
 
 func F레버리지_종목_여부(종목코드 string) bool {
