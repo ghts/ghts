@@ -37,9 +37,19 @@ import (
 	"bytes"
 	"github.com/ghts/ghts/lib"
 	"gopkg.in/ini.v1"
+	"io"
 	"os"
 	"path/filepath"
 )
+
+func F로그인_설정_화일_읽기() (로그인_정보 *S로그인_정보, 에러 error) {
+	defer lib.S예외처리{M에러: &에러}.S실행()
+
+	로그인_정보_화일_경로 := F로그인_설정_화일_경로()
+	로그인_정보_문자열 := lib.F확인2(F로그인_정보_문자열_읽기(로그인_정보_화일_경로))
+
+	return F로그인_정보_문자열_해석(로그인_정보_문자열)
+}
 
 func F로그인_설정_화일_경로_설정(경로 string) {
 	os.Setenv(P환경변수_설정_화일_경로, 경로)
@@ -55,23 +65,31 @@ func F로그인_설정_화일_경로() string {
 	}
 }
 
-func F로그인_설정_화일_읽기() (로그인_정보 *S로그인_정보, 에러 error) {
+func F로그인_정보_문자열_읽기(로그인_정보_화일_경로 string) (로그인_정보_문자열 string, 에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
-	설정_화일_경로 := F로그인_설정_화일_경로()
-
-	if lib.F파일_없음(설정_화일_경로) {
+	if lib.F파일_없음(로그인_정보_화일_경로) {
 		버퍼 := new(bytes.Buffer)
 		버퍼.WriteString("Xing 설정화일 찾을 수없음\n")
 		버퍼.WriteString("'%v'가 존재하지 않습니다.\n")
 		버퍼.WriteString("환경변수 '%v'에 설정화일 경로를 설정하십시오.\n")
 		버퍼.WriteString("xing_config.ini.sample을 참조하여 새로 생성하십시오.")
 
-		return nil, lib.New에러(버퍼.String(), 설정_화일_경로, P환경변수_설정_화일_경로)
+		return "", lib.New에러(버퍼.String(), 로그인_정보_화일_경로, P환경변수_설정_화일_경로)
 	}
+	로그인_정보_화일 := lib.F확인2(os.Open(로그인_정보_화일_경로))
+	defer 로그인_정보_화일.Close()
 
-	cfg파일 := lib.F확인2(ini.Load(설정_화일_경로))
-	섹션 := lib.F확인2(cfg파일.GetSection("XingAPI_LogIn_Info"))
+	바이트_모음 := lib.F확인2(io.ReadAll(로그인_정보_화일))
+
+	return string(바이트_모음), nil
+}
+
+func F로그인_정보_문자열_해석(로그인_정보_문자열 string) (로그인_정보 *S로그인_정보, 에러 error) {
+	defer lib.S예외처리{M에러: &에러}.S실행()
+
+	설정_화일 := lib.F확인2(ini.Load([]byte(로그인_정보_문자열)))
+	섹션 := lib.F확인2(설정_화일.GetSection("XingAPI_LogIn_Info"))
 
 	로그인_정보 = new(S로그인_정보)
 	로그인_정보.M로그인_ID = lib.F확인2(섹션.GetKey("ID")).String()
@@ -136,9 +154,9 @@ func F로그인_정보_설정() (에러 error) {
 }
 
 func F로그인_정보_환경_변수_삭제() {
-	os.Setenv(P환경변수_로그인_ID, "")
-	os.Setenv(P환경변수_로그인_암호, "")
-	os.Setenv(P환경변수_인증서_암호, "")
-	os.Setenv(P환경변수_계좌_비밀번호, "")
-	os.Setenv(P환경변수_모의투자_암호, "")
+	lib.F확인1(os.Setenv(P환경변수_로그인_ID, ""))
+	lib.F확인1(os.Setenv(P환경변수_로그인_암호, ""))
+	lib.F확인1(os.Setenv(P환경변수_인증서_암호, ""))
+	lib.F확인1(os.Setenv(P환경변수_계좌_비밀번호, ""))
+	lib.F확인1(os.Setenv(P환경변수_모의투자_암호, ""))
 }
