@@ -938,7 +938,7 @@ func GOPATH() string {
 	GOPATH := F환경변수("GOPATH")
 
 	if GOPATH == "" {
-		GOPATH = F홈_디렉토리() + `/Go` // Go 1.8부터 생긴 디폴트 GOPATH
+		GOPATH = F홈_디렉토리() + `/go` // Go 1.8부터 생긴 디폴트 GOPATH
 	}
 
 	return GOPATH
@@ -950,6 +950,10 @@ func GOROOT() (GOROOT string) {
 			GOROOT = `C:\Go`
 		} else if F파일_존재함(`C:\Program Files\Go\bin\go.exe`) {
 			GOROOT = `C:\Program Files\Go`
+		} else if F파일_존재함(`D:\Program Files\Go\bin\go.exe`) {
+			GOROOT = `D:\Program Files\Go`
+		} else if F파일_존재함(`E:\Program Files\Go\bin\go.exe`) {
+			GOROOT = `E:\Program Files\Go`
 		} else {
 			GO실행화일_경로 := F확인2(F파일_검색(`C:\`, "go.exe"))
 			GO실행화일_경로 = strings.TrimSpace(GO실행화일_경로)
