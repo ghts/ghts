@@ -123,10 +123,10 @@ func F접속(서버_구분 xt.T서버_구분) error {
 
 	switch 서버_구분 {
 	case xt.P서버_실거래:
-		서버_이름 = "hts.ebestsec.co.kr"
+		서버_이름 = "api.ls-sec.co.kr"
 		포트_번호 = 20001
 	case xt.P서버_모의투자:
-		서버_이름 = "demo.ebestsec.co.kr"
+		서버_이름 = "demo.ls-sec.co.kr"
 		포트_번호 = 20001
 	case xt.P서버_XingACE:
 		서버_이름 = "127.0.0.1"

@@ -46,26 +46,34 @@ func XingAPI디렉토리() (string, error) {
 		return lib.F디렉토리명(파일경로)
 	}
 
-	기본_위치 := `C:\eBEST\xingAPI\` + xing_dll
-	if _, 에러 := os.Stat(기본_위치); 에러 == nil {
-		lib.F실행경로_추가(기본_위치)
+	위치_후보_모음 := []string{
+		`C:\LS_SEC\xingAPI\` + xing_dll, // 새로운 위치
+		`C:\eBEST\xingAPI\` + xing_dll}  // 예전 위치
 
-		if _, 에러 := lib.F실행파일_검색(xing_dll); 에러 != nil {
-			return "", lib.New에러("실행경로에 추가시켰으나 여전히 찾을 수 없음.")
+	for _, 위치 := range 위치_후보_모음 {
+		if _, 에러 := os.Stat(위치); 에러 == nil {
+			lib.F실행경로_추가(위치)
+
+			if _, 에러 := lib.F실행파일_검색(xing_dll); 에러 != nil {
+				return "", lib.New에러("실행경로에 추가시켰으나 여전히 찾을 수 없음.")
+			}
+
+			return lib.F디렉토리명(위치)
 		}
-
-		return lib.F디렉토리명(기본_위치)
 	}
 
-	파일경로, 에러 = lib.F파일_검색(`C:\`, xing_dll)
-	if 에러 == nil {
-		lib.F실행경로_추가(파일경로)
+	for _, 드라이브 := range []string{`C:\`, `D:\`, `E:\`} {
+		파일경로, 에러 = lib.F파일_검색(드라이브, xing_dll)
 
-		if _, 에러 := lib.F실행파일_검색(xing_dll); 에러 != nil {
-			return "", lib.New에러("실행경로에 추가시켰으나 여전히 찾을 수 없음.")
+		if 에러 == nil {
+			lib.F실행경로_추가(파일경로)
+
+			if _, 에러 := lib.F실행파일_검색(xing_dll); 에러 != nil {
+				return "", lib.New에러("실행경로에 추가시켰으나 여전히 찾을 수 없음.")
+			}
+
+			return lib.F디렉토리명(파일경로)
 		}
-
-		return lib.F디렉토리명(파일경로)
 	}
 
 	return "", lib.New에러("DLL파일을 찾을 수 없습니다.")

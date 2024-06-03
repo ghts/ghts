@@ -36,6 +36,7 @@ package xt
 import (
 	"github.com/ghts/ghts/lib"
 	"strconv"
+	"strings"
 	"unsafe"
 )
 
@@ -1905,9 +1906,13 @@ func (p T통신매체구분) F해석(값 interface{}) T통신매체구분 {
 		return P통신매체_안드로이드
 	case "API", "씽(X-ing)":
 		return P통신매체_API
-	case "HTS", "xingQ master", "일반", "eBEST Pro Master":
+	case "HTS", "xingQ master", "일반":
 		return P통신매체_HTS
 	default:
+		if strings.Contains(문자열, "투혼") {
+			return P통신매체_HTS
+		}
+
 		panic(lib.New에러("예상하지 못한 값 : '%v'", 문자열))
 	}
 }
