@@ -5,7 +5,6 @@ DEPRECATED 경고 : 이 저장소는 DLL호출 방식의 Xing API를 사용합�
 
 GHTS
 ====
-- 
 - 국내 주식 매매 기능은 LS증권 API를 통해 구현되어서 실거래 적용 중.
 - 향후 대대적인 구조 변경 가능성 있음. (증권사 API 모듈 분리, nanomsg -> gRPC, 제너릭 적용 등등)
 
