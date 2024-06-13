@@ -42,15 +42,30 @@ import (
 	"strings"
 )
 
+var map상장_주식_수량 map[string]int64
+
+// F상장_주식_수량_맵 : HTTP 쿼리 빈도를 최소화 하기 위해서 로컬 캐시('map상장_주식_수량')를 사용.
 // 참고자료 : https://statools.tistory.com/175
 func F상장_주식_수량_맵() (상장주식수량_맵 map[string]int64, 에러 error) {
-	for i := 0; i < 3; i++ {
-		if 상장주식수량_맵, 에러 = f상장_주식_수량_맵(); 에러 == nil && len(상장주식수량_맵) > 0 {
-			return
+	if len(map상장_주식_수량) == 0 {
+		for i := 0; i < 3; i++ { // map상장_주식_수량 초기화
+			if map상장_주식_수량, 에러 = f상장_주식_수량_맵(); 에러 == nil && len(map상장_주식_수량) > 1000 {
+				break
+			}
 		}
 	}
 
-	return nil, 에러
+	return f상장_주식_수량_맵_복사본(), 에러
+}
+
+func f상장_주식_수량_맵_복사본() (복사본 map[string]int64) {
+	복사본 = make(map[string]int64)
+
+	for 종목코드, 상장_주식_수량 := range map상장_주식_수량 {
+		복사본[종목코드] = 상장_주식_수량
+	}
+
+	return 복사본
 }
 
 func f상장_주식_수량_맵() (상장주식수량_맵 map[string]int64, 에러 error) {
