@@ -682,12 +682,12 @@ func (p T전일대비_구분) G부호보정_정수64(등락폭 int64) int64 {
 		if 등락폭 < 0 {
 			등락폭 = 등락폭 * -1
 		}
-	//case P구분_보합:
-	//	return "보합"
 	case P구분_하한, P구분_하락:
 		if 등락폭 > 0 {
 			등락폭 = 등락폭 * -1
 		}
+	case P구분_보합:
+		// PASS
 	default:
 		panic(lib.F2문자열("예상하지 못한 경우 : '%v'", int(p)))
 	}
@@ -701,12 +701,12 @@ func (p T전일대비_구분) G부호보정_실수64(등락율 float64) float64 
 		if 등락율 < 0.0 {
 			등락율 = 등락율 * -1
 		}
-	//case P구분_보합:
-	//	return "보합"
 	case P구분_하한, P구분_하락:
 		if 등락율 > 0.0 {
 			등락율 = 등락율 * -1
 		}
+	case P구분_보합:
+		// PASS
 	default:
 		panic(lib.F2문자열("예상하지 못한 경우 : '%v'", int(p)))
 	}
