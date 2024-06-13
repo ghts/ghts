@@ -1,4 +1,4 @@
-DEPRECATED 경고 : 이 저장소는 DLL호출 방식의 예전 방식을 사용합니다.
+DEPRECATED 경고 : 이 저장소는 DLL호출 방식의 Xing API를 사용합니다.
 
 https://openapi.ls-sec.co.kr/ 에서 새로 출시된 HTTP 방식의 Open API를 사용하시길 권장 드립니다.
 
