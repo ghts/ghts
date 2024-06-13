@@ -36,8 +36,8 @@ package util
 import (
 	"database/sql"
 	"github.com/ghts/ghts/lib"
-	dd "github.com/ghts/ghts/lib/daily_data"
 	mt "github.com/ghts/ghts/lib/market_time"
+	dd "github.com/ghts/ghts/lib/unused"
 	xt "github.com/ghts/ghts/xing/base"
 	xing "github.com/ghts/ghts/xing/go"
 	"time"

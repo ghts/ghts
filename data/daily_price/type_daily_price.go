@@ -31,7 +31,7 @@ GNU Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public License
 along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 
-package daily_data
+package daily_price
 
 import (
 	"bytes"
@@ -113,9 +113,9 @@ func (s S일일_가격정보) G복사본() *S일일_가격정보 {
 		M일자:   s.M일자,
 		M시가:   s.M시가,
 		M고가:   s.M고가,
-		M저가: s.M저가,
-		M종가: s.M종가,
-		M거래량: s.M거래량})
+		M저가:   s.M저가,
+		M종가:   s.M종가,
+		M거래량:  s.M거래량})
 }
 
 func New종목별_일일_가격정보_모음_3년치_DB읽기(db *sql.DB, 종목코드 string) (s *S종목별_일일_가격정보_모음, 에러 error) {
@@ -1126,6 +1126,7 @@ func (s S종목별_일일_가격정보_모음) g월수익율_변동성_도우미
 	return lib.F표준_편차(월수익율...)
 }
 
+// F일일_가격정보_테이블_생성 : mysql, mariadb 기준.
 func F일일_가격정보_테이블_생성(db *sql.DB) error {
 	SQL := new(bytes.Buffer)
 	SQL.WriteString("CREATE TABLE IF NOT EXISTS daily_price (")

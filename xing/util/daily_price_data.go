@@ -34,8 +34,8 @@ along with GHTS.  If not, see <http://www.gnu.org/licenses/>. */
 package util
 
 import (
+	dd "github.com/ghts/ghts/data/daily_price"
 	"github.com/ghts/ghts/lib"
-	dd "github.com/ghts/ghts/lib/daily_data"
 	mt "github.com/ghts/ghts/lib/market_time"
 	xt "github.com/ghts/ghts/xing/base"
 	xing "github.com/ghts/ghts/xing/go"
@@ -207,7 +207,7 @@ func f일일_가격정보_수집_도우미(db *sql.DB, 종목코드 string, 시�
 		if 일일_데이터.M거래량 == 0 {
 			continue
 		} else if 일일_데이터.M일자.Equal(금일) && 폐장_전 {
-			continue	// 폐장 전에 수집된 금일 데이터 제외.
+			continue // 폐장 전에 수집된 금일 데이터 제외.
 		}
 
 		일일_가격정보_슬라이스[j] = dd.New일일_가격정보(

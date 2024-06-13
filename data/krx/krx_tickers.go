@@ -1,4 +1,4 @@
-package daily_data
+package krx
 
 import (
 	"github.com/PuerkitoBio/goquery"
