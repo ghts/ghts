@@ -1,6 +1,7 @@
 DEPRECATED 경고 : 이 저장소는 DLL호출 방식의 Xing API를 사용합니다.
 
-https://openapi.ls-sec.co.kr/ 에서 새로 출시된 HTTP 방식의 Open API를 사용하시길 권장 드립니다.
+새로 개발하는 프로젝트의 경우, 최근 출시된 HTTP 방식의 Open API가 권장됩니다. <br>
+(https://openapi.ls-sec.co.kr/)
 
 GHTS
 ====
