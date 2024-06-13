@@ -39,13 +39,12 @@ import (
 	"time"
 )
 
-// RWMutex를 위한 인터페이스
+// I읽기_잠금 : RWMutex를 위한 인터페이스
 type I읽기_잠금 interface {
 	RLock()
 	RUnlock()
 }
 
-// 안전한 bool
 type I안전한_bool interface {
 	G값() bool
 	S값(값 bool) error
@@ -79,7 +78,6 @@ func (s *s안전한_bool) S값(값 bool) error {
 	}
 }
 
-// 안전한 정수64
 type I안전한_정수64 interface {
 	G값() int64
 	S값(값 int64)
@@ -108,7 +106,6 @@ func (s *s안전한_정수64) S값(값 int64) {
 	s.값 = 값
 }
 
-// 안전한 string
 type I안전한_string interface {
 	G값() string
 	S값(값 string)
@@ -137,7 +134,6 @@ func (s *s안전한_string) S값(값 string) {
 	s.값 = 값
 }
 
-// 안전한 일련 번호
 type I안전한_일련번호 interface {
 	G값() int64
 }
@@ -160,7 +156,6 @@ func (s *s안전한_일련번호) G값() int64 {
 	return s.일련번호
 }
 
-// 안전한 시각
 type I안전한_시각 interface {
 	G값() time.Time
 	S값(값 time.Time)
@@ -189,7 +184,6 @@ func (s *s안전한_시각) S값(값 time.Time) {
 	s.값 = 값
 }
 
-// 안전한 테스트
 type I안전한_테스트 interface {
 	G참임(참이어야_하는_값 bool, 에러_발생_시_출력할_변수값 ...interface{})
 	G거짓임(거짓이어야_하는_값 bool, 에러_발생_시_출력할_변수값 ...interface{})

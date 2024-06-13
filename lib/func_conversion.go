@@ -747,8 +747,9 @@ func f안전한_전달값_자료형(전달값 interface{}) bool {
 		reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64,
 		reflect.Float32, reflect.Float64, reflect.Bool, reflect.String,
 		reflect.Chan, reflect.Func:
-		// Chan, Func은 참조형이긴 하지만 그대로 전달해도 괜찮을 듯.
-		return true
+		return true // Chan, Func은 참조형이긴 하지만 그대로 전달해도 괜찮을 듯.
+	default:
+		// PASS. 코드 검사 통과를 위해서 default문 추가.
 	}
 
 	switch 전달값.(type) {

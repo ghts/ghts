@@ -60,7 +60,7 @@ func f콜백_TR데이터_처리기(값 lib.I콜백) (에러 error) {
 	lib.F조건부_패닉(식별번호 == 0, "식별번호 없음")
 
 	if 대기_항목 == nil {
-		switch 값.G콜백() {
+		switch 콜백 := 값.G콜백(); 콜백 {
 		case lib.P콜백_TR데이터:
 			panic(lib.New에러("식별번호 '%v' : nil 대기항목. %v", 식별번호, 값.G콜백()))
 		case lib.P콜백_메시지_및_에러:
@@ -71,6 +71,9 @@ func f콜백_TR데이터_처리기(값 lib.I콜백) (에러 error) {
 			} else if 변환값.M내용 != "조회완료" && 변환값.M내용 != "정상적으로 조회가 완료되었습니다." {
 				panic(lib.New에러("식별번호 '%v' : nil 대기항목. 메세지. '%v' '%v' '%v'", 식별번호, TR코드, 변환값.M코드, 변환값.M내용))
 			}
+		default:
+			panic(lib.F2문자열("예상하지 못한 경우 : '%v' '%v'", int(콜백), 콜백.String()))
+
 		}
 	}
 

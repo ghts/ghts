@@ -62,22 +62,37 @@ func (s *S모의_테스트) S값(통과_여부 bool) {
 	s.통과_여부 = 통과_여부
 }
 
-func (s *S모의_테스트) Error(args ...interface{})                 { s.S값(false) }
+//goland:noinspection GoUnusedParameter
+func (s *S모의_테스트) Error(args ...interface{}) { s.S값(false) }
+
+//goland:noinspection GoUnusedParameter,GoUnusedParameter
 func (s *S모의_테스트) Errorf(format string, args ...interface{}) { s.S값(false) }
 func (s *S모의_테스트) Fail()                                     { s.S값(false) }
 func (s *S모의_테스트) FailNow()                                  { s.S값(false) }
 func (s *S모의_테스트) Failed() bool                              { return !s.G값() }
-func (s *S모의_테스트) Fatal(args ...interface{})                 { s.S값(false) }
-func (s *S모의_테스트) Fatalf(format string, args ...interface{}) { s.S값(false) }
-func (s *S모의_테스트) Log(args ...interface{})                   {}
-func (s *S모의_테스트) Logf(format string, args ...interface{})   {}
-func (s *S모의_테스트) Skip(args ...interface{})                  {}
-func (s *S모의_테스트) SkipNow()                                  {}
-func (s *S모의_테스트) Skipf(format string, args ...interface{})  {}
-func (s *S모의_테스트) Skipped() bool                             { return false }
-func (s *S모의_테스트) S모의_테스트_리셋()                               { s.S값(true) }
 
-// F에러패닉_처리()의 인수.
+//goland:noinspection GoUnusedParameter
+func (s *S모의_테스트) Fatal(args ...interface{}) { s.S값(false) }
+
+//goland:noinspection GoUnusedParameter,GoUnusedParameter
+func (s *S모의_테스트) Fatalf(format string, args ...interface{}) { s.S값(false) }
+
+//goland:noinspection GoUnusedParameter
+func (s *S모의_테스트) Log(args ...interface{}) {}
+
+//goland:noinspection GoUnusedParameter
+func (s *S모의_테스트) Logf(format string, args ...interface{}) {}
+
+//goland:noinspection GoUnusedParameter
+func (s *S모의_테스트) Skip(args ...interface{}) {}
+func (s *S모의_테스트) SkipNow()                 {}
+
+//goland:noinspection GoUnusedParameter,GoUnusedParameter
+func (s *S모의_테스트) Skipf(format string, args ...interface{}) {}
+func (s *S모의_테스트) Skipped() bool                            { return false }
+func (s *S모의_테스트) S모의_테스트_리셋()                              { s.S값(true) }
+
+// S예외처리 : 함수 시작할 때 defer에서 S실행() 메소드를 통해서 예외를 처리하는 용도로 사용.
 type S예외처리 struct {
 	M에러    *error
 	M함수    func()

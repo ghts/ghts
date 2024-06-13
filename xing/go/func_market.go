@@ -301,6 +301,8 @@ func F종목_정보_설정() (에러 error) {
 		case lib.P시장구분_ETN:
 			종목모음_ETN = append(종목모음_ETN, 종목)
 			종목모음_ETF_ETN = append(종목모음_ETF_ETN, 종목)
+		default:
+			// PASS. 코드 검사 통과를 위해서 default문 추가.
 		}
 
 		switch s.M증권그룹 {
@@ -692,10 +694,10 @@ func F최소_호가단위by종목(종목 *lib.S종목) (값 int64, 에러 error)
 	switch 종목.G시장구분() {
 	case lib.P시장구분_ETF, lib.P시장구분_ETN:
 		return 5, nil
+	default:
+		// 오류 발생 예방을 위해서 (기준가가 아닌) 상한가 기준으로 호가 단위 산출.
+		return f호가_단위(종목.G상한가()), nil
 	}
-
-	// 오류 발생 예방을 위해서 (기준가가 아닌) 상한가 기준으로 호가 단위 산출.
-	return f호가_단위(종목.G상한가()), nil
 }
 
 func f호가_단위(기준가 int64) int64 {

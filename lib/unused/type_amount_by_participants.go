@@ -65,7 +65,7 @@ type S종목별_매매주체_동향 struct {
 	M개인_순매수액  float64
 }
 
-func (s S종목별_매매주체_동향) G합계() float64 {
+func (s *S종목별_매매주체_동향) G합계() float64 {
 	return s.M기관_순매수액 + s.M외국인_순매수액 + s.M개인_순매수액
 }
 

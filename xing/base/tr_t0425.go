@@ -102,6 +102,8 @@ func NewT0425InBlock(질의값 *T0425_현물_체결_미체결_조회_질의값, 
 		정렬구분 = "1"
 	case lib.P정렬_역순:
 		정렬구분 = "2"
+	default:
+		panic(lib.F2문자열("예상하지 못한 경우 : '%v' '%v'", int(질의값.M정렬구분), 질의값.M정렬구분.String()))
 	}
 
 	lib.F바이트_복사_문자열(g.Accno[:], 질의값.M계좌번호)
@@ -160,8 +162,8 @@ func NewT0425_현물_체결_미체결_조회_응답_반복값_모음(b []byte) (
 
 	버퍼 := bytes.NewBuffer(b)
 	수량 := len(b) / SizeT0425OutBlock1
-	g_모음 := make([]*T0425OutBlock1, 수량, 수량)
-	값_모음 = make([]*T0425_현물_체결_미체결_조회_응답_반복값, 수량, 수량)
+	g_모음 := make([]*T0425OutBlock1, 수량)
+	값_모음 = make([]*T0425_현물_체결_미체결_조회_응답_반복값, 수량)
 
 	for i, g := range g_모음 {
 		g = new(T0425OutBlock1)

@@ -39,6 +39,7 @@ import (
 	"time"
 )
 
+//goland:noinspection GoUnusedConst
 const (
 	P일자_형식     = "2006-01-02"
 	P시간_형식     = "2006-01-02 15:04:05.999999999 -0700 MST"
@@ -84,10 +85,10 @@ const (
 
 	P에러_자료형 = "error"
 
-	// 자주 사용되는 정규식 표현
+	// P정규식_실수는 자주 사용되는 정규식 표현
 	P정규식_실수 = `[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?`
 
-	// 입력 구조체 바이트 복사에 사용됨.
+	// P긴_공백문자열는 입력 구조체 바이트 복사에 사용됨.
 	P긴_공백문자열 = "         " +
 		"                           " +
 		"                           " +
@@ -99,7 +100,7 @@ const (
 		"                           " +
 		"                           "
 
-	// 입력 구조체 바이트 복사에 사용됨.
+	// P긴_0_문자열는 입력 구조체 바이트 복사에 사용됨.
 	P긴_0_문자열 = "0000000000000000000000000000000000" +
 		"00000000000000000000000000000000000000000000000000" +
 		"00000000000000000000000000000000000000000000000000" +
@@ -207,18 +208,15 @@ func (t T변환) String() string {
 }
 
 const (
-	// 질의 메시지 구분
 	P메시지_질의  = "G" // GET.
 	P메시지_설정  = "S" // SET. 있으면 갱신. 없으면 생성 후 갱신.
 	P메시지_삭제  = "D" // DELETE
 	P메시지_종료  = "Q"
 	P메시지_초기화 = "I" // 주로 테스트 할 때 사용.
 
-	// 회신 메시지 구분
 	P메시지_OK = "O"
 	P메시지_에러 = "E"
 
-	// 기타.
 	P메시지_생성 = "C" // CREATE
 	P메시지_읽기 = "R" // READ. 질의(GET)와 중복된다고 판단되면 삭제될 수 있음.
 	P메시지_갱신 = "U" // UPDATE
@@ -240,7 +238,7 @@ func (p T주소) TCP주소() string {
 	return "tcp://" + p.G단축값()
 }
 
-func (p T주소) HTTP주소(추가_인수 ...string) string {
+func (p T주소) HTTPS주소(추가_인수 ...string) string {
 	if len(추가_인수) > 0 {
 		추가url := 추가_인수[0]
 
@@ -248,10 +246,10 @@ func (p T주소) HTTP주소(추가_인수 ...string) string {
 			추가url = "/" + 추가url
 		}
 
-		return "http://" + p.G단축값() + 추가url
+		return "https://" + p.G단축값() + 추가url
 	}
 
-	return "http://" + p.G단축값()
+	return "https://" + p.G단축값()
 }
 
 func (p T주소) WS주소(추가_인수 ...string) string {
@@ -327,45 +325,6 @@ func (p T신호_32비트_모듈) String() string {
 }
 
 const (
-	KRW = T통화(byte('K'))
-	USD = T통화(byte('U'))
-	EUR = T통화(byte('E'))
-	CNY = T통화(byte('C'))
-)
-
-type T통화 byte
-
-func (v T통화) String() string {
-	switch v {
-	case KRW:
-		return "KRW"
-	case USD:
-		return "USD"
-	case EUR:
-		return "EUR"
-	case CNY:
-		return "CNY"
-	default:
-		return F2문자열("예상하지 못한 값 : '%v'", byte(v))
-	}
-}
-
-func (v *T통화) Parse(값 string) {
-	switch 값 {
-	case "KRW":
-		*v = KRW
-	case "USD":
-		*v = USD
-	case "EUR":
-		*v = EUR
-	case "CNY":
-		*v = CNY
-	default:
-		panic(New에러("예상하지 못한 값 : '%v'", 값))
-	}
-}
-
-const (
 	P자료형_Int            = "int"
 	P자료형_Int64          = "int64"
 	P자료형_Float64        = "float64"
@@ -408,8 +367,8 @@ const (
 
 type T시장구분 int8
 
-func (p T시장구분) String() string {
-	switch p {
+func (p *T시장구분) String() string {
+	switch *p {
 	case P시장구분_전체:
 		return "전체"
 	case P시장구분_코스피:
@@ -433,18 +392,18 @@ func (p T시장구분) String() string {
 	}
 }
 
-func (v *T시장구분) Parse(값 string) error {
+func (p *T시장구분) Parse(값 string) error {
 	switch 값 {
 	case "코스피":
-		*v = P시장구분_코스피
+		*p = P시장구분_코스피
 	case "코스닥":
-		*v = P시장구분_코스닥
+		*p = P시장구분_코스닥
 	case "코넥스":
-		*v = P시장구분_코넥스
+		*p = P시장구분_코넥스
 	case "ETF":
-		*v = P시장구분_ETF
+		*p = P시장구분_ETF
 	case "ETN":
-		*v = P시장구분_ETN
+		*p = P시장구분_ETN
 	default:
 		return New에러("예상하지 못한 M값. %v", 값)
 	}

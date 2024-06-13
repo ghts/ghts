@@ -39,7 +39,6 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"math/big"
 	"strings"
 	"time"
 )
@@ -73,7 +72,7 @@ func New에러(포맷_문자열or에러 interface{}, 추가_매개변수 ...inte
 		return 변환값
 	case S에러:
 		(&변환값).호출_경로_모음 = F호출경로_모음()
-		return 변환값
+		return &변환값
 	case error:
 		if len(추가_매개변수) > 0 {
 			panic(New에러("New에러() 예상하지 못한 추가 매개변수 : '%v'", len(추가_매개변수)))
@@ -120,7 +119,7 @@ type S에러 struct {
 	출력_완료    bool
 }
 
-func (s S에러) Error() string {
+func (s *S에러) Error() string {
 	버퍼 := new(bytes.Buffer)
 
 	if !strings.HasPrefix(s.에러_메시지, "\n") {
@@ -143,7 +142,7 @@ func (s S에러) Error() string {
 	return 버퍼.String()
 }
 
-func (s S에러) Is(에러값 error) bool {
+func (s *S에러) Is(에러값 error) bool {
 	if s.원래_에러 != nil {
 		return errors.Is(s.원래_에러, 에러값)
 	} else if s.에러_메시지 == 에러값.Error() {
@@ -153,7 +152,7 @@ func (s S에러) Is(에러값 error) bool {
 	return false
 }
 
-func (s S에러) Unwrap() error { return s.원래_에러 }
+func (s *S에러) Unwrap() error { return s.원래_에러 }
 
 func (s *S에러) G출력_완료() bool { return s.출력_완료 }
 
@@ -169,16 +168,16 @@ type S종목 struct {
 	기준가   int64
 }
 
-func (s S종목) G코드() string     { return s.코드 }
-func (s S종목) G이름() string     { return s.이름 }
-func (s S종목) G식별_문자열() string { return F2문자열("%v[%v]", s.G이름(), s.G코드()) }
-func (s S종목) G시장구분() T시장구분    { return s.시장_구분 }
-func (s S종목) G전일_종가() int64   { return s.전일_종가 }
-func (s S종목) G상한가() int64     { return s.상한가 }
-func (s S종목) G하한가() int64     { return s.하한가 }
-func (s S종목) G기준가() int64     { return s.기준가 }
+func (s *S종목) G코드() string     { return s.코드 }
+func (s *S종목) G이름() string     { return s.이름 }
+func (s *S종목) G식별_문자열() string { return F2문자열("%v[%v]", s.G이름(), s.G코드()) }
+func (s *S종목) G시장구분() T시장구분    { return s.시장_구분 }
+func (s *S종목) G전일_종가() int64   { return s.전일_종가 }
+func (s *S종목) G상한가() int64     { return s.상한가 }
+func (s *S종목) G하한가() int64     { return s.하한가 }
+func (s *S종목) G기준가() int64     { return s.기준가 }
 
-func (s S종목) String() string {
+func (s *S종목) String() string {
 	버퍼 := new(bytes.Buffer)
 	버퍼.WriteString(s.이름)
 	버퍼.WriteString("(")
@@ -189,7 +188,7 @@ func (s S종목) String() string {
 	return 버퍼.String()
 }
 
-func (s S종목) G복제본() *S종목 {
+func (s *S종목) G복제본() *S종목 {
 	복제본 := new(S종목)
 	복제본.코드 = s.코드
 	복제본.이름 = s.이름
@@ -202,7 +201,7 @@ func (s S종목) G복제본() *S종목 {
 	return 복제본
 }
 
-func (s S종목) MarshalBinary() ([]byte, error) {
+func (s *S종목) MarshalBinary() ([]byte, error) {
 	// TODO : 추가된 항목에 맞게 업데이트 필요.
 
 	속성 := make([]byte, 1)
@@ -264,7 +263,7 @@ func (s *S종목) UnmarshalBinary(값 []byte) (에러 error) {
 	return nil
 }
 
-func (s S종목) MarshalText() ([]byte, error) {
+func (s *S종목) MarshalText() ([]byte, error) {
 	버퍼 := new(bytes.Buffer)
 	버퍼.WriteString(`{"종목_코드": "`)
 	버퍼.WriteString(s.코드)
@@ -298,7 +297,7 @@ func (s *S종목) UnmarshalText(값 []byte) error {
 	return nil
 }
 
-// 종목
+// New종목은 S종목을 생성합니다.
 func New종목(코드 string, 이름 string, 시장_구분 T시장구분) *S종목 {
 	switch 시장_구분 {
 	case P시장구분_코스피, P시장구분_코스닥, P시장구분_ETF, P시장구분_코넥스:
@@ -309,6 +308,8 @@ func New종목(코드 string, 이름 string, 시장_구분 T시장구분) *S종�
 		if len(코드) != 6 {
 			panic(New에러with출력("잘못된 코드 '%v' '%v' '%v'", 코드, 이름, 시장_구분))
 		}
+	default:
+		panic(F2문자열("예상하지 못한 경우 : '%v' '%v'", int(시장_구분), 시장_구분.String()))
 	}
 
 	s := new(S종목)
@@ -329,6 +330,8 @@ func New종목with가격정보(코드 string, 이름 string, 시장_구분 T시�
 		if len(코드) != 6 {
 			panic(New에러with출력("잘못된 코드 '%v' '%v' '%v'", 코드, 이름, 시장_구분))
 		}
+	default:
+		// PASS. 코드 검사 통과를 위해서 default문 추가함.
 	}
 
 	s := new(S종목)
@@ -341,246 +344,6 @@ func New종목with가격정보(코드 string, 이름 string, 시장_구분 T시�
 	s.기준가 = 기준가
 
 	return s
-}
-
-// 통화
-type S통화 struct {
-	단위   T통화
-	금액   *big.Float
-	변경불가 bool
-}
-
-func (s *S통화) G단위() T통화 { return s.단위 }
-func (s *S통화) G정수64() int64 {
-	값, _ := s.금액.Int64()
-	return 값
-}
-func (s *S통화) G실수64() float64 {
-	실수64, _ := s.금액.Float64()
-	return 실수64
-}
-func (s *S통화) G정밀값() *big.Float {
-	return new(big.Float).Copy(s.금액)
-}
-
-func (s *S통화) G문자열() string { return s.금액.String() }
-func (s *S통화) G문자열_고정소숫점(소숫점_이하_자릿수 int) string {
-	return s.금액.Text('f', 소숫점_이하_자릿수)
-}
-
-func (s *S통화) G비교(다른_통화 *S통화) T비교 {
-	switch {
-	case s.단위 != 다른_통화.G단위():
-		return P비교_불가
-	default:
-		return T비교(s.금액.Cmp(다른_통화.G정밀값()))
-	}
-}
-
-func (s *S통화) G복사본() *S통화 {
-	복사본 := new(S통화)
-	복사본.단위 = s.G단위()
-	복사본.금액 = s.G정밀값()
-	복사본.변경불가 = false
-
-	return 복사본
-}
-
-func (s *S통화) G변경불가() bool {
-	return s.변경불가
-}
-
-func (s *S통화) S동결() { s.변경불가 = true }
-
-func (s *S통화) S더하기(값 float64) *S통화 {
-	if s.변경불가 {
-		panic("변경불가능한 값입니다.")
-		//return s
-	}
-
-	s.금액 = new(big.Float).Add(s.금액, big.NewFloat(값))
-
-	return s
-}
-
-func (s *S통화) S빼기(값 float64) *S통화 {
-	if s.변경불가 {
-		panic(New에러with출력("변경불가능한 값입니다."))
-		//return s
-	}
-
-	s.금액 = new(big.Float).Sub(s.금액, big.NewFloat(값))
-
-	return s
-}
-
-func (s *S통화) S곱하기(값 float64) *S통화 {
-	if s.변경불가 {
-		panic(New에러("변경불가능한 값입니다."))
-		//return s
-	}
-
-	s.금액 = new(big.Float).Mul(s.금액, big.NewFloat(값))
-
-	return s
-}
-
-func (s *S통화) S나누기(값 float64) (*S통화, error) {
-	switch {
-	case s.변경불가:
-		panic("변경불가능한 값입니다.")
-		//return s, 에러
-	case 값 == 0.0:
-		return nil, New에러with출력("분모가 0인 나눗셈 불가.")
-	default:
-		s.금액 = new(big.Float).Quo(s.금액, big.NewFloat(값))
-		return s, nil
-	}
-}
-
-func (s *S통화) S금액(금액 float64) *S통화 {
-	if s.변경불가 {
-		panic("변경불가능한 값입니다.")
-		//return s
-	}
-
-	s.금액 = big.NewFloat(금액)
-
-	return s
-}
-
-func (s *S통화) String() string {
-	return s.단위.String() + " " + s.금액.String()
-}
-
-func (s S통화) MarshalBinary() ([]byte, error) {
-	var 변경_불가 byte
-	if !s.변경불가 {
-		변경_불가 = byte(0)
-	} else {
-		변경_불가 = byte(1)
-	}
-
-	금액, 에러 := s.금액.MarshalText()
-	if 에러 != nil {
-		return nil, 에러
-	}
-
-	버퍼 := new(bytes.Buffer)
-	버퍼.WriteByte(변경_불가)
-	버퍼.WriteByte(byte(s.단위))
-	버퍼.Write(금액)
-
-	return 버퍼.Bytes(), nil
-}
-
-func (s *S통화) UnmarshalBinary(값 []byte) (에러 error) {
-	defer func() {
-		if 에러 != nil {
-			s.단위 = T통화(byte(' '))
-			s.금액 = big.NewFloat(0.0)
-			s.변경불가 = true
-		}
-	}()
-
-	const 헤더_길이 = 2
-
-	switch {
-	case len(값) == 0:
-		return New에러with출력("비어있는 M값")
-	case len(값) <= 헤더_길이:
-		return New에러with출력("너무 짧은 M값. %v", len(값))
-	}
-
-	if 변경_불가 := int(값[0]); 변경_불가 == 0 {
-		s.변경불가 = false
-	} else {
-		s.변경불가 = true
-	}
-
-	s.단위 = T통화(값[1])
-
-	F확인1(s.금액.UnmarshalText(값[2:]))
-
-	return
-}
-
-func (s S통화) MarshalText() ([]byte, error) {
-	버퍼 := new(bytes.Buffer)
-	버퍼.WriteString("{")
-	버퍼.WriteString(s.단위.String())
-	버퍼.WriteString(",")
-	금액 := F확인2(s.금액.MarshalText())
-	버퍼.Write(금액)
-	버퍼.WriteString(",")
-	if s.변경불가 {
-		버퍼.WriteString("T")
-	} else {
-		버퍼.WriteString("F")
-	}
-	버퍼.WriteString("}")
-
-	return 버퍼.Bytes(), nil
-}
-
-func (s *S통화) UnmarshalText(값 []byte) (에러 error) {
-	defer func() {
-		if 에러 != nil {
-			s.단위 = T통화(byte(' '))
-			s.금액 = big.NewFloat(0.0)
-			s.변경불가 = true
-		}
-	}()
-
-	문자열 := string(값)
-	문자열_모음 := strings.Split(문자열, ",")
-
-	if len(문자열_모음) != 3 {
-		return New에러with출력("예상하지 못한 경우. %v", len(문자열_모음))
-	}
-
-	s.단위.Parse(strings.TrimSpace(문자열_모음[0][1:]))
-
-	if s.금액 == nil {
-		s.금액 = new(big.Float)
-	}
-	금액_문자열 := strings.TrimSpace(문자열_모음[1])
-	F확인1(s.금액.UnmarshalText([]byte(금액_문자열)))
-
-	switch strings.TrimSpace(문자열_모음[2])[:1] {
-	case "T", "t":
-		s.변경불가 = true
-	case "F", "f":
-		s.변경불가 = false
-	default:
-		에러 = New에러with출력("예상하지 못한 문자열. '%v'", strings.TrimSpace(문자열_모음[2]))
-	}
-
-	return nil
-}
-
-func New원화(금액 float64) *S통화 { return New통화(KRW, 금액) }
-func New달러(금액 float64) *S통화 { return New통화(USD, 금액) }
-func New유로(금액 float64) *S통화 { return New통화(EUR, 금액) }
-func New위안(금액 float64) *S통화 { return New통화(CNY, 금액) }
-func New통화(단위 T통화, 금액 float64) *S통화 {
-	F확인1(F통화단위_검사(단위))
-
-	s := new(S통화)
-	s.단위 = 단위
-	s.금액 = big.NewFloat(금액)
-	s.변경불가 = false
-
-	return s
-}
-
-func F통화단위_검사(통화단위 T통화) error {
-	switch 통화단위 {
-	case KRW, USD, EUR, CNY:
-		return nil
-	default:
-		return New에러with출력("잘못된 통화단위. '%v'", 통화단위)
-	}
 }
 
 // 중복 없고 무작위 순서의 문자열 모음.
@@ -606,7 +369,7 @@ type s문자열_집합 struct {
 
 func (s *s문자열_집합) G슬라이스() []string {
 	길이 := len(s.맵)
-	값 := make([]string, 길이, 길이)
+	값 := make([]string, 길이)
 
 	i := 0
 	for 문자열 := range s.맵 {

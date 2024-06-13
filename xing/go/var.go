@@ -44,12 +44,11 @@ import (
 
 var (
 	소켓REP_TR콜백 lib.I소켓with컨텍스트
-
-	소켓REQ_저장소 = lib.New소켓_저장소(20, func() lib.I소켓_질의 {
+	소켓REQ_저장소  = lib.New소켓_저장소(20, func() lib.I소켓_질의 {
 		return lib.F확인2(nano.NewNano소켓REQ(xt.F주소_DLL32(), lib.P30초))
 	})
+	//소켓SUB_실시간_정보 lib.I소켓
 
-	ch질의           = make(chan *lib.S작업, 1000)
 	ch신호_DLL32_초기화 = make(chan lib.T신호_32비트_모듈, 1)
 	ch신호_DLL32_로그인 = make(chan lib.T신호_32비트_모듈, 1)
 	ch신호_DLL32_종료  = make(chan lib.T신호_32비트_모듈, 1)

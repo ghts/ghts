@@ -121,10 +121,10 @@ func NewT1902_ETF시간별_추이_응답_반복값_모음(b []byte) (값_모음 
 
 	버퍼 := bytes.NewBuffer(b)
 	수량 := len(b) / SizeT1902OutBlock1
-	g_모음 := make([]*T1902OutBlock1, 수량, 수량)
+	g_모음 := make([]*T1902OutBlock1, 수량)
 
 	값_모음 = new(T1902_ETF시간별_추이_응답_반복값_모음)
-	값_모음.M배열 = make([]*T1902_ETF시간별_추이_응답_반복값, 수량, 수량)
+	값_모음.M배열 = make([]*T1902_ETF시간별_추이_응답_반복값, 수량)
 
 	for i, g := range g_모음 {
 		g = new(T1902OutBlock1)

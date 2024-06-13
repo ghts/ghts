@@ -226,6 +226,8 @@ type s샘플_구조체_1 struct {
 }
 
 // 간단한 테스트용 구조체
+//
+//goland:noinspection GoExportedFuncWithUnexportedType
 func F샘플_구조체_1() s샘플_구조체_1 {
 	r := F임의값_생성기()
 
@@ -246,6 +248,8 @@ type s샘플_구조체_2 struct {
 }
 
 // 좀 더 복잡한 테스트용 구조체
+//
+//goland:noinspection GoExportedFuncWithUnexportedType
 func F샘플_구조체_2() s샘플_구조체_2 {
 	r := F임의값_생성기()
 
@@ -320,6 +324,8 @@ func f테스트용_변환가능한_전달값_모음() []interface{} {
 		switch F종류(값) {
 		case reflect.Func, reflect.Chan:
 			continue
+		default:
+			// PASS. 코드 검사 통과를 위해서 default문 추가.
 		}
 
 		변환가능한_값_모음 = append(변환가능한_값_모음, 값)

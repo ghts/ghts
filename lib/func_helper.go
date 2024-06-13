@@ -39,7 +39,6 @@ import (
 	"encoding/gob"
 	"errors"
 	"io"
-	"io/ioutil"
 	"math"
 	"math/big"
 	"net"
@@ -334,9 +333,9 @@ func F인터넷에_접속됨() bool {
 	}
 
 	URL모음 := []string{
-		"http://finance.daum.net",
-		"http://finance.naver.com",
-		"http://finance.yahoo.com"}
+		"https://finance.daum.net",
+		"https://finance.naver.com",
+		"https://finance.yahoo.com"}
 
 	ch회신 := make(chan bool, len(URL모음))
 
@@ -547,7 +546,7 @@ func F인터페이스_모음_입력값_검사(값_모음 []interface{}) error {
 		return nil
 	case 1:
 		if _, ok := 값_모음[0].([]interface{}); ok {
-			return errors.New("배열이 아니라 단일값입니다.")
+			return errors.New("배열이 아닌 단일값")
 		}
 	}
 
@@ -666,12 +665,10 @@ func F파일_절대경로(파일경로 string) (string, error) {
 }
 
 func F실행파일_검색(파일명 string) (경로 string, 에러 error) {
-	if runtime.GOOS == "windows" {
-		파일명_소문자 := strings.ToLower(파일명)
-		if !strings.HasSuffix(파일명_소문자, ".exe") &&
-			!strings.HasSuffix(파일명_소문자, ".dll") {
-			return "", New에러with출력("exe 파일이나 dll파일만 가능합니다. %v, 파일명")
-		}
+	파일명_소문자 := strings.ToLower(파일명)
+	if !strings.HasSuffix(파일명_소문자, ".exe") &&
+		!strings.HasSuffix(파일명_소문자, ".dll") {
+		return "", New에러with출력("exe 파일이나 dll파일만 가능합니다. %v, 파일명")
 	}
 
 	return exec.LookPath(파일명)
@@ -858,14 +855,14 @@ func JSON_파일_저장(값 interface{}, 파일명 string) (에러 error) {
 	if 바이트_모음, 에러 := F인코딩(JSON, 값); 에러 != nil {
 		return 에러
 	} else {
-		return ioutil.WriteFile(파일명, 바이트_모음, 0644)
+		return os.WriteFile(파일명, 바이트_모음, 0644)
 	}
 }
 
 func JSON_파일_읽기(파일명 string, 반환값 interface{}) (에러 error) {
 	if !F파일_존재함(파일명) {
 		return New에러("해당 파일이 존재하지 않음. '%s'", 파일명)
-	} else if 바이트_모음, 에러 := ioutil.ReadFile(파일명); 에러 != nil {
+	} else if 바이트_모음, 에러 := os.ReadFile(파일명); 에러 != nil {
 		return 에러
 	} else {
 		return F디코딩(JSON, 바이트_모음, 반환값)
@@ -901,7 +898,7 @@ func CSV쓰기(레코드_모음 [][]string, 파일명 string, 파일_잠금 sync
 	return nil
 }
 
-func CSV읽기(파일명, 구분자 string, 파일_잠금 sync.Locker) (레코드_모음 [][]string, 에러 error) {
+func CSV읽기(파일명 string, 구분자 rune, 파일_잠금 sync.Locker) (레코드_모음 [][]string, 에러 error) {
 	defer S예외처리{M에러: &에러, M함수: func() { 레코드_모음 = nil }}.S실행()
 
 	switch 잠금 := 파일_잠금.(type) {
@@ -918,7 +915,10 @@ func CSV읽기(파일명, 구분자 string, 파일_잠금 sync.Locker) (레코�
 	파일 := F확인2(os.Open(파일명))
 	defer 파일.Close()
 
-	return csv.NewReader(파일).ReadAll()
+	csv리더 := csv.NewReader(파일)
+	csv리더.Comma = 구분자
+
+	return csv리더.ReadAll()
 }
 
 // Go루틴이 다른 Go루틴이 실행될 수 있도록 실행우선권을 양보함.

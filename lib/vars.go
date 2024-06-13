@@ -51,8 +51,7 @@ var (
 	인터넷_접속됨      = true
 	인터넷_접속_확인_완료 = false
 
-	테스트_모드         = New안전한_bool(false)
-	문자열_출력_일시정지_모드 = New안전한_bool(false)
+	테스트_모드 = New안전한_bool(false)
 
 	화면_출력_잠금 sync.Mutex
 

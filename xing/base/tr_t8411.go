@@ -174,10 +174,10 @@ func NewT8411_현물_차트_틱_응답_반복값_모음(b []byte) (값 *T8411_�
 
 	버퍼 := bytes.NewBuffer(b)
 	수량 := len(b) / SizeT8411OutBlock1
-	g_모음 := make([]*T8411OutBlock1, 수량, 수량)
+	g_모음 := make([]*T8411OutBlock1, 수량)
 
 	값 = new(T8411_현물_차트_틱_응답_반복값_모음)
-	값.M배열 = make([]*T8411_현물_차트_틱_응답_반복값, 수량, 수량)
+	값.M배열 = make([]*T8411_현물_차트_틱_응답_반복값, 수량)
 
 	for i, g := range g_모음 {
 		g = new(T8411OutBlock1)

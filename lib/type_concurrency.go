@@ -46,4 +46,4 @@ type S작업 struct {
 	인수 []interface{}
 }
 
-func (s S작업) S실행() { s.함수(s.인수...) }
+func (s *S작업) S실행() { s.함수(s.인수...) }

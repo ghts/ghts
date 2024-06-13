@@ -93,7 +93,7 @@ type S개장일_모음 struct {
 	인덱스_맵 map[uint32]int
 }
 
-func (s S개장일_모음) G인덱스(일자 uint32) int {
+func (s *S개장일_모음) G인덱스(일자 uint32) int {
 	if 인덱스, 존재함 := s.인덱스_맵[일자]; 존재함 {
 		return 인덱스
 	} else {
@@ -101,11 +101,11 @@ func (s S개장일_모음) G인덱스(일자 uint32) int {
 	}
 }
 
-func (s S개장일_모음) G인덱스2(일자 time.Time) int {
+func (s *S개장일_모음) G인덱스2(일자 time.Time) int {
 	return s.G인덱스(lib.F일자2정수(일자))
 }
 
-func (s S개장일_모음) G증분_개장일(일자 uint32, 증분 int) (uint32, error) {
+func (s *S개장일_모음) G증분_개장일(일자 uint32, 증분 int) (uint32, error) {
 	if 인덱스 := s.G인덱스(일자); 인덱스 < 0 {
 		return 0, lib.New에러("존재하지 않는 일자 : '%v'", 일자)
 	} else if 인덱스+증분 < 0 || 인덱스+증분 >= len(s.M저장소) {
@@ -115,7 +115,7 @@ func (s S개장일_모음) G증분_개장일(일자 uint32, 증분 int) (uint32,
 	}
 }
 
-func (s S개장일_모음) G이전_개장일(기간 int) (이전_개장일 uint32, 에러 error) {
+func (s *S개장일_모음) G이전_개장일(기간 int) (이전_개장일 uint32, 에러 error) {
 	if len(s.M저장소)-1 < 기간 {
 		return lib.F일자2정수(time.Time{}), lib.New에러("Index out of range. %v %v", len(s.M저장소), 기간)
 	}
@@ -125,7 +125,7 @@ func (s S개장일_모음) G이전_개장일(기간 int) (이전_개장일 uint3
 	return s.M저장소[len(s.M저장소)-기간-1], nil
 }
 
-func (s S개장일_모음) G복사본() *S개장일_모음 {
+func (s *S개장일_모음) G복사본() *S개장일_모음 {
 	return New개장일_모음from슬라이스(s.M저장소)
 }
 

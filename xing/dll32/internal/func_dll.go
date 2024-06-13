@@ -173,13 +173,13 @@ func f접속됨() (bool, error) {
 
 	switch 에러_번호 {
 	case 0:
-		return 참거짓 == TRUE || 참거짓 != FALSE, nil
+		return 참거짓 != FALSE, nil
 	default:
 		return false, lib.New에러("f접속됨() 에러 발생.\n'%v'", 에러_번호)
 	}
 }
 
-func F로그인(서버_구분 xt.T서버_구분) (에러 error) {
+func F로그인() (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
 	lib.F확인1(xt.F로그인_정보_설정())

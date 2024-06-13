@@ -5,6 +5,7 @@
 package w32
 
 import (
+	"errors"
 	"fmt"
 	"golang.org/x/sys/windows"
 	"syscall"
@@ -136,7 +137,7 @@ func IsUserAnAdmin() (bool, error) {
 	isUserAnAdminProc := shell32.NewProc("IsUserAnAdmin")
 	ret, _, winError := isUserAnAdminProc.Call()
 
-	if winError != windows.NTE_OP_OK {
+	if !errors.Is(winError, windows.NTE_OP_OK) {
 		return false, fmt.Errorf("IsUserAnAdmin returns error code %d", winError)
 	}
 	if ret == 0 {

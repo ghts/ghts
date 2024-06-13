@@ -78,9 +78,9 @@ type S질의값_기본형 struct {
 	M식별번호 int64
 }
 
-func (s S질의값_기본형) TR구분() TR구분   { return s.M구분 }
-func (s S질의값_기본형) TR코드() string { return s.M코드 }
-func (s S질의값_기본형) G식별번호() int64 { return s.M식별번호 }
+func (s *S질의값_기본형) TR구분() TR구분   { return s.M구분 }
+func (s *S질의값_기본형) TR코드() string { return s.M코드 }
+func (s *S질의값_기본형) G식별번호() int64 { return s.M식별번호 }
 func (s *S질의값_기본형) S설정(구분 TR구분, 코드 string) {
 	s.M구분 = 구분
 	s.M코드 = 코드
@@ -185,7 +185,7 @@ type S질의값_단일_종목 struct {
 	M종목코드 string
 }
 
-func (s S질의값_단일_종목) G종목코드() string { return s.M종목코드 }
+func (s *S질의값_단일_종목) G종목코드() string { return s.M종목코드 }
 
 func (s *S질의값_단일_종목) String() string {
 	return F2문자열("%v %v %v", s.M구분, s.M코드, s.M종목코드)
@@ -220,7 +220,7 @@ type S질의값_복수_종목 struct {
 	M종목코드_모음 []string
 }
 
-func (s S질의값_복수_종목) G종목코드_모음() []string {
+func (s *S질의값_복수_종목) G종목코드_모음() []string {
 	if len(s.M종목코드_모음) == 0 {
 		return nil
 	} else {
@@ -228,7 +228,7 @@ func (s S질의값_복수_종목) G종목코드_모음() []string {
 	}
 }
 
-func (s S질의값_복수_종목) G전체_종목코드() string {
+func (s *S질의값_복수_종목) G전체_종목코드() string {
 	버퍼 := new(bytes.Buffer)
 
 	for _, 종목코드 := range s.M종목코드_모음 {
@@ -417,7 +417,7 @@ type S콜백_기본형 struct {
 	M콜백 T콜백
 }
 
-func (s S콜백_기본형) G콜백() T콜백 {
+func (s *S콜백_기본형) G콜백() T콜백 {
 	return s.M콜백
 }
 

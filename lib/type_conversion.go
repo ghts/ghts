@@ -54,9 +54,11 @@ import (
 // codec.InterfaceExt
 // ConvertExt(v interface{}) interface{}
 // UpdateExt(dst interface{}, src interface{})
+//
+//goland:noinspection GoUnusedType
 type s변환기 struct{ 자료형 string }
 
-func (s s변환기) WriteExt(값 interface{}) []byte {
+func (s *s변환기) WriteExt(값 interface{}) []byte {
 	switch 변환값 := 값.(type) {
 	case error:
 		return []byte(변환값.Error())
@@ -67,7 +69,7 @@ func (s s변환기) WriteExt(값 interface{}) []byte {
 	panic(New에러("s변환기.WriteExt() 예상하지 못한 자료형. %T", 값))
 }
 
-func (s s변환기) ReadExt(포인터 interface{}, 바이트_모음 []byte) {
+func (s *s변환기) ReadExt(포인터 interface{}, 바이트_모음 []byte) {
 	defer S예외처리{M함수: func() { 포인터 = nil }}.S실행()
 
 	switch s.자료형 {
@@ -104,7 +106,7 @@ func (s s변환기) ReadExt(포인터 interface{}, 바이트_모음 []byte) {
 	}
 }
 
-func (s s변환기) ConvertExt(값 interface{}) interface{} {
+func (s *s변환기) ConvertExt(값 interface{}) interface{} {
 	switch 변환값 := 값.(type) {
 	case error:
 		return 변환값.Error()
@@ -117,7 +119,7 @@ func (s s변환기) ConvertExt(값 interface{}) interface{} {
 	panic(New에러("s변환기.ConvertExt() 예상하지 못한 자료형 : '%T'", 값))
 }
 
-func (s s변환기) UpdateExt(포인터 interface{}, 값 interface{}) {
+func (s *s변환기) UpdateExt(포인터 interface{}, 값 interface{}) {
 	defer S예외처리{M함수: func() { 포인터 = nil }}.S실행()
 
 	switch s.자료형 {
@@ -130,7 +132,7 @@ func (s s변환기) UpdateExt(포인터 interface{}, 값 interface{}) {
 	panic(New에러("s변환기.UpdateExt() 예상하지 못한 자료형. %v", s.자료형))
 }
 
-// 바이트 배열로 인코딩 된 M값
+// S바이트_변환 : 바이트 슬라이스로 인코딩 된 M값
 type S바이트_변환 struct {
 	변환_형식   T변환
 	자료형_문자열 string
@@ -215,7 +217,6 @@ func (s *S바이트_변환) S해석기(해석기 func(*S바이트_변환) (inter
 	return s
 }
 
-// 해석기는 저장하지 않는다.
 func (s *S바이트_변환) MarshalBinary() (바이트_모음 []byte, 에러 error) {
 	defer S예외처리{M에러: &에러, M함수: func() { 바이트_모음 = nil }}.S실행()
 
@@ -235,7 +236,6 @@ func (s *S바이트_변환) MarshalBinary() (바이트_모음 []byte, 에러 err
 	return 버퍼.Bytes(), nil
 }
 
-// 해석기는 복원되지 않는다.
 func (s *S바이트_변환) UnmarshalBinary(바이트_모음 []byte) (에러 error) {
 	defer S예외처리{
 		M에러: &에러,
@@ -338,7 +338,6 @@ type S바이트_변환_모음 struct {
 	M바이트_변환_모음 []*S바이트_변환
 }
 
-// 해석기는 저장되지 않으며, 해석 직전에 설정해야 함.
 func (s *S바이트_변환_모음) S해석기(해석기 func(*S바이트_변환) (interface{}, error)) *S바이트_변환_모음 {
 	for _, 바이트_변환_매개체 := range s.M바이트_변환_모음 {
 		바이트_변환_매개체.S해석기(해석기)
@@ -385,7 +384,6 @@ func (s *S바이트_변환_모음) IsNil(인덱스 int) bool {
 	return s.M바이트_변환_모음[인덱스].IsNil()
 }
 
-// 해석기는 저장되지 않는다.
 func (s *S바이트_변환_모음) MarshalBinary() (바이트_모음 []byte, 에러 error) {
 	defer S예외처리{M에러: &에러, M함수: func() { 바이트_모음 = nil }}.S실행()
 
@@ -402,7 +400,6 @@ func (s *S바이트_변환_모음) MarshalBinary() (바이트_모음 []byte, 에
 	return 버퍼.Bytes(), nil
 }
 
-// 해석기는 복원되지 않는다.
 func (s *S바이트_변환_모음) UnmarshalBinary(바이트_모음 []byte) (에러 error) {
 	defer S예외처리{M에러: &에러, M함수: func() { s.M바이트_변환_모음 = nil }}.S실행()
 

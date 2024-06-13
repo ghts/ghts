@@ -68,8 +68,8 @@ func NewT8432_증시주변자금추이_응답_반복값_모음(b []byte) (값_�
 
 	버퍼 := bytes.NewBuffer(b)
 	수량 := len(b) / SizeT8432OutBlock
-	g_모음 := make([]*T8432OutBlock, 수량, 수량)
-	값_모음 = make([]*T8432_지수선물_마스터_조회_반복값, 수량, 수량)
+	g_모음 := make([]*T8432OutBlock, 수량)
+	값_모음 = make([]*T8432_지수선물_마스터_조회_반복값, 수량)
 
 	for i, g := range g_모음 {
 		g = new(T8432OutBlock)

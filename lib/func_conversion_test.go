@@ -56,7 +56,7 @@ func TestF바이트2참거짓(t *testing.T) {
 
 func TestF문자열2바이트_복사(t *testing.T) {
 	t.Parallel()
-	바이트_배열 := make([]byte, 10, 10)
+	바이트_배열 := make([]byte, 10)
 	F바이트_복사_문자열(바이트_배열, "12345")
 
 	F테스트_같음(t, string(바이트_배열), "12345     ")
@@ -64,7 +64,7 @@ func TestF문자열2바이트_복사(t *testing.T) {
 
 func TestF정수2바이트_복사(t *testing.T) {
 	t.Parallel()
-	바이트_배열 := make([]byte, 10, 10)
+	바이트_배열 := make([]byte, 10)
 	F바이트_복사_정수(바이트_배열, 12345)
 
 	F테스트_같음(t, string(바이트_배열), "0000012345")

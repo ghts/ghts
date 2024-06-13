@@ -160,10 +160,10 @@ func NewT1305_현물_기간별_조회_응답_반복값_모음(b []byte) (값 *T1
 
 	버퍼 := bytes.NewBuffer(b)
 	수량 := len(b) / SizeT1305OutBlock1
-	g_모음 := make([]*T1305OutBlock1, 수량, 수량)
+	g_모음 := make([]*T1305OutBlock1, 수량)
 
 	값 = new(T1305_현물_기간별_조회_응답_반복값_모음)
-	값.M배열 = make([]*T1305_현물_기간별_조회_응답_반복값, 수량, 수량)
+	값.M배열 = make([]*T1305_현물_기간별_조회_응답_반복값, 수량)
 
 	for i, g := range g_모음 {
 		g = new(T1305OutBlock1)

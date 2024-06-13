@@ -122,10 +122,10 @@ func NewT1405_투자경고_조회_응답_반복값_모음(b []byte) (값_모음 
 
 	버퍼 := bytes.NewBuffer(b)
 	수량 := len(b) / SizeT1405OutBlock1
-	g_모음 := make([]*T1405OutBlock1, 수량, 수량)
+	g_모음 := make([]*T1405OutBlock1, 수량)
 
 	값_모음 = new(T1405_투자경고_조회_응답_반복값_모음)
-	값_모음.M배열 = make([]*T1405_투자경고_조회_응답_반복값, 수량, 수량)
+	값_모음.M배열 = make([]*T1405_투자경고_조회_응답_반복값, 수량)
 
 	for i, g := range g_모음 {
 		g = new(T1405OutBlock1)

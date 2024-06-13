@@ -93,5 +93,6 @@ func F2Go바이트_모음(c데이터 unsafe.Pointer) []byte {
 }
 
 func F2Go바이트_모음with길이(c데이터 unsafe.Pointer, 길이 int) []byte {
+	//goland:noinspection GoRedundantConversion
 	return unsafe.Slice((*byte)(c데이터), 길이) // Go 1.17에 추가된 기능 사용.
 }

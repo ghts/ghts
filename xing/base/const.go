@@ -688,6 +688,8 @@ func (p T전일대비_구분) G부호보정_정수64(등락폭 int64) int64 {
 		if 등락폭 > 0 {
 			등락폭 = 등락폭 * -1
 		}
+	default:
+		panic(lib.F2문자열("예상하지 못한 경우 : '%v'", int(p)))
 	}
 
 	return 등락폭
@@ -705,6 +707,8 @@ func (p T전일대비_구분) G부호보정_실수64(등락율 float64) float64 
 		if 등락율 > 0.0 {
 			등락율 = 등락율 * -1
 		}
+	default:
+		panic(lib.F2문자열("예상하지 못한 경우 : '%v'", int(p)))
 	}
 
 	return 등락율
@@ -1964,191 +1968,6 @@ func (p T신용_구분_t0425) String() string {
 		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
 	}
 }
-
-//type CFOAQ00600_선물옵션분류 uint8
-//
-//const (
-//	P선물옵션_전체 CFOAQ00600_선물옵션분류 = 0
-//	P선물      CFOAQ00600_선물옵션분류 = 11
-//	P옵션      CFOAQ00600_선물옵션분류 = 12
-//)
-//
-//func (p CFOAQ00600_선물옵션분류) String() string {
-//	switch p {
-//	case P선물옵션_전체:
-//		return "전체"
-//	case P선물:
-//		return "선물"
-//	case P옵션:
-//		return "옵션"
-//	default:
-//		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
-//	}
-//}
-
-//type T선옵_상품군 uint8
-//
-//const (
-//	P선옵_상품군_전체      T선옵_상품군 = 0
-//	P선옵_상품군_주가지수    T선옵_상품군 = 1
-//	P선옵_상품군_개별주식    T선옵_상품군 = 2
-//	P선옵_상품군_가공채권    T선옵_상품군 = 3
-//	P선옵_상품군_통화      T선옵_상품군 = 4
-//	P선옵_상품군_원자재_농산물 T선옵_상품군 = 5
-//	P선옵_상품군_금리      T선옵_상품군 = 6
-//)
-//
-//func (p T선옵_상품군) String() string {
-//	switch p {
-//	case P선옵_상품군_전체:
-//		return "전체"
-//	case P선옵_상품군_주가지수:
-//		return "주가지수"
-//	case P선옵_상품군_개별주식:
-//		return "개별주식"
-//	case P선옵_상품군_가공채권:
-//		return "가공채권"
-//	case P선옵_상품군_통화:
-//		return "통화"
-//	case P선옵_상품군_원자재_농산물:
-//		return "원자재/농산물"
-//	case P선옵_상품군_금리:
-//		return "금리"
-//	default:
-//		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
-//	}
-//}
-
-//type T선물옵션_체결구분 uint8
-//
-//const (
-//	P선물옵션_매도 T선물옵션_체결구분 = iota
-//	P선물옵션_매수
-//	P선물옵션_전매
-//	P선물옵션_환매
-//	P선물옵션_최종전매
-//	P선물옵션_최종환매
-//	P선물옵션_권리행사
-//	P선물옵션_권리배정
-//	P선물옵션_미행사
-//	P선물옵션_미배정
-//)
-//
-//func (p T선물옵션_체결구분) String() string {
-//	switch p {
-//	case P선물옵션_매도:
-//		return "매도"
-//	case P선물옵션_매수:
-//		return "매수"
-//	case P선물옵션_전매:
-//		return "전매"
-//	case P선물옵션_환매:
-//		return "환매"
-//	case P선물옵션_최종전매:
-//		return "최종전매"
-//	case P선물옵션_최종환매:
-//		return "최종환매"
-//	case P선물옵션_권리행사:
-//		return "권리행사"
-//	case P선물옵션_권리배정:
-//		return "권리배정"
-//	case P선물옵션_미행사:
-//		return "미행사"
-//	case P선물옵션_미배정:
-//		return "미배정"
-//	default:
-//		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
-//	}
-//}
-
-//type CFOAQ00600_정렬구분 uint8
-//
-//const (
-//	CFOAQ00600_역순 CFOAQ00600_정렬구분 = 3
-//	CFOAQ00600_정순 CFOAQ00600_정렬구분 = 4
-//)
-//
-//func (p CFOAQ00600_정렬구분) String() string {
-//	switch p {
-//	case CFOAQ00600_역순:
-//		return "역순"
-//	case CFOAQ00600_정순:
-//		return "정순"
-//	default:
-//		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
-//	}
-//}
-//
-//type CFOAQ00600_주문구분 uint8
-//
-//const (
-//	P주문_확인 CFOAQ00600_주문구분 = iota
-//	P주문_접수
-//	P주문_거부
-//)
-//
-//func (p CFOAQ00600_주문구분) String() string {
-//	switch p {
-//	case P주문_확인:
-//		return "확인"
-//	case P주문_접수:
-//		return "접수"
-//	case P주문_거부:
-//		return "거부"
-//	default:
-//		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
-//	}
-//}
-//
-//type CFOAQ00600_체결구분명 uint8
-//
-//type T선물옵션품목 uint8
-//
-//const (
-//	P선옵품목_코스피200_관련 T선물옵션품목 = 1
-//	P선옵품목_코스피200_제외 T선물옵션품목 = 2
-//	P선옵품목_코스닥50_관련  T선물옵션품목 = 3 // 현재는 발생데이터 존재 안 함.
-//)
-//
-//func (p T선물옵션품목) String() string {
-//	switch p {
-//	case P선옵품목_코스피200_관련:
-//		return "코스피200 관련"
-//	case P선옵품목_코스피200_제외:
-//		return "코스피200 제외"
-//	case P선옵품목_코스닥50_관련:
-//		return "코스닥 50 관련"
-//	default:
-//		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
-//	}
-//}
-
-//type CFOFQ02400_등록시장 uint8
-//
-//const (
-//	CFOFQ02400_전체     CFOFQ02400_등록시장 = 99
-//	CFOFQ02400_KOSPI  CFOFQ02400_등록시장 = 40
-//	CFOFQ02400_KOSDAQ CFOFQ02400_등록시장 = 20
-//	CFOFQ02400_KSE    CFOFQ02400_등록시장 = 10
-//	CFOFQ02400_KOFEX  CFOFQ02400_등록시장 = 50
-//)
-//
-//func (p CFOFQ02400_등록시장) String() string {
-//	switch p {
-//	case CFOFQ02400_전체:
-//		return "전체"
-//	case CFOFQ02400_KOSPI:
-//		return "KOSPI"
-//	case CFOFQ02400_KOSDAQ:
-//		return "KOSDAQ"
-//	case CFOFQ02400_KSE:
-//		return "KSE"
-//	case CFOFQ02400_KOFEX:
-//		return "KOFEX"
-//	default:
-//		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
-//	}
-//}
 
 type T상태_T0434 uint8
 

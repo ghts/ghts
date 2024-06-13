@@ -216,14 +216,16 @@ func f초기화_작동_확인() (작동_여부 bool) {
 	ch확인 := make(chan lib.T신호, 1)
 	ch타임아웃 := time.After(lib.P1분)
 
-	// F접속됨() 테스트
 	go f접속_확인(ch확인)
+	go f시간_일치_확인(ch확인)
 
-	select {
-	case <-ch확인:
-	case <-ch타임아웃:
-		lib.New에러with출력("F접속됨_확인() 타임아웃.")
-		return false
+	for i := 0; i < 2; i++ {
+		select {
+		case <-ch확인:
+		case <-ch타임아웃:
+			lib.New에러with출력("f초기화_작동_확인() 타임아웃.")
+			return false
+		}
 	}
 
 	//fmt.Println("** dll32 동작 확인 완료**")
@@ -267,7 +269,7 @@ func f접속_확인(ch완료 chan lib.T신호) {
 	return
 }
 
-func tr동작_확인(ch완료 chan lib.T신호) {
+func f시간_일치_확인(ch완료 chan lib.T신호) {
 	defer func() { ch완료 <- lib.P신호_종료 }()
 
 	if len(tr코드별_전송_제한_1초) == 0 {

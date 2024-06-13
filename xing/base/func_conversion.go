@@ -84,6 +84,8 @@ func F2Xing호가유형(호가_유형 lib.T호가유형, 주문_조건 lib.T주�
 			return P호가_장후_시간외
 		case lib.P호가_시간외_단일가:
 			return P호가_시간외_단일가
+		default:
+			panic(lib.F2문자열("예상하지 못한 경우 : '%v' '%v'", int(호가_유형), 호가_유형.String()))
 		}
 	case lib.P주문조건_IOC:
 		switch 호가_유형 {
@@ -93,6 +95,8 @@ func F2Xing호가유형(호가_유형 lib.T호가유형, 주문_조건 lib.T주�
 			return P호가_시장가_IOC
 		case lib.P호가_최유리_지정가:
 			return P호가_최유리_지정가_IOC
+		default:
+			panic(lib.F2문자열("예상하지 못한 경우 : '%v' '%v'", int(호가_유형), 호가_유형.String()))
 		}
 	case lib.P주문조건_FOK:
 		switch 호가_유형 {
@@ -102,6 +106,8 @@ func F2Xing호가유형(호가_유형 lib.T호가유형, 주문_조건 lib.T주�
 			return P호가_시장가_FOK
 		case lib.P호가_최유리_지정가:
 			return P호가_최유리_지정가_FOK
+		default:
+			panic(lib.F2문자열("예상하지 못한 경우 : '%v' '%v'", int(호가_유형), 호가_유형.String()))
 		}
 	}
 

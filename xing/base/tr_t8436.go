@@ -76,10 +76,10 @@ func NewT8436_현물_종목조회_응답_반복값_모음(b []byte) (값 *T8436_
 
 	버퍼 := bytes.NewBuffer(b)
 	수량 := len(b) / SizeT8436OutBlock
-	g_모음 := make([]*T8436OutBlock, 수량, 수량)
+	g_모음 := make([]*T8436OutBlock, 수량)
 
 	값 = new(T8436_현물_종목조회_응답)
-	값.M배열 = make([]*T8436_현물_종목조회_응답_반복값, 수량, 수량)
+	값.M배열 = make([]*T8436_현물_종목조회_응답_반복값, 수량)
 
 	for i, g := range g_모음 {
 		g = new(T8436OutBlock)

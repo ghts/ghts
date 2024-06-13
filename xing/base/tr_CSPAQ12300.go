@@ -335,8 +335,8 @@ func NewCSPAQ12300_현물계좌_잔고내역_조회_응답_반복값_모음(b []
 
 	버퍼 := bytes.NewBuffer(b)
 	수량 := len(b) / SizeCSPAQ12300OutBlock3
-	g_모음 := make([]*CSPAQ12300OutBlock3, 수량, 수량)
-	값_모음 = make([]*CSPAQ12300_현물계좌_잔고내역_응답_반복값, 수량, 수량)
+	g_모음 := make([]*CSPAQ12300OutBlock3, 수량)
+	값_모음 = make([]*CSPAQ12300_현물계좌_잔고내역_응답_반복값, 수량)
 
 	for i, g := range g_모음 {
 		g = new(CSPAQ12300OutBlock3)

@@ -173,7 +173,7 @@ type S내재가치_식별정보 struct {
 	M연도_월 uint32
 }
 
-func (s S내재가치_식별정보) G키() string {
+func (s *S내재가치_식별정보) G키() string {
 	return s.M종목코드 + strconv.Itoa(int(s.M연도_월))
 }
 
@@ -181,11 +181,11 @@ func (s *S내재가치_식별정보) S연도_월(연도 uint16, 월 uint8) {
 	s.M연도_월 = uint32(연도)*100 + uint32(월)
 }
 
-func (s S내재가치_식별정보) G일자() uint32 {
+func (s *S내재가치_식별정보) G일자() uint32 {
 	return s.M연도_월*100 + 1
 }
 
-func (s S내재가치_식별정보) G일자2() time.Time {
+func (s *S내재가치_식별정보) G일자2() time.Time {
 	return lib.F확인2(lib.F2포맷된_일자("20060102", strconv.Itoa(int(s.M연도_월*100+1))))
 }
 

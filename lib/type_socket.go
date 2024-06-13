@@ -60,6 +60,7 @@ type I소켓_질의 interface {
 	G질의_응답(변환_형식 T변환, 값_모음 ...interface{}) (*S바이트_변환_모음, error)
 }
 
+//goland:noinspection GoExportedFuncWithUnexportedType
 func New소켓_저장소(수량 int, 생성함수 func() I소켓_질의) *s소켓_저장소 {
 	s := new(s소켓_저장소)
 	s.M저장소 = make(chan I소켓_질의, 수량)
