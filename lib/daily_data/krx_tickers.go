@@ -20,7 +20,7 @@ type S상장_법인_정보 struct {
 
 var map상장_법인_정보 map[string]*S상장_법인_정보
 
-// HTTP 쿼리 빈도를 최소화 하기 위해서 로컬 캐쉬('map상장_법인_정보')를 사용.
+// F상장_법인_정보_맵 : HTTP 쿼리 빈도를 최소화 하기 위해서 로컬 캐쉬('map상장_법인_정보')를 사용.
 func F상장_법인_정보_맵() (법인정보_맵 map[string]*S상장_법인_정보, 에러 error) {
 	if len(map상장_법인_정보) == 0 {
 		for i := 0; i < 3; i++ { // map상장_법인_정보 초기화
@@ -58,7 +58,7 @@ func f복사_Time(값 time.Time) time.Time {
 func f상장_법인_정보_맵() (법인정보_맵 map[string]*S상장_법인_정보, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 법인정보_맵 = nil }}.S실행()
 
-	url := `http://kind.krx.co.kr/corpgeneral/corpList.do?method=download&searchType=13`
+	url := `https://kind.krx.co.kr/corpgeneral/corpList.do?method=download&searchType=13`
 	응답 := lib.F확인2(http.Get(url))
 	defer 응답.Body.Close()
 
