@@ -36,7 +36,7 @@ package krx
 import (
 	"encoding/csv"
 	"github.com/ghts/ghts/lib"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
@@ -96,7 +96,7 @@ func csv다운로드() (CSV string, 에러 error) {
 	응답 := lib.F확인2(http.PostForm(url_CSV, 폼_데이터))
 	defer 응답.Body.Close()
 
-	바이트_모음 := lib.F확인2(ioutil.ReadAll(응답.Body))
+	바이트_모음 := lib.F확인2(io.ReadAll(응답.Body))
 	CSV = lib.F2문자열_EUC_KR(바이트_모음)
 
 	return CSV, nil
@@ -118,7 +118,7 @@ func otp() (OTP string, 에러 error) {
 	응답 := lib.F확인2(http.PostForm(url_OTP, 폼_데이터))
 	defer 응답.Body.Close()
 
-	바이트_모음 := lib.F확인2(ioutil.ReadAll(응답.Body))
+	바이트_모음 := lib.F확인2(io.ReadAll(응답.Body))
 	OTP = string(바이트_모음)
 
 	return OTP, nil

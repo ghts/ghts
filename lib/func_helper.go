@@ -295,7 +295,7 @@ func HTTP회신_본문(url string) (string, error) {
 		return "", 에러
 	}
 
-	바이트_모음, 에러 := ioutil.ReadAll(응답.Body)
+	바이트_모음, 에러 := io.ReadAll(응답.Body)
 
 	if 에러 != nil || 바이트_모음 == nil {
 		return "", 에러
@@ -316,7 +316,7 @@ func HTTP회신_본문_CP949(url string) (string, error) {
 		return "", 에러
 	}
 
-	바이트_모음, 에러 := ioutil.ReadAll(응답.Body)
+	바이트_모음, 에러 := io.ReadAll(응답.Body)
 
 	if 에러 != nil || 바이트_모음 == nil {
 		return "", 에러
