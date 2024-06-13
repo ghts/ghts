@@ -89,7 +89,7 @@ func f상장_주식_수량_맵() (상장주식수량_맵 map[string]int64, 에�
 func csv다운로드() (CSV string, 에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
-	const url_CSV = "http://data.krx.co.kr/comm/fileDn/download_csv/download.cmd"
+	const url_CSV = "https://data.krx.co.kr/comm/fileDn/download_csv/download.cmd"
 
 	폼_데이터 := url.Values{"code": {lib.F확인2(otp())}}
 
@@ -105,7 +105,7 @@ func csv다운로드() (CSV string, 에러 error) {
 func otp() (OTP string, 에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
-	const url_OTP = "http://data.krx.co.kr/comm/fileDn/GenerateOTP/generate.cmd"
+	const url_OTP = "https://data.krx.co.kr/comm/fileDn/GenerateOTP/generate.cmd"
 
 	폼_데이터 := url.Values{
 		"locale":      {"ko_KR"},
