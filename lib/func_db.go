@@ -67,3 +67,19 @@ func SQL실행(db *sql.DB, sql문자열 string, 추가_인수 ...interface{}) (i
 
 	return
 }
+
+func F정수값DB질의(db *sql.DB, sql문자열 string, 추가_인수 ...interface{}) (정수값 int64, 에러 error) {
+	defer S예외처리{M에러: &에러}.S실행()
+
+	stmt := F확인2(db.Prepare(sql문자열))
+	defer stmt.Close()
+
+	rows := F확인2(stmt.Query(추가_인수...))
+	defer rows.Close()
+
+	for rows.Next() {
+		F확인1(rows.Scan(&정수값))
+	}
+
+	return 정수값, nil
+}
