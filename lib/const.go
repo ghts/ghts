@@ -1,4 +1,4 @@
-/* Copyright(C) 2015-2023년 김운하 (unha.kim@ghts.org)
+/* Copyright(C) 2015-2024년 김운하 (unha.kim@ghts.org)
 
 이 파일은 GHTS의 일부입니다.
 
@@ -15,7 +15,7 @@ GNU LGPL 2.1판은 이 프로그램과 함께 제공됩니다.
 (자유 소프트웨어 재단 : Free Software Foundation, Inc.,
 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA)
 
-Copyright(C) 2015-2023년 UnHa Kim(unha.kim@ghts.org)
+Copyright(C) 2015-2024년 UnHa Kim(unha.kim@ghts.org)
 
 This file is part of GHTS.
 
@@ -44,7 +44,7 @@ const (
 	P일자_형식     = "2006-01-02"
 	P시간_형식     = "2006-01-02 15:04:05.999999999 -0700 MST"
 	P간략한_시간_형식 = "2006-01-02 15:04:05"
-	P시분초_형식 = "15:04:05"
+	P시분초_형식    = "15:04:05"
 
 	P마이너스1초 = -1 * time.Second
 	P10밀리초  = 10 * time.Millisecond

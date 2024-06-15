@@ -1,4 +1,4 @@
-/* Copyright (C) 2015-2023 김운하 (unha.kim@ghts.org)
+/* Copyright (C) 2015-2024 김운하 (unha.kim@ghts.org)
 
 이 파일은 GHTS의 일부입니다.
 
