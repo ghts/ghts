@@ -15,30 +15,37 @@ func (s S예외처리) S실행() {
 		}
 	}()
 
+	var i에러 interface{}
 	패닉_복원값 := recover()
 
-	var 에러 error
-	에러_포인터 := s.M에러
-
+	// 호출 경로 포함 에러 생성
 	switch {
+	case 패닉_복원값 != nil && s.M에러 != nil:
+		*s.M에러 = New에러(패닉_복원값)
+		i에러 = *s.M에러
 	case 패닉_복원값 != nil:
-		if s.M출력_숨김 {
-			에러 = New에러(패닉_복원값)
-		} else {
-			에러 = New에러with출력(패닉_복원값)
-		}
-	case 에러_포인터 != nil && *에러_포인터 != nil:
-		if s.M출력_숨김 {
-			에러 = New에러(*에러_포인터)
-		} else {
-			에러 = New에러with출력(*에러_포인터)
-		}
+		i에러 = New에러(패닉_복원값)
+	case s.M에러 != nil && *s.M에러 != nil:
+		*s.M에러 = New에러(*s.M에러)
+		i에러 = *s.M에러
+	//case s.M에러 != nil && *s.M에러 == nil:
+	// PASS
 	default: // 에러 및 패닉 없음.
 		return
 	}
 
-	if 에러_포인터 != nil {
-		*에러_포인터 = 에러
+	// 에러 출력
+	switch 변환값 := i에러.(type) {
+	case *S에러:
+		if !변환값.출력_완료 && !s.M출력_숨김 {
+			F에러_출력(변환값)
+			변환값.S출력_완료()
+		}
+	case S에러:
+		if !변환값.출력_완료 && !s.M출력_숨김 {
+			F에러_출력(변환값)
+			(&변환값).S출력_완료()
+		}
 	}
 
 	if s.M함수 != nil {

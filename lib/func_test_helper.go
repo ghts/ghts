@@ -378,11 +378,15 @@ func F문자열_출력(포맷_문자열 string, 추가_매개변수 ...interface
 func F에러_출력(에러 interface{}, 추가_매개변수 ...interface{}) {
 	switch 변환값 := 에러.(type) {
 	case *S에러:
-		log.Println(변환값.Error())
-		변환값.S출력_완료()
+		if !변환값.출력_완료 {
+			log.Println(변환값.Error())
+			변환값.S출력_완료()
+		}
 	case S에러:
-		log.Println(변환값.Error())
-		(&변환값).S출력_완료()
+		if !변환값.출력_완료 {
+			log.Println(변환값.Error())
+			(&변환값).S출력_완료()
+		}
 	case error:
 		log.Println(변환값.Error())
 	case string:

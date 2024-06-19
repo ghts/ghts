@@ -35,10 +35,16 @@ func New에러(포맷_문자열or에러 interface{}, 추가_매개변수 ...inte
 	case nil:
 		return nil
 	case *S에러:
-		변환값.호출_경로_모음 = F호출경로_모음()
+		if 호출경로_모음 := F호출경로_모음(); !f호출경로_존재(변환값.에러_메시지, 호출경로_모음) {
+			변환값.호출_경로_모음 = 호출경로_모음
+		}
+
 		return 변환값
 	case S에러:
-		(&변환값).호출_경로_모음 = F호출경로_모음()
+		if 호출경로_모음 := F호출경로_모음(); !f호출경로_존재(변환값.에러_메시지, 호출경로_모음) {
+			(&변환값).호출_경로_모음 = 호출경로_모음
+		}
+
 		return &변환값
 	case error:
 		if len(추가_매개변수) > 0 {
@@ -50,7 +56,10 @@ func New에러(포맷_문자열or에러 interface{}, 추가_매개변수 ...inte
 		에러.시점 = time.Now()
 		에러.에러_메시지 = strings.TrimSpace(변환값.Error())
 		에러.출력_완료 = false
-		에러.호출_경로_모음 = F호출경로_모음()
+
+		if 호출경로_모음 := F호출경로_모음(); !f호출경로_존재(에러.에러_메시지, 호출경로_모음) {
+			에러.호출_경로_모음 = 호출경로_모음
+		}
 
 		return 에러
 	case string:
@@ -59,7 +68,10 @@ func New에러(포맷_문자열or에러 interface{}, 추가_매개변수 ...inte
 		에러.시점 = time.Now()
 		에러.에러_메시지 = fmt.Sprintf(strings.TrimSpace(변환값), 추가_매개변수...)
 		에러.출력_완료 = false
-		에러.호출_경로_모음 = F호출경로_모음()
+
+		if 호출경로_모음 := F호출경로_모음(); !f호출경로_존재(에러.에러_메시지, 호출경로_모음) {
+			에러.호출_경로_모음 = 호출경로_모음
+		}
 
 		return 에러
 	default:
@@ -67,12 +79,22 @@ func New에러(포맷_문자열or에러 interface{}, 추가_매개변수 ...inte
 	}
 }
 
+func f호출경로_존재(에러_문자열 string, 호출경로_모음 []string) bool {
+	for _, 호출경로 := range 호출경로_모음 {
+		if strings.Contains(에러_문자열, 호출경로) {
+			return true
+		}
+	}
+
+	return false
+}
+
 func New에러with출력(포맷_문자열or에러 interface{}, 추가_매개변수 ...interface{}) error {
 	에러 := New에러(포맷_문자열or에러, 추가_매개변수...)
 
 	if !에러.(*S에러).G출력_완료() {
 		log.Println(에러.Error())
-		에러.(*S에러).출력_완료 = true
+		에러.(*S에러).S출력_완료()
 	}
 
 	return 에러
@@ -87,7 +109,7 @@ type S에러 struct {
 }
 
 func (s *S에러) Error() string {
-	버퍼 := new(bytes.Buffer)
+	버퍼 := new(strings.Builder)
 
 	if !strings.HasPrefix(s.에러_메시지, "\n") {
 		버퍼.WriteString("\n")
@@ -102,6 +124,10 @@ func (s *S에러) Error() string {
 	버퍼.WriteString(" ")
 
 	for _, 호출경로 := range s.호출_경로_모음 {
+		if strings.Contains(s.에러_메시지, 호출경로) {
+			continue
+		}
+
 		버퍼.WriteString(호출경로)
 		버퍼.WriteString("\n")
 	}
