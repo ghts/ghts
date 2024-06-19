@@ -2,10 +2,10 @@ package lib
 
 // S예외처리 : 함수 시작할 때 defer에서 S실행() 메소드를 통해서 예외를 처리하는 용도로 사용.
 type S예외처리 struct {
-	M에러    *error
-	M함수    func()
-	M함수_항상 func()
-	M출력_숨김 bool
+	M에러    *error // 반환값으로 전달받거나, 패닉에서 recover() 결과로 얻은 에러.
+	M함수    func() // 에러가 발생했을 때만 실행되는 함수.
+	M함수_항상 func() // 항상 실행되는 함수.
+	M출력_숨김 bool   // 에러 출력 여부.
 }
 
 func (s S예외처리) S실행() {
