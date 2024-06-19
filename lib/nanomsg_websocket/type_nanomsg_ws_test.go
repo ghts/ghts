@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/ghts/ghts/lib"
+	"math/rand/v2"
 	"net/http"
 	"strings"
 	"testing"
@@ -11,7 +12,7 @@ import (
 )
 
 func f테스트용_임의_주소() lib.T주소 {
-	return lib.T주소(lib.F임의값_생성기().Intn(60000))
+	return lib.T주소(rand.IntN(60000))
 }
 
 var HTTP서버 *http.Server
