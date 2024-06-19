@@ -47,6 +47,16 @@ func F같음(값, 비교값 interface{}) bool {
 	return false
 }
 
+func F동일값_존재[T comparable](값 T, 비교값_모음 ...T) bool {
+	for _, 비교값 := range 비교값_모음 {
+		if 값 == 비교값 {
+			return true
+		}
+	}
+
+	return false
+}
+
 func f2실수값_모음[T T숫자](값_모음 ...T) (실수값_모음 []float64) {
 	실수값_모음 = make([]float64, len(값_모음))
 
