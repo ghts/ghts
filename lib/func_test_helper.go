@@ -377,6 +377,8 @@ func F문자열_출력(포맷_문자열 string, 추가_매개변수 ...interface
 
 func F에러_출력(에러 interface{}, 추가_매개변수 ...interface{}) {
 	switch 변환값 := 에러.(type) {
+	case nil:
+		return
 	case *S에러:
 		if !변환값.출력_완료 {
 			log.Println(변환값.Error())
