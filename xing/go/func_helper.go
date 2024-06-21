@@ -216,7 +216,7 @@ func f데이터_복원_반복_조회(대기_항목 *DLL32_콜백_대기_항목, 
 
 func f전송_권한_획득(TR코드 string) {
 	switch TR코드 {
-	case "", xt.TR시간_조회_t0167, xt.RT현물_주문_접수_SC0, xt.RT현물_주문_체결_SC1, xt.RT현물_주문_정정_SC2, xt.RT현물_주문_취소_SC3, xt.RT현물_주문_거부_SC4,
+	case "", xt.RT현물_주문_접수_SC0, xt.RT현물_주문_체결_SC1, xt.RT현물_주문_정정_SC2, xt.RT현물_주문_취소_SC3, xt.RT현물_주문_거부_SC4,
 		xt.RT코스피_호가_잔량_H1, xt.RT코스피_시간외_호가_잔량_H2, xt.RT코스닥_호가_잔량_HA, xt.RT코스닥_시간외_호가_잔량_HB,
 		xt.RT코스피_체결_S3, xt.RT코스피_예상_체결_YS3, xt.RT코스닥_체결_K3, xt.RT코스닥_예상_체결_YK3,
 		xt.RT코스피_ETF_NAV_I5, xt.RT주식_VI발동해제_VI, xt.RT시간외_단일가VI발동해제_DVI, xt.RT장_운영정보_JIF:
