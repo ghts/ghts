@@ -1047,7 +1047,7 @@ func F명월_1일() time.Time {
 	}
 }
 
-func F키_모음[K comparable, V any](맵 map[K]V) []K {
+func F맵_키_모음[K comparable, V any](맵 map[K]V) []K {
 	키_모음 := make([]K, len(맵))
 
 	i := 0
@@ -1057,6 +1057,18 @@ func F키_모음[K comparable, V any](맵 map[K]V) []K {
 	}
 
 	return 키_모음
+}
+
+func F맵_값_모음[K comparable, V any](맵 map[K]V) []V {
+	값_모음 := make([]V, len(맵))
+
+	i := 0
+	for _, 값 := range 맵 {
+		값_모음[i] = 값
+		i++
+	}
+
+	return 값_모음
 }
 
 func F2맵[T comparable](값_모음 []T) (맵 map[T]S비어있음) {
