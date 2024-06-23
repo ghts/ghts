@@ -380,15 +380,11 @@ func F에러_출력(에러 interface{}, 추가_매개변수 ...interface{}) {
 	case nil:
 		return
 	case *S에러:
-		if !변환값.출력_완료 {
-			log.Println(변환값.Error())
-			변환값.S출력_완료()
-		}
+		log.Println(변환값.Error())
+		변환값.S출력_완료()
 	case S에러:
-		if !변환값.출력_완료 {
-			log.Println(변환값.Error())
-			(&변환값).S출력_완료()
-		}
+		log.Println(변환값.Error())
+		(&변환값).S출력_완료()
 	case error:
 		log.Println(변환값.Error())
 	case string:
