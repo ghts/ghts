@@ -34,25 +34,30 @@ func TestS에러(t *testing.T) {
 
 func f함수1() (에러 error) {
 	defer S예외처리{M에러: &에러, M출력_숨김: true}.S실행()
-	return f함수2()
+	에러 = f함수2()
+	return
 }
 
 func f함수2() (에러 error) {
 	defer S예외처리{M에러: &에러, M출력_숨김: true}.S실행()
-	return f함수3()
+	에러 = f함수3()
+	return
 }
 
 func f함수3() (에러 error) {
 	defer S예외처리{M에러: &에러, M출력_숨김: true}.S실행()
-	return f함수4()
+	에러 = f함수4()
+	return
 }
 
 func f함수4() (에러 error) {
 	defer S예외처리{M에러: &에러, M출력_숨김: true}.S실행()
-	return f함수5()
+	에러 = f함수5()
+	return
 }
 
 func f함수5() (에러 error) {
 	defer S예외처리{M에러: &에러, M출력_숨김: true}.S실행()
-	return errors.New(에러_메시지)
+	에러 = errors.New(에러_메시지)
+	return
 }
