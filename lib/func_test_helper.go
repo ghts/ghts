@@ -275,14 +275,15 @@ func f건너뛰는_호출경로(호출경로 string) bool {
 		strings.HasPrefix(호출경로, "signal_windows.go:"),
 		strings.HasPrefix(호출경로, "syscall_windows.go:"),
 		strings.HasPrefix(호출경로, "testing.go:"),
-		F정규식_검색(호출경로, []string{`type_test_helper.go:[0-9]+:S실행()`}) != "",
-		F정규식_검색(호출경로, []string{`type_test_helper.go:[0-9]+:S실행_No출력()`}) != "",
-		F정규식_검색(호출경로, []string{`type_test_helper.go:[0-9]+:s실행()`}) != "",
+		F정규식_검색(호출경로, []string{`type_error_handling.go:[0-9]+:S실행()`}) != "",
+		F정규식_검색(호출경로, []string{`type_error_handling.go:[0-9]+:S실행_No출력()`}) != "",
+		F정규식_검색(호출경로, []string{`type_error_handling.go:[0-9]+:s실행()`}) != "",
 		F정규식_검색(호출경로, []string{`print.go:[0-9]+:handleMethods()`}) != "",
 		F정규식_검색(호출경로, []string{`print.go:[0-9]+:printValue()`}) != "",
 		F정규식_검색(호출경로, []string{`print.go:[0-9]+:printArg()`}) != "",
 		F정규식_검색(호출경로, []string{`print.go:[0-9]+:doPrintf()`}) != "",
 		F정규식_검색(호출경로, []string{`print.go:[0-9]+:Sprintf()`}) != "",
+		F정규식_검색(호출경로, []string{`.go:[0-9]+:]()`}) != "",
 		호출경로 == ".:0:()":
 		return true
 	default:
@@ -376,15 +377,27 @@ func F문자열_출력(포맷_문자열 string, 추가_매개변수 ...interface
 }
 
 func F에러_출력(에러 interface{}, 추가_매개변수 ...interface{}) {
+	println("F에러_출력")
+
 	switch 변환값 := 에러.(type) {
 	case nil:
 		return
 	case *S에러:
-		log.Println(변환값.Error())
-		변환값.S출력_완료()
+		func() {
+			변환값.Lock()
+			defer 변환값.Unlock()
+
+			log.Println(변환값.Error())
+			변환값.S출력_완료()
+		}()
 	case S에러:
-		log.Println(변환값.Error())
-		(&변환값).S출력_완료()
+		func() {
+			변환값.Lock()
+			defer 변환값.Unlock()
+
+			log.Println(변환값.Error())
+			(&변환값).S출력_완료()
+		}()
 	case error:
 		log.Println(변환값.Error())
 	case string:
