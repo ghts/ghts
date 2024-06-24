@@ -376,37 +376,6 @@ func F문자열_출력(포맷_문자열 string, 추가_매개변수 ...interface
 	log.Printf(버퍼.String(), 추가_매개변수...)
 }
 
-func F에러_출력(에러 interface{}, 추가_매개변수 ...interface{}) {
-	println("F에러_출력")
-
-	switch 변환값 := 에러.(type) {
-	case nil:
-		return
-	case *S에러:
-		func() {
-			변환값.Lock()
-			defer 변환값.Unlock()
-
-			log.Println(변환값.Error())
-			변환값.S출력_완료()
-		}()
-	case S에러:
-		func() {
-			변환값.Lock()
-			defer 변환값.Unlock()
-
-			log.Println(변환값.Error())
-			(&변환값).S출력_완료()
-		}()
-	case error:
-		log.Println(변환값.Error())
-	case string:
-		log.Println(New에러(변환값, 추가_매개변수...).Error())
-	default:
-		panic(New에러("F에러_출력() 예상하지 못한 자료형 : '%T'", 에러))
-	}
-}
-
 func F문자열_호출경로_출력(포맷_문자열 string, 추가_매개변수 ...interface{}) {
 	F문자열_출력_도우미(true, 포맷_문자열, 추가_매개변수...)
 }

@@ -1,5 +1,10 @@
 package lib
 
+import (
+	"log"
+	"strings"
+)
+
 // S예외처리 : 함수 시작할 때 defer에서 S실행() 메소드를 통해서 예외를 처리하는 용도로 사용.
 type S예외처리 struct {
 	M에러    *error // 반환값으로 전달받거나, 패닉에서 recover() 결과로 얻은 에러.
@@ -37,16 +42,51 @@ func (s S예외처리) S실행() {
 	// 에러 출력
 	switch 변환값 := i에러.(type) {
 	case *S에러:
-		if !변환값.메시지_출력_완료 && !s.M출력_숨김 {
+		if !s.M출력_숨김 {
 			F에러_출력(변환값)
 		}
 	case S에러:
-		if !변환값.메시지_출력_완료 && !s.M출력_숨김 {
+		if !s.M출력_숨김 {
 			F에러_출력(변환값)
 		}
 	}
 
 	if s.M함수 != nil {
 		s.M함수()
+	}
+}
+
+func F에러_출력(에러 interface{}, 추가_매개변수 ...interface{}) {
+	switch 변환값 := 에러.(type) {
+	case nil:
+		return
+	case *S에러:
+		func() {
+			변환값.Lock()
+			defer 변환값.Unlock()
+
+			if 문자열 := strings.TrimSpace(변환값.Error()); 문자열 != "" {
+				log.Println(문자열)
+			}
+
+			변환값.S출력_완료()
+		}()
+	case S에러:
+		func() {
+			변환값.Lock()
+			defer 변환값.Unlock()
+
+			if 문자열 := strings.TrimSpace(변환값.Error()); 문자열 != "" {
+				log.Println(문자열)
+			}
+
+			(&변환값).S출력_완료()
+		}()
+	case error:
+		log.Println(변환값.Error())
+	case string:
+		log.Println(New에러(변환값, 추가_매개변수...).Error())
+	default:
+		panic(New에러("F에러_출력() 예상하지 못한 자료형 : '%T'", 에러))
 	}
 }

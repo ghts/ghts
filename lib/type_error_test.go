@@ -12,7 +12,7 @@ func TestS에러(t *testing.T) {
 	에러 := f함수1()
 	F테스트_에러발생(t, 에러)
 
-	if 에러.(*S에러).메시지_출력_완료 {
+	if 에러.(*S에러).출력_완료 {
 		F테스트_참임(t, !strings.Contains(에러.Error(), 에러_메시지))
 	} else {
 		F테스트_참임(t, strings.Contains(에러.Error(), 에러_메시지))
@@ -23,7 +23,7 @@ func TestS에러(t *testing.T) {
 	for _, 함수명 := range 함수명_모음 {
 		포함 := false
 		for _, 호출경로 := range 에러.(*S에러).호출_경로_모음 {
-			if strings.Contains(호출경로.M경로_문자열, 함수명) {
+			if strings.Contains(호출경로, 함수명) {
 				포함 = true
 			}
 		}
