@@ -126,9 +126,7 @@ func New종목별_일일_가격정보_모음_DB읽기(db *sql.DB, 종목코드 s
 }
 
 func New종목별_일일_가격정보_모음(값_모음 []*S일일_가격정보) (s *S종목별_일일_가격정보_모음, 에러 error) {
-	if len(값_모음) == 0 {
-		return nil, lib.New에러("비어 있는 입력값.")
-	} else if 값_모음[0] == nil {
+	if len(값_모음) == 0 || 값_모음[0] == nil {
 		return nil, lib.New에러("비어 있는 입력값.")
 	}
 
