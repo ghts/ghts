@@ -386,7 +386,7 @@ func F초기화_TR전송_제한() (에러 error) {
 	TR전송_제한_초기화_잠금.Lock()
 	defer TR전송_제한_초기화_잠금.Unlock()
 
-	if len(tr코드별_전송_제한_1초) > 0 {
+	if len(tr코드별_전송_제한_1초) > 3 {
 		return nil
 	}
 
