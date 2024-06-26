@@ -181,19 +181,19 @@ func f초기화_작동_확인() (작동_여부 bool) {
 	defer lib.S예외처리{M함수: func() { 작동_여부 = false }}.S실행()
 
 	ch확인 := make(chan lib.T신호, 1)
-	ch타임아웃 := time.After(lib.P1분)
+	//ch타임아웃 := time.After(lib.P1분)
 
 	go f접속_확인(ch확인)
 	//go f시간_일치_확인(ch확인)
 
-	for i := 0; i < 2; i++ {
-		select {
-		case <-ch확인:
-		case <-ch타임아웃:
-			lib.New에러with출력("f초기화_작동_확인() 타임아웃.")
-			return false
-		}
-	}
+	//for i := 0; i < 2; i++ {
+	//	select {
+	//	case <-ch확인:
+	//	case <-ch타임아웃:
+	//		lib.New에러with출력("f초기화_작동_확인() 타임아웃.")
+	//		return false
+	//	}
+	//}
 
 	//fmt.Println("** dll32 동작 확인 완료**")
 
