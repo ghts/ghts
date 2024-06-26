@@ -185,7 +185,7 @@ func f초기화_작동_확인() (작동_여부 bool) {
 	ch타임아웃 := time.After(lib.P1분)
 
 	go f접속_확인(ch확인)
-	//go f시간_일치_확인(ch확인)
+	go f시간_일치_확인(ch확인)
 
 	for i := 0; i < 2; i++ {
 		select {
@@ -237,25 +237,25 @@ func f접속_확인(ch완료 chan lib.T신호) {
 	return
 }
 
-//func f시간_일치_확인(ch완료 chan lib.T신호) {
-//	defer func() { ch완료 <- lib.P신호_종료 }()
-//
-//	if len(tr코드별_전송_제한_1초) == 0 {
-//		tr코드별_전송_제한_1초[xt.TR시간_조회_t0167] = lib.New전송_권한(xt.TR시간_조회_t0167, 5, lib.P1초)
-//	}
-//
-//	for i := 0; i < 100; i++ {
-//		시각, 에러 := (<-TrT0167_시각_조회()).G값()
-//
-//		if 에러 != nil || 시각.Equal(time.Time{}) {
-//			continue
-//		} else if 차이 := time.Now().Sub(시각); 차이 < -1*lib.P10분 || 차이 > lib.P10분 {
-//			panic(lib.New에러("서버와 시스템 시각 불일치 : 차이 '%v'분", 차이.Minutes()))
-//		}
-//
-//		return
-//	}
-//}
+func f시간_일치_확인(ch완료 chan lib.T신호) {
+	defer func() { ch완료 <- lib.P신호_종료 }()
+
+	if len(tr코드별_전송_제한_1초) == 0 {
+		tr코드별_전송_제한_1초[xt.TR시간_조회_t0167] = lib.New전송_권한(xt.TR시간_조회_t0167, 5, lib.P1초)
+	}
+
+	for i := 0; i < 100; i++ {
+		시각, 에러 := (<-TrT0167_시각_조회()).G값()
+
+		if 에러 != nil || 시각.Equal(time.Time{}) {
+			continue
+		} else if 차이 := time.Now().Sub(시각); 차이 < -1*lib.P10분 || 차이 > lib.P10분 {
+			panic(lib.New에러("서버와 시스템 시각 불일치 : 차이 '%v'분", 차이.Minutes()))
+		}
+
+		return
+	}
+}
 
 func F전일_당일_설정() (에러 error) {
 	for i := 0; i < 3; i++ {
