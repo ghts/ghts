@@ -183,6 +183,10 @@ func F선물옵션_종목코드_검사(종목코드 string) (에러 error) {
 
 func F종목코드_존재함(종목코드 string) bool {
 	if len(종목맵_전체) == 0 {
+		F종목_정보_설정()
+	}
+
+	if len(종목맵_전체) == 0 {
 		panic(lib.New에러("xing 모듈 초기화 되지 않음."))
 	}
 
@@ -205,6 +209,19 @@ func F종목_정보_설정() (에러 error) {
 	종목모음_설정_잠금.Lock()
 	defer 종목모음_설정_잠금.Unlock()
 
+	if len(종목모음_코스피) > 0 &&
+		len(종목모음_코스닥) > 0 &&
+		len(종목모음_ETF) > 0 &&
+		len(종목모음_ETN) > 0 &&
+		len(종목모음_ETF_ETN) > 0 &&
+		len(종목모음_전체) > 0 &&
+		len(종목맵_전체) > 0 &&
+		len(기준가_맵) > 0 &&
+		len(하한가_맵) > 0 &&
+		종목모음_설정일.G값().Equal(lib.F금일()) {
+		return nil
+	}
+
 	defer lib.S예외처리{
 		M에러: &에러,
 		M함수: func() {
@@ -220,19 +237,6 @@ func F종목_정보_설정() (에러 error) {
 			하한가_맵 = make(map[string]int64)
 			종목모음_설정일 = lib.New안전한_시각(time.Time{})
 		}}.S실행()
-
-	if len(종목모음_코스피) > 0 &&
-		len(종목모음_코스닥) > 0 &&
-		len(종목모음_ETF) > 0 &&
-		len(종목모음_ETN) > 0 &&
-		len(종목모음_ETF_ETN) > 0 &&
-		len(종목모음_전체) > 0 &&
-		len(종목맵_전체) > 0 &&
-		len(기준가_맵) > 0 &&
-		len(하한가_맵) > 0 &&
-		종목모음_설정일.G값().Equal(lib.F금일()) {
-		return nil
-	}
 
 	종목_정보_모음 := lib.F확인2(TrT8436_주식종목_조회(lib.P시장구분_전체))
 
