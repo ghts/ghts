@@ -11,6 +11,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
+	"sync"
 	"time"
 )
 
@@ -377,8 +378,17 @@ func F소켓_정리() {
 	소켓REQ_저장소.S정리()
 }
 
+var TR전송_제한_초기화_잠금 sync.Mutex
+
 func F초기화_TR전송_제한() (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
+
+	TR전송_제한_초기화_잠금.Lock()
+	defer TR전송_제한_초기화_잠금.Unlock()
+
+	if len(tr코드별_전송_제한_1초) > 0 {
+		return nil
+	}
 
 	TR코드_모음 := []string{
 		//xt.TR선물옵션_주문체결내역조회_CFOAQ00600,
