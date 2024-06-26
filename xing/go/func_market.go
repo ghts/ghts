@@ -198,6 +198,10 @@ func F종목코드_존재함(종목코드 string) bool {
 }
 
 func F종목코드_검사(종목코드 string) error {
+	if len(종목맵_전체) == 0 {
+		F종목_정보_설정()
+	}
+	
 	if !F종목코드_존재함(종목코드) {
 		return lib.New에러("존재하지 않는 종목코드 : '%s'.", 종목코드)
 	}
