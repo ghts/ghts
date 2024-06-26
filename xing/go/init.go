@@ -383,10 +383,7 @@ var TR전송_제한_초기화_잠금 sync.Mutex
 func F초기화_TR전송_제한() (에러 error) {
 	defer lib.S예외처리{M에러: &에러}.S실행()
 
-	TR전송_제한_초기화_잠금.Lock()
-	defer TR전송_제한_초기화_잠금.Unlock()
-
-	if f전송_제한_초기화_완료() {
+	if f전체TR_전송_제한_초기화_완료() {
 		return nil
 	}
 
@@ -435,6 +432,19 @@ func F초기화_TR전송_제한() (에러 error) {
 		xt.TR증시_주변_자금_추이_t8428,
 		//xt.TR지수선물_마스터_조회_t8432,
 		xt.TR현물_종목_조회_t8436}
+
+	return tr전송_제한_초기화(TR코드_모음)
+}
+
+func tr전송_제한_초기화(TR코드_모음 []string) (에러 error) {
+	TR전송_제한_초기화_잠금.Lock()
+	defer TR전송_제한_초기화_잠금.Unlock()
+
+	if len(TR코드_모음) > 1 && f전체TR_전송_제한_초기화_완료() {
+		return nil
+	} else if len(TR코드_모음) == 1 && f단일TR_전송_제한_초기화_완료(TR코드_모음[0]) {
+		return nil
+	}
 
 	// 중복 제거
 	TR코드_맵 := make(map[string]lib.S비어있음)
@@ -510,6 +520,13 @@ func F초기화_TR전송_제한() (에러 error) {
 	return nil
 }
 
-func f전송_제한_초기화_완료() bool {
+func f전체TR_전송_제한_초기화_완료() bool {
 	return len(tr코드별_전송_제한_1초) > 1 && len(tr코드별_전송_제한_10분) > 0
+}
+
+func f단일TR_전송_제한_초기화_완료(TR코드 string) bool {
+	_, 존재함1 := tr코드별_전송_제한_1초[TR코드]
+	_, 존재함2 := tr코드별_전송_제한_10분[TR코드]
+
+	return 존재함1 || 존재함2
 }
