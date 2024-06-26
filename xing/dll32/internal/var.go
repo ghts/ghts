@@ -48,8 +48,8 @@ var (
 	소켓REP_TR수신   = lib.F확인2(nano.NewNano소켓REP(xt.F주소_DLL32()))
 	소켓PUB_실시간_정보 = lib.F확인2(nano.NewNano소켓PUB(xt.F주소_실시간()))
 
-	소켓REQ_저장소 = lib.New소켓_저장소(20, func() lib.I소켓_질의 {
-		return lib.F확인2(nano.NewNano소켓REQ(xt.F주소_콜백(), lib.P30초))
+	소켓REQ_저장소 = lib.New소켓_저장소(20, func() (lib.I소켓_질의, error) {
+		return nano.NewNano소켓REQ(xt.F주소_콜백(), lib.P30초)
 	})
 
 	접속_처리_잠금  sync.Mutex

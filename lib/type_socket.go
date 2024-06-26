@@ -28,7 +28,7 @@ type I소켓_질의 interface {
 }
 
 //goland:noinspection GoExportedFuncWithUnexportedType
-func New소켓_저장소(수량 int, 생성함수 func() I소켓_질의) *s소켓_저장소 {
+func New소켓_저장소(수량 int, 생성함수 func() (I소켓_질의, error)) *s소켓_저장소 {
 	s := new(s소켓_저장소)
 	s.M저장소 = make(chan I소켓_질의, 수량)
 	s.M생성함수 = 생성함수
@@ -39,7 +39,7 @@ func New소켓_저장소(수량 int, 생성함수 func() I소켓_질의) *s소�
 type s소켓_저장소 struct {
 	sync.Mutex
 	M저장소  chan I소켓_질의
-	M생성함수 func() I소켓_질의
+	M생성함수 func() (I소켓_질의, error)
 }
 
 func (s *s소켓_저장소) G소켓() I소켓_질의 {
@@ -52,7 +52,15 @@ func (s *s소켓_저장소) G소켓() I소켓_질의 {
 		s.Lock()
 		defer s.Unlock()
 
-		return s.M생성함수()
+		for i := 0; i < 3; i++ {
+			if i소켓, 에러 := s.M생성함수(); 에러 == nil {
+				return i소켓
+			}
+
+			F대기(P1초)
+		}
+
+		return nil
 	}
 }
 

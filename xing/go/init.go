@@ -70,10 +70,6 @@ func F초기화(서버_구분 xt.T서버_구분, 로그인_정보 *xt.S로그인
 
 func F소켓_생성() {
 	소켓REP_TR콜백 = lib.F확인2(nano.NewNano소켓REP(xt.F주소_콜백()))
-
-	소켓REQ_저장소 = lib.New소켓_저장소(20, func() lib.I소켓_질의 {
-		return lib.F확인2(nano.NewNano소켓REQ(xt.F주소_DLL32(), lib.P30초))
-	})
 }
 
 func F초기화_Go루틴() {
