@@ -5,13 +5,18 @@ import (
 	"errors"
 	"math"
 	"math/big"
-	"math/rand/v2"
+	"math/rand"
 	"reflect"
 	"time"
 )
 
+func F임의값_생성기() *rand.Rand {
+	return rand.New(rand.NewSource(time.Now().UnixNano() + rand.Int63()))
+}
+
 func F임의_참거짓() bool {
-	return rand.IntN(2) == 0
+	return F임의값_생성기().Intn(2) == 0
+	//return rand.IntN(2) == 0
 }
 
 func F임의_문자열(최소_길이, 최대_길이 int) string {
@@ -19,7 +24,8 @@ func F임의_문자열(최소_길이, 최대_길이 int) string {
 		panic(New에러with출력("최소 길이는 최대 길이보다 작아야 합니다. %v %v", 최소_길이, 최대_길이))
 	}
 
-	길이 := rand.IntN(최대_길이-최소_길이) + 최소_길이
+	r := F임의값_생성기()
+	길이 := r.Intn(최대_길이-최소_길이) + 최소_길이 //rand.IntN(최대_길이-최소_길이) + 최소_길이
 	버퍼 := new(bytes.Buffer)
 	문자열_모음 := []string{"1", "2", "3", "4", "5", "6", "7", "8", "9", "0",
 		"a", "b", "dll", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n",
@@ -29,14 +35,16 @@ func F임의_문자열(최소_길이, 최대_길이 int) string {
 		"!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "+"}
 
 	for i := 0; i < 길이; i++ {
-		버퍼.WriteString(문자열_모음[rand.IntN(len(문자열_모음))])
+		버퍼.WriteString(문자열_모음[r.Intn(len(문자열_모음))])
+		//버퍼.WriteString(문자열_모음[rand.IntN(len(문자열_모음))])
 	}
 
 	return 버퍼.String()
 }
 
 func F임의_양의_정수값() int {
-	return rand.Int()
+	return F임의값_생성기().Int()
+	//return rand.Int()
 }
 
 func F임의_양의_정수8값() int8 {
@@ -44,7 +52,8 @@ func F임의_양의_정수8값() int8 {
 }
 
 func F임의_양의_정수64값() int64 {
-	return rand.Int64()
+	return F임의값_생성기().Int63()
+	//return rand.Int64()
 }
 
 func F임의_정수값() int {
@@ -60,7 +69,8 @@ func F임의_정수값() int {
 func F임의_범위_이내_정수값(최소값, 최대값 int) int {
 	F조건부_패닉(최소값 > 최대값, "최소값이 최대값보다 큽니다. 최소값 : %v, 최대값 : %v", 최소값, 최대값)
 
-	추가값_비율 := rand.Float64()
+	추가값_비율 := F임의값_생성기().Float64()
+	//추가값_비율 := rand.Float64()
 	추가값 := int(추가값_비율 * float64(최대값-최소값))
 
 	return 최소값 + 추가값
@@ -79,7 +89,8 @@ func F임의_정수64값() int64 {
 func F임의_범위_이내_정수64값(최소값, 최대값 int64) int64 {
 	F조건부_패닉(최소값 > 최대값, "최소값이 최대값보다 큽니다. 최소값 : %v, 최대값 : %v", 최소값, 최대값)
 
-	추가값_비율 := rand.Float64()
+	추가값_비율 := F임의값_생성기().Float64()
+	//추가값_비율 := rand.Float64()
 	추가값 := int64(추가값_비율 * float64(최대값-최소값))
 
 	return 최소값 + 추가값
@@ -96,13 +107,15 @@ func F임의_범위_이내_정수64값_모음(길이 int, 최소값, 최대값 i
 }
 
 func F임의_실수64() float64 {
-	return rand.Float64() * math.Pow10(F임의_범위_이내_정수값(0, 20))
+	return F임의값_생성기().Float64() * math.Pow10(F임의_범위_이내_정수값(0, 20))
+	//return rand.Float64() * math.Pow10(F임의_범위_이내_정수값(0, 20))
 }
 
 func F임의_범위_이내_실수64값(최소값, 최대값 float64) float64 {
 	F조건부_패닉(최소값 > 최대값, "최소값이 최대값보다 큽니다. 최소값 : %v, 최대값 : %v", 최소값, 최대값)
 
-	추가값_비율 := rand.Float64()
+	추가값_비율 := F임의값_생성기().Float64()
+	//추가값_비율 := rand.Float64()
 	추가값 := 추가값_비율 * (최대값 - 최소값)
 
 	return 최소값 + 추가값
@@ -119,9 +132,11 @@ func F샘플_통화단위_모음() []T통화 {
 }
 
 func F임의_통화단위() T통화 {
+	r := F임의값_생성기()
 	통화단위_모음 := F샘플_통화단위_모음()
 
-	return 통화단위_모음[rand.IntN(len(통화단위_모음))]
+	return 통화단위_모음[r.Intn(len(통화단위_모음))]
+	//return 통화단위_모음[rand.IntN(len(통화단위_모음))]
 }
 
 func F임의_통화값() *S통화 {
@@ -131,10 +146,13 @@ func F임의_통화값() *S통화 {
 func F임의_통화값_모음(수량 int) []*S통화 {
 	통화_모음 := make([]*S통화, 수량)
 	통화단위_모음 := F샘플_통화단위_모음()
+	r := F임의값_생성기()
 
 	for i := 0; i < 수량; i++ {
-		통화단위 := 통화단위_모음[rand.IntN(len(통화단위_모음))]
-		금액 := math.Trunc(rand.Float64()*math.Pow10(rand.IntN(5))*100) / 100
+		통화단위 := 통화단위_모음[r.Intn(len(통화단위_모음))]
+		금액 := math.Trunc(r.Float64()*math.Pow10(r.Intn(5))*100) / 100
+		//통화단위 := 통화단위_모음[rand.IntN(len(통화단위_모음))]
+		//금액 := math.Trunc(rand.Float64()*math.Pow10(rand.IntN(5))*100) / 100
 
 		통화_모음[i] = New통화(통화단위, 금액)
 	}
@@ -143,13 +161,22 @@ func F임의_통화값_모음(수량 int) []*S통화 {
 }
 
 func F임의_시각() time.Time {
-	연도 := rand.IntN(200) + 1970
-	월 := time.Month(rand.IntN(12))
-	일 := rand.IntN(31)
-	시 := rand.IntN(24)
-	분 := rand.IntN(60)
-	초 := rand.IntN(60)
-	나노초 := rand.IntN(1000000000)
+	r := F임의값_생성기()
+
+	연도 := r.Intn(200) + 1970
+	월 := time.Month(r.Intn(12))
+	일 := r.Intn(31)
+	시 := r.Intn(24)
+	분 := r.Intn(60)
+	초 := r.Intn(60)
+	나노초 := r.Intn(1000000000)
+	//연도 := rand.IntN(200) + 1970
+	//월 := time.Month(rand.IntN(12))
+	//일 := rand.IntN(31)
+	//시 := rand.IntN(24)
+	//분 := rand.IntN(60)
+	//초 := rand.IntN(60)
+	//나노초 := rand.IntN(1000000000)
 
 	return time.Date(연도, 월, 일, 시, 분, 초, 나노초, time.Now().Location())
 }
@@ -159,7 +186,8 @@ func F테스트용_임의_주소() T주소 {
 	defer 소켓_테스트용_주소_중복_방지_잠금.Unlock()
 
 	for {
-		주소 := T주소(rand.IntN(60000))
+		주소 := T주소(F임의값_생성기().Intn(60000))
+		//주소 := T주소(rand.IntN(60000))
 		주소_문자열 := 주소.TCP주소()
 
 		_, 중복 := 소켓_테스트용_주소_중복_방지_맵[주소_문자열]
@@ -182,14 +210,19 @@ type s샘플_구조체_1 struct {
 	M문자열  string
 }
 
-// 간단한 테스트용 구조체
+// F샘플_구조체_1 : 간단한 테스트용 구조체
 //
 //goland:noinspection GoExportedFuncWithUnexportedType
 func F샘플_구조체_1() s샘플_구조체_1 {
+	r := F임의값_생성기()
+
 	s := s샘플_구조체_1{}
-	s.M정수 = rand.Int()
-	s.M정수64 = rand.Int64()
-	s.M실수64 = rand.Float64()
+	s.M정수 = r.Int()
+	s.M정수64 = r.Int63()
+	s.M실수64 = r.Float64()
+	//s.M정수 = rand.Int()
+	//s.M정수64 = rand.Int64()
+	//s.M실수64 = rand.Float64()
 	s.M참거짓 = F임의_참거짓()
 	s.M문자열 = F임의_문자열(5, 100)
 
@@ -206,18 +239,25 @@ type s샘플_구조체_2 struct {
 //
 //goland:noinspection GoExportedFuncWithUnexportedType
 func F샘플_구조체_2() s샘플_구조체_2 {
+	r := F임의값_생성기()
+
 	s := s샘플_구조체_2{}
 	s.M슬라이스 = []string{F임의_문자열(3, 5), F임의_문자열(3, 5)}
 	s.M맵 = map[string]int{
-		F임의_문자열(5, 10): rand.Int(),
-		F임의_문자열(5, 10): rand.Int(),
-		F임의_문자열(5, 10): rand.Int()}
+		F임의_문자열(5, 10): r.Int(),
+		F임의_문자열(5, 10): r.Int(),
+		F임의_문자열(5, 10): r.Int()}
+	//F임의_문자열(5, 10): rand.Int(),
+	//F임의_문자열(5, 10): rand.Int(),
+	//F임의_문자열(5, 10): rand.Int()}
 	s.M구조체 = F샘플_구조체_1()
 
 	return s
 }
 
 func f테스트용_안전한_전달값_모음() []interface{} {
+	r := F임의값_생성기()
+
 	바이트_전송값_1 := F확인2(New바이트_변환(P변환형식_기본값, F샘플_구조체_1()))
 	F조건부_패닉(바이트_전송값_1 == nil, "바이트_전송값 변환값이 nil임")
 
@@ -225,10 +265,14 @@ func f테스트용_안전한_전달값_모음() []interface{} {
 	F조건부_패닉(바이트_전송값_2 == nil, "바이트_전송값 변환값이 nil임")
 
 	안전한_전달값_모음 := []interface{}{
-		rand.Int(), uint(rand.Int()), uintptr(rand.Int()),
-		int8(rand.IntN(128)), int16(rand.IntN(32768)), rand.Int32(), rand.Int64(),
-		uint8(rand.IntN(128)), uint16(rand.IntN(65536)), uint32(rand.Int32()), uint64(rand.Int64()),
-		rand.Float32(), rand.Float64(), F임의_참거짓(),
+		r.Int(), uint(r.Int()), uintptr(r.Int()),
+		int8(r.Intn(127)), int16(r.Intn(127)), r.Int31(), r.Int63(),
+		uint8(r.Intn(127)), uint16(r.Intn(127)), uint32(r.Int31()), uint64(r.Int63()),
+		r.Float32(), r.Float64(), F임의_참거짓(),
+		//rand.Int(), uint(rand.Int()), uintptr(rand.Int()),
+		//int8(rand.IntN(128)), int16(rand.IntN(32768)), rand.Int32(), rand.Int64(),
+		//uint8(rand.IntN(128)), uint16(rand.IntN(65536)), uint32(rand.Int32()), uint64(rand.Int64()),
+		//rand.Float32(), rand.Float64(), F임의_참거짓(),
 		F임의_문자열(5, 10), []byte(F임의_문자열(5, 10)),
 		make(chan S비어있음), func() {},
 		nil, errors.New(F임의_문자열(5, 10)), F임의_시각(),
@@ -237,7 +281,8 @@ func f테스트용_안전한_전달값_모음() []interface{} {
 
 	인터페이스_모음 := make([]interface{}, 10)
 	for i := range 인터페이스_모음 {
-		인터페이스_모음[i] = 안전한_전달값_모음[rand.IntN(len(안전한_전달값_모음))]
+		인터페이스_모음[i] = 안전한_전달값_모음[r.Intn(len(안전한_전달값_모음))]
+		//인터페이스_모음[i] = 안전한_전달값_모음[rand.IntN(len(안전한_전달값_모음))]
 	}
 
 	안전한_전달값_모음 = append(안전한_전달값_모음, 인터페이스_모음)
@@ -246,15 +291,20 @@ func f테스트용_안전한_전달값_모음() []interface{} {
 }
 
 func f테스트용_위험한_전달값_모음() []interface{} {
+	r := F임의값_생성기()
+
 	구조체_1 := F샘플_구조체_1()
 	구조체_2 := F샘플_구조체_2()
 
 	return []interface{}{
 		구조체_1, &구조체_1,
 		구조체_2, &구조체_2,
-		big.NewInt(rand.Int64()),
-		big.NewRat(rand.Int64(), rand.Int64()),
-		big.NewFloat(rand.Float64())}
+		big.NewInt(r.Int63()),
+		big.NewRat(r.Int63(), r.Int63()),
+		big.NewFloat(r.Float64())}
+	//big.NewInt(rand.Int64()),
+	//big.NewRat(rand.Int64(), rand.Int64()),
+	//big.NewFloat(rand.Float64())}
 }
 
 func f테스트용_변환가능한_전달값_모음() []interface{} {
@@ -290,13 +340,15 @@ func f테스트용_변환형식_모음() []T변환 {
 func F임의_변환_형식() T변환 {
 	변환형식_모음 := []T변환{JSON, GOB}
 
-	return 변환형식_모음[rand.IntN(len(변환형식_모음)-1)]
+	return 변환형식_모음[F임의값_생성기().Intn(len(변환형식_모음)-1)]
+	//return 변환형식_모음[rand.IntN(len(변환형식_모음)-1)]
 }
 
 func F임의_시장_구분() T시장구분 {
 	시장_구분_모음 := []T시장구분{P시장구분_코스피, P시장구분_코스닥, P시장구분_코넥스, P시장구분_ETF}
 
-	return 시장_구분_모음[rand.IntN(len(시장_구분_모음))]
+	return 시장_구분_모음[F임의값_생성기().Intn(len(시장_구분_모음))]
+	//return 시장_구분_모음[rand.IntN(len(시장_구분_모음))]
 }
 
 func F임의_샘플_종목() *S종목 {
@@ -364,6 +416,7 @@ func F종목_추출(종목_모음 []*S종목, 수량 int) (추출_종목_모음 
 
 	F조건부_패닉(len(종목_모음) < 수량, "종목 수량 : %v, 추출 수량 %v", len(종목_모음), 수량)
 
+	r := F임의값_생성기()
 	총길이 := len(종목_모음)
 	추출_종목_맵 := make(map[string]*S종목)
 
@@ -372,7 +425,8 @@ func F종목_추출(종목_모음 []*S종목, 수량 int) (추출_종목_모음 
 			break
 		}
 
-		추출_종목 := 종목_모음[rand.IntN(총길이)]
+		추출_종목 := 종목_모음[r.Intn(총길이)]
+		//추출_종목 := 종목_모음[rand.IntN(총길이)]
 		추출_종목_맵[추출_종목.G코드()] = 추출_종목
 	}
 
