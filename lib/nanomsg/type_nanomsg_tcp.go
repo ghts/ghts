@@ -17,7 +17,8 @@ import (
 )
 
 func NewNano소켓(종류 lib.T소켓_종류, 주소 string, 접속방식 lib.T소켓_접속방식, 옵션_모음 ...interface{}) (소켓 lib.I소켓, 에러 error) {
-	defer lib.S예외처리{M에러: &에러, M함수: func() { 소켓 = nil }}.S실행()
+	//defer lib.S예외처리{M에러: &에러, M함수: func() { 소켓 = nil }}.S실행()
+	defer lib.S예외처리{M에러: &에러, M함수: func() { 소켓 = nil }, M출력_숨김: true}.S실행()
 
 	s := new(sNano소켓)
 	s.종류 = 종류

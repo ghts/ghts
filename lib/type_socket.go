@@ -42,11 +42,15 @@ type s소켓_저장소 struct {
 	M생성함수 func() (I소켓_질의, error)
 }
 
+var 생성_횟수 int = 1
+
 func (s *s소켓_저장소) G소켓() I소켓_질의 {
 	select {
 	case <-Ch공통_종료():
 		return nil
 	case 소켓 := <-s.M저장소:
+		//F체크포인트("재활용 성공. 남은 소켓 수량", len(s.M저장소))
+
 		return 소켓
 	default:
 		s.Lock()
@@ -54,11 +58,16 @@ func (s *s소켓_저장소) G소켓() I소켓_질의 {
 
 		for i := 0; i < 3; i++ {
 			if i소켓, 에러 := s.M생성함수(); 에러 == nil {
+				F체크포인트(생성_횟수, "번째 소켓 생성 성공. ", i+1, "번째 시도")
+				생성_횟수++
+
 				return i소켓
 			}
 
 			F대기(P1초)
 		}
+
+		F체크포인트(생성_횟수, "번째 소켓 생성 실패")
 
 		return nil
 	}
