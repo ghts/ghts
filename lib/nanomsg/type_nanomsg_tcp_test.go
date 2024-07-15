@@ -2,7 +2,7 @@ package nano
 
 import (
 	"github.com/ghts/ghts/lib"
-	"math/rand/v2"
+	"math/rand"
 	"testing"
 	"time"
 )
@@ -238,7 +238,7 @@ func 클라이언트_PAIR(t lib.I안전한_테스트, 주소 lib.T주소, ch초�
 
 func f테스트용_임의_주소() lib.T주소 {
 	for {
-		주소 := lib.T주소(rand.IntN(60000))
+		주소 := lib.T주소(rand.Intn(60000))
 
 		return 주소
 	}
