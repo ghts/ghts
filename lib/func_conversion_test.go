@@ -1,7 +1,7 @@
 package lib
 
 import (
-	"math/rand/v2"
+	"math/rand"
 	"reflect"
 	"strings"
 	"testing"
@@ -138,7 +138,7 @@ func TestF인코딩_디코딩_슬라이스를_포함한_구조체(t *testing.T) 
 
 	원래값 := new(s슬라이스를_포함한_구조체)
 	원래값.M문자열 = F임의_문자열(4, 6)
-	원래값.M슬라이스 = make([]string, 5+rand.IntN(10))
+	원래값.M슬라이스 = make([]string, 5+rand.Intn(10))
 
 	for i := 0; i < len(원래값.M슬라이스); i++ {
 		원래값.M슬라이스[i] = F임의_문자열(4, 6)
@@ -171,7 +171,7 @@ func TestF인코딩_디코딩_슬라이스를_포함한_구조체2(t *testing.T)
 
 	원래값 := new(s슬라이스를_포함한_구조체2)
 	원래값.M문자열 = F임의_문자열(4, 6)
-	원래값.M슬라이스 = make([]*S종목, 5+rand.IntN(10))
+	원래값.M슬라이스 = make([]*S종목, 5+rand.Intn(10))
 
 	for i := 0; i < len(원래값.M슬라이스); i++ {
 		원래값.M슬라이스[i] = F임의_샘플_종목_코스피_주식()

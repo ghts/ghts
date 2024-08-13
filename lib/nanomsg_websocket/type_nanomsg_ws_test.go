@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/ghts/ghts/lib"
-	"math/rand/v2"
+	"math/rand"
 	"net/http"
 	"strings"
 	"testing"
@@ -12,7 +12,7 @@ import (
 )
 
 func f테스트용_임의_주소() lib.T주소 {
-	return lib.T주소(rand.IntN(60000))
+	return lib.T주소(rand.Intn(60000))
 }
 
 var HTTP서버 *http.Server
