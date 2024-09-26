@@ -449,8 +449,8 @@ func f에러_제외한_값_추출(에러_후보_모음 ...interface{}) interface
 	return 에러_후보_모음[:(len(에러_후보_모음) - 1)]
 }
 
-func F정규식_검색(검색_대상 string, 정규식_문자열_모음 []string) string {
-	검색_결과 := ""
+func F정규식_검색(검색_대상 string, 정규식_문자열_모음 []string) (검색_결과 string) {
+	defer S예외처리{M함수: func() { 검색_결과 = "" }}.S실행()
 
 	for _, 정규식_문자열 := range 정규식_문자열_모음 {
 		정규식 := regexp.MustCompile(정규식_문자열)
