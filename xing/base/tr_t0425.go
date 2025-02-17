@@ -57,6 +57,7 @@ type T0425_현물_체결_미체결_조회_응답_반복값 struct {
 	M주문_구분   T주문유형
 	M신용_구분   T신용_구분_t0425
 	M대출_일자   time.Time
+	M거래소_구분  T거래소_구분
 }
 
 func NewT0425InBlock(질의값 *T0425_현물_체결_미체결_조회_질의값, 비밀번호 string) (g *T0425InBlock) {
@@ -160,6 +161,7 @@ func NewT0425_현물_체결_미체결_조회_응답_반복값_모음(b []byte) (
 		값.M주문_구분 = T주문유형(lib.F확인2(lib.F2정수64(g.Orggb)))
 		값.M신용_구분 = T신용_구분_t0425(lib.F확인2(lib.F2정수64(g.Singb)))
 		값.M대출_일자 = lib.F2포맷된_일자_단순형_공백은_초기값("20060102", g.Loandt)
+		값.M거래소_구분 = F2거래소_구분(lib.F2문자열(g.Exchname))
 
 		if len(값.M종목코드) == 7 && strings.HasPrefix(값.M종목코드, "A") {
 			값.M종목코드 = 값.M종목코드[1:]

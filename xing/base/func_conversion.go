@@ -31,6 +31,19 @@ import (
 //	}
 //}
 
+func F2거래소_구분(거래소_이름 interface{}) T거래소_구분 {
+	switch lib.F2문자열_공백_제거(거래소_이름) {
+	case "K", "KRX":
+		return P거래소_KRX
+	case "N", "NXT":
+		return P거래소_NXT
+	case "U", "통합":
+		return P거래소_통합
+	default:
+		panic(lib.New에러("예상하지 못한 값 : '%s'", 거래소_이름))
+	}
+}
+
 func F2Xing호가유형(호가_유형 lib.T호가유형, 주문_조건 lib.T주문조건) T호가유형 {
 	switch 주문_조건 {
 	case lib.P주문조건_없음:
@@ -119,6 +132,21 @@ func F2시장구분(값 interface{}) lib.T시장구분 {
 		return lib.P시장구분_코스피
 	case "KOSDAQ":
 		return lib.P시장구분_코스닥
+	default:
+		panic(lib.New에러("예상하지 못한 값 : '%v'", 문자열))
+	}
+}
+
+func F2중간가_잔량_구분(값 interface{}) lib.T매도_매수_구분 {
+	문자열 := lib.F2문자열_공백_제거(값)
+
+	switch 문자열 {
+	case "":
+		return lib.P매도_매수_전체
+	case "1":
+		return lib.P매도
+	case "2":
+		return lib.P매수
 	default:
 		panic(lib.New에러("예상하지 못한 값 : '%v'", 문자열))
 	}
@@ -284,7 +312,7 @@ func F바이트_변환값_해석(바이트_변환값 *lib.S바이트_변환) (�
 		lib.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T1305_현물_기간별_조회_질의값:
-		s := NewT1305_현물_기간별_조회_질의값()
+		s := NewT1305_현물_기간별_조회_질의값_단순()
 		lib.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T1305_현물_기간별_조회_응답:
@@ -304,7 +332,7 @@ func F바이트_변환값_해석(바이트_변환값 *lib.S바이트_변환) (�
 		lib.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T1310_현물_전일당일분틱조회_질의값:
-		s := new(T1310_현물_전일당일분틱조회_질의값)
+		s := NewT1310_현물_전일당일_분틱_조회_질의값_단순()
 		lib.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T1310_현물_전일당일분틱조회_응답:
@@ -329,14 +357,6 @@ func F바이트_변환값_해석(바이트_변환값 *lib.S바이트_변환) (�
 		return s, nil
 	case P자료형_T1405_투자경고_조회_질의값:
 		s := new(T1405_투자경고_조회_질의값)
-		lib.F확인1(바이트_변환값.G값(s))
-		return s, nil
-	case P자료형_T1717_종목별_매매주체_동향_질의값:
-		s := new(T1717_종목별_매매주체_동향_질의값)
-		lib.F확인1(바이트_변환값.G값(s))
-		return s, nil
-	case P자료형_T1717_종목별_매매주체_동향_응답:
-		s := new(T1717_종목별_매매주체_동향_응답)
 		lib.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T1901_ETF_시세_조회_응답:
@@ -603,8 +623,6 @@ func F바이트_변환값_해석_Raw(바이트_변환값 *lib.S바이트_변환)
 		return NewT1405_투자경고_조회_응답_헤더(b)
 	case P자료형_T1405OutBlock1:
 		return NewT1405_투자경고_조회_응답_반복값_모음(b)
-	case P자료형_T1717OutBlock:
-		return NewT1717_종목별_매매주체_동향_응답(b)
 	case P자료형_T1901_ETF_시세_조회_응답:
 		return NewT1901_ETF_시세_조회_응답(b)
 	case P자료형_T1902OutBlock:

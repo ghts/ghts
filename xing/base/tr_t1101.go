@@ -7,40 +7,44 @@ import (
 	"time"
 )
 
-// t1101 현물 호가 조회 응답
 type T1101_현물_호가_조회_응답 struct {
-	M종목코드         string
-	M시각           time.Time
-	M종목명          string
-	M현재가          int64
-	M상한가          int64
-	M하한가          int64
-	M시가           int64
-	M고가           int64
-	M저가           int64
-	M전일대비구분       T전일대비_구분
-	M전일대비등락폭      int64
-	M전일대비등락율      float64
-	M거래량          int64
-	M전일종가         int64
-	M매도_호가_모음     []int64
-	M매수_호가_모음     []int64
-	M매도_잔량_모음     []int64
-	M매수_잔량_모음     []int64
-	M매도_직전대비수량_모음 []int64
-	M매수_직전대비수량_모음 []int64
-	M매도호가수량합      int64
-	M매수호가수량합      int64
-	M직전매도대비수량합    int64
-	M직전매수대비수량합    int64
-	M예상체결가격       int64
-	M예상체결수량       int64
-	M예상체결전일구분     T전일대비_구분
-	M예상체결전일대비     int64
-	M예상체결등락율      float64
-	M시간외매도잔량      int64
-	M시간외매수잔량      int64
-	M동시호가_구분      T동시호가_구분
+	M종목코드          string
+	M시각            time.Time
+	M종목명           string
+	M현재가           int64
+	M상한가           int64
+	M하한가           int64
+	M시가            int64
+	M고가            int64
+	M저가            int64
+	M전일대비구분        T전일대비_구분
+	M전일대비등락폭       int64
+	M전일대비등락율       float64
+	M거래량           int64
+	M전일종가          int64
+	M매도_호가_모음      []int64
+	M매수_호가_모음      []int64
+	M매도_잔량_모음      []int64
+	M매수_잔량_모음      []int64
+	M매도_직전대비수량_모음  []int64
+	M매수_직전대비수량_모음  []int64
+	M매도호가수량합       int64
+	M매수호가수량합       int64
+	M직전매도대비수량합     int64
+	M직전매수대비수량합     int64
+	M예상체결가격        int64
+	M예상체결수량        int64
+	M예상체결전일구분      T전일대비_구분
+	M예상체결전일대비      int64
+	M예상체결등락율       float64
+	M시간외매도잔량       int64
+	M시간외매수잔량       int64
+	M동시호가_구분       T동시호가_구분
+	KRX중간가격        int64
+	KRX매도중간가잔량합계수량 int64
+	KRX매수중간가잔량합계수량 int64
+	KRX중간가잔량합계수량   int64
+	KRX중간가잔량구분     lib.T매도_매수_구분
 }
 
 func NewT1101InBlock(질의값 *lib.S질의값_단일_종목) (g *T1101InBlock) {
@@ -159,12 +163,17 @@ func NewT1101_현물_호가_조회_응답(b []byte) (s *T1101_현물_호가_조�
 	s.M예상체결등락율 = lib.F확인2(lib.F2실수_소숫점_추가(g.Yediff, 2))
 	s.M시간외매도잔량 = lib.F확인2(lib.F2정수64(g.Tmoffer))
 	s.M시간외매수잔량 = lib.F확인2(lib.F2정수64(g.Tmbid))
-	s.M동시호가_구분 = T동시호가_구분(lib.F확인2(lib.F2정수64(g.Status)))
+	s.M동시호가_구분 = T동시호가_구분(lib.F확인2(lib.F2정수64(g.Ho_status)))
 	s.M상한가 = lib.F확인2(lib.F2정수64(g.Uplmtprice))
 	s.M하한가 = lib.F확인2(lib.F2정수64(g.Dnlmtprice))
 	s.M시가 = lib.F확인2(lib.F2정수64(g.Open))
 	s.M고가 = lib.F확인2(lib.F2정수64(g.High))
 	s.M저가 = lib.F확인2(lib.F2정수64(g.Low))
+	s.KRX중간가격 = lib.F확인2(lib.F2정수64(g.Krx_midprice))
+	s.KRX매도중간가잔량합계수량 = lib.F확인2(lib.F2정수64(g.Krx_offermidsumrem))
+	s.KRX매수중간가잔량합계수량 = lib.F확인2(lib.F2정수64(g.Krx_bidmidsumrem))
+	s.KRX중간가잔량합계수량 = lib.F확인2(lib.F2정수64(g.Krx_midsumrem))
+	s.KRX중간가잔량구분 = F2중간가_잔량_구분(g.Krx_midsumremgubun)
 
 	f속성값_초기화(g)
 

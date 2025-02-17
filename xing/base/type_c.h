@@ -1855,17 +1855,18 @@ typedef struct {
     char    cheprice            [   9];    char    _cheprice            ;    // [long  ,    9] 체결가격                        StartPos 65, Length 9
     char    ordrem              [   9];    char    _ordrem              ;    // [long  ,    9] 미체결잔량                      StartPos 75, Length 9
     char    cfmqty              [   9];    char    _cfmqty              ;    // [long  ,    9] 확인수량                        StartPos 85, Length 9
-    char    status              [  10];    char    _status              ;    // [string,   10] 상태                            StartPos 95, Length 10
-    char    orgordno            [  10];    char    _orgordno            ;    // [long  ,   10] 원주문번호                      StartPos 106, Length 10
-    char    ordgb               [  20];    char    _ordgb               ;    // [string,   20] 유형                            StartPos 117, Length 20
-    char    ordtime             [   8];    char    _ordtime             ;    // [string,    8] 주문시간                        StartPos 138, Length 8
-    char    ordermtd            [  10];    char    _ordermtd            ;    // [string,   10] 주문매체                        StartPos 147, Length 10
-    char    sysprocseq          [  10];    char    _sysprocseq          ;    // [long  ,   10] 처리순번                        StartPos 158, Length 10
-    char    hogagb              [   2];    char    _hogagb              ;    // [string,    2] 호가유형                        StartPos 169, Length 2
-    char    price1              [   8];    char    _price1              ;    // [long  ,    8] 현재가                          StartPos 172, Length 8
-    char    orggb               [   2];    char    _orggb               ;    // [string,    2] 주문구분                        StartPos 181, Length 2
-    char    singb               [   2];    char    _singb               ;    // [string,    2] 신용구분                        StartPos 184, Length 2
-    char    loandt              [   8];    char    _loandt              ;    // [string,    8] 대출일자                        StartPos 187, Length 8
+    char    status              [  20];    char    _status              ;    // [string,   20] 상태                            StartPos 95, Length 20
+    char    orgordno            [  10];    char    _orgordno            ;    // [long  ,   10] 원주문번호                      StartPos 116, Length 10
+    char    ordgb               [  20];    char    _ordgb               ;    // [string,   20] 유형                            StartPos 127, Length 20
+    char    ordtime             [   8];    char    _ordtime             ;    // [string,    8] 주문시간                        StartPos 148, Length 8
+    char    ordermtd            [  10];    char    _ordermtd            ;    // [string,   10] 주문매체                        StartPos 157, Length 10
+    char    sysprocseq          [  10];    char    _sysprocseq          ;    // [long  ,   10] 처리순번                        StartPos 168, Length 10
+    char    hogagb              [   2];    char    _hogagb              ;    // [string,    2] 호가유형                        StartPos 179, Length 2
+    char    price1              [   8];    char    _price1              ;    // [long  ,    8] 현재가                          StartPos 182, Length 8
+    char    orggb               [   2];    char    _orggb               ;    // [string,    2] 주문구분                        StartPos 191, Length 2
+    char    singb               [   2];    char    _singb               ;    // [string,    2] 신용구분                        StartPos 194, Length 2
+    char    loandt              [   8];    char    _loandt              ;    // [string,    8] 대출일자                        StartPos 197, Length 8
+    char    exchname            [   3];    char    _exchname            ;    // [string,    3] 거래소명                        StartPos 206, Length 3
 } T0425OutBlock1;
 
 //------------------------------------------------------------------------------
@@ -1907,96 +1908,101 @@ typedef struct {
 // 현물 현재가 호가 조회 (t1101)
 //------------------------------------------------------------------------------
 typedef struct {
-    char    shcode[6];     char    _shcode;    //[string,    6] 단축코드   StartPos 0, Length 6
+    char    shcode              [   6];    char    _shcode              ;    // [string,    6] 단축코드                        StartPos 0, Length 6
 } T1101InBlock;
 
 typedef struct {
-    char hname[20];     char _hname;        //[string,   20] 한글명   StartPos 0, Length 20
-    char price[8];      char _price;        //[long  ,    8] 현재가   StartPos 21, Length 8
-    char sign[1];       char _sign;         //[string,    1] 전일대비구분   StartPos 30, Length 1
-    char change[8];     char _change;       //[long  ,    8] 전일대비   StartPos 32, Length 8
-    char diff[6];       char _diff;         //[float ,  6.2] 등락율   StartPos 41, Length 6
-    char volume[12];    char _volume;       //[long  ,   12] 누적거래량   StartPos 48, Length 12
-    char jnilclose[8];     char _jnilclose;    //[long  ,    8] 전일종가   StartPos 61, Length 8
-    char offerho1[8];    char _offerho1;     //[long  ,    8] 매도호가1   StartPos 70, Length 8
-    char bidho1[8];     char _bidho1;       //[long  ,    8] 매수호가1   StartPos 79, Length 8
-    char offerrem1[12];    char _offerrem1;    //[long  ,   12] 매도호가수량1   StartPos 88, Length 12
-    char bidrem1[12];    char _bidrem1;      //[long  ,   12] 매수호가수량1   StartPos 101, Length 12
-    char preoffercha1[12];  char _preoffercha1; //[long  ,   12] 직전매도대비수량1   StartPos 114, Length 12
-    char prebidcha1[12];    char _prebidcha1;   //[long  ,   12] 직전매수대비수량1   StartPos 127, Length 12
-    char offerho2[8];    char _offerho2;     //[long  ,    8] 매도호가2   StartPos 140, Length 8
-    char bidho2[8];     char _bidho2;       //[long  ,    8] 매수호가2   StartPos 149, Length 8
-    char offerrem2[12];    char _offerrem2;    //[long  ,   12] 매도호가수량2   StartPos 158, Length 12
-    char bidrem2[12];    char _bidrem2;      //[long  ,   12] 매수호가수량2   StartPos 171, Length 12
-    char preoffercha2[12];  char _preoffercha2; //[long  ,   12] 직전매도대비수량2   StartPos 184, Length 12
-    char prebidcha2[12];    char _prebidcha2;   //[long  ,   12] 직전매수대비수량2   StartPos 197, Length 12
-    char offerho3[8];    char _offerho3;     //[long  ,    8] 매도호가3   StartPos 210, Length 8
-    char bidho3[8];     char _bidho3;       //[long  ,    8] 매수호가3   StartPos 219, Length 8
-    char offerrem3[12];    char _offerrem3;    //[long  ,   12] 매도호가수량3   StartPos 228, Length 12
-    char bidrem3[12];    char _bidrem3;      //[long  ,   12] 매수호가수량3   StartPos 241, Length 12
-    char preoffercha3[12];  char _preoffercha3; //[long  ,   12] 직전매도대비수량3   StartPos 254, Length 12
-    char prebidcha3[12];    char _prebidcha3;   //[long  ,   12] 직전매수대비수량3   StartPos 267, Length 12
-    char offerho4[8];    char _offerho4;     //[long  ,    8] 매도호가4   StartPos 280, Length 8
-    char bidho4[8];     char _bidho4;       //[long  ,    8] 매수호가4   StartPos 289, Length 8
-    char offerrem4[12];    char _offerrem4;    //[long  ,   12] 매도호가수량4   StartPos 298, Length 12
-    char bidrem4[12];    char _bidrem4;      //[long  ,   12] 매수호가수량4   StartPos 311, Length 12
-    char preoffercha4[12];  char _preoffercha4; //[long  ,   12] 직전매도대비수량4   StartPos 324, Length 12
-    char prebidcha4[12];    char _prebidcha4;   //[long  ,   12] 직전매수대비수량4   StartPos 337, Length 12
-    char offerho5[8];    char _offerho5;     //[long  ,    8] 매도호가5   StartPos 350, Length 8
-    char bidho5[8];     char _bidho5;       //[long  ,    8] 매수호가5   StartPos 359, Length 8
-    char offerrem5[12];    char _offerrem5;    //[long  ,   12] 매도호가수량5   StartPos 368, Length 12
-    char bidrem5[12];    char _bidrem5;      //[long  ,   12] 매수호가수량5   StartPos 381, Length 12
-    char preoffercha5[12];  char _preoffercha5; //[long  ,   12] 직전매도대비수량5   StartPos 394, Length 12
-    char prebidcha5[12];    char _prebidcha5;   //[long  ,   12] 직전매수대비수량5   StartPos 407, Length 12
-    char offerho6[8];    char _offerho6;     //[long  ,    8] 매도호가6   StartPos 420, Length 8
-    char bidho6[8];     char _bidho6;       //[long  ,    8] 매수호가6   StartPos 429, Length 8
-    char offerrem6[12];    char _offerrem6;    //[long  ,   12] 매도호가수량6   StartPos 438, Length 12
-    char bidrem6[12];    char _bidrem6;      //[long  ,   12] 매수호가수량6   StartPos 451, Length 12
-    char preoffercha6[12];  char _preoffercha6; //[long  ,   12] 직전매도대비수량6   StartPos 464, Length 12
-    char prebidcha6[12];    char _prebidcha6;   //[long  ,   12] 직전매수대비수량6   StartPos 477, Length 12
-    char offerho7[8];    char _offerho7;     //[long  ,    8] 매도호가7   StartPos 490, Length 8
-    char bidho7[8];     char _bidho7;       //[long  ,    8] 매수호가7   StartPos 499, Length 8
-    char offerrem7[12];    char _offerrem7;    //[long  ,   12] 매도호가수량7   StartPos 508, Length 12
-    char bidrem7[12];    char _bidrem7;      //[long  ,   12] 매수호가수량7   StartPos 521, Length 12
-    char preoffercha7[12];  char _preoffercha7; //[long  ,   12] 직전매도대비수량7   StartPos 534, Length 12
-    char prebidcha7[12];    char _prebidcha7;   //[long  ,   12] 직전매수대비수량7   StartPos 547, Length 12
-    char offerho8[8];    char _offerho8;     //[long  ,    8] 매도호가8   StartPos 560, Length 8
-    char bidho8[8];     char _bidho8;       //[long  ,    8] 매수호가8   StartPos 569, Length 8
-    char offerrem8[12];    char _offerrem8;    //[long  ,   12] 매도호가수량8   StartPos 578, Length 12
-    char bidrem8[12];    char _bidrem8;      //[long  ,   12] 매수호가수량8   StartPos 591, Length 12
-    char preoffercha8[12];  char _preoffercha8; //[long  ,   12] 직전매도대비수량8   StartPos 604, Length 12
-    char prebidcha8[12];    char _prebidcha8;   //[long  ,   12] 직전매수대비수량8   StartPos 617, Length 12
-    char offerho9[8];    char _offerho9;     //[long  ,    8] 매도호가9   StartPos 630, Length 8
-    char bidho9[8];     char _bidho9;       //[long  ,    8] 매수호가9   StartPos 639, Length 8
-    char offerrem9[12];    char _offerrem9;    //[long  ,   12] 매도호가수량9   StartPos 648, Length 12
-    char bidrem9[12];    char _bidrem9;      //[long  ,   12] 매수호가수량9   StartPos 661, Length 12
-    char preoffercha9[12];  char _preoffercha9; //[long  ,   12] 직전매도대비수량9   StartPos 674, Length 12
-    char prebidcha9[12];    char _prebidcha9;   //[long  ,   12] 직전매수대비수량9   StartPos 687, Length 12
-    char offerho10[8];     char _offerho10;    //[long  ,    8] 매도호가10   StartPos 700, Length 8
-    char bidho10[8];    char _bidho10;      //[long  ,    8] 매수호가10   StartPos 709, Length 8
-    char offerrem10[12];    char _offerrem10;   //[long  ,   12] 매도호가수량10   StartPos 718, Length 12
-    char bidrem10[12];     char _bidrem10;     //[long  ,   12] 매수호가수량10   StartPos 731, Length 12
-    char preoffercha10[12]; char _preoffercha10; //[long  ,   12] 직전매도대비수량10   StartPos 744, Length 12
-    char prebidcha10[12];   char _prebidcha10;  //[long  ,   12] 직전매수대비수량10   StartPos 757, Length 12
-    char offer[12];     char _offer;        //[long  ,   12] 매도호가수량합   StartPos 770, Length 12
-    char bid[12];       char _bid;          //[long  ,   12] 매수호가수량합   StartPos 783, Length 12
-    char preoffercha[12];   char _preoffercha;  //[long  ,   12] 직전매도대비수량합   StartPos 796, Length 12
-    char prebidcha[12];    char _prebidcha;    //[long  ,   12] 직전매수대비수량합   StartPos 809, Length 12
-    char hotime[8];     char _hotime;       //[string,    8] 수신시간   StartPos 822, Length 8
-    char yeprice[8];    char _yeprice;      //[long  ,    8] 예상체결가격   StartPos 831, Length 8
-    char yevolume[12];     char _yevolume;     //[long  ,   12] 예상체결수량   StartPos 840, Length 12
-    char yesign[1];     char _yesign;       //[string,    1] 예상체결전일구분   StartPos 853, Length 1
-    char yechange[8];    char _yechange;     //[long  ,    8] 예상체결전일대비   StartPos 855, Length 8
-    char yediff[6];     char _yediff;       //[float ,  6.2] 예상체결등락율   StartPos 864, Length 6
-    char tmoffer[12];    char _tmoffer;      //[long  ,   12] 시간외매도잔량   StartPos 871, Length 12
-    char tmbid[12];     char _tmbid;        //[long  ,   12] 시간외매수잔량   StartPos 884, Length 12
-    char ho_status[1];     char _ho_status;    //[string,    1] 동시구분   StartPos 897, Length 1
-    char shcode[6];     char _shcode;       //[string,    6] 단축코드   StartPos 899, Length 6
-    char uplmtprice[8];    char _uplmtprice;   //[long  ,    8] 상한가   StartPos 906, Length 8
-    char dnlmtprice[8];    char _dnlmtprice;   //[long  ,    8] 하한가   StartPos 915, Length 8
-    char open[8];       char _open;         //[long  ,    8] 시가   StartPos 924, Length 8
-    char high[8];       char _high;         //[long  ,    8] 고가   StartPos 933, Length 8
-    char low[8];        char _low;          //[long  ,    8] 저가   StartPos 942, Length 8
+    char    hname               [  20];    char    _hname               ;    // [string,   20] 한글명                          StartPos 0, Length 20
+    char    price               [   8];    char    _price               ;    // [long  ,    8] 현재가                          StartPos 21, Length 8
+    char    sign                [   1];    char    _sign                ;    // [string,    1] 전일대비구분                    StartPos 30, Length 1
+    char    change              [   8];    char    _change              ;    // [long  ,    8] 전일대비                        StartPos 32, Length 8
+    char    diff                [   6];    char    _diff                ;    // [double,  6.2] 등락율                          StartPos 41, Length 6
+    char    volume              [  12];    char    _volume              ;    // [long  ,   12] 누적거래량                      StartPos 48, Length 12
+    char    jnilclose           [   8];    char    _jnilclose           ;    // [long  ,    8] 전일종가(기준가)                StartPos 61, Length 8
+    char    offerho1            [   8];    char    _offerho1            ;    // [long  ,    8] 매도호가1                       StartPos 70, Length 8
+    char    bidho1              [   8];    char    _bidho1              ;    // [long  ,    8] 매수호가1                       StartPos 79, Length 8
+    char    offerrem1           [  12];    char    _offerrem1           ;    // [long  ,   12] 매도호가수량1                   StartPos 88, Length 12
+    char    bidrem1             [  12];    char    _bidrem1             ;    // [long  ,   12] 매수호가수량1                   StartPos 101, Length 12
+    char    preoffercha1        [  12];    char    _preoffercha1        ;    // [long  ,   12] 직전매도대비수량1               StartPos 114, Length 12
+    char    prebidcha1          [  12];    char    _prebidcha1          ;    // [long  ,   12] 직전매수대비수량1               StartPos 127, Length 12
+    char    offerho2            [   8];    char    _offerho2            ;    // [long  ,    8] 매도호가2                       StartPos 140, Length 8
+    char    bidho2              [   8];    char    _bidho2              ;    // [long  ,    8] 매수호가2                       StartPos 149, Length 8
+    char    offerrem2           [  12];    char    _offerrem2           ;    // [long  ,   12] 매도호가수량2                   StartPos 158, Length 12
+    char    bidrem2             [  12];    char    _bidrem2             ;    // [long  ,   12] 매수호가수량2                   StartPos 171, Length 12
+    char    preoffercha2        [  12];    char    _preoffercha2        ;    // [long  ,   12] 직전매도대비수량2               StartPos 184, Length 12
+    char    prebidcha2          [  12];    char    _prebidcha2          ;    // [long  ,   12] 직전매수대비수량2               StartPos 197, Length 12
+    char    offerho3            [   8];    char    _offerho3            ;    // [long  ,    8] 매도호가3                       StartPos 210, Length 8
+    char    bidho3              [   8];    char    _bidho3              ;    // [long  ,    8] 매수호가3                       StartPos 219, Length 8
+    char    offerrem3           [  12];    char    _offerrem3           ;    // [long  ,   12] 매도호가수량3                   StartPos 228, Length 12
+    char    bidrem3             [  12];    char    _bidrem3             ;    // [long  ,   12] 매수호가수량3                   StartPos 241, Length 12
+    char    preoffercha3        [  12];    char    _preoffercha3        ;    // [long  ,   12] 직전매도대비수량3               StartPos 254, Length 12
+    char    prebidcha3          [  12];    char    _prebidcha3          ;    // [long  ,   12] 직전매수대비수량3               StartPos 267, Length 12
+    char    offerho4            [   8];    char    _offerho4            ;    // [long  ,    8] 매도호가4                       StartPos 280, Length 8
+    char    bidho4              [   8];    char    _bidho4              ;    // [long  ,    8] 매수호가4                       StartPos 289, Length 8
+    char    offerrem4           [  12];    char    _offerrem4           ;    // [long  ,   12] 매도호가수량4                   StartPos 298, Length 12
+    char    bidrem4             [  12];    char    _bidrem4             ;    // [long  ,   12] 매수호가수량4                   StartPos 311, Length 12
+    char    preoffercha4        [  12];    char    _preoffercha4        ;    // [long  ,   12] 직전매도대비수량4               StartPos 324, Length 12
+    char    prebidcha4          [  12];    char    _prebidcha4          ;    // [long  ,   12] 직전매수대비수량4               StartPos 337, Length 12
+    char    offerho5            [   8];    char    _offerho5            ;    // [long  ,    8] 매도호가5                       StartPos 350, Length 8
+    char    bidho5              [   8];    char    _bidho5              ;    // [long  ,    8] 매수호가5                       StartPos 359, Length 8
+    char    offerrem5           [  12];    char    _offerrem5           ;    // [long  ,   12] 매도호가수량5                   StartPos 368, Length 12
+    char    bidrem5             [  12];    char    _bidrem5             ;    // [long  ,   12] 매수호가수량5                   StartPos 381, Length 12
+    char    preoffercha5        [  12];    char    _preoffercha5        ;    // [long  ,   12] 직전매도대비수량5               StartPos 394, Length 12
+    char    prebidcha5          [  12];    char    _prebidcha5          ;    // [long  ,   12] 직전매수대비수량5               StartPos 407, Length 12
+    char    offerho6            [   8];    char    _offerho6            ;    // [long  ,    8] 매도호가6                       StartPos 420, Length 8
+    char    bidho6              [   8];    char    _bidho6              ;    // [long  ,    8] 매수호가6                       StartPos 429, Length 8
+    char    offerrem6           [  12];    char    _offerrem6           ;    // [long  ,   12] 매도호가수량6                   StartPos 438, Length 12
+    char    bidrem6             [  12];    char    _bidrem6             ;    // [long  ,   12] 매수호가수량6                   StartPos 451, Length 12
+    char    preoffercha6        [  12];    char    _preoffercha6        ;    // [long  ,   12] 직전매도대비수량6               StartPos 464, Length 12
+    char    prebidcha6          [  12];    char    _prebidcha6          ;    // [long  ,   12] 직전매수대비수량6               StartPos 477, Length 12
+    char    offerho7            [   8];    char    _offerho7            ;    // [long  ,    8] 매도호가7                       StartPos 490, Length 8
+    char    bidho7              [   8];    char    _bidho7              ;    // [long  ,    8] 매수호가7                       StartPos 499, Length 8
+    char    offerrem7           [  12];    char    _offerrem7           ;    // [long  ,   12] 매도호가수량7                   StartPos 508, Length 12
+    char    bidrem7             [  12];    char    _bidrem7             ;    // [long  ,   12] 매수호가수량7                   StartPos 521, Length 12
+    char    preoffercha7        [  12];    char    _preoffercha7        ;    // [long  ,   12] 직전매도대비수량7               StartPos 534, Length 12
+    char    prebidcha7          [  12];    char    _prebidcha7          ;    // [long  ,   12] 직전매수대비수량7               StartPos 547, Length 12
+    char    offerho8            [   8];    char    _offerho8            ;    // [long  ,    8] 매도호가8                       StartPos 560, Length 8
+    char    bidho8              [   8];    char    _bidho8              ;    // [long  ,    8] 매수호가8                       StartPos 569, Length 8
+    char    offerrem8           [  12];    char    _offerrem8           ;    // [long  ,   12] 매도호가수량8                   StartPos 578, Length 12
+    char    bidrem8             [  12];    char    _bidrem8             ;    // [long  ,   12] 매수호가수량8                   StartPos 591, Length 12
+    char    preoffercha8        [  12];    char    _preoffercha8        ;    // [long  ,   12] 직전매도대비수량8               StartPos 604, Length 12
+    char    prebidcha8          [  12];    char    _prebidcha8          ;    // [long  ,   12] 직전매수대비수량8               StartPos 617, Length 12
+    char    offerho9            [   8];    char    _offerho9            ;    // [long  ,    8] 매도호가9                       StartPos 630, Length 8
+    char    bidho9              [   8];    char    _bidho9              ;    // [long  ,    8] 매수호가9                       StartPos 639, Length 8
+    char    offerrem9           [  12];    char    _offerrem9           ;    // [long  ,   12] 매도호가수량9                   StartPos 648, Length 12
+    char    bidrem9             [  12];    char    _bidrem9             ;    // [long  ,   12] 매수호가수량9                   StartPos 661, Length 12
+    char    preoffercha9        [  12];    char    _preoffercha9        ;    // [long  ,   12] 직전매도대비수량9               StartPos 674, Length 12
+    char    prebidcha9          [  12];    char    _prebidcha9          ;    // [long  ,   12] 직전매수대비수량9               StartPos 687, Length 12
+    char    offerho10           [   8];    char    _offerho10           ;    // [long  ,    8] 매도호가10                      StartPos 700, Length 8
+    char    bidho10             [   8];    char    _bidho10             ;    // [long  ,    8] 매수호가10                      StartPos 709, Length 8
+    char    offerrem10          [  12];    char    _offerrem10          ;    // [long  ,   12] 매도호가수량10                  StartPos 718, Length 12
+    char    bidrem10            [  12];    char    _bidrem10            ;    // [long  ,   12] 매수호가수량10                  StartPos 731, Length 12
+    char    preoffercha10       [  12];    char    _preoffercha10       ;    // [long  ,   12] 직전매도대비수량10              StartPos 744, Length 12
+    char    prebidcha10         [  12];    char    _prebidcha10         ;    // [long  ,   12] 직전매수대비수량10              StartPos 757, Length 12
+    char    offer               [  12];    char    _offer               ;    // [long  ,   12] 매도호가수량합                  StartPos 770, Length 12
+    char    bid                 [  12];    char    _bid                 ;    // [long  ,   12] 매수호가수량합                  StartPos 783, Length 12
+    char    preoffercha         [  12];    char    _preoffercha         ;    // [long  ,   12] 직전매도대비수량합              StartPos 796, Length 12
+    char    prebidcha           [  12];    char    _prebidcha           ;    // [long  ,   12] 직전매수대비수량합              StartPos 809, Length 12
+    char    hotime              [   8];    char    _hotime              ;    // [string,    8] 수신시간                        StartPos 822, Length 8
+    char    yeprice             [   8];    char    _yeprice             ;    // [long  ,    8] 예상체결가격                    StartPos 831, Length 8
+    char    yevolume            [  12];    char    _yevolume            ;    // [long  ,   12] 예상체결수량                    StartPos 840, Length 12
+    char    yesign              [   1];    char    _yesign              ;    // [string,    1] 예상체결전일구분                StartPos 853, Length 1
+    char    yechange            [   8];    char    _yechange            ;    // [long  ,    8] 예상체결전일대비                StartPos 855, Length 8
+    char    yediff              [   6];    char    _yediff              ;    // [double,  6.2] 예상체결등락율                  StartPos 864, Length 6
+    char    tmoffer             [  12];    char    _tmoffer             ;    // [long  ,   12] 시간외매도잔량                  StartPos 871, Length 12
+    char    tmbid               [  12];    char    _tmbid               ;    // [long  ,   12] 시간외매수잔량                  StartPos 884, Length 12
+    char    ho_status           [   1];    char    _ho_status           ;    // [string,    1] 동시구분                        StartPos 897, Length 1
+    char    shcode              [   6];    char    _shcode              ;    // [string,    6] 단축코드                        StartPos 899, Length 6
+    char    uplmtprice          [   8];    char    _uplmtprice          ;    // [long  ,    8] 상한가                          StartPos 906, Length 8
+    char    dnlmtprice          [   8];    char    _dnlmtprice          ;    // [long  ,    8] 하한가                          StartPos 915, Length 8
+    char    open                [   8];    char    _open                ;    // [long  ,    8] 시가                            StartPos 924, Length 8
+    char    high                [   8];    char    _high                ;    // [long  ,    8] 고가                            StartPos 933, Length 8
+    char    low                 [   8];    char    _low                 ;    // [long  ,    8] 저가                            StartPos 942, Length 8
+    char    krx_midprice        [   8];    char    _krx_midprice        ;    // [long  ,    8] KRX중간가격                     StartPos 951, Length 8
+    char    krx_offermidsumrem  [   9];    char    _krx_offermidsumrem  ;    // [long  ,    9] KRX매도중간가잔량합계수량       StartPos 960, Length 9
+    char    krx_bidmidsumrem    [   9];    char    _krx_bidmidsumrem    ;    // [long  ,    9] KRX매수중간가잔량합계수량       StartPos 970, Length 9
+    char    krx_midsumrem       [   9];    char    _krx_midsumrem       ;    // [long  ,    9] KRX중간가잔량합계수량           StartPos 980, Length 9
+    char    krx_midsumremgubun  [   1];    char    _krx_midsumremgubun  ;    // [string,    1] KRX중간가잔량구분(' '없음'1'매� StartPos 990, Length 1
 } T1101OutBlock;
 
 //------------------------------------------------------------------------------
@@ -2004,169 +2010,175 @@ typedef struct {
 //------------------------------------------------------------------------------
 typedef struct {
     char    shcode              [   6];    char    _shcode              ;    // [string,    6] 단축코드                        StartPos 0, Length 6
+    char    exchgubun           [   1];    char    _exchgubun           ;    // [string,    1] 거래소구분코드                  StartPos 7, Length 1
 } T1102InBlock;
 
 typedef struct {
-   char    hname               [  20];    char    _hname               ;    // [string,   20] 한글명                          StartPos 0, Length 20
-   char    price               [   8];    char    _price               ;    // [long  ,    8] 현재가                          StartPos 21, Length 8
-   char    sign                [   1];    char    _sign                ;    // [string,    1] 전일대비구분                    StartPos 30, Length 1
-   char    change              [   8];    char    _change              ;    // [long  ,    8] 전일대비                        StartPos 32, Length 8
-   char    diff                [   6];    char    _diff                ;    // [float ,  6.2] 등락율                          StartPos 41, Length 6
-   char    volume              [  12];    char    _volume              ;    // [long  ,   12] 누적거래량                      StartPos 48, Length 12
-   char    recprice            [   8];    char    _recprice            ;    // [long  ,    8] 기준가(평가가격)                StartPos 61, Length 8
-   char    avg                 [   8];    char    _avg                 ;    // [long  ,    8] 가중평균                        StartPos 70, Length 8
-   char    uplmtprice          [   8];    char    _uplmtprice          ;    // [long  ,    8] 상한가(최고호가가격)            StartPos 79, Length 8
-   char    dnlmtprice          [   8];    char    _dnlmtprice          ;    // [long  ,    8] 하한가(최저호가가격)            StartPos 88, Length 8
-   char    jnilvolume          [  12];    char    _jnilvolume          ;    // [long  ,   12] 전일거래량                      StartPos 97, Length 12
-   char    volumediff          [  12];    char    _volumediff          ;    // [long  ,   12] 거래량차                        StartPos 110, Length 12
-   char    open                [   8];    char    _open                ;    // [long  ,    8] 시가                            StartPos 123, Length 8
-   char    opentime            [   6];    char    _opentime            ;    // [string,    6] 시가시간                        StartPos 132, Length 6
-   char    high                [   8];    char    _high                ;    // [long  ,    8] 고가                            StartPos 139, Length 8
-   char    hightime            [   6];    char    _hightime            ;    // [string,    6] 고가시간                        StartPos 148, Length 6
-   char    low                 [   8];    char    _low                 ;    // [long  ,    8] 저가                            StartPos 155, Length 8
-   char    lowtime             [   6];    char    _lowtime             ;    // [string,    6] 저가시간                        StartPos 164, Length 6
-   char    high52w             [   8];    char    _high52w             ;    // [long  ,    8] 52최고가                        StartPos 171, Length 8
-   char    high52wdate         [   8];    char    _high52wdate         ;    // [string,    8] 52최고가일                      StartPos 180, Length 8
-   char    low52w              [   8];    char    _low52w              ;    // [long  ,    8] 52최저가                        StartPos 189, Length 8
-   char    low52wdate          [   8];    char    _low52wdate          ;    // [string,    8] 52최저가일                      StartPos 198, Length 8
-   char    exhratio            [   6];    char    _exhratio            ;    // [float ,  6.2] 소진율                          StartPos 207, Length 6
-   char    per                 [   6];    char    _per                 ;    // [float ,  6.2] PER                             StartPos 214, Length 6
-   char    pbrx                [   6];    char    _pbrx                ;    // [float ,  6.2] PBRX                            StartPos 221, Length 6
-   char    listing             [  12];    char    _listing             ;    // [long  ,   12] 상장주식수(천)                  StartPos 228, Length 12
-   char    jkrate              [   8];    char    _jkrate              ;    // [long  ,    8] 증거금율                        StartPos 241, Length 8
-   char    memedan             [   5];    char    _memedan             ;    // [string,    5] 수량단위                        StartPos 250, Length 5
-   char    offernocd1          [   3];    char    _offernocd1          ;    // [string,    3] 매도증권사코드1                 StartPos 256, Length 3
-   char    bidnocd1            [   3];    char    _bidnocd1            ;    // [string,    3] 매수증권사코드1                 StartPos 260, Length 3
-   char    offerno1            [   6];    char    _offerno1            ;    // [string,    6] 매도증권사명1                   StartPos 264, Length 6
-   char    bidno1              [   6];    char    _bidno1              ;    // [string,    6] 매수증권사명1                   StartPos 271, Length 6
-   char    dvol1               [   8];    char    _dvol1               ;    // [long  ,    8] 총매도수량1                     StartPos 278, Length 8
-   char    svol1               [   8];    char    _svol1               ;    // [long  ,    8] 총매수수량1                     StartPos 287, Length 8
-   char    dcha1               [   8];    char    _dcha1               ;    // [long  ,    8] 매도증감1                       StartPos 296, Length 8
-   char    scha1               [   8];    char    _scha1               ;    // [long  ,    8] 매수증감1                       StartPos 305, Length 8
-   char    ddiff1              [   6];    char    _ddiff1              ;    // [float ,  6.2] 매도비율1                       StartPos 314, Length 6
-   char    sdiff1              [   6];    char    _sdiff1              ;    // [float ,  6.2] 매수비율1                       StartPos 321, Length 6
-   char    offernocd2          [   3];    char    _offernocd2          ;    // [string,    3] 매도증권사코드2                 StartPos 328, Length 3
-   char    bidnocd2            [   3];    char    _bidnocd2            ;    // [string,    3] 매수증권사코드2                 StartPos 332, Length 3
-   char    offerno2            [   6];    char    _offerno2            ;    // [string,    6] 매도증권사명2                   StartPos 336, Length 6
-   char    bidno2              [   6];    char    _bidno2              ;    // [string,    6] 매수증권사명2                   StartPos 343, Length 6
-   char    dvol2               [   8];    char    _dvol2               ;    // [long  ,    8] 총매도수량2                     StartPos 350, Length 8
-   char    svol2               [   8];    char    _svol2               ;    // [long  ,    8] 총매수수량2                     StartPos 359, Length 8
-   char    dcha2               [   8];    char    _dcha2               ;    // [long  ,    8] 매도증감2                       StartPos 368, Length 8
-   char    scha2               [   8];    char    _scha2               ;    // [long  ,    8] 매수증감2                       StartPos 377, Length 8
-   char    ddiff2              [   6];    char    _ddiff2              ;    // [float ,  6.2] 매도비율2                       StartPos 386, Length 6
-   char    sdiff2              [   6];    char    _sdiff2              ;    // [float ,  6.2] 매수비율2                       StartPos 393, Length 6
-   char    offernocd3          [   3];    char    _offernocd3          ;    // [string,    3] 매도증권사코드3                 StartPos 400, Length 3
-   char    bidnocd3            [   3];    char    _bidnocd3            ;    // [string,    3] 매수증권사코드3                 StartPos 404, Length 3
-   char    offerno3            [   6];    char    _offerno3            ;    // [string,    6] 매도증권사명3                   StartPos 408, Length 6
-   char    bidno3              [   6];    char    _bidno3              ;    // [string,    6] 매수증권사명3                   StartPos 415, Length 6
-   char    dvol3               [   8];    char    _dvol3               ;    // [long  ,    8] 총매도수량3                     StartPos 422, Length 8
-   char    svol3               [   8];    char    _svol3               ;    // [long  ,    8] 총매수수량3                     StartPos 431, Length 8
-   char    dcha3               [   8];    char    _dcha3               ;    // [long  ,    8] 매도증감3                       StartPos 440, Length 8
-   char    scha3               [   8];    char    _scha3               ;    // [long  ,    8] 매수증감3                       StartPos 449, Length 8
-   char    ddiff3              [   6];    char    _ddiff3              ;    // [float ,  6.2] 매도비율3                       StartPos 458, Length 6
-   char    sdiff3              [   6];    char    _sdiff3              ;    // [float ,  6.2] 매수비율3                       StartPos 465, Length 6
-   char    offernocd4          [   3];    char    _offernocd4          ;    // [string,    3] 매도증권사코드4                 StartPos 472, Length 3
-   char    bidnocd4            [   3];    char    _bidnocd4            ;    // [string,    3] 매수증권사코드4                 StartPos 476, Length 3
-   char    offerno4            [   6];    char    _offerno4            ;    // [string,    6] 매도증권사명4                   StartPos 480, Length 6
-   char    bidno4              [   6];    char    _bidno4              ;    // [string,    6] 매수증권사명4                   StartPos 487, Length 6
-   char    dvol4               [   8];    char    _dvol4               ;    // [long  ,    8] 총매도수량4                     StartPos 494, Length 8
-   char    svol4               [   8];    char    _svol4               ;    // [long  ,    8] 총매수수량4                     StartPos 503, Length 8
-   char    dcha4               [   8];    char    _dcha4               ;    // [long  ,    8] 매도증감4                       StartPos 512, Length 8
-   char    scha4               [   8];    char    _scha4               ;    // [long  ,    8] 매수증감4                       StartPos 521, Length 8
-   char    ddiff4              [   6];    char    _ddiff4              ;    // [float ,  6.2] 매도비율4                       StartPos 530, Length 6
-   char    sdiff4              [   6];    char    _sdiff4              ;    // [float ,  6.2] 매수비율4                       StartPos 537, Length 6
-   char    offernocd5          [   3];    char    _offernocd5          ;    // [string,    3] 매도증권사코드5                 StartPos 544, Length 3
-   char    bidnocd5            [   3];    char    _bidnocd5            ;    // [string,    3] 매수증권사코드5                 StartPos 548, Length 3
-   char    offerno5            [   6];    char    _offerno5            ;    // [string,    6] 매도증권사명5                   StartPos 552, Length 6
-   char    bidno5              [   6];    char    _bidno5              ;    // [string,    6] 매수증권사명5                   StartPos 559, Length 6
-   char    dvol5               [   8];    char    _dvol5               ;    // [long  ,    8] 총매도수량5                     StartPos 566, Length 8
-   char    svol5               [   8];    char    _svol5               ;    // [long  ,    8] 총매수수량5                     StartPos 575, Length 8
-   char    dcha5               [   8];    char    _dcha5               ;    // [long  ,    8] 매도증감5                       StartPos 584, Length 8
-   char    scha5               [   8];    char    _scha5               ;    // [long  ,    8] 매수증감5                       StartPos 593, Length 8
-   char    ddiff5              [   6];    char    _ddiff5              ;    // [float ,  6.2] 매도비율5                       StartPos 602, Length 6
-   char    sdiff5              [   6];    char    _sdiff5              ;    // [float ,  6.2] 매수비율5                       StartPos 609, Length 6
-   char    fwdvl               [  12];    char    _fwdvl               ;    // [long  ,   12] 외국계매도합계수량              StartPos 616, Length 12
-   char    ftradmdcha          [  12];    char    _ftradmdcha          ;    // [long  ,   12] 외국계매도직전대비              StartPos 629, Length 12
-   char    ftradmddiff         [   6];    char    _ftradmddiff         ;    // [float ,  6.2] 외국계매도비율                  StartPos 642, Length 6
-   char    fwsvl               [  12];    char    _fwsvl               ;    // [long  ,   12] 외국계매수합계수량              StartPos 649, Length 12
-   char    ftradmscha          [  12];    char    _ftradmscha          ;    // [long  ,   12] 외국계매수직전대비              StartPos 662, Length 12
-   char    ftradmsdiff         [   6];    char    _ftradmsdiff         ;    // [float ,  6.2] 외국계매수비율                  StartPos 675, Length 6
-   char    vol                 [   6];    char    _vol                 ;    // [float ,  6.2] 회전율                          StartPos 682, Length 6
-   char    shcode              [   6];    char    _shcode              ;    // [string,    6] 단축코드                        StartPos 689, Length 6
-   char    value               [  12];    char    _value               ;    // [long  ,   12] 누적거래대금                    StartPos 696, Length 12
-   char    jvolume             [  12];    char    _jvolume             ;    // [long  ,   12] 전일동시간거래량                StartPos 709, Length 12
-   char    highyear            [   8];    char    _highyear            ;    // [long  ,    8] 연중최고가                      StartPos 722, Length 8
-   char    highyeardate        [   8];    char    _highyeardate        ;    // [string,    8] 연중최고일자                    StartPos 731, Length 8
-   char    lowyear             [   8];    char    _lowyear             ;    // [long  ,    8] 연중최저가                      StartPos 740, Length 8
-   char    lowyeardate         [   8];    char    _lowyeardate         ;    // [string,    8] 연중최저일자                    StartPos 749, Length 8
-   char    target              [   8];    char    _target              ;    // [long  ,    8] 목표가                          StartPos 758, Length 8
-   char    capital             [  12];    char    _capital             ;    // [long  ,   12] 자본금                          StartPos 767, Length 12
-   char    abscnt              [  12];    char    _abscnt              ;    // [long  ,   12] 유동주식수                      StartPos 780, Length 12
-   char    parprice            [   8];    char    _parprice            ;    // [long  ,    8] 액면가                          StartPos 793, Length 8
-   char    gsmm                [   2];    char    _gsmm                ;    // [string,    2] 결산월                          StartPos 802, Length 2
-   char    subprice            [   8];    char    _subprice            ;    // [long  ,    8] 대용가                          StartPos 805, Length 8
-   char    total               [  12];    char    _total               ;    // [long  ,   12] 시가총액                        StartPos 814, Length 12
-   char    listdate            [   8];    char    _listdate            ;    // [string,    8] 상장일                          StartPos 827, Length 8
-   char    name                [  10];    char    _name                ;    // [string,   10] 전분기명                        StartPos 836, Length 10
-   char    bfsales             [  12];    char    _bfsales             ;    // [long  ,   12] 전분기매출액                    StartPos 847, Length 12
-   char    bfoperatingincome   [  12];    char    _bfoperatingincome   ;    // [long  ,   12] 전분기영업이익                  StartPos 860, Length 12
-   char    bfordinaryincome    [  12];    char    _bfordinaryincome    ;    // [long  ,   12] 전분기경상이익                  StartPos 873, Length 12
-   char    bfnetincome         [  12];    char    _bfnetincome         ;    // [long  ,   12] 전분기순이익                    StartPos 886, Length 12
-   char    bfeps               [  13];    char    _bfeps               ;    // [float , 13.2] 전분기EPS                       StartPos 899, Length 13
-   char    name2               [  10];    char    _name2               ;    // [string,   10] 전전분기명                      StartPos 913, Length 10
-   char    bfsales2            [  12];    char    _bfsales2            ;    // [long  ,   12] 전전분기매출액                  StartPos 924, Length 12
-   char    bfoperatingincome2  [  12];    char    _bfoperatingincome2  ;    // [long  ,   12] 전전분기영업이익                StartPos 937, Length 12
-   char    bfordinaryincome2   [  12];    char    _bfordinaryincome2   ;    // [long  ,   12] 전전분기경상이익                StartPos 950, Length 12
-   char    bfnetincome2        [  12];    char    _bfnetincome2        ;    // [long  ,   12] 전전분기순이익                  StartPos 963, Length 12
-   char    bfeps2              [  13];    char    _bfeps2              ;    // [float , 13.2] 전전분기EPS                     StartPos 976, Length 13
-   char    salert              [   7];    char    _salert              ;    // [float ,  7.2] 전년대비매출액                  StartPos 990, Length 7
-   char    opert               [   7];    char    _opert               ;    // [float ,  7.2] 전년대비영업이익                StartPos 998, Length 7
-   char    ordrt               [   7];    char    _ordrt               ;    // [float ,  7.2] 전년대비경상이익                StartPos 1006, Length 7
-   char    netrt               [   7];    char    _netrt               ;    // [float ,  7.2] 전년대비순이익                  StartPos 1014, Length 7
-   char    epsrt               [   7];    char    _epsrt               ;    // [float ,  7.2] 전년대비EPS                     StartPos 1022, Length 7
-   char    info1               [  10];    char    _info1               ;    // [string,   10] 락구분                          StartPos 1030, Length 10
-   char    info2               [  10];    char    _info2               ;    // [string,   10] 관리/급등구분                   StartPos 1041, Length 10
-   char    info3               [  10];    char    _info3               ;    // [string,   10] 정지/연장구분                   StartPos 1052, Length 10
-   char    info4               [  12];    char    _info4               ;    // [string,   12] 투자/불성실구분                 StartPos 1063, Length 12
-   char    janginfo            [  10];    char    _janginfo            ;    // [string,   10] 장구분                          StartPos 1076, Length 10
-   char    t_per               [   6];    char    _t_per               ;    // [float ,  6.2] T.PER                           StartPos 1087, Length 6
-   char    tonghwa             [   3];    char    _tonghwa             ;    // [string,    3] 통화ISO코드                     StartPos 1094, Length 3
-   char    dval1               [  18];    char    _dval1               ;    // [long  ,   18] 총매도대금1                     StartPos 1098, Length 18
-   char    sval1               [  18];    char    _sval1               ;    // [long  ,   18] 총매수대금1                     StartPos 1117, Length 18
-   char    dval2               [  18];    char    _dval2               ;    // [long  ,   18] 총매도대금2                     StartPos 1136, Length 18
-   char    sval2               [  18];    char    _sval2               ;    // [long  ,   18] 총매수대금2                     StartPos 1155, Length 18
-   char    dval3               [  18];    char    _dval3               ;    // [long  ,   18] 총매도대금3                     StartPos 1174, Length 18
-   char    sval3               [  18];    char    _sval3               ;    // [long  ,   18] 총매수대금3                     StartPos 1193, Length 18
-   char    dval4               [  18];    char    _dval4               ;    // [long  ,   18] 총매도대금4                     StartPos 1212, Length 18
-   char    sval4               [  18];    char    _sval4               ;    // [long  ,   18] 총매수대금4                     StartPos 1231, Length 18
-   char    dval5               [  18];    char    _dval5               ;    // [long  ,   18] 총매도대금5                     StartPos 1250, Length 18
-   char    sval5               [  18];    char    _sval5               ;    // [long  ,   18] 총매수대금5                     StartPos 1269, Length 18
-   char    davg1               [   8];    char    _davg1               ;    // [long  ,    8] 총매도평단가1                   StartPos 1288, Length 8
-   char    savg1               [   8];    char    _savg1               ;    // [long  ,    8] 총매수평단가1                   StartPos 1297, Length 8
-   char    davg2               [   8];    char    _davg2               ;    // [long  ,    8] 총매도평단가2                   StartPos 1306, Length 8
-   char    savg2               [   8];    char    _savg2               ;    // [long  ,    8] 총매수평단가2                   StartPos 1315, Length 8
-   char    davg3               [   8];    char    _davg3               ;    // [long  ,    8] 총매도평단가3                   StartPos 1324, Length 8
-   char    savg3               [   8];    char    _savg3               ;    // [long  ,    8] 총매수평단가3                   StartPos 1333, Length 8
-   char    davg4               [   8];    char    _davg4               ;    // [long  ,    8] 총매도평단가4                   StartPos 1342, Length 8
-   char    savg4               [   8];    char    _savg4               ;    // [long  ,    8] 총매수평단가4                   StartPos 1351, Length 8
-   char    davg5               [   8];    char    _davg5               ;    // [long  ,    8] 총매도평단가5                   StartPos 1360, Length 8
-   char    savg5               [   8];    char    _savg5               ;    // [long  ,    8] 총매수평단가5                   StartPos 1369, Length 8
-   char    ftradmdval          [  18];    char    _ftradmdval          ;    // [long  ,   18] 외국계매도대금                  StartPos 1378, Length 18
-   char    ftradmsval          [  18];    char    _ftradmsval          ;    // [long  ,   18] 외국계매수대금                  StartPos 1397, Length 18
-   char    ftradmdavg          [   8];    char    _ftradmdavg          ;    // [long  ,    8] 외국계매도평단가                StartPos 1416, Length 8
-   char    ftradmsavg          [   8];    char    _ftradmsavg          ;    // [long  ,    8] 외국계매수평단가                StartPos 1425, Length 8
-   char    info5               [   8];    char    _info5               ;    // [string,    8] 투자주의환기                    StartPos 1434, Length 8
-   char    spac_gubun          [   1];    char    _spac_gubun          ;    // [string,    1] 기업인수목적회사여부            StartPos 1443, Length 1
-   char    issueprice          [   8];    char    _issueprice          ;    // [long  ,    8] 발행가격                        StartPos 1445, Length 8
-   char    alloc_gubun         [   1];    char    _alloc_gubun         ;    // [string,    1] 배분적용구분코드(1:배분발생2:배 StartPos 1454, Length 1
-   char    alloc_text          [   8];    char    _alloc_text          ;    // [string,    8] 배분적용구분                    StartPos 1456, Length 8
-   char    shterm_text         [  10];    char    _shterm_text         ;    // [string,   10] 단기과열/VI발동                 StartPos 1465, Length 10
-   char    svi_uplmtprice      [   8];    char    _svi_uplmtprice      ;    // [long  ,    8] 정적VI상한가                    StartPos 1476, Length 8
-   char    svi_dnlmtprice      [   8];    char    _svi_dnlmtprice      ;    // [long  ,    8] 정적VI하한가                    StartPos 1485, Length 8
-   char    low_lqdt_gu         [   1];    char    _low_lqdt_gu         ;    // [string,    1] 저유동성종목여부                StartPos 1494, Length 1
-   char    abnormal_rise_gu    [   1];    char    _abnormal_rise_gu    ;    // [string,    1] 이상급등종목여부                StartPos 1496, Length 1
-   char    lend_text           [   8];    char    _lend_text           ;    // [string,    8] 대차불가표시                    StartPos 1498, Length 8
-   char    ty_text             [   8];    char    _ty_text             ;    // [string,    8] ETF/ETN투자유의                 StartPos 1507, Length 8
+    char    hname               [  20];    char    _hname               ;    // [string,   20] 한글명                          StartPos 0, Length 20
+    char    price               [   8];    char    _price               ;    // [long  ,    8] 현재가                          StartPos 21, Length 8
+    char    sign                [   1];    char    _sign                ;    // [string,    1] 전일대비구분                    StartPos 30, Length 1
+    char    change              [   8];    char    _change              ;    // [long  ,    8] 전일대비                        StartPos 32, Length 8
+    char    diff                [   6];    char    _diff                ;    // [double,  6.2] 등락율                          StartPos 41, Length 6
+    char    volume              [  12];    char    _volume              ;    // [long  ,   12] 누적거래량                      StartPos 48, Length 12
+    char    recprice            [   8];    char    _recprice            ;    // [long  ,    8] 기준가(평가가격)                StartPos 61, Length 8
+    char    avg                 [   8];    char    _avg                 ;    // [long  ,    8] 가중평균                        StartPos 70, Length 8
+    char    uplmtprice          [   8];    char    _uplmtprice          ;    // [long  ,    8] 상한가(최고호가가격)            StartPos 79, Length 8
+    char    dnlmtprice          [   8];    char    _dnlmtprice          ;    // [long  ,    8] 하한가(최저호가가격)            StartPos 88, Length 8
+    char    jnilvolume          [  12];    char    _jnilvolume          ;    // [long  ,   12] 전일거래량                      StartPos 97, Length 12
+    char    volumediff          [  12];    char    _volumediff          ;    // [long  ,   12] 거래량차                        StartPos 110, Length 12
+    char    open                [   8];    char    _open                ;    // [long  ,    8] 시가                            StartPos 123, Length 8
+    char    opentime            [   6];    char    _opentime            ;    // [string,    6] 시가시간                        StartPos 132, Length 6
+    char    high                [   8];    char    _high                ;    // [long  ,    8] 고가                            StartPos 139, Length 8
+    char    hightime            [   6];    char    _hightime            ;    // [string,    6] 고가시간                        StartPos 148, Length 6
+    char    low                 [   8];    char    _low                 ;    // [long  ,    8] 저가                            StartPos 155, Length 8
+    char    lowtime             [   6];    char    _lowtime             ;    // [string,    6] 저가시간                        StartPos 164, Length 6
+    char    high52w             [   8];    char    _high52w             ;    // [long  ,    8] 52최고가                        StartPos 171, Length 8
+    char    high52wdate         [   8];    char    _high52wdate         ;    // [string,    8] 52최고가일                      StartPos 180, Length 8
+    char    low52w              [   8];    char    _low52w              ;    // [long  ,    8] 52최저가                        StartPos 189, Length 8
+    char    low52wdate          [   8];    char    _low52wdate          ;    // [string,    8] 52최저가일                      StartPos 198, Length 8
+    char    exhratio            [   6];    char    _exhratio            ;    // [double,  6.2] 소진율                          StartPos 207, Length 6
+    char    per                 [   6];    char    _per                 ;    // [double,  6.2] PER                             StartPos 214, Length 6
+    char    pbrx                [   6];    char    _pbrx                ;    // [double,  6.2] PBRX                            StartPos 221, Length 6
+    char    listing             [  12];    char    _listing             ;    // [long  ,   12] 상장주식수(천)                  StartPos 228, Length 12
+    char    jkrate              [   8];    char    _jkrate              ;    // [long  ,    8] 증거금율                        StartPos 241, Length 8
+    char    memedan             [   5];    char    _memedan             ;    // [string,    5] 수량단위                        StartPos 250, Length 5
+    char    offernocd1          [   3];    char    _offernocd1          ;    // [string,    3] 매도증권사코드1                 StartPos 256, Length 3
+    char    bidnocd1            [   3];    char    _bidnocd1            ;    // [string,    3] 매수증권사코드1                 StartPos 260, Length 3
+    char    offerno1            [   6];    char    _offerno1            ;    // [string,    6] 매도증권사명1                   StartPos 264, Length 6
+    char    bidno1              [   6];    char    _bidno1              ;    // [string,    6] 매수증권사명1                   StartPos 271, Length 6
+    char    dvol1               [   8];    char    _dvol1               ;    // [long  ,    8] 총매도수량1                     StartPos 278, Length 8
+    char    svol1               [   8];    char    _svol1               ;    // [long  ,    8] 총매수수량1                     StartPos 287, Length 8
+    char    dcha1               [   8];    char    _dcha1               ;    // [long  ,    8] 매도증감1                       StartPos 296, Length 8
+    char    scha1               [   8];    char    _scha1               ;    // [long  ,    8] 매수증감1                       StartPos 305, Length 8
+    char    ddiff1              [   6];    char    _ddiff1              ;    // [double,  6.2] 매도비율1                       StartPos 314, Length 6
+    char    sdiff1              [   6];    char    _sdiff1              ;    // [double,  6.2] 매수비율1                       StartPos 321, Length 6
+    char    offernocd2          [   3];    char    _offernocd2          ;    // [string,    3] 매도증권사코드2                 StartPos 328, Length 3
+    char    bidnocd2            [   3];    char    _bidnocd2            ;    // [string,    3] 매수증권사코드2                 StartPos 332, Length 3
+    char    offerno2            [   6];    char    _offerno2            ;    // [string,    6] 매도증권사명2                   StartPos 336, Length 6
+    char    bidno2              [   6];    char    _bidno2              ;    // [string,    6] 매수증권사명2                   StartPos 343, Length 6
+    char    dvol2               [   8];    char    _dvol2               ;    // [long  ,    8] 총매도수량2                     StartPos 350, Length 8
+    char    svol2               [   8];    char    _svol2               ;    // [long  ,    8] 총매수수량2                     StartPos 359, Length 8
+    char    dcha2               [   8];    char    _dcha2               ;    // [long  ,    8] 매도증감2                       StartPos 368, Length 8
+    char    scha2               [   8];    char    _scha2               ;    // [long  ,    8] 매수증감2                       StartPos 377, Length 8
+    char    ddiff2              [   6];    char    _ddiff2              ;    // [double,  6.2] 매도비율2                       StartPos 386, Length 6
+    char    sdiff2              [   6];    char    _sdiff2              ;    // [double,  6.2] 매수비율2                       StartPos 393, Length 6
+    char    offernocd3          [   3];    char    _offernocd3          ;    // [string,    3] 매도증권사코드3                 StartPos 400, Length 3
+    char    bidnocd3            [   3];    char    _bidnocd3            ;    // [string,    3] 매수증권사코드3                 StartPos 404, Length 3
+    char    offerno3            [   6];    char    _offerno3            ;    // [string,    6] 매도증권사명3                   StartPos 408, Length 6
+    char    bidno3              [   6];    char    _bidno3              ;    // [string,    6] 매수증권사명3                   StartPos 415, Length 6
+    char    dvol3               [   8];    char    _dvol3               ;    // [long  ,    8] 총매도수량3                     StartPos 422, Length 8
+    char    svol3               [   8];    char    _svol3               ;    // [long  ,    8] 총매수수량3                     StartPos 431, Length 8
+    char    dcha3               [   8];    char    _dcha3               ;    // [long  ,    8] 매도증감3                       StartPos 440, Length 8
+    char    scha3               [   8];    char    _scha3               ;    // [long  ,    8] 매수증감3                       StartPos 449, Length 8
+    char    ddiff3              [   6];    char    _ddiff3              ;    // [double,  6.2] 매도비율3                       StartPos 458, Length 6
+    char    sdiff3              [   6];    char    _sdiff3              ;    // [double,  6.2] 매수비율3                       StartPos 465, Length 6
+    char    offernocd4          [   3];    char    _offernocd4          ;    // [string,    3] 매도증권사코드4                 StartPos 472, Length 3
+    char    bidnocd4            [   3];    char    _bidnocd4            ;    // [string,    3] 매수증권사코드4                 StartPos 476, Length 3
+    char    offerno4            [   6];    char    _offerno4            ;    // [string,    6] 매도증권사명4                   StartPos 480, Length 6
+    char    bidno4              [   6];    char    _bidno4              ;    // [string,    6] 매수증권사명4                   StartPos 487, Length 6
+    char    dvol4               [   8];    char    _dvol4               ;    // [long  ,    8] 총매도수량4                     StartPos 494, Length 8
+    char    svol4               [   8];    char    _svol4               ;    // [long  ,    8] 총매수수량4                     StartPos 503, Length 8
+    char    dcha4               [   8];    char    _dcha4               ;    // [long  ,    8] 매도증감4                       StartPos 512, Length 8
+    char    scha4               [   8];    char    _scha4               ;    // [long  ,    8] 매수증감4                       StartPos 521, Length 8
+    char    ddiff4              [   6];    char    _ddiff4              ;    // [double,  6.2] 매도비율4                       StartPos 530, Length 6
+    char    sdiff4              [   6];    char    _sdiff4              ;    // [double,  6.2] 매수비율4                       StartPos 537, Length 6
+    char    offernocd5          [   3];    char    _offernocd5          ;    // [string,    3] 매도증권사코드5                 StartPos 544, Length 3
+    char    bidnocd5            [   3];    char    _bidnocd5            ;    // [string,    3] 매수증권사코드5                 StartPos 548, Length 3
+    char    offerno5            [   6];    char    _offerno5            ;    // [string,    6] 매도증권사명5                   StartPos 552, Length 6
+    char    bidno5              [   6];    char    _bidno5              ;    // [string,    6] 매수증권사명5                   StartPos 559, Length 6
+    char    dvol5               [   8];    char    _dvol5               ;    // [long  ,    8] 총매도수량5                     StartPos 566, Length 8
+    char    svol5               [   8];    char    _svol5               ;    // [long  ,    8] 총매수수량5                     StartPos 575, Length 8
+    char    dcha5               [   8];    char    _dcha5               ;    // [long  ,    8] 매도증감5                       StartPos 584, Length 8
+    char    scha5               [   8];    char    _scha5               ;    // [long  ,    8] 매수증감5                       StartPos 593, Length 8
+    char    ddiff5              [   6];    char    _ddiff5              ;    // [double,  6.2] 매도비율5                       StartPos 602, Length 6
+    char    sdiff5              [   6];    char    _sdiff5              ;    // [double,  6.2] 매수비율5                       StartPos 609, Length 6
+    char    fwdvl               [  12];    char    _fwdvl               ;    // [long  ,   12] 외국계매도합계수량              StartPos 616, Length 12
+    char    ftradmdcha          [  12];    char    _ftradmdcha          ;    // [long  ,   12] 외국계매도직전대비              StartPos 629, Length 12
+    char    ftradmddiff         [   6];    char    _ftradmddiff         ;    // [double,  6.2] 외국계매도비율                  StartPos 642, Length 6
+    char    fwsvl               [  12];    char    _fwsvl               ;    // [long  ,   12] 외국계매수합계수량              StartPos 649, Length 12
+    char    ftradmscha          [  12];    char    _ftradmscha          ;    // [long  ,   12] 외국계매수직전대비              StartPos 662, Length 12
+    char    ftradmsdiff         [   6];    char    _ftradmsdiff         ;    // [double,  6.2] 외국계매수비율                  StartPos 675, Length 6
+    char    vol                 [   6];    char    _vol                 ;    // [double,  6.2] 회전율                          StartPos 682, Length 6
+    char    shcode              [   6];    char    _shcode              ;    // [string,    6] 단축코드                        StartPos 689, Length 6
+    char    value               [  12];    char    _value               ;    // [long  ,   12] 누적거래대금                    StartPos 696, Length 12
+    char    jvolume             [  12];    char    _jvolume             ;    // [long  ,   12] 전일동시간거래량                StartPos 709, Length 12
+    char    highyear            [   8];    char    _highyear            ;    // [long  ,    8] 연중최고가                      StartPos 722, Length 8
+    char    highyeardate        [   8];    char    _highyeardate        ;    // [string,    8] 연중최고일자                    StartPos 731, Length 8
+    char    lowyear             [   8];    char    _lowyear             ;    // [long  ,    8] 연중최저가                      StartPos 740, Length 8
+    char    lowyeardate         [   8];    char    _lowyeardate         ;    // [string,    8] 연중최저일자                    StartPos 749, Length 8
+    char    target              [   8];    char    _target              ;    // [long  ,    8] 목표가                          StartPos 758, Length 8
+    char    capital             [  12];    char    _capital             ;    // [long  ,   12] 자본금                          StartPos 767, Length 12
+    char    abscnt              [  12];    char    _abscnt              ;    // [long  ,   12] 유동주식수                      StartPos 780, Length 12
+    char    parprice            [   8];    char    _parprice            ;    // [long  ,    8] 액면가                          StartPos 793, Length 8
+    char    gsmm                [   2];    char    _gsmm                ;    // [string,    2] 결산월                          StartPos 802, Length 2
+    char    subprice            [   8];    char    _subprice            ;    // [long  ,    8] 대용가                          StartPos 805, Length 8
+    char    total               [  12];    char    _total               ;    // [long  ,   12] 시가총액                        StartPos 814, Length 12
+    char    listdate            [   8];    char    _listdate            ;    // [string,    8] 상장일                          StartPos 827, Length 8
+    char    name                [  10];    char    _name                ;    // [string,   10] 전분기명                        StartPos 836, Length 10
+    char    bfsales             [  12];    char    _bfsales             ;    // [long  ,   12] 전분기매출액                    StartPos 847, Length 12
+    char    bfoperatingincome   [  12];    char    _bfoperatingincome   ;    // [long  ,   12] 전분기영업이익                  StartPos 860, Length 12
+    char    bfordinaryincome    [  12];    char    _bfordinaryincome    ;    // [long  ,   12] 전분기경상이익                  StartPos 873, Length 12
+    char    bfnetincome         [  12];    char    _bfnetincome         ;    // [long  ,   12] 전분기순이익                    StartPos 886, Length 12
+    char    bfeps               [  13];    char    _bfeps               ;    // [double, 13.2] 전분기EPS                       StartPos 899, Length 13
+    char    name2               [  10];    char    _name2               ;    // [string,   10] 전전분기명                      StartPos 913, Length 10
+    char    bfsales2            [  12];    char    _bfsales2            ;    // [long  ,   12] 전전분기매출액                  StartPos 924, Length 12
+    char    bfoperatingincome2  [  12];    char    _bfoperatingincome2  ;    // [long  ,   12] 전전분기영업이익                StartPos 937, Length 12
+    char    bfordinaryincome2   [  12];    char    _bfordinaryincome2   ;    // [long  ,   12] 전전분기경상이익                StartPos 950, Length 12
+    char    bfnetincome2        [  12];    char    _bfnetincome2        ;    // [long  ,   12] 전전분기순이익                  StartPos 963, Length 12
+    char    bfeps2              [  13];    char    _bfeps2              ;    // [double, 13.2] 전전분기EPS                     StartPos 976, Length 13
+    char    salert              [   7];    char    _salert              ;    // [double,  7.2] 전년대비매출액                  StartPos 990, Length 7
+    char    opert               [   7];    char    _opert               ;    // [double,  7.2] 전년대비영업이익                StartPos 998, Length 7
+    char    ordrt               [   7];    char    _ordrt               ;    // [double,  7.2] 전년대비경상이익                StartPos 1006, Length 7
+    char    netrt               [   7];    char    _netrt               ;    // [double,  7.2] 전년대비순이익                  StartPos 1014, Length 7
+    char    epsrt               [   7];    char    _epsrt               ;    // [double,  7.2] 전년대비EPS                     StartPos 1022, Length 7
+    char    info1               [  10];    char    _info1               ;    // [string,   10] 락구분                          StartPos 1030, Length 10
+    char    info2               [  10];    char    _info2               ;    // [string,   10] 관리/급등구분                   StartPos 1041, Length 10
+    char    info3               [  10];    char    _info3               ;    // [string,   10] 정지/연장구분                   StartPos 1052, Length 10
+    char    info4               [  12];    char    _info4               ;    // [string,   12] 투자/불성실구분                 StartPos 1063, Length 12
+    char    janginfo            [  10];    char    _janginfo            ;    // [string,   10] 장구분                          StartPos 1076, Length 10
+    char    t_per               [   6];    char    _t_per               ;    // [double,  6.2] T.PER                           StartPos 1087, Length 6
+    char    tonghwa             [   3];    char    _tonghwa             ;    // [string,    3] 통화ISO코드                     StartPos 1094, Length 3
+    char    dval1               [  18];    char    _dval1               ;    // [long  ,   18] 총매도대금1                     StartPos 1098, Length 18
+    char    sval1               [  18];    char    _sval1               ;    // [long  ,   18] 총매수대금1                     StartPos 1117, Length 18
+    char    dval2               [  18];    char    _dval2               ;    // [long  ,   18] 총매도대금2                     StartPos 1136, Length 18
+    char    sval2               [  18];    char    _sval2               ;    // [long  ,   18] 총매수대금2                     StartPos 1155, Length 18
+    char    dval3               [  18];    char    _dval3               ;    // [long  ,   18] 총매도대금3                     StartPos 1174, Length 18
+    char    sval3               [  18];    char    _sval3               ;    // [long  ,   18] 총매수대금3                     StartPos 1193, Length 18
+    char    dval4               [  18];    char    _dval4               ;    // [long  ,   18] 총매도대금4                     StartPos 1212, Length 18
+    char    sval4               [  18];    char    _sval4               ;    // [long  ,   18] 총매수대금4                     StartPos 1231, Length 18
+    char    dval5               [  18];    char    _dval5               ;    // [long  ,   18] 총매도대금5                     StartPos 1250, Length 18
+    char    sval5               [  18];    char    _sval5               ;    // [long  ,   18] 총매수대금5                     StartPos 1269, Length 18
+    char    davg1               [   8];    char    _davg1               ;    // [long  ,    8] 총매도평단가1                   StartPos 1288, Length 8
+    char    savg1               [   8];    char    _savg1               ;    // [long  ,    8] 총매수평단가1                   StartPos 1297, Length 8
+    char    davg2               [   8];    char    _davg2               ;    // [long  ,    8] 총매도평단가2                   StartPos 1306, Length 8
+    char    savg2               [   8];    char    _savg2               ;    // [long  ,    8] 총매수평단가2                   StartPos 1315, Length 8
+    char    davg3               [   8];    char    _davg3               ;    // [long  ,    8] 총매도평단가3                   StartPos 1324, Length 8
+    char    savg3               [   8];    char    _savg3               ;    // [long  ,    8] 총매수평단가3                   StartPos 1333, Length 8
+    char    davg4               [   8];    char    _davg4               ;    // [long  ,    8] 총매도평단가4                   StartPos 1342, Length 8
+    char    savg4               [   8];    char    _savg4               ;    // [long  ,    8] 총매수평단가4                   StartPos 1351, Length 8
+    char    davg5               [   8];    char    _davg5               ;    // [long  ,    8] 총매도평단가5                   StartPos 1360, Length 8
+    char    savg5               [   8];    char    _savg5               ;    // [long  ,    8] 총매수평단가5                   StartPos 1369, Length 8
+    char    ftradmdval          [  18];    char    _ftradmdval          ;    // [long  ,   18] 외국계매도대금                  StartPos 1378, Length 18
+    char    ftradmsval          [  18];    char    _ftradmsval          ;    // [long  ,   18] 외국계매수대금                  StartPos 1397, Length 18
+    char    ftradmdavg          [   8];    char    _ftradmdavg          ;    // [long  ,    8] 외국계매도평단가                StartPos 1416, Length 8
+    char    ftradmsavg          [   8];    char    _ftradmsavg          ;    // [long  ,    8] 외국계매수평단가                StartPos 1425, Length 8
+    char    info5               [   8];    char    _info5               ;    // [string,    8] 투자주의환기                    StartPos 1434, Length 8
+    char    spac_gubun          [   1];    char    _spac_gubun          ;    // [string,    1] 기업인수목적회사여부            StartPos 1443, Length 1
+    char    issueprice          [   8];    char    _issueprice          ;    // [long  ,    8] 발행가격                        StartPos 1445, Length 8
+    char    alloc_gubun         [   1];    char    _alloc_gubun         ;    // [string,    1] 배분적용구분코드(1:배분발생2:배 StartPos 1454, Length 1
+    char    alloc_text          [   8];    char    _alloc_text          ;    // [string,    8] 배분적용구분                    StartPos 1456, Length 8
+    char    shterm_text         [  10];    char    _shterm_text         ;    // [string,   10] 단기과열/VI발동                 StartPos 1465, Length 10
+    char    svi_uplmtprice      [   8];    char    _svi_uplmtprice      ;    // [long  ,    8] 정적VI상한가                    StartPos 1476, Length 8
+    char    svi_dnlmtprice      [   8];    char    _svi_dnlmtprice      ;    // [long  ,    8] 정적VI하한가                    StartPos 1485, Length 8
+    char    low_lqdt_gu         [   1];    char    _low_lqdt_gu         ;    // [string,    1] 저유동성종목여부                StartPos 1494, Length 1
+    char    abnormal_rise_gu    [   1];    char    _abnormal_rise_gu    ;    // [string,    1] 이상급등종목여부                StartPos 1496, Length 1
+    char    lend_text           [   8];    char    _lend_text           ;    // [string,    8] 대차불가표시                    StartPos 1498, Length 8
+    char    ty_text             [   8];    char    _ty_text             ;    // [string,    8] ETF/ETN투자유의                 StartPos 1507, Length 8
+    char    nxt_janginfo        [  10];    char    _nxt_janginfo        ;    // [string,   10] NXT장구분                       StartPos 1516, Length 10
+    char    nxt_shterm_text     [  10];    char    _nxt_shterm_text     ;    // [string,   10] NXT단기과열/VI발동              StartPos 1527, Length 10
+    char    nxt_svi_uplmtprice  [   8];    char    _nxt_svi_uplmtprice  ;    // [string,    8] NXT정적VI상한가                 StartPos 1538, Length 8
+    char    nxt_svi_dnlmtprice  [   8];    char    _nxt_svi_dnlmtprice  ;    // [string,    8] NXT정적VI하한가                 StartPos 1547, Length 8
+    char    ex_shcode           [  10];    char    _ex_shcode           ;    // [string,   10] 거래소별단축코드                StartPos 1556, Length 10
 } T1102OutBlock;
 
 //------------------------------------------------------------------------------
@@ -2210,12 +2222,14 @@ typedef struct {
     char    date                [   8];    char    _date                ;    // [string,    8] 날짜                            StartPos 9, Length 8
     char    idx                 [   4];    char    _idx                 ;    // [long  ,    4] IDX                             StartPos 18, Length 4
     char    cnt                 [   4];    char    _cnt                 ;    // [long  ,    4] 건수                            StartPos 23, Length 4
+    char    exchgubun           [   1];    char    _exchgubun           ;    // [string,    1] 거래소구분코드                  StartPos 28, Length 1
 } T1305InBlock;
 
 typedef struct {
     char    cnt                 [   4];    char    _cnt                 ;    // [long  ,    4] CNT                             StartPos 0, Length 4
     char    date                [   8];    char    _date                ;    // [string,    8] 날짜                            StartPos 5, Length 8
     char    idx                 [   4];    char    _idx                 ;    // [long  ,    4] IDX                             StartPos 14, Length 4
+    char    ex_shcode           [  10];    char    _ex_shcode           ;    // [string,   10] 거래소별단축코드                StartPos 19, Length 10
 } T1305OutBlock;
 
 typedef struct {
@@ -2226,26 +2240,26 @@ typedef struct {
     char    close               [   8];    char    _close               ;    // [long  ,    8] 종가                            StartPos 36, Length 8
     char    sign                [   1];    char    _sign                ;    // [string,    1] 전일대비구분                    StartPos 45, Length 1
     char    change              [   8];    char    _change              ;    // [long  ,    8] 전일대비                        StartPos 47, Length 8
-    char    diff                [   6];    char    _diff                ;    // [float ,  6.2] 등락율                          StartPos 56, Length 6
+    char    diff                [   6];    char    _diff                ;    // [double,  6.2] 등락율                          StartPos 56, Length 6
     char    volume              [  12];    char    _volume              ;    // [long  ,   12] 누적거래량                      StartPos 63, Length 12
-    char    diff_vol            [  10];    char    _diff_vol            ;    // [float , 10.2] 거래증가율                      StartPos 76, Length 10
-    char    chdegree            [   6];    char    _chdegree            ;    // [float ,  6.2] 체결강도                        StartPos 87, Length 6
-    char    sojinrate           [   6];    char    _sojinrate           ;    // [float ,  6.2] 소진율                          StartPos 94, Length 6
-    char    changerate          [   6];    char    _changerate          ;    // [float ,  6.2] 회전율                          StartPos 101, Length 6
+    char    diff_vol            [  10];    char    _diff_vol            ;    // [double, 10.2] 거래증가율                      StartPos 76, Length 10
+    char    chdegree            [   6];    char    _chdegree            ;    // [double,  6.2] 체결강도                        StartPos 87, Length 6
+    char    sojinrate           [   6];    char    _sojinrate           ;    // [double,  6.2] 소진율                          StartPos 94, Length 6
+    char    changerate          [   6];    char    _changerate          ;    // [double,  6.2] 회전율                          StartPos 101, Length 6
     char    fpvolume            [  12];    char    _fpvolume            ;    // [long  ,   12] 외인순매수                      StartPos 108, Length 12
     char    covolume            [  12];    char    _covolume            ;    // [long  ,   12] 기관순매수                      StartPos 121, Length 12
     char    shcode              [   6];    char    _shcode              ;    // [string,    6] 종목코드                        StartPos 134, Length 6
     char    value               [  12];    char    _value               ;    // [long  ,   12] 누적거래대금(단위:백만)         StartPos 141, Length 12
     char    ppvolume            [  12];    char    _ppvolume            ;    // [long  ,   12] 개인순매수                      StartPos 154, Length 12
-    char    o_sign              [   1];    char    _o_sign              ;    // [string,    1] 시가대비구분                    StartPos 167, Length 1
-    char    o_change            [   8];    char    _o_change            ;    // [long  ,    8] 시가대비                        StartPos 169, Length 8
-    char    o_diff              [   6];    char    _o_diff              ;    // [float ,  6.2] 시가기준등락율                  StartPos 178, Length 6
-    char    h_sign              [   1];    char    _h_sign              ;    // [string,    1] 고가대비구분                    StartPos 185, Length 1
-    char    h_change            [   8];    char    _h_change            ;    // [long  ,    8] 고가대비                        StartPos 187, Length 8
-    char    h_diff              [   6];    char    _h_diff              ;    // [float ,  6.2] 고가기준등락율                  StartPos 196, Length 6
-    char    l_sign              [   1];    char    _l_sign              ;    // [string,    1] 저가대비구분                    StartPos 203, Length 1
-    char    l_change            [   8];    char    _l_change            ;    // [long  ,    8] 저가대비                        StartPos 205, Length 8
-    char    l_diff              [   6];    char    _l_diff              ;    // [float ,  6.2] 저가기준등락율                  StartPos 214, Length 6
+    char    o_sign              [   1];    char    _o_sign              ;    // [string,    1] 기준가기준 시가대비구분         StartPos 167, Length 1
+    char    o_change            [   8];    char    _o_change            ;    // [long  ,    8] 기준가기준 시가대비             StartPos 169, Length 8
+    char    o_diff              [   6];    char    _o_diff              ;    // [double,  6.2] 기준가기준 시가등락율           StartPos 178, Length 6
+    char    h_sign              [   1];    char    _h_sign              ;    // [string,    1] 기준가기준 고가대비구분         StartPos 185, Length 1
+    char    h_change            [   8];    char    _h_change            ;    // [long  ,    8] 기준가기준 고가대비             StartPos 187, Length 8
+    char    h_diff              [   6];    char    _h_diff              ;    // [double,  6.2] 기준가기준 고가등락율           StartPos 196, Length 6
+    char    l_sign              [   1];    char    _l_sign              ;    // [string,    1] 기준가기준 저가대비구분         StartPos 203, Length 1
+    char    l_change            [   8];    char    _l_change            ;    // [long  ,    8] 기준가기준 저가대비             StartPos 205, Length 8
+    char    l_diff              [   6];    char    _l_diff              ;    // [double,  6.2] 기준가기준 저가등락율           StartPos 214, Length 6
     char    marketcap           [  12];    char    _marketcap           ;    // [long  ,   12] 시가총액(단위:백만)             StartPos 221, Length 12
 } T1305OutBlock1;
 
@@ -2258,6 +2272,7 @@ typedef struct {
     char    shcode              [   6];    char    _shcode              ;    // [string,    6] 단축코드                        StartPos 4, Length 6
     char    endtime             [   4];    char    _endtime             ;    // [string,    4] 종료시간                        StartPos 11, Length 4
     char    cts_time            [  10];    char    _cts_time            ;    // [string,   10] 시간CTS                         StartPos 16, Length 10
+    char    exchgubun           [   1];    char    _exchgubun           ;    // [string,    1] 거래소구분코드                  StartPos 27, Length 1
 } T1310InBlock;
 
 typedef struct {
@@ -2269,9 +2284,9 @@ typedef struct {
     char    price               [   8];    char    _price               ;    // [long  ,    8] 현재가                          StartPos 11, Length 8
     char    sign                [   1];    char    _sign                ;    // [string,    1] 전일대비구분                    StartPos 20, Length 1
     char    change              [   8];    char    _change              ;    // [long  ,    8] 전일대비                        StartPos 22, Length 8
-    char    diff                [   6];    char    _diff                ;    // [float ,  6.2] 등락율                          StartPos 31, Length 6
+    char    diff                [   6];    char    _diff                ;    // [double,  6.2] 등락율                          StartPos 31, Length 6
     char    cvolume             [  12];    char    _cvolume             ;    // [long  ,   12] 체결수량                        StartPos 38, Length 12
-    char    chdegree            [   8];    char    _chdegree            ;    // [float ,  8.2] 체결강도                        StartPos 51, Length 8
+    char    chdegree            [   8];    char    _chdegree            ;    // [double,  8.2] 체결강도                        StartPos 51, Length 8
     char    volume              [  12];    char    _volume              ;    // [long  ,   12] 거래량                          StartPos 60, Length 12
     char    mdvolume            [  12];    char    _mdvolume            ;    // [long  ,   12] 매도체결수량                    StartPos 73, Length 12
     char    mdchecnt            [   8];    char    _mdchecnt            ;    // [long  ,    8] 매도체결건수                    StartPos 86, Length 8
@@ -2279,6 +2294,7 @@ typedef struct {
     char    mschecnt            [   8];    char    _mschecnt            ;    // [long  ,    8] 매수체결건수                    StartPos 108, Length 8
     char    revolume            [  12];    char    _revolume            ;    // [long  ,   12] 순체결량                        StartPos 117, Length 12
     char    rechecnt            [   8];    char    _rechecnt            ;    // [long  ,    8] 순체결건수                      StartPos 130, Length 8
+    char    exchname            [   3];    char    _exchname            ;    // [string,    3] 거래소명                        StartPos 139, Length 3
 } T1310OutBlock1;
 
 //------------------------------------------------------------------------------
@@ -2342,55 +2358,6 @@ typedef struct {
     char    edate               [   8];    char    _edate               ;    // [string,    8] 해제일                          StartPos 70, Length 8
     char    shcode              [   6];    char    _shcode              ;    // [string,    6] 종목코드                        StartPos 79, Length 6
 } T1405OutBlock1;
-
-//------------------------------------------------------------------------------
-// 종목별 매매주체 동향 (t1717)
-//------------------------------------------------------------------------------
-typedef struct  {
-    char    shcode              [   6];    char    _shcode              ;    // [string,    6] 종목코드                        StartPos 0, Length 6
-    char    gubun               [   1];    char    _gubun               ;    // [string,    1] 구분(0:일간순매수1:기간누적순매 StartPos 7, Length 1
-    char    fromdt              [   8];    char    _fromdt              ;    // [string,    8] 시작일자(일간조회일경우는space) StartPos 9, Length 8
-    char    todt                [   8];    char    _todt                ;    // [string,    8] 종료일자                        StartPos 18, Length 8
-} T1717InBlock;
-
-typedef struct {
-    char    date                [   8];    char    _date                ;    // [string,    8] 일자                            StartPos 0, Length 8
-    char    close               [   8];    char    _close               ;    // [long  ,    8] 종가                            StartPos 9, Length 8
-    char    sign                [   1];    char    _sign                ;    // [string,    1] 전일대비구분                    StartPos 18, Length 1
-    char    change              [   8];    char    _change              ;    // [long  ,    8] 전일대비                        StartPos 20, Length 8
-    char    diff                [   6];    char    _diff                ;    // [float ,  6.2] 등락율                          StartPos 29, Length 6
-    char    volume              [  12];    char    _volume              ;    // [long  ,   12] 누적거래량                      StartPos 36, Length 12
-    char    tjj0000_vol         [  12];    char    _tjj0000_vol         ;    // [long  ,   12] 사모펀드(순매수량)              StartPos 49, Length 12
-    char    tjj0001_vol         [  12];    char    _tjj0001_vol         ;    // [long  ,   12] 증권(순매수량)                  StartPos 62, Length 12
-    char    tjj0002_vol         [  12];    char    _tjj0002_vol         ;    // [long  ,   12] 보험(순매수량)                  StartPos 75, Length 12
-    char    tjj0003_vol         [  12];    char    _tjj0003_vol         ;    // [long  ,   12] 투신(순매수량)                  StartPos 88, Length 12
-    char    tjj0004_vol         [  12];    char    _tjj0004_vol         ;    // [long  ,   12] 은행(순매수량)                  StartPos 101, Length 12
-    char    tjj0005_vol         [  12];    char    _tjj0005_vol         ;    // [long  ,   12] 종금(순매수량)                  StartPos 114, Length 12
-    char    tjj0006_vol         [  12];    char    _tjj0006_vol         ;    // [long  ,   12] 기금(순매수량)                  StartPos 127, Length 12
-    char    tjj0007_vol         [  12];    char    _tjj0007_vol         ;    // [long  ,   12] 기타법인(순매수량)              StartPos 140, Length 12
-    char    tjj0008_vol         [  12];    char    _tjj0008_vol         ;    // [long  ,   12] 개인(순매수량)                  StartPos 153, Length 12
-    char    tjj0009_vol         [  12];    char    _tjj0009_vol         ;    // [long  ,   12] 등록외국인(순매수량)            StartPos 166, Length 12
-    char    tjj0010_vol         [  12];    char    _tjj0010_vol         ;    // [long  ,   12] 미등록외국인(순매수량)          StartPos 179, Length 12
-    char    tjj0011_vol         [  12];    char    _tjj0011_vol         ;    // [long  ,   12] 국가외(순매수량)                StartPos 192, Length 12
-    char    tjj0018_vol         [  12];    char    _tjj0018_vol         ;    // [long  ,   12] 기관(순매수량)                  StartPos 205, Length 12
-    char    tjj0016_vol         [  12];    char    _tjj0016_vol         ;    // [long  ,   12] 외인계(순매수량)(등록+미등록)   StartPos 218, Length 12
-    char    tjj0017_vol         [  12];    char    _tjj0017_vol         ;    // [long  ,   12] 기타계(순매수량)(기타+국가)     StartPos 231, Length 12
-    char    tjj0000_dan         [  12];    char    _tjj0000_dan         ;    // [long  ,   12] 사모펀드(단가)                  StartPos 244, Length 12
-    char    tjj0001_dan         [  12];    char    _tjj0001_dan         ;    // [long  ,   12] 증권(단가)                      StartPos 257, Length 12
-    char    tjj0002_dan         [  12];    char    _tjj0002_dan         ;    // [long  ,   12] 보험(단가)                      StartPos 270, Length 12
-    char    tjj0003_dan         [  12];    char    _tjj0003_dan         ;    // [long  ,   12] 투신(단가)                      StartPos 283, Length 12
-    char    tjj0004_dan         [  12];    char    _tjj0004_dan         ;    // [long  ,   12] 은행(단가)                      StartPos 296, Length 12
-    char    tjj0005_dan         [  12];    char    _tjj0005_dan         ;    // [long  ,   12] 종금(단가)                      StartPos 309, Length 12
-    char    tjj0006_dan         [  12];    char    _tjj0006_dan         ;    // [long  ,   12] 기금(단가)                      StartPos 322, Length 12
-    char    tjj0007_dan         [  12];    char    _tjj0007_dan         ;    // [long  ,   12] 기타법인(단가)                  StartPos 335, Length 12
-    char    tjj0008_dan         [  12];    char    _tjj0008_dan         ;    // [long  ,   12] 개인(단가)                      StartPos 348, Length 12
-    char    tjj0009_dan         [  12];    char    _tjj0009_dan         ;    // [long  ,   12] 등록외국인(단가)                StartPos 361, Length 12
-    char    tjj0010_dan         [  12];    char    _tjj0010_dan         ;    // [long  ,   12] 미등록외국인(단가)              StartPos 374, Length 12
-    char    tjj0011_dan         [  12];    char    _tjj0011_dan         ;    // [long  ,   12] 국가외(단가)                    StartPos 387, Length 12
-    char    tjj0018_dan         [  12];    char    _tjj0018_dan         ;    // [long  ,   12] 기관(단가)                      StartPos 400, Length 12
-    char    tjj0016_dan         [  12];    char    _tjj0016_dan         ;    // [long  ,   12] 외인계(단가)(등록+미등록)       StartPos 413, Length 12
-    char    tjj0017_dan         [  12];    char    _tjj0017_dan         ;    // [long  ,   12] 기타계(단가)(기타+국가)         StartPos 426, Length 12
-} T1717OutBlock;
 
 //------------------------------------------------------------------------------
 // ETF 현재가(시세) 조회 (t1901)
@@ -2680,6 +2647,9 @@ typedef struct {
     char    open                [   8];    char    _open                ;    // [long  ,    8] 시가                            StartPos 1184, Length 8
     char    high                [   8];    char    _high                ;    // [long  ,    8] 고가                            StartPos 1193, Length 8
     char    low                 [   8];    char    _low                 ;    // [long  ,    8] 저가                            StartPos 1202, Length 8
+    char    midprice            [   8];    char    _midprice            ;    // [long  ,    8] 중간가격                        StartPos 1211, Length 8
+    char    offermidsumrem      [   9];    char    _offermidsumrem      ;    // [long  ,    9] 매도중간가잔량합계수량          StartPos 1220, Length 9
+    char    bidmidsumrem        [   9];    char    _bidmidsumrem        ;    // [long  ,    9] 매수중간가잔량합계수량          StartPos 1230, Length 9
 } T1906OutBlock;
 
 //------------------------------------------------------------------------------
@@ -3134,7 +3104,12 @@ typedef struct {
     char    shcode              [   6];    char    _shcode              ;    // [string,    6] 단축코드                        StartPos 389, Length 6
     char    alloc_gubun         [   1];    char    _alloc_gubun         ;    // [string,    1] 배분적용구분                    StartPos 396, Length 1
     char    volume              [  12];    char    _volume              ;    // [long  ,   12] 누적거래량                      StartPos 398, Length 12
-} H1_OutBlock;
+    char    midprice            [   8];    char    _midprice            ;    // [long  ,    8] 중간가격                        StartPos 411, Length 8
+    char    offermidsumrem      [   9];    char    _offermidsumrem      ;    // [long  ,    9] 매도중간가잔량합계수량          StartPos 420, Length 9
+    char    bidmidsumrem        [   9];    char    _bidmidsumrem        ;    // [long  ,    9] 매수중간가잔량합계수량          StartPos 430, Length 9
+    char    midsumrem           [   9];    char    _midsumrem           ;    // [long  ,    9] 중간가잔량합계수량              StartPos 440, Length 9
+    char    midsumremgubun      [   1];    char    _midsumremgubun      ;    // [string,    1] 중간가잔량구분(' '없음'1'매도'2 StartPos 450, Length 1
+} H1__OutBlock;
 
 //------------------------------------------------------------------------------
 // 코스피 시간외 호가 잔량 (H2_)
@@ -3199,7 +3174,12 @@ typedef struct {
     char    shcode              [   6];    char    _shcode              ;    // [string,    6] 단축코드                        StartPos 389, Length 6
     char    alloc_gubun         [   1];    char    _alloc_gubun         ;    // [string,    1] 배분적용구분                    StartPos 396, Length 1
     char    volume              [  12];    char    _volume              ;    // [long  ,   12] 누적거래량                      StartPos 398, Length 12
-} HA_OutBlock;
+    char    midprice            [   8];    char    _midprice            ;    // [long  ,    8] 중간가격                        StartPos 411, Length 8
+    char    offermidsumrem      [   9];    char    _offermidsumrem      ;    // [long  ,    9] 매도중간가잔량합계수량          StartPos 420, Length 9
+    char    bidmidsumrem        [   9];    char    _bidmidsumrem        ;    // [long  ,    9] 매수중간가잔량합계수량          StartPos 430, Length 9
+    char    midsumrem           [   9];    char    _midsumrem           ;    // [long  ,    9] 중간가잔량합계수량              StartPos 440, Length 9
+    char    midsumremgubun      [   1];    char    _midsumremgubun      ;    // [string,    1] 중간가잔량구분(' '없음'1'매도'2 StartPos 450, Length 1
+} HA__OutBlock;
 
 //------------------------------------------------------------------------------
 // 코스닥 시간외 호가 잔량 (HB_)
@@ -3237,13 +3217,14 @@ typedef struct {
     char    msvolume            [  12];    char    _msvolume            ;    // [long  ,   12] 매수누적체결량                  StartPos 141, Length 12
     char    mschecnt            [   8];    char    _mschecnt            ;    // [long  ,    8] 매수누적체결건수                StartPos 154, Length 8
     char    cpower              [   9];    char    _cpower              ;    // [float ,  9.2] 체결강도                        StartPos 163, Length 9
-    char    wAvrg              [   8];    char    _w_avrg              ;    // [long  ,    8] 가중평균가                      StartPos 173, Length 8
+    char    w_avrg              [   8];    char    _w_avrg              ;    // [long  ,    8] 가중평균가                      StartPos 173, Length 8
     char    offerho             [   8];    char    _offerho             ;    // [long  ,    8] 매도호가                        StartPos 182, Length 8
     char    bidho               [   8];    char    _bidho               ;    // [long  ,    8] 매수호가                        StartPos 191, Length 8
     char    status              [   2];    char    _status              ;    // [string,    2] 장정보                          StartPos 200, Length 2
     char    jnilvolume          [  12];    char    _jnilvolume          ;    // [long  ,   12] 전일동시간대거래량              StartPos 203, Length 12
     char    shcode              [   6];    char    _shcode              ;    // [string,    6] 단축코드                        StartPos 216, Length 6
-} S3_OutBlock;
+    char    exchname            [   3];    char    _exchname            ;    // [string,    3] 거래소명                        StartPos 223, Length 3
+} S3__OutBlock;
 
 //------------------------------------------------------------------------------
 // 코스피 예상 체결 (YS3)
@@ -3260,7 +3241,8 @@ typedef struct {
     char    yofferrem0          [  12];    char    _yofferrem0          ;    // [long  ,   12] 예상매도호가수량                StartPos 65, Length 12
     char    ybidrem0            [  12];    char    _ybidrem0            ;    // [long  ,   12] 예상매수호가수량                StartPos 78, Length 12
     char    shcode              [   6];    char    _shcode              ;    // [string,    6] 단축코드                        StartPos 91, Length 6
-} YS3OutBlock;
+    char    exchname            [   3];    char    _exchname            ;    // [string,    3] 거래소명                        StartPos 98, Length 3
+} YS3_OutBlock;
 
 //------------------------------------------------------------------------------
 // 코스닥 체결 (K3_)
@@ -3286,13 +3268,14 @@ typedef struct {
     char    msvolume            [  12];    char    _msvolume            ;    // [long  ,   12] 매수누적체결량                  StartPos 141, Length 12
     char    mschecnt            [   8];    char    _mschecnt            ;    // [long  ,    8] 매수누적체결건수                StartPos 154, Length 8
     char    cpower              [   9];    char    _cpower              ;    // [float ,  9.2] 체결강도                        StartPos 163, Length 9
-    char    wAvrg              [   8];    char    _w_avrg              ;    // [long  ,    8] 가중평균가                      StartPos 173, Length 8
+    char    w_avrg              [   8];    char    _w_avrg              ;    // [long  ,    8] 가중평균가                      StartPos 173, Length 8
     char    offerho             [   8];    char    _offerho             ;    // [long  ,    8] 매도호가                        StartPos 182, Length 8
     char    bidho               [   8];    char    _bidho               ;    // [long  ,    8] 매수호가                        StartPos 191, Length 8
     char    status              [   2];    char    _status              ;    // [string,    2] 장정보                          StartPos 200, Length 2
     char    jnilvolume          [  12];    char    _jnilvolume          ;    // [long  ,   12] 전일동시간대거래량              StartPos 203, Length 12
     char    shcode              [   6];    char    _shcode              ;    // [string,    6] 단축코드                        StartPos 216, Length 6
-} K3_OutBlock;
+    char    exchname            [   3];    char    _exchname            ;    // [string,    3] 거래소명                        StartPos 223, Length 3
+} K3__OutBlock;
 
 //------------------------------------------------------------------------------
 // 코스닥 예상 체결 (YK3)
@@ -3309,7 +3292,8 @@ typedef struct {
     char    yofferrem0          [  12];    char    _yofferrem0          ;    // [long  ,   12] 예상매도호가수량                StartPos 65, Length 12
     char    ybidrem0            [  12];    char    _ybidrem0            ;    // [long  ,   12] 예상매수호가수량                StartPos 78, Length 12
     char    shcode              [   6];    char    _shcode              ;    // [string,    6] 단축코드                        StartPos 91, Length 6
-} YK3OutBlock;
+    char    exchname            [   3];    char    _exchname            ;    // [string,    3] 거래소명                        StartPos 98, Length 3
+} YK3_OutBlock;
 
 //------------------------------------------------------------------------------
 // 코스피 ETF종목 실시간 NAV (I5_)
@@ -3340,9 +3324,10 @@ typedef struct {
     char    dvi_recprice        [   8];    char    _dvi_recprice        ;    // [long  ,    8] 동적VI발동기준가격              StartPos 11, Length 8
     char    vi_trgprice         [   8];    char    _vi_trgprice         ;    // [long  ,    8] VI발동가격                      StartPos 20, Length 8
     char    shcode              [   6];    char    _shcode              ;    // [string,    6] 단축코드(KEY)                   StartPos 29, Length 6
-    char    ref_shcode          [   6];    char    _ref_shcode          ;    // [string,    6] 참조코드                        StartPos 36, Length 6
+    char    ref_shcode          [   6];    char    _ref_shcode          ;    // [string,    6] 참조코드(미사용)                StartPos 36, Length 6
     char    time                [   6];    char    _time                ;    // [string,    6] 시간                            StartPos 43, Length 6
-} VI_OutBlock;
+    char    exchname            [   3];    char    _exchname            ;    // [string,    3] 거래소명                        StartPos 50, Length 3
+} VI__OutBlock;
 
 //------------------------------------------------------------------------------
 // 시간외 단일가 VI발동해제 (DVI)
@@ -3355,7 +3340,8 @@ typedef struct {
     char    shcode              [   6];    char    _shcode              ;    // [string,    6] 단축코드(KEY)                   StartPos 29, Length 6
     char    ref_shcode          [   6];    char    _ref_shcode          ;    // [string,    6] 참조코드(미사용)                StartPos 36, Length 6
     char    time                [   6];    char    _time                ;    // [string,    6] 시간                            StartPos 43, Length 6
-} DVIOutBlock;
+    char    exchname            [   3];    char    _exchname            ;    // [string,    3] 거래소명                        StartPos 50, Length 3
+} DVI_OutBlock;
 
 //------------------------------------------------------------------------------
 // 장 운영 정보 (JIF)

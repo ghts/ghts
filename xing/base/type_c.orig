@@ -174,10 +174,6 @@ type T1405InBlock C.T1405InBlock
 type T1405OutBlock C.T1405OutBlock
 type T1405OutBlock1 C.T1405OutBlock1
 
-// 종목별 매매주체 동향 (t1717)
-type T1717InBlock C.T1717InBlock
-type T1717OutBlock C.T1717OutBlock
-
 // ETF 현재가 조회 (t1901)
 type T1901InBlock C.T1901InBlock
 type T1901OutBlock C.T1901OutBlock
@@ -242,17 +238,17 @@ type T8436OutBlock C.T8436OutBlock
 // 실시간 정보 구조체
 //------------------------------------------------------------------------------
 
-type H1_OutBlock C.H1_OutBlock  // 코스피 호가 잔량
+type H1_OutBlock C.H1__OutBlock  // 코스피 호가 잔량
 type H2_OutBlock C.H2_OutBlock  // 코스피 시간외 호가 잔량
-type HA_OutBlock C.HA_OutBlock  // 코스닥 호가 잔량
+type HA_OutBlock C.HA__OutBlock  // 코스닥 호가 잔량
 type HB_OutBlock C.HB_OutBlock  // 코스닥 시간외 호가 잔량
-type S3_OutBlock C.S3_OutBlock  // 코스피 체결
-type YS3OutBlock C.YS3OutBlock  // 코스피 예상 체결
-type K3_OutBlock C.K3_OutBlock  // 코스닥 체결
-type YK3OutBlock C.YK3OutBlock  // 코스닥 예상 체결
+type S3_OutBlock C.S3__OutBlock  // 코스피 체결
+type YS3OutBlock C.YS3_OutBlock  // 코스피 예상 체결
+type K3_OutBlock C.K3__OutBlock  // 코스닥 체결
+type YK3OutBlock C.YK3_OutBlock  // 코스닥 예상 체결
 type I5_OutBlock C.I5_OutBlock  // 코스피 ETF NAV
-type VI_OutBlock C.VI_OutBlock  // 주식 VI발동해제
-type DVIOutBlock C.DVIOutBlock  // 시간외 단일가 VI발동해제
+type VI_OutBlock C.VI__OutBlock  // 주식 VI발동해제
+type DVIOutBlock C.DVI_OutBlock  // 시간외 단일가 VI발동해제
 
 // 장 운영 정보
 type JIFInBlock C.JIFInBlock

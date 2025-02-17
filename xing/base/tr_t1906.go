@@ -43,6 +43,9 @@ type T1906_ETF_LP_호가_조회_응답 struct {
 	M시간외매도잔량      int64
 	M시간외매수잔량      int64
 	M동시호가_구분      T동시호가_구분
+	M중간_가격        int64
+	M매도중간가잔량합계수량  int64
+	M매수중간가잔량합계수량  int64
 }
 
 func NewT1906InBlock(질의값 *lib.S질의값_단일_종목) (g *T1906InBlock) {
@@ -191,6 +194,10 @@ func NewT1906_ETF_LP_호가_조회_응답(b []byte) (s *T1906_ETF_LP_호가_조�
 	s.M시가 = lib.F확인2(lib.F2정수64(g.Open))
 	s.M고가 = lib.F확인2(lib.F2정수64(g.High))
 	s.M저가 = lib.F확인2(lib.F2정수64(g.Low))
+
+	s.M중간_가격 = lib.F확인2(lib.F2정수64(g.Midprice))
+	s.M매도중간가잔량합계수량 = lib.F확인2(lib.F2정수64(g.Offermidsumrem))
+	s.M매수중간가잔량합계수량 = lib.F확인2(lib.F2정수64(g.Bidmidsumrem))
 
 	f속성값_초기화(g)
 

@@ -7,7 +7,12 @@ import (
 	"time"
 )
 
-// t1102 현물 시세(현재가) 조회 응답
+type T1102_현물_시세_조회_질의값 struct {
+	*lib.S질의값_단일_종목
+	M거래소_구분 T거래소_구분
+}
+
+// T1102_현물_시세_조회_응답 : 현물 시세(현재가) 조회 응답
 type T1102_현물_시세_조회_응답 struct {
 	M종목코드          string
 	M일자            time.Time
@@ -89,11 +94,16 @@ type T1102_현물_시세_조회_응답 struct {
 	M저유동성종목여부      bool
 	M이상급등종목여부      bool
 	M대차불가여부        bool
-	M투자유의          bool
+	ETF_ETN_투자유의   bool
 	M매도_거래원_정보_모음  []*T1102_거래원_정보
 	M매수_거래원_정보_모음  []*T1102_거래원_정보
 	M외국계_매도_거래원_정보 *T1102_거래원_정보
 	M외국계_매수_거래원_정보 *T1102_거래원_정보
+	NXT장구분         string
+	NXT단기과열_VI발동   string
+	NXT정적VI상한가     int64
+	NXT정적VI하한가     int64
+	M거래소별단축코드      string
 }
 
 type T1102_거래원_정보 struct {
@@ -106,9 +116,19 @@ type T1102_거래원_정보 struct {
 	M비율      float64
 }
 
-func NewT1102InBlock(질의값 *lib.S질의값_단일_종목) (g *T1102InBlock) {
+func NewT1102_현물_시세_조회_질의값() *T1102_현물_시세_조회_질의값 {
+	s := new(T1102_현물_시세_조회_질의값)
+	s.S질의값_단일_종목 = lib.New질의값_단일_종목_단순형()
+	s.S질의값_단일_종목.S질의값_기본형 = lib.New질의값_기본형(TR조회, TR현물_시세_조회_t1102)
+	s.M거래소_구분 = P거래소_KRX
+
+	return s
+}
+
+func NewT1102InBlock(질의값 *T1102_현물_시세_조회_질의값) (g *T1102InBlock) {
 	g = new(T1102InBlock)
 	lib.F바이트_복사_문자열(g.Shcode[:], 질의값.M종목코드)
+	lib.F바이트_복사_문자열(g.Exchgubun[:], string(질의값.M거래소_구분))
 
 	f속성값_초기화(g)
 
@@ -226,9 +246,9 @@ func NewT1102_현물_시세_조회_응답(b []byte) (s *T1102_현물_시세_조�
 
 	switch 투자유의_문자열 := lib.F2문자열_EUC_KR_공백제거(g.Ty_text); 투자유의_문자열 {
 	case "":
-		s.M투자유의 = false
+		s.ETF_ETN_투자유의 = false
 	case "투자유의":
-		s.M투자유의 = true
+		s.ETF_ETN_투자유의 = true
 	default:
 		panic(lib.New에러("%v '투자유의_문자열' 예상하지 못한 값 : '%v'", s.M종목코드, 투자유의_문자열))
 	}
@@ -330,6 +350,12 @@ func NewT1102_현물_시세_조회_응답(b []byte) (s *T1102_현물_시세_조�
 	s.M외국계_매수_거래원_정보.M거래_대금 = lib.F확인2(lib.F2정수64_공백은_0(g.Ftradmsval))
 	s.M외국계_매수_거래원_정보.M전일대비_증감 = lib.F확인2(lib.F2정수64(g.Ftradmscha))
 	s.M외국계_매수_거래원_정보.M비율 = lib.F확인2(lib.F2실수_소숫점_추가(g.Ftradmsdiff, 2))
+
+	s.NXT장구분 = lib.F2문자열_EUC_KR_공백제거(g.Nxt_janginfo)
+	s.NXT단기과열_VI발동 = lib.F2문자열_EUC_KR_공백제거(g.Nxt_shterm_text)
+	s.NXT정적VI상한가 = lib.F확인2(lib.F2정수64_공백은_0(g.Nxt_svi_uplmtprice))
+	s.NXT정적VI하한가 = lib.F확인2(lib.F2정수64_공백은_0(g.Nxt_svi_dnlmtprice))
+	s.M거래소별단축코드 = lib.F2문자열_공백_제거(g.Ex_shcode)
 
 	return s, nil
 }

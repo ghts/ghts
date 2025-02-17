@@ -6,7 +6,7 @@ import (
 	"github.com/ghts/ghts/lib"
 )
 
-// SC0
+// New현물_주문_접수 : SC0
 func New현물_주문_접수(b []byte) (값 *S현물_주문_응답_실시간_정보, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
 
@@ -35,7 +35,7 @@ func New현물_주문_접수(b []byte) (값 *S현물_주문_응답_실시간_정
 	return 값, nil
 }
 
-// SC1
+// New현물_주문_체결 : SC1
 func New현물_주문_체결(b []byte) (값 *S현물_주문_응답_실시간_정보, 에러 error) {
 	defer lib.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
 
@@ -249,6 +249,12 @@ func New코스피_호가_잔량(b []byte) (값 *S호가_잔량_실시간_정보,
 	값.M매도_총잔량 = lib.F확인2(lib.F2정수64(g.Totofferrem))
 	값.M매수_총잔량 = lib.F확인2(lib.F2정수64(g.Totbidrem))
 
+	값.M중간가격 = lib.F확인2(lib.F2정수64(g.Midprice))
+	값.M매도중간가잔량합계수량 = lib.F확인2(lib.F2정수64(g.Offermidsumrem))
+	값.M매수중간가잔량합계수량 = lib.F확인2(lib.F2정수64(g.Bidmidsumrem))
+	값.M중간가잔량합계수량 = lib.F확인2(lib.F2정수64(g.Midsumrem))
+	값.M중간가잔량구분 = F2중간가_잔량_구분(g.Midsumremgubun)
+
 	return 값, nil
 }
 
@@ -369,6 +375,12 @@ func New코스닥_호가_잔량(b []byte) (값 *S호가_잔량_실시간_정보,
 	값.M매도_총잔량 = lib.F확인2(lib.F2정수64(g.Totofferrem))
 	값.M매수_총잔량 = lib.F확인2(lib.F2정수64(g.Totbidrem))
 
+	값.M중간가격 = lib.F확인2(lib.F2정수64(g.Midprice))
+	값.M매도중간가잔량합계수량 = lib.F확인2(lib.F2정수64(g.Offermidsumrem))
+	값.M매수중간가잔량합계수량 = lib.F확인2(lib.F2정수64(g.Bidmidsumrem))
+	값.M중간가잔량합계수량 = lib.F확인2(lib.F2정수64(g.Midsumrem))
+	값.M중간가잔량구분 = F2중간가_잔량_구분(g.Midsumremgubun)
+
 	return 값, nil
 }
 
@@ -430,7 +442,7 @@ func New코스피_체결(b []byte) (값 *S코스피_체결, 에러 error) {
 	값.M매수누적체결량 = lib.F확인2(lib.F2정수64(g.Msvolume))
 	값.M매수누적체결건수 = lib.F확인2(lib.F2정수64(g.Mschecnt))
 	값.M체결강도 = lib.F확인2(lib.F2실수(g.Cpower))
-	값.M가중평균가 = lib.F확인2(lib.F2정수64(g.WAvrg))
+	값.M가중평균가 = lib.F확인2(lib.F2정수64(g.Avrg))
 	값.M매도호가 = lib.F확인2(lib.F2정수64(g.Offerho))
 	값.M매수호가 = lib.F확인2(lib.F2정수64(g.Bidho))
 
@@ -446,6 +458,7 @@ func New코스피_체결(b []byte) (값 *S코스피_체결, 에러 error) {
 	}
 
 	값.M전일동시간대거래량 = lib.F확인2(lib.F2정수64(g.Jnilvolume))
+	값.M거래소_구분 = F2거래소_구분(g.Exchname)
 
 	return 값, nil
 }
@@ -470,6 +483,7 @@ func New코스피_예상_체결(b []byte) (값 *S코스피_예상_체결, 에러
 	값.M예상매수호가 = lib.F확인2(lib.F2정수64(g.Ybidho0))
 	값.M예상매도호가수량 = lib.F확인2(lib.F2정수64(g.Yofferrem0))
 	값.M예상매수호가수량 = lib.F확인2(lib.F2정수64(g.Ybidrem0))
+	값.M거래소_구분 = F2거래소_구분(g.Exchname)
 
 	return 값, nil
 }
@@ -513,7 +527,7 @@ func New코스닥_체결(b []byte) (값 *S코스닥_체결, 에러 error) {
 	값.M매수누적체결량 = lib.F확인2(lib.F2정수64(g.Msvolume))
 	값.M매수누적체결건수 = lib.F확인2(lib.F2정수64(g.Mschecnt))
 	값.M체결강도 = lib.F확인2(lib.F2실수(g.Cpower))
-	값.M가중평균가 = lib.F확인2(lib.F2정수64(g.WAvrg))
+	값.M가중평균가 = lib.F확인2(lib.F2정수64(g.Avrg))
 	값.M매도호가 = lib.F확인2(lib.F2정수64(g.Offerho))
 	값.M매수호가 = lib.F확인2(lib.F2정수64(g.Bidho))
 
@@ -529,6 +543,7 @@ func New코스닥_체결(b []byte) (값 *S코스닥_체결, 에러 error) {
 	}
 
 	값.M전일동시간대거래량 = lib.F확인2(lib.F2정수64(g.Jnilvolume))
+	값.M거래소_구분 = F2거래소_구분(g.Exchname)
 
 	return 값, nil
 }
@@ -553,6 +568,7 @@ func New코스닥_예상_체결(b []byte) (값 *S코스닥_예상_체결, 에러
 	값.M예상매수호가 = lib.F확인2(lib.F2정수64(g.Ybidho0))
 	값.M예상매도호가수량 = lib.F확인2(lib.F2정수64(g.Yofferrem0))
 	값.M예상매수호가수량 = lib.F확인2(lib.F2정수64(g.Ybidrem0))
+	값.M거래소_구분 = F2거래소_구분(g.Exchname)
 
 	return 값, nil
 }
@@ -600,6 +616,7 @@ func New주식_VI발동해제(b []byte) (값 *S주식_VI발동해제, 에러 err
 	값.M정적VI발동_기준가격 = lib.F확인2(lib.F2정수64(g.Svi_recprice))
 	값.M동적VI발동_기준가격 = lib.F확인2(lib.F2정수64(g.Dvi_recprice))
 	값.VI발동가격 = lib.F확인2(lib.F2정수64(g.Vi_trgprice))
+	값.M거래소_구분 = F2거래소_구분(g.Exchname)
 
 	return 값, nil
 }
@@ -620,6 +637,7 @@ func New시간외_단일가VI발동해제(b []byte) (값 *S시간외_단일가VI
 	값.M정적VI발동_기준가격 = lib.F확인2(lib.F2정수64(g.Svi_recprice))
 	값.M동적VI발동_기준가격 = lib.F확인2(lib.F2정수64(g.Dvi_recprice))
 	값.VI발동가격 = lib.F확인2(lib.F2정수64(g.Vi_trgprice))
+	값.M거래소_구분 = F2거래소_구분(g.Exchname)
 
 	return 값, nil
 }

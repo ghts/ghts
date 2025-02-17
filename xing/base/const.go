@@ -123,8 +123,6 @@ const (
 	SizeT1405InBlock        = int(unsafe.Sizeof(T1405InBlock{}))
 	SizeT1405OutBlock       = int(unsafe.Sizeof(T1405OutBlock{}))
 	SizeT1405OutBlock1      = int(unsafe.Sizeof(T1405OutBlock1{}))
-	SizeT1717InBlock        = int(unsafe.Sizeof(T1717InBlock{}))
-	SizeT1717OutBlock       = int(unsafe.Sizeof(T1717OutBlock{}))
 	SizeT1901InBlock        = int(unsafe.Sizeof(T1901InBlock{}))
 	SizeT1901OutBlock       = int(unsafe.Sizeof(T1901OutBlock{}))
 	SizeT1902InBlock        = int(unsafe.Sizeof(T1902InBlock{}))
@@ -234,9 +232,6 @@ const (
 	P자료형_T1405_투자경고_조회_질의값           = "T1405_투자경고_조회_질의값"
 	P자료형_T1405OutBlock               = "T1405OutBlock"
 	P자료형_T1405OutBlock1              = "T1405OutBlock1"
-	P자료형_T1717_종목별_매매주체_동향_질의값       = "T1717_종목별_매매주체_동향_질의값"
-	P자료형_T1717_종목별_매매주체_동향_응답        = "T1717_종목별_매매주체_동향_응답"
-	P자료형_T1717OutBlock               = "T1717OutBlock"
 	P자료형_T1901_ETF_시세_조회_응답          = "T1901_ETF_시세_조회_응답"
 	P자료형_T1902_ETF시간별_추이_응답          = "T1902_ETF시간별_추이_응답"
 	P자료형_T1902_ETF시간별_추이_응답_헤더       = "T1902_ETF시간별_추이_응답_헤더"
@@ -325,7 +320,6 @@ const (
 	TR현물_당일_전일_분틱_조회_t1310    = "t1310"
 	TR관리_불성실_투자유의_조회_t1404    = "t1404"
 	TR투자경고_매매정지_정리매매_조회_t1405 = "t1405"
-	TR종목별_매매주체_동향_t1717       = "t1717"
 	TR_ETF_시세_조회_t1901        = "t1901"
 	TR_ETF_시간별_추이_t1902       = "t1902"
 	TR_ETF_LP호가_조회_t1906      = "t1906"
@@ -712,13 +706,13 @@ func (p T전일대비_구분) String() string {
 }
 
 const (
-	P당일전일구분_당일 = T당일전일_구분(0)
-	P당일전일구분_전일 = T당일전일_구분(1)
+	P당일전일구분_당일 = T당일_전일_구분(0)
+	P당일전일구분_전일 = T당일_전일_구분(1)
 )
 
-type T당일전일_구분 uint8
+type T당일_전일_구분 uint8
 
-func (s T당일전일_구분) String() string {
+func (s T당일_전일_구분) String() string {
 	switch s {
 	case P당일전일구분_당일:
 		return "당일"
@@ -1945,3 +1939,25 @@ const (
 	P상태_취소확인
 	P상태_거부
 )
+
+// K : KRX, N : NXT, U : 통합, 그 외 입력값은 모두 KRX로 처리되어 기본값은 K
+type T거래소_구분 string
+
+const (
+	P거래소_KRX = T거래소_구분("K")
+	P거래소_NXT = T거래소_구분("N")
+	P거래소_통합  = T거래소_구분("U")
+)
+
+func (p T거래소_구분) String() string {
+	switch p {
+	case P거래소_KRX:
+		return "KRX"
+	case P거래소_NXT:
+		return "NXT"
+	case P거래소_통합:
+		return "통합"
+	default:
+		panic(lib.New에러("예상하지 못한 값 : '%s'", string(p)))
+	}
+}

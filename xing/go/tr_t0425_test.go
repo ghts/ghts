@@ -76,5 +76,6 @@ func TestT0425_현물_체결_미체결_확인(t *testing.T) {
 
 		lib.F테스트_같음(t, 값.M신용_구분, xt.P현금, xt.P자기_융자, xt.P자기_융자_상환, xt.P유통_대주, xt.P유통_대주_상환, xt.P담보_대출)
 		lib.F테스트_참임(t, 값.M대출_일자.Equal(time.Time{}) || 값.M대출_일자.After(lib.F금일().AddDate(-10, 0, 0)))
+		lib.F테스트_같음(t, 값.M거래소_구분, xt.P거래소_KRX, xt.P거래소_NXT, xt.P거래소_통합)
 	}
 }
