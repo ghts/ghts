@@ -2176,8 +2176,8 @@ typedef struct {
     char    ty_text             [   8];    char    _ty_text             ;    // [string,    8] ETF/ETN투자유의                 StartPos 1507, Length 8
     char    nxt_janginfo        [  10];    char    _nxt_janginfo        ;    // [string,   10] NXT장구분                       StartPos 1516, Length 10
     char    nxt_shterm_text     [  10];    char    _nxt_shterm_text     ;    // [string,   10] NXT단기과열/VI발동              StartPos 1527, Length 10
-    char    nxt_svi_uplmtprice  [   8];    char    _nxt_svi_uplmtprice  ;    // [string,    8] NXT정적VI상한가                 StartPos 1538, Length 8
-    char    nxt_svi_dnlmtprice  [   8];    char    _nxt_svi_dnlmtprice  ;    // [string,    8] NXT정적VI하한가                 StartPos 1547, Length 8
+    char    nxt_svi_uplmtprice  [   8];    char    _nxt_svi_uplmtprice  ;    // [long  ,    8] NXT정적VI상한가                 StartPos 1538, Length 8
+    char    nxt_svi_dnlmtprice  [   8];    char    _nxt_svi_dnlmtprice  ;    // [long  ,    8] NXT정적VI하한가                 StartPos 1547, Length 8
     char    ex_shcode           [  10];    char    _ex_shcode           ;    // [string,   10] 거래소별단축코드                StartPos 1556, Length 10
 } T1102OutBlock;
 
