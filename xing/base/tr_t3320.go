@@ -133,11 +133,11 @@ func NewT3320_기업정보_요약_응답2(b []byte) (값 *T3320_기업정보_요
 	값.SPS = lib.F2실수_소숫점_추가_단순형_공백은_0(g.Sps, 2)
 	값.CPS = lib.F2실수_소숫점_추가_단순형_공백은_0(g.Cps, 2)
 	값.BPS = lib.F2실수_단순형_공백은_0(g.Bps)
-	값.T_PER = lib.F2실수_소숫점_추가_단순형_공백은_0(g.Tper, 2)
-	값.T_EPS = lib.F2실수_단순형_공백은_0(g.Teps)
+	값.T_PER = lib.F2실수_소숫점_추가_단순형_공백은_0(g.T_per, 2)
+	값.T_EPS = lib.F2실수_단순형_공백은_0(g.T_eps)
 	값.PEG = lib.F2실수_소숫점_추가_단순형_공백은_0(g.Peg, 2)
-	값.T_PEG = lib.F2실수_소숫점_추가_단순형_공백은_0(g.Tpeg, 2)
-	값.M최근분기년도 = lib.F2문자열(g.Tgsym)
+	값.T_PEG = lib.F2실수_소숫점_추가_단순형_공백은_0(g.T_peg, 2)
+	값.M최근분기년도 = lib.F2문자열(g.T_gsym)
 
 	return 값, nil
 }

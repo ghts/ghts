@@ -3074,7 +3074,7 @@ type T3320InBlock struct {
 	X_gicode byte
 }
 type T3320OutBlock struct {
-	Upgubunnm      [20]byte
+	Upgubunnm      [40]byte
 	X_upgubunnm    byte
 	Sijangcd       [1]byte
 	X_sijangcd     byte
@@ -3116,7 +3116,12 @@ type T3320OutBlock struct {
 	X_price        byte
 	Jnilclose      [8]byte
 	X_jnilclose    byte
-	Added          [6]byte
+	Notice1        [1]byte
+	X_notice1      byte
+	Notice2        [1]byte
+	X_notice2      byte
+	Notice3        [1]byte
+	X_notice3      byte
 }
 type T3320OutBlock1 struct {
 	Gicode     [7]byte
@@ -3147,15 +3152,15 @@ type T3320OutBlock1 struct {
 	X_cps      byte
 	Bps        [13]byte
 	X_bps      byte
-	Tper       [13]byte
+	T_per      [13]byte
 	X_t_per    byte
-	Teps       [13]byte
+	T_eps      [13]byte
 	X_t_eps    byte
 	Peg        [13]byte
 	X_peg      byte
-	Tpeg       [13]byte
+	T_peg      [13]byte
 	X_t_peg    byte
-	Tgsym      [6]byte
+	T_gsym     [6]byte
 	X_t_gsym   byte
 }
 

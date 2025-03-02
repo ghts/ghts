@@ -33,7 +33,7 @@ import (
 
 func F2거래소_구분(거래소_이름 interface{}) T거래소_구분 {
 	switch lib.F2문자열_공백_제거(거래소_이름) {
-	case "K", "KRX":
+	case "K", "KRX", "":
 		return P거래소_KRX
 	case "N", "NXT":
 		return P거래소_NXT
@@ -289,6 +289,10 @@ func F바이트_변환값_해석(바이트_변환값 *lib.S바이트_변환) (�
 	//	return s, nil
 	case P자료형_T1101_현물_호가_조회_응답:
 		s := new(T1101_현물_호가_조회_응답)
+		lib.F확인1(바이트_변환값.G값(s))
+		return s, nil
+	case P자료형_T1102_현물_시세_조회_질의값:
+		s := new(T1102_현물_시세_조회_질의값)
 		lib.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T1102_현물_시세_조회_응답:

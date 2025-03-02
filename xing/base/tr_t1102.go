@@ -229,7 +229,7 @@ func NewT1102_현물_시세_조회_응답(b []byte) (s *T1102_현물_시세_조�
 	s.M발행가격 = lib.F확인2(lib.F2정수64(g.Issueprice))
 	s.M배분적용구분코드 = lib.F2문자열_EUC_KR(g.Alloc_gubun)
 	s.M배분적용구분 = lib.F2문자열_EUC_KR(g.Alloc_text)
-	s.M단기과열_VI발동 = lib.F2문자열_EUC_KR(g.Shterm_text)
+	s.M단기과열_VI발동 = lib.F2문자열_EUC_KR_공백제거(g.Shterm_text)
 	s.M정적VI상한가 = lib.F확인2(lib.F2정수64(g.Svi_uplmtprice))
 	s.M정적VI하한가 = lib.F확인2(lib.F2정수64(g.Svi_dnlmtprice))
 	s.M저유동성종목여부 = lib.F2참거짓(g.Low_lqdt_gu, 1, true)
