@@ -14,6 +14,7 @@ type CSPAT00600InBlock1 struct {
 	MgntrnCode    [3]byte
 	LoanDt        [8]byte
 	OrdCndiTpCode [1]byte
+	MbrNo         [3]byte
 }
 type CSPAT00600OutBlock1 struct {
 	RecCnt            [5]byte

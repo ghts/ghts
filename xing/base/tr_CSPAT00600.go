@@ -13,6 +13,7 @@ type CSPAT00600_현물_정상_주문_질의값 struct {
 	//M계좌_비밀번호 string
 	M신용거래_구분 T신용거래_구분
 	M대출일     string
+	M거래소_구분  T거래소_구분
 }
 
 func (s *CSPAT00600_현물_정상_주문_질의값) S대출일(값 time.Time) {
@@ -92,6 +93,7 @@ func NewCSPAT00600_현물_정상_주문_질의값() *CSPAT00600_현물_정상_�
 	s.S질의값_정상_주문 = lib.New질의값_정상_주문()
 	s.S질의값_정상_주문.M구분 = TR주문
 	s.S질의값_정상_주문.M코드 = TR현물_정상_주문_CSPAT00600
+	s.M거래소_구분 = P거래소_KRX
 
 	return s
 }
@@ -106,6 +108,7 @@ func NewCSPAT00600InBlock(질의값 *CSPAT00600_현물_정상_주문_질의값, 
 	lib.F바이트_복사_문자열(g.BnsTpCode[:], lib.F2문자열(int(질의값.M매도_매수_구분)))
 	lib.F바이트_복사_정수(g.OrdprcPtnCode[:], int(F2Xing호가유형(질의값.M호가유형, 질의값.M주문조건)))
 	lib.F바이트_복사_정수(g.MgntrnCode[:], int(질의값.M신용거래_구분))
+	lib.F바이트_복사_문자열(g.MbrNo[:], 질의값.M거래소_구분.String())
 
 	// 대출일 : YYYYMMDD, 신용주문이 아닐 경우는 SPACE
 	switch 질의값.M신용거래_구분 {
