@@ -42,25 +42,25 @@ type T3320_기업정보_요약_응답1 struct {
 func (s *T3320_기업정보_요약_응답1) G응답1() I이중_응답1 { return s }
 
 type T3320_기업정보_요약_응답2 struct {
-	M종목코드    string
-	M결산년월    string
-	M결산구분    string
-	PER      float64
-	EPS      float64
-	PBR      float64
-	ROA      float64
-	ROE      float64
-	EBITDA   float64
-	EVEBITDA float64
-	M액면가     float64
-	SPS      float64
-	CPS      float64
-	BPS      float64
-	T_PER    float64
-	T_EPS    float64
-	PEG      float64
-	T_PEG    float64
-	M최근분기년도  string
+	M종목코드  string
+	M결산년월  string
+	M결산구분  string
+	PER    float64
+	EPS    float64
+	PBR    float64
+	ROA    float64
+	ROE    float64
+	EBITDA float64
+	//EVEBITDA float64
+	M액면가    float64
+	SPS     float64
+	CPS     float64
+	BPS     float64
+	T_PER   float64
+	T_EPS   float64
+	PEG     float64
+	T_PEG   float64
+	M최근분기년도 string
 }
 
 func (s *T3320_기업정보_요약_응답2) G응답2() I이중_응답2 { return s }
@@ -128,7 +128,7 @@ func NewT3320_기업정보_요약_응답2(b []byte) (값 *T3320_기업정보_요
 	값.ROA = lib.F2실수_소숫점_추가_단순형_공백은_0(g.Roa, 2)
 	값.ROE = lib.F2실수_소숫점_추가_단순형_공백은_0(g.Roe, 2)
 	값.EBITDA = lib.F2실수_소숫점_추가_단순형_공백은_0(g.Ebitda, 2)
-	값.EVEBITDA = lib.F2실수_소숫점_추가_단순형_공백은_0(g.Evebitda, 2)
+	//값.EVEBITDA = lib.F2실수_소숫점_추가_단순형_공백은_0(g.Evebitda, 2)
 	값.M액면가 = lib.F2실수_소숫점_추가_단순형_공백은_0(g.Par, 2)
 	값.SPS = lib.F2실수_소숫점_추가_단순형_공백은_0(g.Sps, 2)
 	값.CPS = lib.F2실수_소숫점_추가_단순형_공백은_0(g.Cps, 2)

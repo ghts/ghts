@@ -50,7 +50,7 @@ func TestT3320_F기업정보_요약(t *testing.T) {
 	lib.F테스트_참임(t, math.Abs(값2.ROA) < 100, 값2.ROA)
 	lib.F테스트_참임(t, math.Abs(값2.ROE) < 100, 값2.ROE)
 	//값2.EBITDA   = lib.F확인2(lib.F2실수(g.Ebitda)
-	lib.F테스트_참임(t, math.Abs(값2.EVEBITDA) < 100, 값2.EVEBITDA)
+	//lib.F테스트_참임(t, math.Abs(값2.EVEBITDA) < 100, 값2.EVEBITDA)
 	lib.F테스트_참임(t, 값2.M액면가 > 0)
 	//값2.SPS      = lib.F확인2(lib.F2실수(g.Sps)
 	//값2.CPS      = lib.F확인2(lib.F2실수(g.Cps)
