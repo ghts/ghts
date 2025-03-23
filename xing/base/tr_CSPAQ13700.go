@@ -74,7 +74,7 @@ type CSPAQ13700_현물계좌_주문체결내역_반복값 struct {
 	M체결가      float64
 	M체결처리시각   time.Time
 	M최종체결시각   time.Time
-	M호가유형     T호가유형
+	M호가유형     lib.T호가유형
 	M주문조건     lib.T주문조건
 	M전체체결수량   int64
 	M통신매체     T통신매체구분
@@ -236,7 +236,7 @@ func NewCSPAQ13700_현물계좌_주문체결내역_반복값_모음(b []byte) (�
 			값.M최종체결시각 = lib.F확인2(lib.F2일자별_시각(값.M주문일, "150405.999", 최종체결시각_문자열))
 		}
 
-		값.M호가유형 = T호가유형(lib.F확인2(lib.F2정수64_공백은_0(g.OrdprcPtnCode)))
+		값.M호가유형 = F2호가유형(lib.F확인2(lib.F2정수_공백은_0(g.OrdprcPtnCode)))
 		값.M주문조건 = lib.T주문조건(lib.F확인2(lib.F2정수64_공백은_0(g.OrdCndiTpCode)))
 		값.M전체체결수량 = lib.F확인2(lib.F2정수64_공백은_0(g.AllExecQty))
 		값.M통신매체 = T통신매체구분(lib.F확인2(lib.F2정수64_공백은_0(g.RegCommdaCode)))

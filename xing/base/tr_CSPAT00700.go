@@ -11,8 +11,8 @@ import (
 type CSPAT00700_현물_정정_주문_질의값 struct {
 	*lib.S질의값_정정_주문
 	//M계좌_비밀번호 string
-	M주문조건 lib.T주문조건
 	M호가유형 lib.T호가유형
+	M주문조건 lib.T주문조건
 }
 
 type CSPAT00700_현물_정정_주문_응답 struct {
@@ -81,7 +81,7 @@ func NewCSPAT00700InBlock(질의값 *CSPAT00700_현물_정정_주문_질의값, 
 	lib.F바이트_복사_문자열(g.InptPwd[:], 비밀번호)
 	lib.F바이트_복사_문자열(g.IsuNo[:], 질의값.M종목코드)
 	lib.F바이트_복사_정수(g.OrdQty[:], 질의값.M주문수량)
-	lib.F바이트_복사_정수(g.OrdprcPtnCode[:], int(F2Xing호가유형(질의값.M호가유형, 질의값.M주문조건)))
+	lib.F바이트_복사_정수(g.OrdprcPtnCode[:], int(질의값.M호가유형.Xing코드()))
 	lib.F바이트_복사_정수(g.OrdCndiTpCode[:], int(질의값.M주문조건))
 	lib.F바이트_복사_실수(g.OrdPrc[:], 질의값.M주문단가, 2)
 
@@ -125,7 +125,7 @@ func NewCSPAT00700_현물_정정_주문_응답1(b []byte) (s *CSPAT00700_현물_
 	//s.M계좌_비밀번호 = lib.F2문자열_공백_제거(g.InptPwd)
 	s.M종목코드 = lib.F2문자열_공백_제거(g.IsuNo)
 	s.M주문수량 = lib.F확인2(lib.F2정수64(g.OrdQty))
-	s.M호가유형 = F2호가유형(T호가유형(lib.F확인2(lib.F2정수(g.OrdprcPtnCode))))
+	s.M호가유형 = F2호가유형(lib.F확인2(lib.F2정수(g.OrdprcPtnCode)))
 	s.M주문조건 = lib.T주문조건(lib.F확인2(lib.F2정수(g.OrdCndiTpCode)))
 	s.M주문가격 = lib.F확인2(lib.F2정수64(g.OrdPrc))
 	s.M통신매체_코드 = lib.F2문자열_공백_제거(g.CommdaCode)

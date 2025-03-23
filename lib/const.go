@@ -583,7 +583,7 @@ const (
 	P주문응답_FOK취소
 )
 
-type T주문응답_구분 int8
+type T주문응답_구분 uint8
 
 func (v T주문응답_구분) G검사() error {
 	switch v {
@@ -592,7 +592,7 @@ func (v T주문응답_구분) G검사() error {
 		P주문응답_IOC취소, P주문응답_FOK취소:
 		return nil
 	default:
-		return New에러("잘못된 주문응답 구분값. %v", v)
+		return New에러("잘못된 주문응답 구분값. %v", uint8(v))
 	}
 }
 
@@ -623,13 +623,39 @@ const (
 	P호가_조건부_지정가
 	P호가_최유리_지정가
 	P호가_최우선_지정가
+	P호가_중간가
 	P호가_장전_시간외
 	P호가_장후_시간외
 	P호가_시간외_단일가
 	P호가_해당없음
 )
 
-type T호가유형 int8
+type T호가유형 uint8
+
+func (v T호가유형) Xing코드() uint8 {
+	switch v {
+	case P호가_지정가:
+		return 0
+	case P호가_시장가:
+		return 3
+	case P호가_조건부_지정가:
+		return 5
+	case P호가_최유리_지정가:
+		return 6
+	case P호가_최우선_지정가:
+		return 7
+	case P호가_중간가:
+		return 12
+	case P호가_장전_시간외:
+		return 61
+	case P호가_장후_시간외:
+		return 81
+	case P호가_시간외_단일가:
+		return 82
+	default:
+		return 0 // 예상하지 못한 입력값은 지정가로 대체.
+	}
+}
 
 func (v T호가유형) String() string {
 	switch v {
@@ -652,7 +678,7 @@ func (v T호가유형) String() string {
 	case P호가_해당없음:
 		return "해당없음"
 	default:
-		return F2문자열("예상하지 못한 M값. %v", v)
+		return F2문자열("예상하지 못한 M값. %v", uint8(v))
 	}
 }
 
@@ -664,7 +690,7 @@ func (v T호가유형) G검사() {
 		P호가_시간외_단일가, P호가_해당없음:
 		return
 	default:
-		panic(New에러("잘못된 지정가 시장가 구분값. %v", v))
+		panic(New에러("잘못된 지정가 시장가 구분값. %v", uint8(v)))
 	}
 }
 
@@ -674,7 +700,7 @@ const (
 	P주문조건_FOK
 )
 
-type T주문조건 int8
+type T주문조건 uint8
 
 func (v T주문조건) String() string {
 	switch v {
@@ -685,7 +711,7 @@ func (v T주문조건) String() string {
 	case P주문조건_FOK:
 		return "FOK"
 	default:
-		return F2문자열("잘못된 주문조건 구분값. %v", v)
+		return F2문자열("잘못된 주문조건 구분값. %v", uint8(v))
 	}
 }
 
@@ -694,7 +720,7 @@ func (v T주문조건) G검사() {
 	case P주문조건_없음, P주문조건_IOC, P주문조건_FOK:
 		return
 	default:
-		panic(New에러("잘못된 주문 조건 구분값. %v", v))
+		panic(New에러("잘못된 주문 조건 구분값. %v", uint8(v)))
 	}
 }
 
