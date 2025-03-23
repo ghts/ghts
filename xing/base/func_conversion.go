@@ -5,32 +5,6 @@ import (
 	"strings"
 )
 
-//func F2Xing주문조건(주문_조건 lib.T주문조건) T주문조건 {
-//	switch 주문_조건 {
-//	case lib.P주문조건_없음:
-//		return P주문조건_없음
-//	case lib.P주문조건_IOC:
-//		return P주문조건_IOC
-//	case lib.P주문조건_FOK:
-//		return P주문조건_FOK
-//	default:
-//		panic(lib.New에러("예상하지 못한 신용거래_구분 값. %v", 주문_조건))
-//	}
-//}
-//
-//func F2주문조건(주문_조건 T주문조건) lib.T주문조건 {
-//	switch 주문_조건 {
-//	case P주문조건_없음:
-//		return lib.P주문조건_없음
-//	case P주문조건_IOC:
-//		return lib.P주문조건_IOC
-//	case P주문조건_FOK:
-//		return lib.P주문조건_FOK
-//	default:
-//		panic(lib.New에러("예상하지 못한 주문_조건 값. %v", 주문_조건))
-//	}
-//}
-
 func F2거래소_구분(거래소_이름 interface{}) T거래소_구분 {
 	switch lib.F2문자열_공백_제거(거래소_이름) {
 	case "K", "KRX", "":
@@ -44,83 +18,28 @@ func F2거래소_구분(거래소_이름 interface{}) T거래소_구분 {
 	}
 }
 
-func F2Xing호가유형(호가_유형 lib.T호가유형, 주문_조건 lib.T주문조건) T호가유형 {
-	switch 주문_조건 {
-	case lib.P주문조건_없음:
-		switch 호가_유형 {
-		case lib.P호가_지정가:
-			return P호가_지정가
-		case lib.P호가_시장가:
-			return P호가_시장가
-		case lib.P호가_조건부_지정가:
-			return P호가_조건부_지정가
-		case lib.P호가_최유리_지정가:
-			return P호가_최유리_지정가
-		case lib.P호가_최우선_지정가:
-			return P호가_최우선_지정가
-		case lib.P호가_장전_시간외:
-			return P호가_장전_시간외
-		case lib.P호가_장후_시간외:
-			return P호가_장후_시간외
-		case lib.P호가_시간외_단일가:
-			return P호가_시간외_단일가
-		default:
-			panic(lib.F2문자열("예상하지 못한 경우 : '%v' '%v'", int(호가_유형), 호가_유형.String()))
-		}
-	case lib.P주문조건_IOC:
-		switch 호가_유형 {
-		case lib.P호가_지정가:
-			return P호가_지정가_IOC
-		case lib.P호가_시장가:
-			return P호가_시장가_IOC
-		case lib.P호가_최유리_지정가:
-			return P호가_최유리_지정가_IOC
-		default:
-			panic(lib.F2문자열("예상하지 못한 경우 : '%v' '%v'", int(호가_유형), 호가_유형.String()))
-		}
-	case lib.P주문조건_FOK:
-		switch 호가_유형 {
-		case lib.P호가_지정가:
-			return P호가_지정가_FOK
-		case lib.P호가_시장가:
-			return P호가_시장가_FOK
-		case lib.P호가_최유리_지정가:
-			return P호가_최유리_지정가_FOK
-		default:
-			panic(lib.F2문자열("예상하지 못한 경우 : '%v' '%v'", int(호가_유형), 호가_유형.String()))
-		}
-	}
-
-	// 다음 경우는 어떻게 처리해야 될 지 모르겠음.
-	//P호가_지정가_전환      T호가유형 = 27
-	//P호가_지정가_IOC_전환  T호가유형 = 28
-	//P호가_지정가_FOK_전환  T호가유형 = 29
-	//P호가_부분충족_K_OTC  T호가유형 = 41
-	//P호가_전량충족_K_OTC  T호가유형 = 42
-
-	panic(lib.New에러("예상하지 못한 경우 : %v %v", 호가_유형, 주문_조건))
-}
-
-func F2호가유형(호가_유형 T호가유형) lib.T호가유형 {
-	switch 호가_유형 {
-	case P호가_지정가:
+func F2호가유형(xing호가유형코드 int) lib.T호가유형 {
+	switch xing호가유형코드 {
+	case 0:
 		return lib.P호가_지정가
-	case P호가_시장가:
+	case 3:
 		return lib.P호가_시장가
-	case P호가_조건부_지정가:
+	case 5:
 		return lib.P호가_조건부_지정가
-	case P호가_최유리_지정가:
+	case 6:
 		return lib.P호가_최유리_지정가
-	case P호가_최우선_지정가:
+	case 7:
 		return lib.P호가_최우선_지정가
-	case P호가_장전_시간외:
+	case 12:
+		return lib.P호가_중간가
+	case 61:
 		return lib.P호가_장전_시간외
-	case P호가_장후_시간외:
+	case 81:
 		return lib.P호가_장후_시간외
-	case P호가_시간외_단일가:
+	case 82:
 		return lib.P호가_시간외_단일가
 	default:
-		panic(lib.New에러("예상하지 못한 호가_유형 값. '%v'", 호가_유형))
+		return lib.P호가_지정가
 	}
 }
 

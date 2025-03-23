@@ -363,6 +363,14 @@ func F2정수(값 interface{}) (int, error) {
 	return 반환값, nil
 }
 
+func F2정수_공백은_0(값 interface{}) (int, error) {
+	if F2문자열_공백_제거(값) == "" {
+		return 0, nil
+	}
+
+	return F2정수(값)
+}
+
 func F2정수64(값 interface{}) (int64, error) {
 	문자열 := ""
 

@@ -52,7 +52,7 @@ type T0425_현물_체결_미체결_조회_응답_반복값 struct {
 	M주문_시간   time.Time
 	M주문_매체   string
 	M처리_순번   int64
-	M호가_유형   T호가유형
+	M호가_유형   lib.T호가유형
 	M현재가     int64
 	M주문_구분   T주문유형
 	M신용_구분   T신용_구분_t0425
@@ -156,7 +156,7 @@ func NewT0425_현물_체결_미체결_조회_응답_반복값_모음(b []byte) (
 		값.M주문_시간 = lib.F확인2(lib.F2일자별_시각(당일.G값(), "150405.99", 주문시간_문자열))
 		값.M주문_매체 = lib.F2문자열_EUC_KR_공백제거(g.Ordermtd)
 		값.M처리_순번 = lib.F확인2(lib.F2정수64(g.Sysprocseq))
-		값.M호가_유형 = T호가유형(lib.F확인2(lib.F2정수64(g.Hogagb)))
+		값.M호가_유형 = F2호가유형(lib.F확인2(lib.F2정수_공백은_0(g.Hogagb)))
 		값.M현재가 = lib.F확인2(lib.F2정수64(g.Price1))
 		값.M주문_구분 = T주문유형(lib.F확인2(lib.F2정수64(g.Orggb)))
 		값.M신용_구분 = T신용_구분_t0425(lib.F확인2(lib.F2정수64(g.Singb)))

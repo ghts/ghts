@@ -12,12 +12,8 @@ type CSPAT00600_현물_정상_주문_질의값 struct {
 	*lib.S질의값_정상_주문
 	//M계좌_비밀번호 string
 	M신용거래_구분 T신용거래_구분
-	M대출일     string
+	M대출일     time.Time
 	M거래소_구분  T거래소_구분
-}
-
-func (s *CSPAT00600_현물_정상_주문_질의값) S대출일(값 time.Time) {
-	s.M대출일 = 값.Format("20060102")
 }
 
 func (s *CSPAT00600_현물_정상_주문_질의값) String() string {
@@ -44,7 +40,7 @@ type CSPAT00600_현물_정상_주문_응답1 struct {
 	M주문수량       int64
 	M주문가격       int64
 	M매도_매수_구분   lib.T매도_매수_구분
-	M호가유형       T호가유형
+	M호가유형       lib.T호가유형
 	M프로그램_호가유형  string
 	M공매도_가능     bool
 	M공매도_호가구분   string
@@ -106,20 +102,15 @@ func NewCSPAT00600InBlock(질의값 *CSPAT00600_현물_정상_주문_질의값, 
 	lib.F바이트_복사_정수(g.OrdQty[:], 질의값.M주문수량)
 	lib.F바이트_복사_실수(g.OrdPrc[:], 질의값.M주문단가, 2)
 	lib.F바이트_복사_문자열(g.BnsTpCode[:], lib.F2문자열(int(질의값.M매도_매수_구분)))
-	lib.F바이트_복사_정수(g.OrdprcPtnCode[:], int(F2Xing호가유형(질의값.M호가유형, 질의값.M주문조건)))
+	lib.F바이트_복사_정수(g.OrdprcPtnCode[:], int(질의값.M호가유형.Xing코드()))
 	lib.F바이트_복사_정수(g.MgntrnCode[:], int(질의값.M신용거래_구분))
-	lib.F바이트_복사_문자열(g.MbrNo[:], 질의값.M거래소_구분.String())
-
-	// 대출일 : YYYYMMDD, 신용주문이 아닐 경우는 SPACE
-	switch 질의값.M신용거래_구분 {
-	case P신용거래_해당없음:
+	if 질의값.M신용거래_구분 == P신용거래_해당없음 {
 		lib.F바이트_복사_문자열(g.LoanDt[:], "        ")
-	default:
-		lib.F조건부_패닉(len(질의값.M대출일) < len(g.LoanDt), "대출일 내용이 부족합니다. '%v'", 질의값.M대출일)
-		lib.F바이트_복사_문자열(g.LoanDt[:], 질의값.M대출일)
+	} else {
+		lib.F바이트_복사_문자열(g.LoanDt[:], 질의값.M대출일.Format("20060102"))
 	}
-
 	lib.F바이트_복사_정수(g.OrdCndiTpCode[:], int(질의값.M주문조건))
+	lib.F바이트_복사_문자열(g.MbrNo[:], 질의값.M거래소_구분.String())
 
 	f속성값_초기화(g)
 
@@ -158,7 +149,7 @@ func NewCSPAT00600_현물_정상_주문_응답1(b []byte) (s *CSPAT00600_현물_
 	s.M주문수량 = lib.F확인2(lib.F2정수64(g.OrdQty))
 	s.M주문가격 = lib.F확인2(lib.F2정수64(g.OrdPrc))
 	s.M매도_매수_구분 = lib.T매도_매수_구분(lib.F확인2(lib.F2정수(g.BnsTpCode)))
-	s.M호가유형 = T호가유형(lib.F확인2(lib.F2정수(g.OrdprcPtnCode)))
+	s.M호가유형 = F2호가유형(lib.F확인2(lib.F2정수_공백은_0(g.OrdprcPtnCode)))
 	s.M프로그램_호가유형 = lib.F2문자열_공백_제거(g.PrgmOrdprcPtnCode)
 	s.M공매도_가능 = lib.F문자열_비교(g.StslAbleYn, "Y", true)
 	s.M공매도_호가구분 = lib.F2문자열_공백_제거(g.StslOrdprcTpCode)
