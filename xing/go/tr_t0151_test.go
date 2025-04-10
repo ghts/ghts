@@ -1,6 +1,7 @@
 package xing
 
 import (
+	lb "github.com/ghts/ghts/lib"
 	"testing"
 )
 
