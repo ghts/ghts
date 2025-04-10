@@ -3,24 +3,24 @@ package util
 import (
 	"database/sql"
 	"github.com/ghts/ghts/data/daily_price"
-	"github.com/ghts/ghts/lib"
+	lb "github.com/ghts/ghts/lib"
 	"sort"
 	"time"
 )
 
 func New개장일_모음(db *sql.DB) (개장일_모음 *S개장일_모음, 에러 error) {
-	defer lib.S예외처리{M에러: &에러}.S실행()
+	defer lb.S예외처리{M에러: &에러}.S실행()
 
-	일일_가격정보_모음_KODEX200 := lib.F확인2(daily_price.New종목별_일일_가격정보_모음_DB읽기(db, "069500"))
-	일일_가격정보_모음_삼성전자 := lib.F확인2(daily_price.New종목별_일일_가격정보_모음_DB읽기(db, "005930"))
-	개장일_맵 := make(map[uint32]lib.S비어있음)
+	일일_가격정보_모음_KODEX200 := lb.F확인2(daily_price.New종목별_일일_가격정보_모음_DB읽기(db, "069500"))
+	일일_가격정보_모음_삼성전자 := lb.F확인2(daily_price.New종목별_일일_가격정보_모음_DB읽기(db, "005930"))
+	개장일_맵 := make(map[uint32]lb.S비어있음)
 
 	for _, 일일_정보 := range 일일_가격정보_모음_KODEX200.M저장소 {
-		개장일_맵[일일_정보.M일자] = lib.S비어있음{}
+		개장일_맵[일일_정보.M일자] = lb.S비어있음{}
 	}
 
 	for _, 일일_정보 := range 일일_가격정보_모음_삼성전자.M저장소 {
-		개장일_맵[일일_정보.M일자] = lib.S비어있음{}
+		개장일_맵[일일_정보.M일자] = lb.S비어있음{}
 	}
 
 	개장일_슬라이스 := make([]int, len(개장일_맵))
@@ -34,7 +34,7 @@ func New개장일_모음(db *sql.DB) (개장일_모음 *S개장일_모음, 에�
 	return New개장일_모음from슬라이스(개장일_슬라이스), nil
 }
 
-func New개장일_모음from슬라이스[T lib.T정수](값_모음 []T) *S개장일_모음 {
+func New개장일_모음from슬라이스[T lb.T정수](값_모음 []T) *S개장일_모음 {
 	정수값_모음 := make([]int, len(값_모음))
 
 	for i, 개장일 := range 값_모음 {
@@ -69,14 +69,14 @@ func (s *S개장일_모음) G인덱스(일자 uint32) int {
 }
 
 func (s *S개장일_모음) G인덱스2(일자 time.Time) int {
-	return s.G인덱스(lib.F일자2정수(일자))
+	return s.G인덱스(lb.F일자2정수(일자))
 }
 
 func (s *S개장일_모음) G증분_개장일(일자 uint32, 증분 int) (uint32, error) {
 	if 인덱스 := s.G인덱스(일자); 인덱스 < 0 {
-		return 0, lib.New에러("존재하지 않는 일자 : '%v'", 일자)
+		return 0, lb.New에러("존재하지 않는 일자 : '%v'", 일자)
 	} else if 인덱스+증분 < 0 || 인덱스+증분 >= len(s.M저장소) {
-		return 0, lib.New에러("범위를 벗어난 증분 : '%v' '%v'", 인덱스+증분, len(s.M저장소))
+		return 0, lb.New에러("범위를 벗어난 증분 : '%v' '%v'", 인덱스+증분, len(s.M저장소))
 	} else {
 		return s.M저장소[인덱스+증분], nil
 	}
@@ -84,10 +84,10 @@ func (s *S개장일_모음) G증분_개장일(일자 uint32, 증분 int) (uint32
 
 func (s *S개장일_모음) G이전_개장일(기간 int) (이전_개장일 uint32, 에러 error) {
 	if len(s.M저장소)-1 < 기간 {
-		return lib.F일자2정수(time.Time{}), lib.New에러("Index out of range. %v %v", len(s.M저장소), 기간)
+		return lb.F일자2정수(time.Time{}), lb.New에러("Index out of range. %v %v", len(s.M저장소), 기간)
 	}
 
-	defer lib.S예외처리{M에러: &에러, M함수: func() { 이전_개장일 = 0 }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M함수: func() { 이전_개장일 = 0 }}.S실행()
 
 	return s.M저장소[len(s.M저장소)-기간-1], nil
 }

@@ -1,7 +1,6 @@
 package xt
 
 import (
-	"github.com/ghts/ghts/lib"
 	"strconv"
 	"strings"
 	"unsafe"
@@ -378,7 +377,7 @@ const (
 
 // TR 및 응답 종류
 const (
-	TR조회 lib.TR구분 = iota
+	TR조회 lb.TR구분 = iota
 	TR주문
 	TR실시간_정보_구독
 	TR실시간_정보_해지
@@ -403,7 +402,7 @@ const (
 	TR서버_구분
 )
 
-func TR구분_String(v lib.TR구분) string {
+func TR구분_String(v lb.TR구분) string {
 	switch v {
 	case TR조회:
 		return "TR조회"
@@ -446,7 +445,7 @@ func TR구분_String(v lib.TR구분) string {
 	case TR서버_구분:
 		return "서버_구분"
 	default:
-		return lib.F2문자열("예상하지 못한 M값 : '%v'", v)
+		return lb.F2문자열("예상하지 못한 M값 : '%v'", v)
 	}
 }
 
@@ -470,7 +469,7 @@ func (v T주문_응답_구분) String() string {
 	case P주문_응답_체결_확인:
 		return "체결 확인"
 	default:
-		return lib.F2문자열("예상하지 못한 값 : '%v'", uint8(v))
+		return lb.F2문자열("예상하지 못한 값 : '%v'", uint8(v))
 	}
 }
 
@@ -521,7 +520,7 @@ func (v T신용거래_구분) String() string {
 	case P신용거래_예탁담보대출상환:
 		return "예탁담보대출상환"
 	default:
-		return lib.F2문자열("예상하지 못한 M값. %v", v)
+		return lb.F2문자열("예상하지 못한 M값. %v", v)
 	}
 }
 
@@ -531,7 +530,7 @@ func (v T신용거래_구분) G검사() {
 		P신용거래_자기대주신규, P신용거래_유통융자상환, P신용거래_자기융자상환, P신용거래_유통대주상환:
 		return
 	default:
-		panic(lib.New에러("잘못된 신용거래 구분값. %v", v))
+		panic(lb.New에러("잘못된 신용거래 구분값. %v", v))
 	}
 }
 
@@ -556,7 +555,7 @@ func (s T동시호가_구분) String() string {
 		return "동시호가"
 	}
 
-	return lib.F2문자열("예상하지 못한 동시호가 구분. '%v'", int(s))
+	return lb.F2문자열("예상하지 못한 동시호가 구분. '%v'", int(s))
 }
 
 const (
@@ -582,7 +581,7 @@ func (p T전일대비_구분) G부호보정_정수64(등락폭 int64) int64 {
 	case P구분_보합:
 		// PASS
 	default:
-		panic(lib.F2문자열("예상하지 못한 경우 : '%v'", int(p)))
+		panic(lb.F2문자열("예상하지 못한 경우 : '%v'", int(p)))
 	}
 
 	return 등락폭
@@ -601,7 +600,7 @@ func (p T전일대비_구분) G부호보정_실수64(등락율 float64) float64 
 	case P구분_보합, T전일대비_구분(0):
 		// PASS	// 0의 경우 어떻게 처리해야 할 지 모르겠음. 일단 무시
 	default:
-		panic(lib.F2문자열("예상하지 못한 경우 : '%v'", int(p)))
+		panic(lb.F2문자열("예상하지 못한 경우 : '%v'", int(p)))
 	}
 
 	return 등락율
@@ -616,7 +615,7 @@ func (p T전일대비_구분) G검사() error {
 	case P구분_상한, P구분_상승, P구분_보합, P구분_하한, P구분_하락:
 		return nil
 	default:
-		return lib.New에러("예상하지 못한 값 : '%v'", int(p))
+		return lb.New에러("예상하지 못한 값 : '%v'", int(p))
 	}
 }
 
@@ -651,7 +650,7 @@ func (s T당일_전일_구분) String() string {
 	case P당일전일구분_전일:
 		return "전일"
 	default:
-		return lib.F2문자열("예상하지 못한 당일전일 구분. '%v'", int(s))
+		return lb.F2문자열("예상하지 못한 당일전일 구분. '%v'", int(s))
 	}
 }
 
@@ -670,7 +669,7 @@ func (s T분틱_구분) String() string {
 		return "틱"
 	}
 
-	panic(lib.F2문자열("예상하지 못한 분틱 구분. '%v'", s))
+	panic(lb.F2문자열("예상하지 못한 분틱 구분. '%v'", s))
 
 	return ""
 }
@@ -725,7 +724,7 @@ func (p T서버_구분) String() string {
 		return "127.0.0.1"
 	}
 
-	panic(lib.F2문자열("예상하지 못한 서버 구분값. %v", p))
+	panic(lb.F2문자열("예상하지 못한 서버 구분값. %v", p))
 
 	return ""
 }
@@ -784,7 +783,7 @@ func (p T시장상태) String() string {
 		return "시간외단일가매매종료"
 	}
 
-	panic(lib.F2문자열("예상하지 못한 시장상태. %v", p))
+	panic(lb.F2문자열("예상하지 못한 시장상태. %v", p))
 
 	return ""
 }
@@ -824,7 +823,7 @@ func (p T주문시장구분) String() string {
 	case P주문시장_JASDAQ:
 		return "JASDAQ"
 	default:
-		panic(lib.New에러("예상하지 못한 주문_시장구분 : '%d'", int(p)))
+		panic(lb.New에러("예상하지 못한 주문_시장구분 : '%d'", int(p)))
 	}
 }
 
@@ -896,7 +895,7 @@ func (p T주문유형) String() string {
 	case P주문_장외매매:
 		return "장외매매"
 	default:
-		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
+		panic(lb.New에러("예상하지 못한 값 : '%v'", int(p)))
 	}
 }
 
@@ -939,7 +938,7 @@ func (p T증권그룹) String() string {
 		return "ETN"
 	}
 
-	panic(lib.F2문자열("예상하지 못한 증권그룹 값. %v", p))
+	panic(lb.F2문자열("예상하지 못한 증권그룹 값. %v", p))
 
 	return ""
 }
@@ -975,7 +974,7 @@ func (p T일주월년_구분) String() string {
 		return "년"
 	}
 
-	panic(lib.F2문자열("예상하지 못한 일주월 구분. '%v'", p))
+	panic(lb.F2문자열("예상하지 못한 일주월 구분. '%v'", p))
 
 	return ""
 }
@@ -998,7 +997,7 @@ func (p VI발동해제) String() string {
 		return "월"
 	}
 
-	panic(lib.F2문자열("예상하지 못한 VI발동해제 구분. '%v'", p))
+	panic(lb.F2문자열("예상하지 못한 VI발동해제 구분. '%v'", p))
 
 	return ""
 }
@@ -1042,7 +1041,7 @@ func (p T시장구분) String() string {
 		return "홍콩주식 오후"
 	}
 
-	panic(lib.F2문자열("예상하지 못한 시장구분. '%v'", p))
+	panic(lb.F2문자열("예상하지 못한 시장구분. '%v'", p))
 
 	return ""
 }
@@ -1086,12 +1085,12 @@ func (p T재무순위_구분) String() string {
 	case P재무순위_PEG:
 		return "PEG"
 	default:
-		return lib.F2문자열("예상하지 못한 T재무순위_구분 값 : '%s'" + string(p))
+		return lb.F2문자열("예상하지 못한 T재무순위_구분 값 : '%s'" + string(p))
 	}
 }
 
 func (p T재무순위_구분) T3341() string {
-	return lib.F2문자열("%x", int(p+1))
+	return lb.F2문자열("%x", int(p+1))
 }
 
 type T수정구분 uint32
@@ -1177,7 +1176,7 @@ func (p T수정구분) String() string {
 	case P수정구분_불성실공시종목:
 		return "불성실공시종목"
 	default:
-		return lib.F2문자열("예상하지 못한 값 : '%v'", p)
+		return lb.F2문자열("예상하지 못한 값 : '%v'", p)
 	}
 }
 
@@ -1201,7 +1200,7 @@ func (p T관리_질의_구분) String() string {
 	case P구분_투자_환기:
 		return "투자 환기"
 	default:
-		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
+		panic(lb.New에러("예상하지 못한 값 : '%v'", int(p)))
 	}
 }
 
@@ -1603,7 +1602,7 @@ func (p T관리종목_지정_사유_구분) String() string {
 	case P코스닥_종류주식의_5억원_미달_30일_지속:
 		return "코스닥_종류주식의_5억원_미달_30일_지속"
 	default:
-		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
+		panic(lb.New에러("예상하지 못한 값 : '%v'", int(p)))
 	}
 }
 
@@ -1639,7 +1638,7 @@ func (p T투자경고_질의_구분) String() string {
 	case P단기과열지정예고:
 		return "단기 과열 지정 예고"
 	default:
-		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
+		panic(lb.New에러("예상하지 못한 값 : '%v'", int(p)))
 	}
 }
 
@@ -1657,7 +1656,7 @@ func (p T단가_구분_CSPAQ12300) String() string {
 	case CSPAQ12300_BEP_단가:
 		return "BEP 단가"
 	default:
-		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
+		panic(lb.New에러("예상하지 못한 값 : '%v'", int(p)))
 	}
 }
 
@@ -1687,7 +1686,7 @@ func (p T등록_시장_CSPAQ12300) String() string {
 	case CSPAQ12300_비상장:
 		return "비상장"
 	default:
-		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
+		panic(lb.New에러("예상하지 못한 값 : '%v'", int(p)))
 	}
 }
 
@@ -1711,7 +1710,7 @@ func (p T대출상세분류_CSPAQ12300) String() string {
 	case CSPAQ12300_예탁주식담보융자:
 		return "예탁주식담보융자"
 	default:
-		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
+		panic(lb.New에러("예상하지 못한 값 : '%v'", int(p)))
 	}
 }
 
@@ -1732,7 +1731,7 @@ func (p T주문_체결_미체결_구분_CSPAQ13700) String() string {
 	case CSPAQ13700_미체결:
 		return "미체결"
 	default:
-		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
+		panic(lb.New에러("예상하지 못한 값 : '%v'", int(p)))
 	}
 }
 
@@ -1759,7 +1758,7 @@ func (p T주문처리_유형_CSPAQ13700) String() string {
 	case CSPAQ13700_취소거부_채권:
 		return "취소거부(채권)"
 	default:
-		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
+		panic(lb.New에러("예상하지 못한 값 : '%v'", int(p)))
 	}
 }
 
@@ -1789,12 +1788,12 @@ func (p T통신매체구분) String() string {
 	case P통신매체_모의서버_API:
 		return "모의 서버 API"
 	default:
-		panic(lib.New에러("예상하지 못한 값 : " + strconv.Itoa(int(p))))
+		panic(lb.New에러("예상하지 못한 값 : " + strconv.Itoa(int(p))))
 	}
 }
 
 func (p T통신매체구분) F해석(값 interface{}) T통신매체구분 {
-	문자열 := lib.F2문자열_EUC_KR_공백제거(값)
+	문자열 := lb.F2문자열_EUC_KR_공백제거(값)
 
 	switch 문자열 {
 	case "아이폰":
@@ -1810,7 +1809,7 @@ func (p T통신매체구분) F해석(값 interface{}) T통신매체구분 {
 			return P통신매체_HTS
 		}
 
-		panic(lib.New에러("예상하지 못한 값 : '%v'", 문자열))
+		panic(lb.New에러("예상하지 못한 값 : '%v'", 문자열))
 	}
 }
 
@@ -1828,7 +1827,7 @@ func (p T예약주문_CSPAQ13700) String() string {
 	case CSPAQ13700_예약주문:
 		return "예약주문"
 	default:
-		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
+		panic(lb.New에러("예상하지 못한 값 : '%v'", int(p)))
 	}
 }
 
@@ -1858,7 +1857,7 @@ func (p T신용_구분_t0425) String() string {
 	case P담보_대출:
 		return "담보 대출"
 	default:
-		panic(lib.New에러("예상하지 못한 값 : '%v'", int(p)))
+		panic(lb.New에러("예상하지 못한 값 : '%v'", int(p)))
 	}
 }
 
@@ -1890,6 +1889,6 @@ func (p T거래소_구분) String() string {
 	case P거래소_통합:
 		return "통합"
 	default:
-		panic(lib.New에러("예상하지 못한 값 : '%s'", string(p)))
+		panic(lb.New에러("예상하지 못한 값 : '%s'", string(p)))
 	}
 }

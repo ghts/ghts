@@ -1,7 +1,7 @@
 package xt
 
 import (
-	"github.com/ghts/ghts/lib"
+	lb "github.com/ghts/ghts/lib"
 	"os"
 	"reflect"
 	"strconv"
@@ -10,8 +10,8 @@ import (
 )
 
 func F전일_당일_설정(전일값, 당일값 time.Time) {
-	전일 = lib.New안전한_시각(전일값)
-	당일 = lib.New안전한_시각(당일값)
+	전일 = lb.New안전한_시각(전일값)
+	당일 = lb.New안전한_시각(당일값)
 }
 
 func F당일() time.Time {
@@ -48,7 +48,7 @@ func f속성값_초기화(질의값 interface{}) interface{} {
 }
 
 func F서버_구분() T서버_구분 {
-	if 구분값, 에러 := lib.F2정수(os.Getenv(P환경변수_서버_구분)); 에러 == nil && T서버_구분(구분값) == P서버_실거래 {
+	if 구분값, 에러 := lb.F2정수(os.Getenv(P환경변수_서버_구분)); 에러 == nil && T서버_구분(구분값) == P서버_실거래 {
 		return P서버_실거래
 	} else {
 		return P서버_모의투자
@@ -59,35 +59,35 @@ func F서버_구분_설정(서버_구분 T서버_구분) {
 	os.Setenv(P환경변수_서버_구분, strconv.Itoa(int(서버_구분)))
 }
 
-func F주소_DLL32() lib.T주소 {
+func F주소_DLL32() lb.T주소 {
 	for {
 		// 환경변수를 통하면 자동으로 자식 프로세스에 같은 값이 전달된다.
-		if 주소, 에러 := lib.F2정수(os.Getenv(P환경변수_주소_TR)); 에러 != nil {
+		if 주소, 에러 := lb.F2정수(os.Getenv(P환경변수_주소_TR)); 에러 != nil {
 			F주소_설정()
 		} else {
-			return lib.T주소(주소)
+			return lb.T주소(주소)
 		}
 	}
 }
 
-func F주소_콜백() lib.T주소 {
+func F주소_콜백() lb.T주소 {
 	for {
 		// 환경변수를 통하면 자동으로 자식 프로세스에 같은 값이 전달된다.
-		if 주소, 에러 := lib.F2정수(os.Getenv(P환경변수_주소_콜백)); 에러 != nil {
+		if 주소, 에러 := lb.F2정수(os.Getenv(P환경변수_주소_콜백)); 에러 != nil {
 			F주소_설정()
 		} else {
-			return lib.T주소(주소)
+			return lb.T주소(주소)
 		}
 	}
 }
 
-func F주소_실시간() lib.T주소 {
+func F주소_실시간() lb.T주소 {
 	for {
 		// 환경변수를 통하면 자동으로 자식 프로세스에 같은 값이 전달된다.
-		if 주소, 에러 := lib.F2정수(os.Getenv(P환경변수_주소_실시간)); 에러 != nil {
+		if 주소, 에러 := lb.F2정수(os.Getenv(P환경변수_주소_실시간)); 에러 != nil {
 			F주소_설정()
 		} else {
-			return lib.T주소(주소)
+			return lb.T주소(주소)
 		}
 	}
 }
@@ -103,14 +103,14 @@ func F주소_설정() {
 	}
 
 	for {
-		임의_포트_번호 := lib.F임의_범위_이내_정수값(0, 30000)
-		주소_TR := lib.T주소(임의_포트_번호)
-		주소_콜백 := lib.T주소(임의_포트_번호 + 1)
-		주소_실시간 := lib.T주소(임의_포트_번호 + 2)
+		임의_포트_번호 := lb.F임의_범위_이내_정수값(0, 30000)
+		주소_TR := lb.T주소(임의_포트_번호)
+		주소_콜백 := lb.T주소(임의_포트_번호 + 1)
+		주소_실시간 := lb.T주소(임의_포트_번호 + 2)
 
-		if lib.F포트_닫힘_확인(주소_TR) &&
-			lib.F포트_닫힘_확인(주소_콜백) &&
-			lib.F포트_닫힘_확인(주소_실시간) {
+		if lb.F포트_닫힘_확인(주소_TR) &&
+			lb.F포트_닫힘_확인(주소_콜백) &&
+			lb.F포트_닫힘_확인(주소_실시간) {
 			// 환경변수를 통하면 자동으로 자식 프로세스에 같은 값이 전달된다.
 			os.Setenv(P환경변수_주소_TR, strconv.Itoa(int(주소_TR)))
 			os.Setenv(P환경변수_주소_콜백, strconv.Itoa(int(주소_콜백)))

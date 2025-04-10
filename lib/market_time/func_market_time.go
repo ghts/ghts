@@ -1,7 +1,7 @@
 package market_time
 
 import (
-	"github.com/ghts/ghts/lib"
+	lb "github.com/ghts/ghts/lib"
 	"time"
 )
 
@@ -70,15 +70,15 @@ func f한국증시_거래시간_도우미(시작_시간, 시작_분, 종료_시�
 
 func F대기_한국_시각(시, 분, 초 int) {
 	목표_시각 := F금일_보정_시각(시, 분, 초)
-	지금 := lib.F지금()
+	지금 := lb.F지금()
 
 	if 목표_시각.After(지금) {
-		lib.F대기(목표_시각.Sub(지금))
+		lb.F대기(목표_시각.Sub(지금))
 	}
 }
 
 func F금일_보정_시각(시, 분, 초 int) time.Time {
-	return lib.F금일().Add(f임시_지연_시간() + time.Duration(시)*lib.P1시간 + time.Duration(분)*lib.P1분 + time.Duration(초)*lib.P1초)
+	return lb.F금일().Add(f임시_지연_시간() + time.Duration(시)*lb.P1시간 + time.Duration(분)*lb.P1분 + time.Duration(초)*lb.P1초)
 }
 
 func f임시_지연_시간() time.Duration {

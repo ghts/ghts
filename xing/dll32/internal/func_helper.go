@@ -1,16 +1,16 @@
 package dll32
 
 import (
-	"github.com/ghts/ghts/lib"
+	lb "github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/xing/base"
 	"os"
 	"strings"
 )
 
 func XingAPI디렉토리() (string, error) {
-	파일경로, 에러 := lib.F실행파일_검색(xing_dll)
+	파일경로, 에러 := lb.F실행파일_검색(xing_dll)
 	if 에러 == nil {
-		return lib.F디렉토리명(파일경로)
+		return lb.F디렉토리명(파일경로)
 	}
 
 	위치_후보_모음 := []string{
@@ -19,45 +19,45 @@ func XingAPI디렉토리() (string, error) {
 
 	for _, 위치 := range 위치_후보_모음 {
 		if _, 에러 := os.Stat(위치); 에러 == nil {
-			lib.F실행경로_추가(위치)
+			lb.F실행경로_추가(위치)
 
-			if _, 에러 := lib.F실행파일_검색(xing_dll); 에러 != nil {
-				return "", lib.New에러("실행경로에 추가시켰으나 여전히 찾을 수 없음.")
+			if _, 에러 := lb.F실행파일_검색(xing_dll); 에러 != nil {
+				return "", lb.New에러("실행경로에 추가시켰으나 여전히 찾을 수 없음.")
 			}
 
-			return lib.F디렉토리명(위치)
+			return lb.F디렉토리명(위치)
 		}
 	}
 
 	for _, 드라이브 := range []string{`C:\`, `D:\`, `E:\`} {
-		파일경로, 에러 = lib.F파일_검색(드라이브, xing_dll)
+		파일경로, 에러 = lb.F파일_검색(드라이브, xing_dll)
 
 		if 에러 == nil {
-			lib.F실행경로_추가(파일경로)
+			lb.F실행경로_추가(파일경로)
 
-			if _, 에러 := lib.F실행파일_검색(xing_dll); 에러 != nil {
-				return "", lib.New에러("실행경로에 추가시켰으나 여전히 찾을 수 없음.")
+			if _, 에러 := lb.F실행파일_검색(xing_dll); 에러 != nil {
+				return "", lb.New에러("실행경로에 추가시켰으나 여전히 찾을 수 없음.")
 			}
 
-			return lib.F디렉토리명(파일경로)
+			return lb.F디렉토리명(파일경로)
 		}
 	}
 
-	return "", lib.New에러("DLL파일을 찾을 수 없습니다.")
+	return "", lb.New에러("DLL파일을 찾을 수 없습니다.")
 }
 
 func f계좌_비밀번호() string {
 	if xt.F서버_구분() == xt.P서버_실거래 && 계좌_비밀번호 == "" {
-		panic(lib.New에러("계좌 비밀번호가 설정되어 있지 않습니다."))
+		panic(lb.New에러("계좌 비밀번호가 설정되어 있지 않습니다."))
 	}
 
 	return 계좌_비밀번호
 }
 
 func f자료형_문자열_해석(g *xt.TR_DATA) (자료형_문자열 string, 에러 error) {
-	defer lib.S예외처리{M에러: &에러, M함수: func() { 자료형_문자열 = "" }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M함수: func() { 자료형_문자열 = "" }}.S실행()
 
-	TR코드 := lib.F2문자열_공백_제거(g.TrCode)
+	TR코드 := lb.F2문자열_공백_제거(g.TrCode)
 
 	for {
 		if strings.HasSuffix(TR코드, "C#") {
@@ -69,7 +69,7 @@ func f자료형_문자열_해석(g *xt.TR_DATA) (자료형_문자열 string, 에
 		}
 	}
 
-	길이 := lib.F확인2(lib.F2정수(g.DataLength))
+	길이 := lb.F확인2(lb.F2정수(g.DataLength))
 
 	switch TR코드 {
 	//case xt.TR선물옵션_주문체결내역조회_CFOAQ00600:
@@ -329,7 +329,7 @@ func f자료형_문자열_해석(g *xt.TR_DATA) (자료형_문자열 string, 에
 		}
 	}
 
-	panic(lib.New에러("예상하지 못한 TR코드 & 길이 : '%v' '%v'", TR코드, 길이))
+	panic(lb.New에러("예상하지 못한 TR코드 & 길이 : '%v' '%v'", TR코드, 길이))
 }
 
 func f민감정보_삭제(raw값 []byte, 구분_문자열 string) []byte {

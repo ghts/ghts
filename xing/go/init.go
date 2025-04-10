@@ -2,7 +2,7 @@ package xing
 
 import (
 	"fmt"
-	"github.com/ghts/ghts/lib"
+	lb "github.com/ghts/ghts/lib"
 	ep "github.com/ghts/ghts/lib/external_process"
 	"github.com/ghts/ghts/lib/nanomsg"
 	"github.com/ghts/ghts/xing/base"
@@ -48,7 +48,7 @@ func init() {
 - 뉴스 및 공시 정보. (t3102,t3202)
 - TR 결과값을 출력해서 HTS와 대조 비교해 볼 것. (실시간 정보들)
 `
-	lib.F중복없는_문자열_출력(메모)
+	lb.F중복없는_문자열_출력(메모)
 }
 
 func F초기화(서버_구분 xt.T서버_구분, 로그인_정보 *xt.S로그인_정보) {
@@ -58,31 +58,31 @@ func F초기화(서버_구분 xt.T서버_구분, 로그인_정보 *xt.S로그인
 	xt.F로그인_정보_환경_변수_설정(로그인_정보)
 	F소켓_생성()
 	F초기화_Go루틴()
-	lib.F확인1(f초기화_DLL32())
-	lib.F확인1(F접속_로그인())
-	lib.F조건부_패닉(!f초기화_작동_확인(), "초기화 작동 확인 실패.")
-	lib.F확인1(F초기화_TR전송_제한())
-	lib.F확인1(F종목_정보_설정())
-	lib.F확인1(F전일_당일_설정())
+	lb.F확인1(f초기화_DLL32())
+	lb.F확인1(F접속_로그인())
+	lb.F조건부_패닉(!f초기화_작동_확인(), "초기화 작동 확인 실패.")
+	lb.F확인1(F초기화_TR전송_제한())
+	lb.F확인1(F종목_정보_설정())
+	lb.F확인1(F전일_당일_설정())
 
 	fmt.Println("** Xing API 초기화 완료 **")
 }
 
 func F소켓_생성() {
-	소켓REP_TR콜백 = lib.F확인2(nano.NewNano소켓REP(xt.F주소_콜백()))
+	소켓REP_TR콜백 = lb.F확인2(nano.NewNano소켓REP(xt.F주소_콜백()))
 }
 
 func F초기화_Go루틴() {
-	ch초기화 := make(chan lib.T신호, 1)
+	ch초기화 := make(chan lb.T신호, 1)
 	go Go루틴_관리(ch초기화)
 	<-ch초기화
 }
 
 func f초기화_DLL32() (에러 error) {
-	defer lib.S예외처리{M에러: &에러, M함수_항상: xt.F로그인_정보_환경_변수_삭제}.S실행()
+	defer lb.S예외처리{M에러: &에러, M함수_항상: xt.F로그인_정보_환경_변수_삭제}.S실행()
 
-	if !lib.F인터넷에_접속됨() {
-		lib.F문자열_출력("인터넷을 확인하십시오.")
+	if !lb.F인터넷에_접속됨() {
+		lb.F문자열_출력("인터넷을 확인하십시오.")
 		return
 	}
 
@@ -93,17 +93,17 @@ func f초기화_DLL32() (에러 error) {
 		defer os.Setenv("GOARCH", GOARCH_원래값)
 
 		if 에러 := DLL32_빌드(); 에러 != nil {
-			panic(lib.New에러with출력("dll32_xing.exe 빌드 에러 발생.\n%v", 에러))
-		} else if lib.F파일_없음(DLL32_실행_화일_경로()) {
-			panic(lib.New에러with출력("빌드된 실행 화일 찾을 수 없음. '%v'", DLL32_실행_화일_경로()))
+			panic(lb.New에러with출력("dll32_xing.exe 빌드 에러 발생.\n%v", 에러))
+		} else if lb.F파일_없음(DLL32_실행_화일_경로()) {
+			panic(lb.New에러with출력("빌드된 실행 화일 찾을 수 없음. '%v'", DLL32_실행_화일_경로()))
 		}
 
 		// 자식 프로세스는 부모 프로세스의 환경 변수를 그대로 물려받음.
 		// 로그인 정보는 환경 변수를 통해서 전달.
-		프로세스ID_DLL32 = lib.F확인2(ep.F외부_프로세스_실행(DLL32_실행_화일_경로()))
+		프로세스ID_DLL32 = lb.F확인2(ep.F외부_프로세스_실행(DLL32_실행_화일_경로()))
 		<-ch신호_DLL32_초기화
 	default:
-		lib.F문자열_출력("*********************************************\n"+
+		lb.F문자열_출력("*********************************************\n"+
 			"현재 OS(%v)에서는 'dll32_xing.exe'를 수동으로 실행해야 합니다.\n"+
 			"*********************************************", runtime.GOOS)
 	}
@@ -124,8 +124,8 @@ func DLL32_소스_코드_화일_경로() string {
 }
 
 func DLL32_빌드() error {
-	if lib.F파일_존재함(DLL32_실행_화일_경로()) {
-		if lib.F파일_없음(DLL32_소스_코드_화일_경로()) {
+	if lb.F파일_존재함(DLL32_실행_화일_경로()) {
+		if lb.F파일_없음(DLL32_소스_코드_화일_경로()) {
 			return nil // 컴파일 준비되어 있지 않으면 이미 존재하는 실행 화일 그대로 사용.
 		} else {
 			os.Remove(DLL32_실행_화일_경로()) // 컴파일 준비되어 있으면 삭제 후 최신 버전 재생성
@@ -141,14 +141,14 @@ func DLL32_빌드() error {
 	defer os.Setenv("CGO_ENABLED", CGO_ENABLED_원래값)
 
 	PATH_원래값 := os.Getenv("PATH")
-	os.Setenv("PATH", lib.GOROOT()+`\bin;C:\msys64\mingw32\bin;C:\msys64\usr\bin`)
+	os.Setenv("PATH", lb.GOROOT()+`\bin;C:\msys64\mingw32\bin;C:\msys64\usr\bin`)
 	defer os.Setenv("PATH", PATH_원래값)
 
 	return exec.Command("go", "build", "-o", "dll32_xing.exe", "github.com/ghts/ghts/xing/dll32").Run()
 }
 
 func DLL32_삭제() (에러 error) {
-	if lib.F파일_존재함(DLL32_실행_화일_경로()) {
+	if lb.F파일_존재함(DLL32_실행_화일_경로()) {
 		return os.Remove(DLL32_실행_화일_경로())
 	}
 
@@ -157,16 +157,16 @@ func DLL32_삭제() (에러 error) {
 
 func F접속_로그인() (에러 error) {
 	if !F확인_TR소켓() {
-		return lib.New에러("DLL32 프로세스 REP소켓 접속 불가.")
+		return lb.New에러("DLL32 프로세스 REP소켓 접속 불가.")
 	}
 
-	질의값 := lib.New질의값_정수(lib.TR접속, "", int(xt.F서버_구분()))
-	i응답값 := lib.F확인2(F질의(질의값).G해석값(0))
+	질의값 := lb.New질의값_정수(lb.TR접속, "", int(xt.F서버_구분()))
+	i응답값 := lb.F확인2(F질의(질의값).G해석값(0))
 
-	if 응답값, ok := i응답값.(lib.T신호); !ok {
-		return lib.New에러("F접속_로그인() 예상하지 못한 자료형 : '%T'", i응답값)
-	} else if 응답값 != lib.P신호_OK {
-		return lib.New에러("예상하지 못한 응답값 : '%v'", 응답값)
+	if 응답값, ok := i응답값.(lb.T신호); !ok {
+		return lb.New에러("F접속_로그인() 예상하지 못한 자료형 : '%T'", i응답값)
+	} else if 응답값 != lb.P신호_OK {
+		return lb.New에러("예상하지 못한 응답값 : '%v'", 응답값)
 	}
 
 	<-ch신호_DLL32_로그인
@@ -175,10 +175,10 @@ func F접속_로그인() (에러 error) {
 }
 
 func f초기화_작동_확인() (작동_여부 bool) {
-	defer lib.S예외처리{M함수: func() { 작동_여부 = false }}.S실행()
+	defer lb.S예외처리{M함수: func() { 작동_여부 = false }}.S실행()
 
-	ch확인 := make(chan lib.T신호, 1)
-	ch타임아웃 := time.After(lib.P1분)
+	ch확인 := make(chan lb.T신호, 1)
+	ch타임아웃 := time.After(lb.P1분)
 
 	go f접속_확인(ch확인)
 	go f시간_일치_확인(ch확인)
@@ -187,7 +187,7 @@ func f초기화_작동_확인() (작동_여부 bool) {
 		select {
 		case <-ch확인:
 		case <-ch타임아웃:
-			lib.New에러with출력("f초기화_작동_확인() 타임아웃.")
+			lb.New에러with출력("f초기화_작동_확인() 타임아웃.")
 			return false
 		}
 	}
@@ -199,20 +199,20 @@ func f초기화_작동_확인() (작동_여부 bool) {
 
 func F확인_TR소켓() bool {
 	for i := 0; i < 100; i++ {
-		if 응답 := F질의(lib.New질의값_기본형(xt.TR소켓_테스트, ""), lib.P5초); 응답.G에러() == nil {
+		if 응답 := F질의(lb.New질의값_기본형(xt.TR소켓_테스트, ""), lb.P5초); 응답.G에러() == nil {
 			return true
 		}
 
-		lib.F대기(lib.P500밀리초)
+		lb.F대기(lb.P500밀리초)
 	}
 
 	return false
 }
 
-func f접속_확인(ch완료 chan lib.T신호) {
+func f접속_확인(ch완료 chan lb.T신호) {
 	defer func() {
 		if ch완료 != nil {
-			ch완료 <- lib.P신호_종료
+			ch완료 <- lb.P신호_종료
 		}
 	}()
 
@@ -220,24 +220,24 @@ func f접속_확인(ch완료 chan lib.T신호) {
 		if 접속됨, 에러 := F접속됨(); 에러 == nil && 접속됨 {
 			break
 		} else if 에러 != nil {
-			lib.F에러_출력(에러)
+			lb.F에러_출력(에러)
 		}
 
-		lib.F대기(lib.P1초)
+		lb.F대기(lb.P1초)
 	}
 
 	if 접속됨, 에러 := F접속됨(); 에러 != nil || !접속됨 {
-		panic(lib.New에러("이 시점에 접속되어 있어야 함."))
+		panic(lb.New에러("이 시점에 접속되어 있어야 함."))
 	}
 
 	return
 }
 
-func f시간_일치_확인(ch완료 chan lib.T신호) {
-	defer func() { ch완료 <- lib.P신호_종료 }()
+func f시간_일치_확인(ch완료 chan lb.T신호) {
+	defer func() { ch완료 <- lb.P신호_종료 }()
 
 	if len(tr코드별_전송_제한_1초) == 0 {
-		tr코드별_전송_제한_1초[xt.TR시간_조회_t0167] = lib.New전송_권한(xt.TR시간_조회_t0167, 5, lib.P1초)
+		tr코드별_전송_제한_1초[xt.TR시간_조회_t0167] = lb.New전송_권한(xt.TR시간_조회_t0167, 5, lb.P1초)
 	}
 
 	for i := 0; i < 100; i++ {
@@ -245,8 +245,8 @@ func f시간_일치_확인(ch완료 chan lib.T신호) {
 
 		if 에러 != nil || 시각.Equal(time.Time{}) {
 			continue
-		} else if 차이 := time.Now().Sub(시각); 차이 < -1*lib.P10분 || 차이 > lib.P10분 {
-			panic(lib.New에러("서버와 시스템 시각 불일치 : 차이 '%v'분", 차이.Minutes()))
+		} else if 차이 := time.Now().Sub(시각); 차이 < -1*lb.P10분 || 차이 > lb.P10분 {
+			panic(lb.New에러("서버와 시스템 시각 불일치 : 차이 '%v'분", 차이.Minutes()))
 		}
 
 		return
@@ -260,22 +260,22 @@ func F전일_당일_설정() (에러 error) {
 		}
 	}
 
-	return lib.New에러("전일/당일 설정 중 에러 발생.")
+	return lb.New에러("전일/당일 설정 중 에러 발생.")
 }
 
 func f전일_당일_설정() (에러 error) {
-	lib.S예외처리{M에러: &에러}.S실행()
+	lb.S예외처리{M에러: &에러}.S실행()
 
 	const 수량 = 3
 
 	질의값_기간별_조회 := xt.NewT1305_현물_기간별_조회_질의값("069500", xt.P일주월_일, 수량, xt.P거래소_KRX, "")
-	i응답값 := lib.F확인2(F질의_단일TR(질의값_기간별_조회))
+	i응답값 := lb.F확인2(F질의_단일TR(질의값_기간별_조회))
 
 	switch 응답값 := i응답값.(type) {
 	case *xt.T1305_현물_기간별_조회_응답:
-		lib.F조건부_패닉(응답값.M헤더.M수량 != int64(수량), "예상하지 못한 수량 : '%v' '%v'", 응답값.M헤더.M수량, 수량)
-		lib.F조건부_패닉(len(응답값.M반복값_모음.M배열) != 수량, "예상하지 못한 수량 : '%v' '%v'", len(응답값.M반복값_모음.M배열), 수량)
-		lib.F조건부_패닉(응답값.M반복값_모음.M배열[0].M일자.Before(응답값.M반복값_모음.M배열[1].M일자), "예상하지 못한 순서")
+		lb.F조건부_패닉(응답값.M헤더.M수량 != int64(수량), "예상하지 못한 수량 : '%v' '%v'", 응답값.M헤더.M수량, 수량)
+		lb.F조건부_패닉(len(응답값.M반복값_모음.M배열) != 수량, "예상하지 못한 수량 : '%v' '%v'", len(응답값.M반복값_모음.M배열), 수량)
+		lb.F조건부_패닉(응답값.M반복값_모음.M배열[0].M일자.Before(응답값.M반복값_모음.M배열[1].M일자), "예상하지 못한 순서")
 
 		당일 := 응답값.M반복값_모음.M배열[0].M일자
 		전일 := 응답값.M반복값_모음.M배열[1].M일자
@@ -283,35 +283,35 @@ func f전일_당일_설정() (에러 error) {
 
 		return nil
 	default:
-		panic(lib.New에러with출력("F전일_당일_설정() 예상하지 못한 자료형 : '%T'", i응답값))
+		panic(lb.New에러with출력("F전일_당일_설정() 예상하지 못한 자료형 : '%T'", i응답값))
 	}
 }
 
 func DLL32_종료됨() bool {
 	프로세스, 에러 := ps.FindProcess(프로세스ID_DLL32)
-	포트_닫힘_C함수_호출 := lib.F포트_닫힘_확인(xt.F주소_DLL32())
+	포트_닫힘_C함수_호출 := lb.F포트_닫힘_확인(xt.F주소_DLL32())
 
 	return 프로세스 == nil && 에러 == nil && 포트_닫힘_C함수_호출
 }
 
 func DLL32_종료() (에러 error) {
-	defer lib.S예외처리{M에러: &에러}.S실행()
+	defer lb.S예외처리{M에러: &에러}.S실행()
 
 	if !DLL32_종료됨() {
 		소켓REQ := 소켓REQ_저장소.G소켓()
 
-		소켓REQ.S송신(lib.P변환형식_기본값, lib.New질의값_기본형(lib.TR종료, ""))
+		소켓REQ.S송신(lb.P변환형식_기본값, lb.New질의값_기본형(lb.TR종료, ""))
 		소켓REQ_저장소.S회수(소켓REQ)
 
-		lib.F대기(lib.P20초)
+		lb.F대기(lb.P20초)
 	}
 
-	ch타임아웃 := time.After(lib.P2분)
+	ch타임아웃 := time.After(lb.P2분)
 
 	select {
 	case <-ch신호_DLL32_종료:
 	case <-ch타임아웃:
-		return lib.New에러with출력("DLL32 종료 타임아웃")
+		return lb.New에러with출력("DLL32 종료 타임아웃")
 	}
 
 	for i := 0; i < 10; i++ {
@@ -320,7 +320,7 @@ func DLL32_종료() (에러 error) {
 		}
 
 		ep.F프로세스_종료by프로세스ID(프로세스ID_DLL32)
-		lib.F대기(lib.P1초)
+		lb.F대기(lb.P1초)
 	}
 
 	return nil
@@ -329,33 +329,33 @@ func DLL32_종료() (에러 error) {
 func F종료() {
 	종료_잠금.Lock()
 	defer func() {
-		종료_시각.S값(lib.F지금())
+		종료_시각.S값(lb.F지금())
 		종료_잠금.Unlock()
 	}()
 
-	if lib.F지금().Before(종료_시각.G값().Add(lib.P3분)) {
+	if lb.F지금().Before(종료_시각.G값().Add(lb.P3분)) {
 		return // 중복 실행 방지.
 	}
 
 	DLL32_종료()
-	lib.F공통_종료_채널_닫기()
+	lb.F공통_종료_채널_닫기()
 	F소켓_정리()
 
-	타임_아웃 := time.After(lib.P1분)
+	타임_아웃 := time.After(lb.P1분)
 
 	select {
 	case <-Ch모니터링_루틴_종료:
-		//lib.F문자열_출력("모니터링 루틴 종료.")
+		//lb.F문자열_출력("모니터링 루틴 종료.")
 	case <-타임_아웃:
-		//lib.F문자열_출력("종료 타임아웃.")
+		//lb.F문자열_출력("종료 타임아웃.")
 	}
 
 	for i := 0; i < V콜백_도우미_수량; i++ {
 		select {
 		case <-Ch콜백_도우미_종료:
-			//lib.F문자열_출력("콜백 루틴 %v/%v 종료.", i+1, V콜백_도우미_수량)
+			//lb.F문자열_출력("콜백 루틴 %v/%v 종료.", i+1, V콜백_도우미_수량)
 		case <-타임_아웃:
-			//lib.F문자열_출력("종료 타임아웃.")
+			//lb.F문자열_출력("종료 타임아웃.")
 		}
 	}
 
@@ -363,14 +363,14 @@ func F종료() {
 }
 
 func F소켓_정리() {
-	lib.F패닉억제_호출(소켓REP_TR콜백.Close)
+	lb.F패닉억제_호출(소켓REP_TR콜백.Close)
 	소켓REQ_저장소.S정리()
 }
 
 var TR전송_제한_초기화_잠금 sync.Mutex
 
 func F초기화_TR전송_제한() (에러 error) {
-	defer lib.S예외처리{M에러: &에러}.S실행()
+	defer lb.S예외처리{M에러: &에러}.S실행()
 
 	if f전체TR_전송_제한_초기화_완료() {
 		return nil
@@ -435,10 +435,10 @@ func tr전송_제한_초기화(TR코드_모음 []string) (에러 error) {
 	}
 
 	// 중복 제거
-	TR코드_맵 := make(map[string]lib.S비어있음)
+	TR코드_맵 := make(map[string]lb.S비어있음)
 
 	for _, TR코드 := range TR코드_모음 {
-		TR코드_맵[TR코드] = lib.S비어있음{}
+		TR코드_맵[TR코드] = lb.S비어있음{}
 	}
 
 	TR코드_모음 = make([]string, 0)
@@ -448,12 +448,12 @@ func tr전송_제한_초기화(TR코드_모음 []string) (에러 error) {
 	}
 
 	for {
-		응답 := F질의(lib.New질의값_문자열_모음(xt.TR코드별_전송_제한, "", TR코드_모음), lib.P5초)
-		lib.F확인1(응답.G에러())
+		응답 := F질의(lb.New질의값_문자열_모음(xt.TR코드별_전송_제한, "", TR코드_모음), lb.P5초)
+		lb.F확인1(응답.G에러())
 
 		전송_제한_정보_모음 = new(xt.TR코드별_전송_제한_정보_모음)
-		lib.F확인1(응답.G값(0, 전송_제한_정보_모음))
-		lib.F조건부_패닉(len(TR코드_모음) != len(전송_제한_정보_모음.M맵),
+		lb.F확인1(응답.G값(0, 전송_제한_정보_모음))
+		lb.F조건부_패닉(len(TR코드_모음) != len(전송_제한_정보_모음.M맵),
 			"서로 다른 길이 : '%v' '%v'", len(TR코드_모음), len(전송_제한_정보_모음.M맵))
 
 		정상 := false
@@ -468,32 +468,32 @@ func tr전송_제한_초기화(TR코드_모음 []string) (에러 error) {
 			break
 		}
 
-		lib.F대기(lib.P1초)
+		lb.F대기(lb.P1초)
 	}
 
 	for TR코드, 전송_제한_정보 := range 전송_제한_정보_모음.M맵 {
 		if 전송_제한_정보.M초_베이스 > 0 {
 			if 전송_권한, 존재함 := tr코드별_전송_제한_1초[TR코드]; 존재함 {
-				전송_권한.S수량_간격_변경(1, lib.P1초*time.Duration(전송_제한_정보.M초_베이스))
+				전송_권한.S수량_간격_변경(1, lb.P1초*time.Duration(전송_제한_정보.M초_베이스))
 				tr코드별_전송_제한_1초[TR코드] = 전송_권한
 			} else {
-				tr코드별_전송_제한_1초[TR코드] = lib.New전송_권한(TR코드, 1, lib.P1초*time.Duration(전송_제한_정보.M초_베이스))
+				tr코드별_전송_제한_1초[TR코드] = lb.New전송_권한(TR코드, 1, lb.P1초*time.Duration(전송_제한_정보.M초_베이스))
 			}
 		} else if 전송_제한_정보.M초당_전송_제한 > 0 {
 			if 전송_권한, 존재함 := tr코드별_전송_제한_1초[TR코드]; 존재함 {
-				전송_권한.S수량_간격_변경(전송_제한_정보.M초당_전송_제한, lib.P1초)
+				전송_권한.S수량_간격_변경(전송_제한_정보.M초당_전송_제한, lb.P1초)
 				tr코드별_전송_제한_1초[TR코드] = 전송_권한
 			} else {
-				tr코드별_전송_제한_1초[TR코드] = lib.New전송_권한(TR코드, 전송_제한_정보.M초당_전송_제한, lib.P1초)
+				tr코드별_전송_제한_1초[TR코드] = lb.New전송_권한(TR코드, 전송_제한_정보.M초당_전송_제한, lb.P1초)
 			}
 		}
 
 		if 전송_제한_정보.M10분당_전송_제한 > 0 {
 			if 전송_권한, 존재함 := tr코드별_전송_제한_10분[TR코드]; 존재함 {
-				전송_권한.S수량_간격_변경(전송_제한_정보.M10분당_전송_제한, lib.P10분)
+				전송_권한.S수량_간격_변경(전송_제한_정보.M10분당_전송_제한, lb.P10분)
 				tr코드별_전송_제한_10분[TR코드] = 전송_권한
 			} else {
-				전송_권한 = lib.New전송_권한(TR코드, 전송_제한_정보.M10분당_전송_제한, lib.P10분)
+				전송_권한 = lb.New전송_권한(TR코드, 전송_제한_정보.M10분당_전송_제한, lb.P10분)
 
 				// 지난 10분간 이미 전송한 수량을 반영.
 				for i := 0; i < 전송_제한_정보.M10분간_전송한_수량; i++ {

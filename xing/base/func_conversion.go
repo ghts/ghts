@@ -1,12 +1,12 @@
 package xt
 
 import (
-	"github.com/ghts/ghts/lib"
+	lb "github.com/ghts/ghts/lib"
 	"strings"
 )
 
 func F2거래소_구분(거래소_이름 interface{}) T거래소_구분 {
-	switch lib.F2문자열_공백_제거(거래소_이름) {
+	switch lb.F2문자열_공백_제거(거래소_이름) {
 	case "K", "KRX", "":
 		return P거래소_KRX
 	case "N", "NXT":
@@ -14,65 +14,65 @@ func F2거래소_구분(거래소_이름 interface{}) T거래소_구분 {
 	case "U", "통합":
 		return P거래소_통합
 	default:
-		panic(lib.New에러("예상하지 못한 값 : '%s'", 거래소_이름))
+		panic(lb.New에러("예상하지 못한 값 : '%s'", 거래소_이름))
 	}
 }
 
-func F2호가유형(xing호가유형코드 int) lib.T호가유형 {
+func F2호가유형(xing호가유형코드 int) lb.T호가유형 {
 	switch xing호가유형코드 {
 	case 0:
-		return lib.P호가_지정가
+		return lb.P호가_지정가
 	case 3:
-		return lib.P호가_시장가
+		return lb.P호가_시장가
 	case 5:
-		return lib.P호가_조건부_지정가
+		return lb.P호가_조건부_지정가
 	case 6:
-		return lib.P호가_최유리_지정가
+		return lb.P호가_최유리_지정가
 	case 7:
-		return lib.P호가_최우선_지정가
+		return lb.P호가_최우선_지정가
 	case 12:
-		return lib.P호가_중간가
+		return lb.P호가_중간가
 	case 61:
-		return lib.P호가_장전_시간외
+		return lb.P호가_장전_시간외
 	case 81:
-		return lib.P호가_장후_시간외
+		return lb.P호가_장후_시간외
 	case 82:
-		return lib.P호가_시간외_단일가
+		return lb.P호가_시간외_단일가
 	default:
-		return lib.P호가_지정가
+		return lb.P호가_지정가
 	}
 }
 
-func F2시장구분(값 interface{}) lib.T시장구분 {
-	문자열 := lib.F2문자열_EUC_KR_공백제거(값)
+func F2시장구분(값 interface{}) lb.T시장구분 {
+	문자열 := lb.F2문자열_EUC_KR_공백제거(값)
 
 	switch 문자열 {
 	case "KOSPI", "KOSPI200":
-		return lib.P시장구분_코스피
+		return lb.P시장구분_코스피
 	case "KOSDAQ":
-		return lib.P시장구분_코스닥
+		return lb.P시장구분_코스닥
 	default:
-		panic(lib.New에러("예상하지 못한 값 : '%v'", 문자열))
+		panic(lb.New에러("예상하지 못한 값 : '%v'", 문자열))
 	}
 }
 
-func F2중간가_잔량_구분(값 interface{}) lib.T매도_매수_구분 {
-	문자열 := lib.F2문자열_공백_제거(값)
+func F2중간가_잔량_구분(값 interface{}) lb.T매도_매수_구분 {
+	문자열 := lb.F2문자열_공백_제거(값)
 
 	switch 문자열 {
 	case "":
-		return lib.P매도_매수_전체
+		return lb.P매도_매수_전체
 	case "1":
-		return lib.P매도
+		return lb.P매도
 	case "2":
-		return lib.P매수
+		return lb.P매수
 	default:
-		panic(lib.New에러("예상하지 못한 값 : '%v'", 문자열))
+		panic(lb.New에러("예상하지 못한 값 : '%v'", 문자열))
 	}
 }
 
 func F2수정구분_모음(값 int64) (수정구분_모음 []T수정구분, 에러 error) {
-	defer lib.S예외처리{M에러: &에러, M함수: func() { 수정구분_모음 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M함수: func() { 수정구분_모음 = nil }}.S실행()
 
 	if 값 == 0 {
 		return []T수정구분{P수정구분_없음}, nil
@@ -113,14 +113,14 @@ func F2수정구분_모음(값 int64) (수정구분_모음 []T수정구분, 에�
 	}
 
 	if 잔여값 > 0 {
-		return nil, lib.New에러with출력("예상하지 못한 값 : '%x'", 값)
+		return nil, lb.New에러with출력("예상하지 못한 값 : '%x'", 값)
 	}
 
 	return 수정구분_모음, nil
 }
 
 func F2주문_응답_구분(값 [8]byte) T주문_응답_구분 {
-	switch lib.F2문자열(값) {
+	switch lb.F2문자열(값) {
 	case "SONAT000":
 		return P주문_응답_신규_주문
 	case "SONAT001":
@@ -130,14 +130,14 @@ func F2주문_응답_구분(값 [8]byte) T주문_응답_구분 {
 	case "SONAS100":
 		return P주문_응답_체결_확인
 	default:
-		panic(lib.New에러("예상하지 못한 값 : '%v", 값))
+		panic(lb.New에러("예상하지 못한 값 : '%v", 값))
 	}
 }
 
-func F바이트_변환값_해석(바이트_변환값 *lib.S바이트_변환) (해석값 interface{}, 에러 error) {
-	defer lib.S예외처리{M에러: &에러, M함수: func() { 해석값 = nil }}.S실행()
+func F바이트_변환값_해석(바이트_변환값 *lb.S바이트_변환) (해석값 interface{}, 에러 error) {
+	defer lb.S예외처리{M에러: &에러, M함수: func() { 해석값 = nil }}.S실행()
 
-	if 바이트_변환값.G변환_형식() == lib.Raw {
+	if 바이트_변환값.G변환_형식() == lb.Raw {
 		return F바이트_변환값_해석_Raw(바이트_변환값)
 	}
 
@@ -148,303 +148,303 @@ func F바이트_변환값_해석(바이트_변환값 *lib.S바이트_변환) (�
 	switch 자료형_문자열 {
 	case P자료형_S현물_주문_응답_실시간_정보:
 		s := new(S현물_주문_응답_실시간_정보)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	//case P자료형_CFOAQ00600_선물옵션_주문체결내역_질의값:
 	//	s := new(CFOAQ00600_선물옵션_주문체결내역_질의값)
-	//	lib.F확인(바이트_변환값.TCP주소(s))
+	//	lb.F확인(바이트_변환값.TCP주소(s))
 	//	return s, nil
 	//case P자료형_CFOAT00100_선물옵션_정상주문_질의값:
 	//	s := new(CFOAT00100_선물옵션_정상주문_질의값)
-	//	lib.F확인(바이트_변환값.TCP주소(s))
+	//	lb.F확인(바이트_변환값.TCP주소(s))
 	//	return s, nil
 	//case P자료형_CFOAT00200_선물옵션_정정주문_질의값:
 	//	s := new(CFOAT00200_선물옵션_정정주문_질의값)
-	//	lib.F확인(바이트_변환값.TCP주소(s))
+	//	lb.F확인(바이트_변환값.TCP주소(s))
 	//	return s, nil
 	//case P자료형_CFOAT00300_선물옵션_취소주문_질의값:
 	//	s := new(CFOAT00300_선물옵션_취소주문_질의값)
-	//	lib.F확인(바이트_변환값.TCP주소(s))
+	//	lb.F확인(바이트_변환값.TCP주소(s))
 	//	return s, nil
 	//case P자료형_CFOBQ10500_선물옵션_예탁금_증거금_조회_질의값:
 	//	s := new(CFOBQ10500_선물옵션_예탁금_증거금_조회_질의값)
-	//	lib.F확인(바이트_변환값.TCP주소(s))
+	//	lb.F확인(바이트_변환값.TCP주소(s))
 	//	return s, nil
 	//case P자료형_CFOFQ02400_선물옵션_미결제약정_질의값:
 	//	s := new(CFOFQ02400_선물옵션_미결제약정_질의값)
-	//	lib.F확인(바이트_변환값.TCP주소(s))
+	//	lb.F확인(바이트_변환값.TCP주소(s))
 	//	return s, nil
 	case P자료형_CSPAQ12300_현물계좌_잔고내역_질의값:
 		s := new(CSPAQ12300_현물계좌_잔고내역_질의값)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_CSPAQ13700_현물계좌_주문체결내역_질의값:
 		s := new(CSPAQ13700_현물계좌_주문체결내역_질의값)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_CSPAT00600_현물_정상_주문_질의값:
 		s := new(CSPAT00600_현물_정상_주문_질의값)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_CSPAT00700_현물_정정_주문_질의값:
 		s := new(CSPAT00700_현물_정정_주문_질의값)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T0150_현물_당일_매매일지_질의값:
 		s := new(T0150_현물_당일_매매일지_질의값)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T0151_현물_일자별_매매일지_질의값:
 		s := new(T0151_현물_일자별_매매일지_질의값)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T0425_현물_체결_미체결_조회_질의값:
 		s := new(T0425_현물_체결_미체결_조회_질의값)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	//case P자료형_T0434_선물옵션_체결_미체결_조회_질의값:
 	//	s := new(T0434_선물옵션_체결_미체결_조회_질의값)
-	//	lib.F확인(바이트_변환값.TCP주소(s))
+	//	lb.F확인(바이트_변환값.TCP주소(s))
 	//	return s, nil
 	case P자료형_T1101_현물_호가_조회_응답:
 		s := new(T1101_현물_호가_조회_응답)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T1102_현물_시세_조회_질의값:
 		s := new(T1102_현물_시세_조회_질의값)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T1102_현물_시세_조회_응답:
 		s := new(T1102_현물_시세_조회_응답)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T1301_현물_시간대별_체결_응답:
 		s := new(T1301_현물_시간대별_체결_응답)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T1301_현물_시간대별_체결_응답_헤더:
 		s := new(T1301_현물_시간대별_체결_응답_헤더)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T1301_현물_시간대별_체결_응답_반복값:
 		s := new(T1301_현물_시간대별_체결_응답_반복값)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T1301_현물_시간대별_체결_응답_반복값_모음:
 		s := new(T1301_현물_시간대별_체결_응답_반복값_모음)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T1305_현물_기간별_조회_질의값:
 		s := NewT1305_현물_기간별_조회_질의값_단순()
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T1305_현물_기간별_조회_응답:
 		s := new(T1305_현물_기간별_조회_응답)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T1305_현물_기간별_조회_응답_헤더:
 		s := new(T1305_현물_기간별_조회_응답_헤더)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T1305_현물_기간별_조회_응답_반복값:
 		s := new(T1305_현물_기간별_조회_응답_반복값)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T1305_현물_기간별_조회_응답_반복값_모음:
 		s := new(T1305_현물_기간별_조회_응답_반복값_모음)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T1310_현물_전일당일분틱조회_질의값:
 		s := NewT1310_현물_전일당일_분틱_조회_질의값_단순()
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T1310_현물_전일당일분틱조회_응답:
 		s := new(T1310_현물_전일당일분틱조회_응답)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T1310_현물_전일당일분틱조회_응답_헤더:
 		s := new(T1310_현물_전일당일분틱조회_응답_헤더)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T1310_현물_전일당일분틱조회_응답_반복값:
 		s := new(T1310_현물_전일당일분틱조회_응답_반복값)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T1310_현물_전일당일분틱조회_응답_반복값_모음:
 		s := new(T1310_현물_전일당일분틱조회_응답_반복값_모음)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T1404_관리종목_조회_질의값:
 		s := new(T1404_관리종목_조회_질의값)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T1405_투자경고_조회_질의값:
 		s := new(T1405_투자경고_조회_질의값)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T1901_ETF_시세_조회_응답:
 		s := new(T1901_ETF_시세_조회_응답)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T1902_ETF시간별_추이_응답:
 		s := new(T1902_ETF시간별_추이_응답)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T1902_ETF시간별_추이_응답_헤더:
 		s := new(T1902_ETF시간별_추이_응답_헤더)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T1902_ETF시간별_추이_응답_반복값:
 		s := new(T1902_ETF시간별_추이_응답_반복값)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T1902_ETF시간별_추이_응답_반복값_모음:
 		s := new(T1902_ETF시간별_추이_응답_반복값_모음)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 
 	case P자료형_T1906_ETF_LP_호가_조회_응답:
 		s := new(T1906_ETF_LP_호가_조회_응답)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	//case P자료형_T3320_기업정보_요약_응답:
 	//	s := new(T3320_기업정보_요약_응답)
-	//	lib.F확인(바이트_변환값.TCP주소(s))
+	//	lb.F확인(바이트_변환값.TCP주소(s))
 	//	return s, nil
 	//case P자료형_T3320_기업정보_요약_응답1:
 	//	s := new(T3320_기업정보_요약_응답1)
-	//	lib.F확인(바이트_변환값.TCP주소(s))
+	//	lb.F확인(바이트_변환값.TCP주소(s))
 	//	return s, nil
 	//case P자료형_T3320_기업정보_요약_응답2:
 	//	s := new(T3320_기업정보_요약_응답2)
-	//	lib.F확인(바이트_변환값.TCP주소(s))
+	//	lb.F확인(바이트_변환값.TCP주소(s))
 	//	return s, nil
 	case P자료형_T3341_재무순위_질의값:
 		s := new(T3341_재무순위_질의값)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T8407_현물_멀티_현재가_조회_응답:
 		s := new(T8407_현물_멀티_현재가_조회_응답)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T8410_현물_차트_일주월년_질의값:
 		s := new(T8410_현물_차트_일주월년_질의값)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T8410_현물_차트_일주월년_응답:
 		s := new(T8410_현물_차트_일주월년_응답)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T8410_현물_차트_일주월년_응답_헤더:
 		s := new(T8410_현물_차트_일주월년_응답_헤더)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T8410_현물_차트_일주월년_응답_반복값:
 		s := new(T8410_현물_차트_일주월년_응답_반복값)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T8410_현물_차트_일주월년_응답_반복값_모음:
 		s := new(T8410_현물_차트_일주월년_응답_반복값_모음)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T8411_현물_차트_틱_질의값:
 		s := new(T8411_현물_차트_틱_질의값)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T8411_현물_차트_틱_응답:
 		s := new(T8411_현물_차트_틱_응답)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T8411_현물_차트_틱_응답_헤더:
 		s := new(T8411_현물_차트_틱_응답_헤더)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T8411_현물_차트_틱_응답_반복값:
 		s := new(T8411_현물_차트_틱_응답_반복값)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T8411_현물_차트_틱_응답_반복값_모음:
 		s := new(T8411_현물_차트_틱_응답_반복값_모음)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T8412_현물_차트_분_질의값:
 		s := new(T8412_현물_차트_분_질의값)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T8412_현물_차트_분_응답:
 		s := new(T8412_현물_차트_분_응답)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T8412_현물_차트_분_응답_헤더:
 		s := new(T8412_현물_차트_분_응답_헤더)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T8412_현물_차트_분_응답_반복값:
 		s := new(T8412_현물_차트_분_응답_반복값)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T8412_현물_차트_분_응답_반복값_모음:
 		s := new(T8412_현물_차트_분_응답_반복값_모음)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T8413_현물_차트_일주월_질의값:
 		s := new(T8413_현물_차트_일주월_질의값)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T8413_현물_차트_일주월_응답:
 		s := new(T8413_현물_차트_일주월_응답)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T8413_현물_차트_일주월_응답_헤더:
 		s := new(T8413_현물_차트_일주월_응답_헤더)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T8413_현물_차트_일주월_응답_반복값:
 		s := new(T8413_현물_차트_일주월_응답_반복값)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T8413_현물_차트_일주월_응답_반복값_모음:
 		s := new(T8413_현물_차트_일주월_응답_반복값_모음)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T8428_증시주변_자금추이_질의값:
 		s := new(T8428_증시주변_자금추이_질의값)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T8428_증시주변_자금추이_응답:
 		s := new(T8428_증시주변_자금추이_응답)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T8428_증시주변_자금추이_응답_헤더:
 		s := new(T8428_증시주변_자금추이_응답_헤더)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T8428_증시주변_자금추이_응답_반복값:
 		s := new(T8428_증시주변_자금추이_응답_반복값)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T8428_증시주변_자금추이_응답_반복값_모음:
 		s := new(T8428_증시주변_자금추이_응답_반복값_모음)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T8436_현물_종목조회_응답_반복값:
 		s := new(T8436_현물_종목조회_응답_반복값)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	case P자료형_T8436_현물_종목조회_응답:
 		s := new(T8436_현물_종목조회_응답)
-		lib.F확인1(바이트_변환값.G값(s))
+		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
 	}
 
-	return lib.F바이트_변환값_해석(바이트_변환값)
+	return lb.F바이트_변환값_해석(바이트_변환값)
 }
 
-func F바이트_변환값_해석_Raw(바이트_변환값 *lib.S바이트_변환) (해석값 interface{}, 에러 error) {
-	defer lib.S예외처리{M에러: &에러, M함수: func() { 해석값 = nil }}.S실행()
+func F바이트_변환값_해석_Raw(바이트_변환값 *lb.S바이트_변환) (해석값 interface{}, 에러 error) {
+	defer lb.S예외처리{M에러: &에러, M함수: func() { 해석값 = nil }}.S실행()
 
 	var b []byte
-	lib.F확인1(바이트_변환값.G값(&b))
+	lb.F확인1(바이트_변환값.G값(&b))
 
 	자료형_문자열 := 바이트_변환값.G자료형_문자열()
 	시작_인덱스 := strings.Index(자료형_문자열, ".") + 1
@@ -489,7 +489,7 @@ func F바이트_변환값_해석_Raw(바이트_변환값 *lib.S바이트_변환)
 		return New장_운영정보(b)
 	case RT코스피_거래원, RT코스닥_거래원, RT코스피_기세, RT코스닥_LP호가,
 		RT지수, RT예상지수, RT실시간_뉴스_제목_패킷, RT업종별_투자자별_매매_현황:
-		return nil, lib.New에러("미구현 RT코드 : '%v'", 자료형_문자열)
+		return nil, lb.New에러("미구현 RT코드 : '%v'", 자료형_문자열)
 	//case P자료형_CFOAQ00600OutBlock:
 	//	return NewCFOAQ00600OutBlock(b)
 	//case P자료형_CFOAT00100OutBlock:
@@ -589,6 +589,6 @@ func F바이트_변환값_해석_Raw(바이트_변환값 *lib.S바이트_변환)
 	case P자료형_T8436OutBlock:
 		return NewT8436_현물_종목조회_응답_반복값_모음(b)
 	default:
-		return nil, lib.New에러with출력("F바이트_변환값_해석_Raw() 예상하지 못한 자료형. '%v'\n", 자료형_문자열)
+		return nil, lb.New에러with출력("F바이트_변환값_해석_Raw() 예상하지 못한 자료형. '%v'\n", 자료형_문자열)
 	}
 }

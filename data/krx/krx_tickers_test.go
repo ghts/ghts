@@ -1,8 +1,8 @@
 package krx
 
 import (
-	lb "github.com/ghts/ghts/lib"
-	"testing"
+lb "github.com/ghts/ghts/lib"
+"testing"
 )
 
 func TestF상장_법인_정보_맵(t *testing.T) {

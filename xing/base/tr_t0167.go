@@ -3,7 +3,7 @@ package xt
 import (
 	"bytes"
 	"encoding/binary"
-	"github.com/ghts/ghts/lib"
+	lb "github.com/ghts/ghts/lib"
 	"time"
 )
 
@@ -17,16 +17,16 @@ func (s T0167_시각_조회_응답) G값() (time.Time, error) {
 }
 
 func NewT0167_시각_조회_응답(b []byte) (값 time.Time, 에러 error) {
-	defer lib.S예외처리{M에러: &에러, M함수: func() { 값 = time.Time{} }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = time.Time{} }}.S실행()
 
-	lib.F조건부_패닉(len(b) != SizeT0167OutBlock,
+	lb.F조건부_패닉(len(b) != SizeT0167OutBlock,
 		"예상하지 못한 길이 : '%v", len(b))
 
 	g := new(T0167OutBlock)
-	lib.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
+	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
-	날짜_문자열 := lib.F2문자열(g.Date)
-	시간_문자열 := lib.F2문자열(g.Time)
+	날짜_문자열 := lb.F2문자열(g.Date)
+	시간_문자열 := lb.F2문자열(g.Time)
 
-	return lib.F2포맷된_시각("20060102150405.99999999", 날짜_문자열+시간_문자열[:6]+"."+시간_문자열[7:])
+	return lb.F2포맷된_시각("20060102150405.99999999", 날짜_문자열+시간_문자열[:6]+"."+시간_문자열[7:])
 }

@@ -1,7 +1,7 @@
 package xt
 
 import (
-	"github.com/ghts/ghts/lib"
+	lb "github.com/ghts/ghts/lib"
 	"time"
 )
 
@@ -64,11 +64,11 @@ func (s *T1301_현물_시간대별_체결_응답_반복값_모음) G반복값_�
 func NewT1301InBlock(질의값 *T1301_현물_시간대별_체결_질의값) (g *T1301InBlock) {
 	g = new(T1301InBlock)
 
-	lib.F바이트_복사_문자열(g.Shcode[:], 질의값.M종목코드)
-	lib.F바이트_복사_정수(g.Cvolume[:], 질의값.M특이거래량)
-	lib.F바이트_복사_문자열(g.Starttime[:], 질의값.M시작시간)
-	lib.F바이트_복사_문자열(g.Endtime[:], 질의값.M종료시간)
-	lib.F바이트_복사_문자열(g.Time[:], 질의값.M연속키)
+	lb.F바이트_복사_문자열(g.Shcode[:], 질의값.M종목코드)
+	lb.F바이트_복사_정수(g.Cvolume[:], 질의값.M특이거래량)
+	lb.F바이트_복사_문자열(g.Starttime[:], 질의값.M시작시간)
+	lb.F바이트_복사_문자열(g.Endtime[:], 질의값.M종료시간)
+	lb.F바이트_복사_문자열(g.Time[:], 질의값.M연속키)
 
 	f속성값_초기화(g)
 

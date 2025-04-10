@@ -2,13 +2,12 @@ package krx
 
 import (
 	"github.com/PuerkitoBio/goquery"
-	lb "github.com/ghts/ghts/lib"
-	"io"
-	"net/http"
-	"strings"
-	"time"
+lb "github.com/ghts/ghts/lib"
+"io"
+"net/http"
+"strings"
+"time"
 )
-
 type S상장_법인_정보 struct {
 	M회사명  string
 	M종목코드 string

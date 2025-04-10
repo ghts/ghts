@@ -1,7 +1,7 @@
 package xt
 
 import (
-	"github.com/ghts/ghts/lib"
+	lb "github.com/ghts/ghts/lib"
 
 	"time"
 )
@@ -37,7 +37,7 @@ type S호가_잔량_실시간_정보 struct {
 	M매도중간가잔량합계수량 int64
 	M매수중간가잔량합계수량 int64
 	M중간가잔량합계수량   int64
-	M중간가잔량구분     lib.T매도_매수_구분
+	M중간가잔량구분     lb.T매도_매수_구분
 }
 
 func (s *S호가_잔량_실시간_정보) TR코드() string { return s.RT코드 }
@@ -76,7 +76,7 @@ type S체결 struct {
 	M고가        int64
 	M저가시각      time.Time
 	M저가        int64
-	M매도_매수_구분  lib.T매도_매수_구분
+	M매도_매수_구분  lb.T매도_매수_구분
 	M체결량       int64
 	M누적거래량     int64
 	M누적거래대금    int64
@@ -88,7 +88,7 @@ type S체결 struct {
 	M가중평균가     int64
 	M매도호가      int64
 	M매수호가      int64
-	M장_정보      lib.T장_정보
+	M장_정보      lb.T장_정보
 	M전일동시간대거래량 int64
 	M거래소_구분    T거래소_구분
 }

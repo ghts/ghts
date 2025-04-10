@@ -1,7 +1,7 @@
 package trade
 
 import (
-	"github.com/ghts/ghts/lib"
+	lb "github.com/ghts/ghts/lib"
 
 	"math"
 	"strconv"
@@ -13,11 +13,11 @@ func F이동_범위_최대값(값_모음 []float64, 윈도우_크기 int) []floa
 	고가_모음[0] = 값_모음[0]
 
 	for i := 1; i < 윈도우_크기; i++ {
-		고가_모음[i] = lib.F최대값(값_모음[:i]...)
+		고가_모음[i] = lb.F최대값(값_모음[:i]...)
 	}
 
 	for i := 윈도우_크기; i < len(값_모음); i++ {
-		고가_모음[i] = lib.F최대값(값_모음[i-윈도우_크기+1 : i]...)
+		고가_모음[i] = lb.F최대값(값_모음[i-윈도우_크기+1 : i]...)
 	}
 
 	return 고가_모음
@@ -28,18 +28,18 @@ func F이동_범위_최소값(값_모음 []float64, 윈도우_크기 int) []floa
 	저가_모음[0] = 값_모음[0]
 
 	for i := 1; i < 윈도우_크기; i++ {
-		저가_모음[i] = lib.F최소값(값_모음[:i]...)
+		저가_모음[i] = lb.F최소값(값_모음[:i]...)
 	}
 
 	for i := 윈도우_크기; i < len(값_모음); i++ {
-		저가_모음[i] = lib.F최소값(값_모음[i-윈도우_크기+1 : i]...)
+		저가_모음[i] = lb.F최소값(값_모음[i-윈도우_크기+1 : i]...)
 	}
 
 	return 저가_모음
 }
 
 func F단순_이동_평균(값_모음 []float64, 윈도우_크기 int) []float64 {
-	윈도우_크기 = lib.F최소값(윈도우_크기, len(값_모음))
+	윈도우_크기 = lb.F최소값(윈도우_크기, len(값_모음))
 
 	이동_평균_모음 := make([]float64, len(값_모음))
 	윈도우_크기_실수값 := float64(윈도우_크기)
@@ -59,7 +59,7 @@ func F단순_이동_평균(값_모음 []float64, 윈도우_크기 int) []float64
 }
 
 func F지수_이동_평균(값_모음 []float64, 윈도우_크기 int) []float64 {
-	윈도우_크기 = lib.F최소값(윈도우_크기, len(값_모음))
+	윈도우_크기 = lb.F최소값(윈도우_크기, len(값_모음))
 
 	이동_평균_모음 := make([]float64, len(값_모음))
 
@@ -81,8 +81,8 @@ func F지수_이동_평균(값_모음 []float64, 윈도우_크기 int) []float64
 }
 
 func F가중_이동_평균(값_모음, 가중치 []float64, 윈도우_크기 int) []float64 {
-	윈도우_크기 = lib.F최소값(윈도우_크기, len(가중치))
-	가중치_합계 := lib.F합계(가중치[:윈도우_크기-1]...)
+	윈도우_크기 = lb.F최소값(윈도우_크기, len(가중치))
+	가중치_합계 := lb.F합계(가중치[:윈도우_크기-1]...)
 	가중_이동_평균 := make([]float64, len(값_모음))
 
 	for i := 윈도우_크기; i < len(값_모음); i++ {
@@ -137,7 +137,7 @@ func F이동_평균_도우미(값_모음 []float64, 윈도우_크기 int, EMA bo
 }
 
 func F이동_표준_편차_도우미(값_모음 []float64, 윈도우_크기 int, EMA bool) []float64 {
-	윈도우_크기 = lib.F최소값(윈도우_크기, len(값_모음))
+	윈도우_크기 = lb.F최소값(윈도우_크기, len(값_모음))
 	이동_평균_모음 := F이동_평균_도우미(값_모음, 윈도우_크기, EMA)
 	편차_제곱_모음 := make([]float64, len(값_모음))
 	표준_편차_모음 := make([]float64, len(값_모음))
@@ -247,12 +247,12 @@ func F기하_수익율(수익율_모음 []float64) float64 {
 }
 
 func F기간(시작일, 종료일 uint32) int {
-	시작, 에러 := lib.F2포맷된_일자("20060102", strconv.Itoa(int(시작일)))
+	시작, 에러 := lb.F2포맷된_일자("20060102", strconv.Itoa(int(시작일)))
 	if 에러 != nil {
 		return 0
 	}
 
-	종료, 에러 := lib.F2포맷된_일자("20060102", strconv.Itoa(int(종료일)))
+	종료, 에러 := lb.F2포맷된_일자("20060102", strconv.Itoa(int(종료일)))
 	if 에러 != nil {
 		return 0
 	}
@@ -260,14 +260,14 @@ func F기간(시작일, 종료일 uint32) int {
 	return int(종료.Sub(시작).Hours() / 24)
 }
 
-func F주문가by퍼센트(매도_매수_구분 lib.T매도_매수_구분, 현재가 int64, 퍼센트 float64) int64 {
+func F주문가by퍼센트(매도_매수_구분 lb.T매도_매수_구분, 현재가 int64, 퍼센트 float64) int64 {
 	switch 매도_매수_구분 {
-	case lib.P매도:
+	case lb.P매도:
 		return F매도_주문가by퍼센트(현재가, 퍼센트)
-	case lib.P매수:
+	case lb.P매수:
 		return F매수_주문가by퍼센트(현재가, 퍼센트)
 	default:
-		panic(lib.New에러("예상하지 못한 ''매도_매수_구분'값 : %v", 매도_매수_구분))
+		panic(lb.New에러("예상하지 못한 ''매도_매수_구분'값 : %v", 매도_매수_구분))
 	}
 }
 

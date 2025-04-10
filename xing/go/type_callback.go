@@ -1,7 +1,7 @@
 package xing
 
 import (
-	"github.com/ghts/ghts/lib"
+	lb "github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/xing/base"
 	"sync"
 	"time"
@@ -49,13 +49,13 @@ func (s *DLL32_콜백_대기_항목) S회신() {
 		select {
 		case s.ch회신 <- s.에러:
 		default:
-			panic(lib.New에러with출력("채널 에러 회신 실패."))
+			panic(lb.New에러with출력("채널 에러 회신 실패."))
 		}
 	} else {
 		select {
 		case s.ch회신 <- s.G회신값():
 		default:
-			panic(lib.New에러with출력("채널 회신 실패."))
+			panic(lb.New에러with출력("채널 회신 실패."))
 		}
 	}
 
@@ -86,7 +86,7 @@ func (s *DLL32_콜백_저장소) S추가(식별번호 int, TR코드 string) chan
 	대기_항목.식별번호 = 식별번호
 	대기_항목.ch회신 = make(chan interface{}, 1)
 	대기_항목.TR코드 = TR코드
-	대기_항목.생성된_시각 = lib.F지금()
+	대기_항목.생성된_시각 = lb.F지금()
 
 	s.Lock()
 	s.저장소[식별번호] = 대기_항목
@@ -97,7 +97,7 @@ func (s *DLL32_콜백_저장소) S추가(식별번호 int, TR코드 string) chan
 
 func (s *DLL32_콜백_저장소) S회신(식별번호 int) {
 	if 대기_항목 := s.G값(식별번호); 대기_항목 == nil {
-		lib.New에러("nil 대기 항목.")
+		lb.New에러("nil 대기 항목.")
 	} else {
 		대기_항목.S회신()
 	}
@@ -112,9 +112,9 @@ func (s *DLL32_콜백_저장소) s정리() {
 	최근_정리_시간 := s.최근_정리_시간
 	s.RUnlock()
 
-	지금 := lib.F지금()
+	지금 := lb.F지금()
 
-	if 지금.Sub(최근_정리_시간) < lib.P1분 {
+	if 지금.Sub(최근_정리_시간) < lb.P1분 {
 		return // 정리한 지 얼마 안 되었음.
 	}
 
@@ -122,7 +122,7 @@ func (s *DLL32_콜백_저장소) s정리() {
 	defer s.Unlock()
 
 	for idx, 대기_항목 := range s.저장소 {
-		if 지금.Sub(대기_항목.생성된_시각) > lib.P40초 {
+		if 지금.Sub(대기_항목.생성된_시각) > lb.P40초 {
 			delete(s.저장소, idx)
 		}
 	}

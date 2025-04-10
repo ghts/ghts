@@ -3,12 +3,12 @@ package xt
 import (
 	"bytes"
 	"encoding/binary"
-	"github.com/ghts/ghts/lib"
+	lb "github.com/ghts/ghts/lib"
 	"time"
 )
 
 type T8411_현물_차트_틱_질의값 struct {
-	*lib.S질의값_단일_종목
+	*lb.S질의값_단일_종목
 	M단위     int // n틱
 	M요청건수   int // 최대 압축 2000, 비압축 500
 	M조회영업일수 int // 0 : 미사용, 1 >= 사용
@@ -79,22 +79,22 @@ func (s *T8411_현물_차트_틱_응답_반복값_모음) G반복값_모음_TR�
 
 func NewT8411_현물_차트_틱_질의값() *T8411_현물_차트_틱_질의값 {
 	s := new(T8411_현물_차트_틱_질의값)
-	s.S질의값_단일_종목 = lib.New질의값_단일_종목_단순형()
+	s.S질의값_단일_종목 = lb.New질의값_단일_종목_단순형()
 
 	return s
 }
 
 func NewT8411InBlock(질의값 *T8411_현물_차트_틱_질의값) (g *T8411InBlock) {
 	g = new(T8411InBlock)
-	lib.F바이트_복사_문자열(g.Shcode[:], 질의값.M종목코드)
-	lib.F바이트_복사_정수(g.Ncnt[:], 질의값.M단위)
-	lib.F바이트_복사_정수(g.Qrycnt[:], 질의값.M요청건수)
-	lib.F바이트_복사_정수(g.Nday[:], 질의값.M조회영업일수)
-	lib.F바이트_복사_문자열(g.Sdate[:], 질의값.M시작일자)
-	lib.F바이트_복사_문자열(g.Edate[:], 질의값.M종료일자)
-	lib.F바이트_복사_문자열(g.Cts_date[:], 질의값.M연속일자)
-	lib.F바이트_복사_문자열(g.Cts_time[:], 질의값.M연속시간)
-	lib.F바이트_복사_문자열(g.Comp_yn[:], lib.F조건값(질의값.M압축여부, "Y", "N"))
+	lb.F바이트_복사_문자열(g.Shcode[:], 질의값.M종목코드)
+	lb.F바이트_복사_정수(g.Ncnt[:], 질의값.M단위)
+	lb.F바이트_복사_정수(g.Qrycnt[:], 질의값.M요청건수)
+	lb.F바이트_복사_정수(g.Nday[:], 질의값.M조회영업일수)
+	lb.F바이트_복사_문자열(g.Sdate[:], 질의값.M시작일자)
+	lb.F바이트_복사_문자열(g.Edate[:], 질의값.M종료일자)
+	lb.F바이트_복사_문자열(g.Cts_date[:], 질의값.M연속일자)
+	lb.F바이트_복사_문자열(g.Cts_time[:], 질의값.M연속시간)
+	lb.F바이트_복사_문자열(g.Comp_yn[:], lb.F조건값(질의값.M압축여부, "Y", "N"))
 
 	f속성값_초기화(g)
 
@@ -102,42 +102,42 @@ func NewT8411InBlock(질의값 *T8411_현물_차트_틱_질의값) (g *T8411InBl
 }
 
 func NewT8411_현물_차트_틱_응답_헤더(b []byte) (값 *T8411_현물_차트_틱_응답_헤더, 에러 error) {
-	defer lib.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
 
-	lib.F조건부_패닉(len(b) != SizeT8411OutBlock,
+	lb.F조건부_패닉(len(b) != SizeT8411OutBlock,
 		"예상하지 못한 길이 : '%v", len(b))
 
 	g := new(T8411OutBlock)
-	lib.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
+	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	값 = new(T8411_현물_차트_틱_응답_헤더)
-	값.M종목코드 = lib.F2문자열(g.Shcode)
-	값.M전일시가 = lib.F확인2(lib.F2정수64(g.Jisiga))
-	값.M전일고가 = lib.F확인2(lib.F2정수64(g.Jihigh))
-	값.M전일저가 = lib.F확인2(lib.F2정수64(g.Jilow))
-	값.M전일종가 = lib.F확인2(lib.F2정수64(g.Jiclose))
-	값.M전일거래량 = lib.F확인2(lib.F2정수64(g.Jivolume))
-	값.M당일시가 = lib.F확인2(lib.F2정수64(g.Disiga))
-	값.M당일고가 = lib.F확인2(lib.F2정수64(g.Dihigh))
-	값.M당일저가 = lib.F확인2(lib.F2정수64(g.Dilow))
-	값.M당일종가 = lib.F확인2(lib.F2정수64(g.Diclose))
-	값.M상한가 = lib.F확인2(lib.F2정수64(g.Highend))
-	값.M하한가 = lib.F확인2(lib.F2정수64(g.Lowend))
-	값.M연속일자 = lib.F2문자열(g.Cts_date)
-	값.M연속시간 = lib.F2문자열(g.Cts_time)
-	값.M장시작시간 = lib.F확인2(lib.F2일자별_시각(당일.G값(), "150405", g.S_time))
-	값.M장종료시간 = lib.F확인2(lib.F2일자별_시각(당일.G값(), "150405", g.E_time))
-	값.M동시호가처리시간 = lib.F확인2(lib.F2정수(g.Dshmin))
-	값.M수량 = lib.F확인2(lib.F2정수64(g.Rec_count))
+	값.M종목코드 = lb.F2문자열(g.Shcode)
+	값.M전일시가 = lb.F확인2(lb.F2정수64(g.Jisiga))
+	값.M전일고가 = lb.F확인2(lb.F2정수64(g.Jihigh))
+	값.M전일저가 = lb.F확인2(lb.F2정수64(g.Jilow))
+	값.M전일종가 = lb.F확인2(lb.F2정수64(g.Jiclose))
+	값.M전일거래량 = lb.F확인2(lb.F2정수64(g.Jivolume))
+	값.M당일시가 = lb.F확인2(lb.F2정수64(g.Disiga))
+	값.M당일고가 = lb.F확인2(lb.F2정수64(g.Dihigh))
+	값.M당일저가 = lb.F확인2(lb.F2정수64(g.Dilow))
+	값.M당일종가 = lb.F확인2(lb.F2정수64(g.Diclose))
+	값.M상한가 = lb.F확인2(lb.F2정수64(g.Highend))
+	값.M하한가 = lb.F확인2(lb.F2정수64(g.Lowend))
+	값.M연속일자 = lb.F2문자열(g.Cts_date)
+	값.M연속시간 = lb.F2문자열(g.Cts_time)
+	값.M장시작시간 = lb.F확인2(lb.F2일자별_시각(당일.G값(), "150405", g.S_time))
+	값.M장종료시간 = lb.F확인2(lb.F2일자별_시각(당일.G값(), "150405", g.E_time))
+	값.M동시호가처리시간 = lb.F확인2(lb.F2정수(g.Dshmin))
+	값.M수량 = lb.F확인2(lb.F2정수64(g.Rec_count))
 
 	return 값, nil
 }
 
 func NewT8411_현물_차트_틱_응답_반복값_모음(b []byte) (값 *T8411_현물_차트_틱_응답_반복값_모음, 에러 error) {
-	defer lib.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
 
 	나머지 := len(b) % SizeT8411OutBlock1
-	lib.F조건부_패닉(나머지 != 0, "예상하지 못한 길이. '%v' '%v'", len(b), 나머지)
+	lb.F조건부_패닉(나머지 != 0, "예상하지 못한 길이. '%v' '%v'", len(b), 나머지)
 
 	버퍼 := bytes.NewBuffer(b)
 	수량 := len(b) / SizeT8411OutBlock1
@@ -148,21 +148,21 @@ func NewT8411_현물_차트_틱_응답_반복값_모음(b []byte) (값 *T8411_�
 
 	for i, g := range g_모음 {
 		g = new(T8411OutBlock1)
-		lib.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
+		lb.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
-		날짜_문자열 := lib.F2문자열_공백_제거(g.Date)
-		시각_문자열 := lib.F2문자열_공백_제거(g.Time[:6])
+		날짜_문자열 := lb.F2문자열_공백_제거(g.Date)
+		시각_문자열 := lb.F2문자열_공백_제거(g.Time[:6])
 
 		s := new(T8411_현물_차트_틱_응답_반복값)
-		s.M일자_시각 = lib.F확인2(lib.F2포맷된_시각("20060102 150405", 날짜_문자열+" "+시각_문자열))
-		s.M시가 = lib.F확인2(lib.F2정수64(g.Open))
-		s.M고가 = lib.F확인2(lib.F2정수64(g.High))
-		s.M저가 = lib.F확인2(lib.F2정수64(g.Low))
-		s.M종가 = lib.F확인2(lib.F2정수64(g.Close))
-		s.M거래량 = lib.F확인2(lib.F2정수64(g.Vol))
-		s.M수정구분 = lib.F확인2(lib.F2정수64_공백은_0(g.Jongchk))
-		s.M수정비율 = lib.F2실수_소숫점_추가_단순형_공백은_0(g.Rate, 2)
-		s.M수정주가반영항목 = lib.F확인2(lib.F2정수64_공백은_0(g.Pricechk))
+		s.M일자_시각 = lb.F확인2(lb.F2포맷된_시각("20060102 150405", 날짜_문자열+" "+시각_문자열))
+		s.M시가 = lb.F확인2(lb.F2정수64(g.Open))
+		s.M고가 = lb.F확인2(lb.F2정수64(g.High))
+		s.M저가 = lb.F확인2(lb.F2정수64(g.Low))
+		s.M종가 = lb.F확인2(lb.F2정수64(g.Close))
+		s.M거래량 = lb.F확인2(lb.F2정수64(g.Vol))
+		s.M수정구분 = lb.F확인2(lb.F2정수64_공백은_0(g.Jongchk))
+		s.M수정비율 = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Rate, 2)
+		s.M수정주가반영항목 = lb.F확인2(lb.F2정수64_공백은_0(g.Pricechk))
 
 		값.M배열[i] = s
 	}

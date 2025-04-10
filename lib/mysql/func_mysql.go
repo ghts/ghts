@@ -2,12 +2,12 @@ package mysql
 
 import (
 	"database/sql"
-	"github.com/ghts/ghts/lib"
+	lb "github.com/ghts/ghts/lib"
 )
 import _ "github.com/go-sql-driver/mysql"
 
 func DSN_MySQL(address, username, password, dbname string) string {
-	return lib.F2문자열("%v:%v@tcp(%v:3306)/%v?parseTime=true",
+	return lb.F2문자열("%v:%v@tcp(%v:3306)/%v?parseTime=true",
 		username,
 		password,
 		address,

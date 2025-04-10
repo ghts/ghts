@@ -1,7 +1,7 @@
 package dll32
 
 import (
-	"github.com/ghts/ghts/lib"
+	lb "github.com/ghts/ghts/lib"
 	xing "github.com/ghts/ghts/xing/go"
 	"os"
 	"testing"
@@ -19,12 +19,12 @@ func TestMain(m *testing.M) {
 }
 
 func f테스트_준비() error {
-	defer lib.S예외처리{}.S실행()
+	defer lb.S예외처리{}.S실행()
 
-	lib.F테스트_모드_시작()
+	lb.F테스트_모드_시작()
 
-	if lib.F환경변수("GOARCH") != "386" {
-		return lib.New에러with출력("DLL32 모듈은 32비트 전용입니다.")
+	if lb.F환경변수("GOARCH") != "386" {
+		return lb.New에러with출력("DLL32 모듈은 32비트 전용입니다.")
 	}
 
 	xing.F소켓_생성()
@@ -37,7 +37,7 @@ func f테스트_준비() error {
 }
 
 func f테스트_정리() {
-	lib.F테스트_모드_종료()
+	lb.F테스트_모드_종료()
 
 	f종료_질의_송신()
 	F종료_대기()

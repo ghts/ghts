@@ -2,7 +2,7 @@ package xt
 
 import (
 	"errors"
-	"github.com/ghts/ghts/lib"
+	lb "github.com/ghts/ghts/lib"
 	"strings"
 )
 
@@ -72,7 +72,7 @@ func (s *S이중_응답_일반형) G값(TR코드 string) interface{} {
 		g.M응답2 = s.M응답2.(*T3320_기업정보_요약_응답2)
 		return g
 	default:
-		panic(lib.New에러("예상하지 못한 TR코드 : '%v'", TR코드))
+		panic(lb.New에러("예상하지 못한 TR코드 : '%v'", TR코드))
 	}
 }
 
@@ -102,7 +102,7 @@ func (s *S헤더_반복값) G반복값_모음_TR데이터() I반복값_모음_TR
 func (s *S헤더_반복값) G값(TR코드 string) interface{} {
 	switch TR코드 {
 	default:
-		panic(lib.New에러with출력("예상하지 못한 TR코드 : '%v' %v", TR코드, lib.F소스코드_위치(0))) // 패닉 출력을 삭제하지 말 것.
+		panic(lb.New에러with출력("예상하지 못한 TR코드 : '%v' %v", TR코드, lb.F소스코드_위치(0))) // 패닉 출력을 삭제하지 말 것.
 	//case TR현물_시간대별_체결_조회:
 	//	값 := new(T1301_현물_시간대별_체결_응답)
 	//	값.M헤더 = s.M헤더.(*T1301_현물_시간대별_체결_응답_헤더)

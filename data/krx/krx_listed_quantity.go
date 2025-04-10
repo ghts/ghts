@@ -2,9 +2,9 @@ package krx
 
 import (
 	"encoding/csv"
-	lb "github.com/ghts/ghts/lib"
-	"net/url"
-	"strings"
+lb "github.com/ghts/ghts/lib"
+"net/url"
+"strings"
 )
 
 var map상장_주식_수량 map[string]int64

@@ -1,7 +1,7 @@
 package xing
 
 import (
-	"github.com/ghts/ghts/lib"
+	lb "github.com/ghts/ghts/lib"
 	xt "github.com/ghts/ghts/xing/base"
 	"strings"
 	"time"
@@ -17,10 +17,10 @@ func F전일() time.Time {
 
 func F2전일_시각(포맷 string, 값 interface{}) (time.Time, error) {
 	if strings.Contains(포맷, "2") {
-		return time.Time{}, lib.New에러("포맷에 이미 날짜가 포함되어 있습니다. %v", 포맷)
+		return time.Time{}, lb.New에러("포맷에 이미 날짜가 포함되어 있습니다. %v", 포맷)
 	}
 
-	시각, 에러 := lib.F2포맷된_시각(포맷, 값)
+	시각, 에러 := lb.F2포맷된_시각(포맷, 값)
 	if 에러 != nil {
 		return time.Time{}, 에러
 	}
@@ -35,10 +35,10 @@ func F2전일_시각(포맷 string, 값 interface{}) (time.Time, error) {
 
 func F2당일_시각(포맷 string, 값 interface{}) (time.Time, error) {
 	if strings.Contains(포맷, "2") {
-		return time.Time{}, lib.New에러("포맷에 이미 날짜가 포함되어 있습니다. %v", 포맷)
+		return time.Time{}, lb.New에러("포맷에 이미 날짜가 포함되어 있습니다. %v", 포맷)
 	}
 
-	시각, 에러 := lib.F2포맷된_시각(포맷, 값)
+	시각, 에러 := lb.F2포맷된_시각(포맷, 값)
 	if 에러 != nil {
 		return time.Time{}, 에러
 	}
@@ -110,12 +110,12 @@ func f에러_발생(TR코드, 코드, 내용 string) bool {
 		}
 
 		// 에러 출력. 디버깅에 필요함. 지우지 말 것.
-		panic(lib.New에러with출력("판별 불가능한 TR코드 : '%v'\n코드 : '%v'\n내용 : '%v'", TR코드, 코드, 내용))
+		panic(lb.New에러with출력("판별 불가능한 TR코드 : '%v'\n코드 : '%v'\n내용 : '%v'", TR코드, 코드, 내용))
 	}
 }
 
-func f데이터_복원_이중_응답(대기_항목 *DLL32_콜백_대기_항목, 수신값 *lib.S바이트_변환) (에러 error) {
-	defer lib.S예외처리{M에러: &에러}.S실행()
+func f데이터_복원_이중_응답(대기_항목 *DLL32_콜백_대기_항목, 수신값 *lb.S바이트_변환) (에러 error) {
+	defer lb.S예외처리{M에러: &에러}.S실행()
 
 	완전값 := new(xt.S이중_응답_일반형)
 
@@ -131,7 +131,7 @@ func f데이터_복원_이중_응답(대기_항목 *DLL32_콜백_대기_항목, 
 		}
 	}
 
-	switch 변환값 := lib.F확인2(수신값.S해석기(xt.F바이트_변환값_해석).G해석값()).(type) {
+	switch 변환값 := lb.F확인2(수신값.S해석기(xt.F바이트_변환값_해석).G해석값()).(type) {
 	case nil:
 		대기_항목.대기값 = nil
 		대기_항목.데이터_수신 = true
@@ -151,7 +151,7 @@ func f데이터_복원_이중_응답(대기_항목 *DLL32_콜백_대기_항목, 
 	case xt.I이중_응답2:
 		완전값.M응답2 = 변환값
 	default:
-		panic(lib.New에러with출력("f데이터_복원_이중_응답() 예상하지 못한 자료형 문자열 : '%v'", 수신값.G자료형_문자열()))
+		panic(lb.New에러with출력("f데이터_복원_이중_응답() 예상하지 못한 자료형 문자열 : '%v'", 수신값.G자료형_문자열()))
 	}
 
 	대기_항목.대기값 = 완전값
@@ -165,8 +165,8 @@ func f데이터_복원_이중_응답(대기_항목 *DLL32_콜백_대기_항목, 
 	return nil
 }
 
-func f데이터_복원_반복_조회(대기_항목 *DLL32_콜백_대기_항목, 수신값 *lib.S바이트_변환) (에러 error) {
-	defer lib.S예외처리{M에러: &에러}.S실행()
+func f데이터_복원_반복_조회(대기_항목 *DLL32_콜백_대기_항목, 수신값 *lb.S바이트_변환) (에러 error) {
+	defer lb.S예외처리{M에러: &에러}.S실행()
 
 	완전값 := new(xt.S헤더_반복값)
 
@@ -182,11 +182,11 @@ func f데이터_복원_반복_조회(대기_항목 *DLL32_콜백_대기_항목, 
 		}
 	}
 
-	switch 변환값 := lib.F확인2(수신값.S해석기(xt.F바이트_변환값_해석).G해석값()).(type) {
+	switch 변환값 := lb.F확인2(수신값.S해석기(xt.F바이트_변환값_해석).G해석값()).(type) {
 	default:
-		panic(lib.New에러with출력("f데이터_복원_반복_조회() 예상하지 못한 자료형 : '%T' '%v'", 변환값, 수신값.G자료형_문자열()))
+		panic(lb.New에러with출력("f데이터_복원_반복_조회() 예상하지 못한 자료형 : '%T' '%v'", 변환값, 수신값.G자료형_문자열()))
 	case error:
-		lib.F에러_출력(변환값.Error())
+		lb.F에러_출력(변환값.Error())
 		return 변환값
 	case xt.I헤더_반복값_TR데이터:
 		if 변환값.G헤더_TR데이터() != nil {
@@ -229,7 +229,7 @@ func f전송_권한_획득(TR코드 string) {
 	}
 }
 
-func f1초_1회_미만_전송_제한_확인(TR코드 string) lib.I전송_권한 {
+func f1초_1회_미만_전송_제한_확인(TR코드 string) lb.I전송_권한 {
 	tr전송_제한_초기화_확인(TR코드)
 
 	전송_권한, 존재함 := tr코드별_전송_제한_초당_1회_미만[TR코드]
@@ -244,7 +244,7 @@ func f1초_1회_미만_전송_제한_확인(TR코드 string) lib.I전송_권한 
 	return 전송_권한.G획득()
 }
 
-func f10분당_전송_제한_확인(TR코드 string) lib.I전송_권한 {
+func f10분당_전송_제한_확인(TR코드 string) lb.I전송_권한 {
 	tr전송_제한_초기화_확인(TR코드)
 
 	전송_권한, 존재함 := tr코드별_전송_제한_10분[TR코드]
@@ -259,14 +259,14 @@ func f10분당_전송_제한_확인(TR코드 string) lib.I전송_권한 {
 	return 전송_권한.G획득()
 }
 
-func f초당_전송_제한_확인(TR코드 string) lib.I전송_권한 {
+func f초당_전송_제한_확인(TR코드 string) lb.I전송_권한 {
 	tr전송_제한_초기화_확인(TR코드)
 
 	전송_권한, 존재함 := tr코드별_전송_제한_1초[TR코드]
 
 	switch {
 	case !존재함:
-		panic(lib.New에러("전송제한을 찾을 수 없음 : '%v'", TR코드))
+		panic(lb.New에러("전송제한을 찾을 수 없음 : '%v'", TR코드))
 	case 전송_권한.TR코드() != TR코드:
 		panic("예상하지 못한 경우.")
 	case 전송_권한.G남은_수량() > 100:
@@ -297,7 +297,7 @@ func f전송_시각_기록(TR코드 string) {
 }
 
 func F계좌번호_존재함(계좌번호 string) bool {
-	계좌번호_모음 := lib.F확인2(F계좌번호_모음())
+	계좌번호_모음 := lb.F확인2(F계좌번호_모음())
 
 	for _, 계좌번호_값 := range 계좌번호_모음 {
 		if 계좌번호 == 계좌번호_값 {
@@ -321,14 +321,14 @@ func F계좌번호_존재함(계좌번호 string) bool {
 //}
 
 //func F계좌번호by상세명(상세명 string) (계좌번호 string, 에러 error) {
-//	defer lib.S예외처리{M에러: &에러}.S실행()
+//	defer lb.S예외처리{M에러: &에러}.S실행()
 //
 //	계좌번호_모음, 에러 := F계좌번호_모음()
-//	lib.F확인(에러)
+//	lb.F확인(에러)
 //
 //	for _, 계좌번호 := range 계좌번호_모음 {
 //		계좌_상세명, 에러 := F계좌_상세명(계좌번호)
-//		lib.F확인(에러)
+//		lb.F확인(에러)
 //
 //		if 계좌_상세명 == 상세명 {
 //			return 계좌번호, nil
@@ -342,7 +342,7 @@ func F종목_식별_문자열(종목코드 string) string {
 	if 종목, 에러 := F종목by코드(종목코드); 에러 == nil {
 		return 종목.G식별_문자열()
 	} else {
-		return lib.F2문자열("[%v]", 종목코드)
+		return lb.F2문자열("[%v]", 종목코드)
 	}
 }
 
