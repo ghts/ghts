@@ -2,14 +2,16 @@ package krx
 
 import (
 	"github.com/PuerkitoBio/goquery"
-lb "github.com/ghts/ghts/lib"
-"io"
-"net/http"
-"strings"
-"time"
+	lb "github.com/ghts/ghts/lib"
+	"io"
+	"net/http"
+	"strings"
+	"time"
 )
+
 type S상장_법인_정보 struct {
 	M회사명  string
+	M시장구분 string
 	M종목코드 string
 	M업종   string
 	M주요제품 string
@@ -59,7 +61,7 @@ func f상장_법인_정보_맵() (법인정보_맵 map[string]*S상장_법인_�
 
 	url := `https://kind.krx.co.kr/corpgeneral/corpList.do?method=download&searchType=13`
 	응답 := lb.F확인2(http.Get(url))
-	defer 응답.Body.Close()
+	defer func() { _ = 응답.Body.Close() }()
 
 	응답값 := lb.F확인2(io.ReadAll(응답.Body))
 	문서 := lb.F확인2(goquery.NewDocumentFromReader(strings.NewReader(lb.F2문자열_EUC_KR(응답값))))
@@ -75,18 +77,20 @@ func f상장_법인_정보_맵() (법인정보_맵 map[string]*S상장_법인_�
 			case 0:
 				법인_정보.M회사명 = 문자열
 			case 1:
-				법인_정보.M종목코드 = 문자열
+				법인_정보.M시장구분 = 문자열
 			case 2:
-				법인_정보.M업종 = 문자열
+				법인_정보.M종목코드 = 문자열
 			case 3:
-				법인_정보.M주요제품 = 문자열
+				법인_정보.M업종 = 문자열
 			case 4:
+				법인_정보.M주요제품 = 문자열
+			case 5:
 				if 상장일, 에러 := lb.F2포맷된_일자(lb.P일자_형식, 문자열); 에러 == nil {
 					법인_정보.M상장일 = 상장일
 				} else {
 					lb.F문자열_출력("상장일 에러 : %v '%v'", 법인_정보.M종목코드, 문자열)
 				}
-			case 5:
+			case 6:
 				if 월_정수, 에러 := lb.F2정수(lb.F정규식_검색(문자열, []string{`[0-9]+`})); 에러 == nil {
 					월_모음 := []time.Month{
 						time.January,
