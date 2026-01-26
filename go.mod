@@ -1,14 +1,15 @@
 module github.com/ghts/ghts
 
-go 1.23.0
+go 1.24.0
 
 require (
 	github.com/PuerkitoBio/goquery v1.9.2
 	github.com/go-sql-driver/mysql v1.8.1
 	github.com/mitchellh/go-ps v1.0.0
 	go.nanomsg.org/mangos/v3 v3.4.2
-	golang.org/x/sys v0.21.0
-	golang.org/x/text v0.16.0
+	golang.org/x/exp v0.0.0-20260112195511-716be5621a96
+	golang.org/x/sys v0.31.0
+	golang.org/x/text v0.23.0
 	gopkg.in/ini.v1 v1.67.0
 )
 
