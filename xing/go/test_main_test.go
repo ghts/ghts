@@ -1,9 +1,10 @@
 package xing
 
 import (
+	"testing"
+
 	lb "github.com/ghts/ghts/lib"
 	xt "github.com/ghts/ghts/xing/base"
-	"testing"
 )
 
 func TestMain(m *testing.M) {
@@ -23,9 +24,7 @@ func f테스트_준비() (에러 error) {
 
 	lb.F테스트_모드_시작()
 	xt.F서버_구분_설정(xt.P서버_모의투자)
-
-	lb.F확인1(xt.F로그인_정보_설정())
-
+	lb.F확인1(xt.F테스트용_로그인_설정_화일_읽기())
 	F초기화(xt.P서버_모의투자, xt.V로그인_정보)
 	lb.F확인1(F주문_응답_실시간_정보_구독())
 
