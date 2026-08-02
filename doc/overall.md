@@ -167,7 +167,6 @@ ghts/
 
 ### 📊 data/ 및 doc/
 - **data/daily_price/**: 일일 가격 데이터 저장
-- **data/krx/**: 한국거래소 관련 데이터
 - **doc/db_schema.sql**: 데이터베이스 스키마 정의
 - **doc/env4dev.txt.go**: 개발 환경 설정 템플릿
 
