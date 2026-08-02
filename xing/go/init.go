@@ -2,54 +2,19 @@ package xing
 
 import (
 	"fmt"
-	lb "github.com/ghts/ghts/lib"
-	ep "github.com/ghts/ghts/lib/external_process"
-	"github.com/ghts/ghts/lib/nanomsg"
-	"github.com/ghts/ghts/xing/base"
-	"github.com/mitchellh/go-ps"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"runtime"
 	"sync"
 	"time"
+
+	lb "github.com/ghts/ghts/lib"
+	ep "github.com/ghts/ghts/lib/external_process"
+	"github.com/ghts/ghts/lib/nanomsg"
+	"github.com/ghts/ghts/xing/base"
+	"github.com/mitchellh/go-ps"
 )
-
-func init() {
-	//TR현물_호가_조회_t1101 = "t1101"	// HTS 1101 화면,  DevCenter 소숫점 비교 확인 완료.
-	//TR현물_시세_조회_t1102 = "t1102"	// HTS 1101 화면,  DevCenter 소숫점 비교 확인 완료.
-	//TR현물_기간별_조회_t1305      = "t1305"	// HTS 1305 화면,  DevCenter 소숫점 비교 확인 완료.
-	//TR현물_당일_전일_분틱_조회_t1310 = "t1310"	// HTS 1310 화면,  DevCenter 소숫점 비교 확인 완료.
-	//TR관리_불성실_투자유의_조회_t1404 = "t1404"	// HTS 1404 화면,  DevCenter 소숫점 비교 확인 완료.
-	//TR투자경고_매매정지_정리매매_조회_t1405 = "t1405"	// HTS 1405 화면,  DevCenter 소숫점 비교 확인 완료.
-	//TR_ETF_시간별_추이_t1902    = "t1902"	// HTS 1902 화면,  DevCenter 소숫점 비교 확인 완료.
-	//TR재무순위_종합_t3341        = "t3341"	// HTS 3303 화면,  DevCenter 소숫점 비교 확인 완료.
-	//TR현물_차트_틱_t8411        = "t8411"	// HTS 4001 화면,  DevCenter 소숫점 비교 확인 완료.
-	//TR현물_차트_분_t8412        = "t8412"	// HTS 4001 화면,  DevCenter 소숫점 비교 확인 완료.
-	//TR현물_차트_일주월_t8413      = "t8413"		// HTS 1305 화면, DevCenter 소숫점 비교 확인 완료.
-	//TR증시_주변_자금_추이_t8428    = "t8428"	// HTS 1503 화면, DevCenter 소숫점 비교 확인 완료.
-	//TR현물_종목_조회_t8436       = "t8436"	// 종목 정보 대조 비교 완료.
-
-	메모 := `
-- 선물 주문 : CFOAT00100(선물옵션 정상주문) / CFOAT00200(선물옵션 정정주문) / CFOAT00300(선물옵션 취소주문)
-- CFOAQ00600(선물옵션 계좌주문체결내역 조회)
-- CFOFQ02400(선물옵션 계좌 미결제 약정현황(평균가)
-- CFOBQ10500(선물옵션 계좌예탁금증거금조회)
-- 실시간 TR : C01(선물주문체결) / O01(선물접수) / H01(선물주문정정취소)
-- 데이터 수집 중 연결이 끊기는 경우가 자주 발생함. 재접속 하는 것 완성 및 디버깅 할 것.
-- 매매일지 / 수수료 (t0150, t0151)
-- 계좌 조회 기능 구현할 것. (CDPCQ04700, CSPAQ12200,CSPAQ12300, CSPAQ13700, FOCCQ33600)
-- ETF 일별 추이 (t1903)
-- 선물 가격 정보 (t8414, t8415, t8416, t9943)
-- 해외 지수 (o3123, o3121, t3518, t3521) // o31xx는 해외선물 계좌 내지 모의투자 있어야 보임.
-- 주식 분할, 합병, 소각, 유상/무상 증자등 주가에 영향을 미치는 이벤트 아는 방법 찾을 것.
-- 업종별 조회 기능. (t8424, t4203, t1514, t8419)
-- 테마별 조회 기능. (t8425, t1531)
-- 뉴스 및 공시 정보. (t3102,t3202)
-- TR 결과값을 출력해서 HTS와 대조 비교해 볼 것. (실시간 정보들)
-`
-	lb.F중복없는_문자열_출력(메모)
-}
 
 func F초기화(서버_구분 xt.T서버_구분, 로그인_정보 *xt.S로그인_정보) {
 	// 자식 프로세스는 부모 프로세스의 환경 변수를 그대로 물려받음.

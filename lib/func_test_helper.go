@@ -358,6 +358,10 @@ func F체크포인트(값_모음 ...interface{}) {
 }
 
 func f포맷된_문자열(포맷_문자열 string, 추가_매개변수 ...interface{}) string {
+	if len(추가_매개변수) == 0 {
+		return 포맷_문자열
+	}
+
 	return fmt.Sprintf(포맷_문자열, 추가_매개변수...)
 }
 
@@ -478,25 +482,6 @@ func F중복없는_문자열_출력(포맷_문자열 string, 인수 ...interface
 	}
 
 	return
-}
-
-func F화면_출력_중지() (화면_출력_장치 *os.File) {
-	화면_출력_잠금.Lock()
-
-	_, 출력_파이프 := F확인3(os.Pipe())
-	화면_출력_장치 = os.Stdout
-	os.Stdout = 출력_파이프
-
-	return 화면_출력_장치
-}
-
-func F화면_출력_재개(화면_출력_장치 *os.File) {
-	defer 화면_출력_잠금.Unlock()
-
-	출력_파이프 := os.Stdout
-	defer 출력_파이프.Close()
-
-	os.Stdout = 화면_출력_장치
 }
 
 func F출력_문자열_확보(함수 func()) (문자열 string, 에러 error) {
