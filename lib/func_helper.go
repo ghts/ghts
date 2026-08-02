@@ -20,6 +20,8 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"golang.org/x/exp/constraints"
 )
 
 func F같음(값, 비교값 interface{}) bool {
@@ -245,10 +247,10 @@ func F절대값_Duration(값 time.Duration) time.Duration {
 	return 값
 }
 
-func F대기(시간 time.Duration) { time.Sleep(시간) }
-func F대기_초(초 float64)      { time.Sleep(time.Duration(float64(P1초) * 초)) }
-func F대기_분(분 float64)      { time.Sleep(time.Duration(float64(P1분) * 분)) }
-func F대기_시간(시간 float64)    { time.Sleep(time.Duration(float64(P1시간) * 시간)) }
+func F대기(기간 time.Duration) { time.Sleep(기간) }
+func F대기_초[T constraints.Integer | constraints.Float](초 T)      { time.Sleep(P1초 * time.Duration(초)) }
+func F대기_분[T constraints.Integer | constraints.Float](분 T)      { time.Sleep(P1분 * time.Duration(분)) }
+func F대기_시간[T constraints.Integer | constraints.Float](시간 T)    { time.Sleep(P1시간 * time.Duration(시간)) }
 
 func F신호_수신(채널 <-chan T신호) bool {
 	select {

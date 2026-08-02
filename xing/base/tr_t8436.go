@@ -60,7 +60,7 @@ func NewT8436_현물_종목조회_응답_반복값_모음(b []byte) (값 *T8436_
 		s.M하한가 = lb.F확인2(lb.F2정수64(g.DnLmtPrice))
 		s.M전일가 = lb.F확인2(lb.F2정수64(g.JnilClose))
 		s.M기준가 = lb.F확인2(lb.F2정수64(g.RecPrice))
-		s.M증권그룹 = T증권그룹(lb.F확인2(lb.F2정수(g.Bu12Gubun)))
+		s.M증권그룹 = T증권그룹(lb.F확인2(lb.F2정수_공백은_0(g.Bu12Gubun)))
 		s.M기업인수목적회사여부 = lb.F2참거짓(lb.F2문자열(g.SpacGubun), "Y", true)
 
 		ETF구분 := lb.F2문자열_공백_제거(g.EtfGubun)
