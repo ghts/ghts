@@ -1,12 +1,13 @@
 package dll32
 
 import (
-	lb "github.com/ghts/ghts/lib"
-	"github.com/ghts/ghts/lib/dll"
-	xt "github.com/ghts/ghts/xing/base"
 	"runtime"
 	"time"
 	"unsafe"
+
+	lb "github.com/ghts/ghts/lib"
+	"github.com/ghts/ghts/lib/w32"
+	xt "github.com/ghts/ghts/xing/base"
 )
 
 // 단일 스레드에서 API를 호출.
@@ -184,7 +185,7 @@ func F조회_및_주문_질의_처리(질의 *lb.S채널_질의) {
 		c데이터 = unsafe.Pointer(xt.NewT0151InBlock(질의값.(*xt.T0151_현물_일자별_매매일지_질의값)))
 		길이 = xt.SizeT0151InBlock
 	case xt.TR시간_조회_t0167:
-		c데이터 = unsafe.Pointer(dll.F2ANSI문자열(""))
+		c데이터 = unsafe.Pointer(w32.F2ANSI문자열(""))
 		길이 = 0
 	case xt.TR현물_체결_미체결_조회_t0425:
 		c데이터 = unsafe.Pointer(xt.NewT0425InBlock(질의값.(*xt.T0425_현물_체결_미체결_조회_질의값), f계좌_비밀번호()))

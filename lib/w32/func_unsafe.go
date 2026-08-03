@@ -1,9 +1,10 @@
-package dll
+package w32
 
 import (
-	"golang.org/x/text/encoding/korean"
 	"strings"
 	"unsafe"
+
+	"golang.org/x/text/encoding/korean"
 )
 
 const 단위_오프셋 = unsafe.Sizeof(byte(0))

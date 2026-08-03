@@ -3,13 +3,13 @@ package dll32
 import (
 	"bytes"
 	"encoding/binary"
-	lb "github.com/ghts/ghts/lib"
-	"github.com/ghts/ghts/lib/dll"
-	"github.com/ghts/ghts/lib/w32"
-	"github.com/ghts/ghts/xing/base"
 	"strings"
 	"syscall"
 	"unsafe"
+
+	lb "github.com/ghts/ghts/lib"
+	"github.com/ghts/ghts/lib/w32"
+	"github.com/ghts/ghts/xing/base"
 )
 
 func F콜백(콜백값 lb.I콜백) (에러 error) {
@@ -89,7 +89,7 @@ func f콜백_동기식(콜백값 lb.I콜백) (에러 error) {
 }
 
 func OnTrData(TR데이터 unsafe.Pointer) {
-	c데이터 := dll.F2Go바이트_모음with길이(TR데이터, xt.Sizeof_TR_DATA)
+	c데이터 := w32.F2Go바이트_모음with길이(TR데이터, xt.Sizeof_TR_DATA)
 	버퍼 := bytes.NewBuffer(c데이터)
 	g := new(xt.TR_DATA)
 
@@ -120,25 +120,25 @@ func OnTrData(TR데이터 unsafe.Pointer) {
 	case "t8410OutBlock1":
 		버퍼 := make([]byte, xt.SizeT8410OutBlock1*2000)
 		길이 := F압축_해제(unsafe.Pointer(g.Data), &버퍼[0], g.DataLength)
-		raw값 = dll.F2Go바이트_모음with길이(unsafe.Pointer(&버퍼[0]), 길이)
+		raw값 = w32.F2Go바이트_모음with길이(unsafe.Pointer(&버퍼[0]), 길이)
 		g.DataLength = int32(길이)
 	case "t8411OutBlock1":
 		버퍼 := make([]byte, xt.SizeT8411OutBlock1*2000)
 		길이 := F압축_해제(unsafe.Pointer(g.Data), &버퍼[0], g.DataLength)
-		raw값 = dll.F2Go바이트_모음with길이(unsafe.Pointer(&버퍼[0]), 길이)
+		raw값 = w32.F2Go바이트_모음with길이(unsafe.Pointer(&버퍼[0]), 길이)
 		g.DataLength = int32(길이)
 	case "t8412OutBlock1":
 		버퍼 := make([]byte, xt.SizeT8412OutBlock1*2000)
 		길이 := F압축_해제(unsafe.Pointer(g.Data), &버퍼[0], g.DataLength)
-		raw값 = dll.F2Go바이트_모음with길이(unsafe.Pointer(&버퍼[0]), 길이)
+		raw값 = w32.F2Go바이트_모음with길이(unsafe.Pointer(&버퍼[0]), 길이)
 		g.DataLength = int32(길이)
 	case "t8413OutBlock1":
 		버퍼 := make([]byte, xt.SizeT8413OutBlock1*2000)
 		길이 := F압축_해제(unsafe.Pointer(g.Data), &버퍼[0], g.DataLength)
-		raw값 = dll.F2Go바이트_모음with길이(unsafe.Pointer(&버퍼[0]), 길이)
+		raw값 = w32.F2Go바이트_모음with길이(unsafe.Pointer(&버퍼[0]), 길이)
 		g.DataLength = int32(길이)
 	default:
-		raw값 = dll.F2Go바이트_모음with길이(unsafe.Pointer(g.Data), int(g.DataLength))
+		raw값 = w32.F2Go바이트_모음with길이(unsafe.Pointer(g.Data), int(g.DataLength))
 	}
 
 	자료형_문자열 := lb.F확인2(f자료형_문자열_해석(g))
@@ -167,7 +167,7 @@ func OnTrData(TR데이터 unsafe.Pointer) {
 func OnMessageAndError(MSG데이터 unsafe.Pointer) {
 	defer F메시지_해제(MSG데이터)
 
-	c데이터 := dll.F2Go바이트_모음with길이(MSG데이터, xt.Sizeof_MSG_DATA)
+	c데이터 := w32.F2Go바이트_모음with길이(MSG데이터, xt.Sizeof_MSG_DATA)
 	버퍼 := bytes.NewBuffer(c데이터)
 	g := new(xt.MSG_DATA)
 
@@ -198,7 +198,7 @@ func OnMessageAndError(MSG데이터 unsafe.Pointer) {
 	콜백값.S콜백_기본형 = lb.New콜백_기본형(lb.P콜백_메시지_및_에러)
 	콜백값.M식별번호 = int(g.RequestID)
 	콜백값.M코드 = lb.F2문자열_공백_제거(g.MsgCode)
-	콜백값.M내용 = dll.F2문자열_EUC_KR(unsafe.Pointer(g.MsgData))
+	콜백값.M내용 = w32.F2문자열_EUC_KR(unsafe.Pointer(g.MsgData))
 	콜백값.M에러여부 = 에러여부
 
 	F콜백(콜백값)
@@ -210,7 +210,7 @@ func OnReleaseData(식별번호 int) {
 }
 
 func OnRealtimeData(실시간_데이터 unsafe.Pointer) {
-	c데이터 := dll.F2Go바이트_모음with길이(실시간_데이터, xt.Sizeof_REALTIME_DATA)
+	c데이터 := w32.F2Go바이트_모음with길이(실시간_데이터, xt.Sizeof_REALTIME_DATA)
 	버퍼 := bytes.NewBuffer(c데이터)
 	g := new(xt.REALTIME_DATA)
 
@@ -231,7 +231,7 @@ func OnRealtimeData(실시간_데이터 unsafe.Pointer) {
 
 	// KeyData, RegKey등이 불필요한 듯 해서 전송 안 함. 필요하면 추가할 것.
 
-	raw값 := dll.F2Go바이트_모음with길이(unsafe.Pointer(g.Data), int(g.DataLength))
+	raw값 := w32.F2Go바이트_모음with길이(unsafe.Pointer(g.Data), int(g.DataLength))
 	raw값 = f민감정보_삭제(raw값, lb.F2문자열_공백_제거(g.TrCode))
 	바이트_변환값 := lb.F확인2(lb.New바이트_변환Raw(lb.F2문자열(g.TrCode), raw값, false))
 
@@ -241,7 +241,7 @@ func OnRealtimeData(실시간_데이터 unsafe.Pointer) {
 }
 
 func OnLogin(wParam, lParam unsafe.Pointer) {
-	코드 := dll.F2Go문자열(wParam)
+	코드 := w32.F2Go문자열(wParam)
 	정수, 에러 := lb.F2정수(코드)
 	로그인_성공_여부 := 에러 == nil && 정수 == 0
 
@@ -254,7 +254,7 @@ func OnLogin(wParam, lParam unsafe.Pointer) {
 			lb.F문자열_출력("에러 코드 : %v", 정수)
 		}
 
-		lb.F문자열_출력("에러 메세지 : %v", dll.F2문자열_EUC_KR(lParam))
+		lb.F문자열_출력("에러 메세지 : %v", w32.F2문자열_EUC_KR(lParam))
 
 		if f모의투자서버_접속_중() {
 			버퍼 := new(bytes.Buffer)
