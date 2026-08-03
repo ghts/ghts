@@ -1,4 +1,4 @@
-package nanomsg_context
+package nano
 
 import (
 	lb "github.com/ghts/ghts/lib"

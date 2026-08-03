@@ -1,8 +1,10 @@
 package nano
 
 import (
+	"strings"
+	"time"
+
 	lb "github.com/ghts/ghts/lib"
-	"github.com/ghts/ghts/lib/nanomsg_context"
 	"go.nanomsg.org/mangos/v3"
 	"go.nanomsg.org/mangos/v3/protocol/pair"
 	"go.nanomsg.org/mangos/v3/protocol/pub"
@@ -12,8 +14,6 @@ import (
 	"go.nanomsg.org/mangos/v3/protocol/req"
 	"go.nanomsg.org/mangos/v3/protocol/sub"
 	_ "go.nanomsg.org/mangos/v3/transport/tcp"
-	"strings"
-	"time"
 )
 
 func NewNano소켓(종류 lb.T소켓_종류, 주소 string, 접속방식 lb.T소켓_접속방식, 옵션_모음 ...interface{}) (소켓 lb.I소켓, 에러 error) {
@@ -193,7 +193,7 @@ func (s *sNano소켓) G컨텍스트() (lb.I송수신, error) {
 		lb.F에러_출력(에러)
 		return nil, 에러
 	} else {
-		return nanomsg_context.New컨텍스트(ctx), nil
+		return New컨텍스트(ctx), nil
 	}
 }
 
