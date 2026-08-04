@@ -1,8 +1,9 @@
 package xing
 
 import (
-	lb "github.com/ghts/ghts/lib"
 	"testing"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
 func TestCSPAQ12200_현물계좌_총평가(t *testing.T) {
@@ -15,7 +16,7 @@ func TestCSPAQ12200_현물계좌_총평가(t *testing.T) {
 	lb.F테스트_에러없음(t, 에러)
 	lb.F테스트_같음(t, 값.M계좌번호, 계좌번호)
 	lb.F테스트_다름(t, 값.M계좌명, "")
-	//lb.F테스트_참임(t, 값.M현금주문가능금액 >= 0)
+	lb.F테스트_참임(t, 값.M현금주문가능금액 >= 0)
 	lb.F테스트_참임(t, 값.M출금가능금액 >= 0)
 	lb.F테스트_참임(t, 값.M코스피_금액 >= 0)
 	lb.F테스트_참임(t, 값.M코스닥_금액 >= 0)
@@ -70,4 +71,6 @@ func TestCSPAQ12200_현물계좌_총평가(t *testing.T) {
 	lb.F테스트_참임(t, 값.M추가신용담보대용 >= 0)
 	lb.F테스트_같음(t, 값.M매도대금담보대출금액, 0)
 	lb.F테스트_같음(t, 값.M처분제한금액, 0)
+	lb.F테스트_참임(t, 값.M미수불가주문가능금액 >= 0)
+	lb.F테스트_참임(t, 값.M증거금률100퍼센트주문가능금액 >= 값.M미수불가주문가능금액)
 }

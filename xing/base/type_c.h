@@ -1371,6 +1371,7 @@ typedef struct {
     char    AddCrdtPldgSubst    [  16];    // [long  ,   16] 추가신용담보대용                StartPos 916, Length 16
     char    CslLoanAmtdt1       [  16];    // [long  ,   16] 매도대금담보대출금액            StartPos 932, Length 16
     char    DpslRestrcAmt       [  16];    // [long  ,   16] 처분제한금액                    StartPos 948, Length 16
+    char    RcvblUablOrdAbleAmt [  16];    // [long  ,   16] 미수불가주문가능금액            StartPos 964, Length 16
 } CSPAQ12200OutBlock2;
 
 typedef struct {
@@ -1657,6 +1658,7 @@ typedef struct {
     char    CrdaySellAdjstAmt   [  16];    // [long  ,   16] 금일매도정산금액                StartPos 574, Length 16
     char    CrdayBuyAdjstAmt    [  16];    // [long  ,   16] 금일매수정산금액                StartPos 590, Length 16
     char    CslLoanAmtdt1       [  16];    // [long  ,   16] 매도대금담보대출금액            StartPos 606, Length 16
+    char    RcvblUablOrdAbleAmt [  16];    // [long  ,   16] 미수불가주문가능금액            StartPos 622, Length 16
 } CSPAQ22200OutBlock2;
 
 typedef struct {

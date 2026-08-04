@@ -3,6 +3,7 @@ package xt
 import (
 	"bytes"
 	"encoding/binary"
+
 	lb "github.com/ghts/ghts/lib"
 )
 
@@ -64,6 +65,7 @@ type CSPAQ12200_현물계좌_총평가_응답 struct {
 	M추가신용담보대용         int64
 	M매도대금담보대출금액       int64
 	M처분제한금액           int64
+	M미수불가주문가능금액       int64
 }
 
 func NewCSPAQ12200InBlock(계좌번호 string, 비밀번호 string) (g *CSPAQ12200InBlock1) {
@@ -148,6 +150,7 @@ func NewCSPAQ12200_현물계좌_총평가_응답(b []byte) (값 *CSPAQ12200_현�
 	값.M추가신용담보대용 = lb.F확인2(lb.F2정수64(g2.AddCrdtPldgSubst))
 	값.M매도대금담보대출금액 = lb.F확인2(lb.F2정수64(g2.CslLoanAmtdt1))
 	값.M처분제한금액 = lb.F확인2(lb.F2정수64(g2.DpslRestrcAmt))
+	값.M미수불가주문가능금액 = lb.F확인2(lb.F2정수64(g2.RcvblUablOrdAbleAmt))
 
 	return 값, nil
 }
