@@ -7,8 +7,6 @@ import (
 )
 
 func TestCSPAQ12200_현물계좌_총평가(t *testing.T) {
-	t.Parallel()
-
 	계좌번호, 에러 := F계좌_번호(0)
 	lb.F테스트_에러없음(t, 에러)
 

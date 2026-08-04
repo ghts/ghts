@@ -1,16 +1,15 @@
 package xing
 
 import (
+	"testing"
+	"time"
+
 	lb "github.com/ghts/ghts/lib"
 	mt "github.com/ghts/ghts/lib/market_time"
 	xt "github.com/ghts/ghts/xing/base"
-	"testing"
-	"time"
 )
 
 func TestT1906_ETF_LP_호가_조회(t *testing.T) {
-	t.Parallel()
-
 	const 종목코드 = "069500" // 코덱스200
 
 	값, 에러 := TrT1906_ETF_LP_호가_조회(종목코드)

@@ -9,8 +9,6 @@ import (
 )
 
 func TestT1901_ETF_시세_조회(t *testing.T) {
-	t.Parallel()
-
 	const 종목코드 = "069500" // KODEX 200
 
 	값, 에러 := TrT1901_ETF_시세_조회(종목코드)

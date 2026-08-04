@@ -1,24 +1,21 @@
 package xing
 
 import (
+	"testing"
+	"time"
+
 	lb "github.com/ghts/ghts/lib"
 	mt "github.com/ghts/ghts/lib/market_time"
 	"github.com/ghts/ghts/lib/nanomsg"
 	"github.com/ghts/ghts/xing/base"
-	"testing"
-	"time"
 )
 
 func TestCSPAT00700_현물_정정_주문_질의값(t *testing.T) {
-	t.Parallel()
-
 	_, ok := interface{}(new(xt.CSPAT00700_현물_정정_주문_질의값)).(lb.I질의값)
 	lb.F테스트_참임(t, ok)
 }
 
 func TestCSPAT00700_현물_정정_주문(t *testing.T) {
-	t.Parallel()
-
 	if xt.F서버_구분() == xt.P서버_실거래 ||
 		!F금일_한국증시_개장() ||
 		!mt.F한국증시_정규_거래_시간임() {

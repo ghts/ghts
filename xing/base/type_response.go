@@ -2,8 +2,9 @@ package xt
 
 import (
 	"errors"
-	lb "github.com/ghts/ghts/lib"
 	"strings"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
 func NewJSON응답(값 interface{}) *JSON응답 {
@@ -152,11 +153,6 @@ func (s *S헤더_반복값) G값(TR코드 string) interface{} {
 		값 := new(T8412_현물_차트_분_응답)
 		값.M헤더 = s.M헤더.(*T8412_현물_차트_분_응답_헤더)
 		값.M반복값_모음 = s.M반복값_모음.(*T8412_현물_차트_분_응답_반복값_모음)
-		return 값
-	case TR현물_차트_일주월_t8413:
-		값 := new(T8413_현물_차트_일주월_응답)
-		값.M헤더 = s.M헤더.(*T8413_현물_차트_일주월_응답_헤더)
-		값.M반복값_모음 = s.M반복값_모음.(*T8413_현물_차트_일주월_응답_반복값_모음)
 		return 값
 	case TR증시_주변_자금_추이_t8428:
 		값 := new(T8428_증시주변_자금추이_응답)

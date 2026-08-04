@@ -120,9 +120,6 @@ const (
 	SizeT8412InBlock        = int(unsafe.Sizeof(T8412InBlock{}))
 	SizeT8412OutBlock       = int(unsafe.Sizeof(T8412OutBlock{}))
 	SizeT8412OutBlock1      = int(unsafe.Sizeof(T8412OutBlock1{}))
-	SizeT8413InBlock        = int(unsafe.Sizeof(T8413InBlock{}))
-	SizeT8413OutBlock       = int(unsafe.Sizeof(T8413OutBlock{}))
-	SizeT8413OutBlock1      = int(unsafe.Sizeof(T8413OutBlock1{}))
 	SizeT8428InBlock        = int(unsafe.Sizeof(T8428InBlock{}))
 	SizeT8428OutBlock       = int(unsafe.Sizeof(T8428OutBlock{}))
 	SizeT8428OutBlock1      = int(unsafe.Sizeof(T8428OutBlock1{}))
@@ -232,13 +229,6 @@ const (
 	P자료형_T8412_현물_차트_분_응답_반복값_모음     = "T8412_현물_차트_분_응답_반복값_모음"
 	P자료형_T8412OutBlock               = "T8412OutBlock"
 	P자료형_T8412OutBlock1              = "T8412OutBlock1"
-	P자료형_T8413_현물_차트_일주월_질의값         = "T8413_현물_차트_일주월_질의값"
-	P자료형_T8413_현물_차트_일주월_응답          = "T8413_현물_차트_일주월_응답"
-	P자료형_T8413_현물_차트_일주월_응답_헤더       = "T8413_현물_차트_일주월_응답_헤더"
-	P자료형_T8413_현물_차트_일주월_응답_반복값      = "T8413_현물_차트_일주월_응답_반복값"
-	P자료형_T8413_현물_차트_일주월_응답_반복값_모음   = "T8413_현물_차트_일주월_응답_반복값_모음"
-	P자료형_T8413OutBlock               = "T8413OutBlock"
-	P자료형_T8413OutBlock1              = "T8413OutBlock1"
 	P자료형_T8428_증시주변_자금추이_질의값         = "T8428_증시주변_자금추이_질의값"
 	P자료형_T8428_증시주변_자금추이_응답          = "T8428_증시주변_자금추이_응답"
 	P자료형_T8428_증시주변_자금추이_응답_헤더       = "T8428_증시주변_자금추이_응답_헤더"
@@ -279,7 +269,6 @@ const (
 	TR현물_차트_일주월년_t8410        = "t8410"
 	TR현물_차트_틱_t8411           = "t8411"
 	TR현물_차트_분_t8412           = "t8412"
-	TR현물_차트_일주월_t8413         = "t8413"
 	TR증시_주변_자금_추이_t8428       = "t8428"
 	TR현물_종목_조회_t8436          = "t8436"
 

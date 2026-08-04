@@ -1,16 +1,15 @@
 package xing
 
 import (
+	"time"
+
 	lb "github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/xing/base"
-	"time"
 
 	"testing"
 )
 
 func TestT1305_기간별_주가_조회(t *testing.T) {
-	t.Parallel()
-
 	종목코드 := F임의_종목().G코드()
 	일주월_구분 := ([]xt.T일주월년_구분{xt.P일주월_일, xt.P일주월_주, xt.P일주월_월})[lb.F임의_범위_이내_정수값(0, 2)]
 	var 이전_일자 time.Time

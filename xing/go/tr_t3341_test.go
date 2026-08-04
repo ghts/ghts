@@ -1,16 +1,15 @@
 package xing
 
 import (
-	lb "github.com/ghts/ghts/lib"
-	"github.com/ghts/ghts/xing/base"
 	"math"
 	"strings"
 	"testing"
+
+	lb "github.com/ghts/ghts/lib"
+	"github.com/ghts/ghts/xing/base"
 )
 
 func TestT3341_재무_순위_종합(t *testing.T) {
-	t.Parallel()
-
 	시장구분_모음 := []lb.T시장구분{lb.P시장구분_전체, lb.P시장구분_코스피, lb.P시장구분_코스닥}
 	시장구분 := 시장구분_모음[lb.F임의_범위_이내_정수값(0, 2)]
 

@@ -1,19 +1,16 @@
 package xing
 
 import (
-	lb "github.com/ghts/ghts/lib"
 	"testing"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
 func TestF종목코드_존재함(t *testing.T) {
-	t.Parallel()
-
 	lb.F테스트_참임(t, F종목코드_존재함("069500"))
 }
 
 func TestF질의값_종목코드_검사(t *testing.T) {
-	t.Parallel()
-
 	질의값1 := lb.New질의값_단일_종목_단순형()
 	질의값1.M종목코드 = "069500"
 
@@ -24,8 +21,6 @@ func TestF질의값_종목코드_검사(t *testing.T) {
 }
 
 func TestETF_ETN_종목_여부(t *testing.T) {
-	t.Parallel()
-
 	lb.F테스트_거짓임(t, ETF_ETN_종목_여부("000020"))
 	lb.F테스트_참임(t, ETF_ETN_종목_여부("069500"))
 }

@@ -1,14 +1,13 @@
 package xing
 
 import (
-	lb "github.com/ghts/ghts/lib"
 	"testing"
 	"time"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
 func TestT8428_증시주변_자금_추이(t *testing.T) {
-	t.Parallel()
-
 	값_모음, 에러 := TrT8428_증시주변자금추이(1200)
 	lb.F테스트_에러없음(t, 에러)
 

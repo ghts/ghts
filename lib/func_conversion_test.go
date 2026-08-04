@@ -90,8 +90,6 @@ func TestF2문자열_EUC_KR(t *testing.T) {
 }
 
 //func TestF인코딩_디코딩(t *testing.T) {
-//	t.Parallel()
-//
 //	변환형식_모음 := []T변환{GOB} //,JSON}
 //
 //	r := F임의값_생성기()

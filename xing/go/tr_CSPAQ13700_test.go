@@ -9,15 +9,13 @@ import (
 )
 
 func TestCSPAQ13700_현물계좌_주문체결내역_질의값(t *testing.T) {
-	t.Parallel()
-
 	_, ok := interface{}(new(xt.CSPAQ13700_현물계좌_주문체결내역_질의값)).(lb.I질의값)
 
 	lb.F테스트_참임(t, ok)
 }
 
 func TestCSPAQ13700_현물계좌_주문체결내역(t *testing.T) {
-	t.Skip() // t.Parallel()
+	t.Skip() // 모의투자 조회할 내역(자료)이 없습니다. 에러 발생
 
 	계좌번호, 에러 := F계좌_번호(0)
 	lb.F테스트_에러없음(t, 에러)

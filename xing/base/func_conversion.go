@@ -360,26 +360,6 @@ func F바이트_변환값_해석(바이트_변환값 *lb.S바이트_변환) (해
 		s := new(T8412_현물_차트_분_응답_반복값_모음)
 		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
-	case P자료형_T8413_현물_차트_일주월_질의값:
-		s := new(T8413_현물_차트_일주월_질의값)
-		lb.F확인1(바이트_변환값.G값(s))
-		return s, nil
-	case P자료형_T8413_현물_차트_일주월_응답:
-		s := new(T8413_현물_차트_일주월_응답)
-		lb.F확인1(바이트_변환값.G값(s))
-		return s, nil
-	case P자료형_T8413_현물_차트_일주월_응답_헤더:
-		s := new(T8413_현물_차트_일주월_응답_헤더)
-		lb.F확인1(바이트_변환값.G값(s))
-		return s, nil
-	case P자료형_T8413_현물_차트_일주월_응답_반복값:
-		s := new(T8413_현물_차트_일주월_응답_반복값)
-		lb.F확인1(바이트_변환값.G값(s))
-		return s, nil
-	case P자료형_T8413_현물_차트_일주월_응답_반복값_모음:
-		s := new(T8413_현물_차트_일주월_응답_반복값_모음)
-		lb.F확인1(바이트_변환값.G값(s))
-		return s, nil
 	case P자료형_T8428_증시주변_자금추이_질의값:
 		s := new(T8428_증시주변_자금추이_질의값)
 		lb.F확인1(바이트_변환값.G값(s))
@@ -547,10 +527,6 @@ func F바이트_변환값_해석_Raw(바이트_변환값 *lb.S바이트_변환) 
 		return NewT8412_현물_차트_분_응답_헤더(b)
 	case P자료형_T8412OutBlock1:
 		return NewT8412_현물_차트_분_응답_반복값_모음(b)
-	case P자료형_T8413OutBlock:
-		return NewT8413_현물_차트_일주월_응답_헤더(b)
-	case P자료형_T8413OutBlock1:
-		return NewT8413_현물_차트_일주월_응답_반복값_모음(b)
 	case P자료형_T8428OutBlock:
 		return NewT8428_증시주변자금추이_응답_헤더(b)
 	case P자료형_T8428OutBlock1:

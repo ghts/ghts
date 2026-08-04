@@ -165,15 +165,11 @@ type T8411InBlock C.T8411InBlock
 type T8411OutBlock C.T8411OutBlock
 type T8411OutBlock1 C.T8411OutBlock1
 
-// 현물 차트 분
+// 현물 차트 분 (t8412)
 type T8412InBlock C.T8412InBlock
 type T8412OutBlock C.T8412OutBlock
 type T8412OutBlock1 C.T8412OutBlock1
 
-// 현물 차트 일주월
-type T8413InBlock C.T8413InBlock
-type T8413OutBlock C.T8413OutBlock
-type T8413OutBlock1 C.T8413OutBlock1
 
 // 증시 주변 자금 추이
 type T8428InBlock C.T8428InBlock

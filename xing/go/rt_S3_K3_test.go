@@ -1,22 +1,21 @@
 package xing
 
 import (
+	"testing"
+
 	lb "github.com/ghts/ghts/lib"
 	mt "github.com/ghts/ghts/lib/market_time"
 	"github.com/ghts/ghts/lib/nanomsg"
 	xt "github.com/ghts/ghts/xing/base"
-	"testing"
 )
 
 func TestF체결_실시간_정보(t *testing.T) {
-	t.Parallel()
-
 	if !mt.F한국증시_정규_거래_시간임() {
 		t.SkipNow()
 	}
 
 	const 종목코드_코스피 = "005930" // 삼성전자
-	const 종목코드_코스닥 = "091990" // 셀트리온 헬스케어
+	const 종목코드_코스닥 = "058470" // 리노공업
 	const 종목코드_ETF = "069500" // KODEX 200
 
 	종목_코스피, 에러 := F종목by코드(종목코드_코스피)

@@ -257,16 +257,6 @@ func F조회_및_주문_질의_처리(질의 *lb.S채널_질의) {
 
 		c데이터 = unsafe.Pointer(xt.NewT8412InBlock(질의값.(*xt.T8412_현물_차트_분_질의값)))
 		길이 = xt.SizeT8412InBlock
-	case xt.TR현물_차트_일주월_t8413:
-		연속키 := lb.F2문자열_공백_제거(질의값.(*xt.T8413_현물_차트_일주월_질의값).M연속일자)
-
-		if 연속키 != "" {
-			연속_조회_여부 = true
-			연속_조회_키 = 연속키
-		}
-
-		c데이터 = unsafe.Pointer(xt.NewT8413InBlock(질의값.(*xt.T8413_현물_차트_일주월_질의값)))
-		길이 = xt.SizeT8413InBlock
 	case xt.TR증시_주변_자금_추이_t8428:
 		연속키 := lb.F2문자열_공백_제거(질의값.(*xt.T8428_증시주변_자금추이_질의값).M연속키)
 		if 연속키 != "" {

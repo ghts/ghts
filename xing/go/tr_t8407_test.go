@@ -1,14 +1,13 @@
 package xing
 
 import (
+	"testing"
+
 	lb "github.com/ghts/ghts/lib"
 	xt "github.com/ghts/ghts/xing/base"
-	"testing"
 )
 
 func TestT8407_F현물_멀티_현재가_조회(t *testing.T) {
-	t.Parallel()
-
 	종목코드_모음 := lb.F종목코드_추출(lb.F샘플_종목_모음_전체(), lb.F임의_범위_이내_정수값(40, 110))
 	응답값_맵, 에러 := TrT8407_현물_멀티_현재가_조회(종목코드_모음)
 	lb.F테스트_에러없음(t, 에러)

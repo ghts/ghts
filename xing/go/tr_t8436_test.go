@@ -1,14 +1,13 @@
 package xing
 
 import (
+	"testing"
+
 	lb "github.com/ghts/ghts/lib"
 	xt "github.com/ghts/ghts/xing/base"
-	"testing"
 )
 
 func TestT8436_주식종목_조회(t *testing.T) {
-	t.Parallel()
-
 	시장_구분 := ([]lb.T시장구분{lb.P시장구분_전체, lb.P시장구분_코스피, lb.P시장구분_코스닥})[lb.F임의_범위_이내_정수값(0, 2)]
 
 	값_모음, 에러 := TrT8436_주식종목_조회(시장_구분)
