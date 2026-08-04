@@ -49,9 +49,16 @@ func TestF체결_실시간_정보(t *testing.T) {
 		lb.F테스트_에러없음(t, 에러)
 
 		i실시간_정보 := lb.F확인2(바이트_변환_모음.S해석기(xt.F바이트_변환값_해석).G해석값(0))
+		var 값 *xt.S체결
 
-		값, ok := i실시간_정보.(*xt.S체결)
-		if !ok {
+		switch 체결값 := i실시간_정보.(type) {
+		case *xt.S코스피_체결:
+			v := xt.S코스피_체결(*체결값)
+			값 = (*xt.S체결)(&v)
+		case *xt.S코스닥_체결:
+			v := xt.S코스닥_체결(*체결값)
+			값 = (*xt.S체결)(&v)
+		default:
 			continue
 		}
 
