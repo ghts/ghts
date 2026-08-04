@@ -8,6 +8,8 @@ import (
 	lb "github.com/ghts/ghts/lib"
 )
 
+const P로그인_정보_화일명 = "xing_config.ini"
+
 const (
 	P환경변수_서버_구분    = "SERVER_CLASS"
 	P환경변수_주소_TR    = "ADDRESS_TR"
