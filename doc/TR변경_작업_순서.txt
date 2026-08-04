@@ -1,0 +1,4 @@
+1. 증권사 홈페이지 API 관련 교육/공지 게시판 내용 확인.
+2. DevCenter의 TR정보 메뉴 - C++ header to clipboard 으로 C언어 헤더 파일 내용 복사해서 xing/base/type_c.h의 해당 TR 내용 덮어쓰기.
+3. type_sync_go.bat 실행해서 type_c.go 내 Go 구현체 동기화.
+4. 이후 TR별 자료형 변환등 관련 내용 수정할 것. (TR마다 다름.)
