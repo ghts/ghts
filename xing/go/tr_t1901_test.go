@@ -1,9 +1,11 @@
 package xing
 
 import (
+	"testing"
+	"time"
+
 	lb "github.com/ghts/ghts/lib"
 	xt "github.com/ghts/ghts/xing/base"
-	"testing"
 )
 
 func TestT1901_ETF_시세_조회(t *testing.T) {
@@ -59,19 +61,16 @@ func TestT1901_ETF_시세_조회(t *testing.T) {
 	}
 
 	lb.F중복없는_문자열_출력("t1901 테스트 보완 필요.")
+	lb.F테스트_참임(t, 값.M시가 >= 0)
+	lb.F테스트_참임(t, 값.M시가시각.After(lb.F확인2(lb.F2금일_한국_시각(8, 30, 0))))
+	lb.F테스트_참임(t, 값.M시가시각.Before(lb.F확인2(lb.F2금일_한국_시각(9, 5, 0))))
+	lb.F테스트_참임(t, 값.M고가 >= 값.M시가)
+	lb.F테스트_참임(t, 값.M고가시각.After(lb.F확인2(lb.F2금일_한국_시각(8, 30, 0))))
+	lb.F테스트_참임(t, 값.M고가시각.Before(lb.F확인2(lb.F2금일_한국_시각(15, 35, 0))))
+	lb.F테스트_참임(t, 값.M저가 <= 값.M시가)
+	lb.F테스트_참임(t, 값.M저가시각.After(lb.F확인2(lb.F2금일_한국_시각(8, 30, 0))))
+	lb.F테스트_참임(t, 값.M저가시각.Before(lb.F확인2(lb.F2금일_한국_시각(15, 35, 0))))
 
-	//s.M시가 = lb.F확인2(lb.F2정수64(g.Open)
-	//lb.F체크포인트(lb.F2문자열(g.Opentime[:]))
-	//s.M시가시각 = lb.F확인2(lb.F2금일_시각("150405", g.Opentime)
-	//
-	//s.M고가 = lb.F확인2(lb.F2정수64(g.High)
-	//lb.F체크포인트(lb.F2문자열(g.Hightime[:]))
-	//s.M고가시각 = lb.F확인2(lb.F2금일_시각("150405", g.Hightime)
-	//
-	//s.M저가 = lb.F확인2(lb.F2정수64(g.Low)
-	//lb.F체크포인트(lb.F2문자열(g.Lowtime[:]))
-	//s.M저가시각 = lb.F확인2(lb.F2금일_시각("150405", g.Lowtime)
-	//
 	//s.M52주_최고가 = lb.F확인2(lb.F2정수64(g.High52w)
 	//lb.F체크포인트(lb.F2문자열(g.High52wdate))
 	//s.M52주_최고가일 = lb.F확인2(lb.F2포맷된_일자("20060102", g.High52wdate)
@@ -206,21 +205,18 @@ func TestT1901_ETF_시세_조회(t *testing.T) {
 	//s.M상품유형 = lb.F2문자열(g.Etf_kind)
 	//s.VI발동해제 = lb.F2문자열(g.Vi_gubun)
 	//s.ETN상품분류 = lb.F2문자열(g.Etn_kind_cd)
-	//s.ETN만기일 = lb.F확인2(lb.F2포맷된_일자("20060102", g.Lastymd)
+	lb.F테스트_참임(t, 값.ETN만기일.Equal(time.Time{}) || 값.ETN만기일.After(lb.F금일()))
+	lb.F테스트_참임(t, 값.ETN지급일.Equal(time.Time{}) || 값.ETN지급일.After(lb.F금일()))
 	//s.ETN지급일 = lb.F확인2(lb.F2포맷된_일자("20060102", g.Payday)
 	//s.ETN최종거래일 = lb.F확인2(lb.F2포맷된_일자("20060102", g.Lastdate)
 	//s.ETN발행시장참가자 = lb.F2문자열(g.Issuernmk)
 	//s.ETN만기상환가격결정_시작일 = lb.F확인2(lb.F2포맷된_일자("20060102", g.Last_sdate)
 	//s.ETN만기상환가격결정_종료일 = lb.F확인2(lb.F2포맷된_일자("20060102", g.Last_edate)
 	//s.ETN유동성공급자_보유수량 = lb.F확인2(lb.F2정수64(g.Lp_holdvol)
-	//
-	//lb.F체크포인트(g.Listdate[:])
-	//
+
+	lb.F테스트_참임(t, 값.M상장일.After(time.Time{}) && 값.M상장일.Before(lb.F금일()))
 	//s.M상장일 = lb.F확인2(lb.F2포맷된_일자("20060102", g.Listdate)
 	//s.ETP상품구분코드 = lb.F2문자열(g.Etp_gb)
-	//
-	//lb.F체크포인트(g.Etn_elback_yn)
-	//
 	//s.ETN조기상환가능여부 = lb.F2문자열(g.Etn_elback_yn) != "N"
 	//s.M최종결제 = lb.F2문자열(g.Settletype)
 	//s.M지수자산대분류코드 = lb.F2문자열(g.Idx_asset_class1)

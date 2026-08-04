@@ -3,8 +3,9 @@ package xt
 import (
 	"bytes"
 	"encoding/binary"
-	lb "github.com/ghts/ghts/lib"
 	"time"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
 type T1902_ETF시간별_추이_응답 struct {
@@ -106,14 +107,14 @@ func NewT1902_ETF시간별_추이_응답_반복값_모음(b []byte) (값_모음 
 		값.M전일대비구분 = T전일대비_구분(lb.F확인2(lb.F2정수(g.Sign)))
 		값.M전일대비등락폭 = 값.M전일대비구분.G부호보정_정수64(lb.F확인2(lb.F2정수64(g.Change)))
 		값.M누적_거래량 = lb.F확인2(lb.F2정수64(g.Volume))
-		값.M현재가_NAV_차이 = lb.F확인2(lb.F2실수_소숫점_추가(g.NavDiff, 2))
+		값.M현재가_NAV_차이 = lb.F확인2(lb.F2실수_소숫점_추가(g.Navdiff, 2))
 		값.NAV = lb.F확인2(lb.F2실수_소숫점_추가(g.Nav, 2))
-		값.NAV전일대비등락폭 = lb.F확인2(lb.F2실수_소숫점_추가(g.NavChange, 2))
+		값.NAV전일대비등락폭 = lb.F확인2(lb.F2실수_소숫점_추가(g.Navchange, 2))
 		값.M추적오차 = lb.F확인2(lb.F2실수_소숫점_추가(g.Crate, 2))
 		값.M괴리율 = lb.F확인2(lb.F2실수_소숫점_추가(g.Grate, 2))
 		값.M지수 = lb.F확인2(lb.F2실수_소숫점_추가(g.Jisu, 2))
-		값.M지수_전일대비등락폭 = lb.F확인2(lb.F2실수_소숫점_추가(g.JiChange, 2))
-		값.M지수_전일대비등락율 = lb.F확인2(lb.F2실수_소숫점_추가(g.JiRate, 2))
+		값.M지수_전일대비등락폭 = lb.F확인2(lb.F2실수_소숫점_추가(g.Jichange, 2))
+		값.M지수_전일대비등락율 = lb.F확인2(lb.F2실수_소숫점_추가(g.Jirate, 2))
 
 		if g.X_jichange == 160 && 값.M지수_전일대비등락폭 > 0 {
 			값.M지수_전일대비등락폭 = -1 * 값.M지수_전일대비등락폭
