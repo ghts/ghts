@@ -26,9 +26,8 @@ func F로그인_설정_화일_경로() (경로 string, 에러 error) {
 	const p로그인_정보_화일명 = "xing_config.ini"
 
 	경로_후보_모음 := []string{
-		filepath.Join(lb.F확인2(os.Getwd()), p로그인_정보_화일명),        /// 현재 디렉토리에 존재
-		os.Getenv(P환경변수_설정_화일_경로),                              // 모 프로세스에서 포크할 때 자식 프로세스로 환경 변수를 통해서 전달.
-		filepath.Join(lb.GOPATH(), "src", "ghts", p로그인_정보_화일명), // 개발 환경
+		filepath.Join(lb.F확인2(os.Getwd()), p로그인_정보_화일명), /// 현재 디렉토리에 존재
+		os.Getenv(P환경변수_설정_화일_경로),                       // 모 프로세스에서 포크할 때 자식 프로세스로 환경 변수를 통해서 전달.
 	}
 
 	for _, 경로_후보 := range 경로_후보_모음 {
@@ -150,21 +149,4 @@ func F로그인_정보_환경_변수_삭제() {
 	lb.F확인1(os.Setenv(P환경변수_인증서_암호, ""))
 	lb.F확인1(os.Setenv(P환경변수_계좌_비밀번호, ""))
 	lb.F확인1(os.Setenv(P환경변수_모의투자_암호, ""))
-}
-
-func F테스트용_로그인_설정_화일_읽기() (에러 error) {
-	defer lb.S예외처리{M에러: &에러}.S실행()
-
-	if !lb.F테스트_모드_실행_중() {
-		return lb.New에러with출력("F테스트용_로그인_설정_화일_읽기()는 테스트 전용 함수입니다.")
-	}
-
-	검색_시작_디렉토리 := filepath.Join(lb.GOPATH(), "src", "github.com", "ghts")
-	const p테스트용_로그인_정보_화일명 = "xing_config4test.ini"
-
-	로그인_정보_화일_경로 := lb.F확인2(lb.F파일_검색(검색_시작_디렉토리, p테스트용_로그인_정보_화일명))
-	로그인_정보_문자열 := lb.F확인2(F로그인_정보_문자열_읽기(로그인_정보_화일_경로))
-	V로그인_정보 = lb.F확인2(F로그인_정보_문자열_해석(로그인_정보_문자열))
-
-	return nil
 }
