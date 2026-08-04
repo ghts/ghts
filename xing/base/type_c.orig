@@ -44,49 +44,8 @@ type SC3_OutBlock C.SC3_OutBlock    // 주식 주문 취소 실시간 정보
 type SC4_OutBlock C.SC4_OutBlock    // 주식 주문 거부 실시간 정보
 
 //------------------------------------------------------------------------------
-// 선물옵션 주문 관련 TR 구조체
-//------------------------------------------------------------------------------
-
-// 선물 옵션 정상 주문 (CFOAT00100)
-type CFOAT00100InBlock1 C.CFOAT00100InBlock1
-type CFOAT00100OutBlock1 C.CFOAT00100OutBlock1
-type CFOAT00100OutBlock2 C.CFOAT00100OutBlock2
-type CFOAT00100OutBlock C.CFOAT00100OutBlock
-
-// 선물 옵션 정정 주문 (CFOAT00200)
-type CFOAT00200InBlock1 C.CFOAT00200InBlock1
-type CFOAT00200OutBlock1 C.CFOAT00200OutBlock1
-type CFOAT00200OutBlock2 C.CFOAT00200OutBlock2
-type CFOAT00200OutBlock C.CFOAT00200OutBlock
-
-// 선물 옵션 취소 주문 (CFOAT00300)
-type CFOAT00300InBlock1 C.CFOAT00300InBlock1
-type CFOAT00300OutBlock1 C.CFOAT00300OutBlock1
-type CFOAT00300OutBlock2 C.CFOAT00300OutBlock2
-type CFOAT00300OutBlock C.CFOAT00300OutBlock
-
-//------------------------------------------------------------------------------
 // 조회 TR 구조체
 //------------------------------------------------------------------------------
-
-// 선물 옵션 계좌 주문 체결 내역 조회 (CFOAQ00600)
-type CFOAQ00600InBlock1 C.CFOAQ00600InBlock1
-type CFOAQ00600OutBlock1 C.CFOAQ00600OutBlock1
-type CFOAQ00600OutBlock2 C.CFOAQ00600OutBlock2
-type CFOAQ00600OutBlock3 C.CFOAQ00600OutBlock3
-
-// 선물 옵션 계좌 예탁금 증거금 조회 (CFOBQ10500)
-type CFOBQ10500InBlock1 C.CFOBQ10500InBlock1
-type CFOBQ10500OutBlock1 C.CFOBQ10500OutBlock1
-type CFOBQ10500OutBlock2 C.CFOBQ10500OutBlock2
-type CFOBQ10500OutBlock3 C.CFOBQ10500OutBlock3
-
-// 선물 옵션 계좌 미결제 약정 현황 (평균가) (CFOFQ02400)
-type CFOFQ02400InBlock1 C.CFOFQ02400InBlock1
-type CFOFQ02400OutBlock1 C.CFOFQ02400OutBlock1
-type CFOFQ02400OutBlock2 C.CFOFQ02400OutBlock2
-type CFOFQ02400OutBlock3 C.CFOFQ02400OutBlock3
-type CFOFQ02400OutBlock4 C.CFOFQ02400OutBlock4
 
 // 현물 계좌 잔고 내역 조회 (CSPAQ12200)
 type CSPAQ12200InBlock1 C.CSPAQ12200InBlock1
@@ -135,11 +94,6 @@ type T0167OutBlock C.T0167OutBlock
 type T0425InBlock C.T0425InBlock
 type T0425OutBlock C.T0425OutBlock
 type T0425OutBlock1 C.T0425OutBlock1
-
-// 선물옵션 체결 미체결 조회 (t0434)
-type T0434InBlock C.T0434InBlock
-type T0434OutBlock C.T0434OutBlock
-type T0434OutBlock1 C.T0434OutBlock1
 
 // 현물 현재가 호가 조회 (t1101)
 type T1101InBlock C.T1101InBlock
@@ -225,10 +179,6 @@ type T8413OutBlock1 C.T8413OutBlock1
 type T8428InBlock C.T8428InBlock
 type T8428OutBlock C.T8428OutBlock
 type T8428OutBlock1 C.T8428OutBlock1
-
-// 지수선물종목조회 API용
-type T8432InBlock C.T8432InBlock
-type T8432OutBlock C.T8432OutBlock
 
 // 주식종목조회 API용
 type T8436InBlock C.T8436InBlock

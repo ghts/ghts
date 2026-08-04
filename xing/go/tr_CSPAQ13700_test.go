@@ -1,10 +1,11 @@
 package xing
 
 import (
-	lb "github.com/ghts/ghts/lib"
-	xt "github.com/ghts/ghts/xing/base"
 	"testing"
 	"time"
+
+	lb "github.com/ghts/ghts/lib"
+	xt "github.com/ghts/ghts/xing/base"
 )
 
 func TestCSPAQ13700_현물계좌_주문체결내역_질의값(t *testing.T) {
@@ -45,7 +46,7 @@ func testCSPAQ13700_현물계좌_주문체결내역_도우미(t *testing.T, 계�
 			xt.P주문유형_해당없음, xt.P주문_현금매도, xt.P주문_현금매수,
 			xt.P주문_신용매도, xt.P주문_신용매수, xt.P주문_저축매도,
 			xt.P주문_저축매수, xt.P주문_상품매도_대차, xt.P주문_상품매도,
-			xt.P주문_상품매수, xt.P주문_현금매수_유가, xt.P주문_현금매수_정리, xt.P주문_장외매매) //xt.P주문_선물대용매도_일반, xt.P주문_선물대용매도_반대,
+			xt.P주문_상품매수, xt.P주문_현금매수_유가, xt.P주문_현금매수_정리, xt.P주문_장외매매, xt.P주문_선물대용매도_일반, xt.P주문_선물대용매도_반대)
 		lb.F테스트_같음(t, 값.M주문처리유형,
 			xt.CSPAQ13700_정상처리, xt.CSPAQ13700_정정확인, xt.CSPAQ13700_정정거부_채권,
 			xt.CSPAQ13700_취소확인, xt.CSPAQ13700_취소거부_채권)

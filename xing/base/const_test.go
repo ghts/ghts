@@ -1,27 +1,16 @@
 package xt
 
 import (
-	lb "github.com/ghts/ghts/lib"
 	"reflect"
 	"strings"
 	"testing"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
 func TestP자료형_문자열(t *testing.T) {
 	lb.F테스트_같음(t, P자료형_nil, f자료형_문자열(nil))
 	lb.F테스트_같음(t, P자료형_S현물_주문_응답_실시간_정보, f자료형_문자열(S현물_주문_응답_실시간_정보{}))
-	//lb.F테스트_같음(t, P자료형_CFOAQ00600_선물옵션_주문체결내역_질의값, f자료형_문자열(CFOAQ00600_선물옵션_주문체결내역_질의값{}))
-	//lb.F테스트_같음(t, P자료형_CFOAQ00600OutBlock, f자료형_문자열(CFOAQ00600OutBlock{}
-	//lb.F테스트_같음(t, P자료형_CFOAT00100_선물옵션_정상주문_질의값, f자료형_문자열(CFOAT00100_선물옵션_정상주문_질의값{}))
-	//lb.F테스트_같음(t, P자료형_CFOAT00100OutBlock, f자료형_문자열(             = "CFOAT00100OutBlock"
-	//lb.F테스트_같음(t, P자료형_CFOAT00200_선물옵션_정정주문_질의값, f자료형_문자열(CFOAT00200_선물옵션_정정주문_질의값{}))
-	//lb.F테스트_같음(t, P자료형_CFOAT00200OutBlock, f자료형_문자열(             = "CFOAT00200OutBlock"
-	//lb.F테스트_같음(t, P자료형_CFOAT00300_선물옵션_취소주문_질의값, f자료형_문자열(CFOAT00300_선물옵션_취소주문_질의값{}))
-	//lb.F테스트_같음(t, P자료형f_CFOAT00300OutBlock, f자료형_문자열(             = "CFOAT00300OutBlock"
-	//lb.F테스트_같음(t, P자료형_CFOBQ10500_선물옵션_예탁금_증거금_조회_질의값, f자료형_문자열(CFOBQ10500_선물옵션_예탁금_증거금_조회_질의값{}))
-	//lb.F테스트_같음(t, P자료형_CFOBQ10500OutBlock, f자료형_문자열(             = "CFOBQ10500OutBlock"
-	//lb.F테스트_같음(t, P자료형_CFOFQ02400_선물옵션_미결제약정_질의값, f자료형_문자열(CFOFQ02400_선물옵션_미결제약정_질의값{}))
-	//lb.F테스트_같음(t, P자료형_CFOFQ02400OutBlock, f자료형_문자열(             = "CFOFQ02400OutBlock"
 	lb.F테스트_같음(t, P자료형_CSPAT00600_현물_정상_주문_질의값, f자료형_문자열(CSPAT00600_현물_정상_주문_질의값{}))
 	lb.F테스트_같음(t, P자료형_CSPAT00600OutBlock, f자료형_문자열(CSPAT00600OutBlock{}))
 	lb.F테스트_같음(t, P자료형_CSPAT00700_현물_정정_주문_질의값, f자료형_문자열(CSPAT00700_현물_정정_주문_질의값{}))

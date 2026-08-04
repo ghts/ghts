@@ -1,8 +1,9 @@
 package xt
 
 import (
-	lb "github.com/ghts/ghts/lib"
 	"strings"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
 func F2거래소_구분(거래소_이름 interface{}) T거래소_구분 {
@@ -150,30 +151,6 @@ func F바이트_변환값_해석(바이트_변환값 *lb.S바이트_변환) (해
 		s := new(S현물_주문_응답_실시간_정보)
 		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
-	//case P자료형_CFOAQ00600_선물옵션_주문체결내역_질의값:
-	//	s := new(CFOAQ00600_선물옵션_주문체결내역_질의값)
-	//	lb.F확인(바이트_변환값.TCP주소(s))
-	//	return s, nil
-	//case P자료형_CFOAT00100_선물옵션_정상주문_질의값:
-	//	s := new(CFOAT00100_선물옵션_정상주문_질의값)
-	//	lb.F확인(바이트_변환값.TCP주소(s))
-	//	return s, nil
-	//case P자료형_CFOAT00200_선물옵션_정정주문_질의값:
-	//	s := new(CFOAT00200_선물옵션_정정주문_질의값)
-	//	lb.F확인(바이트_변환값.TCP주소(s))
-	//	return s, nil
-	//case P자료형_CFOAT00300_선물옵션_취소주문_질의값:
-	//	s := new(CFOAT00300_선물옵션_취소주문_질의값)
-	//	lb.F확인(바이트_변환값.TCP주소(s))
-	//	return s, nil
-	//case P자료형_CFOBQ10500_선물옵션_예탁금_증거금_조회_질의값:
-	//	s := new(CFOBQ10500_선물옵션_예탁금_증거금_조회_질의값)
-	//	lb.F확인(바이트_변환값.TCP주소(s))
-	//	return s, nil
-	//case P자료형_CFOFQ02400_선물옵션_미결제약정_질의값:
-	//	s := new(CFOFQ02400_선물옵션_미결제약정_질의값)
-	//	lb.F확인(바이트_변환값.TCP주소(s))
-	//	return s, nil
 	case P자료형_CSPAQ12300_현물계좌_잔고내역_질의값:
 		s := new(CSPAQ12300_현물계좌_잔고내역_질의값)
 		lb.F확인1(바이트_변환값.G값(s))
@@ -202,10 +179,6 @@ func F바이트_변환값_해석(바이트_변환값 *lb.S바이트_변환) (해
 		s := new(T0425_현물_체결_미체결_조회_질의값)
 		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
-	//case P자료형_T0434_선물옵션_체결_미체결_조회_질의값:
-	//	s := new(T0434_선물옵션_체결_미체결_조회_질의값)
-	//	lb.F확인(바이트_변환값.TCP주소(s))
-	//	return s, nil
 	case P자료형_T1101_현물_호가_조회_응답:
 		s := new(T1101_현물_호가_조회_응답)
 		lb.F확인1(바이트_변환값.G값(s))
@@ -524,8 +497,6 @@ func F바이트_변환값_해석_Raw(바이트_변환값 *lb.S바이트_변환) 
 		return NewT0167_시각_조회_응답(b)
 	case P자료형_T0425OutBlock:
 		return NewT0425_현물_체결_미체결_조회_응답(b)
-	//case P자료형_T0434OutBlock:
-	//	return NewT0434_선물옵션_체결_미체결_조회_응답(b)
 	case P자료형_T1101OutBlock:
 		return NewT1101_현물_호가_조회_응답(b)
 	case P자료형_T1102OutBlock:
@@ -584,8 +555,6 @@ func F바이트_변환값_해석_Raw(바이트_변환값 *lb.S바이트_변환) 
 		return NewT8428_증시주변자금추이_응답_헤더(b)
 	case P자료형_T8428OutBlock1:
 		return NewT8428_증시주변자금추이_응답_반복값_모음(b)
-	case P자료형_T8432OutBlock:
-		return NewT8432_증시주변자금추이_응답_반복값_모음(b)
 	case P자료형_T8436OutBlock:
 		return NewT8436_현물_종목조회_응답_반복값_모음(b)
 	default:

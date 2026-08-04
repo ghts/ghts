@@ -1,9 +1,10 @@
 package xing
 
 import (
+	"strings"
+
 	lb "github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/xing/base"
-	"strings"
 )
 
 func f콜백_TR데이터_처리기(값 lb.I콜백) (에러 error) {
@@ -142,10 +143,6 @@ func f콜백_데이터_식별번호(값 lb.I콜백) (식별번호 int, 대기_�
 
 func f콜백_데이터_복원(대기_항목 *DLL32_콜백_대기_항목, 수신값 *lb.S바이트_변환) error {
 	switch 대기_항목.TR코드 {
-	// 선물옵션 관련 TR들 비활성화
-	// xt.TR선물옵션_주문체결내역조회_CFOAQ00600, xt.TR선물옵션_정상주문_CFOAT00100, xt.TR선물옵션_정정주문_CFOAT00200, xt.TR선물옵션_취소주문_CFOAT00300,
-	// xt.TR선물옵션_예탁금_증거금_조회_CFOBQ10500, xt.TR선물옵션_미결제약정_현황_CFOFQ02400,
-	// xt.TR선물옵션_체결_미체결_조회_t0434, xt.TR지수선물_마스터_조회_t8432
 	case
 		xt.TR현물_당일_매매일지_t0150, xt.TR현물_일자별_매매일지_t0151, xt.TR시간_조회_t0167,
 		xt.TR현물_체결_미체결_조회_t0425,

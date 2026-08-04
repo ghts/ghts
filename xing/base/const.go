@@ -42,31 +42,6 @@ const (
 	SizeVI_OutBlock         = int(unsafe.Sizeof(VI_OutBlock{}))
 	SizeDVIOutBlock         = int(unsafe.Sizeof(DVIOutBlock{}))
 	SizeJIFOutBlock         = int(unsafe.Sizeof(JIFOutBlock{}))
-	SizeCFOAQ00600InBlock1  = int(unsafe.Sizeof(CFOAQ00600InBlock1{}))
-	SizeCFOAQ00600OutBlock1 = int(unsafe.Sizeof(CFOAQ00600OutBlock1{}))
-	SizeCFOAQ00600OutBlock2 = int(unsafe.Sizeof(CFOAQ00600OutBlock2{}))
-	SizeCFOAQ00600OutBlock3 = int(unsafe.Sizeof(CFOAQ00600OutBlock3{}))
-	SizeCFOAT00100InBlock1  = int(unsafe.Sizeof(CFOAT00100InBlock1{}))
-	SizeCFOAT00100OutBlock  = int(unsafe.Sizeof(CFOAT00100OutBlock{}))
-	SizeCFOAT00100OutBlock1 = int(unsafe.Sizeof(CFOAT00100OutBlock1{}))
-	SizeCFOAT00100OutBlock2 = int(unsafe.Sizeof(CFOAT00100OutBlock2{}))
-	SizeCFOAT00200InBlock1  = int(unsafe.Sizeof(CFOAT00200InBlock1{}))
-	SizeCFOAT00200OutBlock  = int(unsafe.Sizeof(CFOAT00200OutBlock{}))
-	SizeCFOAT00200OutBlock1 = int(unsafe.Sizeof(CFOAT00200OutBlock1{}))
-	SizeCFOAT00200OutBlock2 = int(unsafe.Sizeof(CFOAT00200OutBlock2{}))
-	SizeCFOAT00300InBlock1  = int(unsafe.Sizeof(CFOAT00300InBlock1{}))
-	SizeCFOAT00300OutBlock  = int(unsafe.Sizeof(CFOAT00300OutBlock{}))
-	SizeCFOAT00300OutBlock1 = int(unsafe.Sizeof(CFOAT00300OutBlock1{}))
-	SizeCFOAT00300OutBlock2 = int(unsafe.Sizeof(CFOAT00300OutBlock2{}))
-	SizeCFOBQ10500InBlock1  = int(unsafe.Sizeof(CFOBQ10500InBlock1{}))
-	SizeCFOBQ10500OutBlock1 = int(unsafe.Sizeof(CFOBQ10500OutBlock1{}))
-	SizeCFOBQ10500OutBlock2 = int(unsafe.Sizeof(CFOBQ10500OutBlock2{}))
-	SizeCFOBQ10500OutBlock3 = int(unsafe.Sizeof(CFOBQ10500OutBlock3{}))
-	SizeCFOFQ02400InBlock1  = int(unsafe.Sizeof(CFOFQ02400InBlock1{}))
-	SizeCFOFQ02400OutBlock1 = int(unsafe.Sizeof(CFOFQ02400OutBlock1{}))
-	SizeCFOFQ02400OutBlock2 = int(unsafe.Sizeof(CFOFQ02400OutBlock2{}))
-	SizeCFOFQ02400OutBlock3 = int(unsafe.Sizeof(CFOFQ02400OutBlock3{}))
-	SizeCFOFQ02400OutBlock4 = int(unsafe.Sizeof(CFOFQ02400OutBlock4{}))
 	SizeCSPAQ12200InBlock1  = int(unsafe.Sizeof(CSPAQ12200InBlock1{}))
 	SizeCSPAQ12200OutBlock1 = int(unsafe.Sizeof(CSPAQ12200OutBlock1{}))
 	SizeCSPAQ12200OutBlock2 = int(unsafe.Sizeof(CSPAQ12200OutBlock2{}))
@@ -105,9 +80,6 @@ const (
 	SizeT0425InBlock        = int(unsafe.Sizeof(T0425InBlock{}))
 	SizeT0425OutBlock       = int(unsafe.Sizeof(T0425OutBlock{}))
 	SizeT0425OutBlock1      = int(unsafe.Sizeof(T0425OutBlock1{}))
-	SizeT0434InBlock        = int(unsafe.Sizeof(T0434InBlock{}))
-	SizeT0434OutBlock       = int(unsafe.Sizeof(T0434OutBlock{}))
-	SizeT0434OutBlock1      = int(unsafe.Sizeof(T0434OutBlock1{}))
 	SizeT1101InBlock        = int(unsafe.Sizeof(T1101InBlock{}))
 	SizeT1101OutBlock       = int(unsafe.Sizeof(T1101OutBlock{}))
 	SizeT1102InBlock        = int(unsafe.Sizeof(T1102InBlock{}))
@@ -154,57 +126,42 @@ const (
 	SizeT8428InBlock        = int(unsafe.Sizeof(T8428InBlock{}))
 	SizeT8428OutBlock       = int(unsafe.Sizeof(T8428OutBlock{}))
 	SizeT8428OutBlock1      = int(unsafe.Sizeof(T8428OutBlock1{}))
-	SizeT8432OutBlock       = int(unsafe.Sizeof(T8432OutBlock{}))
 	SizeT8436InBlock        = int(unsafe.Sizeof(T8436InBlock{}))
 	SizeT8436OutBlock       = int(unsafe.Sizeof(T8436OutBlock{}))
 
-	P자료형_nil              = "nil"
-	P자료형_S현물_주문_응답_실시간_정보 = "S현물_주문_응답_실시간_정보"
-	//P자료형_CFOAQ00600_선물옵션_주문체결내역_질의값     = "CFOAQ00600_선물옵션_주문체결내역_질의값"
-	//P자료형_CFOAQ00600OutBlock             = "CFOAQ00600OutBlock"
-	//P자료형_CFOAT00100_선물옵션_정상주문_질의값       = "CFOAT00100_선물옵션_정상주문_질의값"
-	//P자료형_CFOAT00100OutBlock             = "CFOAT00100OutBlock"
-	//P자료형_CFOAT00200_선물옵션_정정주문_질의값       = "CFOAT00200_선물옵션_정정주문_질의값"
-	//P자료형_CFOAT00200OutBlock             = "CFOAT00200OutBlock"
-	//P자료형_CFOAT00300_선물옵션_취소주문_질의값       = "CFOAT00300_선물옵션_취소주문_질의값"
-	//P자료형_CFOAT00300OutBlock             = "CFOAT00300OutBlock"
-	//P자료형_CFOBQ10500_선물옵션_예탁금_증거금_조회_질의값 = "CFOBQ10500_선물옵션_예탁금_증거금_조회_질의값"
-	//P자료형_CFOBQ10500OutBlock             = "CFOBQ10500OutBlock"
-	//P자료형_CFOFQ02400_선물옵션_미결제약정_질의값      = "CFOFQ02400_선물옵션_미결제약정_질의값"
-	//P자료형_CFOFQ02400OutBlock             = "CFOFQ02400OutBlock"
-	P자료형_CSPAQ12200OutBlock         = "CSPAQ12200OutBlock"
-	P자료형_CSPAQ12200OutBlock1        = "CSPAQ12200OutBlock1"
-	P자료형_CSPAQ12200OutBlock2        = "CSPAQ12200OutBlock2"
-	P자료형_CSPAQ12300_현물계좌_잔고내역_질의값   = "CSPAQ12300_현물계좌_잔고내역_질의값"
-	P자료형_CSPAQ12300OutBlock         = "CSPAQ12300OutBlock"
-	P자료형_CSPAQ13700_현물계좌_주문체결내역_질의값 = "CSPAQ13700_현물계좌_주문체결내역_질의값"
-	P자료형_CSPAQ13700OutBlock         = "CSPAQ13700OutBlock"
-	P자료형_CSPAQ22200OutBlock         = "CSPAQ22200OutBlock"
-	P자료형_CSPAQ22200OutBlock1        = "CSPAQ22200OutBlock1"
-	P자료형_CSPAQ22200OutBlock2        = "CSPAQ22200OutBlock2"
-	P자료형_CSPAT00600_현물_정상_주문_질의값    = "CSPAT00600_현물_정상_주문_질의값"
-	P자료형_CSPAT00600OutBlock         = "CSPAT00600OutBlock"
-	P자료형_CSPAT00700_현물_정정_주문_질의값    = "CSPAT00700_현물_정정_주문_질의값"
-	P자료형_CSPAT00700OutBlock         = "CSPAT00700OutBlock"
-	P자료형_CSPAT00800_현물_취소_주문_질의값    = "CSPAT00800_현물_취소_주문_질의값"
-	P자료형_CSPAT00800OutBlock         = "CSPAT00800OutBlock"
-	P자료형_T0150_현물_당일_매매일지_질의값       = "T0150_현물_당일_매매일지_질의값"
-	P자료형_T0150_현물_당일_매매일지_응답        = "T0150_현물_당일_매매일지_응답"
-	P자료형_T0150_현물_당일_매매일지_응답_헤더     = "T0150_현물_당일_매매일지_응답_헤더"
-	P자료형_T0150_현물_당일_매매일지_응답_반복값    = "T0150_현물_당일_매매일지_응답_반복값"
-	P자료형_T0150OutBlock              = "T0150OutBlock"
-	P자료형_T0150OutBlock1             = "T0150OutBlock1"
-	P자료형_T0151_현물_일자별_매매일지_질의값      = "T0151_현물_일자별_매매일지_질의값"
-	P자료형_T0151_현물_일자별_매매일지_응답       = "T0151_현물_일자별_매매일지_응답"
-	P자료형_T0151_현물_일자별_매매일지_응답_헤더    = "T0151_현물_일자별_매매일지_응답_헤더"
-	P자료형_T0151_현물_일자별_매매일지_응답_반복값   = "T0151_현물_일자별_매매일지_응답_반복값"
-	P자료형_T0151OutBlock              = "T0151OutBlock"
-	P자료형_T0151OutBlock1             = "T0151OutBlock1"
-	P자료형_T0167OutBlock              = "T0167OutBlock"
-	P자료형_T0425_현물_체결_미체결_조회_질의값     = "T0425_현물_체결_미체결_조회_질의값"
-	P자료형_T0425OutBlock              = "T0425OutBlock"
-	//P자료형_T0434_선물옵션_체결_미체결_조회_질의값       = "T0434_선물옵션_체결_미체결_조회_질의값"
-	//P자료형_T0434OutBlock                  = "T0434OutBlock"
+	P자료형_nil                         = "nil"
+	P자료형_S현물_주문_응답_실시간_정보            = "S현물_주문_응답_실시간_정보"
+	P자료형_CSPAQ12200OutBlock          = "CSPAQ12200OutBlock"
+	P자료형_CSPAQ12200OutBlock1         = "CSPAQ12200OutBlock1"
+	P자료형_CSPAQ12200OutBlock2         = "CSPAQ12200OutBlock2"
+	P자료형_CSPAQ12300_현물계좌_잔고내역_질의값    = "CSPAQ12300_현물계좌_잔고내역_질의값"
+	P자료형_CSPAQ12300OutBlock          = "CSPAQ12300OutBlock"
+	P자료형_CSPAQ13700_현물계좌_주문체결내역_질의값  = "CSPAQ13700_현물계좌_주문체결내역_질의값"
+	P자료형_CSPAQ13700OutBlock          = "CSPAQ13700OutBlock"
+	P자료형_CSPAQ22200OutBlock          = "CSPAQ22200OutBlock"
+	P자료형_CSPAQ22200OutBlock1         = "CSPAQ22200OutBlock1"
+	P자료형_CSPAQ22200OutBlock2         = "CSPAQ22200OutBlock2"
+	P자료형_CSPAT00600_현물_정상_주문_질의값     = "CSPAT00600_현물_정상_주문_질의값"
+	P자료형_CSPAT00600OutBlock          = "CSPAT00600OutBlock"
+	P자료형_CSPAT00700_현물_정정_주문_질의값     = "CSPAT00700_현물_정정_주문_질의값"
+	P자료형_CSPAT00700OutBlock          = "CSPAT00700OutBlock"
+	P자료형_CSPAT00800_현물_취소_주문_질의값     = "CSPAT00800_현물_취소_주문_질의값"
+	P자료형_CSPAT00800OutBlock          = "CSPAT00800OutBlock"
+	P자료형_T0150_현물_당일_매매일지_질의값        = "T0150_현물_당일_매매일지_질의값"
+	P자료형_T0150_현물_당일_매매일지_응답         = "T0150_현물_당일_매매일지_응답"
+	P자료형_T0150_현물_당일_매매일지_응답_헤더      = "T0150_현물_당일_매매일지_응답_헤더"
+	P자료형_T0150_현물_당일_매매일지_응답_반복값     = "T0150_현물_당일_매매일지_응답_반복값"
+	P자료형_T0150OutBlock               = "T0150OutBlock"
+	P자료형_T0150OutBlock1              = "T0150OutBlock1"
+	P자료형_T0151_현물_일자별_매매일지_질의값       = "T0151_현물_일자별_매매일지_질의값"
+	P자료형_T0151_현물_일자별_매매일지_응답        = "T0151_현물_일자별_매매일지_응답"
+	P자료형_T0151_현물_일자별_매매일지_응답_헤더     = "T0151_현물_일자별_매매일지_응답_헤더"
+	P자료형_T0151_현물_일자별_매매일지_응답_반복값    = "T0151_현물_일자별_매매일지_응답_반복값"
+	P자료형_T0151OutBlock               = "T0151OutBlock"
+	P자료형_T0151OutBlock1              = "T0151OutBlock1"
+	P자료형_T0167OutBlock               = "T0167OutBlock"
+	P자료형_T0425_현물_체결_미체결_조회_질의값      = "T0425_현물_체결_미체결_조회_질의값"
+	P자료형_T0425OutBlock               = "T0425OutBlock"
 	P자료형_T1101_현물_호가_조회_응답           = "T1101_현물_호가_조회_응답"
 	P자료형_T1101OutBlock               = "T1101OutBlock"
 	P자료형_T1102_현물_시세_조회_질의값          = "T1102_현물_시세_조회_질의값"
@@ -289,20 +246,12 @@ const (
 	P자료형_T8428_증시주변_자금추이_응답_반복값_모음   = "T8428_증시주변_자금추이_응답_반복값_모음"
 	P자료형_T8428OutBlock               = "T8428OutBlock"
 	P자료형_T8428OutBlock1              = "T8428OutBlock1"
-	P자료형_T8432OutBlock               = "T8432OutBlock"
 	P자료형_T8436_현물_종목조회_응답_반복값        = "T8436_현물_종목조회_응답_반복값"
 	P자료형_T8436_현물_종목조회_응답            = "T8436_현물_종목조회_응답"
 	P자료형_T8436OutBlock               = "T8436OutBlock"
 )
 
 const (
-	//TR선물옵션_주문체결내역조회_CFOAQ00600   = "CFOAQ00600"
-	//TR선물옵션_정상주문_CFOAT00100       = "CFOAT00100"
-	//TR선물옵션_정정주문_CFOAT00200       = "CFOAT00200"
-	//TR선물옵션_취소주문_CFOAT00300       = "CFOAT00300"
-	//TR선물옵션_예탁금_증거금_조회_CFOBQ10500 = "CFOBQ10500"
-	//TR선물옵션_미결제약정_현황_CFOFQ02400   = "CFOFQ02400"
-
 	TR현물계좌_총평가_CSPAQ12200        = "CSPAQ12200"
 	TR현물계좌_잔고내역_조회_CSPAQ12300    = "CSPAQ12300"
 	TR현물계좌_주문체결내역_조회_CSPAQ13700  = "CSPAQ13700"
@@ -311,11 +260,10 @@ const (
 	TR현물_정정_주문_CSPAT00700        = "CSPAT00700"
 	TR현물_취소_주문_CSPAT00800        = "CSPAT00800"
 
-	TR현물_당일_매매일지_t0150   = "t0150"
-	TR현물_일자별_매매일지_t0151  = "t0151"
-	TR시간_조회_t0167        = "t0167"
-	TR현물_체결_미체결_조회_t0425 = "t0425"
-	//TR선물옵션_체결_미체결_조회_t0434    = "t0434"
+	TR현물_당일_매매일지_t0150        = "t0150"
+	TR현물_일자별_매매일지_t0151       = "t0151"
+	TR시간_조회_t0167             = "t0167"
+	TR현물_체결_미체결_조회_t0425      = "t0425"
 	TR현물_호가_조회_t1101          = "t1101"
 	TR현물_시세_조회_t1102          = "t1102"
 	TR현물_기간별_조회_t1305         = "t1305"
@@ -333,8 +281,7 @@ const (
 	TR현물_차트_분_t8412           = "t8412"
 	TR현물_차트_일주월_t8413         = "t8413"
 	TR증시_주변_자금_추이_t8428       = "t8428"
-	//TR지수선물_마스터_조회_t8432  = "t8432"
-	TR현물_종목_조회_t8436 = "t8436"
+	TR현물_종목_조회_t8436          = "t8436"
 
 	// 구현된 RT코드
 	RT현물_주문_접수_SC0 = "SC0"
@@ -832,18 +779,18 @@ func (p T주문시장구분) String() string {
 type T주문유형 uint8
 
 const (
-	P주문유형_해당없음  T주문유형 = 0
-	P주문_현금매도    T주문유형 = 1
-	P주문_현금매수    T주문유형 = 2
-	P주문_신용매도    T주문유형 = 3
-	P주문_신용매수    T주문유형 = 4
-	P주문_저축매도    T주문유형 = 5
-	P주문_저축매수    T주문유형 = 6
-	P주문_상품매도_대차 T주문유형 = 7
-	P주문_상품매도    T주문유형 = 9
-	P주문_상품매수    T주문유형 = 10
-	//P주문_선물대용매도_일반 T주문유형 = 11
-	//P주문_선물대용매도_반대 T주문유형 = 12
+	P주문유형_해당없음    T주문유형 = 0
+	P주문_현금매도      T주문유형 = 1
+	P주문_현금매수      T주문유형 = 2
+	P주문_신용매도      T주문유형 = 3
+	P주문_신용매수      T주문유형 = 4
+	P주문_저축매도      T주문유형 = 5
+	P주문_저축매수      T주문유형 = 6
+	P주문_상품매도_대차   T주문유형 = 7
+	P주문_상품매도      T주문유형 = 9
+	P주문_상품매수      T주문유형 = 10
+	P주문_선물대용매도_일반 T주문유형 = 11
+	P주문_선물대용매도_반대 T주문유형 = 12
 	P주문_현금매도_프    T주문유형 = 13
 	P주문_현금매수_프    T주문유형 = 14
 	P주문_현금매수_유가   T주문유형 = 15
@@ -876,10 +823,10 @@ func (p T주문유형) String() string {
 		return "상품매도"
 	case P주문_상품매수:
 		return "상품매수"
-	//case P주문_선물대용매도_일반:
-	//	return "선물대용매도(일반)"
-	//case P주문_선물대용매도_반대:
-	//	return "선물대용매도(반대)"
+	case P주문_선물대용매도_일반:
+		return "선물대용매도(일반)"
+	case P주문_선물대용매도_반대:
+		return "선물대용매도(반대)"
 	case P주문_현금매도_프:
 		return "현금매도_프"
 	case P주문_현금매수_프:
