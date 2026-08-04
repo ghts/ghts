@@ -838,6 +838,7 @@ func (p T주문유형) String() string {
 }
 
 const (
+	P증권그룹_Unknown      = T증권그룹(0)
 	P증권그룹_주식           = T증권그룹(1)
 	P증권그룹_예탁증서         = T증권그룹(3)
 	P증권그룹_증권투자회사_뮤추얼펀드 = T증권그룹(4)
@@ -854,6 +855,8 @@ type T증권그룹 uint8
 
 func (p T증권그룹) String() string {
 	switch p {
+	case P증권그룹_Unknown:
+		return "Unknown"
 	case P증권그룹_주식:
 		return "주식"
 	case P증권그룹_예탁증서:
@@ -875,6 +878,8 @@ func (p T증권그룹) String() string {
 	case P증권그룹_ETN:
 		return "ETN"
 	}
+
+	lb.F체크포인트(p)
 
 	panic(lb.F2문자열("예상하지 못한 증권그룹 값. %v", p))
 

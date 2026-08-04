@@ -3228,18 +3228,18 @@ type T8436InBlock struct {
 	Gubun [1]byte
 }
 type T8436OutBlock struct {
-	HName      [20]byte
-	ShCode     [6]byte
-	ExpCode    [12]byte
-	EtfGubun   [1]byte
-	UpLmtPrice [8]byte
-	DnLmtPrice [8]byte
-	JnilClose  [8]byte
-	MeMeDan    [5]byte
-	RecPrice   [8]byte
+	Hname      [20]byte
+	Shcode     [6]byte
+	Expcode    [12]byte
+	Etfgubun   [1]byte
+	Uplmtprice [8]byte
+	Dnlmtprice [8]byte
+	Jnilclose  [8]byte
+	Memedan    [5]byte
+	Recprice   [8]byte
 	Gubun      [1]byte
-	Bu12Gubun  [2]byte
-	SpacGubun  [1]byte
+	Bu12gubun  [2]byte
+	Spac_gubun [1]byte
 	Filler     [32]byte
 }
 

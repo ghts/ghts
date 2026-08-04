@@ -3,6 +3,7 @@ package xt
 import (
 	"bytes"
 	"encoding/binary"
+
 	lb "github.com/ghts/ghts/lib"
 )
 
@@ -53,17 +54,17 @@ func NewT8436_현물_종목조회_응답_반복값_모음(b []byte) (값 *T8436_
 		lb.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 		s := new(T8436_현물_종목조회_응답_반복값)
-		s.M종목명 = lb.F2문자열_EUC_KR_공백제거(g.HName)
-		s.M종목코드 = lb.F2문자열_공백_제거(g.ShCode)
+		s.M종목명 = lb.F2문자열_EUC_KR_공백제거(g.Hname)
+		s.M종목코드 = lb.F2문자열_공백_제거(g.Shcode)
 		//s.M주문수량단위 = lb.F확인2(lb.F2정수(g.MeMeDan))
-		s.M상한가 = lb.F확인2(lb.F2정수64(g.UpLmtPrice))
-		s.M하한가 = lb.F확인2(lb.F2정수64(g.DnLmtPrice))
-		s.M전일가 = lb.F확인2(lb.F2정수64(g.JnilClose))
-		s.M기준가 = lb.F확인2(lb.F2정수64(g.RecPrice))
-		s.M증권그룹 = T증권그룹(lb.F확인2(lb.F2정수_공백은_0(g.Bu12Gubun)))
-		s.M기업인수목적회사여부 = lb.F2참거짓(lb.F2문자열(g.SpacGubun), "Y", true)
+		s.M상한가 = lb.F확인2(lb.F2정수64(g.Uplmtprice))
+		s.M하한가 = lb.F확인2(lb.F2정수64(g.Dnlmtprice))
+		s.M전일가 = lb.F확인2(lb.F2정수64(g.Jnilclose))
+		s.M기준가 = lb.F확인2(lb.F2정수64(g.Recprice))
+		s.M증권그룹 = T증권그룹(lb.F확인2(lb.F2정수_공백은_0(g.Bu12gubun)))
+		s.M기업인수목적회사여부 = lb.F2참거짓(lb.F2문자열(g.Spac_gubun), "Y", true)
 
-		ETF구분 := lb.F2문자열_공백_제거(g.EtfGubun)
+		ETF구분 := lb.F2문자열_공백_제거(g.Etfgubun)
 		시장구분 := lb.F2문자열_공백_제거(g.Gubun)
 
 		switch {
@@ -76,6 +77,7 @@ func NewT8436_현물_종목조회_응답_반복값_모음(b []byte) (값 *T8436_
 		case 시장구분 == "2":
 			s.M시장구분 = lb.P시장구분_코스닥
 		default:
+			lb.F체크포인트(s.M시장구분)
 			panic(lb.New에러("예상하지 못한 경우 : '%v', '%v'", ETF구분, 시장구분))
 		}
 
@@ -84,8 +86,8 @@ func NewT8436_현물_종목조회_응답_반복값_모음(b []byte) (값 *T8436_
 		switch {
 		case s.M증권그룹 == P증권그룹_상장지수펀드_ETF && s.M시장구분 == lb.P시장구분_ETN,
 			s.M증권그룹 == P증권그룹_ETN && s.M시장구분 == lb.P시장구분_ETF:
-			lb.F문자열_출력(
-				"종목코드 : '%v', 증권그룹 : '%v', 시장구분 : '%v'",
+			lb.F체크포인트("종목코드", s.M종목코드, "증권그룹", s.M증권그룹, "시장구분", s.M시장구분)
+			lb.F문자열_출력("종목코드 : '%v', 증권그룹 : '%v', 시장구분 : '%v'",
 				s.M종목코드, s.M증권그룹, s.M시장구분)
 		}
 	}
