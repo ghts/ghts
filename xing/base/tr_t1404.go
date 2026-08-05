@@ -3,8 +3,9 @@ package xt
 import (
 	"bytes"
 	"encoding/binary"
-	lb "github.com/ghts/ghts/lib"
 	"strconv"
+
+	lb "github.com/ghts/ghts/lib"
 
 	"time"
 )
