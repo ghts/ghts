@@ -1,12 +1,13 @@
 package xt
 
 import (
-	lb "github.com/ghts/ghts/lib"
 	"os"
 	"reflect"
 	"strconv"
 	"strings"
 	"time"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
 func F전일_당일_설정(전일값, 당일값 time.Time) {
@@ -124,4 +125,13 @@ func F주소_설정() {
 func F주소_재설정() {
 	주소_설정_완료.S값(false)
 	F주소_설정()
+}
+
+func F무시해야할_에러_메시지(에러_메시지 string) bool {
+	return strings.Contains(에러_메시지, "주문이 접수 대기") ||
+		strings.Contains(에러_메시지, "원주문번호를 잘못 입력") ||
+		strings.Contains(에러_메시지, "취소 가능한 수량을 초과하였습니다.") ||
+		strings.Contains(에러_메시지, "주문수량이 매매가능수량을 초과했습니다") ||
+		strings.Contains(에러_메시지, "모의투자 정정주문이 완료 되었습니다.") ||
+		strings.Contains(에러_메시지, "모의투자 취소주문이 완료 되었습니다.")
 }

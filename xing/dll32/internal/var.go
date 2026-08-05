@@ -1,12 +1,13 @@
 package dll32
 
 import (
-	lb "github.com/ghts/ghts/lib"
-	nano "github.com/ghts/ghts/lib/nanomsg"
-	xt "github.com/ghts/ghts/xing/base"
 	"runtime"
 	"sync"
 	"syscall"
+
+	lb "github.com/ghts/ghts/lib"
+	nano "github.com/ghts/ghts/lib/nanomsg"
+	xt "github.com/ghts/ghts/xing/base"
 )
 
 // 전역 변수는 항상 동시 액세스로 인한 오류의 위험이 있어서 한 군데 몰아서 관리함.
@@ -73,7 +74,7 @@ var (
 
 // 초기화 이후에는 사실상 읽기 전용이어서, 다중 사용에 문제가 없는 값들.
 var (
-	계좌번호_모음 []string
-	계좌_비밀번호 string
-	서버_구분   xt.T서버_구분
+	V계좌번호_모음 []string
+	V계좌_비밀번호 string
+	V서버_구분   xt.T서버_구분
 )

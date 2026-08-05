@@ -3,6 +3,7 @@ package xt
 import (
 	"bytes"
 	"encoding/binary"
+
 	lb "github.com/ghts/ghts/lib"
 )
 
@@ -23,7 +24,7 @@ func New현물_주문_접수(b []byte) (값 *S현물_주문_응답_실시간_정
 
 	값 = new(S현물_주문_응답_실시간_정보)
 	값.M주문번호 = lb.F확인2(lb.F2정수64(g.Ordno))
-	값.M원_주문번호 = lb.F확인2(lb.F2정수64(g.Orgordno))
+	값.M원_주문번호 = lb.F확인2(lb.F2정수64_공백은_0(g.Orgordno))
 	값.RT코드 = RT현물_주문_접수_SC0
 	값.M응답_구분 = F2주문_응답_구분(g.Trcode)
 	값.M종목코드 = 종목코드

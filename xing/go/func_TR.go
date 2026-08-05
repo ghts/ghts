@@ -1270,10 +1270,7 @@ func F질의_단일TR(질의값 lb.I질의값, 옵션_모음 ...interface{}) (�
 	case 값 := <-ch회신:
 		switch 변환값 := 값.(type) {
 		case error:
-			if strings.Contains(변환값.Error(), "주문이 접수 대기") ||
-				strings.Contains(변환값.Error(), "원주문번호를 잘못 입력") ||
-				strings.Contains(변환값.Error(), "취소 가능한 수량을 초과하였습니다.") ||
-				strings.Contains(변환값.Error(), "주문수량이 매매가능수량을 초과했습니다") {
+			if xt.F무시해야할_에러_메시지(변환값.Error()) {
 				예외_처리.M출력_숨김 = true
 				return nil, 변환값
 			}

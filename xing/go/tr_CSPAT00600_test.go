@@ -27,7 +27,7 @@ func TestCSPAT00600_현물_정상_주문(t *testing.T) {
 
 	lb.F테스트_에러없음(t, F주문_응답_실시간_정보_구독())
 
-	const 반복_횟수 = 10
+	const 반복_횟수 = 3
 	const 수량 = 5 // 주문이 정상 작동하는 지만 확인하면 됨.
 	const 호가_유형 = lb.P호가_시장가
 

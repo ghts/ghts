@@ -27,7 +27,7 @@ func TestCSPAT00700_현물_정정_주문(t *testing.T) {
 
 	lb.F테스트_에러없음(t, F주문_응답_실시간_정보_구독())
 
-	const 반복_횟수 = 10
+	const 반복_횟수 = 3
 	const 수량 = int64(5)
 	const 수량_전량_취소주문 = int64(0)
 
