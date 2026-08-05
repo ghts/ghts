@@ -86,7 +86,7 @@ func f테스트_참임(t testing.TB, true이어야_하는_조건 bool, 에러_�
 
 	F문자열_출력_도우미(true, 출력_문자열)
 
-	t.FailNow()
+	t.Fail()
 }
 
 func F테스트_거짓임(t testing.TB, false이어야_하는_조건 bool, 에러_발생_시_출력할_변수_모음 ...interface{}) {
@@ -109,7 +109,7 @@ func f테스트_거짓임(t testing.TB, false이어야_하는_조건 bool, 출�
 
 	F문자열_출력(출력_문자열)
 
-	t.FailNow()
+	t.Fail()
 }
 
 func F테스트_에러없음(t testing.TB, 에러_후보_모음 ...interface{}) interface{} {
@@ -124,7 +124,7 @@ func f테스트_에러없음(t testing.TB, 에러_후보_모음 ...interface{}) 
 	case error:
 		if 에러값 != nil {
 			F에러_출력("f테스트_에러없음() : 에러 발생.\n%v", F변수값_문자열(에러_후보_모음...))
-			t.FailNow()
+			t.Fail()
 		}
 	default:
 		panic(New에러("f테스트_에러없음() 예상하지 못한 자료형. %T", 에러_후보_모음[len(에러_후보_모음)-1]))
@@ -141,7 +141,7 @@ func F테스트_에러발생(t testing.TB, 에러_후보_모음 ...interface{}) 
 func f테스트_에러발생(t testing.TB, 에러_후보_모음 ...interface{}) {
 	if len(에러_후보_모음) == 0 {
 		F에러_출력("확인할 대상 에러가 없음.")
-		t.FailNow()
+		t.Fail()
 		return
 	}
 
@@ -155,7 +155,7 @@ func f테스트_에러발생(t testing.TB, 에러_후보_모음 ...interface{}) 
 	}
 
 	F에러_출력("에러 없음.")
-	t.FailNow()
+	t.Fail()
 
 	return
 }
@@ -180,7 +180,7 @@ func f테스트_같음(t testing.TB, 값 interface{}, 비교값1 interface{}, �
 
 	F문자열_출력_도우미(true, "같은 값을 발견하지 못함.\n%v", F변수값_자료형_문자열(값_모음...))
 
-	t.FailNow()
+	t.Fail()
 }
 
 func F테스트_다름(t testing.TB, 값 interface{}, 비교값1 interface{}, 추가_비교값_모음 ...interface{}) {
@@ -202,7 +202,7 @@ func f테스트_다름(t testing.TB, 값 interface{}, 비교값1 interface{}, �
 
 		F문자열_출력_도우미(true, "같은 값을 발견함.\n%v", F변수값_자료형_문자열(값_모음...))
 
-		t.FailNow()
+		t.Fail()
 	}
 }
 
