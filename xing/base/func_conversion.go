@@ -514,7 +514,7 @@ func F바이트_변환값_해석_Raw(바이트_변환값 *lb.S바이트_변환) 
 	case P자료형_T3341OutBlock1:
 		return NewT3341_재무순위_응답_반복값_모음(b)
 	case P자료형_T8407OutBlock1:
-		return NewT8407_현물_멀티_현재가_조회_응답_반복값_모음(b)
+		return NewT8407_현물_멀티_현재가_조회_응답_모음(b)
 	case P자료형_T8410OutBlock:
 		return NewT8410_현물_차트_일주월년_응답_헤더(b)
 	case P자료형_T8410OutBlock1:
