@@ -3,6 +3,7 @@ package xt
 import (
 	"bytes"
 	"encoding/binary"
+
 	lb "github.com/ghts/ghts/lib"
 )
 
@@ -141,7 +142,7 @@ func NewT3341_재무순위_응답_반복값_모음(b []byte) (값 *T3341_재무�
 		s.M매출액_증가율 = lb.F확인2(lb.F2실수_소숫점_추가_공백은_0(g.Salesgrowth, 2))
 		s.M영업이익_증가율 = lb.F확인2(lb.F2실수_소숫점_추가_공백은_0(g.Operatingincomegrowt, 2))
 		s.M경상이익_증가율 = lb.F확인2(lb.F2실수_소숫점_추가_공백은_0(g.Ordinaryincomegrowth, 2))
-		s.M부채비율 = lb.F확인2(lb.F2실수_소숫점_추가(g.Liabilitytoequity, 2))
+		s.M부채비율 = lb.F확인2(lb.F2실수_소숫점_추가_공백은_0(g.Liabilitytoequity, 2))
 		s.M유보율 = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Enterpriseratio, 2)
 		s.EPS = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Eps, 2)
 		s.BPS = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Bps, 2)
