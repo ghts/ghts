@@ -7,12 +7,16 @@ import (
 
 func SQL실행(db *sql.DB, sql문자열 string, 추가_인수 ...interface{}) (id int64, 에러 error) {
 	var tx *sql.Tx
+	var stmt *sql.Stmt
 
 	defer S예외처리{M에러: &에러, M함수: func() {
 		id = 0
-
 		if tx != nil {
 			tx.Rollback()
+		}
+	}, M함수_항상: func() {
+		if stmt != nil {
+			stmt.Close()
 		}
 	}}.S실행()
 
@@ -25,9 +29,7 @@ func SQL실행(db *sql.DB, sql문자열 string, 추가_인수 ...interface{}) (i
 		return
 	}
 
-	stmt := F확인2(tx.Prepare(sql문자열))
-	defer stmt.Close()
-
+	stmt = F확인2(tx.Prepare(sql문자열))
 	결과 := F확인2(stmt.Exec(추가_인수...))
 	id = F확인2(결과.LastInsertId())
 	에러 = tx.Commit()
@@ -36,13 +38,20 @@ func SQL실행(db *sql.DB, sql문자열 string, 추가_인수 ...interface{}) (i
 }
 
 func F정수값DB질의(db *sql.DB, sql문자열 string, 추가_인수 ...interface{}) (정수값 int64, 에러 error) {
-	defer S예외처리{M에러: &에러}.S실행()
+	var stmt *sql.Stmt
+	var rows *sql.Rows
 
-	stmt := F확인2(db.Prepare(sql문자열))
-	defer stmt.Close()
+	defer S예외처리{M에러: &에러, M함수_항상: func() {
+		if stmt != nil {
+			stmt.Close()
+		}
+		if rows != nil {
+			rows.Close()
+		}
+	}}.S실행()
 
-	rows := F확인2(stmt.Query(추가_인수...))
-	defer rows.Close()
+	stmt = F확인2(db.Prepare(sql문자열))
+	rows = F확인2(stmt.Query(추가_인수...))
 
 	for rows.Next() {
 		F확인1(rows.Scan(&정수값))
