@@ -15,40 +15,23 @@ type S예외처리 struct {
 
 func (s S예외처리) S실행() {
 	defer func() {
+		if !s.M출력_숨김 && s.M에러 != nil {
+			if 에러 := *s.M에러; 에러 != nil && F2문자열_공백_제거(에러.Error()) != "" {
+				F에러_출력(에러)
+			}
+		}
+
 		if s.M함수_항상 != nil {
 			s.M함수_항상()
 		}
 	}()
 
-	var i에러 interface{}
-	패닉_복원값 := recover()
-
-	// 호출 경로 포함 에러 생성
-	switch {
-	case 패닉_복원값 != nil && s.M에러 != nil:
-		*s.M에러 = New에러(패닉_복원값)
-		i에러 = *s.M에러
-	case 패닉_복원값 != nil:
-		i에러 = New에러(패닉_복원값)
-	case s.M에러 != nil && *s.M에러 != nil:
-		*s.M에러 = New에러(*s.M에러)
-		i에러 = *s.M에러
-	//case s.M에러 != nil && *s.M에러 == nil:
-	// PASS
-	default: // 에러 및 패닉 없음.
+	if r := recover(); r != nil && s.M에러 != nil {
+		*s.M에러 = New에러(r)
+	} else if s.M에러 != nil && *s.M에러 != nil {
+		*s.M에러 = New에러(*s.M에러) // *errors.errorString -> *lib.S에러
+	} else {
 		return
-	}
-
-	// 에러 출력
-	switch 변환값 := i에러.(type) {
-	case *S에러:
-		if !s.M출력_숨김 {
-			F에러_출력(변환값)
-		}
-	case S에러:
-		if !s.M출력_숨김 {
-			F에러_출력(&변환값)
-		}
 	}
 
 	if s.M함수 != nil {
