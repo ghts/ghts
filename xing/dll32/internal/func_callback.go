@@ -28,7 +28,7 @@ func go콜백_도우미(ch초기화, ch종료 chan lb.T신호) (에러 error) {
 		}
 	}()
 
-	defer lb.S예외처리{M에러: &에러, M함수: func() {
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() {
 		select {
 		case <-ch공통_종료:
 			에러 = nil

@@ -488,7 +488,7 @@ func F출력_문자열_확보(함수 func()) (문자열 string, 에러 error) {
 	화면_출력_잠금.Lock()
 	defer 화면_출력_잠금.Unlock()
 
-	defer S예외처리{M에러: &에러, M함수: func() { 문자열 = "" }}.S실행()
+	defer S예외처리{M에러: &에러, M에러_실행: func() { 문자열 = "" }}.S실행()
 
 	원래_출력장치 := os.Stdout
 	임시_입력장치, 임시_출력장치 := F확인3(os.Pipe())

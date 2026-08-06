@@ -170,7 +170,7 @@ func NewCSPAQ12300InBlock(질의값 *CSPAQ12300_현물계좌_잔고내역_질의
 }
 
 func NewCSPAQ12300_현물계좌_잔고내역_응답(b []byte) (값 *CSPAQ12300_현물계좌_잔고내역_응답, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	const 헤더_길이 = SizeCSPAQ12300OutBlock1 + SizeCSPAQ12300OutBlock2 + 5
 	lb.F조건부_패닉(len(b) < 헤더_길이, "예상하지 못한 길이 : '%v'", len(b))
@@ -192,7 +192,7 @@ func NewCSPAQ12300_현물계좌_잔고내역_응답(b []byte) (값 *CSPAQ12300_�
 }
 
 func NewCSPAQ12300_현물계좌_잔고내역_조회_응답_헤더1(b []byte) (값 *CSPAQ12300_현물계좌_잔고내역_응답1, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeCSPAQ12300OutBlock1, "예상하지 못한 길이 : '%v", len(b))
 
@@ -211,7 +211,7 @@ func NewCSPAQ12300_현물계좌_잔고내역_조회_응답_헤더1(b []byte) (�
 }
 
 //func NewCSPAQ12300_현물계좌_잔고내역_조회_응답_헤더2(b []byte) (값 *CSPAQ12300_현물계좌_잔고내역_응답2, 에러 error) {
-//	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+//	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 //
 //	lb.F조건부_패닉(len(b) != SizeCSPAQ12300OutBlock2, "예상하지 못한 길이 : '%v", len(b))
 //
@@ -296,7 +296,7 @@ func NewCSPAQ12300_현물계좌_잔고내역_조회_응답_헤더1(b []byte) (�
 //}
 
 func NewCSPAQ12300_현물계좌_잔고내역_조회_응답_반복값_모음(b []byte) (값_모음 []*CSPAQ12300_현물계좌_잔고내역_응답_반복값, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값_모음 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값_모음 = nil }}.S실행()
 
 	나머지 := len(b) % SizeCSPAQ12300OutBlock3
 	lb.F조건부_패닉(나머지 != 0, "예상하지 못한 길이. '%v' '%v'", len(b), 나머지)

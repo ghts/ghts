@@ -18,7 +18,7 @@ func go수신_도우미(ch초기화, ch종료 chan lb.T신호) (에러 error) {
 	defer lb.S예외처리{
 		M에러:    &에러,
 		M출력_숨김: true,
-		M함수: func() {
+		M에러_실행: func() {
 			if lb.F공통_종료_채널_닫힘() {
 				return
 			}
@@ -33,7 +33,7 @@ func go수신_도우미(ch초기화, ch종료 chan lb.T신호) (에러 error) {
 				ctx.S송신(lb.JSON, 에러)
 			}
 		},
-		M함수_항상: func() {
+		M항상_실행: func() {
 			if lb.F공통_종료_채널_닫힘() {
 				select {
 				case Ch수신_도우미_종료 <- lb.P신호_종료:

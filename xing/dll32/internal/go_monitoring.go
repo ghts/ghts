@@ -5,7 +5,7 @@ import (
 )
 
 func Go루틴_관리(ch초기화 chan lb.T신호) (에러 error) {
-	lb.S예외처리{M에러: &에러, M함수_항상: func() {
+	lb.S예외처리{M에러: &에러, M항상_실행: func() {
 		Ch모니터링_루틴_종료 <- lb.P신호_종료
 	}}.S실행()
 

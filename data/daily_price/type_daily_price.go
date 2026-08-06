@@ -306,7 +306,7 @@ func (s *S종목별_일일_가격정보_모음) DB읽기with시작일(db *sql.DB
 
 func (s *S종목별_일일_가격정보_모음) DB저장(db *sql.DB) (에러 error) {
 	var tx *sql.Tx
-	defer lb.S예외처리{M에러: &에러, M함수: func() {
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() {
 		lb.F에러_출력(에러)
 
 		if tx != nil {

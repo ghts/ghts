@@ -37,7 +37,7 @@ func (s *s변환기) WriteExt(값 interface{}) []byte {
 }
 
 func (s *s변환기) ReadExt(포인터 interface{}, 바이트_모음 []byte) {
-	defer S예외처리{M함수: func() { 포인터 = nil }}.S실행()
+	defer S예외처리{M에러_실행: func() { 포인터 = nil }}.S실행()
 
 	switch s.자료형 {
 	case "errors.errorString":
@@ -87,7 +87,7 @@ func (s *s변환기) ConvertExt(값 interface{}) interface{} {
 }
 
 func (s *s변환기) UpdateExt(포인터 interface{}, 값 interface{}) {
-	defer S예외처리{M함수: func() { 포인터 = nil }}.S실행()
+	defer S예외처리{M에러_실행: func() { 포인터 = nil }}.S실행()
 
 	switch s.자료형 {
 	case "errors.errorString",
@@ -185,7 +185,7 @@ func (s *S바이트_변환) S해석기(해석기 func(*S바이트_변환) (inter
 }
 
 func (s *S바이트_변환) MarshalBinary() (바이트_모음 []byte, 에러 error) {
-	defer S예외처리{M에러: &에러, M함수: func() { 바이트_모음 = nil }}.S실행()
+	defer S예외처리{M에러: &에러, M에러_실행: func() { 바이트_모음 = nil }}.S실행()
 
 	자료형_문자열_길이 := make([]byte, 2)
 	binary.LittleEndian.PutUint16(자료형_문자열_길이, uint16(len(s.자료형_문자열))) // 인텔 및 AMD 계열 CPU는 리틀 엔디언
@@ -206,7 +206,7 @@ func (s *S바이트_변환) MarshalBinary() (바이트_모음 []byte, 에러 err
 func (s *S바이트_변환) UnmarshalBinary(바이트_모음 []byte) (에러 error) {
 	defer S예외처리{
 		M에러: &에러,
-		M함수: func() {
+		M에러_실행: func() {
 			s.변환_형식 = P변환형식_기본값
 			s.자료형_문자열 = F2문자열(nil)
 			s.값 = nil
@@ -244,7 +244,7 @@ func (s *S바이트_변환) UnmarshalBinary(바이트_모음 []byte) (에러 err
 func (s *S바이트_변환) Raw바이트_모음() []byte { return s.값 }
 
 func New바이트_변환(변환_형식 T변환, 값 interface{}) (변환값 *S바이트_변환, 에러 error) {
-	defer S예외처리{M에러: &에러, M함수: func() { 변환값 = nil }}.S실행()
+	defer S예외처리{M에러: &에러, M에러_실행: func() { 변환값 = nil }}.S실행()
 
 	if _, ok := 값.(*S바이트_변환); ok {
 		return 값.(*S바이트_변환), nil // 이미 변환된 경우에는 그대로 사용함.
@@ -352,7 +352,7 @@ func (s *S바이트_변환_모음) IsNil(인덱스 int) bool {
 }
 
 func (s *S바이트_변환_모음) MarshalBinary() (바이트_모음 []byte, 에러 error) {
-	defer S예외처리{M에러: &에러, M함수: func() { 바이트_모음 = nil }}.S실행()
+	defer S예외처리{M에러: &에러, M에러_실행: func() { 바이트_모음 = nil }}.S실행()
 
 	수량 := make([]byte, 2)
 	binary.LittleEndian.PutUint16(수량, uint16(len(s.M바이트_변환_모음))) // 인텔 및 AMD 계열 CPU는 리틀 엔디언
@@ -368,7 +368,7 @@ func (s *S바이트_변환_모음) MarshalBinary() (바이트_모음 []byte, 에
 }
 
 func (s *S바이트_변환_모음) UnmarshalBinary(바이트_모음 []byte) (에러 error) {
-	defer S예외처리{M에러: &에러, M함수: func() { s.M바이트_변환_모음 = nil }}.S실행()
+	defer S예외처리{M에러: &에러, M에러_실행: func() { s.M바이트_변환_모음 = nil }}.S실행()
 
 	const 헤더_길이_복수값 = 3 // 변환형식_길이 1, 수량 길이 2.
 	const 헤더_길이_단일값 = 7 // 변환_형식 1, 자료형_문자열_길이 2, 내용_길이 4

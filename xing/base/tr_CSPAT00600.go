@@ -119,7 +119,7 @@ func NewCSPAT00600InBlock(질의값 *CSPAT00600_현물_정상_주문_질의값, 
 }
 
 func NewCSPAT00600_현물_정상_주문_응답(b []byte) (값 *CSPAT00600_현물_정상_주문_응답, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeCSPAT00600OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
@@ -132,7 +132,7 @@ func NewCSPAT00600_현물_정상_주문_응답(b []byte) (값 *CSPAT00600_현물
 }
 
 func NewCSPAT00600_현물_정상_주문_응답1(b []byte) (s *CSPAT00600_현물_정상_주문_응답1, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { s = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { s = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeCSPAT00600OutBlock1, "예상하지 못한 길이 : '%v", len(b))
 
@@ -173,7 +173,7 @@ func NewCSPAT00600_현물_정상_주문_응답1(b []byte) (s *CSPAT00600_현물_
 }
 
 func NewCSPAT00600_현물_정상_주문_응답2(b []byte) (s *CSPAT00600_현물_정상_주문_응답2, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { s = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { s = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeCSPAT00600OutBlock2,
 		"예상하지 못한 길이 : '%v", len(b))

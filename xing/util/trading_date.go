@@ -87,7 +87,7 @@ func (s *S개장일_모음) G이전_개장일(기간 int) (이전_개장일 uint
 		return lb.F일자2정수(time.Time{}), lb.New에러("Index out of range. %v %v", len(s.M저장소), 기간)
 	}
 
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 이전_개장일 = 0 }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 이전_개장일 = 0 }}.S실행()
 
 	return s.M저장소[len(s.M저장소)-기간-1], nil
 }

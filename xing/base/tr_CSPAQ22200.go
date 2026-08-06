@@ -62,7 +62,7 @@ func NewCSPAQ22200InBlock(계좌번호, 비밀번호 string) (g *CSPAQ22200InBlo
 }
 
 func NewCSPAQ22200_현물계좌_예수금_주문가능금액_응답(b []byte) (값 *CSPAQ22200_현물계좌_예수금_주문가능금액_응답, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeCSPAQ22200OutBlock, "예상하지 못한 길이 : '%v", len(b))
 

@@ -75,7 +75,7 @@ func NewT3320InBlock(질의값 *lb.S질의값_단일_종목) (g *T3320InBlock) {
 }
 
 func NewT3320_기업정보_요약_응답1(b []byte) (값 *T3320_기업정보_요약_응답1, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeT3320OutBlock,
 		"예상하지 못한 길이 : '%v", len(b))
@@ -110,7 +110,7 @@ func NewT3320_기업정보_요약_응답1(b []byte) (값 *T3320_기업정보_요
 }
 
 func NewT3320_기업정보_요약_응답2(b []byte) (값 *T3320_기업정보_요약_응답2, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeT3320OutBlock1,
 		"예상하지 못한 길이 : '%v", len(b))

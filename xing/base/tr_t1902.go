@@ -65,7 +65,7 @@ func NewT1902InBlock(질의값 *lb.S질의값_단일종목_연속키) (g *T1902I
 }
 
 func NewT1902_ETF시간별_추이_응답_헤더(b []byte) (s *T1902_ETF시간별_추이_응답_헤더, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { s = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { s = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeT1902OutBlock,
 		"예상하지 못한 길이 : '%v", len(b))
@@ -82,7 +82,7 @@ func NewT1902_ETF시간별_추이_응답_헤더(b []byte) (s *T1902_ETF시간별
 }
 
 func NewT1902_ETF시간별_추이_응답_반복값_모음(b []byte) (값_모음 *T1902_ETF시간별_추이_응답_반복값_모음, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값_모음 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값_모음 = nil }}.S실행()
 
 	나머지 := len(b) % SizeT1902OutBlock1
 	lb.F조건부_패닉(나머지 != 0, "예상하지 못한 길이. '%v' '%v'", len(b), 나머지)

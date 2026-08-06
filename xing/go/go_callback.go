@@ -7,7 +7,7 @@ import (
 )
 
 func Go루틴_관리(ch초기화 chan lb.T신호) (에러 error) {
-	lb.S예외처리{M에러: &에러, M함수_항상: func() {
+	lb.S예외처리{M에러: &에러, M항상_실행: func() {
 		Ch모니터링_루틴_종료 <- lb.P신호_종료
 	}}.S실행()
 
@@ -51,12 +51,12 @@ func go루틴_콜백_처리_도우미(ch초기화 chan lb.T신호, ch도우미_�
 
 	defer lb.S예외처리{
 		M에러: &에러,
-		M함수: func() {
+		M에러_실행: func() {
 			if ctx != nil {
 				ctx.S송신(lb.JSON, 에러)
 			}
 		},
-		M함수_항상: func() {
+		M항상_실행: func() {
 			if lb.F공통_종료_채널_닫힘() {
 				Ch콜백_도우미_종료 <- lb.P신호_종료
 			} else {

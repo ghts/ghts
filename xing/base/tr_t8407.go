@@ -52,7 +52,7 @@ func NewT8407InBlock(질의값 *lb.S질의값_복수_종목) (g *T8407InBlock) {
 }
 
 func NewT8407_현물_멀티_현재가_조회_응답_모음(b []byte) (응답값 *T8407_현물_멀티_현재가_조회_응답_모음, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 응답값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 응답값 = nil }}.S실행()
 
 	나머지 := len(b) % SizeT8407OutBlock1
 	lb.F조건부_패닉(나머지 != 0, "예상하지 못한 길이. '%v' '%v'", len(b), 나머지)

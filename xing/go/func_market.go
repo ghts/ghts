@@ -146,7 +146,7 @@ func F종목_정보_설정() (에러 error) {
 
 	defer lb.S예외처리{
 		M에러: &에러,
-		M함수: func() {
+		M에러_실행: func() {
 			종목모음_코스피 = make([]*lb.S종목, 0)
 			종목모음_코스닥 = make([]*lb.S종목, 0)
 			종목모음_ETF = make([]*lb.S종목, 0)
@@ -574,7 +574,7 @@ func F특수_종목_여부(종목코드 string) bool {
 }
 
 func F최소_호가단위by종목코드(종목코드 string) (값 int64, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = 0 }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = 0 }}.S실행()
 
 	종목 := lb.F확인2(F종목by코드(종목코드))
 
@@ -582,7 +582,7 @@ func F최소_호가단위by종목코드(종목코드 string) (값 int64, 에러 
 }
 
 func F최소_호가단위by종목(종목 *lb.S종목) (값 int64, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = 0 }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = 0 }}.S실행()
 
 	switch 종목.G시장구분() {
 	case lb.P시장구분_ETF, lb.P시장구분_ETN:

@@ -9,7 +9,7 @@ import (
 
 // New현물_주문_접수 : SC0
 func New현물_주문_접수(b []byte) (값 *S현물_주문_응답_실시간_정보, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeSC0_OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
@@ -38,7 +38,7 @@ func New현물_주문_접수(b []byte) (값 *S현물_주문_응답_실시간_정
 
 // New현물_주문_체결 : SC1
 func New현물_주문_체결(b []byte) (값 *S현물_주문_응답_실시간_정보, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeSC1_OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
@@ -67,7 +67,7 @@ func New현물_주문_체결(b []byte) (값 *S현물_주문_응답_실시간_정
 }
 
 func New현물_주문_정정(b []byte) (값 *S현물_주문_응답_실시간_정보, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeSC2_OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
@@ -96,7 +96,7 @@ func New현물_주문_정정(b []byte) (값 *S현물_주문_응답_실시간_정
 }
 
 func New현물_주문_취소(b []byte) (값 *S현물_주문_응답_실시간_정보, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeSC3_OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
@@ -124,7 +124,7 @@ func New현물_주문_취소(b []byte) (값 *S현물_주문_응답_실시간_정
 }
 
 func New현물_주문_거부(b []byte) (값 *S현물_주문_응답_실시간_정보, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeSC4_OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
@@ -153,7 +153,7 @@ func New현물_주문_거부(b []byte) (값 *S현물_주문_응답_실시간_정
 }
 
 func New코스피_호가_잔량(b []byte) (값 *S호가_잔량_실시간_정보, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeH1_OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
@@ -260,7 +260,7 @@ func New코스피_호가_잔량(b []byte) (값 *S호가_잔량_실시간_정보,
 }
 
 func New코스피_시간외_호가_잔량(b []byte) (값 *S코스피_시간외_호가_잔량_실시간_정보, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeH2_OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
@@ -279,7 +279,7 @@ func New코스피_시간외_호가_잔량(b []byte) (값 *S코스피_시간외_�
 }
 
 func New코스닥_호가_잔량(b []byte) (값 *S호가_잔량_실시간_정보, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeHA_OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
@@ -386,7 +386,7 @@ func New코스닥_호가_잔량(b []byte) (값 *S호가_잔량_실시간_정보,
 }
 
 func New코스닥_시간외_호가_잔량(b []byte) (값 *S코스닥_시간외_호가_잔량_실시간_정보, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeHB_OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
@@ -405,7 +405,7 @@ func New코스닥_시간외_호가_잔량(b []byte) (값 *S코스닥_시간외_�
 }
 
 func New코스피_체결(b []byte) (값 *S코스피_체결, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeS3_OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
@@ -465,7 +465,7 @@ func New코스피_체결(b []byte) (값 *S코스피_체결, 에러 error) {
 }
 
 func New코스피_예상_체결(b []byte) (값 *S코스피_예상_체결, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeYS3OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
@@ -490,7 +490,7 @@ func New코스피_예상_체결(b []byte) (값 *S코스피_예상_체결, 에러
 }
 
 func New코스닥_체결(b []byte) (값 *S코스닥_체결, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeK3_OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
@@ -550,7 +550,7 @@ func New코스닥_체결(b []byte) (값 *S코스닥_체결, 에러 error) {
 }
 
 func New코스닥_예상_체결(b []byte) (값 *S코스닥_예상_체결, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeYK3OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
@@ -575,7 +575,7 @@ func New코스닥_예상_체결(b []byte) (값 *S코스닥_예상_체결, 에러
 }
 
 func New코스피_ETF_NAV(b []byte) (값 *S코스피_ETF_NAV, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeI5_OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
@@ -602,7 +602,7 @@ func New코스피_ETF_NAV(b []byte) (값 *S코스피_ETF_NAV, 에러 error) {
 }
 
 func New주식_VI발동해제(b []byte) (값 *S주식_VI발동해제, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeVI_OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
@@ -623,7 +623,7 @@ func New주식_VI발동해제(b []byte) (값 *S주식_VI발동해제, 에러 err
 }
 
 func New시간외_단일가VI발동해제(b []byte) (값 *S시간외_단일가VI발동해제, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeDVIOutBlock, "예상하지 못한 길이 : '%v", len(b))
 
@@ -644,7 +644,7 @@ func New시간외_단일가VI발동해제(b []byte) (값 *S시간외_단일가VI
 }
 
 func New장_운영정보(b []byte) (값 *S장_운영정보, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeJIFOutBlock, "예상하지 못한 길이 : '%v", len(b))
 

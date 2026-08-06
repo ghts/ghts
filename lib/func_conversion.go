@@ -472,7 +472,7 @@ func F2실수_단순형_공백은_0(값 interface{}) float64 {
 }
 
 func F2실수_소숫점_추가(값 interface{}, 소숫점_이하_자릿수 int) (실수값 float64, 에러 error) {
-	defer S예외처리{M에러: &에러, M함수: func() { 실수값 = 0 }}.S실행()
+	defer S예외처리{M에러: &에러, M에러_실행: func() { 실수값 = 0 }}.S실행()
 
 	문자열 := strings.Replace(F2문자열(값), " ", "", -1)
 
@@ -512,7 +512,7 @@ func F2십진수(값 interface{}) (십진수 *big.Float, 에러 error) {
 }
 
 func F2십진수_소숫점_추가(값 interface{}, 소숫점_이하_자릿수 int) (십진수 *big.Float, 에러 error) {
-	defer S예외처리{M에러: &에러, M함수: func() { 십진수 = nil }}.S실행()
+	defer S예외처리{M에러: &에러, M에러_실행: func() { 십진수 = nil }}.S실행()
 
 	문자열 := strings.Replace(F2문자열(값), " ", "", -1)
 	F조건부_패닉(len(문자열) < 소숫점_이하_자릿수, "문자열 길이가 소숫점_이하_자릿수 보다 짧습니다. %v", 값)
@@ -645,7 +645,7 @@ func F2금일_시각_단순형_공백은_초기값(포맷 string, 값 interface{
 }
 
 func F2금일_한국_시각(시, 분, 초 int) (금일_시각 time.Time, 에러 error) {
-	defer S예외처리{M에러: &에러, M함수: func() { 금일_시각 = time.Time{} }}.S실행()
+	defer S예외처리{M에러: &에러, M에러_실행: func() { 금일_시각 = time.Time{} }}.S실행()
 
 	F조건부_패닉(시 < 0 || 시 > 24, "잘못된 시간 값 : '%v'", 시)
 	F조건부_패닉(분 < 0 || 분 > 60, "잘못된 분 값 : '%v'", 분)
@@ -850,7 +850,7 @@ func F디코딩(변환_형식 T변환, 바이트_모음 []byte, 반환값 interf
 func F바이트_변환값_해석(바이트_변환값 *S바이트_변환) (해석값 interface{}, 에러 error) {
 	var 자료형_문자열 string
 
-	defer S예외처리{M에러: &에러, M함수: func() { 해석값 = nil }}.S실행()
+	defer S예외처리{M에러: &에러, M에러_실행: func() { 해석값 = nil }}.S실행()
 
 	자료형_문자열 = 바이트_변환값.G자료형_문자열()
 

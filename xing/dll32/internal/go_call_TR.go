@@ -57,7 +57,7 @@ func go함수_호출_도우미(ch초기화, ch종료 chan lb.T신호) {
 func f질의값_처리(질의 *lb.S채널_질의) {
 	var 에러 error
 
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 질의.Ch에러 <- 에러 }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 질의.Ch에러 <- 에러 }}.S실행()
 
 	switch 질의.M값.TR구분() {
 	case xt.TR조회, xt.TR주문:
@@ -104,7 +104,7 @@ func f질의값_처리(질의 *lb.S채널_질의) {
 
 func F조회_및_주문_질의_처리(질의 *lb.S채널_질의) {
 	var 에러 error
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 질의.Ch에러 <- 에러 }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 질의.Ch에러 <- 에러 }}.S실행()
 
 	var c데이터 unsafe.Pointer
 

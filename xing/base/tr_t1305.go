@@ -119,7 +119,7 @@ func NewT1305InBlock(질의값 *T1305_현물_기간별_조회_질의값) (g *T13
 }
 
 func NewT1305_현물_기간별_조회_응답_헤더(b []byte) (값 *T1305_현물_기간별_조회_응답_헤더, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeT1305OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
@@ -135,7 +135,7 @@ func NewT1305_현물_기간별_조회_응답_헤더(b []byte) (값 *T1305_현물
 }
 
 func NewT1305_현물_기간별_조회_응답_반복값_모음(b []byte) (값 *T1305_현물_기간별_조회_응답_반복값_모음, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	나머지 := len(b) % SizeT1305OutBlock1
 	lb.F조건부_패닉(나머지 != 0, "예상하지 못한 길이. '%v' '%v'", len(b), 나머지)

@@ -44,7 +44,7 @@ func F초기화_Go루틴() {
 }
 
 func f초기화_DLL32() (에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수_항상: xt.F로그인_정보_환경_변수_삭제}.S실행()
+	defer lb.S예외처리{M에러: &에러, M항상_실행: xt.F로그인_정보_환경_변수_삭제}.S실행()
 
 	if !lb.F인터넷에_접속됨() {
 		lb.F문자열_출력("인터넷을 확인하십시오.")
@@ -132,7 +132,7 @@ func F접속_로그인() (에러 error) {
 }
 
 func f초기화_작동_확인() (작동_여부 bool) {
-	defer lb.S예외처리{M함수: func() { 작동_여부 = false }}.S실행()
+	defer lb.S예외처리{M에러_실행: func() { 작동_여부 = false }}.S실행()
 
 	ch확인 := make(chan lb.T신호, 1)
 	ch타임아웃 := time.After(lb.P1분)

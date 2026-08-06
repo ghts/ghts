@@ -73,7 +73,7 @@ func NewT0150InBlock(질의값 *T0150_현물_당일_매매일지_질의값) (g *
 }
 
 func NewT0150_현물_당일_매매일지_응답(b []byte) (값 *T0150_현물_당일_매매일지_응답, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	const 헤더_길이 = SizeT0150OutBlock + 5
 	lb.F조건부_패닉(len(b) < 헤더_길이, "예상하지 못한 길이 : '%v'", len(b))
@@ -90,7 +90,7 @@ func NewT0150_현물_당일_매매일지_응답(b []byte) (값 *T0150_현물_당
 }
 
 func NewT0150_현물_당일_매매일지_응답_헤더(b []byte) (값 *T0150_현물_당일_매매일지_응답_헤더, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeT0150OutBlock, "예상하지 못한 길이 : '%v", len(b))
 
@@ -126,7 +126,7 @@ func NewT0150_현물_당일_매매일지_응답_헤더(b []byte) (값 *T0150_현
 }
 
 func NewT0150_현물_당일_매매일지_응답_반복값_모음(b []byte) (값_모음 []*T0150_현물_당일_매매일지_응답_반복값, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값_모음 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값_모음 = nil }}.S실행()
 
 	나머지 := len(b) % SizeT0150OutBlock1
 	lb.F조건부_패닉(나머지 != 0, "예상하지 못한 길이. '%v' '%v'", len(b), 나머지)

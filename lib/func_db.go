@@ -9,12 +9,12 @@ func SQL실행(db *sql.DB, sql문자열 string, 추가_인수 ...interface{}) (i
 	var tx *sql.Tx
 	var stmt *sql.Stmt
 
-	defer S예외처리{M에러: &에러, M함수: func() {
+	defer S예외처리{M에러: &에러, M에러_실행: func() {
 		id = 0
 		if tx != nil {
 			tx.Rollback()
 		}
-	}, M함수_항상: func() {
+	}, M항상_실행: func() {
 		if stmt != nil {
 			stmt.Close()
 		}
@@ -41,7 +41,7 @@ func F정수값DB질의(db *sql.DB, sql문자열 string, 추가_인수 ...interf
 	var stmt *sql.Stmt
 	var rows *sql.Rows
 
-	defer S예외처리{M에러: &에러, M함수_항상: func() {
+	defer S예외처리{M에러: &에러, M항상_실행: func() {
 		if stmt != nil {
 			stmt.Close()
 		}

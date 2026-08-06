@@ -17,7 +17,7 @@ func (s T0167_시각_조회_응답) G값() (time.Time, error) {
 }
 
 func NewT0167_시각_조회_응답(b []byte) (값 time.Time, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = time.Time{} }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = time.Time{} }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeT0167OutBlock,
 		"예상하지 못한 길이 : '%v", len(b))

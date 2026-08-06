@@ -283,10 +283,10 @@ func http회신_본문_바이트_모음(url string) (바이트_모음 []byte, �
 	var 응답 *http.Response
 
 	defer S예외처리{M에러: &에러,
-		M함수: func() {
+		M에러_실행: func() {
 			바이트_모음 = make([]byte, 0)
 		},
-		M함수_항상: func() {
+		M항상_실행: func() {
 			if 응답 != nil && 응답.Body != nil {
 				응답.Body.Close()
 			}
@@ -444,7 +444,7 @@ func f에러_제외한_값_추출(에러_후보_모음 ...interface{}) interface
 }
 
 func F정규식_검색(검색_대상 string, 정규식_문자열_모음 []string) (검색_결과 string) {
-	defer S예외처리{M함수: func() { 검색_결과 = "" }}.S실행()
+	defer S예외처리{M에러_실행: func() { 검색_결과 = "" }}.S실행()
 
 	for _, 정규식_문자열 := range 정규식_문자열_모음 {
 		정규식 := regexp.MustCompile(정규식_문자열)
@@ -781,7 +781,7 @@ func F파일에_값_저장(값 interface{}, 파일명 string, 파일_잠금 sync
 }
 
 func F파일에서_값_읽기(값_포인터 interface{}, 파일명 string, 파일_잠금 sync.Locker) (에러 error) {
-	defer S예외처리{M에러: &에러, M함수: func() { 값_포인터 = nil }}.S실행()
+	defer S예외처리{M에러: &에러, M에러_실행: func() { 값_포인터 = nil }}.S실행()
 
 	switch 잠금 := 파일_잠금.(type) {
 	case nil: // 아무 것도 하지 않음.
@@ -870,7 +870,7 @@ func CSV쓰기(레코드_모음 [][]string, 파일명 string, 파일_잠금 sync
 }
 
 func CSV읽기(파일명 string, 구분자 rune, 파일_잠금 sync.Locker) (레코드_모음 [][]string, 에러 error) {
-	defer S예외처리{M에러: &에러, M함수: func() { 레코드_모음 = nil }}.S실행()
+	defer S예외처리{M에러: &에러, M에러_실행: func() { 레코드_모음 = nil }}.S실행()
 
 	switch 잠금 := 파일_잠금.(type) {
 	case nil: // 아무 것도 하지 않음.

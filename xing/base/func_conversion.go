@@ -73,7 +73,7 @@ func F2중간가_잔량_구분(값 interface{}) lb.T매도_매수_구분 {
 }
 
 func F2수정구분_모음(값 int64) (수정구분_모음 []T수정구분, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 수정구분_모음 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 수정구분_모음 = nil }}.S실행()
 
 	if 값 == 0 {
 		return []T수정구분{P수정구분_없음}, nil
@@ -136,7 +136,7 @@ func F2주문_응답_구분(값 [8]byte) T주문_응답_구분 {
 }
 
 func F바이트_변환값_해석(바이트_변환값 *lb.S바이트_변환) (해석값 interface{}, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 해석값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 해석값 = nil }}.S실행()
 
 	if 바이트_변환값.G변환_형식() == lb.Raw {
 		return F바이트_변환값_해석_Raw(바이트_변환값)
@@ -394,7 +394,7 @@ func F바이트_변환값_해석(바이트_변환값 *lb.S바이트_변환) (해
 }
 
 func F바이트_변환값_해석_Raw(바이트_변환값 *lb.S바이트_변환) (해석값 interface{}, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 해석값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 해석값 = nil }}.S실행()
 
 	var b []byte
 	lb.F확인1(바이트_변환값.G값(&b))

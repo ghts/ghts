@@ -43,7 +43,7 @@ func (s *s안전한_프로세스ID_저장소) S제거(프로세스ID int) {
 }
 
 func F파이썬_스크립트_실행(스크립트_경로 string, 실행옵션 ...interface{}) (프로세스ID int, 에러 error) {
-	defer lb.S예외처리{M함수: func() { 프로세스ID = -1 }}.S실행()
+	defer lb.S예외처리{M에러_실행: func() { 프로세스ID = -1 }}.S실행()
 
 	if 파이썬_경로.G값() == "" {
 		파일경로 := lb.F확인2(lb.F파일_검색(lb.F홈_디렉토리(), "python.exe"))
@@ -55,7 +55,7 @@ func F파이썬_스크립트_실행(스크립트_경로 string, 실행옵션 ...
 }
 
 func F외부_프로세스_실행(실행화일_경로 string, 실행옵션_모음 ...interface{}) (프로세스ID int, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 프로세스ID = -1 }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 프로세스ID = -1 }}.S실행()
 
 	if !lb.F파일_존재함(실행화일_경로) {
 		panic(lb.New에러("실행화일이 존재하지 않습니다.\n%s", 실행화일_경로))
@@ -84,7 +84,7 @@ func F외부_프로세스_실행(실행화일_경로 string, 실행옵션_모음
 }
 
 func f외부_프로세스_생성(ch프로세스ID chan int, ch에러 chan error, 실행화일_경로 string, 실행옵션_모음 ...interface{}) (에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { ch에러 <- 에러 }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { ch에러 <- 에러 }}.S실행()
 
 	외부_명령어 := exec.Command(실행화일_경로, lb.F2문자열_모음(실행옵션_모음)...)
 	외부_명령어.Stdin = os.Stdin
@@ -102,7 +102,7 @@ func f외부_프로세스_생성(ch프로세스ID chan int, ch에러 chan error,
 }
 
 func f프로세스ID_파일_읽기() (맵 map[int]lb.S비어있음, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 맵 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 맵 = nil }}.S실행()
 
 	if 존재함 := lb.F확인2(f프로세스ID_파일_존재함()); !존재함 {
 		lb.F확인1(f프로세스ID_파일_초기화())

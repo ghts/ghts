@@ -17,8 +17,8 @@ import (
 )
 
 func NewNano소켓(종류 lb.T소켓_종류, 주소 string, 접속방식 lb.T소켓_접속방식, 옵션_모음 ...interface{}) (소켓 lb.I소켓, 에러 error) {
-	//defer lb.S예외처리{M에러: &에러, M함수: func() { 소켓 = nil }}.S실행()
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 소켓 = nil }, M출력_숨김: true}.S실행()
+	//defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 소켓 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 소켓 = nil }, M출력_숨김: true}.S실행()
 
 	s := new(sNano소켓)
 	s.종류 = 종류
@@ -161,7 +161,7 @@ func (s *sNano소켓) S송신(변환_형식 lb.T변환, 값_모음 ...interface{
 }
 
 func (s *sNano소켓) G수신() (값 *lb.S바이트_변환_모음, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }, M출력_숨김: true}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }, M출력_숨김: true}.S실행()
 
 	switch s.종류 {
 	case lb.P소켓_종류_REP, lb.P소켓_종류_PUB:
@@ -198,7 +198,7 @@ func (s *sNano소켓) G컨텍스트() (lb.I송수신, error) {
 }
 
 func (s *sNano소켓) G질의_응답(변환_형식 lb.T변환, 값_모음 ...interface{}) (값 *lb.S바이트_변환_모음, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	lb.F확인1(s.S송신(변환_형식, 값_모음...))
 
