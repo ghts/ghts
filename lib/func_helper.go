@@ -248,9 +248,15 @@ func F절대값_Duration(값 time.Duration) time.Duration {
 }
 
 func F대기(기간 time.Duration) { time.Sleep(기간) }
-func F대기_초[T constraints.Integer | constraints.Float](초 T)      { time.Sleep(P1초 * time.Duration(초)) }
-func F대기_분[T constraints.Integer | constraints.Float](분 T)      { time.Sleep(P1분 * time.Duration(분)) }
-func F대기_시간[T constraints.Integer | constraints.Float](시간 T)    { time.Sleep(P1시간 * time.Duration(시간)) }
+func F대기_초[T constraints.Integer | constraints.Float](초 T) {
+	time.Sleep(P1초 * time.Duration(초))
+}
+func F대기_분[T constraints.Integer | constraints.Float](분 T) {
+	time.Sleep(P1분 * time.Duration(분))
+}
+func F대기_시간[T constraints.Integer | constraints.Float](시간 T) {
+	time.Sleep(P1시간 * time.Duration(시간))
+}
 
 func F신호_수신(채널 <-chan T신호) bool {
 	select {
@@ -262,45 +268,33 @@ func F신호_수신(채널 <-chan T신호) bool {
 }
 
 func HTTP회신_본문(url string) (string, error) {
-	응답, 에러 := http.Get(url)
-	defer func() {
-		if 응답 != nil && 응답.Body != nil {
-			응답.Body.Close()
-		}
-	}()
+	바이트_모음, 에러 := http회신_본문_바이트_모음(url)
 
-	if 에러 != nil || 응답.Body == nil {
-		return "", 에러
-	}
-
-	바이트_모음, 에러 := io.ReadAll(응답.Body)
-
-	if 에러 != nil || 바이트_모음 == nil {
-		return "", 에러
-	}
-
-	return string(바이트_모음), nil
+	return string(바이트_모음), 에러
 }
 
 func HTTP회신_본문_CP949(url string) (string, error) {
-	응답, 에러 := http.Get(url)
-	defer func() {
-		if 응답 != nil && 응답.Body != nil {
-			응답.Body.Close()
-		}
-	}()
+	바이트_모음, 에러 := http회신_본문_바이트_모음(url)
 
-	if 에러 != nil || 응답.Body == nil {
-		return "", 에러
-	}
+	return F2문자열_EUC_KR(바이트_모음), 에러
+}
 
-	바이트_모음, 에러 := io.ReadAll(응답.Body)
+func http회신_본문_바이트_모음(url string) (바이트_모음 []byte, 에러 error) {
+	var 응답 *http.Response
 
-	if 에러 != nil || 바이트_모음 == nil {
-		return "", 에러
-	}
+	defer S예외처리{M에러: &에러,
+		M함수: func() {
+			바이트_모음 = make([]byte, 0)
+		},
+		M함수_항상: func() {
+			if 응답 != nil && 응답.Body != nil {
+				응답.Body.Close()
+			}
+		}}.S실행()
 
-	return F2문자열_EUC_KR(바이트_모음), nil
+	응답 = F확인2(http.Get(url))
+
+	return io.ReadAll(응답.Body)
 }
 
 func F인터넷에_접속됨() bool {
