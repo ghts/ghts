@@ -1032,7 +1032,7 @@ func (p T재무순위_구분) String() string {
 	case P재무순위_PEG:
 		return "PEG"
 	default:
-		return lb.F2문자열("예상하지 못한 T재무순위_구분 값 : '%s'" + string(int(p)))
+		return lb.F2문자열("예상하지 못한 T재무순위_구분 값 : '%d'", int(p))
 	}
 }
 
