@@ -292,9 +292,7 @@ func http회신_본문_바이트_모음(url string) (바이트_모음 []byte, �
 			}
 		}}.S실행()
 
-	응답 = F확인2(http.Get(url))
-
-	return io.ReadAll(응답.Body)
+	return io.ReadAll(F확인2(http.Get(url)).Body)
 }
 
 func F인터넷에_접속됨() bool {
