@@ -335,8 +335,8 @@ const (
 
 type T시장구분 int8
 
-func (p *T시장구분) String() string {
-	switch *p {
+func (p T시장구분) String() string {
+	switch p {
 	case P시장구분_전체:
 		return "전체"
 	case P시장구분_코스피:

@@ -1013,6 +1013,8 @@ func (p T재무순위_구분) String() string {
 		return "매출액 증가율"
 	case P재무순위_영업이익증가율:
 		return "세전계속이익 증가율"
+	case P재무순위_세전계속이익증가율:
+		return "P재무순위 세전계속이익증가율"
 	case P재무순위_부채비율:
 		return "부채비율"
 	case P재무순위_유보율:
@@ -1030,7 +1032,7 @@ func (p T재무순위_구분) String() string {
 	case P재무순위_PEG:
 		return "PEG"
 	default:
-		return lb.F2문자열("예상하지 못한 T재무순위_구분 값 : '%s'" + string(p))
+		return lb.F2문자열("예상하지 못한 T재무순위_구분 값 : '%s'" + string(int(p)))
 	}
 }
 
