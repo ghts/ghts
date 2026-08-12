@@ -206,6 +206,61 @@ func f테스트_다름(t testing.TB, 값 interface{}, 비교값1 interface{}, �
 	}
 }
 
+func F테스트_패닉_발생(t testing.TB, 함수 any, 추가_매개변수 ...any) {
+	t.Helper()
+
+	if 패닉_발생함, 에러 := f패닉_발생_여부_확인(함수, 추가_매개변수); 에러 != nil {
+		t.Errorf("잘못된 호출 : %v", 에러)
+	} else if !패닉_발생함 {
+		t.Errorf("패닉이 발생해야 하지만 발생하지 않았습니다.")
+	}
+}
+
+func F테스트_패닉_없음(t testing.TB, 함수 any, 추가_매개변수 ...any) {
+	t.Helper()
+
+	if 패닉_발생함, 에러 := f패닉_발생_여부_확인(함수, 추가_매개변수); 에러 != nil {
+		t.Errorf("잘못된 호출 : %v", 에러)
+	} else if 패닉_발생함 {
+		t.Errorf("패닉이 발생하지 않아야 하지만 패닉이 발생합니다.")
+	}
+}
+
+func f패닉_발생_여부_확인(함수 any, 추가_매개변수 []any) (패닉_발생함 bool, 에러 error) {
+	함수_리플렉션_값 := reflect.ValueOf(함수)
+
+	// 컴파일 타임 대신, 진입 시점에 함수 타입인지 엄격하게 검증합니다.
+	if 함수_리플렉션_값.Kind() != reflect.Func {
+		return false, New에러("f패닉_발생_여부_확인 : 오직 '함수' 타입만 전달할 수 있습니다.")
+	}
+
+	함수_리플렉션_자료형 := 함수_리플렉션_값.Type()
+
+	// 가변 인자(...)가 아닌 경우, 전달된 매개변수 개수가 일치하는지 검증
+	if !함수_리플렉션_자료형.IsVariadic() && len(추가_매개변수) != 함수_리플렉션_자료형.NumIn() {
+		return false, New에러(
+			"인수 수량 불일치 : 함수는 %d개의 인수를 받지만, 실제로 %d개의 인수를 받았습니다.",
+			함수_리플렉션_자료형.NumIn(), len(추가_매개변수))
+	}
+
+	인수_모음 := make([]reflect.Value, len(추가_매개변수))
+
+	for i, v := range 추가_매개변수 {
+		인수_모음[i] = reflect.ValueOf(v)
+	}
+
+	패닉_발생함 = false
+	defer func() {
+		if r := recover(); r != nil {
+			패닉_발생함 = true
+		}
+
+		함수_리플렉션_값.Call(인수_모음)
+	}()
+
+	return 패닉_발생함, nil
+}
+
 func F호출경로_문자열() string {
 	버퍼 := new(bytes.Buffer)
 
