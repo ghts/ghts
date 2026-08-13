@@ -15,8 +15,8 @@ type S예외처리 struct {
 
 func (s S예외처리) S실행() {
 	defer func() {
-		if !s.M출력_숨김 && s.M에러 != nil {
-			if 에러 := *s.M에러; 에러 != nil && F2문자열_공백_제거(에러.Error()) != "" {
+		if s.M에러 != nil && !s.M출력_숨김 {
+			if 에러 := *s.M에러; F2문자열_공백_제거(에러.Error()) != "" {
 				F에러_출력(에러)
 			}
 		}
