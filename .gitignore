@@ -44,3 +44,4 @@ _testmain.go
 *.ini
 *.pyc
 .aider*
+.DS_Store
