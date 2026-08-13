@@ -50,9 +50,8 @@ func F에러_출력(에러 interface{}, 추가_매개변수 ...interface{}) {
 
 			if 문자열 := strings.TrimSpace(변환값.Error()); 문자열 != "" {
 				log.Println(문자열)
+				변환값.S출력_완료()
 			}
-
-			변환값.S출력_완료()
 		}()
 	case S에러:
 		func() {
@@ -61,12 +60,11 @@ func F에러_출력(에러 interface{}, 추가_매개변수 ...interface{}) {
 
 			if 문자열 := strings.TrimSpace(변환값.Error()); 문자열 != "" {
 				log.Println(문자열)
+				(&변환값).S출력_완료()
 			}
-
-			(&변환값).S출력_완료()
 		}()
 	case error:
-		log.Println(변환값.Error())
+		log.Println(New에러(변환값, 추가_매개변수...).Error())
 	case string:
 		log.Println(New에러(변환값, 추가_매개변수...).Error())
 	default:
