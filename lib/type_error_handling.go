@@ -44,30 +44,24 @@ func F에러_출력(에러 interface{}, 추가_매개변수 ...interface{}) {
 	case nil:
 		return
 	case *S에러:
-		func() {
-			변환값.Lock()
-			defer 변환값.Unlock()
-
-			if 문자열 := strings.TrimSpace(변환값.Error()); 문자열 != "" {
-				log.Println(문자열)
-				변환값.S출력_완료()
-			}
-		}()
+		f에러_출력_도우미(변환값)
 	case S에러:
-		func() {
-			변환값.Lock()
-			defer 변환값.Unlock()
-
-			if 문자열 := strings.TrimSpace(변환값.Error()); 문자열 != "" {
-				log.Println(문자열)
-				(&변환값).S출력_완료()
-			}
-		}()
+		f에러_출력_도우미(&변환값)
 	case error:
 		log.Println(New에러(변환값, 추가_매개변수...).Error())
 	case string:
 		log.Println(New에러(변환값, 추가_매개변수...).Error())
 	default:
 		panic(New에러("F에러_출력() 예상하지 못한 자료형 : '%T'", 에러))
+	}
+}
+
+func f에러_출력_도우미(에러 *S에러) {
+	에러.Lock()
+	defer 에러.Unlock()
+
+	if 문자열 := strings.TrimSpace(에러.Error()); 문자열 != "" {
+		log.Println(문자열)
+		에러.S출력_완료()
 	}
 }
