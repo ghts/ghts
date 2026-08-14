@@ -1,9 +1,10 @@
 package xt
 
 import (
-	lb "github.com/ghts/ghts/lib"
 	"strings"
 	"testing"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
 func TestF바이트_변환값_해석(t *testing.T) {

@@ -1,8 +1,9 @@
 package market_time
 
 import (
-	lb "github.com/ghts/ghts/lib"
 	"time"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
 func F한국증시_정규_거래_시간임() bool {

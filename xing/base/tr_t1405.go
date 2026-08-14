@@ -3,9 +3,10 @@ package xt
 import (
 	"bytes"
 	"encoding/binary"
-	lb "github.com/ghts/ghts/lib"
 	"strconv"
 	"time"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
 type T1405_투자경고_조회_질의값 struct {

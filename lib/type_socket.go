@@ -42,7 +42,7 @@ type s소켓_저장소 struct {
 	M생성함수 func() (I소켓_질의, error)
 }
 
-var 생성_횟수 int = 1
+var 생성_횟수 = 1
 
 func (s *s소켓_저장소) G소켓() I소켓_질의 {
 	select {

@@ -1,9 +1,10 @@
 package dll32
 
 import (
-	"github.com/ghts/ghts/lib/w32"
 	"syscall"
 	"unsafe"
+
+	"github.com/ghts/ghts/lib/w32"
 )
 
 func F메시지_윈도우_생성() {

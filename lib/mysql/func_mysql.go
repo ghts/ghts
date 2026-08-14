@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"database/sql"
+
 	lb "github.com/ghts/ghts/lib"
 )
 import _ "github.com/go-sql-driver/mysql"

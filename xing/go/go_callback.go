@@ -1,9 +1,10 @@
 package xing
 
 import (
+	"strings"
+
 	lb "github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/xing/base"
-	"strings"
 )
 
 func Go루틴_관리(ch초기화 chan lb.T신호) (에러 error) {

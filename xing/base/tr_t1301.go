@@ -1,8 +1,9 @@
 package xt
 
 import (
-	lb "github.com/ghts/ghts/lib"
 	"time"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
 type T1301_현물_시간대별_체결_질의값 struct {

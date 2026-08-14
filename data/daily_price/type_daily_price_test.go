@@ -1,8 +1,9 @@
 package daily_price
 
 import (
-	lb "github.com/ghts/ghts/lib"
 	"testing"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
 func TestS일일_가격정보_모음(t *testing.T) {

@@ -3,9 +3,10 @@ package xt
 import (
 	"bytes"
 	"encoding/binary"
-	lb "github.com/ghts/ghts/lib"
 	"strings"
 	"time"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
 type CSPAQ13700_현물계좌_주문체결내역_질의값 struct {

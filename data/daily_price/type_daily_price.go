@@ -4,13 +4,14 @@ import (
 	"bytes"
 	"context"
 	"database/sql"
-	lb "github.com/ghts/ghts/lib"
-	"github.com/ghts/ghts/lib/trade"
 	"math"
 	"sort"
 	"strconv"
 	"strings"
 	"time"
+
+	lb "github.com/ghts/ghts/lib"
+	"github.com/ghts/ghts/lib/trade"
 )
 
 func New일일_가격정보(종목코드 string, 일자 time.Time, 시가, 고가, 저가, 종가, 거래량 int64) *S일일_가격정보 {

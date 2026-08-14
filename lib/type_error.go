@@ -96,6 +96,8 @@ func (s *S에러) Is(에러값 error) bool {
 
 func (s *S에러) Unwrap() error { return s.원래_에러 }
 
+func (s *S에러) G출력_완료() bool { return s.출력_완료 }
+
 func (s *S에러) S출력_완료() {
 	s.출력_완료 = true
 }

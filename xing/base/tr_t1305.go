@@ -3,8 +3,9 @@ package xt
 import (
 	"bytes"
 	"encoding/binary"
-	lb "github.com/ghts/ghts/lib"
 	"time"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
 // t1305 기간별 주가

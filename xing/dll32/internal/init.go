@@ -1,11 +1,12 @@
 package dll32
 
 import (
+	"runtime"
+	"time"
+
 	lb "github.com/ghts/ghts/lib"
 	nano "github.com/ghts/ghts/lib/nanomsg"
 	xt "github.com/ghts/ghts/xing/base"
-	"runtime"
-	"time"
 )
 
 func init() {

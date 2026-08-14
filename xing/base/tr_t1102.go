@@ -3,8 +3,9 @@ package xt
 import (
 	"bytes"
 	"encoding/binary"
-	lb "github.com/ghts/ghts/lib"
 	"time"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
 type T1102_현물_시세_조회_질의값 struct {

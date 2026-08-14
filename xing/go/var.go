@@ -1,12 +1,13 @@
 package xing
 
 import (
-	lb "github.com/ghts/ghts/lib"
-	nano "github.com/ghts/ghts/lib/nanomsg"
-	xt "github.com/ghts/ghts/xing/base"
 	"runtime"
 	"sync"
 	"time"
+
+	lb "github.com/ghts/ghts/lib"
+	nano "github.com/ghts/ghts/lib/nanomsg"
+	xt "github.com/ghts/ghts/xing/base"
 )
 
 var (

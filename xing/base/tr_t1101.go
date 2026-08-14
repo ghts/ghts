@@ -3,8 +3,9 @@ package xt
 import (
 	"bytes"
 	"encoding/binary"
-	lb "github.com/ghts/ghts/lib"
 	"time"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
 type T1101_현물_호가_조회_응답 struct {

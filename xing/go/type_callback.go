@@ -1,10 +1,11 @@
 package xing
 
 import (
-	lb "github.com/ghts/ghts/lib"
-	"github.com/ghts/ghts/xing/base"
 	"sync"
 	"time"
+
+	lb "github.com/ghts/ghts/lib"
+	"github.com/ghts/ghts/xing/base"
 )
 
 func newDLL32_콜백_대기_저장소() *DLL32_콜백_저장소 {

@@ -1,13 +1,14 @@
 package external_process
 
 import (
-	lb "github.com/ghts/ghts/lib"
-	"github.com/mitchellh/go-ps"
 	"os"
 	"os/exec"
 	"strings"
 	"sync"
 	"time"
+
+	lb "github.com/ghts/ghts/lib"
+	"github.com/mitchellh/go-ps"
 )
 
 const p프로세스ID_목록_파일명 = "pid_list.dat"

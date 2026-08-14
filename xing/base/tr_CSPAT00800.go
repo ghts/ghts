@@ -3,9 +3,10 @@ package xt
 import (
 	"bytes"
 	"encoding/binary"
-	lb "github.com/ghts/ghts/lib"
 	"strings"
 	"time"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
 type CSPAT00800_현물_취소_주문_응답 struct {

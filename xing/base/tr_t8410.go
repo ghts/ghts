@@ -3,9 +3,10 @@ package xt
 import (
 	"bytes"
 	"encoding/binary"
-	lb "github.com/ghts/ghts/lib"
 	"strconv"
 	"time"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
 type T8410_현물_차트_일주월년_질의값 struct {

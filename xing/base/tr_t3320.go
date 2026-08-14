@@ -3,6 +3,7 @@ package xt
 import (
 	"bytes"
 	"encoding/binary"
+
 	lb "github.com/ghts/ghts/lib"
 )
 

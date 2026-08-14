@@ -1,9 +1,10 @@
 package dll32
 
 import (
+	"strings"
+
 	lb "github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/xing/base"
-	"strings"
 )
 
 // TR 요청을 소켓으로 수신 후 함수 호출 모듈로 전달.

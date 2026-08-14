@@ -3,9 +3,10 @@ package xt
 import (
 	"bytes"
 	"encoding/binary"
-	lb "github.com/ghts/ghts/lib"
 	"strconv"
 	"time"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
 // t1310 전일당일분틱조회

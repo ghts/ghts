@@ -3,9 +3,10 @@ package xt
 import (
 	"bytes"
 	"encoding/binary"
-	lb "github.com/ghts/ghts/lib"
 	"strings"
 	"time"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
 type T0425_현물_체결_미체결_조회_질의값 struct {

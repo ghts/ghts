@@ -1,10 +1,11 @@
 package nano
 
 import (
-	lb "github.com/ghts/ghts/lib"
 	"math/rand"
 	"testing"
 	"time"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
 func TestNano소켓_REQ_REP(t *testing.T) {
