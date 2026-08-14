@@ -173,3 +173,20 @@ func TestF평균_표준편차(t *testing.T) {
 	F테스트_참임(t, F평균(값_모음...)-50.5 < 0.001)
 	F테스트_참임(t, F표준_편차(값_모음...)-29.01149 < 0.001)
 }
+
+func TestF홈_디렉토리(t *testing.T) {
+	F테스트_패닉_없음(t, F홈_디렉토리)
+
+	홈_디렉토리 := F홈_디렉토리()
+
+	switch runtime.GOOS {
+	case "windows":
+		F테스트_참임(t, strings.Contains(홈_디렉토리, `:\Users\`))
+	case "darwin":
+		F테스트_참임(t, strings.HasPrefix(홈_디렉토리, `/Users/`))
+	case "linux":
+		F테스트_참임(t, strings.HasPrefix(홈_디렉토리, `/home/`))
+	default:
+		t.Errorf("예상하지 못한 경우.")
+	}
+}

@@ -902,7 +902,7 @@ func F환경변수(키 string) string {
 }
 
 func F홈_디렉토리() string {
-	return F환경변수("USERPROFILE")
+	return F확인2(os.UserHomeDir())
 }
 
 func GOPATH() string {
