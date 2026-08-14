@@ -3,6 +3,7 @@ package lib
 import (
 	"errors"
 	"fmt"
+	"log"
 	"strings"
 	"sync"
 	"time"
@@ -100,4 +101,18 @@ func (s *S에러) G출력_완료() bool { return s.출력_완료 }
 
 func (s *S에러) S출력_완료() {
 	s.출력_완료 = true
+}
+
+func (s *S에러) S출력() {
+	s.Lock()
+	defer s.Unlock()
+
+	if s.출력_완료 ||
+		s.원래_에러 == nil ||
+		strings.TrimSpace(s.원래_에러.Error()) == "" {
+		return
+	}
+
+	log.Println(strings.TrimSpace(s.Error()))
+	s.S출력_완료()
 }
