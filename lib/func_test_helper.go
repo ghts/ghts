@@ -112,52 +112,42 @@ func f테스트_거짓임(t testing.TB, false이어야_하는_조건 bool, 출�
 	t.Fail()
 }
 
-func F테스트_에러없음(t testing.TB, 에러_후보_모음 ...interface{}) interface{} {
+func F테스트_에러없음(t testing.TB, 에러 error, 출력_문자열_인수 ...interface{}) {
 	// I안전한_테스트와 건너뛰는 단계를 같게 맞추기 위함.
-	return f테스트_에러없음(t, 에러_후보_모음...)
+	f테스트_에러없음(t, 에러, 출력_문자열_인수...)
 }
 
-func f테스트_에러없음(t testing.TB, 에러_후보_모음 ...interface{}) interface{} {
-	switch 에러값 := 에러_후보_모음[len(에러_후보_모음)-1].(type) {
-	case nil:
-		// PASS
-	case error:
-		if 에러값 != nil {
-			F에러_출력("f테스트_에러없음() : 에러 발생.\n%v", F변수값_문자열(에러_후보_모음...))
-			t.Fail()
-		}
-	default:
-		panic(New에러("f테스트_에러없음() 예상하지 못한 자료형. %T", 에러_후보_모음[len(에러_후보_모음)-1]))
-	}
-
-	return f에러_제외한_값_추출(에러_후보_모음...)
-}
-
-func F테스트_에러발생(t testing.TB, 에러_후보_모음 ...interface{}) {
-	// I안전한_테스트와 건너뛰는 단계를 같게 맞추기 위함.
-	f테스트_에러발생(t, 에러_후보_모음...)
-}
-
-func f테스트_에러발생(t testing.TB, 에러_후보_모음 ...interface{}) {
-	if len(에러_후보_모음) == 0 {
-		F에러_출력("확인할 대상 에러가 없음.")
-		t.Fail()
+func f테스트_에러없음(t testing.TB, 에러 error, 출력_문자열_인수 ...interface{}) {
+	if 에러 == nil {
 		return
 	}
 
-	for _, 에러_후보 := range 에러_후보_모음 {
-		if 에러_후보 == nil {
-			continue
-		} else if 에러, ok := 에러_후보.(error); ok && 에러 != nil {
-			// 테스트 조건 만족
-			return
-		}
+	if len(출력_문자열_인수) == 0 {
+		F에러_출력(에러)
+	} else {
+		F에러_출력("%v\n%v", F2문자열(출력_문자열_인수...), 에러)
 	}
 
-	F에러_출력("에러 없음.")
 	t.Fail()
+}
 
-	return
+func F테스트_에러발생(t testing.TB, 에러 error, 출력_문자열_인수 ...interface{}) {
+	// I안전한_테스트와 건너뛰는 단계를 같게 맞추기 위함.
+	f테스트_에러발생(t, 에러, 출력_문자열_인수...)
+}
+
+func f테스트_에러발생(t testing.TB, 에러 error, 출력_문자열_인수 ...interface{}) {
+	if 에러 != nil {
+		return
+	}
+
+	if len(출력_문자열_인수) <= 0 {
+		F에러_출력("에러 없음.")
+	} else {
+		F에러_출력("에러 없음.\n%v", F2문자열(출력_문자열_인수...))
+	}
+
+	t.Fail()
 }
 
 func F테스트_같음(t testing.TB, 값 interface{}, 비교값1 interface{}, 추가_비교값_모음 ...interface{}) {

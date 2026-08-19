@@ -196,7 +196,7 @@ func (s *s안전한_테스트) G에러발생(nil이_아니어야_하는_에러 e
 	s.Lock()
 	defer s.Unlock()
 
-	f테스트_에러없음(s.t, nil이_아니어야_하는_에러)
+	f테스트_에러발생(s.t, nil이_아니어야_하는_에러)
 }
 
 func (s *s안전한_테스트) G같음(값 interface{}, 비교값 interface{}, 추가_비교값_모음 ...interface{}) {
