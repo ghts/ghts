@@ -27,7 +27,7 @@ func F당일_일일_가격정보_수집(db *sql.DB) (에러 error) {
 	}
 
 	당일 := lb.F일자2정수(xing.F당일())
-	한달전 := lb.F금일().Add(-30 * lb.P1일)
+	한달전 := lb.F일자2정수(lb.F금일().Add(-30 * lb.P1일))
 	종목코드_모음 := make([]string, 0)
 
 	for _, 종목코드 := range xing.F종목코드_모음_전체() {

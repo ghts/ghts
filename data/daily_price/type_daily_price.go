@@ -89,7 +89,7 @@ func (s *S일일_가격정보) G복사본() *S일일_가격정보 {
 func New종목별_일일_가격정보_모음_3년치_DB읽기(db *sql.DB, 종목코드 string) (s *S종목별_일일_가격정보_모음, 에러 error) {
 	s = new(S종목별_일일_가격정보_모음)
 
-	if 에러 = s.DB읽기with시작일(db, 종목코드, lb.F지금().Add(-3*365*lb.P1일)); 에러 != nil {
+	if 에러 = s.DB읽기with시작일(db, 종목코드, lb.F일자2정수(lb.F지금().Add(-3*365*lb.P1일))); 에러 != nil {
 		return nil, 에러
 	}
 
@@ -99,7 +99,7 @@ func New종목별_일일_가격정보_모음_3년치_DB읽기(db *sql.DB, 종목
 func New종목별_일일_가격정보_모음_2년치_DB읽기(db *sql.DB, 종목코드 string) (s *S종목별_일일_가격정보_모음, 에러 error) {
 	s = new(S종목별_일일_가격정보_모음)
 
-	if 에러 = s.DB읽기with시작일(db, 종목코드, lb.F지금().Add(-2*365*lb.P1일)); 에러 != nil {
+	if 에러 = s.DB읽기with시작일(db, 종목코드, lb.F일자2정수(lb.F지금().Add(-2*365*lb.P1일))); 에러 != nil {
 		return nil, 에러
 	}
 
@@ -109,7 +109,7 @@ func New종목별_일일_가격정보_모음_2년치_DB읽기(db *sql.DB, 종목
 func New종목별_일일_가격정보_모음_15개월치_DB읽기(db *sql.DB, 종목코드 string) (s *S종목별_일일_가격정보_모음, 에러 error) {
 	s = new(S종목별_일일_가격정보_모음)
 
-	if 에러 = s.DB읽기with시작일(db, 종목코드, lb.F지금().Add(-15*30*lb.P1일)); 에러 != nil {
+	if 에러 = s.DB읽기with시작일(db, 종목코드, lb.F일자2정수(lb.F지금().Add(-15*30*lb.P1일))); 에러 != nil {
 		return nil, 에러
 	}
 
@@ -119,7 +119,7 @@ func New종목별_일일_가격정보_모음_15개월치_DB읽기(db *sql.DB, �
 func New종목별_일일_가격정보_모음_13개월치_DB읽기(db *sql.DB, 종목코드 string) (s *S종목별_일일_가격정보_모음, 에러 error) {
 	s = new(S종목별_일일_가격정보_모음)
 
-	if 에러 = s.DB읽기with시작일(db, 종목코드, lb.F지금().Add(-400*lb.P1일)); 에러 != nil {
+	if 에러 = s.DB읽기with시작일(db, 종목코드, lb.F일자2정수(lb.F지금().Add(-400*lb.P1일))); 에러 != nil {
 		return nil, 에러
 	}
 
@@ -247,10 +247,10 @@ func (s *S종목별_일일_가격정보_모음) CSV쓰기(파일명 string) {
 }
 
 func (s *S종목별_일일_가격정보_모음) DB읽기(db *sql.DB, 종목코드 string) (에러 error) {
-	return s.DB읽기with시작일(db, 종목코드, time.Time{})
+	return s.DB읽기with시작일(db, 종목코드, 0)
 }
 
-func (s *S종목별_일일_가격정보_모음) DB읽기with시작일(db *sql.DB, 종목코드 string, 시작일 time.Time) (에러 error) {
+func (s *S종목별_일일_가격정보_모음) DB읽기with시작일(db *sql.DB, 종목코드 string, 시작일 uint32) (에러 error) {
 	종목코드 = trade.F종목코드_보정(종목코드)
 	lb.F확인1(F일일_가격정보_테이블_생성(db))
 
@@ -277,21 +277,18 @@ func (s *S종목별_일일_가격정보_모음) DB읽기with시작일(db *sql.DB
 	s.M저장소 = make([]*S일일_가격정보, 0)
 
 	금일 := lb.F일자2정수(lb.F금일())
-	var 일자 time.Time
 
 	for rows.Next() {
 		일일_가격정보 := new(S일일_가격정보)
 
 		lb.F확인1(rows.Scan(
 			&일일_가격정보.M종목코드,
-			&일자,
+			&일일_가격정보.M일자,
 			&일일_가격정보.M시가,
 			&일일_가격정보.M고가,
 			&일일_가격정보.M저가,
 			&일일_가격정보.M종가,
 			&일일_가격정보.M거래량))
-
-		일일_가격정보.M일자 = lb.F일자2정수(일자)
 
 		if 일일_가격정보.M일자 == 금일 && 일일_가격정보.M거래량 == 0 {
 			continue // 잘못된 데이터 제외
@@ -318,7 +315,7 @@ func (s *S종목별_일일_가격정보_모음) DB저장(db *sql.DB) (에러 err
 	lb.F확인1(F일일_가격정보_테이블_생성(db))
 
 	SQL생성 := new(bytes.Buffer)
-	SQL생성.WriteString("INSERT IGNORE INTO daily_price (")
+	SQL생성.WriteString("INSERT INTO daily_price (")
 	SQL생성.WriteString("  code,")
 	SQL생성.WriteString("  date,")
 	SQL생성.WriteString("  open,")
@@ -326,7 +323,7 @@ func (s *S종목별_일일_가격정보_모음) DB저장(db *sql.DB) (에러 err
 	SQL생성.WriteString("  low,")
 	SQL생성.WriteString("  close,")
 	SQL생성.WriteString("  volume")
-	SQL생성.WriteString(") VALUES (?,?,0,0,0,0,0)")
+	SQL생성.WriteString(") VALUES (?,?,?,?,?,?,?)")
 
 	SQL수정 := new(bytes.Buffer)
 	SQL수정.WriteString("UPDATE daily_price SET")
@@ -350,8 +347,13 @@ func (s *S종목별_일일_가격정보_모음) DB저장(db *sql.DB) (에러 err
 	defer stmt수정.Close()
 
 	for _, 값 := range s.M저장소 {
-		lb.F확인2(stmt생성.Exec(값.M종목코드, 값.G일자()))
-		lb.F확인2(stmt수정.Exec(값.M시가, 값.M고가, 값.M저가, 값.M종가, 값.M거래량, 값.M종목코드, 값.G일자()))
+		// 1) 수정 시도
+		rs := lb.F확인2(stmt수정.Exec(값.M시가, 값.M고가, 값.M저가, 값.M종가, 값.M거래량, 값.M종목코드, 값.G일자()))
+
+		// 2) 없던 레코드면 실제값으로 삽입 (INSERT IGNORE/ON DUPLICATE KEY UPDATE 대신 공용 문법)
+		if n, _ := rs.RowsAffected(); n == 0 {
+			lb.F확인2(stmt생성.Exec(값.M종목코드, 값.G일자(), 값.M시가, 값.M고가, 값.M저가, 값.M종가, 값.M거래량))
+		}
 	}
 
 	return tx.Commit()
@@ -1103,18 +1105,18 @@ func (s *S종목별_일일_가격정보_모음) g월수익율_변동성_도우�
 	return lb.F표준_편차(월수익율...)
 }
 
-// F일일_가격정보_테이블_생성 : mysql, mariadb 기준.
+// F일일_가격정보_테이블_생성 : MySQL, SQLite 공용. (date는 YYYYMMDD 정수)
 func F일일_가격정보_테이블_생성(db *sql.DB) error {
 	SQL := new(bytes.Buffer)
 	SQL.WriteString("CREATE TABLE IF NOT EXISTS daily_price (")
 	SQL.WriteString("code CHAR(8) NOT NULL,")
-	SQL.WriteString("date DATE NOT NULL,")
+	SQL.WriteString("date INTEGER NOT NULL,")
 	SQL.WriteString("open DECIMAL(20,3) NOT NULL,")
 	SQL.WriteString("high DECIMAL(20,3) NOT NULL,")
 	SQL.WriteString("low DECIMAL(20,3) NOT NULL,")
 	SQL.WriteString("close DECIMAL(20,3) NOT NULL,")
 	SQL.WriteString("volume BIGINT NOT NULL,")
-	SQL.WriteString("CONSTRAINT PRIMARY KEY (code,date)")
+	SQL.WriteString("PRIMARY KEY (code,date)")
 	SQL.WriteString(")")
 
 	_, 에러 := db.Exec(SQL.String())
