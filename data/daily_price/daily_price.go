@@ -509,7 +509,7 @@ func (s *S종목별_일일_가격정보_모음) G종가_모음() []float64 {
 func (s *S종목별_일일_가격정보_모음) g거래량_모음() []float64 {
 	거래량_모음 := make([]float64, len(s.M저장소))
 
-	for i := 1; i < len(s.M저장소); i++ {
+	for i := 0; i < len(s.M저장소); i++ {
 		거래량_모음[i] = s.M저장소[i].M거래량
 	}
 
