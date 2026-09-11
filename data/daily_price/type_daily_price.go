@@ -14,6 +14,16 @@ import (
 	"github.com/ghts/ghts/lib/trade"
 )
 
+type I일일_가격정보 interface {
+	G종목코드() string
+	G일자() uint32
+	G시가() float64
+	G고가() float64
+	G저가() float64
+	G종가() float64
+	G거래량() uint64
+}
+
 func New일일_가격정보(종목코드 string, 일자 time.Time, 시가, 고가, 저가, 종가, 거래량 int64) *S일일_가격정보 {
 	if len(종목코드) != 6 {
 		panic(lb.New에러("예상과 다른 종목코드 길이 : '%v' '%v'", 종목코드, len(종목코드)))
@@ -29,6 +39,10 @@ func New일일_가격정보(종목코드 string, 일자 time.Time, 시가, 고�
 		panic(lb.New에러("음수 종가 : '%v'", 종가))
 	} else if 거래량 < 0 {
 		panic(lb.New에러("음수 거래량 : '%v'", 거래량))
+	} else if 고가 != lb.F최대값(시가, 고가, 저가, 종가) {
+		panic(lb.New에러("고가 != lb.F최대값(시가, 고가, 저가, 종가) : '%v' '%v'", 고가, lb.F최대값(시가, 고가, 저가, 종가)))
+	} else if 저가 != lb.F최소값(시가, 고가, 저가, 종가) {
+		panic(lb.New에러("저가 != lb.F최소값(시가, 고가, 저가, 종가) : '%v' '%v'", 저가, lb.F최소값(시가, 고가, 저가, 종가)))
 	}
 
 	return &S일일_가격정보{
@@ -39,16 +53,6 @@ func New일일_가격정보(종목코드 string, 일자 time.Time, 시가, 고�
 		M저가:   float64(저가),
 		M종가:   float64(종가),
 		M거래량:  float64(거래량)}
-}
-
-type I일일_가격정보 interface {
-	G종목코드() string
-	G일자() uint32
-	G시가() float64
-	G고가() float64
-	G저가() float64
-	G종가() float64
-	G거래량() uint64
 }
 
 type S일일_가격정보 struct {
@@ -193,31 +197,24 @@ func (s *S종목별_일일_가격정보_모음) G복사본() *S종목별_일일_
 	return 복사본
 }
 
+// G기준일_이전_정보_복사본 : 기준일 이전 레코드들의 딥 복사본 모음 (기준일 자체 제외).
+// 기준일이 존재하지 않으면 기준일 직전 레코드까지 포함하며, 이전 레코드가 없으면 빈 모음.
 func (s *S종목별_일일_가격정보_모음) G기준일_이전_정보_복사본(기준일 uint32) *S종목별_일일_가격정보_모음 {
-	기준일_인덱스, 존재함 := s.인덱스[기준일]
-	if !존재함 {
-		길이 := len(s.M저장소)
-		for i := 1; i <= 길이; i++ {
-			if s.M저장소[길이-i].M일자 < 기준일 {
-				// (길이-i+1)이 의도한 값이지만, 상한(길이)/하한(0) 범위를 넘어서지 않도록 함.
-				기준일_인덱스 = lb.F중간값(길이-i+1, 길이, 0)
-				break
-			}
-		}
-	}
-
-	기준일_이전_데이터_모음 := lb.F조건값(기준일_인덱스 > 0, s.M저장소[:기준일_인덱스], make([]*S일일_가격정보, 0))
+	인덱스 := sort.Search(len(s.M저장소), func(i int) bool {
+		return s.M저장소[i].M일자 >= 기준일
+	})
 
 	s2 := new(S종목별_일일_가격정보_모음)
-	s2.M저장소 = make([]*S일일_가격정보, len(기준일_이전_데이터_모음))
-	s2.인덱스 = make(map[uint32]int)
+	s2.M저장소 = make([]*S일일_가격정보, 인덱스)
 
-	for i, 가격정보 := range 기준일_이전_데이터_모음 {
-		s2.M저장소[i] = 가격정보.G복사본()
+	for i := 0; i < 인덱스; i++ {
+		s2.M저장소[i] = s.M저장소[i].G복사본()
 	}
 
 	// 이미 정렬되어 있으므로, 새로 정렬하지 않고, 인덱스만 업데이트.
-	for i, 값 := range s.M저장소 {
+	s2.인덱스 = make(map[uint32]int)
+
+	for i, 값 := range s2.M저장소 {
 		s2.인덱스[값.M일자] = i
 	}
 
@@ -434,16 +431,23 @@ func (s *S종목별_일일_가격정보_모음) G값_모음(시작일, 종료일
 	}
 }
 
+// G최근_값_모음 : 시작일~저장소 마지막까지의 값 모음.
+// 시작일이 존재하지 않으면 시작일 이후의 첫 레코드부터 반환하며,
+// 반환할 값이 없을 때만(저장소 비어있거나 모든 레코드가 시작일 이전) 에러.
 func (s *S종목별_일일_가격정보_모음) G최근_값_모음(시작일 uint32) ([]*S일일_가격정보, error) {
-	if 시작_인덱스, 존재함 := s.인덱스[시작일]; !존재함 {
-		return nil, lb.New에러("해당되는 인덱스 없음 : '%v'", 시작일)
-	} else if 시작_인덱스 < 0 {
-		return nil, lb.New에러("음수 인덱스 : '%v'", 시작_인덱스)
-	} else if 시작_인덱스 >= len(s.M저장소) {
-		return nil, lb.New에러("너무 큰 인덱스 : '%v' '%v'", 시작_인덱스, len(s.M저장소))
-	} else {
-		return s.M저장소[시작_인덱스:], nil
+	인덱스 := sort.Search(len(s.M저장소), func(i int) bool {
+		return s.M저장소[i].M일자 >= 시작일
+	})
+
+	if 인덱스 == len(s.M저장소) {
+		return nil, lb.New에러("[%v] 시작일 이후의 값 없음 : '%v'", s.G종목코드(), 시작일)
 	}
+
+	return s.M저장소[인덱스:], nil
+}
+
+func (s *S종목별_일일_가격정보_모음) G최근_값_모음2(시작일 time.Time) ([]*S일일_가격정보, error) {
+	return s.G최근_값_모음(lb.F일자2정수(시작일))
 }
 
 func (s *S종목별_일일_가격정보_모음) G일자_모음() []time.Time {
@@ -597,9 +601,10 @@ func (s *S종목별_일일_가격정보_모음) g기간_종가(시작_룩백_기
 	최소값 := lb.F최대값(0, lb.F최소값(시작_룩백_기간, 종료_룩백_기간))
 	최대값 := lb.F최대값(0, 시작_룩백_기간, 종료_룩백_기간)
 
+	// 룩백 k → 인덱스 (len-1-k). 시작~종료 룩백을 양 끝 포함([a, b])으로 가져온다.
 	종가_모음 := s.G종가_모음()
 	시작_인덱스 := len(종가_모음) - 최대값 - 1
-	종료_인덱스 := len(종가_모음) - 최소값 - 1
+	종료_인덱스 := len(종가_모음) - 최소값
 
 	return 종가_모음[시작_인덱스:종료_인덱스]
 }
@@ -664,6 +669,14 @@ func (s *S종목별_일일_가격정보_모음) G기간_상승_거래량_비율(
 		} else if 종가 < 시가 { // 하락
 			하락_거래량 += 거래량
 		}
+	}
+
+	if 하락_거래량 == 0 && 상승_거래량 > 0 {
+		return math.Inf(1)
+	} else if 하락_거래량 == 0 && 상승_거래량 == 0 {
+		return 0
+	} else if 하락_거래량 == 0 {
+		panic(lb.New에러("예상하지 못한 경우."))
 	}
 
 	return 상승_거래량 / 하락_거래량
@@ -800,10 +813,10 @@ func (s *S종목별_일일_가격정보_모음) G볼린저_밴드(윈도우_크�
 	종가_모음 := s.G종가_모음()
 
 	if len(종가_모음) > 윈도우_크기 {
-		종가_모음 = 종가_모음[len(종가_모음)-윈도우_크기-1:]
+		종가_모음 = 종가_모음[len(종가_모음)-윈도우_크기:]
 	}
 
-	평균, 표준_편차 := lb.F평균N표준편차(종가_모음...)
+	평균, 표준_편차 := lb.F평균N모집단표준편차(종가_모음...)
 
 	return 평균 + 배율*표준_편차
 }
@@ -813,10 +826,10 @@ func (s *S종목별_일일_가격정보_모음) G볼린저_밴드_정보(윈도�
 	종가_모음 := s.G종가_모음()
 
 	if len(종가_모음) > 윈도우_크기 {
-		종가_모음 = 종가_모음[len(종가_모음)-윈도우_크기-1:]
+		종가_모음 = 종가_모음[len(종가_모음)-윈도우_크기:]
 	}
 
-	중심값, 표준_편차 := lb.F평균N표준편차(종가_모음...)
+	중심값, 표준_편차 := lb.F평균N모집단표준편차(종가_모음...)
 	상한값 = 중심값 + 상한배율*표준_편차
 	하한값 = 중심값 + 하한배율*표준_편차
 
@@ -828,26 +841,28 @@ func (s *S종목별_일일_가격정보_모음) G볼린저_밴드_폭(윈도우_
 	종가_모음 := s.G종가_모음()
 
 	if len(종가_모음) > 윈도우_크기 {
-		종가_모음 = 종가_모음[len(종가_모음)-윈도우_크기-1:]
+		종가_모음 = 종가_모음[len(종가_모음)-윈도우_크기:]
 	}
 
-	return lb.F평균N표준편차(종가_모음...)
+	return lb.F평균N모집단표준편차(종가_모음...)
 }
 
 func (s *S종목별_일일_가격정보_모음) ATR(윈도우_크기 int) float64 {
 	TrueRange모음 := make([]float64, len(s.M저장소))
 
-	for i := 2; i < len(s.M저장소); i++ {
+	for i := 1; i < len(s.M저장소); i++ {
 		고가 := lb.F최대값(s.M저장소[i].M고가, s.M저장소[i-1].M종가)
 		저가 := lb.F최소값(s.M저장소[i].M저가, s.M저장소[i-1].M종가)
 
 		TrueRange모음[i] = 고가 - 저가
 	}
 
-	TrueRange모음[0] = (TrueRange모음[3] + TrueRange모음[4] + TrueRange모음[5]) / 3.0 // 임의로 값을 채워 넣음.
-	TrueRange모음[1] = (TrueRange모음[4] + TrueRange모음[5] + TrueRange모음[6]) / 3.0 // 임의로 값을 채워 넣음.
+	// 임의로 값을 채워 넣음.
+	if len(TrueRange모음) > 4 {
+		TrueRange모음[0] = (TrueRange모음[1] + TrueRange모음[2] + TrueRange모음[3]) / 3.0
+	}
 
-	atr모음 := trade.F지수_이동_평균(TrueRange모음, 윈도우_크기)
+	atr모음 := trade.F와일더_이동_평균(TrueRange모음, 윈도우_크기)
 
 	return atr모음[len(atr모음)-1]
 }
@@ -1054,23 +1069,26 @@ func (s *S종목별_일일_가격정보_모음) VPCI_도우미(
 func (s *S종목별_일일_가격정보_모음) G월별_추세_점수_도우미(기준_인덱스 int, 종가_모음 []float64) float64 {
 	기준가 := 종가_모음[기준_인덱스]
 	추세_점수 := 0.0
+	분모 := 0.0
 
 	for i := 1; i <= 12; i++ {
 		if 기준_인덱스-(i*21) < 0 {
-			추세_점수++
 			continue
 		}
 
 		과거_종가 := 종가_모음[기준_인덱스-(i*21)]
+		분모++
 
 		if 기준가 >= 과거_종가 {
 			추세_점수++
 		}
 	}
 
-	추세_점수 = 추세_점수 / 12
+	if 분모 == 0.0 {
+		return 0.0
+	}
 
-	return 추세_점수
+	return 추세_점수 / 분모
 }
 
 func (s *S종목별_일일_가격정보_모음) G일별_추세_점수_도우미(기준_인덱스 int, 종가_모음 []float64) float64 {
@@ -1103,23 +1121,4 @@ func (s *S종목별_일일_가격정보_모음) g월수익율_변동성_도우�
 	}
 
 	return lb.F표준_편차(월수익율...)
-}
-
-// F일일_가격정보_테이블_생성 : MySQL, SQLite 공용. (date는 YYYYMMDD 정수)
-func F일일_가격정보_테이블_생성(db *sql.DB) error {
-	SQL := new(bytes.Buffer)
-	SQL.WriteString("CREATE TABLE IF NOT EXISTS daily_price (")
-	SQL.WriteString("code CHAR(8) NOT NULL,")
-	SQL.WriteString("date INTEGER NOT NULL,")
-	SQL.WriteString("open DECIMAL(20,3) NOT NULL,")
-	SQL.WriteString("high DECIMAL(20,3) NOT NULL,")
-	SQL.WriteString("low DECIMAL(20,3) NOT NULL,")
-	SQL.WriteString("close DECIMAL(20,3) NOT NULL,")
-	SQL.WriteString("volume BIGINT NOT NULL,")
-	SQL.WriteString("PRIMARY KEY (code,date)")
-	SQL.WriteString(")")
-
-	_, 에러 := db.Exec(SQL.String())
-
-	return 에러
 }

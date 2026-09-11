@@ -1,7 +1,8 @@
-package util
+package daily_price
 
 import (
-	dd "github.com/ghts/ghts/data/daily_price"
+	"bytes"
+
 	lb "github.com/ghts/ghts/lib"
 	mt "github.com/ghts/ghts/lib/market_time"
 	xt "github.com/ghts/ghts/xing/base"
@@ -31,7 +32,7 @@ func F당일_일일_가격정보_수집(db *sql.DB) (에러 error) {
 	종목코드_모음 := make([]string, 0)
 
 	for _, 종목코드 := range xing.F종목코드_모음_전체() {
-		s := new(dd.S종목별_일일_가격정보_모음)
+		s := new(S종목별_일일_가격정보_모음)
 		s.DB읽기with시작일(db, 종목코드, 한달전)
 
 		if len(s.M저장소) > 0 && s.M저장소[len(s.M저장소)-1].M일자 == 당일 && s.M저장소[len(s.M저장소)-1].M거래량 > 0 {
@@ -46,12 +47,12 @@ func F당일_일일_가격정보_수집(db *sql.DB) (에러 error) {
 		return
 	}
 
-	dd.F일일_가격정보_테이블_생성(db)
+	F일일_가격정보_테이블_생성(db)
 
 	당일_가격정보_맵 := lb.F확인2(xing.TrT8407_현물_멀티_현재가_조회(종목코드_모음))
 
 	for 종목코드, 값 := range 당일_가격정보_맵 {
-		s := new(dd.S일일_가격정보)
+		s := new(S일일_가격정보)
 		s.M종목코드 = 종목코드
 		s.M일자 = 당일
 		s.M시가 = float64(값.M시가)
@@ -60,7 +61,7 @@ func F당일_일일_가격정보_수집(db *sql.DB) (에러 error) {
 		s.M종가 = float64(값.M현재가)
 		s.M거래량 = float64(값.M누적_거래량)
 
-		종목별_일일_가격정보_모음 := lb.F확인2(dd.New종목별_일일_가격정보_모음([]*dd.S일일_가격정보{s}))
+		종목별_일일_가격정보_모음 := lb.F확인2(New종목별_일일_가격정보_모음([]*S일일_가격정보{s}))
 		lb.F확인1(종목별_일일_가격정보_모음.DB저장(db))
 	}
 
@@ -80,7 +81,7 @@ func F고정_기간_일일_가격정보_수집(db *sql.DB, 종목코드_모음 [
 		return nil
 	}
 
-	dd.F일일_가격정보_테이블_생성(db)
+	F일일_가격정보_테이블_생성(db)
 
 	시작일 := lb.F금일().Add(-1 * 기간)
 
@@ -109,14 +110,14 @@ func F고정_기간_일일_가격정보_수집(db *sql.DB, 종목코드_모음 [
 
 func F일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string, 추가_인수 ...bool) (에러 error) {
 	var 시작일, 마지막_저장일 time.Time
-	var 종목별_일일_가격정보_모음 *dd.S종목별_일일_가격정보_모음
+	var 종목별_일일_가격정보_모음 *S종목별_일일_가격정보_모음
 
-	dd.F일일_가격정보_테이블_생성(db)
+	F일일_가격정보_테이블_생성(db)
 
 	출력_여부 := lb.F조건값(len(추가_인수) > 0, 추가_인수[0], true)
 
 	for i, 종목코드 := range 종목코드_모음 {
-		종목별_일일_가격정보_모음 = lb.F확인2(dd.New종목별_일일_가격정보_모음_DB읽기(db, 종목코드))
+		종목별_일일_가격정보_모음 = lb.F확인2(New종목별_일일_가격정보_모음_DB읽기(db, 종목코드))
 
 		// 시작일 설정
 		시작일 = lb.F지금().AddDate(-30, 0, 0)
@@ -167,7 +168,7 @@ func f일일_가격정보_수집_도우미(db *sql.DB, 종목코드 string, 시�
 	}
 
 	금일 := lb.F금일()
-	일일_가격정보_슬라이스 := make([]*dd.S일일_가격정보, 0)
+	일일_가격정보_슬라이스 := make([]*S일일_가격정보, 0)
 	폐장_전 := lb.F지금().Before(mt.F금일_보정_시각(15, 30, 0))
 
 	for _, 일일_데이터 := range 값_모음 {
@@ -177,7 +178,7 @@ func f일일_가격정보_수집_도우미(db *sql.DB, 종목코드 string, 시�
 			continue // 폐장 전에 수집된 금일 데이터 제외.
 		}
 
-		일일_가격정보_슬라이스 = append(일일_가격정보_슬라이스, dd.New일일_가격정보(
+		일일_가격정보_슬라이스 = append(일일_가격정보_슬라이스, New일일_가격정보(
 			일일_데이터.M종목코드,
 			일일_데이터.M일자,
 			일일_데이터.M시가,
@@ -204,11 +205,30 @@ func f일일_가격정보_수집_도우미(db *sql.DB, 종목코드 string, 시�
 		return
 	}
 
-	종목별_일일_가격정보_모음, 에러 := dd.New종목별_일일_가격정보_모음(일일_가격정보_슬라이스)
+	종목별_일일_가격정보_모음, 에러 := New종목별_일일_가격정보_모음(일일_가격정보_슬라이스)
 	if 에러 != nil {
 		lb.F에러_출력(에러)
 		return
 	}
 
 	lb.F확인1(종목별_일일_가격정보_모음.DB저장(db))
+}
+
+// F일일_가격정보_테이블_생성 : MySQL, SQLite 공용. (date는 YYYYMMDD 정수)
+func F일일_가격정보_테이블_생성(db *sql.DB) error {
+	SQL := new(bytes.Buffer)
+	SQL.WriteString("CREATE TABLE IF NOT EXISTS daily_price (")
+	SQL.WriteString("code CHAR(8) NOT NULL,")
+	SQL.WriteString("date INTEGER NOT NULL,")
+	SQL.WriteString("open DECIMAL(20,3) NOT NULL,")
+	SQL.WriteString("high DECIMAL(20,3) NOT NULL,")
+	SQL.WriteString("low DECIMAL(20,3) NOT NULL,")
+	SQL.WriteString("close DECIMAL(20,3) NOT NULL,")
+	SQL.WriteString("volume BIGINT NOT NULL,")
+	SQL.WriteString("PRIMARY KEY (code,date)")
+	SQL.WriteString(")")
+
+	_, 에러 := db.Exec(SQL.String())
+
+	return 에러
 }

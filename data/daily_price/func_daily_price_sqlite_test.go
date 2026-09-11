@@ -56,14 +56,6 @@ func TestDSN_SQLite_WAL_기본_적용(t *testing.T) {
 }
 
 func f테스트용_일일_가격정보(종목코드 string, offset_일수 int, 종가 float64) *S일일_가격정보 {
-	s := new(S일일_가격정보)
-	s.M종목코드 = 종목코드
-	s.M일자 = lb.F일자2정수(lb.F금일().AddDate(0, 0, offset_일수))
-	s.M시가 = 종가
-	s.M고가 = 종가 + 1
-	s.M저가 = 종가 - 1
-	s.M종가 = 종가
-	s.M거래량 = 100
-
-	return s
+	return New일일_가격정보(종목코드, lb.F금일().AddDate(0, 0, offset_일수),
+		int64(종가), int64(종가+1), int64(종가-1), int64(종가), 100)
 }

@@ -26,13 +26,18 @@ import (
 
 func F같음(값, 비교값 interface{}) bool {
 	switch 값.(type) {
-	case *big.Int, *big.Rat, *big.Float,
-		int, int8, int16, int32, int64,
-		uint, uint8, uint16, uint32, uint64,
-		float32, float64:
-		if F2문자열(값) == F2문자열(비교값) {
-			return true
+	case *big.Int, int, int8, int16, int32, int64,
+		uint, uint8, uint16, uint32, uint64:
+		return F2문자열(값) == F2문자열(비교값)
+	case *big.Rat, *big.Float, float32, float64:
+		실수값1, 에러1 := F2실수(값)
+		실수값2, 에러2 := F2실수(비교값)
+
+		if 에러1 != nil || 에러2 != nil {
+			return false
 		}
+
+		return math.Abs(실수값1-실수값2) < 1e-6
 	case time.Time:
 		비교_시간값, ok := 비교값.(time.Time)
 		if ok && 값.(time.Time).Equal(비교_시간값) {
@@ -91,8 +96,19 @@ func F표준_편차[T T숫자](값_모음 ...T) (표준_편차 float64) {
 	return 표준_편차
 }
 
+// F평균N표준편차 : 평균과 표본 표준편차(분모 N-1, 베셀 보정)를 계산.
+// 유한 데이터로 母 모집단의 분산을 추정할 때 사용(예: 수익률 계열 변동성 지표).
 func F평균N표준편차[T T숫자](값_모음 ...T) (평균, 표준_편차 float64) {
-	실수값_모음 := f2실수값_모음(값_모음...)
+	return f평균N표준편차(f2실수값_모음(값_모음...), true)
+}
+
+// F평균N모집단표준편차 : 평균과 모집단 표준편차(분모 N)를 계산.
+// 데이터 자체가 분석 대상 전체일 때 사용(예: 볼린저 밴드).
+func F평균N모집단표준편차[T T숫자](값_모음 ...T) (평균, 표준_편차 float64) {
+	return f평균N표준편차(f2실수값_모음(값_모음...), false)
+}
+
+func f평균N표준편차(실수값_모음 []float64, 표본_보정 bool) (평균, 표준_편차 float64) {
 	평균 = F평균(실수값_모음...)
 	분산 := 0.0
 
@@ -100,7 +116,8 @@ func F평균N표준편차[T T숫자](값_모음 ...T) (평균, 표준_편차 flo
 		분산 += math.Pow(값-평균, 2)
 	}
 
-	표준_편차 = math.Sqrt(분산 / float64(len(값_모음)-1))
+	분모 := F조건값(표본_보정, float64(len(실수값_모음)-1), float64(len(실수값_모음)))
+	표준_편차 = math.Sqrt(분산 / 분모)
 
 	return 평균, 표준_편차
 }
