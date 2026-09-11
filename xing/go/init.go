@@ -16,7 +16,9 @@ import (
 	"github.com/mitchellh/go-ps"
 )
 
-func F초기화(서버_구분 xt.T서버_구분, 로그인_정보 *xt.S로그인_정보) {
+func F초기화(서버_구분 xt.T서버_구분, 로그인_정보 *xt.S로그인_정보) (에러 error) {
+	defer lb.S예외처리{M에러: &에러}.S실행()
+
 	// 자식 프로세스는 부모 프로세스의 환경 변수를 그대로 물려받음.
 	// 로그인 정보는 환경 변수를 통해서 DLL32 모듈로 전달.
 	xt.F서버_구분_설정(서버_구분)
@@ -31,6 +33,8 @@ func F초기화(서버_구분 xt.T서버_구분, 로그인_정보 *xt.S로그인
 	lb.F확인1(F전일_당일_설정())
 
 	fmt.Println("** Xing API 초기화 완료 **")
+
+	return nil
 }
 
 func F소켓_생성() {
@@ -279,6 +283,8 @@ func DLL32_종료() (에러 error) {
 }
 
 func F종료() {
+	defer lb.S예외처리{}.S실행()
+
 	종료_잠금.Lock()
 	defer func() {
 		종료_시각.S값(lb.F지금())
