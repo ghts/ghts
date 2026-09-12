@@ -45,7 +45,7 @@ func F같음(값, 비교값 interface{}) bool {
 		}
 	}
 
-	if F2문자열(값) == "<nil>" && F2문자열(값) == "<nil>" {
+	if F2문자열(값) == "<nil>" && F2문자열(비교값) == "<nil>" {
 		return true
 	} else if reflect.DeepEqual(값, 비교값) {
 		return true
