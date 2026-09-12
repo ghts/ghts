@@ -334,7 +334,7 @@ const (
 	TR에러_메시지
 	TR코드별_전송_제한
 	TR계좌_수량
-	TR계좌번호_모음
+	TR계좌_번호
 	TR계좌_이름
 	TR계좌_상세명
 	TR계좌_별명
@@ -374,7 +374,7 @@ func TR구분_String(v lb.TR구분) string {
 		return "TR코드별_전송_제한"
 	case TR계좌_수량:
 		return "계좌_수량"
-	case TR계좌번호_모음:
+	case TR계좌_번호:
 		return "계좌_번호"
 	case TR계좌_이름:
 		return "계좌_이름"
