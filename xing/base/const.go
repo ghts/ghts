@@ -380,6 +380,8 @@ func TR구분_String(v lb.TR구분) string {
 		return "계좌_이름"
 	case TR계좌_상세명:
 		return "계좌_상세명"
+	case TR계좌_별명:
+		return "계좌_별명"
 	case TR소켓_테스트:
 		return "신호"
 	case TR서버_구분:
