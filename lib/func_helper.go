@@ -958,7 +958,7 @@ func F지금() time.Time {
 }
 
 func F1분전() time.Time {
-	return time.Now().Add(-3 * time.Minute)
+	return time.Now().Add(-1 * time.Minute)
 }
 
 func F3분전() time.Time {
