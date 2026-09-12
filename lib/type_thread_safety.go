@@ -224,5 +224,5 @@ func (s *s안전한_테스트) Fail() {
 	s.Lock()
 	defer s.Unlock()
 
-	s.t.FailNow()
+	s.t.Fail()
 }
