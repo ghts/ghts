@@ -756,7 +756,7 @@ func (t T소켓_접속방식) String() string {
 	case P소켓_접속_CONNECT:
 		return "CONNECT"
 	default:
-		return "예상하지 못한 접속방식 : '" + t.String() + "'"
+		return F2문자열("예상하지 못한 접속방식 : '%v'", uint(t))
 	}
 }
 
