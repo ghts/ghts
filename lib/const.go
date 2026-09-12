@@ -611,7 +611,7 @@ func (v T주문응답_구분) String() string {
 	case P주문응답_IOC취소:
 		return "IOC 취소"
 	case P주문응답_FOK취소:
-		return "FOC 취소"
+		return "FOK 취소"
 	default:
 		return F2문자열("잘못된 주문응답 구분값. %v", v)
 	}
