@@ -564,7 +564,7 @@ func F2포맷된_시각(포맷 string, 값 interface{}) (time.Time, error) {
 	시각, 에러 := time.Parse(포맷, 문자열)
 
 	if 에러 != nil {
-		New에러("잘못된 시각값 : '%v'", F2문자열(값))
+		에러 = New에러("잘못된 시각값 : '%v'\n%v", F2문자열(값), 에러)
 		return time.Time{}, 에러
 	}
 
