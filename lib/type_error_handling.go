@@ -26,9 +26,11 @@ func (s S예외처리) S실행() {
 	}()
 
 	if r := recover(); r != nil && s.M에러 != nil {
-		*s.M에러 = New에러(r)
+		*s.M에러 = New에러(r) // panic 발생 시 에러 필드 갱신.
 	} else if s.M에러 != nil && *s.M에러 != nil {
 		*s.M에러 = New에러(*s.M에러) // *errors.errorString -> *lib.S에러
+	} else if r != nil {
+		F에러_출력(r)
 	} else {
 		return
 	}
