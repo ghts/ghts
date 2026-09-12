@@ -942,17 +942,6 @@ func GOROOT() (GOROOT string) {
 	return GOROOT
 }
 
-func F비슷한_실수값(실수1, 실수2 float64) bool {
-	if 실수1 == 실수2 ||
-		math.Abs(실수1-실수2) < 0.00001 ||
-		(실수1 != 0 && math.Abs(실수1-실수2/실수1) < 0.0001) ||
-		(실수2 != 0 && math.Abs(실수1-실수2/실수2) < 0.0001) {
-		return true
-	}
-
-	return false
-}
-
 func F지금() time.Time {
 	return time.Now()
 }
