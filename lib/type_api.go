@@ -325,10 +325,10 @@ func (s *s전송_권한) S수량_간격_변경(수량 int, 간격 time.Duration)
 	s.간격 = 간격 + P100밀리초
 
 	switch {
-	case 수량 > 10:
-		s.수량 -= 1
 	case 수량 > 100:
 		s.수량 -= 2
+	case 수량 > 10:
+		s.수량 -= 1
 	}
 }
 
