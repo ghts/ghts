@@ -857,7 +857,7 @@ func CSV쓰기(레코드_모음 [][]string, 파일명 string, 파일_잠금 sync
 		defer 잠금.RUnlock()
 	default:
 		파일_잠금.Lock()
-		파일_잠금.Unlock()
+		defer 파일_잠금.Unlock()
 	}
 
 	파일 := F확인2(os.Create(파일명))
