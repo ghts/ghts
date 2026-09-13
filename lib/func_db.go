@@ -39,8 +39,8 @@ func SQL실행(db *sql.DB, sql문자열 string, 추가_인수 ...interface{}) (i
 }
 
 // DB질의() : 단일 행, 단일 열의 질의 결과를 지정된 자료형으로 반환합니다.
-// 지원 자료형 : 정수/실수(T숫자), big.Int, big.Rat (값/포인터), string, bool, time.Time.
-// time.Time/big.Int/big.Rat 은 INTEGER 열(에포크 초/정수)에서 변환됩니다.
+// 지원 자료형 : 정수/실수(T숫자), big.Int, big.Rat (값/포인터), string, bool.
+// big.Int/big.Rat 은 INTEGER 열(정수)에서 변환됩니다.
 // (database/sql 의 내장 Scan 이 INTEGER(int64) 를 지원하지 않아 int64 로 스캔 후 변환합니다.)
 // 포인터 자료형(*big.Int, *big.Rat)은 매 호출마다 새 인스턴스를 반환합니다.
 func DB질의[T T숫자 | big.Int | *big.Int | big.Rat | *big.Rat | string | bool](db *sql.DB, sql문자열 string, 추가_인수 ...interface{}) (값 T, 에러 error) {
@@ -49,7 +49,6 @@ func DB질의[T T숫자 | big.Int | *big.Int | big.Rat | *big.Rat | string | boo
 	rows := F확인2(db.Query(sql문자열, 추가_인수...))
 	defer rows.Close()
 
-	행_존재 := false
 	for rows.Next() {
 		switch 스캔_대상 := any(&값).(type) {
 		case *big.Int: // 내장 Scan 이 int64 를 지원하지 않으므로 int64 로 스캔 후 변환.
@@ -74,14 +73,10 @@ func DB질의[T T숫자 | big.Int | *big.Int | big.Rat | *big.Rat | string | boo
 			F확인1(rows.Scan(&값))
 		}
 
-		행_존재 = true
-		break
+		return 값, nil
 	}
 
-	if !행_존재 {
-		에러 = New에러("DB질의() : 질의 결과 존재하지 않습니다.")
-		return
-	}
+	에러 = New에러("DB질의() : 질의 결과 존재하지 않습니다.")
 
-	return 값, nil
+	return
 }

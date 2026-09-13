@@ -12,15 +12,12 @@ func TestDB질의(t *testing.T) {
 	t.Parallel()
 
 	db := F확인2(sql.Open("sqlite", ":memory:"))
-	// in-memory DB 는 연결당 독립이므로 단일 연결로 고정.
 	db.SetMaxOpenConns(1)
-	defer func() {
-		F확인1(db.Close())
-	}()
+	defer db.Close()
 
-	F확인2(db.Exec("CREATE TABLE db질의_테스트 (a INTEGER, b TEXT, c INTEGER, d INTEGER)"))
-	F확인2(db.Exec("INSERT INTO db질의_테스트 VALUES (42, '안녕', 1, 1700000000)"))
-	F확인2(db.Exec("INSERT INTO db질의_테스트 VALUES (-7, '음수', 0, 1700000001)"))
+	F확인2(db.Exec("CREATE TABLE db질의_테스트 (a INTEGER, b TEXT, c INTEGER)"))
+	F확인2(db.Exec("INSERT INTO db질의_테스트 VALUES (42, '안녕', 1)"))
+	F확인2(db.Exec("INSERT INTO db질의_테스트 VALUES (-7, '음수', 0)"))
 
 	t.Run("정수", func(t *testing.T) {
 		F테스트_같음(t, F확인2(DB질의[int64](db, "SELECT a FROM db질의_테스트")), int64(42))
