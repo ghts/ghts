@@ -197,7 +197,7 @@ func f접속_확인(ch완료 chan lb.T신호) {
 func f시간_일치_확인(ch완료 chan lb.T신호) {
 	defer func() { ch완료 <- lb.P신호_종료 }()
 
-	if len(tr코드별_전송_제한_1초) == 0 {
+	if _, 존재함 := tr코드별_전송_제한_1초[xt.TR시간_조회_t0167]; !존재함 {
 		tr코드별_전송_제한_1초[xt.TR시간_조회_t0167] = lb.New전송_권한(xt.TR시간_조회_t0167, 5, lb.P1초)
 	}
 
@@ -212,6 +212,8 @@ func f시간_일치_확인(ch완료 chan lb.T신호) {
 
 		return
 	}
+
+	panic(lb.New에러("이 시점에 시간 일치 확인이 완료되었어야 함."))
 }
 
 func F전일_당일_설정() (에러 error) {
