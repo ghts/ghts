@@ -5,6 +5,7 @@ import (
 	"encoding/binary"
 
 	lb "github.com/ghts/ghts/lib"
+	"github.com/ghts/ghts/lib/trade"
 )
 
 type T3320_기업정보_요약_응답 struct {
@@ -120,7 +121,7 @@ func NewT3320_기업정보_요약_응답2(b []byte) (값 *T3320_기업정보_요
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	값 = new(T3320_기업정보_요약_응답2)
-	값.M종목코드 = lb.F2문자열(g.Gicode)[1:]
+	값.M종목코드 = trade.F종목코드_보정(lb.F2문자열(g.Gicode)[:])
 	값.M결산년월 = lb.F2문자열(g.Gsym)
 	값.M결산구분 = lb.F2문자열(g.Gsgb)
 	값.PER = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Per, 2)
