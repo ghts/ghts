@@ -194,7 +194,7 @@ func NewCSPAQ12300_현물계좌_잔고내역_응답(b []byte) (값 *CSPAQ12300_�
 func NewCSPAQ12300_현물계좌_잔고내역_조회_응답_헤더1(b []byte) (값 *CSPAQ12300_현물계좌_잔고내역_응답1, 에러 error) {
 	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
-	lb.F조건부_패닉(len(b) != SizeCSPAQ12300OutBlock1, "예상하지 못한 길이 : '%v", len(b))
+	lb.F조건부_패닉(len(b) != SizeCSPAQ12300OutBlock1, "예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(CSPAQ12300OutBlock1)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
@@ -213,7 +213,7 @@ func NewCSPAQ12300_현물계좌_잔고내역_조회_응답_헤더1(b []byte) (�
 //func NewCSPAQ12300_현물계좌_잔고내역_조회_응답_헤더2(b []byte) (값 *CSPAQ12300_현물계좌_잔고내역_응답2, 에러 error) {
 //	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 //
-//	lb.F조건부_패닉(len(b) != SizeCSPAQ12300OutBlock2, "예상하지 못한 길이 : '%v", len(b))
+//	lb.F조건부_패닉(len(b) != SizeCSPAQ12300OutBlock2, "예상하지 못한 길이 : '%v'", len(b))
 //
 //	g := new(CSPAQ12300OutBlock2)
 //	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.

@@ -68,7 +68,7 @@ func NewT1902_ETF시간별_추이_응답_헤더(b []byte) (s *T1902_ETF시간별
 	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { s = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeT1902OutBlock,
-		"예상하지 못한 길이 : '%v", len(b))
+		"예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(T1902OutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.

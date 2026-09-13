@@ -93,7 +93,7 @@ func NewT0150_현물_당일_매매일지_응답(b []byte) (값 *T0150_현물_당
 func NewT0150_현물_당일_매매일지_응답_헤더(b []byte) (값 *T0150_현물_당일_매매일지_응답_헤더, 에러 error) {
 	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
-	lb.F조건부_패닉(len(b) != SizeT0150OutBlock, "예상하지 못한 길이 : '%v", len(b))
+	lb.F조건부_패닉(len(b) != SizeT0150OutBlock, "예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(T0150OutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.

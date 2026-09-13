@@ -21,7 +21,7 @@ func NewT0167_시각_조회_응답(b []byte) (값 time.Time, 에러 error) {
 	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = time.Time{} }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeT0167OutBlock,
-		"예상하지 못한 길이 : '%v", len(b))
+		"예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(T0167OutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.

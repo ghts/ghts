@@ -60,7 +60,7 @@ func NewT1101InBlock(질의값 *lb.S질의값_단일_종목) (g *T1101InBlock) {
 func NewT1101_현물_호가_조회_응답(b []byte) (s *T1101_현물_호가_조회_응답, 에러 error) {
 	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { s = nil }}.S실행()
 
-	lb.F조건부_패닉(len(b) != SizeT1101OutBlock, "예상하지 못한 길이 : '%v", len(b))
+	lb.F조건부_패닉(len(b) != SizeT1101OutBlock, "예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(T1101OutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.

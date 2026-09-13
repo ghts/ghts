@@ -84,7 +84,7 @@ func NewCSPAQ12200InBlock(계좌번호 string, 비밀번호 string) (g *CSPAQ122
 func NewCSPAQ12200_현물계좌_총평가_응답(b []byte) (값 *CSPAQ12200_현물계좌_총평가_응답, 에러 error) {
 	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
-	lb.F조건부_패닉(len(b) != SizeCSPAQ12200OutBlock, "예상하지 못한 길이 : '%v", len(b))
+	lb.F조건부_패닉(len(b) != SizeCSPAQ12200OutBlock, "예상하지 못한 길이 : '%v'", len(b))
 
 	g_all := new(CSPAQ12200OutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g_all)) // 네트워크 전송 바이트 순서는 빅엔디언.

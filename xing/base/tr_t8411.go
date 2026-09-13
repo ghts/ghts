@@ -106,7 +106,7 @@ func NewT8411_현물_차트_틱_응답_헤더(b []byte) (값 *T8411_현물_차�
 	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeT8411OutBlock,
-		"예상하지 못한 길이 : '%v", len(b))
+		"예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(T8411OutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.

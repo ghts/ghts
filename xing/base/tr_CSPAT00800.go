@@ -76,7 +76,7 @@ func NewCSPAT00800InBlock(질의값 *lb.S질의값_취소_주문, 비밀번호 s
 func NewCSPAT00800_현물_취소_주문_응답(b []byte) (값 *CSPAT00800_현물_취소_주문_응답, 에러 error) {
 	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
-	lb.F조건부_패닉(len(b) != SizeCSPAT00800OutBlock, "예상하지 못한 길이 : '%v", len(b))
+	lb.F조건부_패닉(len(b) != SizeCSPAT00800OutBlock, "예상하지 못한 길이 : '%v'", len(b))
 
 	값 = new(CSPAT00800_현물_취소_주문_응답)
 	값.M응답1 = lb.F확인2(NewCSPAT00800_현물_취소_주문_응답1(b[:SizeCSPAT00800OutBlock1]))
@@ -89,7 +89,7 @@ func NewCSPAT00800_현물_취소_주문_응답1(b []byte) (s *CSPAT00800_현물_
 	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { s = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeCSPAT00800OutBlock1,
-		"예상하지 못한 길이 : '%v", len(b))
+		"예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(CSPAT00800OutBlock1)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
@@ -117,7 +117,7 @@ func NewCSPAT00800_현물_취소_주문_응답2(b []byte) (s *CSPAT00800_S현물
 	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { s = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeCSPAT00800OutBlock2,
-		"예상하지 못한 길이 : '%v", len(b))
+		"예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(CSPAT00800OutBlock2)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.

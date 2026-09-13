@@ -131,7 +131,7 @@ func F2주문_응답_구분(값 [8]byte) T주문_응답_구분 {
 	case "SONAS100":
 		return P주문_응답_체결_확인
 	default:
-		panic(lb.New에러("예상하지 못한 값 : '%v", 값))
+		panic(lb.New에러("예상하지 못한 값 : '%v'", 값))
 	}
 }
 

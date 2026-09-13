@@ -121,7 +121,7 @@ func NewCSPAT00600InBlock(질의값 *CSPAT00600_현물_정상_주문_질의값, 
 func NewCSPAT00600_현물_정상_주문_응답(b []byte) (값 *CSPAT00600_현물_정상_주문_응답, 에러 error) {
 	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
-	lb.F조건부_패닉(len(b) != SizeCSPAT00600OutBlock, "예상하지 못한 길이 : '%v", len(b))
+	lb.F조건부_패닉(len(b) != SizeCSPAT00600OutBlock, "예상하지 못한 길이 : '%v'", len(b))
 
 	값 = new(CSPAT00600_현물_정상_주문_응답)
 
@@ -134,7 +134,7 @@ func NewCSPAT00600_현물_정상_주문_응답(b []byte) (값 *CSPAT00600_현물
 func NewCSPAT00600_현물_정상_주문_응답1(b []byte) (s *CSPAT00600_현물_정상_주문_응답1, 에러 error) {
 	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { s = nil }}.S실행()
 
-	lb.F조건부_패닉(len(b) != SizeCSPAT00600OutBlock1, "예상하지 못한 길이 : '%v", len(b))
+	lb.F조건부_패닉(len(b) != SizeCSPAT00600OutBlock1, "예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(CSPAT00600OutBlock1)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
@@ -176,7 +176,7 @@ func NewCSPAT00600_현물_정상_주문_응답2(b []byte) (s *CSPAT00600_현물_
 	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { s = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeCSPAT00600OutBlock2,
-		"예상하지 못한 길이 : '%v", len(b))
+		"예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(CSPAT00600OutBlock2)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.

@@ -122,7 +122,7 @@ func NewT1305InBlock(질의값 *T1305_현물_기간별_조회_질의값) (g *T13
 func NewT1305_현물_기간별_조회_응답_헤더(b []byte) (값 *T1305_현물_기간별_조회_응답_헤더, 에러 error) {
 	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
-	lb.F조건부_패닉(len(b) != SizeT1305OutBlock, "예상하지 못한 길이 : '%v", len(b))
+	lb.F조건부_패닉(len(b) != SizeT1305OutBlock, "예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(T1305OutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.

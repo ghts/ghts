@@ -91,8 +91,8 @@ func NewT0425InBlock(질의값 *T0425_현물_체결_미체결_조회_질의값, 
 func NewT0425_현물_체결_미체결_조회_응답(b []byte) (s *T0425_현물_체결_미체결_조회_응답, 에러 error) {
 	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { s = nil }}.S실행()
 
-	lb.F조건부_패닉(len(b) < SizeT0425OutBlock+5, "예상하지 못한 길이 : '%v", len(b))
-	lb.F조건부_패닉((len(b)-(SizeT0425OutBlock+5))%SizeT0425OutBlock1 != 0, "예상하지 못한 길이 : '%v", len(b))
+	lb.F조건부_패닉(len(b) < SizeT0425OutBlock+5, "예상하지 못한 길이 : '%v'", len(b))
+	lb.F조건부_패닉((len(b)-(SizeT0425OutBlock+5))%SizeT0425OutBlock1 != 0, "예상하지 못한 길이 : '%v'", len(b))
 
 	s = new(T0425_현물_체결_미체결_조회_응답)
 	s.M헤더 = lb.F확인2(NewT0425_현물_체결_미체결_조회_응답_헤더(b[:SizeT0425OutBlock]))
@@ -104,7 +104,7 @@ func NewT0425_현물_체결_미체결_조회_응답(b []byte) (s *T0425_현물_�
 func NewT0425_현물_체결_미체결_조회_응답_헤더(b []byte) (s *T0425_현물_체결_미체결_조회_응답_헤더, 에러 error) {
 	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { s = nil }}.S실행()
 
-	lb.F조건부_패닉(len(b) != SizeT0425OutBlock, "예상하지 못한 길이 : '%v", len(b))
+	lb.F조건부_패닉(len(b) != SizeT0425OutBlock, "예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(T0425OutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
