@@ -138,7 +138,6 @@ func New현물_주문_거부(b []byte) (값 *S현물_주문_응답_실시간_정
 	값.M종목코드 = 종목코드
 	값.M수량 = lb.F확인2(lb.F2정수64(g.Rjtqty))
 	값.M잔량 = lb.F확인2(lb.F2정수64(g.Unercqty))
-	lb.F문자열_출력("%v", lb.F2문자열(g.Exectime))
 	값.M시각 = 시각
 
 	return 값, nil
