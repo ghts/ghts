@@ -210,6 +210,7 @@ func NewCSPAQ12300_현물계좌_잔고내역_조회_응답_헤더1(b []byte) (�
 	return 값, nil
 }
 
+// 헤더2 데이터 미제공되므로 관련 코드 모두 주석 처리. (DevCenter 확인 완료)
 //func NewCSPAQ12300_현물계좌_잔고내역_조회_응답_헤더2(b []byte) (값 *CSPAQ12300_현물계좌_잔고내역_응답2, 에러 error) {
 //	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 //
