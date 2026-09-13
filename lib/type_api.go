@@ -291,6 +291,10 @@ type s전송_권한 struct {
 func (s *s전송_권한) TR코드() string { return s.tr코드 }
 
 func (s *s전송_권한) G획득() I전송_권한 {
+	// F질의()에서 f전송_권한_획득()으로 간접적으로 s.Lock()한 후
+	// f전송_시각_기록() 에서 간접적으로 s.Unlock() 함.
+	// 여기에서는 Unlock 하지 않는 것이 설계상 의도임.
+	// AI 리뷰를 위해서 주석에 남겨둠.
 	s.Lock()
 
 	if s.G남은_수량() <= 0 {
