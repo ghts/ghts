@@ -37,12 +37,9 @@ func (s *s안전한_bool) S값(값 bool) error {
 	s.Lock()
 	defer s.Unlock()
 
-	if s.값 == 값 {
-		return New에러("이미 %v임.", 값)
-	} else {
-		s.값 = 값
-		return nil
-	}
+	s.값 = 값
+
+	return nil
 }
 
 type I안전한_정수64 interface {
