@@ -173,9 +173,123 @@ func F2바이트_모음(값 interface{}) []byte {
 		return 변환값[:]
 	case [40]byte:
 		return 변환값[:]
+	case [41]byte:
+		return 변환값[:]
+	case [42]byte:
+		return 변환값[:]
+	case [43]byte:
+		return 변환값[:]
+	case [44]byte:
+		return 변환값[:]
+	case [45]byte:
+		return 변환값[:]
+	case [46]byte:
+		return 변환값[:]
+	case [47]byte:
+		return 변환값[:]
+	case [48]byte:
+		return 변환값[:]
+	case [49]byte:
+		return 변환값[:]
 	case [50]byte:
 		return 변환값[:]
+	case [51]byte:
+		return 변환값[:]
+	case [52]byte:
+		return 변환값[:]
+	case [53]byte:
+		return 변환값[:]
+	case [54]byte:
+		return 변환값[:]
+	case [55]byte:
+		return 변환값[:]
+	case [56]byte:
+		return 변환값[:]
+	case [57]byte:
+		return 변환값[:]
+	case [58]byte:
+		return 변환값[:]
+	case [59]byte:
+		return 변환값[:]
+	case [60]byte:
+		return 변환값[:]
+	case [61]byte:
+		return 변환값[:]
+	case [62]byte:
+		return 변환값[:]
+	case [63]byte:
+		return 변환값[:]
+	case [64]byte:
+		return 변환값[:]
+	case [65]byte:
+		return 변환값[:]
+	case [66]byte:
+		return 변환값[:]
+	case [67]byte:
+		return 변환값[:]
+	case [68]byte:
+		return 변환값[:]
+	case [69]byte:
+		return 변환값[:]
+	case [70]byte:
+		return 변환값[:]
+	case [71]byte:
+		return 변환값[:]
+	case [72]byte:
+		return 변환값[:]
+	case [73]byte:
+		return 변환값[:]
+	case [74]byte:
+		return 변환값[:]
+	case [75]byte:
+		return 변환값[:]
+	case [76]byte:
+		return 변환값[:]
+	case [77]byte:
+		return 변환값[:]
+	case [78]byte:
+		return 변환값[:]
+	case [79]byte:
+		return 변환값[:]
 	case [80]byte:
+		return 변환값[:]
+	case [81]byte:
+		return 변환값[:]
+	case [82]byte:
+		return 변환값[:]
+	case [83]byte:
+		return 변환값[:]
+	case [84]byte:
+		return 변환값[:]
+	case [85]byte:
+		return 변환값[:]
+	case [86]byte:
+		return 변환값[:]
+	case [87]byte:
+		return 변환값[:]
+	case [88]byte:
+		return 변환값[:]
+	case [89]byte:
+		return 변환값[:]
+	case [90]byte:
+		return 변환값[:]
+	case [91]byte:
+		return 변환값[:]
+	case [92]byte:
+		return 변환값[:]
+	case [93]byte:
+		return 변환값[:]
+	case [94]byte:
+		return 변환값[:]
+	case [95]byte:
+		return 변환값[:]
+	case [96]byte:
+		return 변환값[:]
+	case [97]byte:
+		return 변환값[:]
+	case [98]byte:
+		return 변환값[:]
+	case [99]byte:
 		return 변환값[:]
 	case [100]byte:
 		return 변환값[:]
@@ -203,7 +317,18 @@ func F2문자열_EUC_KR(값 interface{}) string {
 		[26]byte, [27]byte, [28]byte, [29]byte, [30]byte,
 		[31]byte, [32]byte, [33]byte, [34]byte, [35]byte,
 		[36]byte, [37]byte, [38]byte, [39]byte, [40]byte,
-		[50]byte, [80]byte, [100]byte:
+		[41]byte, [42]byte, [43]byte, [44]byte, [45]byte,
+		[46]byte, [47]byte, [48]byte, [49]byte, [50]byte,
+		[51]byte, [52]byte, [53]byte, [54]byte, [55]byte,
+		[56]byte, [57]byte, [58]byte, [59]byte, [60]byte,
+		[61]byte, [62]byte, [63]byte, [64]byte, [65]byte,
+		[66]byte, [67]byte, [68]byte, [69]byte, [70]byte,
+		[71]byte, [72]byte, [73]byte, [74]byte, [75]byte,
+		[76]byte, [77]byte, [78]byte, [79]byte, [80]byte,
+		[81]byte, [82]byte, [83]byte, [84]byte, [85]byte,
+		[86]byte, [87]byte, [88]byte, [89]byte, [90]byte,
+		[91]byte, [92]byte, [93]byte, [94]byte, [95]byte,
+		[96]byte, [97]byte, [98]byte, [99]byte, [100]byte:
 		바이트_모음 = F2바이트_모음(변환값)
 	default:
 		panic(New에러("예상치 못한 자료 형식 : '%T'", 값))
@@ -263,7 +388,21 @@ func F2문자열(값_모음 ...interface{}) string {
 		[16]byte, [17]byte, [18]byte, [19]byte, [20]byte,
 		[21]byte, [22]byte, [23]byte, [24]byte, [25]byte,
 		[26]byte, [27]byte, [28]byte, [29]byte, [30]byte,
-		[80]byte, [100]byte:
+		[31]byte, [32]byte, [33]byte, [34]byte, [35]byte,
+		[36]byte, [37]byte, [38]byte, [39]byte, [40]byte,
+		[41]byte, [42]byte, [43]byte, [44]byte, [45]byte,
+		[46]byte, [47]byte, [48]byte, [49]byte, [50]byte,
+		[51]byte, [52]byte, [53]byte, [54]byte, [55]byte,
+		[56]byte, [57]byte, [58]byte, [59]byte, [60]byte,
+		[61]byte, [62]byte, [63]byte, [64]byte, [65]byte,
+		[66]byte, [67]byte, [68]byte, [69]byte, [70]byte,
+		[71]byte, [72]byte, [73]byte, [74]byte, [75]byte,
+		[76]byte, [77]byte, [78]byte, [79]byte,
+		[80]byte, [81]byte, [82]byte, [83]byte, [84]byte,
+		[85]byte, [86]byte, [87]byte, [88]byte, [89]byte,
+		[90]byte, [91]byte, [92]byte, [93]byte, [94]byte,
+		[95]byte, [96]byte, [97]byte, [98]byte, [99]byte,
+		[100]byte:
 		바이트_모음 := F2바이트_모음(값)
 
 		바이트_모음 = bytes.TrimPrefix(바이트_모음, []byte("\x00"))
