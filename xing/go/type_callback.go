@@ -97,15 +97,14 @@ func (s *DLL32_콜백_저장소) S추가(식별번호 int, TR코드 string) chan
 }
 
 func (s *DLL32_콜백_저장소) S회신(식별번호 int) {
-	if 대기_항목 := s.G값(식별번호); 대기_항목 == nil {
-		lb.New에러("nil 대기 항목.")
-	} else {
+	if 대기_항목 := s.G값(식별번호); 대기_항목 != nil {
 		대기_항목.S회신()
 	}
 
 	s.Lock()
+	defer s.Unlock()
+
 	delete(s.저장소, 식별번호)
-	s.Unlock()
 }
 
 func (s *DLL32_콜백_저장소) s정리() {
