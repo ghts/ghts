@@ -1,7 +1,6 @@
 package dll32
 
 import (
-	"strings"
 	"syscall"
 
 	lb "github.com/ghts/ghts/lib"
