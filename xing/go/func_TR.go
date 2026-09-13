@@ -1163,7 +1163,7 @@ func F질의_단일TR[T응답값 any](질의값 lb.I질의값, 옵션_모음 ...
 		break
 	case error:
 		if F접속_끊김_여부() {
-			return nil, nil
+			return nil, lb.New에러("F질의_단일TR() : 접속 끊김")
 		}
 
 		lb.F에러_출력(변환값)
