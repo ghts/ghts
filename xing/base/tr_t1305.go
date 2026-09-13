@@ -153,12 +153,12 @@ func NewT1305_현물_기간별_조회_응답_반복값_모음(b []byte) (값 *T1
 		lb.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 		일자_문자열_원본 := lb.F2문자열(g.Date)
-		버퍼 := new(bytes.Buffer)
-		버퍼.WriteString(일자_문자열_원본[0:4])
-		버퍼.WriteString("/")
-		버퍼.WriteString(일자_문자열_원본[4:6])
-		버퍼.WriteString("/")
-		버퍼.WriteString(일자_문자열_원본[6:])
+		일자_문자열_버퍼 := new(bytes.Buffer)
+		일자_문자열_버퍼.WriteString(일자_문자열_원본[0:4])
+		일자_문자열_버퍼.WriteString("/")
+		일자_문자열_버퍼.WriteString(일자_문자열_원본[4:6])
+		일자_문자열_버퍼.WriteString("/")
+		일자_문자열_버퍼.WriteString(일자_문자열_원본[6:])
 		일자_문자열 := 버퍼.String()
 
 		s := new(T1305_현물_기간별_조회_응답_반복값)
