@@ -39,6 +39,12 @@ func F이동_범위_최소값(값_모음 []float64, 윈도우_크기 int) []floa
 }
 
 func F단순_이동_평균(값_모음 []float64, 윈도우_크기 int) []float64 {
+	if 윈도우_크기 <= 0 {
+		panic(lb.New에러("F단순_이동_평균 : 윈도우 크기 0"))
+	} else if len(값_모음) == 0 {
+		panic(lb.New에러("F단순_이동_평균 : len(값_모음) 0"))
+	}
+
 	윈도우_크기 = lb.F최소값(윈도우_크기, len(값_모음))
 
 	이동_평균_모음 := make([]float64, len(값_모음))
