@@ -582,7 +582,7 @@ func New코스피_ETF_NAV(b []byte) (값 *S코스피_ETF_NAV, 에러 error) {
 	값.M누적거래량 = lb.F확인2(lb.F2실수(g.Volume))
 	값.M현재가NAV차이 = lb.F확인2(lb.F2실수(g.Navdiff))
 	값.NAV = lb.F확인2(lb.F2실수(g.Nav))
-	값.NAV전일대비 = lb.F확인2(lb.F2실수(g.Navdiff))
+	값.NAV전일대비 = lb.F확인2(lb.F2실수(g.Navchange))
 	값.M추적오차 = lb.F2실수_단순형_공백은_0(g.Crate)
 	값.M괴리 = lb.F2실수_단순형_공백은_0(g.Grate)
 	값.M지수 = lb.F2실수_단순형_공백은_0(g.Jisu)
