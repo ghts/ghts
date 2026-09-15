@@ -108,22 +108,20 @@ func (s *DLL32_콜백_저장소) S회신(식별번호 int) {
 }
 
 func (s *DLL32_콜백_저장소) s정리() {
-	s.RLock()
-	최근_정리_시간 := s.최근_정리_시간
-	s.RUnlock()
+	s.Lock()
+	defer s.Unlock()
 
 	지금 := lb.F지금()
 
-	if 지금.Sub(최근_정리_시간) < lb.P1분 {
+	if 지금.Sub(s.최근_정리_시간) < lb.P1분 {
 		return // 정리한 지 얼마 안 되었음.
 	}
-
-	s.Lock()
-	defer s.Unlock()
 
 	for idx, 대기_항목 := range s.저장소 {
 		if 지금.Sub(대기_항목.생성된_시각) > lb.P40초 {
 			delete(s.저장소, idx)
 		}
 	}
+
+	s.최근_정리_시간 = 지금
 }
