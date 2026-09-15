@@ -633,7 +633,7 @@ func TrT1902_ETF_시간별_추이(종목코드 string, 추가_옵션_모음 ...i
 		}
 
 		for i, 응답값 := range 응답값_모음 {
-			if 응답값.M시각.Equal(nil시각) && i != 0 && !응답값_모음_임시[i-1].M시각.Equal(nil시각) {
+			if 응답값.M시각.Equal(nil시각) && i != 0 && !응답값_모음[i-1].M시각.Equal(nil시각) {
 				응답값.M시각 = 응답값_모음[i-1].M시각.Add(lb.P10초)
 			}
 		}
