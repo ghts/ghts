@@ -227,7 +227,7 @@ func F전일_당일_설정() (에러 error) {
 }
 
 func f전일_당일_설정() (에러 error) {
-	lb.S예외처리{M에러: &에러}.S실행()
+	defer lb.S예외처리{M에러: &에러}.S실행()
 
 	const 수량 = 3
 
