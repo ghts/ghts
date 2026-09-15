@@ -285,41 +285,47 @@ func DLL32_종료() (에러 error) {
 }
 
 func F종료() {
-	defer lb.S예외처리{}.S실행()
+	func() {
+		defer lb.S예외처리{}.S실행()
 
-	종료_잠금.Lock()
-	defer func() {
-		종료_시각.S값(lb.F지금())
-		종료_잠금.Unlock()
-	}()
+		종료_잠금.Lock()
+		defer func() {
+			종료_시각.S값(lb.F지금())
+			종료_잠금.Unlock()
+		}()
 
-	if lb.F지금().Before(종료_시각.G값().Add(lb.P3분)) {
-		return // 중복 실행 방지.
-	}
+		if lb.F지금().Before(종료_시각.G값().Add(lb.P3분)) {
+			return // 중복 실행 방지.
+		}
 
-	DLL32_종료()
-	lb.F공통_종료_채널_닫기()
-	F소켓_정리()
+		DLL32_종료()
+		lb.F공통_종료_채널_닫기()
+		F소켓_정리()
 
-	타임_아웃 := time.After(lb.P1분)
+		타임_아웃 := time.After(lb.P1분)
 
-	select {
-	case <-Ch모니터링_루틴_종료:
-		//lb.F문자열_출력("모니터링 루틴 종료.")
-	case <-타임_아웃:
-		//lb.F문자열_출력("종료 타임아웃.")
-	}
-
-	for i := 0; i < V콜백_도우미_수량; i++ {
 		select {
-		case <-Ch콜백_도우미_종료:
-			//lb.F문자열_출력("콜백 루틴 %v/%v 종료.", i+1, V콜백_도우미_수량)
+		case <-Ch모니터링_루틴_종료:
+			//lb.F문자열_출력("모니터링 루틴 종료.")
 		case <-타임_아웃:
 			//lb.F문자열_출력("종료 타임아웃.")
 		}
-	}
+
+		for i := 0; i < V콜백_도우미_수량; i++ {
+			select {
+			case <-Ch콜백_도우미_종료:
+				//lb.F문자열_출력("콜백 루틴 %v/%v 종료.", i+1, V콜백_도우미_수량)
+			case <-타임_아웃:
+				//lb.F문자열_출력("종료 타임아웃.")
+			}
+		}
+	}()
 
 	os.Exit(0)
+}
+
+func f종료_도우미() {
+
 }
 
 func F소켓_정리() {
