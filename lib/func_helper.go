@@ -696,11 +696,11 @@ func F파일_검색(검색_시작_디렉토리, 파일명 string) (string, error
 	go filepath.Walk(검색_시작_디렉토리, func(파일경로 string, 파일정보 os.FileInfo, 에러 error) error {
 		switch {
 		case 에러 != nil:
-			if strings.Contains(에러.Error(), "Access is denied.") {
+			if os.IsPermission(에러) { // OS 및 언어에 무관한 파일 권한 에러 판별
 				return nil
 			}
 
-			F문자열_출력("예상하지 못한 에러 발생 : %v\n%v", 파일정보.Name(), 에러)
+			F문자열_출력("예상하지 못한 에러 발생 : %v\n%v", 파일경로, 에러)
 			ch응답 <- 에러
 			return 에러
 		case 파일정보.IsDir():
@@ -963,10 +963,11 @@ func GOROOT() (GOROOT string) {
 			GOROOT = `D:\Program Files\Go`
 		} else if F파일_존재함(`E:\Program Files\Go\bin\go.exe`) {
 			GOROOT = `E:\Program Files\Go`
+		} else if F파일_존재함(`/usr/local/go/bin/go`) {
+			GOROOT = `/usr/local/go/bin/go`
 		} else {
 			GO실행화일_경로 := F확인2(F파일_검색(`C:\`, "go.exe"))
 			GO실행화일_경로 = strings.TrimSpace(GO실행화일_경로)
-
 			GOROOT = strings.Replace(GO실행화일_경로, `\bin\go.exe`, "", -1)
 		}
 	}
