@@ -138,6 +138,8 @@ func F종목_정보_설정() (에러 error) {
 		len(종목모음_ETF_ETN) > 0 &&
 		len(종목모음_전체) > 0 &&
 		len(종목맵_전체) > 0 &&
+		len(종목맵_코스피) > 0 &&
+		len(종목맵_코스닥) > 0 &&
 		len(기준가_맵) > 0 &&
 		len(하한가_맵) > 0 &&
 		종목모음_설정일.G값().Equal(lb.F금일()) {
@@ -155,6 +157,8 @@ func F종목_정보_설정() (에러 error) {
 			특수_종목_맵 = make(map[string]*lb.S종목)
 			종목모음_전체 = make([]*lb.S종목, 0)
 			종목맵_전체 = make(map[string]*lb.S종목)
+			종목맵_코스피 = make(map[string]*lb.S종목)
+			종목맵_코스닥 = make(map[string]*lb.S종목)
 			기준가_맵 = make(map[string]int64)
 			하한가_맵 = make(map[string]int64)
 			종목모음_설정일 = lb.New안전한_시각(time.Time{})
@@ -170,6 +174,8 @@ func F종목_정보_설정() (에러 error) {
 	특수_종목_맵 = make(map[string]*lb.S종목)
 	종목모음_전체 = make([]*lb.S종목, 0)
 	종목맵_전체 = make(map[string]*lb.S종목)
+	종목맵_코스피 = make(map[string]*lb.S종목)
+	종목맵_코스닥 = make(map[string]*lb.S종목)
 	기준가_맵 = make(map[string]int64)
 	하한가_맵 = make(map[string]int64)
 
