@@ -881,13 +881,7 @@ func JSON_파일_읽기(파일명 string, 반환값 interface{}) (에러 error) 
 func CSV쓰기(레코드_모음 [][]string, 파일명 string, 파일_잠금 sync.Locker) (에러 error) {
 	defer S예외처리{M에러: &에러}.S실행()
 
-	switch 잠금 := 파일_잠금.(type) {
-	case nil: // 아무 것도 하지 않음.
-		break
-	case *sync.RWMutex: // RWMutex이면 읽기 잠금.
-		잠금.RLock()
-		defer 잠금.RUnlock()
-	default:
+	if 파일_잠금 != nil {
 		파일_잠금.Lock()
 		defer 파일_잠금.Unlock()
 	}
