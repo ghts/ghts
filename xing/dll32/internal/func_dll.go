@@ -224,6 +224,9 @@ func F질의(TR코드 string, c데이터 unsafe.Pointer, 길이 int,
 		uintptr(타임아웃/time.Second),
 		0, 0)
 
+	// MS윈도우 기준 에러 발생 시 '질의ID = 0', 에러_번호(syscall.Errno)에 Win32 OS의 GetLastError() 결과값이 채워짐.
+	// 유닉스/리눅스/맥OS 기준 '질의ID = -1'
+	// MS윈도우 전용 증권사 API를 호출하므로 MS 윈도우 기준으로 에러 처리.
 	if 에러_번호 != 0 {
 		return int(질의ID), lb.New에러with출력("F질의() 에러 발생. 에러 코드 : '%v'", 에러_번호)
 	}
