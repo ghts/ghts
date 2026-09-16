@@ -618,9 +618,15 @@ func f로그_파일_정리() {
 	지금 := F지금()
 
 	for _, 파일 := range 파일_모음 {
+		if 파일 == nil {
+			continue
+		}
+
 		파일명 := 파일.Name()
 
-		if !strings.HasPrefix(파일명, "log_") || strings.HasSuffix(파일명, ".txt") {
+		if !strings.HasPrefix(파일명, "log_") ||
+			!strings.HasSuffix(파일명, ".txt") ||
+			len(파일명) < 8 {
 			continue
 		}
 
