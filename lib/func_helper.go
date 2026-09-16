@@ -530,7 +530,7 @@ func F종류(값 interface{}) reflect.Kind {
 }
 
 func F올바른_주소_문자열(주소 string) bool {
-	const 주소_정규식 = `tcp://[0-9]+.[0-9]+.[0-9]+.[0-9]+:[0-9]+`
+	const 주소_정규식 = `tcp://[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+:[0-9]+`
 	ok, 에러 := regexp.MatchString(주소_정규식, 주소)
 
 	switch {
