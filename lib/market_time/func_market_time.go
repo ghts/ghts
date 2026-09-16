@@ -82,6 +82,7 @@ func F금일_보정_시각(시, 분, 초 int) time.Time {
 	return lb.F금일().Add(f임시_지연_시간() + time.Duration(시)*lb.P1시간 + time.Duration(분)*lb.P1분 + time.Duration(초)*lb.P1초)
 }
 
+// f임시_지연_시간 : 수능 등 개장 지연 이벤트 대응 용도
 func f임시_지연_시간() time.Duration {
 	if 지금 := time.Now(); 지금.Year() == 2024 && 지금.Month() == time.November && 지금.Day() == 16 {
 		return time.Hour // 2024년 11월 16일 수능으로 인해 개장 1시간 순연.
