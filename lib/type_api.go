@@ -262,7 +262,6 @@ func (s *S질의값_취소_주문) String() string {
 	return F2문자열("%v %v %v %v %v", s.M구분, s.M코드, s.M종목코드, s.M계좌번호, s.M주문수량)
 }
 
-// 전송 권한 관련
 type I전송_권한 interface {
 	I_TR코드
 	G획득() I전송_권한
