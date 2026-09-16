@@ -16,9 +16,25 @@ func F전일() time.Time {
 	return xt.F전일()
 }
 
+// f포맷_연_월_일_요일_포함
+// Go 문법상
+// '1'은 항상 월 토큰,
+// '2'는 항상 일/년 토큰,
+// '6'은 항상 년 토큰,
+// 'Jan'은 항상 월 토큰,
+// 'Mon'은 항상 요일 토큰 임.
+// 이 검사만으로도 '연/월/일/요일'을 정확히 탐지 가능
+func f포맷_연_월_일_요일_포함(포맷 string) bool {
+	return strings.Contains(포맷, "1") ||
+		strings.Contains(포맷, "2") ||
+		strings.Contains(포맷, "6") ||
+		strings.Contains(포맷, "Jan") ||
+		strings.Contains(포맷, "Mon")
+}
+
 func F2전일_시각(포맷 string, 값 interface{}) (time.Time, error) {
-	if strings.Contains(포맷, "2") {
-		return time.Time{}, lb.New에러("포맷에 이미 날짜가 포함되어 있습니다. %v", 포맷)
+	if f포맷_연_월_일_요일_포함(포맷) {
+		return time.Time{}, lb.New에러("포맷에 날짜 구성 요소(년/월/일/요일)가 포함되어 있습니다. 이 함수는 시각(시:분:초)만 사용할 수 있습니다. 포맷: %v", 포맷)
 	}
 
 	시각, 에러 := lb.F2포맷된_시각(포맷, 값)
@@ -35,8 +51,8 @@ func F2전일_시각(포맷 string, 값 interface{}) (time.Time, error) {
 }
 
 func F2당일_시각(포맷 string, 값 interface{}) (time.Time, error) {
-	if strings.Contains(포맷, "2") {
-		return time.Time{}, lb.New에러("포맷에 이미 날짜가 포함되어 있습니다. %v", 포맷)
+	if f포맷_연_월_일_요일_포함(포맷) {
+		return time.Time{}, lb.New에러("포맷에 날짜 구성 요소(년/월/일/요일)가 포함되어 있습니다. 이 함수는 시각(시:분:초)만 사용할 수 있습니다. 포맷: %v", 포맷)
 	}
 
 	시각, 에러 := lb.F2포맷된_시각(포맷, 값)
