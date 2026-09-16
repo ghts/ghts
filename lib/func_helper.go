@@ -571,17 +571,17 @@ func F슬라이스_복사(값, 에러_발생시_반환값 interface{}) interface
 
 	switch {
 	case 리플렉션_값.IsNil():
-		New에러with출력("nil값. '%v'", 값)
+		F에러_출력("nil값. '%v'", 값)
 		return 에러_발생시_반환값
 	case !리플렉션_값.IsValid():
-		New에러with출력("원본 슬라이스가 유효하지 않은 zero값. '%v'", 값)
+		F에러_출력("원본 슬라이스가 유효하지 않은 zero값. '%v'", 값)
 		return 에러_발생시_반환값
 	case 리플렉션_값.Kind() != reflect.Slice:
-		New에러with출력("원본이 슬라이스가 아님. '%v'", 값)
+		F에러_출력("원본이 슬라이스가 아님. '%v'", 값)
 		return 에러_발생시_반환값
 	case 리플렉션_값.Len() == 0:
 		return 값
-		//New에러with출력("원본 슬라이스 길이가 0임. '%v'", M값)
+		//F에러_출력("원본 슬라이스 길이가 0임. '%v'", M값)
 		//return 에러_발생시_반환값
 	}
 
