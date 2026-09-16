@@ -190,9 +190,9 @@ type S질의값_복수_종목 struct {
 func (s *S질의값_복수_종목) G종목코드_모음() []string {
 	if len(s.M종목코드_모음) == 0 {
 		return nil
-	} else {
-		return F슬라이스_복사(s.M종목코드_모음, nil).([]string)
 	}
+
+	return F슬라이스_복사(s.M종목코드_모음, nil).([]string)
 }
 
 func (s *S질의값_복수_종목) G전체_종목코드() string {
@@ -296,7 +296,9 @@ func (s *s전송_권한) G획득() I전송_권한 {
 	// 여기에서는 Unlock 하지 않는 것이 설계상 의도임.
 	s.Lock()
 
-	if s.G남은_수량() <= 0 {
+	if s.G남은_수량() <= 0 &&
+		s.전송_기록_저장소 != nil &&
+		s.전송_기록_저장소.Front() != nil {
 		전송_시각 := s.전송_기록_저장소.Front().Value.(time.Time)
 		대기_시간 := s.간격 - F지금().Sub(전송_시각)
 
