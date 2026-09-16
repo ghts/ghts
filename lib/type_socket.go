@@ -43,14 +43,13 @@ type s소켓_저장소 struct {
 	M생성함수 func() (I소켓_질의, error)
 }
 
-var 생성_횟수 int64
+var 소켓_생성_실패_횟수 int64
 
 func (s *s소켓_저장소) G소켓() I소켓_질의 {
 	select {
 	case <-Ch공통_종료():
 		return nil
 	case 소켓 := <-s.M저장소:
-
 		return 소켓
 	default:
 		s.Lock()
@@ -58,17 +57,17 @@ func (s *s소켓_저장소) G소켓() I소켓_질의 {
 
 		for i := 0; i < 3; i++ {
 			if i소켓, 에러 := s.M생성함수(); 에러 == nil {
-				// '생성_횟수++'의 atomic 표현
-				atomic.AddInt64(&생성_횟수, 1)
-
 				return i소켓
 			}
 
-			F대기(P1초)
-		}
+			// '소켓_생성_실패_횟수++'의 atomic 표현
+			atomic.AddInt64(&소켓_생성_실패_횟수, 1)
 
-		// 'atomic.LoadInt64()'는 int64의 atomic 읽기
-		F문자열_출력("%v번째 소켓 생성 실패", atomic.LoadInt64(&생성_횟수))
+			// 'atomic.LoadInt64()'는 int64의 atomic 읽기
+			F문자열_출력("%v번째 소켓 생성 실패", atomic.LoadInt64(&소켓_생성_실패_횟수))
+
+			F대기(P300밀리초)
+		}
 
 		return nil
 	}
