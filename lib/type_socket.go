@@ -52,11 +52,8 @@ func (s *s소켓_저장소) G소켓() I소켓_질의 {
 	case 소켓 := <-s.M저장소:
 		return 소켓
 	default:
-		s.Lock()
-		defer s.Unlock()
-
 		for i := 0; i < 3; i++ {
-			if i소켓, 에러 := s.M생성함수(); 에러 == nil {
+			if i소켓, 에러 := s.g소켓(); 에러 == nil {
 				return i소켓
 			}
 
@@ -66,11 +63,18 @@ func (s *s소켓_저장소) G소켓() I소켓_질의 {
 			// 'atomic.LoadInt64()'는 int64의 atomic 읽기
 			F문자열_출력("%v번째 소켓 생성 실패", atomic.LoadInt64(&소켓_생성_실패_횟수))
 
-			F대기(P300밀리초)
+			F대기(P1초)
 		}
 
 		return nil
 	}
+}
+
+func (s *s소켓_저장소) g소켓() (I소켓_질의, error) {
+	s.Lock()
+	defer s.Unlock()
+
+	return s.M생성함수()
 }
 
 func (s *s소켓_저장소) S회수(소켓 I소켓_질의) {
