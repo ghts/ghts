@@ -34,6 +34,7 @@ var (
 	tr코드별_전송_제한_초당_1회_미만 = make(map[string]lb.I전송_권한)
 	tr코드별_전송_제한_1초       = make(map[string]lb.I전송_권한)
 	tr코드별_전송_제한_10분      = make(map[string]lb.I전송_권한)
+	전송_제한_잠금             sync.RWMutex
 
 	주문_응답_구독_중 = lb.New안전한_bool(false)
 

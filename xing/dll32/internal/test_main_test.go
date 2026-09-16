@@ -33,7 +33,7 @@ func f테스트_준비() error {
 	lb.F확인2(xt.F로그인_설정_화일_읽기())
 	F초기화()
 	xing.F접속_로그인()
-	xing.F초기화_TR전송_제한()
+	xing.F전송_제한_초기화()
 
 	return nil
 }
