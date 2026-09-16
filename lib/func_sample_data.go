@@ -122,24 +122,15 @@ func F임의_범위_이내_실수64값(최소값, 최대값 float64) float64 {
 }
 
 func F임의_시각() time.Time {
-	r := F임의값_생성기()
+	연도 := F임의_범위_이내_정수값(1970, 2170)
+	월 := time.Month(F임의_범위_이내_정수값(1, 12))
+	일 := F임의_범위_이내_정수값(1, 31)
+	시 := F임의_범위_이내_정수값(0, 23)
+	분 := F임의_범위_이내_정수값(0, 59)
+	초 := F임의_범위_이내_정수값(0, 59)
+	나노초 := F임의값_생성기().Intn(1000000000)
 
-	연도 := r.Intn(200) + 1970
-	월 := time.Month(r.Intn(12))
-	일 := r.Intn(31)
-	시 := r.Intn(24)
-	분 := r.Intn(60)
-	초 := r.Intn(60)
-	나노초 := r.Intn(1000000000)
-	//연도 := rand.IntN(200) + 1970
-	//월 := time.Month(rand.IntN(12))
-	//일 := rand.IntN(31)
-	//시 := rand.IntN(24)
-	//분 := rand.IntN(60)
-	//초 := rand.IntN(60)
-	//나노초 := rand.IntN(1000000000)
-
-	return time.Date(연도, 월, 일, 시, 분, 초, 나노초, time.Now().Location())
+	return time.Date(연도, 월, 일, 시, 분, 초, 나노초, P한국)
 }
 
 func F테스트용_임의_주소() T주소 {
