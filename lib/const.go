@@ -669,6 +669,8 @@ func (v T호가유형) String() string {
 		return "최유리 지정가"
 	case P호가_최우선_지정가:
 		return "최우선 지정가"
+	case P호가_중간가:
+		return "중간가"
 	case P호가_장전_시간외:
 		return "장전 시간외"
 	case P호가_장후_시간외:
