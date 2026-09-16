@@ -2,7 +2,6 @@ package lib
 
 import (
 	"bytes"
-	"encoding/binary"
 	"time"
 )
 
@@ -67,102 +66,6 @@ func (s *S종목) G복제본() *S종목 {
 	복제본.기준가 = s.기준가
 
 	return 복제본
-}
-
-func (s *S종목) MarshalBinary() ([]byte, error) {
-	// TODO : 추가된 항목에 맞게 업데이트 필요.
-
-	속성 := make([]byte, 1)
-	속성[0] = uint8(s.시장_구분)
-
-	코드_길이 := make([]byte, 2)
-	binary.LittleEndian.PutUint16(코드_길이, uint16(len(s.코드))) // 인텔 및 AMD 계열 CPU는 리틀 엔디언
-
-	이름_길이 := make([]byte, 2)
-	binary.LittleEndian.PutUint16(이름_길이, uint16(len(s.이름)))
-
-	값_모음 := [][]byte{속성, 코드_길이, 이름_길이, []byte(s.코드), []byte(s.이름)}
-	버퍼 := new(bytes.Buffer)
-
-	for _, 값 := range 값_모음 {
-		if _, 에러 := 버퍼.Write(값); 에러 != nil {
-			return nil, 에러
-		}
-	}
-
-	return 버퍼.Bytes(), nil
-}
-
-func (s *S종목) UnmarshalBinary(값 []byte) (에러 error) {
-	defer func() {
-		if 에러 != nil {
-			s.코드 = ""
-			s.이름 = ""
-		}
-	}()
-
-	const 헤더_길이 = 5
-
-	switch {
-	case len(값) == 0:
-		return New에러with출력("비어있는 M값")
-	case len(값) < 헤더_길이:
-		return New에러with출력("너무 짧은 M값. %v", len(값))
-	}
-
-	속성 := 값[:1]
-	s.시장_구분 = T시장구분(속성[0])
-
-	코드_길이 := int(binary.LittleEndian.Uint16(값[1:3])) // 인텔 및 AMD 계열 CPU는 리틀 엔디언
-	이름_길이 := int(binary.LittleEndian.Uint16(값[3:5]))
-
-	총_길이 := 헤더_길이 + 코드_길이 + 이름_길이
-	if len(값) != 총_길이 {
-		return New에러with출력("무효한 M값. %v %v %v %v", len(값),
-			헤더_길이, 코드_길이, 이름_길이)
-	}
-
-	시작점 := 헤더_길이
-	s.코드 = string(값[시작점:(시작점 + 코드_길이)])
-
-	시작점 = 시작점 + 코드_길이
-	s.이름 = string(값[시작점:(시작점 + 이름_길이)])
-
-	return nil
-}
-
-func (s *S종목) MarshalText() ([]byte, error) {
-	버퍼 := new(bytes.Buffer)
-	버퍼.WriteString(`{"종목_코드": "`)
-	버퍼.WriteString(s.코드)
-	버퍼.WriteString(`", "종목_이름": "`)
-	버퍼.WriteString(s.이름)
-	버퍼.WriteString(`", "시장_구분": "`)
-	버퍼.WriteString(s.시장_구분.String())
-	버퍼.WriteString(`"}`)
-
-	return 버퍼.Bytes(), nil
-}
-
-func (s *S종목) UnmarshalText(값 []byte) error {
-	문자열 := string(값)
-
-	s.코드 = F정규식_검색(문자열, []string{`{"종목_코드": ".+", "종목_이름": "`})
-	s.코드 = s.코드[len(`{"종목_코드": "`):]
-	s.코드 = s.코드[:len(s.코드)-len(`", "종목_이름": "`)]
-
-	s.이름 = F정규식_검색(문자열, []string{`"종목_이름": ".+", "시장_구분": "`})
-	s.이름 = s.이름[len(`"종목_이름": "`):]
-	s.이름 = s.이름[:len(s.이름)-len(`", "시장_구분": "`)]
-
-	시장_구분 := F정규식_검색(문자열, []string{`"시장_구분": ".+"}`})
-	시장_구분 = 시장_구분[len(`"시장_구분": "`):]
-	시장_구분 = 시장_구분[:len(시장_구분)-len(`"}`)]
-	if 에러 := s.시장_구분.Parse(시장_구분); 에러 != nil {
-		return 에러
-	}
-
-	return nil
 }
 
 // New종목은 S종목을 생성합니다.
