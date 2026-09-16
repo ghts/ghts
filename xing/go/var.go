@@ -58,6 +58,7 @@ var (
 	기준가_맵        = make(map[string]int64)
 	하한가_맵        = make(map[string]int64)
 	계좌번호_모음      []string
+	계좌번호_모음_잠금   sync.Mutex
 	프로세스ID_DLL32 int
 )
 

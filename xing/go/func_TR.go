@@ -1215,9 +1215,15 @@ func F접속됨() (접속됨 bool, 에러 error) {
 }
 
 func F계좌번호_모음() (응답값 []string, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 계좌번호_모음 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() {
+		계좌번호_모음 = make([]string, 0)
+		응답값 = make([]string, 0)
+	}}.S실행()
 
-	if len(계좌번호_모음) != 0 {
+	계좌번호_모음_잠금.Lock()
+	defer 계좌번호_모음_잠금.Unlock()
+
+	if len(계좌번호_모음) > 0 {
 		return 계좌번호_모음, nil
 	}
 
