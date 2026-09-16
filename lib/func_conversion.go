@@ -688,6 +688,15 @@ func F정수2일자(일자_정수값 uint32) (일자 time.Time, 에러 error) {
 	return F2포맷된_일자("20060102", F2문자열(일자_정수값))
 }
 
+// f포맷_시간대_포함은 time.Parse 레이아웃이 시간대 토큰을 포함하는지 판별한다.
+// Go 시간대 토큰은 MST, Z, Z0700, Z07:00, Z07, -0700, -07:00, -07 (8종)뿐이며,
+// 3개의 접두 문자열만 검사하면 8종을 모두 포착하게 된다.
+func f포맷_시간대_포함(포맷 string) bool {
+	return strings.Contains(포맷, "Z") ||
+		strings.Contains(포맷, "MST") ||
+		strings.Contains(포맷, "-07")
+}
+
 func F2포맷된_시각(포맷 string, 값 interface{}) (time.Time, error) {
 	문자열 := ""
 
@@ -707,13 +716,14 @@ func F2포맷된_시각(포맷 string, 값 interface{}) (time.Time, error) {
 		return time.Time{}, 에러
 	}
 
-	if strings.Contains(포맷, "MST") {
-		시각 = 시각.Local() // 현지 시간으로 변환
+	if f포맷_시간대_포함(포맷) {
+		// 표시 시간대 KST로 변환, 값은 보존.
+		시각 = F2한국_시간(시각)
 	} else {
-		// 포맷에 시간대가 없으면 UTC임. 현지 시간대로 바꿈.
+		// 포맷에 시간대가 없으면 시간대 기본값인 UTC로 해석되므로, 시간대를 KST로 수동 지정.
 		시각 = time.Date(시각.Year(), 시각.Month(), 시각.Day(),
 			시각.Hour(), 시각.Minute(), 시각.Second(), 시각.Nanosecond(),
-			time.Now().Location())
+			P한국)
 	}
 
 	return 시각, 에러
