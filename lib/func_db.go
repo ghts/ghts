@@ -6,7 +6,13 @@ import (
 	"math/big"
 )
 
-func SQL실행(db *sql.DB, sql문자열 string, 추가_인수 ...interface{}) (id int64, 에러 error) {
+func SQL실행(db *sql.DB, sql문자열 string, 추가_인수 ...interface{}) (에러 error) {
+	_, 에러 = SQL실행_INSERT(db, sql문자열, 추가_인수...)
+
+	return 에러
+}
+
+func SQL실행_INSERT(db *sql.DB, sql문자열 string, 추가_인수 ...interface{}) (id int64, 에러 error) {
 	var tx *sql.Tx
 	var stmt *sql.Stmt
 
