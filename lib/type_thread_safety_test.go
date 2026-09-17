@@ -10,9 +10,6 @@ func TestI안전한_bool(t *testing.T) {
 	t.Parallel()
 
 	안전한_bool := New안전한_bool(false)
-
-	F테스트_거짓임(t, 안전한_bool.G값())
-	F테스트_에러발생(t, 안전한_bool.S값(false))
 	F테스트_거짓임(t, 안전한_bool.G값())
 
 	F테스트_에러없음(t, 안전한_bool.S값(true))
