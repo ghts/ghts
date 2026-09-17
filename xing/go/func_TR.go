@@ -1136,7 +1136,9 @@ func F질의(질의값 lb.I질의값, 옵션_모음 ...interface{}) (값 *lb.S�
 	소켓REQ := 소켓REQ_저장소.G소켓()
 	defer 소켓REQ_저장소.S회수(소켓REQ)
 
-	if len(옵션_모음) > 0 {
+	if 소켓REQ == nil {
+		return nil
+	} else if len(옵션_모음) > 0 {
 		소켓REQ.S옵션(옵션_모음...)
 	}
 
