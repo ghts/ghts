@@ -190,13 +190,13 @@ func (s *S바이트_변환) MarshalBinary() (바이트_모음 []byte, 에러 err
 	자료형_문자열_길이 := make([]byte, 2)
 	binary.LittleEndian.PutUint16(자료형_문자열_길이, uint16(len(s.자료형_문자열))) // 인텔 및 AMD 계열 CPU는 리틀 엔디언
 
-	바이트_모음_길이 := make([]byte, 4)
-	binary.LittleEndian.PutUint32(바이트_모음_길이, uint32(len(s.값)))
+	내용_길이 := make([]byte, 4)
+	binary.LittleEndian.PutUint32(내용_길이, uint32(len(s.값)))
 
 	버퍼 := new(bytes.Buffer)
 	버퍼.Write([]byte{byte(s.변환_형식)})
 	버퍼.Write(자료형_문자열_길이)
-	버퍼.Write(바이트_모음_길이)
+	버퍼.Write(내용_길이)
 	버퍼.Write([]byte(s.자료형_문자열))
 	버퍼.Write(s.값)
 
@@ -370,13 +370,16 @@ func (s *S바이트_변환_모음) MarshalBinary() (바이트_모음 []byte, 에
 func (s *S바이트_변환_모음) UnmarshalBinary(바이트_모음 []byte) (에러 error) {
 	defer S예외처리{M에러: &에러, M에러_실행: func() { s.M바이트_변환_모음 = nil }}.S실행()
 
-	const 헤더_길이_복수값 = 3 // 변환형식_길이 1, 수량 길이 2.
+	// *S바이트_변환_모음.MarshalBinary() 헤더 규격
+	const 헤더_길이 = 2 // 수량 길이 2.
+
+	// *S바이트_변환.MarshalBinary() 헤더 규격
 	const 헤더_길이_단일값 = 7 // 변환_형식 1, 자료형_문자열_길이 2, 내용_길이 4
 
 	switch {
 	case len(바이트_모음) == 0:
 		return New에러with출력("비어있는 M값")
-	case len(바이트_모음) < 헤더_길이_복수값:
+	case len(바이트_모음) < 헤더_길이:
 		return New에러with출력("너무 짧은 M값. %v", len(바이트_모음))
 	}
 
@@ -385,14 +388,14 @@ func (s *S바이트_변환_모음) UnmarshalBinary(바이트_모음 []byte) (에
 	시작점 := 2
 
 	for i := 0; i < 수량; i++ {
+		F조건부_패닉(len(바이트_모음) < 시작점+헤더_길이_단일값, "*S바이트_변환_모음.UnmarshalBinary() : 헤더 길이 부족. %v번째 값 %v, %v", i+1, len(바이트_모음), 시작점+헤더_길이_단일값)
 		헤더_단일값 := 바이트_모음[시작점:(시작점 + 헤더_길이_단일값)]
 		자료형_문자열_길이 := int(binary.LittleEndian.Uint16(헤더_단일값[1:3]))
+		내용_길이 := int(binary.LittleEndian.Uint32(헤더_단일값[3:7]))
+		F조건부_패닉(내용_길이 < 0, "음수 바이트_모음_길이 : '%v', '%v'", 내용_길이)
 
-		바이트_모음_길이 := int(binary.LittleEndian.Uint32(헤더_단일값[3:7]))
-		F조건부_패닉(바이트_모음_길이 < 0, "음수 바이트_모음_길이 : '%v', '%v'", 바이트_모음_길이)
-
-		단일값_길이 := 헤더_길이_단일값 + 자료형_문자열_길이 + 바이트_모음_길이
-		F조건부_패닉(len(바이트_모음) < 시작점+단일값_길이, "너무 짧은 M값. %v %v", len(바이트_모음), 시작점+단일값_길이)
+		단일값_길이 := 헤더_길이_단일값 + 자료형_문자열_길이 + 내용_길이
+		F조건부_패닉(len(바이트_모음) < 시작점+단일값_길이, "*S바이트_변환_모음.UnmarshalBinary() : 내용 길이 부족. %v번째 값 %v, %v", i+1, len(바이트_모음), 시작점+단일값_길이)
 
 		바이트_모음_단일값 := 바이트_모음[시작점:(시작점 + 단일값_길이)]
 
