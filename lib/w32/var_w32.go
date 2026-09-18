@@ -22,4 +22,7 @@ var (
 	libkernel32      = windows.NewLazySystemDLL("kernel32.dll")
 	getModuleHandle  = libkernel32.NewProc("GetModuleHandleW")
 	getConsoleWindow = libkernel32.NewProc("GetConsoleWindow")
+
+	shell32           = windows.NewLazySystemDLL("Shell32.dll")
+	isUserAnAdminProc = shell32.NewProc("IsUserAnAdmin")
 )

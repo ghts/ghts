@@ -132,19 +132,13 @@ func PostMessage(hWnd HWND, msg uint32, wParam, lParam uintptr) uintptr {
 }
 
 func IsUserAnAdmin() (bool, error) {
-	shell32 := windows.NewLazySystemDLL("Shell32.dll")
-	defer windows.FreeLibrary(windows.Handle(shell32.Handle()))
-
-	isUserAnAdminProc := shell32.NewProc("IsUserAnAdmin")
 	ret, _, winError := isUserAnAdminProc.Call()
 
 	if !errors.Is(winError, windows.NTE_OP_OK) {
 		return false, fmt.Errorf("IsUserAnAdmin returns error code %d", winError)
 	}
-	if ret == 0 {
-		return false, nil
-	}
-	return true, nil
+
+	return ret != 0, nil
 }
 
 func GetConsoleWindow() HWND {
