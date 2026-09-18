@@ -264,6 +264,10 @@ func F임의_종목_ETF() *lb.S종목 {
 }
 
 func f임의_종목_추출(종목_모음 []*lb.S종목) *lb.S종목 {
+	if len(종목_모음) == 0 {
+		return nil
+	}
+
 	return 종목_모음[lb.F임의_범위_이내_정수값(0, len(종목_모음))].G복제본()
 }
 
