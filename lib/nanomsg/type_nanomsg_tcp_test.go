@@ -1,7 +1,6 @@
 package nano
 
 import (
-	"math/rand"
 	"testing"
 	"time"
 
@@ -239,7 +238,7 @@ func 클라이언트_PAIR(t lb.I안전한_테스트, 주소 lb.T주소, ch초기
 
 func f테스트용_임의_주소() lb.T주소 {
 	for {
-		주소 := lb.T주소(rand.Intn(60000))
+		주소 := lb.T주소(lb.F임의_범위_이내_정수값(0, 60000))
 
 		return 주소
 	}

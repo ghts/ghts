@@ -268,7 +268,7 @@ func f임의_종목_추출(종목_모음 []*lb.S종목) *lb.S종목 {
 		return nil
 	}
 
-	return 종목_모음[lb.F임의_범위_이내_정수값(0, len(종목_모음))].G복제본()
+	return 종목_모음[lb.F임의_범위_이내_정수값(0, len(종목_모음)-1)].G복제본()
 }
 
 func F코스피_종목_여부(종목코드 string) bool {
