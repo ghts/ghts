@@ -36,7 +36,8 @@ var (
 	tr코드별_전송_제한_10분      = make(map[string]lb.I전송_권한)
 	전송_제한_잠금             sync.RWMutex
 
-	주문_응답_구독_중 = lb.New안전한_bool(false)
+	주문_응답_구독_중  = lb.New안전한_bool(false)
+	주문_응답_구독_잠금 = sync.Mutex{}
 
 	종료_잠금 = sync.Mutex{}
 	종료_시각 = lb.New안전한_시각(time.Time{})
