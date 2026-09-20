@@ -79,7 +79,11 @@ func F주문_응답_실시간_정보_구독() (에러 error) {
 
 	if 주문_응답_구독_중.G값() {
 		return
-	} else if 에러 = F실시간_정보_구독_단순TR(xt.RT현물_주문_접수_SC0); 에러 != nil {
+	}
+
+	주문_응답_구독_중.S값(true)
+
+	if 에러 = F실시간_정보_구독_단순TR(xt.RT현물_주문_접수_SC0); 에러 != nil {
 		return
 	} else if 에러 = F실시간_정보_구독_단순TR(xt.RT현물_주문_체결_SC1); 에러 != nil {
 		return
@@ -95,16 +99,20 @@ func F주문_응답_실시간_정보_구독() (에러 error) {
 }
 
 func F주문_응답_실시간_정보_해지() (에러 error) {
-	defer lb.S예외처리{M에러: &에러}.S실행()
+	defer lb.S예외처리{M에러: &에러, M항상_실행: func() {
+		주문_응답_구독_중.S값(에러 != nil)
+	}}.S실행()
 
 	주문_응답_구독_잠금.Lock()
 	defer 주문_응답_구독_잠금.Unlock()
 
-	주문_응답_구독_중.S값(false)
-
 	if !주문_응답_구독_중.G값() {
 		return
-	} else if 에러 = F실시간_정보_해지_단순TR(xt.RT현물_주문_접수_SC0); 에러 != nil {
+	}
+
+	주문_응답_구독_중.S값(false)
+
+	if 에러 = F실시간_정보_해지_단순TR(xt.RT현물_주문_접수_SC0); 에러 != nil {
 		return
 	} else if 에러 = F실시간_정보_해지_단순TR(xt.RT현물_주문_체결_SC1); 에러 != nil {
 		return
