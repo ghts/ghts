@@ -141,10 +141,11 @@ func TestF인코딩_디코딩(t *testing.T) {
 			바이트_모음, 에러 := F인코딩(변환형식, 값1)
 			F테스트_에러없음(t, 에러)
 
-			값2 := reflect.New(reflect.TypeOf(값1)).Elem().Interface()
-			F디코딩(변환형식, 바이트_모음, &값2)
+			값2 := reflect.New(reflect.TypeOf(값1))
+			에러 = F디코딩(변환형식, 바이트_모음, 값2.Interface())
+			F테스트_에러없음(t, 에러)
 
-			F테스트_같음(t, 값1, 값2, 변환형식)
+			F테스트_같음(t, 값1, 값2.Elem().Interface(), 변환형식)
 		}
 
 		// nil 대응
