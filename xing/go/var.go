@@ -45,8 +45,9 @@ var (
 
 // 종목 관련 저장소는 초기화 이후에는 사실상 읽기 전용. 다중 사용에 문제가 없음.
 var (
-	종목모음_설정_잠금   sync.Mutex
+	종목정보_잠금      sync.RWMutex
 	종목모음_설정일     = lb.New안전한_시각(time.Time{})
+	종목모음_전체      = make([]*lb.S종목, 0)
 	종목맵_전체       = make(map[string]*lb.S종목)
 	종목모음_코스피     = make([]*lb.S종목, 0)
 	종목맵_코스피      = make(map[string]*lb.S종목)
@@ -55,7 +56,6 @@ var (
 	종목모음_ETF     = make([]*lb.S종목, 0)
 	종목모음_ETN     = make([]*lb.S종목, 0)
 	종목모음_ETF_ETN = make([]*lb.S종목, 0)
-	종목모음_전체      = make([]*lb.S종목, 0)
 	특수_종목_맵      = make(map[string]*lb.S종목)
 	기준가_맵        = make(map[string]int64)
 	하한가_맵        = make(map[string]int64)

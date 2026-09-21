@@ -12,6 +12,9 @@ import (
 func F종목코드_모음_전체() []string {
 	lb.F조건부_패닉(len(종목모음_전체) == 0, "xing 초기화 안 됨.")
 
+	종목정보_잠금.RLock()
+	defer 종목정보_잠금.RUnlock()
+
 	종목코드_모음 := make([]string, len(종목모음_전체), len(종목모음_전체))
 
 	for i, 종목 := range 종목모음_전체 {
@@ -23,6 +26,9 @@ func F종목코드_모음_전체() []string {
 
 func F종목코드_모음_KOSPI() []string {
 	lb.F조건부_패닉(len(종목모음_전체) == 0, "xing 초기화 안 됨.")
+
+	종목정보_잠금.RLock()
+	defer 종목정보_잠금.RUnlock()
 
 	종목코드_모음 := make([]string, len(종목모음_코스피), len(종목모음_코스피))
 
@@ -36,6 +42,9 @@ func F종목코드_모음_KOSPI() []string {
 func F종목코드_모음_KOSDAQ() []string {
 	lb.F조건부_패닉(len(종목모음_전체) == 0, "xing 초기화 안 됨.")
 
+	종목정보_잠금.RLock()
+	defer 종목정보_잠금.RUnlock()
+
 	종목코드_모음 := make([]string, len(종목모음_코스닥), len(종목모음_코스닥))
 
 	for i, 종목 := range 종목모음_코스닥 {
@@ -47,6 +56,9 @@ func F종목코드_모음_KOSDAQ() []string {
 
 func F종목코드_모음_ETF() []string {
 	lb.F조건부_패닉(len(종목모음_전체) == 0, "xing 초기화 안 됨.")
+
+	종목정보_잠금.RLock()
+	defer 종목정보_잠금.RUnlock()
 
 	종목코드_모음 := make([]string, len(종목모음_ETF), len(종목모음_ETF))
 
@@ -60,6 +72,9 @@ func F종목코드_모음_ETF() []string {
 func F종목코드_모음_ETN() []string {
 	lb.F조건부_패닉(len(종목모음_전체) == 0, "xing 초기화 안 됨.")
 
+	종목정보_잠금.RLock()
+	defer 종목정보_잠금.RUnlock()
+
 	종목코드_모음 := make([]string, len(종목모음_ETN), len(종목모음_ETN))
 
 	for i, 종목 := range 종목모음_ETN {
@@ -71,6 +86,9 @@ func F종목코드_모음_ETN() []string {
 
 func F종목코드_모음_ETF_ETN() []string {
 	lb.F조건부_패닉(len(종목모음_전체) == 0, "xing 초기화 안 됨.")
+
+	종목정보_잠금.RLock()
+	defer 종목정보_잠금.RUnlock()
 
 	종목코드_모음 := make([]string, len(종목모음_ETF_ETN), len(종목모음_ETF_ETN))
 
@@ -100,36 +118,20 @@ func F질의값_종목코드_검사(질의값_원본 lb.I질의값) (에러 erro
 }
 
 func F종목코드_존재함(종목코드 string) bool {
-	if len(종목맵_전체) == 0 {
-		F종목_정보_설정()
-	}
+	종목, 에러 := F종목by코드(종목코드)
 
-	if len(종목맵_전체) == 0 {
-		panic(lb.New에러("xing 모듈 초기화 되지 않음."))
-	}
-
-	종목코드 = trade.F종목코드_보정(종목코드)
-
-	_, 존재함 := 종목맵_전체[종목코드]
-
-	return 존재함
+	return 에러 == nil && 종목 != nil
 }
 
 func F종목코드_검사(종목코드 string) error {
-	if len(종목맵_전체) == 0 {
-		F종목_정보_설정()
-	}
+	_, 에러 := F종목by코드(종목코드)
 
-	if !F종목코드_존재함(종목코드) {
-		return lb.New에러("존재하지 않는 종목코드 : '%s'.", 종목코드)
-	}
-
-	return nil
+	return 에러
 }
 
 func F종목_정보_설정() (에러 error) {
-	종목모음_설정_잠금.Lock()
-	defer 종목모음_설정_잠금.Unlock()
+	종목정보_잠금.Lock()
+	defer 종목정보_잠금.Unlock()
 
 	if len(종목모음_코스피) > 0 &&
 		len(종목모음_코스닥) > 0 &&
@@ -222,15 +224,34 @@ func F종목_정보_설정() (에러 error) {
 }
 
 func F종목by코드(종목코드 string) (종목 *lb.S종목, 에러 error) {
+	수량 := func() int {
+		종목정보_잠금.RLock()
+		defer 종목정보_잠금.RUnlock()
+
+		return len(종목맵_전체)
+	}()
+
+	if 수량 == 0 {
+		if 에러 = F종목_정보_설정(); 에러 != nil {
+			return nil, 에러
+		}
+	}
+
 	if len(종목맵_전체) == 0 {
-		return nil, lb.New에러("Xing API가 초기화 되어 있지 않습니다.")
-	} else if strings.HasPrefix(종목코드, "B") {
+		return nil, lb.New에러("xing 모듈 초기화 되지 않음.")
+	}
+
+	종목코드 = trade.F종목코드_보정(종목코드)
+
+	if strings.HasPrefix(종목코드, "B") {
 		return nil, lb.New에러("%v : B로 시작하는 채권 종목입니다.", 종목코드)
 	}
 
 	종목코드 = trade.F종목코드_보정(종목코드)
 
-	if 종목, ok := 종목맵_전체[종목코드]; !ok {
+	var ok bool
+
+	if 종목, ok = 종목맵_전체[종목코드]; !ok {
 		return nil, lb.New에러("해당 종목코드가 존재하지 않습니다. '%v'", 종목코드)
 	} else {
 		return 종목, nil
@@ -252,14 +273,23 @@ func F임의_종목() *lb.S종목 {
 }
 
 func F임의_종목_코스피_주식() *lb.S종목 {
+	종목정보_잠금.RLock()
+	defer 종목정보_잠금.RUnlock()
+
 	return f임의_종목_추출(종목모음_코스피)
 }
 
 func F임의_종목_코스닥_주식() *lb.S종목 {
+	종목정보_잠금.RLock()
+	defer 종목정보_잠금.RUnlock()
+
 	return f임의_종목_추출(종목모음_코스닥)
 }
 
 func F임의_종목_ETF() *lb.S종목 {
+	종목정보_잠금.RLock()
+	defer 종목정보_잠금.RUnlock()
+
 	return f임의_종목_추출(종목모음_ETF)
 }
 
@@ -268,11 +298,18 @@ func f임의_종목_추출(종목_모음 []*lb.S종목) *lb.S종목 {
 		return nil
 	}
 
+	종목정보_잠금.RLock()
+	defer 종목정보_잠금.RUnlock()
+
 	return 종목_모음[lb.F임의_범위_이내_정수값(0, len(종목_모음)-1)].G복제본()
 }
 
 func F코스피_종목_여부(종목코드 string) bool {
 	종목코드 = trade.F종목코드_보정(종목코드)
+
+	종목정보_잠금.RLock()
+	defer 종목정보_잠금.RUnlock()
+
 	_, 존재함 := 종목맵_코스피[종목코드]
 
 	return 존재함
@@ -280,6 +317,10 @@ func F코스피_종목_여부(종목코드 string) bool {
 
 func F코스닥_종목_여부(종목코드 string) bool {
 	종목코드 = trade.F종목코드_보정(종목코드)
+
+	종목정보_잠금.RLock()
+	defer 종목정보_잠금.RUnlock()
+
 	_, 존재함 := 종목맵_코스닥[종목코드]
 
 	return 존재함
@@ -539,7 +580,16 @@ func F금융사_종목_여부(종목코드 string) bool {
 }
 
 func F특수_종목_여부(종목코드 string) bool {
-	if _, 존재함 := 특수_종목_맵[종목코드]; 존재함 {
+	특수_종목_여부_1차_기준 := func() bool {
+		종목정보_잠금.RLock()
+		defer 종목정보_잠금.RUnlock()
+
+		_, 존재함 := 특수_종목_맵[종목코드]
+
+		return 존재함
+	}()
+
+	if 특수_종목_여부_1차_기준 {
 		return true
 	}
 
@@ -565,21 +615,20 @@ func F특수_종목_여부(종목코드 string) bool {
 		strings.Contains(종목명, "8호"),
 		strings.Contains(종목명, "9호"),
 		strings.Contains(종목명, "10호"),
-		strings.HasSuffix(종목.G이름(), "우") ||
-			strings.HasSuffix(종목.G이름(), "B") ||
-			strings.HasSuffix(종목.G이름(), "C") ||
-			strings.Contains(종목.G이름(), "전환") ||
-			strings.HasSuffix(종목.G이름(), "1") ||
-			strings.HasSuffix(종목.G이름(), "2") ||
-			strings.HasSuffix(종목.G이름(), "3") ||
-			strings.HasSuffix(종목.G이름(), "4") ||
-			strings.HasSuffix(종목.G이름(), "5") ||
-			strings.HasSuffix(종목.G이름(), "6") ||
-			strings.HasSuffix(종목.G이름(), "7") ||
-			strings.HasSuffix(종목.G이름(), "8") ||
-			strings.HasSuffix(종목.G이름(), "9"):
+		strings.HasSuffix(종목.G이름(), "우"),
+		strings.HasSuffix(종목.G이름(), "B"),
+		strings.HasSuffix(종목.G이름(), "C"),
+		strings.Contains(종목.G이름(), "전환"),
+		strings.HasSuffix(종목.G이름(), "1"),
+		strings.HasSuffix(종목.G이름(), "2"),
+		strings.HasSuffix(종목.G이름(), "3"),
+		strings.HasSuffix(종목.G이름(), "4"),
+		strings.HasSuffix(종목.G이름(), "5"),
+		strings.HasSuffix(종목.G이름(), "6"),
+		strings.HasSuffix(종목.G이름(), "7"),
+		strings.HasSuffix(종목.G이름(), "8"),
+		strings.HasSuffix(종목.G이름(), "9"):
 		return true
-
 	}
 
 	return false
