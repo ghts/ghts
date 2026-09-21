@@ -70,9 +70,15 @@ func F실시간_데이터_해지_ETF(종목코드_모음 []string) (에러 error
 }
 
 func F주문_응답_실시간_정보_구독() (에러 error) {
-	defer lb.S예외처리{M에러: &에러, M항상_실행: func() {
-		주문_응답_구독_중.S값(에러 == nil)
-	}}.S실행()
+	defer lb.S예외처리{M에러: &에러}.S실행()
+
+	RT코드_모음 := []string{
+		xt.RT현물_주문_접수_SC0,
+		xt.RT현물_주문_체결_SC1,
+		xt.RT현물_주문_정정_SC2,
+		xt.RT현물_주문_취소_SC3,
+		xt.RT현물_주문_거부_SC4,
+	}
 
 	주문_응답_구독_잠금.Lock()
 	defer 주문_응답_구독_잠금.Unlock()
@@ -81,27 +87,29 @@ func F주문_응답_실시간_정보_구독() (에러 error) {
 		return
 	}
 
+	// "구독_중"을 먼저 표시하고 실패 시 롤백.
 	주문_응답_구독_중.S값(true)
 
-	if 에러 = F실시간_정보_구독_단순TR(xt.RT현물_주문_접수_SC0); 에러 != nil {
-		return
-	} else if 에러 = F실시간_정보_구독_단순TR(xt.RT현물_주문_체결_SC1); 에러 != nil {
-		return
-	} else if 에러 = F실시간_정보_구독_단순TR(xt.RT현물_주문_정정_SC2); 에러 != nil {
-		return
-	} else if 에러 = F실시간_정보_구독_단순TR(xt.RT현물_주문_취소_SC3); 에러 != nil {
-		return
-	} else if 에러 = F실시간_정보_구독_단순TR(xt.RT현물_주문_거부_SC4); 에러 != nil {
-		return
+	for _, RT코드 := range RT코드_모음 {
+		if 에러 = F실시간_정보_구독_단순TR(RT코드); 에러 != nil {
+			주문_응답_구독_중.S값(false)
+			return
+		}
 	}
 
 	return nil
 }
 
 func F주문_응답_실시간_정보_해지() (에러 error) {
-	defer lb.S예외처리{M에러: &에러, M항상_실행: func() {
-		주문_응답_구독_중.S값(에러 != nil)
-	}}.S실행()
+	defer lb.S예외처리{M에러: &에러}.S실행()
+
+	RT코드_모음 := []string{
+		xt.RT현물_주문_접수_SC0,
+		xt.RT현물_주문_체결_SC1,
+		xt.RT현물_주문_정정_SC2,
+		xt.RT현물_주문_취소_SC3,
+		xt.RT현물_주문_거부_SC4,
+	}
 
 	주문_응답_구독_잠금.Lock()
 	defer 주문_응답_구독_잠금.Unlock()
@@ -110,18 +118,14 @@ func F주문_응답_실시간_정보_해지() (에러 error) {
 		return
 	}
 
+	// 에러 없이 모든 구독 해지가 완료된 경우에만 재해지 막는다.
 	주문_응답_구독_중.S값(false)
 
-	if 에러 = F실시간_정보_해지_단순TR(xt.RT현물_주문_접수_SC0); 에러 != nil {
-		return
-	} else if 에러 = F실시간_정보_해지_단순TR(xt.RT현물_주문_체결_SC1); 에러 != nil {
-		return
-	} else if 에러 = F실시간_정보_해지_단순TR(xt.RT현물_주문_정정_SC2); 에러 != nil {
-		return
-	} else if 에러 = F실시간_정보_해지_단순TR(xt.RT현물_주문_취소_SC3); 에러 != nil {
-		return
-	} else if 에러 = F실시간_정보_해지_단순TR(xt.RT현물_주문_거부_SC4); 에러 != nil {
-		return
+	for _, RT코드 := range RT코드_모음 {
+		if 에러 = F실시간_정보_해지_단순TR(RT코드); 에러 != nil {
+			주문_응답_구독_중.S값(true)
+			return
+		}
 	}
 
 	return nil
