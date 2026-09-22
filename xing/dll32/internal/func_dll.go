@@ -13,12 +13,11 @@ import (
 	"unsafe"
 )
 
-func f초기화_XingAPI() {
-	API_초기화_잠금.Lock()
-	defer func() {
-		API_초기화_완료.S값(true)
+func f초기화_XingAPI() (에러 error) {
+	defer lb.S예외처리{M에러: &에러, M항상_실행: func() {
+		API_초기화_완료.S값(에러 == nil)
 		API_초기화_잠금.Unlock()
-	}()
+	}}.S실행()
 
 	if API_초기화_완료.G값() {
 		return
@@ -31,10 +30,10 @@ func f초기화_XingAPI() {
 	xing디렉토리 := lb.F확인2(XingAPI디렉토리())
 	lb.F확인1(os.Chdir(xing디렉토리))
 
-	// XingAPI 초기화 ('반드시' DLL파일이 있는 디렉토리에서 실행해야 함.)
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
+	// XingAPI 초기화 ('반드시' DLL파일이 있는 디렉토리에서 실행해야 함.)
 	xing_api_dll = lb.F확인2(syscall.LoadLibrary(xing_dll))
 
 	// 원래 디렉토리로 이동

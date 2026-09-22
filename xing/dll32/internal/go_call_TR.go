@@ -14,24 +14,22 @@ import (
 // Win32 함수, 증권사 API 모두 Go언어와 같은 동시/병렬 처리에 대한 고려가 없던 시절에 만들어졌으므로,
 // 가능한 단일 고정 스레드에서 호출하는 게 좋다.
 func go함수_호출_도우미(ch초기화, ch종료 chan lb.T신호) {
-	if lb.F공통_종료_채널_닫힘() {
-		return
-	}
-
-	defer func() {
-		recover()
-
+	defer lb.S예외처리{M항상_실행: func() {
 		if lb.F공통_종료_채널_닫힘() {
 			Ch함수_호출_도우미_종료 <- lb.P신호_종료
 		} else {
 			ch종료 <- lb.P신호_종료
 		}
-	}()
+	}}.S실행()
+
+	if lb.F공통_종료_채널_닫힘() {
+		return
+	}
 
 	runtime.LockOSThread()
 	defer runtime.UnlockOSThread()
 
-	f초기화_XingAPI() // 모든 API 액세스를 단일 스레드에서 하기 위해서 여기에서 API 초기화를 실행함.
+	lb.F확인1(f초기화_XingAPI()) // 모든 API 액세스를 단일 스레드에서 하기 위해서 여기에서 API 초기화를 실행함.
 	F메시지_윈도우_생성()
 
 	ch공통_종료 := lb.Ch공통_종료()
