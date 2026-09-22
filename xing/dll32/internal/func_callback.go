@@ -115,25 +115,10 @@ func OnTrData(TR데이터 unsafe.Pointer) {
 
 	var raw값 []byte
 
-	// t8410, t8411, t8412 반복값은 압축되어 있음. 압축해제가 필요.
-	// 증권사 API에 의해서 한도 2,000개가 미리 정해져서 하드 코딩함.
-	// 'g.TotalDataBufferSize'는 압축 해제 버퍼 크기와 무관함을 확인함.
+	// t8410, t8411, t8412 반복값은 압축 해제가 필요.
 	switch lb.F2문자열(g.BlockName) {
-	case "t8410OutBlock1":
-		버퍼 := make([]byte, xt.SizeT8410OutBlock1*xt.P압축_반복값_최대_수량)
-		길이 := F압축_해제(unsafe.Pointer(g.Data), &버퍼[0], g.DataLength)
-		raw값 = w32.F2Go바이트_모음with길이(unsafe.Pointer(&버퍼[0]), 길이)
-		g.DataLength = int32(길이)
-	case "t8411OutBlock1":
-		버퍼 := make([]byte, xt.SizeT8411OutBlock1*xt.P압축_반복값_최대_수량)
-		길이 := F압축_해제(unsafe.Pointer(g.Data), &버퍼[0], g.DataLength)
-		raw값 = w32.F2Go바이트_모음with길이(unsafe.Pointer(&버퍼[0]), 길이)
-		g.DataLength = int32(길이)
-	case "t8412OutBlock1":
-		버퍼 := make([]byte, xt.SizeT8412OutBlock1*xt.P압축_반복값_최대_수량)
-		길이 := F압축_해제(unsafe.Pointer(g.Data), &버퍼[0], g.DataLength)
-		raw값 = w32.F2Go바이트_모음with길이(unsafe.Pointer(&버퍼[0]), 길이)
-		g.DataLength = int32(길이)
+	case "t8410OutBlock1", "t8411OutBlock1", "t8412OutBlock1":
+		raw값 = f압축_반복값_해제(g)
 	default:
 		raw값 = w32.F2Go바이트_모음with길이(unsafe.Pointer(g.Data), int(g.DataLength))
 	}
@@ -159,6 +144,37 @@ func OnTrData(TR데이터 unsafe.Pointer) {
 	콜백값 := lb.New콜백_TR데이터(int(g.RequestID), 바이트_변환값, TR코드, 추가_연속조회_필요, 연속키)
 
 	F콜백(콜백값)
+}
+
+// t8410, t8411, t8412등 반복값(OutBlock1)이 압축된 TR에 대한 압축 해제 처리.
+// 압축 반복값 블럭이 아니면 nil 반환.
+func f압축_반복값_해제(g *xt.TR_DATA) []byte {
+	var 블럭크기 int
+
+	switch lb.F2문자열(g.BlockName) {
+	case "t8410OutBlock1":
+		블럭크기 = xt.SizeT8410OutBlock1
+	case "t8411OutBlock1":
+		블럭크기 = xt.SizeT8411OutBlock1
+	case "t8412OutBlock1":
+		블럭크기 = xt.SizeT8412OutBlock1
+	default:
+		return nil
+	}
+
+	// 증권사 API가 반복값 수량 상한을 고정해 놓으므로 최악의 경우만큼 버퍼를 확보한다.
+	버퍼 := make([]byte, 블럭크기*xt.P압축_반복값_최대_수량)
+	길이 := F압축_해제(unsafe.Pointer(g.Data), &버퍼[0], g.DataLength)
+
+	// etkDecompress는 버퍼 capacity 인자를 받지 않으므로, 결과가 범위를 벗어나면
+	// API 계약 위반이다. 손상된 데이터로 진행하지 말고 명시적으로 중단한다.
+	lb.F조건부_패닉(길이 < 0 || 길이 > len(버퍼),
+		"f압축_반복값_해제() 압축 해제 결과가 버퍼 범위를 벗어남. TR코드 : '%v' 블럭 : '%s' 길이 : %d 상한 : %d",
+		lb.F2문자열_공백_제거(g.TrCode), lb.F2문자열(g.BlockName), 길이, len(버퍼))
+
+	g.DataLength = int32(길이)
+
+	return w32.F2Go바이트_모음with길이(unsafe.Pointer(&버퍼[0]), 길이)
 }
 
 func OnMessageAndError(MSG데이터 unsafe.Pointer) {
