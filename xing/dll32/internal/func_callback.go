@@ -120,17 +120,17 @@ func OnTrData(TR데이터 unsafe.Pointer) {
 	// 'g.TotalDataBufferSize'는 압축 해제 버퍼 크기와 무관함을 확인함.
 	switch lb.F2문자열(g.BlockName) {
 	case "t8410OutBlock1":
-		버퍼 := make([]byte, xt.SizeT8410OutBlock1*2000)
+		버퍼 := make([]byte, xt.SizeT8410OutBlock1*xt.P압축_반복값_최대_수량)
 		길이 := F압축_해제(unsafe.Pointer(g.Data), &버퍼[0], g.DataLength)
 		raw값 = w32.F2Go바이트_모음with길이(unsafe.Pointer(&버퍼[0]), 길이)
 		g.DataLength = int32(길이)
 	case "t8411OutBlock1":
-		버퍼 := make([]byte, xt.SizeT8411OutBlock1*2000)
+		버퍼 := make([]byte, xt.SizeT8411OutBlock1*xt.P압축_반복값_최대_수량)
 		길이 := F압축_해제(unsafe.Pointer(g.Data), &버퍼[0], g.DataLength)
 		raw값 = w32.F2Go바이트_모음with길이(unsafe.Pointer(&버퍼[0]), 길이)
 		g.DataLength = int32(길이)
 	case "t8412OutBlock1":
-		버퍼 := make([]byte, xt.SizeT8412OutBlock1*2000)
+		버퍼 := make([]byte, xt.SizeT8412OutBlock1*xt.P압축_반복값_최대_수량)
 		길이 := F압축_해제(unsafe.Pointer(g.Data), &버퍼[0], g.DataLength)
 		raw값 = w32.F2Go바이트_모음with길이(unsafe.Pointer(&버퍼[0]), 길이)
 		g.DataLength = int32(길이)
