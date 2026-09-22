@@ -117,6 +117,7 @@ func OnTrData(TR데이터 unsafe.Pointer) {
 
 	// t8410, t8411, t8412 반복값은 압축되어 있음. 압축해제가 필요.
 	// 증권사 API에 의해서 한도 2,000개가 미리 정해져서 하드 코딩함.
+	// 'g.TotalDataBufferSize'는 압축 해제 버퍼 크기와 무관함을 확인함.
 	switch lb.F2문자열(g.BlockName) {
 	case "t8410OutBlock1":
 		버퍼 := make([]byte, xt.SizeT8410OutBlock1*2000)
