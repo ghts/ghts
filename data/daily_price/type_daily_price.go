@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"database/sql"
+	"errors"
 	"math"
 	"sort"
 	"strconv"
@@ -311,6 +312,10 @@ func (s *S종목별_일일_가격정보_모음) DB저장(db *sql.DB) (에러 err
 
 	lb.F확인1(F일일_가격정보_테이블_생성(db))
 
+	// MySQL/SQLite 호환 가능한 SQL문법 선택.
+	// MySQL/SQLite 간 UPSERT 문법이 달라서 존재 여부를 SELECT로 확인 후 INSERT/UPDATE 분리.
+	// RowsAffected()로 존재 여부를 추론하면 안 된다: MySQL은 "레코드 존재 + 값 변경 없음"에도 0을 반환해
+	// INSERT 재시도 시 PRIMARY KEY 충돌(1062) 발생. 그래서 SELECT로 존재 여부를 직접 확인한다.
 	SQL생성 := new(bytes.Buffer)
 	SQL생성.WriteString("INSERT INTO daily_price (")
 	SQL생성.WriteString("  code,")
@@ -343,13 +348,24 @@ func (s *S종목별_일일_가격정보_모음) DB저장(db *sql.DB) (에러 err
 	stmt수정 := lb.F확인2(tx.Prepare(SQL수정.String()))
 	defer stmt수정.Close()
 
-	for _, 값 := range s.M저장소 {
-		// 1) 수정 시도
-		rs := lb.F확인2(stmt수정.Exec(값.M시가, 값.M고가, 값.M저가, 값.M종가, 값.M거래량, 값.M종목코드, 값.G일자()))
+	stmt존재확인 := lb.F확인2(tx.Prepare("SELECT 1 FROM daily_price WHERE code=? AND date=?"))
+	defer stmt존재확인.Close()
 
-		// 2) 없던 레코드면 실제값으로 삽입 (INSERT IGNORE/ON DUPLICATE KEY UPDATE 대신 공용 문법)
-		if n, _ := rs.RowsAffected(); n == 0 {
+	for _, 값 := range s.M저장소 {
+		var 존재함 int
+
+		스캔_에러 := stmt존재확인.QueryRow(값.M종목코드, 값.G일자()).Scan(&존재함)
+
+		if 스캔_에러 == nil {
+			// 존재 → 수정
+			lb.F확인2(stmt수정.Exec(값.M시가, 값.M고가, 값.M저가, 값.M종가, 값.M거래량, 값.M종목코드, 값.G일자()))
+		} else if errors.Is(스캔_에러, sql.ErrNoRows) {
+			// 신규 레코드 → 삽입
+			// 여기에서 sql.ErrNoRows는 에러가 아니라, 정상 비즈니스 분기(아직 저장 안 된 신규 레코드)
 			lb.F확인2(stmt생성.Exec(값.M종목코드, 값.G일자(), 값.M시가, 값.M고가, 값.M저가, 값.M종가, 값.M거래량))
+		} else {
+			에러 = 스캔_에러
+			return
 		}
 	}
 

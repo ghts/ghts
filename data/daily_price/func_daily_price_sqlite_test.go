@@ -8,9 +8,35 @@ import (
 	ldb "github.com/ghts/ghts/lib/db"
 )
 
-// TestSQLite_테이블_생성N저장N읽기 :
-// modernc.org/sqlite 기준 테이블 생성 → 신규 INSERT → 기존 UPDATE → 읽기 전체 경로 검증.
-func TestSQLite_테이블_생성N저장N읽기(t *testing.T) {
+func TestSQLite_동일값_재저장(t *testing.T) {
+	dbSQLite, 에러 := ldb.DB_SQLite(ldb.DSN_SQLite(":memory:"))
+	lb.F테스트_에러없음(t, 에러)
+	defer dbSQLite.Close()
+
+	lb.F테스트_에러없음(t, F일일_가격정보_테이블_생성(dbSQLite))
+
+	모음, 에러 := New종목별_일일_가격정보_모음([]*S일일_가격정보{
+		f테스트용_일일_가격정보("000000", -2, 1000),
+		f테스트용_일일_가격정보("000000", -1, 1100),
+	})
+	lb.F테스트_에러없음(t, 에러)
+
+	// 1) 최초 저장 (신규 INSERT 경로)
+	lb.F테스트_에러없음(t, 모음.DB저장(dbSQLite))
+
+	// 2) 수집 흐름 시뮬레이션: DB에서 로드한 뒤 값 그대로 재저장
+	로드_모음, 에러 := New종목별_일일_가격정보_모음_DB읽기(dbSQLite, "000000")
+	lb.F테스트_에러없음(t, 에러)
+	lb.F테스트_에러없음(t, 로드_모음.DB저장(dbSQLite))
+
+	// 3) 존재 레코드는 UPDATE로 처리되어야 해서 레코드 수 유지 (중복 INSERT 없음)
+	확인_모음, 에러 := New종목별_일일_가격정보_모음_DB읽기(dbSQLite, "000000")
+	lb.F테스트_에러없음(t, 에러)
+	lb.F테스트_같음(t, 확인_모음.Len(), 2)
+}
+
+// TestSQLite_변경값_저장 : 존재하는 레코드의 값을 변경해 저장하면 UPDATE가 실제로 반영되어야 한다.
+func TestSQLite_변경값_저장(t *testing.T) {
 	dbSQLite, 에러 := ldb.DB_SQLite(ldb.DSN_SQLite(":memory:"))
 	lb.F테스트_에러없음(t, 에러)
 	defer dbSQLite.Close()
@@ -21,25 +47,19 @@ func TestSQLite_테이블_생성N저장N읽기(t *testing.T) {
 		f테스트용_일일_가격정보("000000", -2, 1000),
 	})
 	lb.F테스트_에러없음(t, 에러)
-
-	// 1) 신규 INSERT 경로 검증
 	lb.F테스트_에러없음(t, 모음.DB저장(dbSQLite))
 
-	// 2) 기존 UPDATE 경로 검증 (동일 데이터 재저장)
-	lb.F테스트_에러없음(t, 모음.DB저장(dbSQLite))
-
-	// 3) 신규 레코드 추가 후 다시 저장
-	모음2, 에러 := New종목별_일일_가격정보_모음([]*S일일_가격정보{
-		f테스트용_일일_가격정보("000000", -1, 1100),
+	// 동일 (종목코드, 일자)에 값이 바뀐 레코드로 재저장
+	변경_모음, 에러 := New종목별_일일_가격정보_모음([]*S일일_가격정보{
+		f테스트용_일일_가격정보("000000", -2, 1500),
 	})
 	lb.F테스트_에러없음(t, 에러)
-	lb.F테스트_에러없음(t, 모음2.DB저장(dbSQLite))
+	lb.F테스트_에러없음(t, 변경_모음.DB저장(dbSQLite))
 
-	// 4) 읽기 검증
-	읽어온_모음, 에러 := New종목별_일일_가격정보_모음_DB읽기(dbSQLite, "000000")
-	lb.F확인1(에러)
-
-	lb.F테스트_참임(t, len(읽어온_모음.M저장소) == 2, "예상과 다른 레코드 수 : '%v'", len(읽어온_모음.M저장소))
+	확인_모음, 에러 := New종목별_일일_가격정보_모음_DB읽기(dbSQLite, "000000")
+	lb.F테스트_에러없음(t, 에러)
+	lb.F테스트_같음(t, 확인_모음.Len(), 1)
+	lb.F테스트_같음(t, 확인_모음.G종가(), 1500.0)
 }
 
 // TestDSN_SQLite_WAL_기본_적용 : DSN_SQLite 기본값으로 파일 기반 DB가 WAL 모드인지 검증.
