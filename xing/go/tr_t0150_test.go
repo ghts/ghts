@@ -4,9 +4,14 @@ import (
 	"testing"
 
 	lb "github.com/ghts/ghts/lib"
+	mt "github.com/ghts/ghts/lib/market_time"
 )
 
 func TestT0150_현물_당일_매매일지(t *testing.T) {
+	if !F당일().Equal(lb.F금일()) || !mt.F한국증시_정규_거래_시간임() {
+		t.Skip()
+	}
+
 	계좌번호, 에러 := F계좌_번호(0)
 	lb.F테스트_에러없음(t, 에러)
 

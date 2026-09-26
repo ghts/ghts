@@ -10,8 +10,8 @@ import (
 )
 
 func TestF호가_잔량_실시간_정보(t *testing.T) {
-	if !mt.F한국증시_정규_거래_시간임() {
-		t.SkipNow()
+	if !F당일().Equal(lb.F금일()) || !mt.F한국증시_정규_거래_시간임() {
+		t.Skip()
 	}
 
 	const 종목코드_코스피 = "005930" // 삼성전자

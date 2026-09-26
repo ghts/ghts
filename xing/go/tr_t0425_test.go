@@ -5,10 +5,15 @@ import (
 	"time"
 
 	lb "github.com/ghts/ghts/lib"
+	mt "github.com/ghts/ghts/lib/market_time"
 	"github.com/ghts/ghts/xing/base"
 )
 
 func TestT0425_현물_체결_미체결_확인(t *testing.T) {
+	if !F당일().Equal(lb.F금일()) || !mt.F한국증시_정규_거래_시간임() {
+		t.Skip()
+	}
+
 	계좌번호, 에러 := F계좌_번호(0)
 	lb.F테스트_에러없음(t, 에러)
 
