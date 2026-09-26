@@ -143,7 +143,7 @@ func f초기화_작동_확인() (작동_여부 bool) {
 	go f접속_확인(ch확인)
 	go f시간_일치_확인(ch확인)
 
-	for i := 0; i < 2; i++ {
+	for range 2 {
 		select {
 		case <-ch확인:
 		case <-ch타임아웃:
@@ -158,7 +158,7 @@ func f초기화_작동_확인() (작동_여부 bool) {
 }
 
 func F확인_TR소켓() bool {
-	for i := 0; i < 100; i++ {
+	for range 100 {
 		if 응답 := F질의(lb.New질의값_기본형(xt.TR소켓_테스트, ""), lb.P5초); 응답.G에러() == nil {
 			return true
 		}
@@ -176,7 +176,7 @@ func f접속_확인(ch완료 chan lb.T신호) {
 		}
 	}()
 
-	for i := 0; i < 10; i++ {
+	for range 10 {
 		if 접속됨, 에러 := F접속됨(); 에러 == nil && 접속됨 {
 			break
 		} else if 에러 != nil {
@@ -205,7 +205,7 @@ func f시간_일치_확인(ch완료 chan lb.T신호) {
 		}()
 	}
 
-	for i := 0; i < 100; i++ {
+	for range 100 {
 		시각, 에러 := (<-TrT0167_시각_조회()).G값()
 
 		if 에러 != nil || 시각.Equal(time.Time{}) {
@@ -221,8 +221,8 @@ func f시간_일치_확인(ch완료 chan lb.T신호) {
 }
 
 func F전일_당일_설정() (에러 error) {
-	for i := 0; i < 3; i++ {
-		if 에러 := f전일_당일_설정(); 에러 == nil {
+	for range 3 {
+		if 에러 = f전일_당일_설정(); 에러 == nil {
 			return nil
 		}
 	}
@@ -276,12 +276,12 @@ func DLL32_종료() (에러 error) {
 		return lb.New에러with출력("DLL32 종료 타임아웃")
 	}
 
-	for i := 0; i < 10; i++ {
+	for range 10 {
 		if DLL32_종료됨() {
 			break
 		}
 
-		ep.F프로세스_종료by프로세스ID(프로세스ID_DLL32)
+		_ = ep.F프로세스_종료by프로세스ID(프로세스ID_DLL32)
 		lb.F대기(lb.P1초)
 	}
 
