@@ -56,7 +56,7 @@ func (s *T1902_ETF시간별_추이_응답_반복값_모음) G반복값_모음_TR
 
 func NewT1902InBlock(질의값 *lb.S질의값_단일종목_연속키) (g *T1902InBlock) {
 	g = new(T1902InBlock)
-	lb.F바이트_복사_문자열(g.ShCode[:], 질의값.M종목코드)
+	lb.F바이트_복사_문자열(g.Shcode[:], 질의값.M종목코드)
 	lb.F바이트_복사_문자열(g.Time[:], 질의값.M연속키)
 
 	f속성값_초기화(g)
@@ -75,8 +75,8 @@ func NewT1902_ETF시간별_추이_응답_헤더(b []byte) (s *T1902_ETF시간별
 
 	s = new(T1902_ETF시간별_추이_응답_헤더)
 	s.M연속키 = lb.F2문자열_공백_제거(g.Time)
-	s.M종목명 = lb.F2문자열_EUC_KR_공백제거(g.HName)
-	s.M업종지수명 = lb.F2문자열_EUC_KR_공백제거(g.UpName)
+	s.M종목명 = lb.F2문자열_EUC_KR_공백제거(g.Hname)
+	s.M업종지수명 = lb.F2문자열_EUC_KR_공백제거(g.Upname)
 
 	return s, nil
 }
