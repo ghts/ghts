@@ -606,27 +606,27 @@ func F특수_종목_여부(종목코드 string) bool {
 	return false
 }
 
-func F최소_호가단위by종목코드(종목코드 string) (값 int64, 에러 error) {
+func F호가_단위by종목코드(종목코드 string) (값 int64, 에러 error) {
 	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = 0 }}.S실행()
 
 	종목 := lb.F확인2(F종목by코드(종목코드))
 
-	return F최소_호가단위by종목(종목)
+	return F호가_단위by종목(종목)
 }
 
-func F최소_호가단위by종목(종목 *lb.S종목) (값 int64, 에러 error) {
+func F호가_단위by종목(종목 *lb.S종목) (값 int64, 에러 error) {
 	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = 0 }}.S실행()
 
-	switch 종목.G시장구분() {
-	case lb.P시장구분_ETF, lb.P시장구분_ETN:
-		return 5, nil
-	default:
-		// 오류 발생 예방을 위해서 (기준가가 아닌) 상한가 기준으로 호가 단위 산출.
-		return f호가_단위(종목.G상한가()), nil
+	// 오류 발생 예방을 위해서 상한가 기준으로 호가 단위 산출.
+
+	if ETF_ETN_종목_여부(종목.G코드()) {
+		return f호가_단위_ETF_ETN(종목.G상한가()), nil
 	}
+
+	return f호가_단위_개별_종목(종목.G상한가()), nil
 }
 
-func f호가_단위(기준가 int64) int64 {
+func f호가_단위_개별_종목(기준가 int64) int64 {
 	switch {
 	case 기준가 < 2000:
 		return 1
@@ -645,26 +645,33 @@ func f호가_단위(기준가 int64) int64 {
 	}
 }
 
+func f호가_단위_ETF_ETN(기준가 int64) int64 {
+	switch {
+	case 기준가 < 2000:
+		return 1
+	default:
+		return 5
+	}
+}
+
 func F호가_필터(종목코드 string, 호가 int64) int64 {
 	if 호가 <= 0 {
 		return 0
-	} else if 종목, 에러 := F종목by코드(종목코드); 에러 != nil {
-		호가_단위 := f호가_단위(호가)
+	} else if 호가_단위, 에러 := F호가_단위by종목코드(종목코드); 에러 != nil {
 		return 호가 / 호가_단위 * 호가_단위
-	} else {
-		return F호가_필터by종목(종목, 호가)
 	}
+
+	return 호가
 }
 
 func F호가_필터by종목(종목 *lb.S종목, 호가 int64) int64 {
 	if 호가 <= 0 {
 		return 0
-	} else if 호가_단위, 에러 := F최소_호가단위by종목(종목); 에러 != nil {
-		호가_단위 = f호가_단위(호가)
-		return 호가 / 호가_단위 * 호가_단위
-	} else {
+	} else if 호가_단위, 에러 := F호가_단위by종목(종목); 에러 != nil {
 		return 호가 / 호가_단위 * 호가_단위
 	}
+
+	return 호가
 }
 
 func F금일_한국증시_개장() bool {
