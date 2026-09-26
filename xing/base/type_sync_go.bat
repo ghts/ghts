@@ -8,7 +8,7 @@ REM ***********
 REM *  32Bit  *
 REM ***********
 
-call %GOPATH%\src\github.com\ghts\ghts\batch_scripts\32.bat
+call ..\..\batch_scripts\32.bat
 
 REM cls
 cd %GOPATH%\src\github.com\ghts\ghts\xing\base

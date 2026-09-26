@@ -1958,10 +1958,14 @@ typedef struct {
 //------------------------------------------------------------------------------
 // ETF 현재가(시세) 조회 (t1901)
 //------------------------------------------------------------------------------
+
+// 기본입력
 typedef struct {
     char    shcode              [   6];    char    _shcode              ;    // [string,    6] 단축코드                        StartPos 0, Length 6
+    char    exchgubun           [   1];    char    _exchgubun           ;    // [string,    1] 거래소구분코드                  StartPos 7, Length 1
 } T1901InBlock;
 
+// 출력
 typedef struct {
     char    hname               [  20];    char    _hname               ;    // [string,   20] 한글명                          StartPos 0, Length 20
     char    price               [   8];    char    _price               ;    // [long  ,    8] 현재가                          StartPos 21, Length 8
@@ -2097,23 +2101,31 @@ typedef struct {
     char    idx_asset_class1    [   2];    char    _idx_asset_class1    ;    // [string,    2] 지수자산분류코드(대분류)        StartPos 1235, Length 2
     char    ty_text             [   8];    char    _ty_text             ;    // [string,    8] ETF/ETN투자유의                 StartPos 1238, Length 8
     char    leverage2           [   6];    char    _leverage2           ;    // [float ,  6.2] 추적수익률배수                  StartPos 1247, Length 6
+    char    nxt_vi_gubun        [  10];    char    _nxt_vi_gubun        ;    // [string,   10] NXTVI발동해제                   StartPos 1254, Length 10
+    char    ex_shcode           [  10];    char    _ex_shcode           ;    // [string,   10] 거래소별단축코드                StartPos 1265, Length 10
 } T1901OutBlock;
 
 //------------------------------------------------------------------------------
 // ETF 시간별 추이 (t1902)
 //------------------------------------------------------------------------------
+
+// 기본입력
 typedef struct {
-    char    shCode[6];  char _shcode;       //[string,    6] 단축코드   StartPos 0, Length 6
-    char    time[6];    char _time;         //[string,    6] 시간   StartPos 7, Length 6
+    char    shcode              [   6];    char    _shcode              ;    // [string,    6] 단축코드                        StartPos 0, Length 6
+    char    time                [   6];    char    _time                ;    // [string,    6] 시간                            StartPos 7, Length 6
+    char    exchgubun           [   1];    char    _exchgubun           ;    // [string,    1] 거래소구분코드                  StartPos 14, Length 1
 } T1902InBlock;
 
+// 출력
 typedef struct {
-    char    time[6];    char _time;         //[string,    6] 시간   StartPos 0, Length 6
-    char    hName[20];  char _hname;        //[string,   20] 종목명   StartPos 7, Length 20
-    char    upName[20]; char _upname;       //[string,   20] 업종지수명   StartPos 28, Length 20
+    char    time                [   6];    char    _time                ;    // [string,    6] 시간                            StartPos 0, Length 6
+    char    hname               [  20];    char    _hname               ;    // [string,   20] 종목명                          StartPos 7, Length 20
+    char    upname              [  20];    char    _upname              ;    // [string,   20] 업종지수명                      StartPos 28, Length 20
+    char    ex_shcode           [  10];    char    _ex_shcode           ;    // [string,   10] 거래소별단축코드                StartPos 49, Length 10
 } T1902OutBlock;
 
-typedef struct {    // occurs
+// 출력1                          , occurs
+typedef struct {
     char    time                [   8];    char    _time                ;    // [string,    8] 시간                            StartPos 0, Length 8
     char    price               [   8];    char    _price               ;    // [long  ,    8] 현재가                          StartPos 9, Length 8
     char    sign                [   1];    char    _sign                ;    // [string,    1] 전일대비구분                    StartPos 18, Length 1
@@ -2127,15 +2139,20 @@ typedef struct {    // occurs
     char    jisu                [   8];    char    _jisu                ;    // [float ,  8.2] 지수                            StartPos 101, Length 8
     char    jichange            [   8];    char    _jichange            ;    // [float ,  8.2] 전일대비                        StartPos 110, Length 8
     char    jirate              [   8];    char    _jirate              ;    // [float ,  8.2] 전일대비율                      StartPos 119, Length 8
+    char    exchname            [   3];    char    _exchname            ;    // [string,    3] 거래소명                        StartPos 128, Length 3
 } T1902OutBlock1;
 
 //------------------------------------------------------------------------------
 // ETF LP 호가 (t1906)
 //------------------------------------------------------------------------------
+
+// 기본입력
 typedef struct {
     char    shcode              [   6];    char    _shcode              ;    // [string,    6] 단축코드                        StartPos 0, Length 6
+    char    exchgubun           [   1];    char    _exchgubun           ;    // [string,    1] 거래소구분코드                  StartPos 7, Length 1
 } T1906InBlock;
 
+// 출력
 typedef struct {
     char    hname               [  20];    char    _hname               ;    // [string,   20] 한글명                          StartPos 0, Length 20
     char    price               [   8];    char    _price               ;    // [long  ,    8] 현재가                          StartPos 21, Length 8
@@ -2246,6 +2263,16 @@ typedef struct {
     char    midprice            [   8];    char    _midprice            ;    // [long  ,    8] 중간가격                        StartPos 1211, Length 8
     char    offermidsumrem      [   9];    char    _offermidsumrem      ;    // [long  ,    9] 매도중간가잔량합계수량          StartPos 1220, Length 9
     char    bidmidsumrem        [   9];    char    _bidmidsumrem        ;    // [long  ,    9] 매수중간가잔량합계수량          StartPos 1230, Length 9
+    char    nxt_ho_status       [   1];    char    _nxt_ho_status       ;    // [string,    1] NXT동시구분                     StartPos 1240, Length 1
+    char    nxt_midprice        [   8];    char    _nxt_midprice        ;    // [long  ,    8] NXT중간가격                     StartPos 1242, Length 8
+    char    nxt_offermidsumrem  [   9];    char    _nxt_offermidsumrem  ;    // [long  ,    9] NXT매도중간가잔량합계수량       StartPos 1251, Length 9
+    char    nxt_bidmidsumrem    [   9];    char    _nxt_bidmidsumrem    ;    // [long  ,    9] NXT매수중간가잔량합계수량       StartPos 1261, Length 9
+    char    nxt_yeprice         [   8];    char    _nxt_yeprice         ;    // [long  ,    8] NXT예상체결가격                 StartPos 1271, Length 8
+    char    nxt_yevolume        [  12];    char    _nxt_yevolume        ;    // [long  ,   12] NXT예상체결수량                 StartPos 1280, Length 12
+    char    nxt_yesign          [   1];    char    _nxt_yesign          ;    // [string,    1] NXT예상체결전일구분             StartPos 1293, Length 1
+    char    nxt_yechange        [   8];    char    _nxt_yechange        ;    // [long  ,    8] NXT예상체결전일대비             StartPos 1295, Length 8
+    char    nxt_yediff          [   6];    char    _nxt_yediff          ;    // [float ,  6.2] NXT예상체결등락율               StartPos 1304, Length 6
+    char    ex_shcode           [  10];    char    _ex_shcode           ;    // [string,   10] 거래소별단축코드                StartPos 1311, Length 10
 } T1906OutBlock;
 
 //------------------------------------------------------------------------------
