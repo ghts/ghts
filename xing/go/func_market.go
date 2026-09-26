@@ -211,16 +211,6 @@ func F종목by코드(종목코드 string) (종목 *lb.S종목, 에러 error) {
 	return 종목, nil
 }
 
-// F하한가by종목코드 : 종목코드로 하한가 조회. (테스트 등 전역 맵 직접 참조 대체용)
-func F하한가by종목코드(종목코드 string) (int64, bool) {
-	if s := 종목정보_저장소.Load(); s != nil {
-		값, ok := s.M하한가_맵[종목코드]
-		return 값, ok
-	}
-
-	return 0, false
-}
-
 func F종목명by코드(종목코드 string) (종목명 string, 에러 error) {
 	if 종목, 에러 := F종목by코드(종목코드); 에러 != nil {
 		return "", 에러
@@ -229,6 +219,16 @@ func F종목명by코드(종목코드 string) (종목명 string, 에러 error) {
 	} else {
 		return 종목명, nil
 	}
+}
+
+// F하한가by종목코드 : 종목코드로 하한가 조회. (테스트 등 전역 맵 직접 참조 대체용)
+func F하한가by종목코드(종목코드 string) (int64, bool) {
+	if s := 종목정보_저장소.Load(); s != nil {
+		값, ok := s.M하한가_맵[종목코드]
+		return 값, ok
+	}
+
+	return 0, false
 }
 
 func F임의_종목() *lb.S종목 {
@@ -293,12 +293,24 @@ func F코스닥_종목_여부(종목코드 string) bool {
 	return 존재함
 }
 
-func ETF_ETN_종목_여부(종목_코드 string) bool {
-	종목, 에러 := F종목by코드(종목_코드)
+func ETF_ETN_종목_여부(종목코드 string) bool {
+	정보 := f종목_정보()
+	if 정보 != nil {
+		if _, 존재함 := 정보.M맵_ETF[trade.F종목코드_보정(종목코드)]; 존재함 {
+			return true
+		}
+
+		if _, 존재함 := 정보.M맵_ETN[trade.F종목코드_보정(종목코드)]; 존재함 {
+			return true
+		}
+	}
+
+	종목, 에러 := F종목by코드(종목코드)
+	if 에러 != nil {
+		return false
+	}
 
 	switch {
-	case 에러 != nil:
-		return false
 	case 종목.G시장구분() == lb.P시장구분_ETF,
 		종목.G시장구분() == lb.P시장구분_ETN,
 		strings.Contains(종목.G이름(), "ETN"),
