@@ -75,6 +75,8 @@ func f초기화_XingAPI() (에러 error) {
 	etkReleaseRequestData = lb.F확인2(syscall.GetProcAddress(xing_api_dll, "ETK_ReleaseRequestData"))
 	etkReleaseMessageData = lb.F확인2(syscall.GetProcAddress(xing_api_dll, "ETK_ReleaseMessageData"))
 	etkDecompress = lb.F확인2(syscall.GetProcAddress(xing_api_dll, "ETK_Decompress"))
+
+	return nil
 }
 
 func F접속(서버_구분 xt.T서버_구분) error {
