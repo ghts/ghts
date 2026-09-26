@@ -1913,6 +1913,8 @@ type T1102OutBlock struct {
 	X_nxt_svi_dnlmtprice byte
 	Ex_shcode            [10]byte
 	X_ex_shcode          byte
+	Krx_mcls_price       [8]byte
+	X_krx_mcls_price     byte
 }
 
 type T1301InBlock struct {

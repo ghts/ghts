@@ -1604,11 +1604,14 @@ typedef struct {
 //------------------------------------------------------------------------------
 // 현물 현재가 시세 조회 (t1102)
 //------------------------------------------------------------------------------
+
+// 기본입력
 typedef struct {
     char    shcode              [   6];    char    _shcode              ;    // [string,    6] 단축코드                        StartPos 0, Length 6
     char    exchgubun           [   1];    char    _exchgubun           ;    // [string,    1] 거래소구분코드                  StartPos 7, Length 1
 } T1102InBlock;
 
+// 출력
 typedef struct {
     char    hname               [  20];    char    _hname               ;    // [string,   20] 한글명                          StartPos 0, Length 20
     char    price               [   8];    char    _price               ;    // [long  ,    8] 현재가                          StartPos 21, Length 8
@@ -1775,6 +1778,7 @@ typedef struct {
     char    nxt_svi_uplmtprice  [   8];    char    _nxt_svi_uplmtprice  ;    // [long  ,    8] NXT정적VI상한가                 StartPos 1538, Length 8
     char    nxt_svi_dnlmtprice  [   8];    char    _nxt_svi_dnlmtprice  ;    // [long  ,    8] NXT정적VI하한가                 StartPos 1547, Length 8
     char    ex_shcode           [  10];    char    _ex_shcode           ;    // [string,   10] 거래소별단축코드                StartPos 1556, Length 10
+    char    krx_mcls_price      [   8];    char    _krx_mcls_price      ;    // [long  ,    8] KRX정규종가                     StartPos 1567, Length 8
 } T1102OutBlock;
 
 //------------------------------------------------------------------------------

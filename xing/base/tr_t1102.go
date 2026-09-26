@@ -105,6 +105,7 @@ type T1102_현물_시세_조회_응답 struct {
 	NXT정적VI상한가     int64
 	NXT정적VI하한가     int64
 	M거래소별단축코드      string
+	KRX정규_종가       int64
 }
 
 type T1102_거래원_정보 struct {
@@ -357,6 +358,7 @@ func NewT1102_현물_시세_조회_응답(b []byte) (s *T1102_현물_시세_조�
 	s.NXT정적VI상한가 = lb.F확인2(lb.F2정수64_공백은_0(g.Nxt_svi_uplmtprice))
 	s.NXT정적VI하한가 = lb.F확인2(lb.F2정수64_공백은_0(g.Nxt_svi_dnlmtprice))
 	s.M거래소별단축코드 = lb.F2문자열_공백_제거(g.Ex_shcode)
+	s.KRX정규_종가 = lb.F확인2(lb.F2정수64_공백은_0(g.Krx_mcls_price))
 
 	return s, nil
 }
