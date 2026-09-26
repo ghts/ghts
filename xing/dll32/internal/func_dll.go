@@ -19,6 +19,8 @@ func f초기화_XingAPI() (에러 error) {
 		API_초기화_잠금.Unlock()
 	}}.S실행()
 
+	API_초기화_잠금.Lock()
+
 	if API_초기화_완료.G값() {
 		return
 	}
