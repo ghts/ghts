@@ -3,6 +3,7 @@ package xing
 import (
 	"runtime"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	lb "github.com/ghts/ghts/lib"
@@ -43,24 +44,17 @@ var (
 	종료_시각 = lb.New안전한_시각(time.Time{})
 )
 
-// 종목 관련 저장소는 초기화 이후에는 사실상 읽기 전용. 다중 사용에 문제가 없음.
+// 종목 관련 데이터는 "불변 스냅샷 원자 교체" 방식으로 관리한다. (s종목_정보_저장소 참조)
+// - 읽기: f종목_정보()가 원자적으로 스냅샷 참조만 로드하므로 잠금 없이 호출 가능.
+// - 쓰기: f종목_정보_설정_실행() 한 경로만, 종목정보_초기화_잠금 안에서 Store (하루 1회).
 var (
-	종목정보_잠금      sync.RWMutex
-	종목모음_설정일     = lb.New안전한_시각(time.Time{})
-	종목모음_전체      = make([]*lb.S종목, 0)
-	종목맵_전체       = make(map[string]*lb.S종목)
-	종목모음_코스피     = make([]*lb.S종목, 0)
-	종목맵_코스피      = make(map[string]*lb.S종목)
-	종목모음_코스닥     = make([]*lb.S종목, 0)
-	종목맵_코스닥      = make(map[string]*lb.S종목)
-	종목모음_ETF     = make([]*lb.S종목, 0)
-	종목모음_ETN     = make([]*lb.S종목, 0)
-	종목모음_ETF_ETN = make([]*lb.S종목, 0)
-	특수_종목_맵      = make(map[string]*lb.S종목)
-	기준가_맵        = make(map[string]int64)
-	하한가_맵        = make(map[string]int64)
-	계좌번호_모음      []string
-	계좌번호_모음_잠금   sync.Mutex
+	종목정보_저장소    atomic.Pointer[s종목_정보_저장소]
+	종목정보_초기화_잠금 sync.Mutex // 중복 TR 조회 방지용. 읽기 경로와 무관.
+
+	// 계좌번호 모음도 같은 "1회 조회 후 불변 캐시" 패턴.
+	계좌번호_모음_캐시 atomic.Pointer[[]string]
+	계좌번호_모음_잠금 sync.Mutex // 중복 TR 조회 방지용. 읽기 경로와 무관.
+
 	프로세스ID_DLL32 int
 )
 

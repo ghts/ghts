@@ -1218,26 +1218,32 @@ func F접속됨() (접속됨 bool, 에러 error) {
 
 func F계좌번호_모음() (응답값 []string, 에러 error) {
 	defer lb.S예외처리{M에러: &에러, M에러_실행: func() {
-		계좌번호_모음 = make([]string, 0)
 		응답값 = make([]string, 0)
 	}}.S실행()
 
+	// 캐시 히트: 원자 로드 (읽기 경로 잠금 없음).
+	if 캐시 := 계좌번호_모음_캐시.Load(); 캐시 != nil {
+		return *캐시, nil
+	}
+
+	// 캐시 미스: TR 중복 조회 방지를 위해 잠금 후 재확인 (더블 체크).
 	계좌번호_모음_잠금.Lock()
 	defer 계좌번호_모음_잠금.Unlock()
 
-	if len(계좌번호_모음) > 0 {
-		return 계좌번호_모음, nil
+	if 캐시 := 계좌번호_모음_캐시.Load(); 캐시 != nil {
+		return *캐시, nil
 	}
 
 	질의값 := lb.New질의값_기본형(xt.TR계좌_번호, "")
 
-	계좌번호_모음 = make([]string, 0)
-	if 에러 = F질의(질의값, lb.P10초).G값(0, &계좌번호_모음); 에러 != nil {
-		lb.F에러_출력(에러)
+	모음 := make([]string, 0)
+	if 에러 = F질의(질의값, lb.P10초).G값(0, &모음); 에러 != nil {
 		return nil, 에러
 	}
 
-	return 계좌번호_모음, nil
+	계좌번호_모음_캐시.Store(&모음) // 이후 불변으로 유지.
+
+	return 모음, nil
 }
 
 func F계좌_수량() (계좌_수량 int, 에러 error) {

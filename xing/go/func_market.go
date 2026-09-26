@@ -2,101 +2,56 @@ package xing
 
 import (
 	"strings"
-	"time"
 
 	lb "github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/lib/trade"
 	xt "github.com/ghts/ghts/xing/base"
 )
 
-func F종목코드_모음_전체() []string {
-	lb.F조건부_패닉(len(종목모음_전체) == 0, "xing 초기화 안 됨.")
+// f종목코드_모음_추출 : 종목 모음에서 종목코드 슬라이스를 추출.
+func f종목코드_모음_추출(모음 []*lb.S종목) []string {
+	종목코드_모음 := make([]string, len(모음))
 
-	종목정보_잠금.RLock()
-	defer 종목정보_잠금.RUnlock()
-
-	종목코드_모음 := make([]string, len(종목모음_전체), len(종목모음_전체))
-
-	for i, 종목 := range 종목모음_전체 {
+	for i, 종목 := range 모음 {
 		종목코드_모음[i] = 종목.G코드()
 	}
 
 	return 종목코드_모음
+}
+
+func F종목코드_모음_전체() []string {
+	정보 := f종목_정보()
+	lb.F조건부_패닉(정보 == nil || len(정보.M전체) == 0, "xing 초기화 안 됨.")
+
+	return f종목코드_모음_추출(정보.M전체)
 }
 
 func F종목코드_모음_KOSPI() []string {
-	lb.F조건부_패닉(len(종목모음_전체) == 0, "xing 초기화 안 됨.")
+	정보 := f종목_정보()
+	lb.F조건부_패닉(정보 == nil || len(정보.M코스피) == 0, "xing 초기화 안 됨.")
 
-	종목정보_잠금.RLock()
-	defer 종목정보_잠금.RUnlock()
-
-	종목코드_모음 := make([]string, len(종목모음_코스피), len(종목모음_코스피))
-
-	for i, 종목 := range 종목모음_코스피 {
-		종목코드_모음[i] = 종목.G코드()
-	}
-
-	return 종목코드_모음
+	return f종목코드_모음_추출(정보.M코스피)
 }
 
 func F종목코드_모음_KOSDAQ() []string {
-	lb.F조건부_패닉(len(종목모음_전체) == 0, "xing 초기화 안 됨.")
+	정보 := f종목_정보()
+	lb.F조건부_패닉(정보 == nil || len(정보.M코스닥) == 0, "xing 초기화 안 됨.")
 
-	종목정보_잠금.RLock()
-	defer 종목정보_잠금.RUnlock()
-
-	종목코드_모음 := make([]string, len(종목모음_코스닥), len(종목모음_코스닥))
-
-	for i, 종목 := range 종목모음_코스닥 {
-		종목코드_모음[i] = 종목.G코드()
-	}
-
-	return 종목코드_모음
+	return f종목코드_모음_추출(정보.M코스닥)
 }
 
 func F종목코드_모음_ETF() []string {
-	lb.F조건부_패닉(len(종목모음_전체) == 0, "xing 초기화 안 됨.")
+	정보 := f종목_정보()
+	lb.F조건부_패닉(정보 == nil || len(정보.ETF) == 0, "xing 초기화 안 됨.")
 
-	종목정보_잠금.RLock()
-	defer 종목정보_잠금.RUnlock()
-
-	종목코드_모음 := make([]string, len(종목모음_ETF), len(종목모음_ETF))
-
-	for i, 종목 := range 종목모음_ETF {
-		종목코드_모음[i] = 종목.G코드()
-	}
-
-	return 종목코드_모음
+	return f종목코드_모음_추출(정보.ETF)
 }
 
 func F종목코드_모음_ETN() []string {
-	lb.F조건부_패닉(len(종목모음_전체) == 0, "xing 초기화 안 됨.")
+	정보 := f종목_정보()
+	lb.F조건부_패닉(정보 == nil || len(정보.ETN) == 0, "xing 초기화 안 됨.")
 
-	종목정보_잠금.RLock()
-	defer 종목정보_잠금.RUnlock()
-
-	종목코드_모음 := make([]string, len(종목모음_ETN), len(종목모음_ETN))
-
-	for i, 종목 := range 종목모음_ETN {
-		종목코드_모음[i] = 종목.G코드()
-	}
-
-	return 종목코드_모음
-}
-
-func F종목코드_모음_ETF_ETN() []string {
-	lb.F조건부_패닉(len(종목모음_전체) == 0, "xing 초기화 안 됨.")
-
-	종목정보_잠금.RLock()
-	defer 종목정보_잠금.RUnlock()
-
-	종목코드_모음 := make([]string, len(종목모음_ETF_ETN), len(종목모음_ETF_ETN))
-
-	for i, 종목 := range 종목모음_ETF_ETN {
-		종목코드_모음[i] = 종목.G코드()
-	}
-
-	return 종목코드_모음
+	return f종목코드_모음_추출(정보.ETN)
 }
 
 func F질의값_종목코드_검사(질의값_원본 lb.I질의값) (에러 error) {
@@ -129,79 +84,72 @@ func F종목코드_검사(종목코드 string) error {
 	return 에러
 }
 
+// F종목_정보_설정 : 종목 정보를 (재)조회하여 스냅샷으로 원자 교체한다.
+// 실패 시 기존 스냅샷은 유지된다.
 func F종목_정보_설정() (에러 error) {
-	종목정보_잠금.Lock()
-	defer 종목정보_잠금.Unlock()
+	종목정보_초기화_잠금.Lock()
+	defer 종목정보_초기화_잠금.Unlock()
 
-	if len(종목모음_코스피) > 0 &&
-		len(종목모음_코스닥) > 0 &&
-		len(종목모음_ETF) > 0 &&
-		len(종목모음_ETN) > 0 &&
-		len(종목모음_ETF_ETN) > 0 &&
-		len(종목모음_전체) > 0 &&
-		len(종목맵_전체) > 0 &&
-		len(종목맵_코스피) > 0 &&
-		len(종목맵_코스닥) > 0 &&
-		len(기준가_맵) > 0 &&
-		len(하한가_맵) > 0 &&
-		종목모음_설정일.G값().Equal(lb.F금일()) {
+	return f종목_정보_설정_실행()
+}
+
+// f종목_정보_설정_실행 : TR 조회 + 스냅샷 Store.
+// 반드시 종목정보_초기화_잠금 상태에서 호출할 것 (중복 TR 조회 방지).
+func f종목_정보_설정_실행() (에러 error) {
+	defer lb.S예외처리{M에러: &에러}.S실행()
+
+	// 당일 이미 설정된 경우 TR 재조회 생략.
+	if s := 종목정보_저장소.Load(); s != nil && len(s.M전체) > 0 && s.M설정일.Equal(lb.F금일()) {
 		return nil
 	}
 
-	defer lb.S예외처리{
-		M에러: &에러,
-		M에러_실행: func() {
-			종목모음_코스피 = make([]*lb.S종목, 0)
-			종목모음_코스닥 = make([]*lb.S종목, 0)
-			종목모음_ETF = make([]*lb.S종목, 0)
-			종목모음_ETN = make([]*lb.S종목, 0)
-			종목모음_ETF_ETN = make([]*lb.S종목, 0)
-			특수_종목_맵 = make(map[string]*lb.S종목)
-			종목모음_전체 = make([]*lb.S종목, 0)
-			종목맵_전체 = make(map[string]*lb.S종목)
-			종목맵_코스피 = make(map[string]*lb.S종목)
-			종목맵_코스닥 = make(map[string]*lb.S종목)
-			기준가_맵 = make(map[string]int64)
-			하한가_맵 = make(map[string]int64)
-			종목모음_설정일 = lb.New안전한_시각(time.Time{})
-		}}.S실행()
-
 	종목_정보_모음 := lb.F확인2(TrT8436_주식종목_조회(lb.P시장구분_전체))
 
-	종목모음_코스피 = make([]*lb.S종목, 0)
-	종목모음_코스닥 = make([]*lb.S종목, 0)
-	종목모음_ETF = make([]*lb.S종목, 0)
-	종목모음_ETN = make([]*lb.S종목, 0)
-	종목모음_ETF_ETN = make([]*lb.S종목, 0)
-	특수_종목_맵 = make(map[string]*lb.S종목)
-	종목모음_전체 = make([]*lb.S종목, 0)
-	종목맵_전체 = make(map[string]*lb.S종목)
-	종목맵_코스피 = make(map[string]*lb.S종목)
-	종목맵_코스닥 = make(map[string]*lb.S종목)
-	기준가_맵 = make(map[string]int64)
-	하한가_맵 = make(map[string]int64)
+	종목정보_저장소.Store(new종목_정보_저장소(종목_정보_모음))
+
+	return nil
+}
+
+// new종목_정보_저장소 : 전역 상태와 잠금에 접근하지 않는 순수 생성자 함수이다.
+func new종목_정보_저장소(종목_정보_모음 []*xt.T8436_현물_종목조회_응답_반복값) *s종목_정보_저장소 {
+	저장소 := &s종목_정보_저장소{
+		M설정일:   lb.F금일(),
+		M전체:    make([]*lb.S종목, 0, len(종목_정보_모음)),
+		M맵_전체:  make(map[string]*lb.S종목, len(종목_정보_모음)),
+		M코스피:   make([]*lb.S종목, 0),
+		M맵_코스피: make(map[string]*lb.S종목),
+		M코스닥:   make([]*lb.S종목, 0),
+		M맵_코스닥: make(map[string]*lb.S종목),
+		ETF:    make([]*lb.S종목, 0),
+		M맵_ETF: make(map[string]*lb.S종목),
+		ETN:    make([]*lb.S종목, 0),
+		M맵_ETN: make(map[string]*lb.S종목),
+		M특수_맵:  make(map[string]*lb.S종목),
+		M기준가_맵: make(map[string]int64, len(종목_정보_모음)),
+		M하한가_맵: make(map[string]int64, len(종목_정보_모음)),
+	}
 
 	for _, s := range 종목_정보_모음 {
 		종목 := lb.New종목with가격정보(s.M종목코드, s.M종목명, s.M시장구분, s.M전일가, s.M상한가, s.M하한가, s.M기준가)
 
-		기준가_맵[s.M종목코드] = s.M기준가
-		하한가_맵[s.M종목코드] = s.M하한가
-		종목맵_전체[종목.G코드()] = 종목
-		종목모음_전체 = append(종목모음_전체, 종목)
+		저장소.M전체 = append(저장소.M전체, 종목)
+		저장소.M맵_전체[종목.G코드()] = 종목
+		저장소.M기준가_맵[s.M종목코드] = s.M기준가
+		저장소.M하한가_맵[s.M종목코드] = s.M하한가
 
 		switch s.M시장구분 {
 		case lb.P시장구분_코스피:
-			종목모음_코스피 = append(종목모음_코스피, 종목)
-			종목맵_코스피[종목.G코드()] = 종목
+			저장소.M코스피 = append(저장소.M코스피, 종목)
+			저장소.M맵_코스피[종목.G코드()] = 종목
 		case lb.P시장구분_코스닥:
-			종목모음_코스닥 = append(종목모음_코스닥, 종목)
-			종목맵_코스닥[종목.G코드()] = 종목
+			저장소.M코스닥 = append(저장소.M코스닥, 종목)
+			저장소.M맵_코스닥[종목.G코드()] = 종목
 		case lb.P시장구분_ETF:
-			종목모음_ETF = append(종목모음_ETF, 종목)
-			종목모음_ETF_ETN = append(종목모음_ETF_ETN, 종목)
+			저장소.ETF = append(저장소.ETF, 종목)
+			저장소.M맵_ETF[종목.G코드()] = 종목
 		case lb.P시장구분_ETN:
-			종목모음_ETN = append(종목모음_ETN, 종목)
-			종목모음_ETF_ETN = append(종목모음_ETF_ETN, 종목)
+			저장소.ETN = append(저장소.ETN, 종목)
+			저장소.M맵_ETN[종목.G코드()] = 종목
 		default:
 			// PASS. 코드 검사 통과를 위해서 default문 추가.
 		}
@@ -214,30 +162,37 @@ func F종목_정보_설정() (에러 error) {
 			xt.P증권그룹_인프라투융자회사,
 			xt.P증권그룹_해외ETF,
 			xt.P증권그룹_해외원주:
-			특수_종목_맵[s.M종목코드] = 종목
+			저장소.M특수_맵[s.M종목코드] = 종목
 		}
 	}
 
-	종목모음_설정일 = lb.New안전한_시각(lb.F금일())
+	return 저장소
+}
 
-	return nil
+// f종목_정보 : 현재 스냅샷을 원자적으로 반환. 없거나 전일 이하이면 (재)설정한다.
+// 읽기 경로의 정상 흐름은 잠금 없이(원자 로드 1회) 통과한다.
+func f종목_정보() *s종목_정보_저장소 {
+	if s := 종목정보_저장소.Load(); s != nil && s.M설정일.Equal(lb.F금일()) {
+		return s
+	}
+
+	// 지연 초기화: 여러 루틴이 동시에 들어와도 TR 조회는 1회만.
+	종목정보_초기화_잠금.Lock()
+	defer 종목정보_초기화_잠금.Unlock()
+
+	if s := 종목정보_저장소.Load(); s != nil && s.M설정일.Equal(lb.F금일()) {
+		return s
+	}
+
+	_ = f종목_정보_설정_실행() // 실패 시 기존(전일) 스냅샷 유지. 에러는 S예외처리에서 출력됨.
+
+	return 종목정보_저장소.Load()
 }
 
 func F종목by코드(종목코드 string) (종목 *lb.S종목, 에러 error) {
-	수량 := func() int {
-		종목정보_잠금.RLock()
-		defer 종목정보_잠금.RUnlock()
+	정보 := f종목_정보()
 
-		return len(종목맵_전체)
-	}()
-
-	if 수량 == 0 {
-		if 에러 = F종목_정보_설정(); 에러 != nil {
-			return nil, 에러
-		}
-	}
-
-	if len(종목맵_전체) == 0 {
+	if 정보 == nil || len(정보.M맵_전체) == 0 {
 		return nil, lb.New에러("xing 모듈 초기화 되지 않음.")
 	}
 
@@ -247,15 +202,23 @@ func F종목by코드(종목코드 string) (종목 *lb.S종목, 에러 error) {
 		return nil, lb.New에러("%v : B로 시작하는 채권 종목입니다.", 종목코드)
 	}
 
-	종목코드 = trade.F종목코드_보정(종목코드)
+	종목, ok := 정보.M맵_전체[종목코드]
 
-	var ok bool
-
-	if 종목, ok = 종목맵_전체[종목코드]; !ok {
+	if !ok {
 		return nil, lb.New에러("해당 종목코드가 존재하지 않습니다. '%v'", 종목코드)
-	} else {
-		return 종목, nil
 	}
+
+	return 종목, nil
+}
+
+// F하한가by종목코드 : 종목코드로 하한가 조회. (테스트 등 전역 맵 직접 참조 대체용)
+func F하한가by종목코드(종목코드 string) (int64, bool) {
+	if s := 종목정보_저장소.Load(); s != nil {
+		값, ok := s.M하한가_맵[종목코드]
+		return 값, ok
+	}
+
+	return 0, false
 }
 
 func F종목명by코드(종목코드 string) (종목명 string, 에러 error) {
@@ -269,28 +232,35 @@ func F종목명by코드(종목코드 string) (종목명 string, 에러 error) {
 }
 
 func F임의_종목() *lb.S종목 {
-	return f임의_종목_추출(종목모음_전체)
+	if 정보 := f종목_정보(); 정보 != nil {
+		return f임의_종목_추출(정보.M전체)
+	}
+
+	return nil
 }
 
 func F임의_종목_코스피_주식() *lb.S종목 {
-	종목정보_잠금.RLock()
-	defer 종목정보_잠금.RUnlock()
+	if 정보 := f종목_정보(); 정보 != nil {
+		return f임의_종목_추출(정보.M코스피)
+	}
 
-	return f임의_종목_추출(종목모음_코스피)
+	return nil
 }
 
 func F임의_종목_코스닥_주식() *lb.S종목 {
-	종목정보_잠금.RLock()
-	defer 종목정보_잠금.RUnlock()
+	if 정보 := f종목_정보(); 정보 != nil {
+		return f임의_종목_추출(정보.M코스닥)
+	}
 
-	return f임의_종목_추출(종목모음_코스닥)
+	return nil
 }
 
 func F임의_종목_ETF() *lb.S종목 {
-	종목정보_잠금.RLock()
-	defer 종목정보_잠금.RUnlock()
+	if 정보 := f종목_정보(); 정보 != nil {
+		return f임의_종목_추출(정보.ETF)
+	}
 
-	return f임의_종목_추출(종목모음_ETF)
+	return nil
 }
 
 func f임의_종목_추출(종목_모음 []*lb.S종목) *lb.S종목 {
@@ -298,30 +268,27 @@ func f임의_종목_추출(종목_모음 []*lb.S종목) *lb.S종목 {
 		return nil
 	}
 
-	종목정보_잠금.RLock()
-	defer 종목정보_잠금.RUnlock()
-
 	return 종목_모음[lb.F임의_범위_이내_정수값(0, len(종목_모음)-1)].G복제본()
 }
 
 func F코스피_종목_여부(종목코드 string) bool {
-	종목코드 = trade.F종목코드_보정(종목코드)
+	정보 := f종목_정보()
+	if 정보 == nil {
+		return false
+	}
 
-	종목정보_잠금.RLock()
-	defer 종목정보_잠금.RUnlock()
-
-	_, 존재함 := 종목맵_코스피[종목코드]
+	_, 존재함 := 정보.M맵_코스피[trade.F종목코드_보정(종목코드)]
 
 	return 존재함
 }
 
 func F코스닥_종목_여부(종목코드 string) bool {
-	종목코드 = trade.F종목코드_보정(종목코드)
+	정보 := f종목_정보()
+	if 정보 == nil {
+		return false
+	}
 
-	종목정보_잠금.RLock()
-	defer 종목정보_잠금.RUnlock()
-
-	_, 존재함 := 종목맵_코스닥[종목코드]
+	_, 존재함 := 정보.M맵_코스닥[trade.F종목코드_보정(종목코드)]
 
 	return 존재함
 }
@@ -580,17 +547,10 @@ func F금융사_종목_여부(종목코드 string) bool {
 }
 
 func F특수_종목_여부(종목코드 string) bool {
-	특수_종목_여부_1차_기준 := func() bool {
-		종목정보_잠금.RLock()
-		defer 종목정보_잠금.RUnlock()
-
-		_, 존재함 := 특수_종목_맵[종목코드]
-
-		return 존재함
-	}()
-
-	if 특수_종목_여부_1차_기준 {
-		return true
+	if 정보 := f종목_정보(); 정보 != nil {
+		if _, 존재함 := 정보.M특수_맵[종목코드]; 존재함 {
+			return true
+		}
 	}
 
 	종목, 에러 := F종목by코드(종목코드)

@@ -25,7 +25,7 @@ func TestCSPAT00800_현물_취소_주문(t *testing.T) {
 
 	var 종목 = lb.New종목("069500", "KODEX 200", lb.P시장구분_ETF)
 
-	하한가, ok := 하한가_맵[종목.G코드()]
+	하한가, ok := F하한가by종목코드(종목.G코드())
 	lb.F테스트_참임(t, ok, "하한가를 찾을 수 없음. %v", 종목.G코드())
 
 	const 수량_정상주문 = int64(25)
