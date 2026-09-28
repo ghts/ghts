@@ -1200,7 +1200,7 @@ func F질의_단일TR[T응답값 any](질의값 lb.I질의값, 옵션_모음 ...
 		case T응답값:
 			return &변환값, nil
 		default:
-			return nil, lb.New에러with출력("예상하지 못한 자료형 '%T' '%v'", i값, i값)
+			return nil, lb.New에러with출력("F질의_단일TR() 예상하지 못한 자료형 '%T' '%v'", i값, i값)
 		}
 	case <-time.After(타임아웃):
 		return nil, lb.New에러("타임아웃. '%v' '%v'", 질의값.TR코드(), 식별번호)
