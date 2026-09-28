@@ -10,7 +10,7 @@ IF NOT DEFINED GOPATH (
     SET GOPATH=%USERPROFILE%\Go
 )
 
-SET PROJECT_ROOT=%GOPATH%\src\github.com\ghts
+SET BATCH_SCRIPT_ROOT=%~dp0
 
 REM DEFAULT : 64BIT
 IF NOT DEFINED GOARCH (
@@ -24,6 +24,6 @@ IF /I "%GOARCH%"=="amd64" (
 )
 
 SET CGO_ENABLED=1
-SET PATH=%GOROOT%\bin;%GOPATH%\bin;%GCC_PATH%\bin;%PROJECT_ROOT%\batch_scripts;C:\Program Files\Git\bin;C:\msys64\usr\bin
+SET PATH=%GOROOT%\bin;%GOPATH%\bin;%GCC_PATH%\bin;%BATCH_SCRIPT_ROOT%;C:\Program Files\Git\bin;C:\msys64\usr\bin
 
  
