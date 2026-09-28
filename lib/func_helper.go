@@ -25,7 +25,7 @@ import (
 	"golang.org/x/exp/constraints"
 )
 
-func F같음(값, 비교값 interface{}) bool {
+func F같음(값, 비교값 any) bool {
 	switch 값.(type) {
 	case *big.Int, int, int8, int16, int32, int64,
 		uint, uint8, uint16, uint32, uint64:
@@ -56,13 +56,7 @@ func F같음(값, 비교값 interface{}) bool {
 }
 
 func F동일값_존재[T comparable](값 T, 비교값_모음 ...T) bool {
-	for _, 비교값 := range 비교값_모음 {
-		if 값 == 비교값 {
-			return true
-		}
-	}
-
-	return false
+	return slices.Contains(비교값_모음, 값)
 }
 
 func f2실수값_모음[T T숫자](값_모음 ...T) (실수값_모음 []float64) {
@@ -415,7 +409,7 @@ func F포트_닫힘_확인(주소 T주소) bool {
 	}
 }
 
-func F조건부_패닉(조건 bool, 포맷_문자열 string, 추가_매개변수 ...interface{}) {
+func F조건부_패닉(조건 bool, 포맷_문자열 string, 추가_매개변수 ...any) {
 	if !조건 {
 		return
 	}
@@ -423,7 +417,7 @@ func F조건부_패닉(조건 bool, 포맷_문자열 string, 추가_매개변수
 	panic(New에러(포맷_문자열, 추가_매개변수...))
 }
 
-func F조건부_실행(조건 bool, 함수 interface{}, 추가_매개변수 ...interface{}) {
+func F조건부_실행(조건 bool, 함수 any, 추가_매개변수 ...any) {
 	if 조건 {
 		인수_모음 := make([]reflect.Value, len(추가_매개변수))
 
@@ -498,11 +492,11 @@ func F정규식_검색(검색_대상 string, 정규식_문자열_모음 []string
 	return 검색_결과
 }
 
-func F자료형(값 interface{}) reflect.Type {
+func F자료형(값 any) reflect.Type {
 	return reflect.TypeOf(값)
 }
 
-func F자료형_문자열(값 interface{}) string {
+func F자료형_문자열(값 any) string {
 	자료형 := F자료형(값)
 
 	if 자료형 == nil {
@@ -512,14 +506,14 @@ func F자료형_문자열(값 interface{}) string {
 	}
 }
 
-func F자료형_문자열_단순형(값 interface{}) string {
+func F자료형_문자열_단순형(값 any) string {
 	자료형 := F자료형(값).String()
 	시작_인덱스 := strings.Index(자료형, ".") + 1
 
 	return 자료형[시작_인덱스:]
 }
 
-func F종류(값 interface{}) reflect.Kind {
+func F종류(값 any) reflect.Kind {
 	자료형 := F자료형(값)
 
 	if 자료형 == nil {
@@ -545,16 +539,16 @@ func F올바른_주소_문자열(주소 string) bool {
 	return true
 }
 
-func F인터페이스_입력값_검사(값 interface{}) error {
-	return F인터페이스_모음_입력값_검사([]interface{}{값})
+func F인터페이스_입력값_검사(값 any) error {
+	return F인터페이스_모음_입력값_검사([]any{값})
 }
 
-func F인터페이스_모음_입력값_검사(값_모음 []interface{}) error {
+func F인터페이스_모음_입력값_검사(값_모음 []any) error {
 	switch len(값_모음) {
 	case 0:
 		return nil
 	case 1:
-		if _, ok := 값_모음[0].([]interface{}); ok {
+		if _, ok := 값_모음[0].([]any); ok {
 			return errors.New("배열이 아닌 단일값")
 		}
 	}
@@ -566,7 +560,7 @@ func F문자열_복사(문자열 string) string {
 	return (문자열 + " ")[:len(문자열)]
 }
 
-func F슬라이스_복사(값, 에러_발생시_반환값 interface{}) interface{} {
+func F슬라이스_복사(값, 에러_발생시_반환값 any) any {
 	리플렉션_값 := reflect.ValueOf(값)
 
 	switch {
@@ -692,7 +686,7 @@ func F파일_검색(검색_시작_디렉토리, 파일명 string) (string, error
 		return 파일경로, nil
 	}
 
-	ch응답 := make(chan interface{}, 1)
+	ch응답 := make(chan any, 1)
 	go filepath.Walk(검색_시작_디렉토리, func(파일경로 string, 파일정보 os.FileInfo, 에러 error) error {
 		switch {
 		case 에러 != nil:
@@ -727,7 +721,7 @@ func F파일_검색(검색_시작_디렉토리, 파일명 string) (string, error
 
 			return 파일경로, nil
 		default:
-			panic(New에러("예상하지 못한 자료형 '%T' '%v'", 응답, 응답))
+			panic(New에러("F파일_검색() 예상하지 못한 자료형 '%T' '%v'", 응답, 응답))
 		}
 	case <-time.After(P30초 * 4):
 		return "", New에러with출력("'%v' : 파일 검색 타임아웃", 파일명)
@@ -796,7 +790,7 @@ func F문자열_삭제(대상_문자열 string, 삭제할_문자열 string, 삭�
 	return 대상_문자열
 }
 
-func F파일에_값_저장(값 interface{}, 파일명 string, 파일_잠금 sync.Locker) (에러 error) {
+func F파일에_값_저장(값 any, 파일명 string, 파일_잠금 sync.Locker) (에러 error) {
 	defer S예외처리{M에러: &에러}.S실행()
 
 	if 파일_잠금 != nil {
@@ -809,7 +803,7 @@ func F파일에_값_저장(값 interface{}, 파일명 string, 파일_잠금 sync
 
 	F확인1(gob.NewEncoder(파일).Encode(값))
 
-	for i := 0; i < 10; i++ {
+	for range 10 {
 		if 에러 = 파일.Sync(); 에러 == nil {
 			break
 		}
@@ -818,7 +812,7 @@ func F파일에_값_저장(값 interface{}, 파일명 string, 파일_잠금 sync
 	return 에러
 }
 
-func F파일에서_값_읽기(값_포인터 interface{}, 파일명 string, 파일_잠금 sync.Locker) (에러 error) {
+func F파일에서_값_읽기(값_포인터 any, 파일명 string, 파일_잠금 sync.Locker) (에러 error) {
 	defer S예외처리{M에러: &에러, M에러_실행: func() { 값_포인터 = nil }}.S실행()
 
 	switch 잠금 := 파일_잠금.(type) {
@@ -832,7 +826,7 @@ func F파일에서_값_읽기(값_포인터 interface{}, 파일명 string, 파�
 		defer 파일_잠금.Unlock()
 	}
 
-	F조건부_패닉(F종류(값_포인터) != reflect.Ptr, "포인터형이 아님. %T", 값_포인터)
+	F조건부_패닉(F종류(값_포인터) != reflect.Pointer, "포인터형이 아님. %T", 값_포인터)
 
 	파일 := F확인2(os.Open(파일명))
 	defer 파일.Close()
@@ -860,7 +854,7 @@ func F파일에서_값_읽기(값_포인터 interface{}, 파일명 string, 파�
 	return nil
 }
 
-func JSON_파일_저장(값 interface{}, 파일명 string) (에러 error) {
+func JSON_파일_저장(값 any, 파일명 string) (에러 error) {
 	if 바이트_모음, 에러 := F인코딩(JSON, 값); 에러 != nil {
 		return 에러
 	} else {
@@ -868,7 +862,7 @@ func JSON_파일_저장(값 interface{}, 파일명 string) (에러 error) {
 	}
 }
 
-func JSON_파일_읽기(파일명 string, 반환값 interface{}) (에러 error) {
+func JSON_파일_읽기(파일명 string, 반환값 any) (에러 error) {
 	if !F파일_존재함(파일명) {
 		return New에러("해당 파일이 존재하지 않음. '%s'", 파일명)
 	} else if 바이트_모음, 에러 := os.ReadFile(파일명); 에러 != nil {
