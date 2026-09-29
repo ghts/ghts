@@ -952,7 +952,7 @@ func GOROOT() (GOROOT string) {
 		} else if F파일_존재함(`E:\Program Files\Go\bin\go.exe`) {
 			GOROOT = `E:\Program Files\Go`
 		} else if F파일_존재함(`/usr/local/go/bin/go`) {
-			GOROOT = `/usr/local/go/bin/go`
+			GOROOT = `/usr/local/go/bin`
 		} else {
 			GO실행화일_경로 := F확인2(F파일_검색(`C:\`, "go.exe"))
 			GO실행화일_경로 = strings.TrimSpace(GO실행화일_경로)
