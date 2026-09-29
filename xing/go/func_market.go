@@ -657,7 +657,7 @@ func f호가_단위_ETF_ETN(기준가 int64) int64 {
 func F호가_필터(종목코드 string, 호가 int64) int64 {
 	if 호가 <= 0 {
 		return 0
-	} else if 호가_단위, 에러 := F호가_단위by종목코드(종목코드); 에러 == nil {
+	} else if 호가_단위, 에러 := F호가_단위by종목코드(종목코드); 에러 == nil && 호가_단위 > 0 {
 		return 호가 / 호가_단위 * 호가_단위
 	}
 
@@ -667,7 +667,7 @@ func F호가_필터(종목코드 string, 호가 int64) int64 {
 func F호가_필터by종목(종목 *lb.S종목, 호가 int64) int64 {
 	if 호가 <= 0 {
 		return 0
-	} else if 호가_단위, 에러 := F호가_단위by종목(종목); 에러 == nil {
+	} else if 호가_단위, 에러 := F호가_단위by종목(종목); 에러 == nil && 호가_단위 > 0 {
 		return 호가 / 호가_단위 * 호가_단위
 	}
 
