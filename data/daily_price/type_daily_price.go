@@ -22,7 +22,7 @@ type I일일_가격정보 interface {
 	G고가() float64
 	G저가() float64
 	G종가() float64
-	G거래량() uint64
+	G거래량() float64
 }
 
 func New일일_가격정보(종목코드 string, 일자 time.Time, 시가, 고가, 저가, 종가, 거래량 int64) *S일일_가격정보 {
