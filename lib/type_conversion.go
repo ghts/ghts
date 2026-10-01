@@ -331,6 +331,14 @@ func (s *S바이트_변환_모음) G변환_형식(인덱스 int) T변환 {
 }
 
 func (s *S바이트_변환_모음) G자료형_문자열(인덱스 int) string {
+	if 인덱스 < 0 {
+		F에러_출력("*S바이트_변환_모음.G자료형_문자열() : 음수 인덱스 - '%v'", 인덱스)
+		return ""
+	} else if 인덱스 >= len(s.M바이트_변환_모음) {
+		F에러_출력("*S바이트_변환_모음.G자료형_문자열() : 범위 밖 인덱스. %v %v", 인덱스, len(s.M바이트_변환_모음))
+		return ""
+	}
+
 	return s.M바이트_변환_모음[인덱스].G자료형_문자열()
 }
 
@@ -344,10 +352,24 @@ func (s *S바이트_변환_모음) G값(인덱스 int, 값_포인터 interface{}
 }
 
 func (s *S바이트_변환_모음) G해석값(인덱스 int) (interface{}, error) {
+	if 인덱스 < 0 {
+		return nil, New에러("*S바이트_변환_모음.G해석값() : 음수 인덱스 - '%v'", 인덱스)
+	} else if 인덱스 >= len(s.M바이트_변환_모음) {
+		return nil, New에러("*S바이트_변환_모음.G해석값() : 범위 밖 인덱스. %v %v", 인덱스, len(s.M바이트_변환_모음))
+	}
+
 	return s.M바이트_변환_모음[인덱스].G해석값()
 }
 
 func (s *S바이트_변환_모음) IsNil(인덱스 int) bool {
+	if 인덱스 < 0 {
+		F에러_출력("*S바이트_변환_모음.IsNil() : 음수 인덱스 - '%v'", 인덱스)
+		return false
+	} else if 인덱스 >= len(s.M바이트_변환_모음) {
+		F에러_출력("*S바이트_변환_모음.IsNil() : 범위 밖 인덱스. %v %v", 인덱스, len(s.M바이트_변환_모음))
+		return false
+	}
+
 	return s.M바이트_변환_모음[인덱스].IsNil()
 }
 
