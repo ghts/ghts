@@ -672,7 +672,7 @@ func F실행파일_검색(파일명 string) (경로 string, 에러 error) {
 		파일명_소문자 := strings.ToLower(파일명)
 		if !strings.HasSuffix(파일명_소문자, ".exe") &&
 			!strings.HasSuffix(파일명_소문자, ".dll") {
-			return "", New에러with출력("exe 파일이나 dll파일만 가능합니다. %v, 파일명")
+			return "", New에러with출력("exe 파일이나 dll파일만 가능합니다. %v", 파일명)
 		}
 	}
 
