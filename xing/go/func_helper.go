@@ -1,6 +1,7 @@
 package xing
 
 import (
+	"slices"
 	"strings"
 	"time"
 
@@ -331,13 +332,7 @@ func f전송_시각_기록(TR코드 string) {
 func F계좌번호_존재함(계좌번호 string) bool {
 	계좌번호_모음 := lb.F확인2(F계좌번호_모음())
 
-	for _, 계좌번호_값 := range 계좌번호_모음 {
-		if 계좌번호 == 계좌번호_값 {
-			return true
-		}
-	}
-
-	return false
+	return slices.Contains(계좌번호_모음, 계좌번호)
 }
 
 //func F계좌_번호(0) (계좌번호 string, 에러 error) {

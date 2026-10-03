@@ -1,6 +1,7 @@
 package xing
 
 import (
+	"maps"
 	"os"
 
 	lb "github.com/ghts/ghts/lib"
@@ -45,7 +46,7 @@ func TrCSPAT00700_현물_정정주문(질의값 *xt.CSPAT00700_현물_정정_주
 
 	질의값.M주문단가 = F호가_필터(질의값.M종목코드, 질의값.M주문단가)
 
-	for i := 0; i < 3; i++ { // 최대 3번 재시도
+	for range 3 { // 최대 3번 재시도
 		응답값, 에러 = F질의_단일TR[xt.CSPAT00700_현물_정정_주문_응답](질의값)
 
 		if 에러 != nil && (strings.Contains(에러.Error(), "원주문번호를 잘못") ||
@@ -72,7 +73,7 @@ func TrCSPAT00800_현물_취소주문(질의값 *lb.S질의값_취소_주문) (�
 		질의값.M종목코드 = "Q" + 질의값.M종목코드
 	}
 
-	for i := 0; i < 3; i++ { // 최대 3번 재시도
+	for range 3 { // 최대 3번 재시도
 		if 응답값, 에러 = F질의_단일TR[xt.CSPAT00800_현물_취소_주문_응답](질의값); 에러 != nil {
 			if strings.Contains(에러.Error(), "원주문번호를 잘못") ||
 				strings.Contains(에러.Error(), "접수 대기 상태") {
@@ -800,9 +801,7 @@ func TrT8407_현물_멀티_현재가_조회_전종목() (현재가_맵 map[strin
 
 		응답값_맵 := lb.F확인2(TrT8407_현물_멀티_현재가_조회(종목코드_모음))
 
-		for 키, 값 := range 응답값_맵 {
-			현재가_맵[키] = 값
-		}
+		maps.Copy(현재가_맵, 응답값_맵)
 	}
 
 	return 현재가_맵, nil
@@ -1079,7 +1078,7 @@ func TrT8428_증시주변자금추이(수량 int) (응답값_모음 []*xt.T8428_
 	역순 := 응답값_모음
 	응답값_모음 = make([]*xt.T8428_증시주변_자금추이_응답_반복값, len(역순))
 
-	for i := 0; i < len(역순); i++ {
+	for i := range 역순 {
 		응답값_모음[i] = 역순[len(역순)-1-i]
 	}
 

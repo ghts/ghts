@@ -48,7 +48,7 @@ func NewNano소켓(종류 lb.T소켓_종류, 주소 string, 접속방식 lb.T소
 
 	switch 접속방식 {
 	case lb.P소켓_접속_CONNECT:
-		for i := 0; i < 10; i++ {
+		for range 10 {
 			에러 = s.Socket.Dial(주소)
 
 			switch {
@@ -69,7 +69,7 @@ func NewNano소켓(종류 lb.T소켓_종류, 주소 string, 접속방식 lb.T소
 			}
 		}
 	case lb.P소켓_접속_BIND:
-		for i := 0; i < 10; i++ {
+		for range 10 {
 			에러 = s.Socket.Listen(주소)
 
 			switch {

@@ -225,7 +225,7 @@ func TestCSV파일에_값_저장_및_읽기(t *testing.T) {
 	F테스트_같음(t, len(복제본), len(원본))
 	F테스트_같음(t, len(복제본[0]), len(원본[0]))
 
-	for i := 0; i < len(원본); i++ {
+	for i := range 원본 {
 		for j := 0; j < len(원본[i]); j++ {
 			F테스트_같음(t, 원본[i][j], 복제본[i][j])
 		}
@@ -235,7 +235,7 @@ func TestCSV파일에_값_저장_및_읽기(t *testing.T) {
 func TestF평균_표준편차(t *testing.T) {
 	값_모음 := make([]float64, 100)
 
-	for i := 0; i < 100; i++ {
+	for i := range 100 {
 		값_모음[i] = float64(i + 1)
 	}
 

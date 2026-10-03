@@ -36,7 +36,7 @@ func F패닉2에러(함수 any, 추가_매개변수 ...any) (에러 error) {
 
 	인수_모음 := make([]reflect.Value, len(추가_매개변수))
 
-	for i := 0; i < len(인수_모음); i++ {
+	for i := range 인수_모음 {
 		인수_모음[i] = reflect.ValueOf(추가_매개변수[i])
 	}
 
@@ -264,7 +264,7 @@ func F호출경로_문자열() string {
 func F호출경로_모음() []string {
 	호출경로_모음 := make([]string, 0)
 
-	for i := 0; i < 100; i++ {
+	for i := range 100 {
 		호출경로 := F소스코드_위치(i)
 
 		if f건너뛰는_호출경로(호출경로) {

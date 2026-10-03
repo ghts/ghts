@@ -44,7 +44,7 @@ func TestF체결_실시간_정보(t *testing.T) {
 	var 코스피_수신, 코스닥_수신, ETF_수신 bool
 
 	// 실시간 정보 수신 확인
-	for i := 0; i < 1000; i++ {
+	for range 1000 {
 		바이트_변환_모음, 에러 := 소켓SUB_실시간.G수신()
 		lb.F테스트_에러없음(t, 에러)
 

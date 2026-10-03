@@ -20,7 +20,7 @@ func TestCSPAQ13700_현물계좌_주문체결내역(t *testing.T) {
 	계좌번호, 에러 := F계좌_번호(0)
 	lb.F테스트_에러없음(t, 에러)
 
-	for i := 0; i < 30; i++ {
+	for i := range 30 {
 		일자 := F당일().AddDate(0, 0, -1*i)
 		testCSPAQ13700_현물계좌_주문체결내역_도우미(t, 계좌번호, 일자)
 	}

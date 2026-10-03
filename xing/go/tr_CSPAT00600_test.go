@@ -1,6 +1,7 @@
 package xing
 
 import (
+	"slices"
 	"testing"
 	"time"
 
@@ -57,7 +58,7 @@ func TestCSPAT00600_현물_정상_주문(t *testing.T) {
 	질의값_매수.M신용거래_구분 = xt.P신용거래_해당없음
 	질의값_매수.M대출일 = time.Time{}
 
-	for i := 0; i < 반복_횟수; i++ {
+	for i := range 반복_횟수 {
 		응답값, 에러 := TrCSPAT00600_현물_정상주문(질의값_매수)
 
 		lb.F대기(lb.P100밀리초)
@@ -123,7 +124,7 @@ func TestCSPAT00600_현물_정상_주문(t *testing.T) {
 	질의값_매도.M주문조건 = lb.P주문조건_없음
 	질의값_매도.M대출일 = time.Time{}
 
-	for i := 0; i < 반복_횟수; i++ {
+	for i := range 반복_횟수 {
 		응답값, 에러 := TrCSPAT00600_현물_정상주문(질의값_매도)
 
 		lb.F대기(lb.P100밀리초)
@@ -180,11 +181,5 @@ func TestCSPAT00600_현물_정상_주문(t *testing.T) {
 }
 
 func f주문번호_포함(주문번호 int64, 주문번호_모음 []int64) bool {
-	for _, 주문번호2 := range 주문번호_모음 {
-		if 주문번호 == 주문번호2 {
-			return true
-		}
-	}
-
-	return false
+	return slices.Contains(주문번호_모음, 주문번호)
 }

@@ -151,7 +151,7 @@ func (s *S바이트_변환) G값(값_포인터 any) (에러 error) {
 	case s.IsNil():
 		reflect.ValueOf(값_포인터).Elem().Set(reflect.Zero(reflect.TypeOf(값_포인터).Elem()))
 		return nil
-	case F종류(값_포인터) != reflect.Ptr:
+	case F종류(값_포인터) != reflect.Pointer:
 		return New에러with출력("포인터형이 아님. %T", 값_포인터)
 	}
 

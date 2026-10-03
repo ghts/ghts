@@ -154,7 +154,7 @@ func NewT8410_현물_차트_일주월년_응답_반복값_모음(b []byte) (값 
 	값 = new(T8410_현물_차트_일주월년_응답_반복값_모음)
 	값.M배열 = make([]*T8410_현물_차트_일주월년_응답_반복값, 수량)
 
-	for i := 0; i < 수량; i++ {
+	for i := range 수량 {
 		g := new(T8410OutBlock1)
 		lb.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 

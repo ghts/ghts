@@ -473,7 +473,7 @@ func F2문자열_모음(인터페이스_모음 []any) []string {
 
 	문자열_모음 := make([]string, len(인터페이스_모음))
 
-	for i := 0; i < len(인터페이스_모음); i++ {
+	for i := range 인터페이스_모음 {
 		문자열_모음[i] = F2문자열(인터페이스_모음[i])
 	}
 
@@ -846,11 +846,11 @@ func F2인터페이스_모음(변환_대상 any) []any {
 
 	switch 값_모음 := 변환_대상.(type) {
 	case []string:
-		for i := 0; i < len(값_모음); i++ {
+		for i := range 값_모음 {
 			인터페이스_모음 = append(인터페이스_모음, 값_모음[i])
 		}
 	case [][]byte:
-		for i := 0; i < len(값_모음); i++ {
+		for i := range 값_모음 {
 			인터페이스_모음 = append(인터페이스_모음, 값_모음[i])
 		}
 	default:

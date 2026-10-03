@@ -493,7 +493,7 @@ func F에러_메시지(질의 *lb.S채널_질의) {
 	에러_코드 := 질의.M값.(*lb.S질의값_정수).M정수값
 
 	go버퍼 := new(bytes.Buffer)
-	for i := 0; i < 512; i++ {
+	for range 512 {
 		go버퍼.WriteString(" ")
 	}
 

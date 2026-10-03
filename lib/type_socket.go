@@ -52,7 +52,7 @@ func (s *s소켓_저장소) G소켓() I소켓_질의 {
 	case 소켓 := <-s.M저장소:
 		return 소켓
 	default:
-		for i := 0; i < 3; i++ {
+		for range 3 {
 			if i소켓, 에러 := s.g소켓(); 에러 == nil {
 				return i소켓
 			}

@@ -21,7 +21,7 @@ func TestNano소켓_REQ_REP(t *testing.T) {
 	go 클라이언트_REQ(테스트, 주소, ch초기화, ch종료)
 	<-ch초기화
 
-	for i := 0; i < 2; i++ {
+	for range 2 {
 		<-ch종료
 	}
 }
@@ -74,11 +74,11 @@ func TestNano소켓_PUB_SUB(t *testing.T) {
 	go 서버_PUB(테스트, 주소, ch초기화, ch중지, ch종료)
 	<-ch초기화
 
-	for i := 0; i < 클라이언트_수량; i++ {
+	for range 클라이언트_수량 {
 		go 클라이언트_SUB(테스트, 주소, ch종료)
 	}
 
-	for i := 0; i < 클라이언트_수량; i++ {
+	for range 클라이언트_수량 {
 		<-ch종료
 	}
 
@@ -136,7 +136,7 @@ func TestNano소켓_PUSH_PULL(t *testing.T) {
 	go 클라이언트_PUSH(테스트, 주소, ch초기화, ch종료)
 	<-ch초기화
 
-	for i := 0; i < 2; i++ {
+	for range 2 {
 		<-ch종료
 	}
 }
@@ -150,7 +150,7 @@ func 서버_PULL(t lb.I안전한_테스트, 주소 lb.T주소, ch초기화, ch�
 
 	ch초기화 <- lb.P신호_초기화
 
-	for i := 0; i < 10; i++ {
+	for i := range 10 {
 		바이트_변환_모음, 에러 := 소켓_PULL.G수신()
 		t.G에러없음(에러)
 
@@ -169,7 +169,7 @@ func 클라이언트_PUSH(t lb.I안전한_테스트, 주소 lb.T주소, ch초기
 
 	ch초기화 <- lb.P신호_초기화
 
-	for i := 0; i < 10; i++ {
+	for i := range 10 {
 		문자열 := lb.F2문자열("테스트 PUSH PULL #%v", i)
 		t.G에러없음(소켓_PUSH.S송신(lb.F임의_변환_형식(), 문자열))
 	}
@@ -191,7 +191,7 @@ func TestNano소켓_PAIR(t *testing.T) {
 	go 클라이언트_PAIR(테스트, 주소, ch초기화, ch종료)
 	<-ch초기화
 
-	for i := 0; i < 2; i++ {
+	for range 2 {
 		<-ch종료
 	}
 }
