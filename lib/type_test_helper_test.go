@@ -8,7 +8,7 @@ import (
 func TestS모의_테스트(t *testing.T) {
 	t.Parallel()
 
-	모의_테스트_인터페이스 := *(new(interface{}))
+	모의_테스트_인터페이스 := *(new(any))
 	모의_테스트_인터페이스 = new(S모의_테스트)
 
 	_, ok := 모의_테스트_인터페이스.(testing.TB)

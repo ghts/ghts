@@ -6,13 +6,13 @@ import (
 	"math/big"
 )
 
-func SQL실행(db *sql.DB, sql문자열 string, 추가_인수 ...interface{}) (에러 error) {
+func SQL실행(db *sql.DB, sql문자열 string, 추가_인수 ...any) (에러 error) {
 	_, 에러 = SQL실행_INSERT(db, sql문자열, 추가_인수...)
 
 	return 에러
 }
 
-func SQL실행_INSERT(db *sql.DB, sql문자열 string, 추가_인수 ...interface{}) (id int64, 에러 error) {
+func SQL실행_INSERT(db *sql.DB, sql문자열 string, 추가_인수 ...any) (id int64, 에러 error) {
 	var tx *sql.Tx
 	var stmt *sql.Stmt
 
@@ -49,7 +49,7 @@ func SQL실행_INSERT(db *sql.DB, sql문자열 string, 추가_인수 ...interfac
 // big.Int/big.Rat 은 INTEGER 열(정수)에서 변환됩니다.
 // (database/sql 의 내장 Scan 이 INTEGER(int64) 를 지원하지 않아 int64 로 스캔 후 변환합니다.)
 // 포인터 자료형(*big.Int, *big.Rat)은 매 호출마다 새 인스턴스를 반환합니다.
-func DB질의[T T숫자 | big.Int | *big.Int | big.Rat | *big.Rat | string | bool](db *sql.DB, sql문자열 string, 추가_인수 ...interface{}) (값 T, 에러 error) {
+func DB질의[T T숫자 | big.Int | *big.Int | big.Rat | *big.Rat | string | bool](db *sql.DB, sql문자열 string, 추가_인수 ...any) (값 T, 에러 error) {
 	defer S예외처리{M에러: &에러}.S실행()
 
 	rows := F확인2(db.Query(sql문자열, 추가_인수...))

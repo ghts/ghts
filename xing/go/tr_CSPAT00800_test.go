@@ -10,7 +10,7 @@ import (
 )
 
 func TestCSPAT00800_현물_취소_주문_질의값(t *testing.T) {
-	_, ok := interface{}(new(lb.S질의값_취소_주문)).(lb.I질의값)
+	_, ok := any(new(lb.S질의값_취소_주문)).(lb.I질의값)
 	lb.F테스트_참임(t, ok)
 }
 

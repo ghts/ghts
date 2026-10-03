@@ -200,7 +200,7 @@ func F샘플_구조체_2() s샘플_구조체_2 {
 	return s
 }
 
-func f테스트용_안전한_전달값_모음() []interface{} {
+func f테스트용_안전한_전달값_모음() []any {
 	r := F임의값_생성기()
 
 	바이트_전송값_1 := F확인2(New바이트_변환(P변환형식_기본값, F샘플_구조체_1()))
@@ -209,7 +209,7 @@ func f테스트용_안전한_전달값_모음() []interface{} {
 	바이트_전송값_2 := F확인2(New바이트_변환(P변환형식_기본값, F샘플_구조체_2()))
 	F조건부_패닉(바이트_전송값_2 == nil, "바이트_전송값 변환값이 nil임")
 
-	안전한_전달값_모음 := []interface{}{
+	안전한_전달값_모음 := []any{
 		r.Int(), uint(r.Int()), uintptr(r.Int()),
 		int8(r.Intn(127)), int16(r.Intn(127)), r.Int31(), r.Int63(),
 		uint8(r.Intn(127)), uint16(r.Intn(127)), uint32(r.Int31()), uint64(r.Int63()),
@@ -220,7 +220,7 @@ func f테스트용_안전한_전달값_모음() []interface{} {
 		[]string{F임의_문자열(5, 10), F임의_문자열(5, 10)},
 		바이트_전송값_1, 바이트_전송값_2}
 
-	인터페이스_모음 := make([]interface{}, 10)
+	인터페이스_모음 := make([]any, 10)
 	for i := range 인터페이스_모음 {
 		인터페이스_모음[i] = 안전한_전달값_모음[r.Intn(len(안전한_전달값_모음))]
 	}
@@ -230,13 +230,13 @@ func f테스트용_안전한_전달값_모음() []interface{} {
 	return 안전한_전달값_모음
 }
 
-func f테스트용_위험한_전달값_모음() []interface{} {
+func f테스트용_위험한_전달값_모음() []any {
 	r := F임의값_생성기()
 
 	구조체_1 := F샘플_구조체_1()
 	구조체_2 := F샘플_구조체_2()
 
-	return []interface{}{
+	return []any{
 		구조체_1, &구조체_1,
 		구조체_2, &구조체_2,
 		big.NewInt(r.Int63()),
@@ -247,16 +247,16 @@ func f테스트용_위험한_전달값_모음() []interface{} {
 	//big.NewFloat(rand.Float64())}
 }
 
-func f테스트용_변환가능한_전달값_모음() []interface{} {
-	후보값_모음 := make([]interface{}, 0)
+func f테스트용_변환가능한_전달값_모음() []any {
+	후보값_모음 := make([]any, 0)
 	후보값_모음 = append(후보값_모음, f테스트용_안전한_전달값_모음()...)
 	후보값_모음 = append(후보값_모음, f테스트용_위험한_전달값_모음()...)
 
-	변환가능한_값_모음 := make([]interface{}, 0)
+	변환가능한_값_모음 := make([]any, 0)
 
 	for _, 값 := range 후보값_모음 {
 		switch 값.(type) {
-		case []interface{}:
+		case []any:
 			continue
 		}
 

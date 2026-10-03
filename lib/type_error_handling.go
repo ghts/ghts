@@ -40,7 +40,7 @@ func (s S예외처리) S실행() {
 	}
 }
 
-func F에러_출력(에러 interface{}, 추가_매개변수 ...interface{}) {
+func F에러_출력(에러 any, 추가_매개변수 ...any) {
 	switch 변환값 := 에러.(type) {
 	case nil:
 		return

@@ -72,7 +72,7 @@ func TestS질의값_단일종목(t *testing.T) {
 }
 
 func TestI콜백(t *testing.T) {
-	값_모음 := []interface{}{
+	값_모음 := []any{
 		New콜백_기본형(T콜백(0)),
 		New콜백_정수값(T콜백(0), 0),
 		New콜백_문자열(T콜백(0), ""),
@@ -85,7 +85,7 @@ func TestI콜백(t *testing.T) {
 	}
 }
 
-func f콜백_테스트_도우미(t *testing.T, 값 interface{}) {
+func f콜백_테스트_도우미(t *testing.T, 값 any) {
 	switch 값.(type) {
 	case I콜백:
 		return

@@ -9,7 +9,7 @@ import (
 )
 
 func TestCSPAQ12300_현물계좌_잔고내역_질의값(t *testing.T) {
-	_, ok := interface{}(new(xt.CSPAQ12300_현물계좌_잔고내역_질의값)).(lb.I질의값)
+	_, ok := any(new(xt.CSPAQ12300_현물계좌_잔고내역_질의값)).(lb.I질의값)
 	lb.F테스트_참임(t, ok)
 }
 

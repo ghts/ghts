@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func New에러(포맷_문자열or에러 interface{}, 추가_매개변수 ...interface{}) error {
+func New에러(포맷_문자열or에러 any, 추가_매개변수 ...any) error {
 	switch 변환값 := 포맷_문자열or에러.(type) {
 	case nil:
 		return nil
@@ -44,7 +44,7 @@ func New에러(포맷_문자열or에러 interface{}, 추가_매개변수 ...inte
 	}
 }
 
-func New에러with출력(포맷_문자열or에러 interface{}, 추가_매개변수 ...interface{}) error {
+func New에러with출력(포맷_문자열or에러 any, 추가_매개변수 ...any) error {
 	에러 := New에러(포맷_문자열or에러, 추가_매개변수...)
 	F에러_출력(에러)
 

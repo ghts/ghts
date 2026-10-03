@@ -106,7 +106,7 @@ func (s *S질의값_문자열_모음) String() string {
 	return F2문자열("%v %v %v", s.M구분, s.M코드, s.M문자열_모음)
 }
 
-func New질의값_바이트_변환(TR구분 TR구분, TR코드 string, 값 interface{}) *S질의값_바이트_변환 {
+func New질의값_바이트_변환(TR구분 TR구분, TR코드 string, 값 any) *S질의값_바이트_변환 {
 	s := new(S질의값_바이트_변환)
 	s.S질의값_기본형 = New질의값_기본형(TR구분, TR코드)
 	s.M바이트_변환 = F확인2(New바이트_변환(P변환형식_기본값, 값))
@@ -119,7 +119,7 @@ type S질의값_바이트_변환 struct {
 	M바이트_변환 *S바이트_변환
 }
 
-func New질의값_바이트_변환_모음(TR구분 TR구분, TR코드 string, 값_모음 ...interface{}) *S질의값_바이트_변환_모음 {
+func New질의값_바이트_변환_모음(TR구분 TR구분, TR코드 string, 값_모음 ...any) *S질의값_바이트_변환_모음 {
 	s := new(S질의값_바이트_변환_모음)
 	s.S질의값_기본형 = New질의값_기본형(TR구분, TR코드)
 	s.M바이트_변환_모음 = F확인2(New바이트_변환_모음(P변환형식_기본값, 값_모음...))
@@ -364,7 +364,7 @@ type S문자열_모음 struct {
 func New채널_질의(질의값 I질의값) *S채널_질의 {
 	s := &S채널_질의{
 		M값:    질의값,
-		Ch회신값: make(chan interface{}, 1),
+		Ch회신값: make(chan any, 1),
 		Ch에러:  make(chan error, 1)}
 
 	return s
@@ -372,7 +372,7 @@ func New채널_질의(질의값 I질의값) *S채널_질의 {
 
 type S채널_질의 struct {
 	M값    I질의값
-	Ch회신값 chan interface{}
+	Ch회신값 chan any
 	Ch에러  chan error
 }
 

@@ -24,7 +24,7 @@ func F바이트_복사_문자열(바이트_배열 []byte, 문자열 string) {
 	copy(바이트_배열, 문자열)
 }
 
-func F바이트_복사_정수(바이트_배열 []byte, 값 interface{}) {
+func F바이트_복사_정수(바이트_배열 []byte, 값 any) {
 	문자열 := ""
 
 	switch 값.(type) {
@@ -44,7 +44,7 @@ func F바이트_복사_정수(바이트_배열 []byte, 값 interface{}) {
 	copy(바이트_배열[시작_위치:], 문자열)
 }
 
-func F바이트_복사_실수(바이트_배열 []byte, 값 interface{}, 소숫점_이하_자릿수 int) {
+func F바이트_복사_실수(바이트_배열 []byte, 값 any, 소숫점_이하_자릿수 int) {
 	var 문자열 string
 
 	switch 변환값 := 값.(type) {
@@ -85,9 +85,9 @@ func F바이트_복사_실수(바이트_배열 []byte, 값 interface{}, 소숫�
 	copy(바이트_배열[시작_위치:], 문자열)
 }
 
-func F2인터페이스(값 interface{}) interface{} { return 값 }
+func F2인터페이스(값 any) any { return 값 }
 
-func F2바이트_모음(값 interface{}) []byte {
+func F2바이트_모음(값 any) []byte {
 	switch 변환값 := 값.(type) {
 	case string:
 		return []byte(변환값)
@@ -299,11 +299,11 @@ func F2바이트_모음(값 interface{}) []byte {
 	}
 }
 
-func F2문자열_EUC_KR_공백제거(값 interface{}) string {
+func F2문자열_EUC_KR_공백제거(값 any) string {
 	return strings.TrimSpace(F2문자열_EUC_KR(값))
 }
 
-func F2문자열_EUC_KR(값 interface{}) string {
+func F2문자열_EUC_KR(값 any) string {
 	바이트_모음 := make([]byte, 0)
 
 	switch 변환값 := 값.(type) {
@@ -356,7 +356,7 @@ func F앞뒤_따옴표_제거(값 string) string {
 	return strings.TrimSpace(strings.Trim(strings.Trim(값, `"`), `'`))
 }
 
-func F2문자열(값_모음 ...interface{}) string {
+func F2문자열(값_모음 ...any) string {
 	if len(값_모음) > 1 {
 		if _, ok := 값_모음[0].(string); ok {
 			return f포맷된_문자열(값_모음[0].(string), 값_모음[1:]...)
@@ -445,7 +445,7 @@ func F2문자열(값_모음 ...interface{}) string {
 	}
 }
 
-func F2문자열_공백_제거(값 interface{}) string {
+func F2문자열_공백_제거(값 any) string {
 	return strings.TrimSpace(F2문자열(값))
 }
 
@@ -466,7 +466,7 @@ func f숫자_문자열_정리(문자열 string) string {
 	return 문자열
 }
 
-func F2문자열_모음(인터페이스_모음 []interface{}) []string {
+func F2문자열_모음(인터페이스_모음 []any) []string {
 	if 인터페이스_모음 == nil {
 		return nil
 	}
@@ -480,7 +480,7 @@ func F2문자열_모음(인터페이스_모음 []interface{}) []string {
 	return 문자열_모음
 }
 
-func F2정수(값 interface{}) (int, error) {
+func F2정수(값 any) (int, error) {
 	var 문자열 string
 
 	switch 변환값 := 값.(type) {
@@ -503,7 +503,7 @@ func F2정수(값 interface{}) (int, error) {
 	return 반환값, nil
 }
 
-func F2정수_공백은_0(값 interface{}) (int, error) {
+func F2정수_공백은_0(값 any) (int, error) {
 	if F2문자열_공백_제거(값) == "" {
 		return 0, nil
 	}
@@ -511,7 +511,7 @@ func F2정수_공백은_0(값 interface{}) (int, error) {
 	return F2정수(값)
 }
 
-func F2정수64(값 interface{}) (int64, error) {
+func F2정수64(값 any) (int64, error) {
 	문자열 := ""
 
 	switch 값.(type) {
@@ -539,7 +539,7 @@ func F2정수64(값 interface{}) (int64, error) {
 	}
 }
 
-func F2정수64_공백은_0(값 interface{}) (int64, error) {
+func F2정수64_공백은_0(값 any) (int64, error) {
 	if F2문자열_공백_제거(값) == "" {
 		return 0, nil
 	}
@@ -547,7 +547,7 @@ func F2정수64_공백은_0(값 interface{}) (int64, error) {
 	return F2정수64(값)
 }
 
-func F2정수64_모음(값_모음 []interface{}) ([]int64, error) {
+func F2정수64_모음(값_모음 []any) ([]int64, error) {
 	정수64_모음 := make([]int64, 0)
 
 	for _, 값 := range 값_모음 {
@@ -563,7 +563,7 @@ func F2정수64_모음(값_모음 []interface{}) ([]int64, error) {
 	return 정수64_모음, nil
 }
 
-func F2큰_정수(값 interface{}) (*big.Int, error) {
+func F2큰_정수(값 any) (*big.Int, error) {
 	정수64, 에러 := F2정수64(값)
 	if 에러 != nil {
 		return nil, 에러
@@ -572,7 +572,7 @@ func F2큰_정수(값 interface{}) (*big.Int, error) {
 	return big.NewInt(정수64), nil
 }
 
-func F2실수(값 interface{}) (float64, error) {
+func F2실수(값 any) (float64, error) {
 	var 문자열 string
 
 	switch 변환값 := 값.(type) {
@@ -603,7 +603,7 @@ func F2실수(값 interface{}) (float64, error) {
 	return 실수64, nil
 }
 
-func F2실수_단순형_공백은_0(값 interface{}) float64 {
+func F2실수_단순형_공백은_0(값 any) float64 {
 	if F2문자열_공백_제거(값) == "" {
 		return 0.0
 	}
@@ -611,7 +611,7 @@ func F2실수_단순형_공백은_0(값 interface{}) float64 {
 	return F확인2(F2실수(값))
 }
 
-func F2실수_소숫점_추가(값 interface{}, 소숫점_이하_자릿수 int) (실수값 float64, 에러 error) {
+func F2실수_소숫점_추가(값 any, 소숫점_이하_자릿수 int) (실수값 float64, 에러 error) {
 	defer S예외처리{M에러: &에러, M에러_실행: func() { 실수값 = 0 }}.S실행()
 
 	문자열 := strings.Replace(F2문자열(값), " ", "", -1)
@@ -630,7 +630,7 @@ func F2실수_소숫점_추가(값 interface{}, 소숫점_이하_자릿수 int) 
 	return F2실수(소숫점_추가_문자열)
 }
 
-func F2실수_소숫점_추가_공백은_0(값 interface{}, 소숫점_이하_자릿수 int) (float64, error) {
+func F2실수_소숫점_추가_공백은_0(값 any, 소숫점_이하_자릿수 int) (float64, error) {
 	if strings.TrimSpace(F2문자열(값)) == "" {
 		return 0, nil
 	}
@@ -638,7 +638,7 @@ func F2실수_소숫점_추가_공백은_0(값 interface{}, 소숫점_이하_자
 	return F2실수_소숫점_추가(값, 소숫점_이하_자릿수)
 }
 
-func F2실수_소숫점_추가_단순형_공백은_0(값 interface{}, 소숫점_이하_자릿수 int) float64 {
+func F2실수_소숫점_추가_단순형_공백은_0(값 any, 소숫점_이하_자릿수 int) float64 {
 	if strings.TrimSpace(F2문자열(값)) == "" {
 		return 0
 	}
@@ -646,12 +646,12 @@ func F2실수_소숫점_추가_단순형_공백은_0(값 interface{}, 소숫점_
 	return F확인2(F2실수_소숫점_추가(값, 소숫점_이하_자릿수))
 }
 
-func F2십진수(값 interface{}) (십진수 *big.Float, 에러 error) {
+func F2십진수(값 any) (십진수 *big.Float, 에러 error) {
 	십진수, _, 에러 = big.NewFloat(0).Parse(F2문자열(값), 0)
 	return
 }
 
-func F2십진수_소숫점_추가(값 interface{}, 소숫점_이하_자릿수 int) (십진수 *big.Float, 에러 error) {
+func F2십진수_소숫점_추가(값 any, 소숫점_이하_자릿수 int) (십진수 *big.Float, 에러 error) {
 	defer S예외처리{M에러: &에러, M에러_실행: func() { 십진수 = nil }}.S실행()
 
 	문자열 := strings.Replace(F2문자열(값), " ", "", -1)
@@ -697,7 +697,7 @@ func f포맷_시간대_포함(포맷 string) bool {
 		strings.Contains(포맷, "-07")
 }
 
-func F2포맷된_시각(포맷 string, 값 interface{}) (time.Time, error) {
+func F2포맷된_시각(포맷 string, 값 any) (time.Time, error) {
 	문자열 := ""
 
 	switch 값.(type) {
@@ -729,7 +729,7 @@ func F2포맷된_시각(포맷 string, 값 interface{}) (time.Time, error) {
 	return 시각, 에러
 }
 
-func F2포맷된_시각_단순형_공백은_초기값(포맷 string, 값 interface{}) time.Time {
+func F2포맷된_시각_단순형_공백은_초기값(포맷 string, 값 any) time.Time {
 	if F2문자열_공백_제거(값) == "" {
 		return time.Time{}
 	}
@@ -737,7 +737,7 @@ func F2포맷된_시각_단순형_공백은_초기값(포맷 string, 값 interfa
 	return F확인2(F2포맷된_시각(포맷, 값))
 }
 
-func F2포맷된_일자(포맷 string, 값 interface{}) (time.Time, error) {
+func F2포맷된_일자(포맷 string, 값 any) (time.Time, error) {
 	시각, 에러 := F2포맷된_시각(포맷, 값)
 
 	if 에러 != nil {
@@ -750,7 +750,7 @@ func F2포맷된_일자(포맷 string, 값 interface{}) (time.Time, error) {
 	return 일자, nil
 }
 
-func F2포맷된_일자_단순형_공백은_초기값(포맷 string, 값 interface{}) time.Time {
+func F2포맷된_일자_단순형_공백은_초기값(포맷 string, 값 any) time.Time {
 	if F2문자열_공백_제거(값) == "" {
 		return time.Time{}
 	}
@@ -758,7 +758,7 @@ func F2포맷된_일자_단순형_공백은_초기값(포맷 string, 값 interfa
 	return F확인2(F2포맷된_일자(포맷, 값))
 }
 
-func F2일자별_시각(일자 time.Time, 포맷 string, 값 interface{}) (time.Time, error) {
+func F2일자별_시각(일자 time.Time, 포맷 string, 값 any) (time.Time, error) {
 	if strings.Contains(포맷, "2") {
 		return time.Time{}, New에러with출력("포맷에 이미 날짜가 포함되어 있습니다. %v", 포맷)
 	}
@@ -774,7 +774,7 @@ func F2일자별_시각(일자 time.Time, 포맷 string, 값 interface{}) (time.
 	return 반환값, nil
 }
 
-func F2일자별_시각_단순형_공백은_초기값(일자 time.Time, 포맷 string, 값 interface{}) time.Time {
+func F2일자별_시각_단순형_공백은_초기값(일자 time.Time, 포맷 string, 값 any) time.Time {
 	if F2문자열_공백_제거(값) == "" {
 		return time.Time{}
 	}
@@ -782,11 +782,11 @@ func F2일자별_시각_단순형_공백은_초기값(일자 time.Time, 포맷 s
 	return F확인2(F2일자별_시각(일자, 포맷, 값))
 }
 
-func F2금일_시각(포맷 string, 값 interface{}) (time.Time, error) {
+func F2금일_시각(포맷 string, 값 any) (time.Time, error) {
 	return F2일자별_시각(F금일(), 포맷, 값)
 }
 
-func F2금일_시각_단순형_공백은_초기값(포맷 string, 값 interface{}) time.Time {
+func F2금일_시각_단순형_공백은_초기값(포맷 string, 값 any) time.Time {
 	if F2문자열_공백_제거(값) == "" {
 		return time.Time{}
 	}
@@ -815,7 +815,7 @@ func F2금일_한국_시각(시, 분, 초 int) (금일_시각 time.Time, 에러 
 	return F2금일_시각("15:04:05 -0700 MST", 시각_문자열)
 }
 
-func F2참거짓(값 interface{}, 조건 interface{}, 결과 bool) bool {
+func F2참거짓(값 any, 조건 any, 결과 bool) bool {
 	if F2문자열(값) == F2문자열(조건) {
 		return 결과
 	} else {
@@ -833,7 +833,7 @@ func F2종목코드_모음(종목_모음 []*S종목) []string {
 	return 종목코드_모음
 }
 
-func F문자열_비교(값 interface{}, 비교_문자열 string, 결과 bool) bool {
+func F문자열_비교(값 any, 비교_문자열 string, 결과 bool) bool {
 	if F2문자열(값) == 비교_문자열 {
 		return 결과
 	}
@@ -841,8 +841,8 @@ func F문자열_비교(값 interface{}, 비교_문자열 string, 결과 bool) bo
 	return !결과
 }
 
-func F2인터페이스_모음(변환_대상 interface{}) []interface{} {
-	인터페이스_모음 := make([]interface{}, 0)
+func F2인터페이스_모음(변환_대상 any) []any {
+	인터페이스_모음 := make([]any, 0)
 
 	switch 값_모음 := 변환_대상.(type) {
 	case []string:
@@ -861,7 +861,7 @@ func F2인터페이스_모음(변환_대상 interface{}) []interface{} {
 	return 인터페이스_모음
 }
 
-func f안전한_전달값_자료형(전달값 interface{}) bool {
+func f안전한_전달값_자료형(전달값 any) bool {
 	if 전달값 == nil {
 		return true
 	}
@@ -882,8 +882,8 @@ func f안전한_전달값_자료형(전달값 interface{}) bool {
 		string, []string, []byte,
 		*S바이트_변환, []*S바이트_변환:
 		return true
-	case []interface{}:
-		값_모음 := 전달값.([]interface{})
+	case []any:
+		값_모음 := 전달값.([]any)
 
 		for _, 값 := range 값_모음 {
 			if f안전한_전달값_자료형(값) {
@@ -900,7 +900,7 @@ func f안전한_전달값_자료형(전달값 interface{}) bool {
 }
 
 // 채널 전송용 안전한 전달값 모음
-func F2안전한_전달값_모음(값_모음 ...interface{}) ([]interface{}, error) {
+func F2안전한_전달값_모음(값_모음 ...any) ([]any, error) {
 	if 에러 := F인터페이스_모음_입력값_검사(값_모음); 에러 != nil {
 		return nil, 에러
 	}
@@ -917,7 +917,7 @@ func F2안전한_전달값_모음(값_모음 ...interface{}) ([]interface{}, err
 }
 
 // 채널 전송용 안전한 전달값
-func f2안전한_단일_전달값(값 interface{}) (interface{}, error) {
+func f2안전한_단일_전달값(값 any) (any, error) {
 	if f안전한_전달값_자료형(값) {
 		return 값, nil
 	}
@@ -940,14 +940,14 @@ func f2안전한_단일_전달값(값 interface{}) (interface{}, error) {
 		return 변환값, nil
 	case S바이트_변환:
 		return &변환값, nil
-	case []interface{}:
+	case []any:
 		panic(New에러("여러 개의 값을 변환할 때는 F2안전한_전달값_모음()을 사용하십시오."))
 	}
 
 	return New바이트_변환(P변환형식_기본값, 값)
 }
 
-func F인코딩(변환_형식 T변환, 값 interface{}) (바이트_모음 []byte, 에러 error) {
+func F인코딩(변환_형식 T변환, 값 any) (바이트_모음 []byte, 에러 error) {
 	if 값 == nil {
 		return nil, New에러("nil은 인코딩 불가함.")
 	}
@@ -976,7 +976,7 @@ func F인코딩(변환_형식 T변환, 값 interface{}) (바이트_모음 []byte
 	return 버퍼.Bytes(), nil
 }
 
-func F디코딩(변환_형식 T변환, 바이트_모음 []byte, 반환값 interface{}) (에러 error) {
+func F디코딩(변환_형식 T변환, 바이트_모음 []byte, 반환값 any) (에러 error) {
 	switch 변환_형식 {
 	case JSON:
 		에러 = json.Unmarshal(바이트_모음, 반환값)
@@ -997,7 +997,7 @@ func F디코딩(변환_형식 T변환, 바이트_모음 []byte, 반환값 interf
 
 // 자료형 문자열 값이 실제와 일치하는 지 테스트 케이스에서 확인할 것.
 
-func F바이트_변환값_해석(바이트_변환값 *S바이트_변환) (해석값 interface{}, 에러 error) {
+func F바이트_변환값_해석(바이트_변환값 *S바이트_변환) (해석값 any, 에러 error) {
 	var 자료형_문자열 string
 
 	defer S예외처리{M에러: &에러, M에러_실행: func() { 해석값 = nil }}.S실행()

@@ -108,7 +108,7 @@ func TestF문자열_모음2인터페이스_모음(t *testing.T) {
 func TestF인터페이스_모음2문자열_모음(t *testing.T) {
 	t.Parallel()
 
-	인터페이스_모음 := []interface{}{"테스트", 1, time.Now()}
+	인터페이스_모음 := []any{"테스트", 1, time.Now()}
 	문자열_모음 := F2문자열_모음(인터페이스_모음)
 
 	F테스트_같음(t, len(인터페이스_모음), len(문자열_모음))
@@ -131,7 +131,7 @@ func TestF인코딩_디코딩(t *testing.T) {
 
 	r := F임의값_생성기()
 
-	값_모음 := []interface{}{
+	값_모음 := []any{
 		r.Int(), r.Int63(), r.Float64(), r.Intn(1) == 0,
 		F임의_문자열(5, 100), []string{"test1", "test2"}, F임의_시각(),
 		[]int{r.Int(), r.Int(), r.Int()}}
@@ -152,7 +152,7 @@ func TestF인코딩_디코딩(t *testing.T) {
 		바이트_모음, 에러 := F인코딩(변환형식, nil)
 		F테스트_에러발생(t, 에러)
 
-		// 자료형 정보가 존재하면 구조체도 가능함. 그러나, interface{}로는 안 됨.
+		// 자료형 정보가 존재하면 구조체도 가능함. 그러나, any로는 안 됨.
 		s1 := F샘플_구조체_1()
 		바이트_모음, 에러 = F인코딩(변환형식, s1)
 		F테스트_에러없음(t, 에러)
@@ -238,7 +238,7 @@ func TestF바이트_변환값_해석(t *testing.T) {
 
 	변환_형식_모음 := []T변환{JSON, GOB}
 
-	원본값_모음 := []interface{}{
+	원본값_모음 := []any{
 		new(S콜백_기본형), New콜백_정수값_기본형(), new(S콜백_문자열), new(S콜백_TR데이터), new(S콜백_메시지_및_에러)}
 
 	for _, 변환_형식 := range 변환_형식_모음 {
@@ -255,7 +255,7 @@ func TestF바이트_변환값_해석(t *testing.T) {
 	}
 }
 
-func f자료형_문자열(값 interface{}) string {
+func f자료형_문자열(값 any) string {
 	if 값 == nil {
 		return "nil"
 	}

@@ -103,7 +103,7 @@ func TestP자료형_문자열(t *testing.T) {
 	lb.F테스트_같음(t, P자료형_T8436OutBlock, f자료형_문자열(T8436OutBlock{}))
 }
 
-func f자료형_문자열(값 interface{}) string {
+func f자료형_문자열(값 any) string {
 	if 값 == nil {
 		return "nil"
 	}

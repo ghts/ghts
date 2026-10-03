@@ -15,17 +15,17 @@ import (
 // InterfaceExt
 //
 // codec.BytesExt
-// WriteExt(v interface{}) []byte
-// ReadExt(dst interface{}, src []byte)
+// WriteExt(v any) []byte
+// ReadExt(dst any, src []byte)
 //
 // codec.InterfaceExt
-// ConvertExt(v interface{}) interface{}
-// UpdateExt(dst interface{}, src interface{})
+// ConvertExt(v any) any
+// UpdateExt(dst any, src any)
 //
 //goland:noinspection GoUnusedType
 type s변환기 struct{ 자료형 string }
 
-func (s *s변환기) WriteExt(값 interface{}) []byte {
+func (s *s변환기) WriteExt(값 any) []byte {
 	switch 변환값 := 값.(type) {
 	case error:
 		return []byte(변환값.Error())
@@ -36,7 +36,7 @@ func (s *s변환기) WriteExt(값 interface{}) []byte {
 	panic(New에러("s변환기.WriteExt() 예상하지 못한 자료형. %T", 값))
 }
 
-func (s *s변환기) ReadExt(포인터 interface{}, 바이트_모음 []byte) {
+func (s *s변환기) ReadExt(포인터 any, 바이트_모음 []byte) {
 	defer S예외처리{M에러_실행: func() { 포인터 = nil }}.S실행()
 
 	switch s.자료형 {
@@ -73,7 +73,7 @@ func (s *s변환기) ReadExt(포인터 interface{}, 바이트_모음 []byte) {
 	}
 }
 
-func (s *s변환기) ConvertExt(값 interface{}) interface{} {
+func (s *s변환기) ConvertExt(값 any) any {
 	switch 변환값 := 값.(type) {
 	case error:
 		return 변환값.Error()
@@ -86,7 +86,7 @@ func (s *s변환기) ConvertExt(값 interface{}) interface{} {
 	panic(New에러("s변환기.ConvertExt() 예상하지 못한 자료형 : '%T'", 값))
 }
 
-func (s *s변환기) UpdateExt(포인터 interface{}, 값 interface{}) {
+func (s *s변환기) UpdateExt(포인터 any, 값 any) {
 	defer S예외처리{M에러_실행: func() { 포인터 = nil }}.S실행()
 
 	switch s.자료형 {
@@ -104,7 +104,7 @@ type S바이트_변환 struct {
 	변환_형식   T변환
 	자료형_문자열 string
 	값       []byte
-	해석기     func(*S바이트_변환) (interface{}, error)
+	해석기     func(*S바이트_변환) (any, error)
 }
 
 func (s *S바이트_변환) G에러() error {
@@ -123,7 +123,7 @@ func (s *S바이트_변환) G자료형_문자열() string         { return s.자
 func (s *S바이트_변환) G바이트_모음() ([]byte, error) { return s.MarshalBinary() }
 func (s *S바이트_변환) IsNil() bool              { return len(s.값) == 0 }
 
-func (s *S바이트_변환) G값(값_포인터 interface{}) (에러 error) {
+func (s *S바이트_변환) G값(값_포인터 any) (에러 error) {
 	if s.변환_형식 == Raw {
 		if p바이트_모음, ok := 값_포인터.(*[]byte); !ok {
 			return New에러("*[]byte 형식만 가능합니다. '%T'", 값_포인터)
@@ -168,7 +168,7 @@ func (s *S바이트_변환) G값(값_포인터 interface{}) (에러 error) {
 	return F디코딩(s.변환_형식, s.값, 값_포인터)
 }
 
-func (s *S바이트_변환) G해석값() (interface{}, error) {
+func (s *S바이트_변환) G해석값() (any, error) {
 	if s.G에러() != nil {
 		return nil, s.G에러()
 	} else if s.해석기 == nil {
@@ -178,7 +178,7 @@ func (s *S바이트_변환) G해석값() (interface{}, error) {
 	return s.해석기(s)
 }
 
-func (s *S바이트_변환) S해석기(해석기 func(*S바이트_변환) (interface{}, error)) *S바이트_변환 {
+func (s *S바이트_변환) S해석기(해석기 func(*S바이트_변환) (any, error)) *S바이트_변환 {
 	s.해석기 = 해석기
 
 	return s
@@ -243,7 +243,7 @@ func (s *S바이트_변환) UnmarshalBinary(바이트_모음 []byte) (에러 err
 
 func (s *S바이트_변환) Raw바이트_모음() []byte { return s.값 }
 
-func New바이트_변환(변환_형식 T변환, 값 interface{}) (변환값 *S바이트_변환, 에러 error) {
+func New바이트_변환(변환_형식 T변환, 값 any) (변환값 *S바이트_변환, 에러 error) {
 	defer S예외처리{M에러: &에러, M에러_실행: func() { 변환값 = nil }}.S실행()
 
 	if _, ok := 값.(*S바이트_변환); ok {
@@ -305,7 +305,7 @@ type S바이트_변환_모음 struct {
 	M바이트_변환_모음 []*S바이트_변환
 }
 
-func (s *S바이트_변환_모음) S해석기(해석기 func(*S바이트_변환) (interface{}, error)) *S바이트_변환_모음 {
+func (s *S바이트_변환_모음) S해석기(해석기 func(*S바이트_변환) (any, error)) *S바이트_변환_모음 {
 	for _, 바이트_변환_매개체 := range s.M바이트_변환_모음 {
 		바이트_변환_매개체.S해석기(해석기)
 	}
@@ -342,7 +342,7 @@ func (s *S바이트_변환_모음) G자료형_문자열(인덱스 int) string {
 	return s.M바이트_변환_모음[인덱스].G자료형_문자열()
 }
 
-func (s *S바이트_변환_모음) G값(인덱스 int, 값_포인터 interface{}) error {
+func (s *S바이트_변환_모음) G값(인덱스 int, 값_포인터 any) error {
 	if len(s.M바이트_변환_모음) < (인덱스 + 1) {
 		return New에러("해당 위치에 데이터가 존재하지 않음. 길이 : %v, 인덱스 : %v",
 			len(s.M바이트_변환_모음), 인덱스)
@@ -351,7 +351,7 @@ func (s *S바이트_변환_모음) G값(인덱스 int, 값_포인터 interface{}
 	return s.M바이트_변환_모음[인덱스].G값(값_포인터)
 }
 
-func (s *S바이트_변환_모음) G해석값(인덱스 int) (interface{}, error) {
+func (s *S바이트_변환_모음) G해석값(인덱스 int) (any, error) {
 	if 인덱스 < 0 {
 		return nil, New에러("*S바이트_변환_모음.G해석값() : 음수 인덱스 - '%v'", 인덱스)
 	} else if 인덱스 >= len(s.M바이트_변환_모음) {
@@ -431,7 +431,7 @@ func (s *S바이트_변환_모음) UnmarshalBinary(바이트_모음 []byte) (에
 	return nil
 }
 
-func New바이트_변환_모음(변환_형식 T변환, 값_모음 ...interface{}) (*S바이트_변환_모음, error) {
+func New바이트_변환_모음(변환_형식 T변환, 값_모음 ...any) (*S바이트_변환_모음, error) {
 	if 에러 := F인터페이스_모음_입력값_검사(값_모음); 에러 != nil {
 		return nil, 에러
 	} else if 에러 := 변환_형식.G검사(); 에러 != nil {

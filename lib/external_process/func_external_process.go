@@ -43,7 +43,7 @@ func (s *s안전한_프로세스ID_저장소) S제거(프로세스ID int) {
 	lb.F확인1(lb.F파일에_값_저장(s.저장소, s.파일명, nil))
 }
 
-func F파이썬_스크립트_실행(스크립트_경로 string, 실행옵션 ...interface{}) (프로세스ID int, 에러 error) {
+func F파이썬_스크립트_실행(스크립트_경로 string, 실행옵션 ...any) (프로세스ID int, 에러 error) {
 	defer lb.S예외처리{M에러_실행: func() { 프로세스ID = -1 }}.S실행()
 
 	if 파이썬_경로.G값() == "" {
@@ -51,11 +51,11 @@ func F파이썬_스크립트_실행(스크립트_경로 string, 실행옵션 ...
 		파이썬_경로.S값(파일경로)
 	}
 
-	실행옵션 = append([]interface{}{스크립트_경로}, 실행옵션...)
+	실행옵션 = append([]any{스크립트_경로}, 실행옵션...)
 	return F외부_프로세스_실행(파이썬_경로.G값(), 실행옵션...)
 }
 
-func F외부_프로세스_실행(실행화일_경로 string, 실행옵션_모음 ...interface{}) (프로세스ID int, 에러 error) {
+func F외부_프로세스_실행(실행화일_경로 string, 실행옵션_모음 ...any) (프로세스ID int, 에러 error) {
 	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 프로세스ID = -1 }}.S실행()
 
 	if !lb.F파일_존재함(실행화일_경로) {
@@ -84,7 +84,7 @@ func F외부_프로세스_실행(실행화일_경로 string, 실행옵션_모음
 	}
 }
 
-func f외부_프로세스_생성(ch프로세스ID chan int, ch에러 chan error, 실행화일_경로 string, 실행옵션_모음 ...interface{}) (에러 error) {
+func f외부_프로세스_생성(ch프로세스ID chan int, ch에러 chan error, 실행화일_경로 string, 실행옵션_모음 ...any) (에러 error) {
 	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { ch에러 <- 에러 }}.S실행()
 
 	외부_명령어 := exec.Command(실행화일_경로, lb.F2문자열_모음(실행옵션_모음)...)

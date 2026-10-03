@@ -31,7 +31,7 @@ func F전일() time.Time {
 	return 전일.G값()
 }
 
-func f속성값_초기화(질의값 interface{}) interface{} {
+func f속성값_초기화(질의값 any) any {
 	값 := reflect.ValueOf(질의값).Elem()
 
 	for i := 0; i < 값.NumField(); i++ {

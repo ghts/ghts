@@ -34,7 +34,7 @@ func f포맷_연_월_일_요일_포함(포맷 string) bool {
 		strings.Contains(포맷, "Mon")
 }
 
-func F2전일_시각(포맷 string, 값 interface{}) (time.Time, error) {
+func F2전일_시각(포맷 string, 값 any) (time.Time, error) {
 	if f포맷_연_월_일_요일_포함(포맷) {
 		return time.Time{}, lb.New에러("포맷에 날짜 구성 요소(년/월/일/요일)가 포함되어 있습니다. 이 함수는 시각(시:분:초)만 사용할 수 있습니다. 포맷: %v", 포맷)
 	}
@@ -52,7 +52,7 @@ func F2전일_시각(포맷 string, 값 interface{}) (time.Time, error) {
 	return 전일_시각, nil
 }
 
-func F2당일_시각(포맷 string, 값 interface{}) (time.Time, error) {
+func F2당일_시각(포맷 string, 값 any) (time.Time, error) {
 	if f포맷_연_월_일_요일_포함(포맷) {
 		return time.Time{}, lb.New에러("포맷에 날짜 구성 요소(년/월/일/요일)가 포함되어 있습니다. 이 함수는 시각(시:분:초)만 사용할 수 있습니다. 포맷: %v", 포맷)
 	}

@@ -145,12 +145,12 @@ func (s *s안전한_시각) S값(값 time.Time) {
 }
 
 type I안전한_테스트 interface {
-	G참임(참이어야_하는_값 bool, 에러_발생_시_출력할_변수값 ...interface{})
-	G거짓임(거짓이어야_하는_값 bool, 에러_발생_시_출력할_변수값 ...interface{})
+	G참임(참이어야_하는_값 bool, 에러_발생_시_출력할_변수값 ...any)
+	G거짓임(거짓이어야_하는_값 bool, 에러_발생_시_출력할_변수값 ...any)
 	G에러없음(nil이어야_하는_에러 error)
 	G에러발생(nil이_아니어야_하는_에러 error)
-	G같음(값 interface{}, 비교값 interface{}, 추가_비교값_모음 ...interface{})
-	G다름(값 interface{}, 비교값 interface{}, 추가_비교값_모음 ...interface{})
+	G같음(값 any, 비교값 any, 추가_비교값_모음 ...any)
+	G다름(값 any, 비교값 any, 추가_비교값_모음 ...any)
 	FailNow()
 	Fail()
 }
@@ -164,14 +164,14 @@ type s안전한_테스트 struct {
 	t testing.TB
 }
 
-func (s *s안전한_테스트) G참임(참이어야_하는_값 bool, 에러_발생_시_출력할_변수값 ...interface{}) {
+func (s *s안전한_테스트) G참임(참이어야_하는_값 bool, 에러_발생_시_출력할_변수값 ...any) {
 	s.Lock()
 	defer s.Unlock()
 
 	f테스트_참임(s.t, 참이어야_하는_값, 에러_발생_시_출력할_변수값...)
 }
 
-func (s *s안전한_테스트) G거짓임(거짓이어야_하는_값 bool, 에러발생_시_출력할_변수값 ...interface{}) {
+func (s *s안전한_테스트) G거짓임(거짓이어야_하는_값 bool, 에러발생_시_출력할_변수값 ...any) {
 	s.Lock()
 	defer s.Unlock()
 
@@ -192,14 +192,14 @@ func (s *s안전한_테스트) G에러발생(nil이_아니어야_하는_에러 e
 	f테스트_에러발생(s.t, nil이_아니어야_하는_에러)
 }
 
-func (s *s안전한_테스트) G같음(값 interface{}, 비교값 interface{}, 추가_비교값_모음 ...interface{}) {
+func (s *s안전한_테스트) G같음(값 any, 비교값 any, 추가_비교값_모음 ...any) {
 	s.Lock()
 	defer s.Unlock()
 
 	f테스트_같음(s.t, 값, 비교값, 추가_비교값_모음...)
 }
 
-func (s *s안전한_테스트) G다름(값 interface{}, 비교값 interface{}, 추가_비교값_모음 ...interface{}) {
+func (s *s안전한_테스트) G다름(값 any, 비교값 any, 추가_비교값_모음 ...any) {
 	s.Lock()
 	defer s.Unlock()
 

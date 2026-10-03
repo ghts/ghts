@@ -6,7 +6,7 @@ import (
 	lb "github.com/ghts/ghts/lib"
 )
 
-func F2거래소_구분(거래소_이름 interface{}) T거래소_구분 {
+func F2거래소_구분(거래소_이름 any) T거래소_구분 {
 	switch lb.F2문자열_공백_제거(거래소_이름) {
 	case "K", "KRX", "":
 		return P거래소_KRX
@@ -44,7 +44,7 @@ func F2호가유형(xing호가유형코드 int) lb.T호가유형 {
 	}
 }
 
-func F2시장구분(값 interface{}) lb.T시장구분 {
+func F2시장구분(값 any) lb.T시장구분 {
 	문자열 := lb.F2문자열_EUC_KR_공백제거(값)
 
 	switch 문자열 {
@@ -57,7 +57,7 @@ func F2시장구분(값 interface{}) lb.T시장구분 {
 	}
 }
 
-func F2중간가_잔량_구분(값 interface{}) lb.T매도_매수_구분 {
+func F2중간가_잔량_구분(값 any) lb.T매도_매수_구분 {
 	문자열 := lb.F2문자열_공백_제거(값)
 
 	switch 문자열 {
@@ -135,7 +135,7 @@ func F2주문_응답_구분(값 [8]byte) T주문_응답_구분 {
 	}
 }
 
-func F바이트_변환값_해석(바이트_변환값 *lb.S바이트_변환) (해석값 interface{}, 에러 error) {
+func F바이트_변환값_해석(바이트_변환값 *lb.S바이트_변환) (해석값 any, 에러 error) {
 	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 해석값 = nil }}.S실행()
 
 	if 바이트_변환값.G변환_형식() == lb.Raw {
@@ -393,7 +393,7 @@ func F바이트_변환값_해석(바이트_변환값 *lb.S바이트_변환) (해
 	return lb.F바이트_변환값_해석(바이트_변환값)
 }
 
-func F바이트_변환값_해석_Raw(바이트_변환값 *lb.S바이트_변환) (해석값 interface{}, 에러 error) {
+func F바이트_변환값_해석_Raw(바이트_변환값 *lb.S바이트_변환) (해석값 any, 에러 error) {
 	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 해석값 = nil }}.S실행()
 
 	var b []byte
