@@ -2,6 +2,7 @@ package lib
 
 import (
 	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 )
@@ -18,26 +19,21 @@ type I안전한_bool interface {
 }
 
 func New안전한_bool(값 bool) I안전한_bool {
-	return &s안전한_bool{값: 값}
+	s := &s안전한_bool{}
+	s.Store(값) // atomic.Bool에는 생성자가 없으므로, Store로 초기화한다.
+	return s
 }
 
 type s안전한_bool struct {
-	sync.RWMutex
-	값 bool
+	atomic.Bool // Go 1.19+의 원자적 bool 타입으로 잠금 없이 스레드 안전
 }
 
 func (s *s안전한_bool) G값() bool {
-	s.RLock() // Go언어의 Embedded Lock
-	defer s.RUnlock()
-
-	return s.값
+	return s.Load() // 원자적 읽기
 }
 
 func (s *s안전한_bool) S값(값 bool) error {
-	s.Lock()
-	defer s.Unlock()
-
-	s.값 = 값
+	s.Store(값) // 원자적 쓰기
 
 	return nil
 }
