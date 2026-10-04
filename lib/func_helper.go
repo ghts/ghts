@@ -24,6 +24,53 @@ import (
 	"golang.org/x/exp/constraints"
 )
 
+func nan제거[T T숫자](값_모음 []T) []T {
+	var 필터된_값_모음 []T
+
+	switch 모음 := any(값_모음).(type) {
+	case []float32:
+		필터된_값_모음 = make([]T, 0, len(모음))
+
+		for _, 값 := range 모음 {
+			if !math.IsNaN(float64(값)) { // NaN 제외
+				필터된_값_모음 = append(필터된_값_모음, T(값))
+			}
+		}
+	case []float64:
+		필터된_값_모음 = make([]T, 0, len(모음))
+
+		for _, 값 := range 모음 {
+			if !math.IsNaN(값) { // NaN 제외
+				필터된_값_모음 = append(필터된_값_모음, T(값))
+			}
+		}
+	default:
+		// 정수형: NaN 불가능 → 제거 루틴 생략
+		필터된_값_모음 = slices.Clone(값_모음)
+	}
+
+	return 필터된_값_모음
+}
+
+// 값_모음에서 NaN을 제거하고 오름차순 정렬한 새 슬라이스를 반환한다.
+// 정수형은 NaN이 발생할 수 없으므로 제거 루틴 없이 복사만 수행한다.
+func f정렬_NaN_제거[T T숫자](값_모음 []T) []T {
+	값_모음 = nan제거(값_모음)
+	slices.Sort(값_모음)
+
+	return 값_모음
+}
+
+func f2실수값_모음[T T숫자](값_모음 ...T) (실수값_모음 []float64) {
+	실수값_모음 = make([]float64, len(값_모음))
+
+	for i, 값 := range nan제거(값_모음) {
+		실수값_모음[i] = float64(값)
+	}
+
+	return 실수값_모음
+}
+
 func F같음(값, 비교값 any) bool {
 	switch 값.(type) {
 	case *big.Int, int, int8, int16, int32, int64,
@@ -58,16 +105,6 @@ func F동일값_존재[T comparable](값 T, 비교값_모음 ...T) bool {
 	return slices.Contains(비교값_모음, 값)
 }
 
-func f2실수값_모음[T T숫자](값_모음 ...T) (실수값_모음 []float64) {
-	실수값_모음 = make([]float64, len(값_모음))
-
-	for i, 값 := range 값_모음 {
-		실수값_모음[i] = float64(값)
-	}
-
-	return 실수값_모음
-}
-
 func F합계[T T숫자](값_모음 ...T) T {
 	합계 := T(0)
 
@@ -84,6 +121,10 @@ func F평균[T T숫자](값_모음 ...T) float64 {
 	}
 
 	실수값_모음 := f2실수값_모음(값_모음...)
+
+	if len(실수값_모음) == 0 {
+		panic(New에러("F평균 : 유효한 값이 없습니다. (모두 NaN)"))
+	}
 
 	return F합계(실수값_모음...) / float64(len(실수값_모음))
 }
@@ -105,7 +146,13 @@ func F평균N표준편차[T T숫자](값_모음 ...T) (평균, 표준_편차 flo
 		panic(New에러("F평균N표준편차 : 입력값이 없습니다."))
 	}
 
-	return f평균N표준편차(f2실수값_모음(값_모음...), true)
+	실수값_모음 := f2실수값_모음(값_모음...)
+
+	if len(실수값_모음) == 0 {
+		panic(New에러("F평균N표준편차 : 유효한 값이 없습니다. (모두 NaN)"))
+	}
+
+	return f평균N표준편차(실수값_모음, true)
 }
 
 // F평균N모집단표준편차 : 평균과 모집단 표준편차(분모 N)를 계산.
@@ -115,7 +162,13 @@ func F평균N모집단표준편차[T T숫자](값_모음 ...T) (평균, 표준_�
 		panic(New에러("F평균N모집단표준편차 : 입력값이 없습니다."))
 	}
 
-	return f평균N표준편차(f2실수값_모음(값_모음...), false)
+	실수값_모음 := f2실수값_모음(값_모음...)
+
+	if len(실수값_모음) == 0 {
+		panic(New에러("F평균N모집단표준편차 : 유효한 값이 없습니다. (모두 NaN)"))
+	}
+
+	return f평균N표준편차(실수값_모음, false)
 }
 
 func f평균N표준편차(실수값_모음 []float64, 표본_보정 bool) (평균, 표준_편차 float64) {
@@ -136,38 +189,6 @@ func f평균N표준편차(실수값_모음 []float64, 표본_보정 bool) (평�
 	return 평균, 표준_편차
 }
 
-// 값_모음에서 NaN을 제거하고 오름차순 정렬한 새 슬라이스를 반환한다.
-// 정수형은 NaN이 발생할 수 없으므로 제거 루틴 없이 복사만 수행한다.
-func f정렬_NaN_제거[T T숫자](값_모음 []T) []T {
-	var 정렬_모음 []T
-
-	switch 모음 := any(값_모음).(type) {
-	case []float32:
-		정렬_모음 = make([]T, 0, len(모음))
-
-		for _, 값 := range 모음 {
-			if !math.IsNaN(float64(값)) { // NaN 제외
-				정렬_모음 = append(정렬_모음, T(값))
-			}
-		}
-	case []float64:
-		정렬_모음 = make([]T, 0, len(모음))
-
-		for _, 값 := range 모음 {
-			if !math.IsNaN(값) { // NaN 제외
-				정렬_모음 = append(정렬_모음, T(값))
-			}
-		}
-	default:
-		// 정수형: NaN 불가능 → 제거 루틴 생략
-		정렬_모음 = slices.Clone(값_모음)
-	}
-
-	slices.Sort(정렬_모음)
-
-	return 정렬_모음
-}
-
 // NaN을 제외한 최대값을 반환한다.
 func F최대값[T T숫자](값_모음 ...T) T {
 	if len(값_모음) == 0 {
@@ -175,8 +196,9 @@ func F최대값[T T숫자](값_모음 ...T) T {
 	}
 
 	정렬_모음 := f정렬_NaN_제거(값_모음)
+
 	if len(정렬_모음) == 0 {
-		panic(New에러("유효한 값이 없습니다. (모두 NaN)"))
+		panic(New에러("F최대값 : 유효한 값이 없습니다. (모두 NaN)"))
 	}
 
 	return 정렬_모음[len(정렬_모음)-1]
@@ -220,8 +242,9 @@ func F차최대값[T T숫자](값_모음 ...T) T {
 	}
 
 	정렬_모음 := f정렬_NaN_제거(값_모음)
+
 	if len(정렬_모음) < 2 {
-		panic(New에러("유효한 값이 2개 미만입니다. (NaN %d개 제외됨)", len(값_모음)-len(정렬_모음)))
+		panic(New에러("F차최대값 : 유효한 값이 2개 미만입니다. (NaN %d개 제외됨)", len(값_모음)-len(정렬_모음)))
 	}
 
 	차최대값, _ := f차최대_차최소(정렬_모음)
@@ -236,8 +259,9 @@ func F최소값[T T숫자](값_모음 ...T) T {
 	}
 
 	정렬_모음 := f정렬_NaN_제거(값_모음)
+
 	if len(정렬_모음) == 0 {
-		panic(New에러("유효한 값이 없습니다. (모두 NaN)"))
+		panic(New에러("F최소값 : 유효한 값이 없습니다. (모두 NaN)"))
 	}
 
 	return 정렬_모음[0]
@@ -250,8 +274,9 @@ func F차최소값[T T숫자](값_모음 ...T) T {
 	}
 
 	정렬_모음 := f정렬_NaN_제거(값_모음)
+
 	if len(정렬_모음) < 2 {
-		panic(New에러("유효한 값이 2개 미만입니다. (NaN %d개 제외됨)", len(값_모음)-len(정렬_모음)))
+		panic(New에러("F차최소값 : 유효한 값이 2개 미만입니다. (NaN %d개 제외됨)", len(값_모음)-len(정렬_모음)))
 	}
 
 	_, 차최소값 := f차최대_차최소(정렬_모음)
@@ -266,8 +291,9 @@ func F최대N최소[T T숫자](값_모음 ...T) (최대값, 최소값 T) {
 	}
 
 	정렬_모음 := f정렬_NaN_제거(값_모음)
+
 	if len(정렬_모음) == 0 {
-		panic(New에러("유효한 값이 없습니다. (모두 NaN)"))
+		panic(New에러("F최대N최소 : 유효한 값이 없습니다. (모두 NaN)"))
 	}
 
 	return 정렬_모음[len(정렬_모음)-1], 정렬_모음[0]
@@ -280,8 +306,9 @@ func F차최대N차최소[T T숫자](값_모음 ...T) (차최대값, 차최소�
 	}
 
 	정렬_모음 := f정렬_NaN_제거(값_모음)
+
 	if len(정렬_모음) < 2 {
-		panic(New에러("유효한 값이 2개 미만입니다. (NaN %d개 제외됨)", len(값_모음)-len(정렬_모음)))
+		panic(New에러("F차최대N차최소 : 유효한 값이 2개 미만입니다. (NaN %d개 제외됨)", len(값_모음)-len(정렬_모음)))
 	}
 
 	return f차최대_차최소(정렬_모음)
@@ -293,6 +320,10 @@ func F중간값[T T숫자](값_모음 ...T) T {
 	}
 
 	정렬_모음 := f정렬_NaN_제거(값_모음)
+
+	if len(정렬_모음) == 0 {
+		panic(New에러("F중간값 : 유효한 값이 없습니다. (모두 NaN)"))
+	}
 
 	if len(정렬_모음)%2 == 1 {
 		return 정렬_모음[(len(정렬_모음)-1)/2]
