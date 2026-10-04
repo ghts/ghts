@@ -8,9 +8,6 @@ import (
 var (
 	ch공통_종료_채널 = make(chan T신호)
 
-	파일경로_맵_잠금 = sync.RWMutex{}
-	파일경로_맵    = make(map[string]string)
-
 	실행경로_수정_잠금 = new(sync.Mutex)
 
 	// 이하 테스트 관련 함수 모음
