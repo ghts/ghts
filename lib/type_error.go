@@ -86,10 +86,10 @@ func (s *S에러) Error() string {
 }
 
 func (s *S에러) Is(에러값 error) bool {
-	if s.원래_에러 != nil {
-		return errors.Is(s.원래_에러, 에러값)
-	} else if s.에러_메시지 == 에러값.Error() {
+	if s.에러_메시지 != "" && s.에러_메시지 == 에러값.Error() {
 		return true
+	} else if s.원래_에러 != nil {
+		return errors.Is(s.원래_에러, 에러값)
 	}
 
 	return false
