@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"path"
 	"path/filepath"
 	"reflect"
 	"regexp"
@@ -944,7 +945,14 @@ func GOPATH() string {
 }
 
 func GOROOT() (GOROOT string) {
-	if GOROOT = F환경변수("GOROOT"); GOROOT == "" {
+	GOROOT = F2문자열_공백_제거(F환경변수("GOROOT"))
+
+	if GOROOT != "" {
+		return GOROOT
+	}
+
+	switch runtime.GOOS {
+	case "windows":
 		if F파일_존재함(`C:\Go\bin\go.exe`) {
 			GOROOT = `C:\Go`
 		} else if F파일_존재함(`C:\Program Files\Go\bin\go.exe`) {
@@ -953,12 +961,20 @@ func GOROOT() (GOROOT string) {
 			GOROOT = `D:\Program Files\Go`
 		} else if F파일_존재함(`E:\Program Files\Go\bin\go.exe`) {
 			GOROOT = `E:\Program Files\Go`
-		} else if F파일_존재함(`/usr/local/go/bin/go`) {
+		} else if F파일_존재함(path.Join(F홈_디렉토리(), "go", "bin", "go.exe")) {
+			GOROOT = path.Join(F홈_디렉토리(), "go")
+		} else if 경로, 에러 := F실행파일_검색("go.exe"); 에러 == nil && 경로 != "" {
+			경로 = F2문자열_공백_제거(경로)
+			GOROOT = strings.Replace(경로, `\bin\go.exe`, "", -1)
+		}
+	default:
+		if F파일_존재함(`/usr/local/go/bin/go`) {
 			GOROOT = `/usr/local/go`
-		} else {
-			GO실행화일_경로 := F확인2(F파일_검색(`C:\`, "go.exe"))
-			GO실행화일_경로 = strings.TrimSpace(GO실행화일_경로)
-			GOROOT = strings.Replace(GO실행화일_경로, `\bin\go.exe`, "", -1)
+		} else if F파일_존재함(path.Join(F홈_디렉토리(), "go", "bin", "go")) {
+			GOROOT = path.Join(F홈_디렉토리(), "go")
+		} else if 경로, 에러 := F실행파일_검색("go"); 에러 == nil && 경로 != "" {
+			경로 = F2문자열_공백_제거(경로)
+			GOROOT = strings.Replace(경로, `/bin/go`, "", -1)
 		}
 	}
 
