@@ -254,7 +254,7 @@ func OnRealtimeData(실시간_데이터 unsafe.Pointer) {
 }
 
 func OnLogin(wParam, lParam unsafe.Pointer) {
-	코드 := w32.F2Go문자열(wParam)
+	코드 := w32.F2문자열_EUC_KR(wParam)
 	정수, 에러 := lb.F2정수(코드)
 	로그인_성공_여부 := 에러 == nil && 정수 == 0
 
