@@ -357,7 +357,9 @@ func F앞뒤_따옴표_제거(값 string) string {
 }
 
 func F2문자열(값_모음 ...any) string {
-	if len(값_모음) > 1 {
+	if len(값_모음) == 0 {
+		panic(New에러("F2문자열() 입력값이 없습니다."))
+	} else if len(값_모음) > 1 {
 		if _, ok := 값_모음[0].(string); ok {
 			return f포맷된_문자열(값_모음[0].(string), 값_모음[1:]...)
 		}
