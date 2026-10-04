@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/csv"
 	"encoding/gob"
-	"errors"
 	"io"
 	"math"
 	"math/big"
@@ -550,7 +549,7 @@ func F인터페이스_모음_입력값_검사(값_모음 []any) error {
 		return nil
 	case 1:
 		if _, ok := 값_모음[0].([]any); ok {
-			return errors.New("배열이 아닌 단일값")
+			return New에러("배열이 아닌 단일값 : 인수로 전달하려면 ...기호를 사용하십시오. ", 값_모음)
 		}
 	}
 
