@@ -23,18 +23,18 @@ func New에러(포맷_문자열or에러 any, 추가_매개변수 ...any) error {
 		}
 
 		에러 := new(S에러)
-		에러.원래_에러 = 변환값
 		에러.시점 = time.Now()
 		에러.에러_메시지 = strings.TrimSpace(변환값.Error())
+		에러.원래_에러 = 변환값
 		에러.출력_완료 = false
 		에러.호출_경로_모음 = F호출경로_모음()
 
 		return 에러
 	case string:
 		에러 := new(S에러)
-		에러.원래_에러 = nil
 		에러.시점 = time.Now()
 		에러.에러_메시지 = fmt.Sprintf(strings.TrimSpace(변환값), 추가_매개변수...)
+		에러.원래_에러 = errors.New(에러.에러_메시지)
 		에러.출력_완료 = false
 		에러.호출_경로_모음 = F호출경로_모음()
 
@@ -53,9 +53,9 @@ func New에러with출력(포맷_문자열or에러 any, 추가_매개변수 ...an
 
 type S에러 struct {
 	sync.Mutex
-	원래_에러    error
 	시점       time.Time
 	에러_메시지   string
+	원래_에러    error
 	출력_완료    bool
 	호출_경로_모음 []string
 }
@@ -109,7 +109,7 @@ func (s *S에러) S출력() {
 
 	if s.출력_완료 ||
 		s.원래_에러 == nil ||
-		strings.TrimSpace(s.원래_에러.Error()) == "" {
+		F2문자열_공백_제거(s.원래_에러.Error()) == "" {
 		return
 	}
 
