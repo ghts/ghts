@@ -706,14 +706,6 @@ func F실행파일_검색(파일명 string) (경로 string, 에러 error) {
 }
 
 func F파일_검색(검색_시작_디렉토리, 파일명 string) (string, error) {
-	파일경로_맵_잠금.RLock()
-	파일경로, 존재함 := 파일경로_맵[파일명]
-	파일경로_맵_잠금.RUnlock()
-
-	if 존재함 {
-		return 파일경로, nil
-	}
-
 	ch응답 := make(chan any, 1)
 	go filepath.Walk(검색_시작_디렉토리, func(파일경로 string, 파일정보 os.FileInfo, 에러 error) error {
 		switch {
@@ -741,13 +733,7 @@ func F파일_검색(검색_시작_디렉토리, 파일명 string) (string, error
 		case error:
 			return "", New에러with출력("'%v' : 파일을 찾을 수 없습니다.\n%v", 파일명, 응답.(error))
 		case string:
-			파일경로 = 응답.(string)
-
-			파일경로_맵_잠금.Lock()
-			파일경로_맵[파일명] = 파일경로
-			파일경로_맵_잠금.Unlock()
-
-			return 파일경로, nil
+			return 응답.(string), nil
 		default:
 			panic(New에러("F파일_검색() 예상하지 못한 자료형 '%T' '%v'", 응답, 응답))
 		}
