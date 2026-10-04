@@ -62,9 +62,10 @@ func f정렬_NaN_제거[T T숫자](값_모음 []T) []T {
 }
 
 func f2실수값_모음[T T숫자](값_모음 ...T) (실수값_모음 []float64) {
-	실수값_모음 = make([]float64, len(값_모음))
+	필터된_값_모음 := nan제거(값_모음)
+	실수값_모음 = make([]float64, len(필터된_값_모음))
 
-	for i, 값 := range nan제거(값_모음) {
+	for i, 값 := range 필터된_값_모음 {
 		실수값_모음[i] = float64(값)
 	}
 
