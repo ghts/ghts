@@ -140,23 +140,22 @@ func f프로세스ID_파일_초기화() error {
 }
 
 func f잔류_프로세스_정리_및_초기화() (수량 int, 에러 error) {
-	defer lb.S예외처리{M에러: &에러}.S실행()
+	defer lb.S예외처리{M에러: &에러, M항상_실행: func() {
+		_ = f프로세스ID_파일_초기화()
+	}}.S실행()
 
 	프로세스ID_저장소 := lb.F확인2(f프로세스ID_파일_읽기())
 
 	수량 = 0
-	for 프로세스ID := range 프로세스ID_저장소 {
-		if 프로세스, 에러 := ps.FindProcess(프로세스ID); 프로세스 == nil && 에러 == nil {
-			// 프로세스 찾을 수 없음.
-			continue
-		}
+	var 프로세스 ps.Process
 
-		if 에러 = F프로세스_종료by프로세스ID(프로세스ID); 에러 == nil {
+	for 프로세스ID := range 프로세스ID_저장소 {
+		if 프로세스, 에러 = ps.FindProcess(프로세스ID); 프로세스 == nil && 에러 == nil {
+			continue // 프로세스 찾을 수 없음.
+		} else if 에러 = F프로세스_종료by프로세스ID(프로세스ID); 에러 == nil {
 			수량++
 		}
 	}
-
-	lb.F확인1(f프로세스ID_파일_초기화())
 
 	return 수량, nil
 }
