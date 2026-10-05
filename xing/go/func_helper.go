@@ -17,58 +17,12 @@ func F전일() time.Time {
 	return xt.F전일()
 }
 
-// f포맷_연_월_일_요일_포함
-// Go 문법상
-// '1'('15'제외)은 항상 월 토큰,
-// '2'는 항상 일/년 토큰,
-// '6'은 항상 년 토큰,
-// 'Jan'은 항상 월 토큰,
-// 'Mon'은 항상 요일 토큰 임.
-// 이 검사만으로도 '연/월/일/요일'을 정확히 탐지 가능
-func f포맷_연_월_일_요일_포함(포맷 string) bool {
-	// '15'는 '1'이 포함되었지만 시간을 의미하므로 제외.
-	포맷 = strings.ReplaceAll(포맷, "15", "")
-	return strings.Contains(포맷, "1") ||
-		strings.Contains(포맷, "2") ||
-		strings.Contains(포맷, "6") ||
-		strings.Contains(포맷, "Jan") ||
-		strings.Contains(포맷, "Mon")
-}
-
 func F2전일_시각(포맷 string, 값 any) (time.Time, error) {
-	if f포맷_연_월_일_요일_포함(포맷) {
-		return time.Time{}, lb.New에러("포맷에 날짜 구성 요소(년/월/일/요일)가 포함되어 있습니다. 이 함수는 시각(시:분:초)만 사용할 수 있습니다. 포맷: %v", 포맷)
-	}
-
-	시각, 에러 := lb.F2포맷된_시각(포맷, 값)
-	if 에러 != nil {
-		return time.Time{}, 에러
-	}
-
-	전일 := F전일()
-
-	전일_시각 := time.Date(전일.Year(), 전일.Month(), 전일.Day(),
-		시각.Hour(), 시각.Minute(), 시각.Second(), 시각.Nanosecond(), 시각.Location())
-
-	return 전일_시각, nil
+	return lb.F2일자별_시각(F전일(), 포맷, 값)
 }
 
 func F2당일_시각(포맷 string, 값 any) (time.Time, error) {
-	if f포맷_연_월_일_요일_포함(포맷) {
-		return time.Time{}, lb.New에러("포맷에 날짜 구성 요소(년/월/일/요일)가 포함되어 있습니다. 이 함수는 시각(시:분:초)만 사용할 수 있습니다. 포맷: %v", 포맷)
-	}
-
-	시각, 에러 := lb.F2포맷된_시각(포맷, 값)
-	if 에러 != nil {
-		return time.Time{}, 에러
-	}
-
-	당일 := F당일()
-
-	당일_시각 := time.Date(당일.Year(), 당일.Month(), 당일.Day(),
-		시각.Hour(), 시각.Minute(), 시각.Second(), 시각.Nanosecond(), 시각.Location())
-
-	return 당일_시각, nil
+	return lb.F2일자별_시각(F당일(), 포맷, 값)
 }
 
 func f에러_발생(TR코드, 코드, 내용 string) bool {
