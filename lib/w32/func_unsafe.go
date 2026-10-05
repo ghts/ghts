@@ -12,10 +12,7 @@ const 단위_오프셋 = unsafe.Sizeof(byte(0))
 // F2ANSI문자열 : UTF-8인코딩 Go문자열을 서버에서 인식하는 EUC-KR인코딩 ANSI형식 DLL호출 문자열로 변환
 func F2ANSI문자열(go문자열 string) uintptr {
 	바이트_모음, _ := korean.EUCKR.NewEncoder().Bytes([]byte(go문자열))
-
-	if len(바이트_모음) == 0 {
-		바이트_모음 = append(바이트_모음, 0)
-	}
+	바이트_모음 = append(바이트_모음, 0)
 
 	return uintptr(unsafe.Pointer(&바이트_모음[0]))
 }
