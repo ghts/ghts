@@ -87,14 +87,17 @@ func F주문_응답_실시간_정보_구독() (에러 error) {
 		return
 	}
 
-	// "구독_중"을 먼저 표시하고 실패 시 롤백.
 	주문_응답_구독_중.S값(true)
 
 	for _, RT코드 := range RT코드_모음 {
-		if 에러 = F실시간_정보_구독_단순TR(RT코드); 에러 != nil {
-			주문_응답_구독_중.S값(false)
-			return
+		for range 3 {
+			if 에러 = F실시간_정보_구독_단순TR(RT코드); 에러 == nil {
+				break
+			}
 		}
+
+		주문_응답_구독_중.S값(false)
+		lb.F에러_출력("F주문_응답_실시간_정보_구독 : 구독 에러 발생. '%v'", RT코드)
 	}
 
 	return nil
@@ -114,18 +117,16 @@ func F주문_응답_실시간_정보_해지() (에러 error) {
 	주문_응답_구독_잠금.Lock()
 	defer 주문_응답_구독_잠금.Unlock()
 
-	if !주문_응답_구독_중.G값() {
-		return
-	}
-
-	// 에러 없이 모든 구독 해지가 완료된 경우에만 재해지 막는다.
 	주문_응답_구독_중.S값(false)
 
 	for _, RT코드 := range RT코드_모음 {
-		if 에러 = F실시간_정보_해지_단순TR(RT코드); 에러 != nil {
-			주문_응답_구독_중.S값(true)
-			return
+		for range 3 {
+			if 에러 = F실시간_정보_해지_단순TR(RT코드); 에러 == nil {
+				break
+			}
 		}
+
+		lb.F에러_출력("F주문_응답_실시간_정보_해지 : 구독 해지 에러 발생. '%v'", RT코드)
 	}
 
 	return nil
