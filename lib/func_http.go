@@ -25,6 +25,9 @@ func HTTP_POST(url string, form데이터 url.Values) (바이트_모음 []byte, �
 	http응답 := F확인2((&http.Client{}).Do(http질의))
 	defer http응답.Body.Close()
 
+	F조건부_패닉(http응답.StatusCode < 200 || http응답.StatusCode >= 300,
+		"HTTP_POST : 오류 HTTP 상태 코드, '%v'", http응답.StatusCode)
+
 	// 응답 본문 읽기
 	바이트_모음 = F확인2(io.ReadAll(http응답.Body))
 
