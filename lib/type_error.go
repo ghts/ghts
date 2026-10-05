@@ -34,7 +34,6 @@ func New에러(포맷_문자열or에러 any, 추가_매개변수 ...any) error {
 		에러 := new(S에러)
 		에러.시점 = time.Now()
 		에러.에러_메시지 = fmt.Sprintf(strings.TrimSpace(변환값), 추가_매개변수...)
-		에러.원래_에러 = errors.New(에러.에러_메시지)
 		에러.출력_완료 = false
 		에러.호출_경로_모음 = F호출경로_모음()
 
@@ -61,10 +60,6 @@ type S에러 struct {
 }
 
 func (s *S에러) Error() string {
-	if s.출력_완료 {
-		return ""
-	}
-
 	버퍼 := new(strings.Builder)
 
 	if !strings.HasPrefix(s.에러_메시지, "\n") {
@@ -78,18 +73,20 @@ func (s *S에러) Error() string {
 	}
 
 	for _, 호출경로 := range s.호출_경로_모음 {
-		버퍼.WriteString(호출경로)
-		버퍼.WriteString("\n")
+		if !strings.Contains(s.에러_메시지, 호출경로) {
+			버퍼.WriteString(호출경로)
+			버퍼.WriteString("\n")
+		}
 	}
 
 	return 버퍼.String()
 }
 
 func (s *S에러) Is(에러값 error) bool {
-	if s.에러_메시지 != "" && s.에러_메시지 == 에러값.Error() {
-		return true
-	} else if s.원래_에러 != nil {
+	if s.원래_에러 != nil {
 		return errors.Is(s.원래_에러, 에러값)
+	} else if 에러값 != nil && s.에러_메시지 != "" && s.에러_메시지 == 에러값.Error() {
+		return true
 	}
 
 	return false
@@ -107,12 +104,13 @@ func (s *S에러) S출력() {
 	s.Lock()
 	defer s.Unlock()
 
-	if s.출력_완료 ||
-		s.원래_에러 == nil ||
-		F2문자열_공백_제거(s.원래_에러.Error()) == "" {
+	if s.출력_완료 {
+		return
+	} else if s.에러_메시지 == "" {
 		return
 	}
 
 	log.Println(strings.TrimSpace(s.Error()))
+
 	s.S출력_완료()
 }
