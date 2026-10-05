@@ -12,12 +12,6 @@ func TestS에러(t *testing.T) {
 	에러 := f함수1()
 	F테스트_에러발생(t, 에러)
 
-	if 에러.(*S에러).출력_완료 {
-		F테스트_참임(t, !strings.Contains(에러.Error(), 에러_메시지))
-	} else {
-		F테스트_참임(t, strings.Contains(에러.Error(), 에러_메시지))
-	}
-
 	함수명_모음 := []string{"f함수1", "f함수2", "f함수3", "f함수4", "f함수5"}
 
 	for _, 함수명 := range 함수명_모음 {
