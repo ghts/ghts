@@ -82,7 +82,11 @@ func DB질의[T T숫자 | big.Int | *big.Int | big.Rat | *big.Rat | string | boo
 		return 값, nil
 	}
 
-	에러 = New에러("DB질의() : 질의 결과 존재하지 않습니다.")
+	if rows.Err() != nil {
+		에러 = rows.Err()
+	} else {
+		에러 = New에러("DB질의() : 질의 결과 존재하지 않습니다.")
+	}
 
 	return
 }
