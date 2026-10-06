@@ -106,7 +106,7 @@ func (s *S질의값_문자열_모음) String() string {
 	return F2문자열("%v %v %v", s.M구분, s.M코드, s.M문자열_모음)
 }
 
-func New질의값_바이트_변환(TR구분 TR구분, TR코드 string, 값 interface{}) *S질의값_바이트_변환 {
+func New질의값_바이트_변환(TR구분 TR구분, TR코드 string, 값 any) *S질의값_바이트_변환 {
 	s := new(S질의값_바이트_변환)
 	s.S질의값_기본형 = New질의값_기본형(TR구분, TR코드)
 	s.M바이트_변환 = F확인2(New바이트_변환(P변환형식_기본값, 값))
@@ -119,7 +119,7 @@ type S질의값_바이트_변환 struct {
 	M바이트_변환 *S바이트_변환
 }
 
-func New질의값_바이트_변환_모음(TR구분 TR구분, TR코드 string, 값_모음 ...interface{}) *S질의값_바이트_변환_모음 {
+func New질의값_바이트_변환_모음(TR구분 TR구분, TR코드 string, 값_모음 ...any) *S질의값_바이트_변환_모음 {
 	s := new(S질의값_바이트_변환_모음)
 	s.S질의값_기본형 = New질의값_기본형(TR구분, TR코드)
 	s.M바이트_변환_모음 = F확인2(New바이트_변환_모음(P변환형식_기본값, 값_모음...))
@@ -190,9 +190,9 @@ type S질의값_복수_종목 struct {
 func (s *S질의값_복수_종목) G종목코드_모음() []string {
 	if len(s.M종목코드_모음) == 0 {
 		return nil
-	} else {
-		return F슬라이스_복사(s.M종목코드_모음, nil).([]string)
 	}
+
+	return F슬라이스_복사(s.M종목코드_모음, nil).([]string)
 }
 
 func (s *S질의값_복수_종목) G전체_종목코드() string {
@@ -262,7 +262,6 @@ func (s *S질의값_취소_주문) String() string {
 	return F2문자열("%v %v %v %v %v", s.M구분, s.M코드, s.M종목코드, s.M계좌번호, s.M주문수량)
 }
 
-// 전송 권한 관련
 type I전송_권한 interface {
 	I_TR코드
 	G획득() I전송_권한
@@ -291,19 +290,27 @@ type s전송_권한 struct {
 func (s *s전송_권한) TR코드() string { return s.tr코드 }
 
 func (s *s전송_권한) G획득() I전송_권한 {
+	// F질의()에서 f전송_권한_획득()으로 간접적으로 s.Lock()한 후
+	// f전송_시각_기록() 에서 간접적으로 s.Unlock() 함.
+	// 여기에서는 Unlock 하지 않는 것이 설계상 의도임.
 	s.Lock()
 
-	if s.G남은_수량() <= 0 {
+	if s.G남은_수량() <= 0 &&
+		s.전송_기록_저장소.Front() != nil {
 		전송_시각 := s.전송_기록_저장소.Front().Value.(time.Time)
+		대기_시간 := s.간격 - F지금().Sub(전송_시각)
 
-		if s.간격 > P10분 {
+		// 대기 시간 최대 10분 한도. 타임아웃 설정 효과.
+		대기_시간 = F조건값(대기_시간 > P10분, P10분, 대기_시간)
+
+		if 대기_시간 > P10초 {
 			지금 := F지금()
-			F문자열_출력("%v : %v초 대기 예정.",
+			F문자열_출력("%v : %d초 대기 예정.",
 				지금.Format("15:04:05.999"),
-				s.간격-지금.Sub(전송_시각)/P1초)
+				int(대기_시간/P1초))
 		}
 
-		F대기(s.간격 - F지금().Sub(전송_시각))
+		F대기(대기_시간)
 	}
 
 	return s
@@ -325,10 +332,10 @@ func (s *s전송_권한) S수량_간격_변경(수량 int, 간격 time.Duration)
 	s.간격 = 간격 + P100밀리초
 
 	switch {
-	case 수량 > 10:
-		s.수량 -= 1
 	case 수량 > 100:
 		s.수량 -= 2
+	case 수량 > 10:
+		s.수량 -= 1
 	}
 }
 
@@ -339,9 +346,9 @@ func (s *s전송_권한) s오래된_전송_기록_정리() {
 		if s.전송_기록_저장소.Len() == 0 {
 			return
 		} else if 전송_기록 := s.전송_기록_저장소.Front(); 전송_기록 == nil {
-			return // continue
+			return
 		} else if 전송_시각, ok := 전송_기록.Value.(time.Time); !ok {
-			return //continue
+			return
 		} else if 지금.Sub(전송_시각) > s.간격 {
 			F패닉억제_호출(s.전송_기록_저장소.Remove, 전송_기록)
 		} else {
@@ -357,7 +364,7 @@ type S문자열_모음 struct {
 func New채널_질의(질의값 I질의값) *S채널_질의 {
 	s := &S채널_질의{
 		M값:    질의값,
-		Ch회신값: make(chan interface{}, 1),
+		Ch회신값: make(chan any, 1),
 		Ch에러:  make(chan error, 1)}
 
 	return s
@@ -365,7 +372,7 @@ func New채널_질의(질의값 I질의값) *S채널_질의 {
 
 type S채널_질의 struct {
 	M값    I질의값
-	Ch회신값 chan interface{}
+	Ch회신값 chan any
 	Ch에러  chan error
 }
 

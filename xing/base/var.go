@@ -1,8 +1,9 @@
 package xt
 
 import (
-	lb "github.com/ghts/ghts/lib"
 	"sync"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
 var (

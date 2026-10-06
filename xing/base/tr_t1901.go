@@ -3,8 +3,9 @@ package xt
 import (
 	"bytes"
 	"encoding/binary"
-	lb "github.com/ghts/ghts/lib"
 	"time"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
 // t1901 ETF 시세 조회 응답
@@ -118,7 +119,7 @@ func NewT1901InBlock(질의값 *lb.S질의값_단일_종목) (g *T1901InBlock) {
 }
 
 func NewT1901_ETF_시세_조회_응답(b []byte) (s *T1901_ETF_시세_조회_응답, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { s = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { s = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeT1901OutBlock, "예상하지 못한 길이 : '%v'", len(b))
 

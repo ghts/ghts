@@ -1,11 +1,12 @@
 package xt
 
 import (
-	lb "github.com/ghts/ghts/lib"
 	"strings"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
-func F2거래소_구분(거래소_이름 interface{}) T거래소_구분 {
+func F2거래소_구분(거래소_이름 any) T거래소_구분 {
 	switch lb.F2문자열_공백_제거(거래소_이름) {
 	case "K", "KRX", "":
 		return P거래소_KRX
@@ -43,7 +44,7 @@ func F2호가유형(xing호가유형코드 int) lb.T호가유형 {
 	}
 }
 
-func F2시장구분(값 interface{}) lb.T시장구분 {
+func F2시장구분(값 any) lb.T시장구분 {
 	문자열 := lb.F2문자열_EUC_KR_공백제거(값)
 
 	switch 문자열 {
@@ -56,7 +57,7 @@ func F2시장구분(값 interface{}) lb.T시장구분 {
 	}
 }
 
-func F2중간가_잔량_구분(값 interface{}) lb.T매도_매수_구분 {
+func F2중간가_잔량_구분(값 any) lb.T매도_매수_구분 {
 	문자열 := lb.F2문자열_공백_제거(값)
 
 	switch 문자열 {
@@ -72,7 +73,7 @@ func F2중간가_잔량_구분(값 interface{}) lb.T매도_매수_구분 {
 }
 
 func F2수정구분_모음(값 int64) (수정구분_모음 []T수정구분, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 수정구분_모음 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 수정구분_모음 = nil }}.S실행()
 
 	if 값 == 0 {
 		return []T수정구분{P수정구분_없음}, nil
@@ -130,12 +131,12 @@ func F2주문_응답_구분(값 [8]byte) T주문_응답_구분 {
 	case "SONAS100":
 		return P주문_응답_체결_확인
 	default:
-		panic(lb.New에러("예상하지 못한 값 : '%v", 값))
+		panic(lb.New에러("예상하지 못한 값 : '%v'", 값))
 	}
 }
 
-func F바이트_변환값_해석(바이트_변환값 *lb.S바이트_변환) (해석값 interface{}, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 해석값 = nil }}.S실행()
+func F바이트_변환값_해석(바이트_변환값 *lb.S바이트_변환) (해석값 any, 에러 error) {
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 해석값 = nil }}.S실행()
 
 	if 바이트_변환값.G변환_형식() == lb.Raw {
 		return F바이트_변환값_해석_Raw(바이트_변환값)
@@ -150,30 +151,6 @@ func F바이트_변환값_해석(바이트_변환값 *lb.S바이트_변환) (해
 		s := new(S현물_주문_응답_실시간_정보)
 		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
-	//case P자료형_CFOAQ00600_선물옵션_주문체결내역_질의값:
-	//	s := new(CFOAQ00600_선물옵션_주문체결내역_질의값)
-	//	lb.F확인(바이트_변환값.TCP주소(s))
-	//	return s, nil
-	//case P자료형_CFOAT00100_선물옵션_정상주문_질의값:
-	//	s := new(CFOAT00100_선물옵션_정상주문_질의값)
-	//	lb.F확인(바이트_변환값.TCP주소(s))
-	//	return s, nil
-	//case P자료형_CFOAT00200_선물옵션_정정주문_질의값:
-	//	s := new(CFOAT00200_선물옵션_정정주문_질의값)
-	//	lb.F확인(바이트_변환값.TCP주소(s))
-	//	return s, nil
-	//case P자료형_CFOAT00300_선물옵션_취소주문_질의값:
-	//	s := new(CFOAT00300_선물옵션_취소주문_질의값)
-	//	lb.F확인(바이트_변환값.TCP주소(s))
-	//	return s, nil
-	//case P자료형_CFOBQ10500_선물옵션_예탁금_증거금_조회_질의값:
-	//	s := new(CFOBQ10500_선물옵션_예탁금_증거금_조회_질의값)
-	//	lb.F확인(바이트_변환값.TCP주소(s))
-	//	return s, nil
-	//case P자료형_CFOFQ02400_선물옵션_미결제약정_질의값:
-	//	s := new(CFOFQ02400_선물옵션_미결제약정_질의값)
-	//	lb.F확인(바이트_변환값.TCP주소(s))
-	//	return s, nil
 	case P자료형_CSPAQ12300_현물계좌_잔고내역_질의값:
 		s := new(CSPAQ12300_현물계좌_잔고내역_질의값)
 		lb.F확인1(바이트_변환값.G값(s))
@@ -202,10 +179,6 @@ func F바이트_변환값_해석(바이트_변환값 *lb.S바이트_변환) (해
 		s := new(T0425_현물_체결_미체결_조회_질의값)
 		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
-	//case P자료형_T0434_선물옵션_체결_미체결_조회_질의값:
-	//	s := new(T0434_선물옵션_체결_미체결_조회_질의값)
-	//	lb.F확인(바이트_변환값.TCP주소(s))
-	//	return s, nil
 	case P자료형_T1101_현물_호가_조회_응답:
 		s := new(T1101_현물_호가_조회_응답)
 		lb.F확인1(바이트_변환값.G값(s))
@@ -307,18 +280,18 @@ func F바이트_변환값_해석(바이트_변환값 *lb.S바이트_변환) (해
 		s := new(T1906_ETF_LP_호가_조회_응답)
 		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
-	//case P자료형_T3320_기업정보_요약_응답:
-	//	s := new(T3320_기업정보_요약_응답)
-	//	lb.F확인(바이트_변환값.TCP주소(s))
-	//	return s, nil
-	//case P자료형_T3320_기업정보_요약_응답1:
-	//	s := new(T3320_기업정보_요약_응답1)
-	//	lb.F확인(바이트_변환값.TCP주소(s))
-	//	return s, nil
-	//case P자료형_T3320_기업정보_요약_응답2:
-	//	s := new(T3320_기업정보_요약_응답2)
-	//	lb.F확인(바이트_변환값.TCP주소(s))
-	//	return s, nil
+	case P자료형_T3320_기업정보_요약_응답:
+		s := new(T3320_기업정보_요약_응답)
+		lb.F확인1(바이트_변환값.G값(s))
+		return s, nil
+	case P자료형_T3320_기업정보_요약_응답1:
+		s := new(T3320_기업정보_요약_응답1)
+		lb.F확인1(바이트_변환값.G값(s))
+		return s, nil
+	case P자료형_T3320_기업정보_요약_응답2:
+		s := new(T3320_기업정보_요약_응답2)
+		lb.F확인1(바이트_변환값.G값(s))
+		return s, nil
 	case P자료형_T3341_재무순위_질의값:
 		s := new(T3341_재무순위_질의값)
 		lb.F확인1(바이트_변환값.G값(s))
@@ -387,26 +360,6 @@ func F바이트_변환값_해석(바이트_변환값 *lb.S바이트_변환) (해
 		s := new(T8412_현물_차트_분_응답_반복값_모음)
 		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
-	case P자료형_T8413_현물_차트_일주월_질의값:
-		s := new(T8413_현물_차트_일주월_질의값)
-		lb.F확인1(바이트_변환값.G값(s))
-		return s, nil
-	case P자료형_T8413_현물_차트_일주월_응답:
-		s := new(T8413_현물_차트_일주월_응답)
-		lb.F확인1(바이트_변환값.G값(s))
-		return s, nil
-	case P자료형_T8413_현물_차트_일주월_응답_헤더:
-		s := new(T8413_현물_차트_일주월_응답_헤더)
-		lb.F확인1(바이트_변환값.G값(s))
-		return s, nil
-	case P자료형_T8413_현물_차트_일주월_응답_반복값:
-		s := new(T8413_현물_차트_일주월_응답_반복값)
-		lb.F확인1(바이트_변환값.G값(s))
-		return s, nil
-	case P자료형_T8413_현물_차트_일주월_응답_반복값_모음:
-		s := new(T8413_현물_차트_일주월_응답_반복값_모음)
-		lb.F확인1(바이트_변환값.G값(s))
-		return s, nil
 	case P자료형_T8428_증시주변_자금추이_질의값:
 		s := new(T8428_증시주변_자금추이_질의값)
 		lb.F확인1(바이트_변환값.G값(s))
@@ -440,8 +393,8 @@ func F바이트_변환값_해석(바이트_변환값 *lb.S바이트_변환) (해
 	return lb.F바이트_변환값_해석(바이트_변환값)
 }
 
-func F바이트_변환값_해석_Raw(바이트_변환값 *lb.S바이트_변환) (해석값 interface{}, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 해석값 = nil }}.S실행()
+func F바이트_변환값_해석_Raw(바이트_변환값 *lb.S바이트_변환) (해석값 any, 에러 error) {
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 해석값 = nil }}.S실행()
 
 	var b []byte
 	lb.F확인1(바이트_변환값.G값(&b))
@@ -524,8 +477,6 @@ func F바이트_변환값_해석_Raw(바이트_변환값 *lb.S바이트_변환) 
 		return NewT0167_시각_조회_응답(b)
 	case P자료형_T0425OutBlock:
 		return NewT0425_현물_체결_미체결_조회_응답(b)
-	//case P자료형_T0434OutBlock:
-	//	return NewT0434_선물옵션_체결_미체결_조회_응답(b)
 	case P자료형_T1101OutBlock:
 		return NewT1101_현물_호가_조회_응답(b)
 	case P자료형_T1102OutBlock:
@@ -563,7 +514,7 @@ func F바이트_변환값_해석_Raw(바이트_변환값 *lb.S바이트_변환) 
 	case P자료형_T3341OutBlock1:
 		return NewT3341_재무순위_응답_반복값_모음(b)
 	case P자료형_T8407OutBlock1:
-		return NewT8407_현물_멀티_현재가_조회_응답_반복값_모음(b)
+		return NewT8407_현물_멀티_현재가_조회_응답_모음(b)
 	case P자료형_T8410OutBlock:
 		return NewT8410_현물_차트_일주월년_응답_헤더(b)
 	case P자료형_T8410OutBlock1:
@@ -576,16 +527,10 @@ func F바이트_변환값_해석_Raw(바이트_변환값 *lb.S바이트_변환) 
 		return NewT8412_현물_차트_분_응답_헤더(b)
 	case P자료형_T8412OutBlock1:
 		return NewT8412_현물_차트_분_응답_반복값_모음(b)
-	case P자료형_T8413OutBlock:
-		return NewT8413_현물_차트_일주월_응답_헤더(b)
-	case P자료형_T8413OutBlock1:
-		return NewT8413_현물_차트_일주월_응답_반복값_모음(b)
 	case P자료형_T8428OutBlock:
 		return NewT8428_증시주변자금추이_응답_헤더(b)
 	case P자료형_T8428OutBlock1:
 		return NewT8428_증시주변자금추이_응답_반복값_모음(b)
-	case P자료형_T8432OutBlock:
-		return NewT8432_증시주변자금추이_응답_반복값_모음(b)
 	case P자료형_T8436OutBlock:
 		return NewT8436_현물_종목조회_응답_반복값_모음(b)
 	default:

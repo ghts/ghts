@@ -30,31 +30,31 @@ func (s *S모의_테스트) S값(통과_여부 bool) {
 }
 
 //goland:noinspection GoUnusedParameter
-func (s *S모의_테스트) Error(args ...interface{}) { s.S값(false) }
+func (s *S모의_테스트) Error(args ...any) { s.S값(false) }
 
 //goland:noinspection GoUnusedParameter,GoUnusedParameter
-func (s *S모의_테스트) Errorf(format string, args ...interface{}) { s.S값(false) }
-func (s *S모의_테스트) Fail()                                     { s.S값(false) }
-func (s *S모의_테스트) FailNow()                                  { s.S값(false) }
-func (s *S모의_테스트) Failed() bool                              { return !s.G값() }
+func (s *S모의_테스트) Errorf(format string, args ...any) { s.S값(false) }
+func (s *S모의_테스트) Fail()                             { s.S값(false) }
+func (s *S모의_테스트) FailNow()                          { s.S값(false) }
+func (s *S모의_테스트) Failed() bool                      { return !s.G값() }
 
 //goland:noinspection GoUnusedParameter
-func (s *S모의_테스트) Fatal(args ...interface{}) { s.S값(false) }
+func (s *S모의_테스트) Fatal(args ...any) { s.S값(false) }
 
 //goland:noinspection GoUnusedParameter,GoUnusedParameter
-func (s *S모의_테스트) Fatalf(format string, args ...interface{}) { s.S값(false) }
+func (s *S모의_테스트) Fatalf(format string, args ...any) { s.S값(false) }
 
 //goland:noinspection GoUnusedParameter
-func (s *S모의_테스트) Log(args ...interface{}) {}
+func (s *S모의_테스트) Log(args ...any) {}
 
 //goland:noinspection GoUnusedParameter
-func (s *S모의_테스트) Logf(format string, args ...interface{}) {}
+func (s *S모의_테스트) Logf(format string, args ...any) {}
 
 //goland:noinspection GoUnusedParameter
-func (s *S모의_테스트) Skip(args ...interface{}) {}
-func (s *S모의_테스트) SkipNow()                 {}
+func (s *S모의_테스트) Skip(args ...any) {}
+func (s *S모의_테스트) SkipNow()         {}
 
 //goland:noinspection GoUnusedParameter,GoUnusedParameter
-func (s *S모의_테스트) Skipf(format string, args ...interface{}) {}
-func (s *S모의_테스트) Skipped() bool                            { return false }
-func (s *S모의_테스트) S모의_테스트_리셋()                              { s.S값(true) }
+func (s *S모의_테스트) Skipf(format string, args ...any) {}
+func (s *S모의_테스트) Skipped() bool                    { return false }
+func (s *S모의_테스트) S모의_테스트_리셋()                      { s.S값(true) }

@@ -1,8 +1,9 @@
 package market_time
 
 import (
-	lb "github.com/ghts/ghts/lib"
 	"time"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
 func F한국증시_정규_거래_시간임() bool {
@@ -33,16 +34,9 @@ func F한국증시_장후_시간외_종가매매_시간임() bool {
 	return f한국증시_거래시간_도우미(15, 40, 16, 0)
 }
 
-func F한국증시_시간외_단일가매매_시간임() bool {
-	return f한국증시_거래시간_도우미(16, 0, 18, 0)
-}
-
-func F한국증시_정규경쟁대량매매_거래시간임() bool {
-	return f한국증시_거래시간_도우미(9, 0, 15, 00)
-}
-
-func F한국증시_시간외_대량바스켓매매_거래시간임() bool {
-	return f한국증시_거래시간_도우미(15, 40, 18, 0)
+// F한국증시_애프터_마켓_시간임 : 개별 주식 종목 매매만 가능하고, ETF/ETN 매매 불가.
+func F한국증시_애프터_마켓_시간임() bool {
+	return f한국증시_거래시간_도우미(16, 0, 20, 0)
 }
 
 func F한국증시_ETF_LP_의무_호가제출_시간임() bool {
@@ -53,11 +47,11 @@ func F한국증시_ETF_LP_의무_호가제출_시간임() bool {
 }
 
 func F한국증시_폐장_시간임() bool {
-	return !F한국증시_정규_거래_시간임() &&
-		!F한국증시_동시호가_시간임() &&
-		!F한국증시_장전_시간외_종가매매_시간임() &&
-		!F한국증시_장후_시간외_종가매매_시간임() &&
-		!F한국증시_시간외_단일가매매_시간임()
+	지금 := time.Now()
+	_08시30분 := F금일_보정_시각(8, 30, 0)
+	_20시 := F금일_보정_시각(20, 0, 0)
+
+	return 지금.Before(_08시30분) || 지금.After(_20시)
 }
 
 func f한국증시_거래시간_도우미(시작_시간, 시작_분, 종료_시간, 종료_분 int) bool {
@@ -81,6 +75,7 @@ func F금일_보정_시각(시, 분, 초 int) time.Time {
 	return lb.F금일().Add(f임시_지연_시간() + time.Duration(시)*lb.P1시간 + time.Duration(분)*lb.P1분 + time.Duration(초)*lb.P1초)
 }
 
+// f임시_지연_시간 : 수능 등 개장 지연 이벤트 대응 용도
 func f임시_지연_시간() time.Duration {
 	if 지금 := time.Now(); 지금.Year() == 2024 && 지금.Month() == time.November && 지금.Day() == 16 {
 		return time.Hour // 2024년 11월 16일 수능으로 인해 개장 1시간 순연.

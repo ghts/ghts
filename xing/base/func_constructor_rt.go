@@ -3,14 +3,16 @@ package xt
 import (
 	"bytes"
 	"encoding/binary"
+
 	lb "github.com/ghts/ghts/lib"
+	"github.com/ghts/ghts/lib/trade"
 )
 
 // New현물_주문_접수 : SC0
 func New현물_주문_접수(b []byte) (값 *S현물_주문_응답_실시간_정보, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
-	lb.F조건부_패닉(len(b) != SizeSC0_OutBlock, "예상하지 못한 길이 : '%v", len(b))
+	lb.F조건부_패닉(len(b) != SizeSC0_OutBlock, "예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(SC0_OutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
@@ -18,12 +20,11 @@ func New현물_주문_접수(b []byte) (값 *S현물_주문_응답_실시간_정
 	시각_문자열 := lb.F2문자열(g.Ordtm)
 	시각_문자열 = 시각_문자열[:6] + "." + 시각_문자열[7:]
 	시각 := lb.F확인2(lb.F2금일_시각("150405.999", 시각_문자열))
-	종목코드 := lb.F2문자열_공백_제거(g.Shtcode)
-	종목코드 = 종목코드[1:] // 맨 앞의 'A' 제거
+	종목코드 := trade.F종목코드_보정(lb.F2문자열_공백_제거(g.Shtcode))
 
 	값 = new(S현물_주문_응답_실시간_정보)
 	값.M주문번호 = lb.F확인2(lb.F2정수64(g.Ordno))
-	값.M원_주문번호 = lb.F확인2(lb.F2정수64(g.Orgordno))
+	값.M원_주문번호 = lb.F확인2(lb.F2정수64_공백은_0(g.Orgordno))
 	값.RT코드 = RT현물_주문_접수_SC0
 	값.M응답_구분 = F2주문_응답_구분(g.Trcode)
 	값.M종목코드 = 종목코드
@@ -37,9 +38,9 @@ func New현물_주문_접수(b []byte) (값 *S현물_주문_응답_실시간_정
 
 // New현물_주문_체결 : SC1
 func New현물_주문_체결(b []byte) (값 *S현물_주문_응답_실시간_정보, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
-	lb.F조건부_패닉(len(b) != SizeSC1_OutBlock, "예상하지 못한 길이 : '%v", len(b))
+	lb.F조건부_패닉(len(b) != SizeSC1_OutBlock, "예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(SC1_OutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
@@ -47,9 +48,7 @@ func New현물_주문_체결(b []byte) (값 *S현물_주문_응답_실시간_정
 	시각_문자열 := lb.F2문자열(g.Exectime)
 	시각_문자열 = 시각_문자열[:6] + "." + 시각_문자열[7:]
 	시각 := lb.F확인2(lb.F2금일_시각("150405.999", 시각_문자열))
-
-	종목코드 := lb.F2문자열_공백_제거(g.ShtnIsuno)
-	종목코드 = 종목코드[1:] // 맨 앞의 'A' 제거
+	종목코드 := trade.F종목코드_보정(lb.F2문자열_공백_제거(g.ShtnIsuno))
 
 	값 = new(S현물_주문_응답_실시간_정보)
 	값.M주문번호 = lb.F확인2(lb.F2정수64(g.Ordno))
@@ -66,9 +65,9 @@ func New현물_주문_체결(b []byte) (값 *S현물_주문_응답_실시간_정
 }
 
 func New현물_주문_정정(b []byte) (값 *S현물_주문_응답_실시간_정보, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
-	lb.F조건부_패닉(len(b) != SizeSC2_OutBlock, "예상하지 못한 길이 : '%v", len(b))
+	lb.F조건부_패닉(len(b) != SizeSC2_OutBlock, "예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(SC2_OutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
@@ -76,9 +75,7 @@ func New현물_주문_정정(b []byte) (값 *S현물_주문_응답_실시간_정
 	시각_문자열 := lb.F2문자열(g.Exectime)
 	시각_문자열 = 시각_문자열[:6] + "." + 시각_문자열[7:]
 	시각 := lb.F확인2(lb.F2금일_시각("150405.999", 시각_문자열))
-
-	종목코드 := lb.F2문자열_공백_제거(g.ShtnIsuno)
-	종목코드 = 종목코드[1:] // 맨 앞의 'A' 제거
+	종목코드 := trade.F종목코드_보정(lb.F2문자열_공백_제거(g.ShtnIsuno))
 
 	값 = new(S현물_주문_응답_실시간_정보)
 	값.M주문번호 = lb.F확인2(lb.F2정수64(g.Ordno))
@@ -95,9 +92,9 @@ func New현물_주문_정정(b []byte) (값 *S현물_주문_응답_실시간_정
 }
 
 func New현물_주문_취소(b []byte) (값 *S현물_주문_응답_실시간_정보, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
-	lb.F조건부_패닉(len(b) != SizeSC3_OutBlock, "예상하지 못한 길이 : '%v", len(b))
+	lb.F조건부_패닉(len(b) != SizeSC3_OutBlock, "예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(SC3_OutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
@@ -105,9 +102,7 @@ func New현물_주문_취소(b []byte) (값 *S현물_주문_응답_실시간_정
 	시각_문자열 := lb.F2문자열(g.Exectime)
 	시각_문자열 = 시각_문자열[:6] + "." + 시각_문자열[7:]
 	시각 := lb.F확인2(lb.F2금일_시각("150405.999", 시각_문자열))
-
-	종목코드 := lb.F2문자열_공백_제거(g.ShtnIsuno)
-	종목코드 = 종목코드[1:] // 맨 앞의 'A' 제거
+	종목코드 := trade.F종목코드_보정(lb.F2문자열_공백_제거(g.ShtnIsuno))
 
 	값 = new(S현물_주문_응답_실시간_정보)
 	값.M주문번호 = lb.F확인2(lb.F2정수64(g.Ordno))
@@ -123,9 +118,9 @@ func New현물_주문_취소(b []byte) (값 *S현물_주문_응답_실시간_정
 }
 
 func New현물_주문_거부(b []byte) (값 *S현물_주문_응답_실시간_정보, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
-	lb.F조건부_패닉(len(b) != SizeSC4_OutBlock, "예상하지 못한 길이 : '%v", len(b))
+	lb.F조건부_패닉(len(b) != SizeSC4_OutBlock, "예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(SC4_OutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
@@ -133,9 +128,7 @@ func New현물_주문_거부(b []byte) (값 *S현물_주문_응답_실시간_정
 	시각_문자열 := lb.F2문자열(g.Exectime)
 	시각_문자열 = 시각_문자열[:6] + "." + 시각_문자열[7:]
 	시각 := lb.F확인2(lb.F2금일_시각("150405.999", 시각_문자열))
-
-	종목코드 := lb.F2문자열_공백_제거(g.ShtnIsuno)
-	종목코드 = 종목코드[1:] // 맨 앞의 'A' 제거
+	종목코드 := trade.F종목코드_보정(lb.F2문자열_공백_제거(g.ShtnIsuno))
 
 	값 = new(S현물_주문_응답_실시간_정보)
 	값.M주문번호 = lb.F확인2(lb.F2정수64(g.Ordno))
@@ -145,16 +138,15 @@ func New현물_주문_거부(b []byte) (값 *S현물_주문_응답_실시간_정
 	값.M종목코드 = 종목코드
 	값.M수량 = lb.F확인2(lb.F2정수64(g.Rjtqty))
 	값.M잔량 = lb.F확인2(lb.F2정수64(g.Unercqty))
-	lb.F문자열_출력("%v", lb.F2문자열(g.Exectime))
 	값.M시각 = 시각
 
 	return 값, nil
 }
 
 func New코스피_호가_잔량(b []byte) (값 *S호가_잔량_실시간_정보, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
-	lb.F조건부_패닉(len(b) != SizeH1_OutBlock, "예상하지 못한 길이 : '%v", len(b))
+	lb.F조건부_패닉(len(b) != SizeH1_OutBlock, "예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(H1_OutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
@@ -226,7 +218,7 @@ func New코스피_호가_잔량(b []byte) (값 *S호가_잔량_실시간_정보,
 
 	값.M매도호가_모음 = make([]int64, 0)
 	값.M매도잔량_모음 = make([]int64, 0)
-	for i := 0; i < len(매도잔량_모음); i++ {
+	for i := range 매도잔량_모음 {
 		if 매도호가_모음[i] == 0 || 매도잔량_모음[i] == 0 {
 			continue
 		}
@@ -237,7 +229,7 @@ func New코스피_호가_잔량(b []byte) (값 *S호가_잔량_실시간_정보,
 
 	값.M매수호가_모음 = make([]int64, 0)
 	값.M매수잔량_모음 = make([]int64, 0)
-	for i := 0; i < len(매수잔량_모음); i++ {
+	for i := range 매수잔량_모음 {
 		if 매수호가_모음[i] == 0 || 매수잔량_모음[i] == 0 {
 			continue
 		}
@@ -259,9 +251,9 @@ func New코스피_호가_잔량(b []byte) (값 *S호가_잔량_실시간_정보,
 }
 
 func New코스피_시간외_호가_잔량(b []byte) (값 *S코스피_시간외_호가_잔량_실시간_정보, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
-	lb.F조건부_패닉(len(b) != SizeH2_OutBlock, "예상하지 못한 길이 : '%v", len(b))
+	lb.F조건부_패닉(len(b) != SizeH2_OutBlock, "예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(H2_OutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
@@ -278,9 +270,9 @@ func New코스피_시간외_호가_잔량(b []byte) (값 *S코스피_시간외_�
 }
 
 func New코스닥_호가_잔량(b []byte) (값 *S호가_잔량_실시간_정보, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
-	lb.F조건부_패닉(len(b) != SizeHA_OutBlock, "예상하지 못한 길이 : '%v", len(b))
+	lb.F조건부_패닉(len(b) != SizeHA_OutBlock, "예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(HA_OutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
@@ -352,7 +344,7 @@ func New코스닥_호가_잔량(b []byte) (값 *S호가_잔량_실시간_정보,
 
 	값.M매도호가_모음 = make([]int64, 0)
 	값.M매도잔량_모음 = make([]int64, 0)
-	for i := 0; i < len(매도잔량_모음); i++ {
+	for i := range 매도잔량_모음 {
 		if 매도호가_모음[i] == 0 || 매도잔량_모음[i] == 0 {
 			continue
 		}
@@ -363,7 +355,7 @@ func New코스닥_호가_잔량(b []byte) (값 *S호가_잔량_실시간_정보,
 
 	값.M매수호가_모음 = make([]int64, 0)
 	값.M매수잔량_모음 = make([]int64, 0)
-	for i := 0; i < len(매수잔량_모음); i++ {
+	for i := range 매수잔량_모음 {
 		if 매수호가_모음[i] == 0 || 매수잔량_모음[i] == 0 {
 			continue
 		}
@@ -385,9 +377,9 @@ func New코스닥_호가_잔량(b []byte) (값 *S호가_잔량_실시간_정보,
 }
 
 func New코스닥_시간외_호가_잔량(b []byte) (값 *S코스닥_시간외_호가_잔량_실시간_정보, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
-	lb.F조건부_패닉(len(b) != SizeHB_OutBlock, "예상하지 못한 길이 : '%v", len(b))
+	lb.F조건부_패닉(len(b) != SizeHB_OutBlock, "예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(H2_OutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
@@ -404,9 +396,9 @@ func New코스닥_시간외_호가_잔량(b []byte) (값 *S코스닥_시간외_�
 }
 
 func New코스피_체결(b []byte) (값 *S코스피_체결, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
-	lb.F조건부_패닉(len(b) != SizeS3_OutBlock, "예상하지 못한 길이 : '%v", len(b))
+	lb.F조건부_패닉(len(b) != SizeS3_OutBlock, "예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(S3_OutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
@@ -464,9 +456,9 @@ func New코스피_체결(b []byte) (값 *S코스피_체결, 에러 error) {
 }
 
 func New코스피_예상_체결(b []byte) (값 *S코스피_예상_체결, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
-	lb.F조건부_패닉(len(b) != SizeYS3OutBlock, "예상하지 못한 길이 : '%v", len(b))
+	lb.F조건부_패닉(len(b) != SizeYS3OutBlock, "예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(YS3OutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
@@ -489,9 +481,9 @@ func New코스피_예상_체결(b []byte) (값 *S코스피_예상_체결, 에러
 }
 
 func New코스닥_체결(b []byte) (값 *S코스닥_체결, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
-	lb.F조건부_패닉(len(b) != SizeK3_OutBlock, "예상하지 못한 길이 : '%v", len(b))
+	lb.F조건부_패닉(len(b) != SizeK3_OutBlock, "예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(K3_OutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
@@ -549,9 +541,9 @@ func New코스닥_체결(b []byte) (값 *S코스닥_체결, 에러 error) {
 }
 
 func New코스닥_예상_체결(b []byte) (값 *S코스닥_예상_체결, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
-	lb.F조건부_패닉(len(b) != SizeYK3OutBlock, "예상하지 못한 길이 : '%v", len(b))
+	lb.F조건부_패닉(len(b) != SizeYK3OutBlock, "예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(YK3OutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
@@ -574,9 +566,9 @@ func New코스닥_예상_체결(b []byte) (값 *S코스닥_예상_체결, 에러
 }
 
 func New코스피_ETF_NAV(b []byte) (값 *S코스피_ETF_NAV, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
-	lb.F조건부_패닉(len(b) != SizeI5_OutBlock, "예상하지 못한 길이 : '%v", len(b))
+	lb.F조건부_패닉(len(b) != SizeI5_OutBlock, "예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(I5_OutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
@@ -590,7 +582,7 @@ func New코스피_ETF_NAV(b []byte) (값 *S코스피_ETF_NAV, 에러 error) {
 	값.M누적거래량 = lb.F확인2(lb.F2실수(g.Volume))
 	값.M현재가NAV차이 = lb.F확인2(lb.F2실수(g.Navdiff))
 	값.NAV = lb.F확인2(lb.F2실수(g.Nav))
-	값.NAV전일대비 = lb.F확인2(lb.F2실수(g.Navdiff))
+	값.NAV전일대비 = lb.F확인2(lb.F2실수(g.Navchange))
 	값.M추적오차 = lb.F2실수_단순형_공백은_0(g.Crate)
 	값.M괴리 = lb.F2실수_단순형_공백은_0(g.Grate)
 	값.M지수 = lb.F2실수_단순형_공백은_0(g.Jisu)
@@ -601,9 +593,9 @@ func New코스피_ETF_NAV(b []byte) (값 *S코스피_ETF_NAV, 에러 error) {
 }
 
 func New주식_VI발동해제(b []byte) (값 *S주식_VI발동해제, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
-	lb.F조건부_패닉(len(b) != SizeVI_OutBlock, "예상하지 못한 길이 : '%v", len(b))
+	lb.F조건부_패닉(len(b) != SizeVI_OutBlock, "예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(VI_OutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
@@ -622,9 +614,9 @@ func New주식_VI발동해제(b []byte) (값 *S주식_VI발동해제, 에러 err
 }
 
 func New시간외_단일가VI발동해제(b []byte) (값 *S시간외_단일가VI발동해제, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
-	lb.F조건부_패닉(len(b) != SizeDVIOutBlock, "예상하지 못한 길이 : '%v", len(b))
+	lb.F조건부_패닉(len(b) != SizeDVIOutBlock, "예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(DVIOutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
@@ -643,9 +635,9 @@ func New시간외_단일가VI발동해제(b []byte) (값 *S시간외_단일가VI
 }
 
 func New장_운영정보(b []byte) (값 *S장_운영정보, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
-	lb.F조건부_패닉(len(b) != SizeJIFOutBlock, "예상하지 못한 길이 : '%v", len(b))
+	lb.F조건부_패닉(len(b) != SizeJIFOutBlock, "예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(JIFOutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.

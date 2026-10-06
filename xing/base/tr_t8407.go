@@ -3,13 +3,13 @@ package xt
 import (
 	"bytes"
 	"encoding/binary"
+
 	lb "github.com/ghts/ghts/lib"
 )
 
-//type T8407_현물_멀티_현재가_조회_응답 struct {
-//	M반복값_모음 []*T8407_현물_멀티_현재가_조회_응답
-//}
-
+type T8407_현물_멀티_현재가_조회_응답_모음 struct {
+	M값_모음 []*T8407_현물_멀티_현재가_조회_응답
+}
 type T8407_현물_멀티_현재가_조회_응답 struct {
 	M종목코드          string
 	M종목명           string
@@ -51,8 +51,8 @@ func NewT8407InBlock(질의값 *lb.S질의값_복수_종목) (g *T8407InBlock) {
 	return g
 }
 
-func NewT8407_현물_멀티_현재가_조회_응답_반복값_모음(b []byte) (값_모음 []*T8407_현물_멀티_현재가_조회_응답, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값_모음 = nil }}.S실행()
+func NewT8407_현물_멀티_현재가_조회_응답_모음(b []byte) (응답값 *T8407_현물_멀티_현재가_조회_응답_모음, 에러 error) {
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 응답값 = nil }}.S실행()
 
 	나머지 := len(b) % SizeT8407OutBlock1
 	lb.F조건부_패닉(나머지 != 0, "예상하지 못한 길이. '%v' '%v'", len(b), 나머지)
@@ -60,7 +60,7 @@ func NewT8407_현물_멀티_현재가_조회_응답_반복값_모음(b []byte) (
 	버퍼 := bytes.NewBuffer(b)
 	수량 := len(b) / SizeT8407OutBlock1
 	g_모음 := make([]*T8407OutBlock1, 수량)
-	값_모음 = make([]*T8407_현물_멀티_현재가_조회_응답, 수량)
+	값_모음 := make([]*T8407_현물_멀티_현재가_조회_응답, 수량)
 
 	for i, g := range g_모음 {
 		g = new(T8407OutBlock1)
@@ -71,8 +71,8 @@ func NewT8407_현물_멀티_현재가_조회_응답_반복값_모음(b []byte) (
 		s.M종목명 = lb.F2문자열_EUC_KR_공백제거(g.Hname)
 		s.M현재가 = lb.F확인2(lb.F2정수64(g.Price))
 		s.M전일종가대비구분 = T전일대비_구분(lb.F확인2(lb.F2정수64(g.Sign)))
-		s.M전일종가대비등락폭 = lb.F확인2(lb.F2정수64(g.Change))
-		s.M전일종가대비등락율_퍼센트 = lb.F확인2(lb.F2실수_소숫점_추가(g.Diff, 2))
+		s.M전일종가대비등락폭 = s.M전일종가대비구분.G부호보정_정수64(lb.F확인2(lb.F2정수64(g.Change)))
+		s.M전일종가대비등락율_퍼센트 = s.M전일종가대비구분.G부호보정_실수64(lb.F확인2(lb.F2실수_소숫점_추가(g.Diff, 2)))
 		s.M누적_거래량 = lb.F확인2(lb.F2정수64(g.Volume))
 		s.M매도호가 = lb.F확인2(lb.F2정수64(g.Offerho))
 		s.M매수호가 = lb.F확인2(lb.F2정수64(g.Bidho))
@@ -93,5 +93,8 @@ func NewT8407_현물_멀티_현재가_조회_응답_반복값_모음(b []byte) (
 		값_모음[i] = s
 	}
 
-	return 값_모음, nil
+	응답값 = new(T8407_현물_멀티_현재가_조회_응답_모음)
+	응답값.M값_모음 = 값_모음
+
+	return 응답값, nil
 }

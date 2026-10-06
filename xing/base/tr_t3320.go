@@ -3,7 +3,9 @@ package xt
 import (
 	"bytes"
 	"encoding/binary"
+
 	lb "github.com/ghts/ghts/lib"
+	"github.com/ghts/ghts/lib/trade"
 )
 
 type T3320_기업정보_요약_응답 struct {
@@ -75,10 +77,10 @@ func NewT3320InBlock(질의값 *lb.S질의값_단일_종목) (g *T3320InBlock) {
 }
 
 func NewT3320_기업정보_요약_응답1(b []byte) (값 *T3320_기업정보_요약_응답1, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeT3320OutBlock,
-		"예상하지 못한 길이 : '%v", len(b))
+		"예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(T3320OutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
@@ -110,16 +112,16 @@ func NewT3320_기업정보_요약_응답1(b []byte) (값 *T3320_기업정보_요
 }
 
 func NewT3320_기업정보_요약_응답2(b []byte) (값 *T3320_기업정보_요약_응답2, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeT3320OutBlock1,
-		"예상하지 못한 길이 : '%v", len(b))
+		"예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(T3320OutBlock1)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	값 = new(T3320_기업정보_요약_응답2)
-	값.M종목코드 = lb.F2문자열(g.Gicode)[1:]
+	값.M종목코드 = trade.F종목코드_보정(lb.F2문자열(g.Gicode)[:])
 	값.M결산년월 = lb.F2문자열(g.Gsym)
 	값.M결산구분 = lb.F2문자열(g.Gsgb)
 	값.PER = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Per, 2)

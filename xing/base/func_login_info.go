@@ -2,34 +2,45 @@ package xt
 
 import (
 	"bytes"
-	lb "github.com/ghts/ghts/lib"
-	"gopkg.in/ini.v1"
 	"io"
 	"os"
 	"path/filepath"
+
+	lb "github.com/ghts/ghts/lib"
+	"gopkg.in/ini.v1"
 )
 
 func F로그인_설정_화일_읽기() (로그인_정보 *S로그인_정보, 에러 error) {
 	defer lb.S예외처리{M에러: &에러}.S실행()
 
-	로그인_정보_화일_경로 := F로그인_설정_화일_경로()
+	로그인_정보_화일_경로 := lb.F확인2(F로그인_설정_화일_경로())
 	로그인_정보_문자열 := lb.F확인2(F로그인_정보_문자열_읽기(로그인_정보_화일_경로))
+	V로그인_정보, 에러 = F로그인_정보_문자열_해석(로그인_정보_문자열)
+	F로그인_설정_화일_경로_설정(로그인_정보_화일_경로) // 자식 프로세스 생성한다면 환경 변수를 통해서 정보 전달.
 
-	return F로그인_정보_문자열_해석(로그인_정보_문자열)
+	return V로그인_정보, 에러
 }
 
-func F로그인_설정_화일_경로_설정(경로 string) {
-	os.Setenv(P환경변수_설정_화일_경로, 경로)
-}
+func F로그인_설정_화일_경로() (경로 string, 에러 error) {
+	defer lb.S예외처리{M에러: &에러}.S실행()
 
-func F로그인_설정_화일_경로() string {
-	if lb.F파일_존재함(os.Getenv(P환경변수_설정_화일_경로)) {
-		return os.Getenv(P환경변수_설정_화일_경로)
-	} else if 현재_디렉토리, 에러 := os.Getwd(); 에러 == nil && lb.F파일_존재함(filepath.Join(현재_디렉토리, "xing_config.ini")) {
-		return filepath.Join(현재_디렉토리, "xing_config.ini")
-	} else {
-		return `.\xing_config.ini`
+	경로_후보_모음 := []string{
+		filepath.Join(lb.F확인2(os.Getwd()), P로그인_정보_화일명), /// 현재 디렉토리에 존재
+		os.Getenv(P환경변수_설정_화일_경로),                       // 환경 변수를 통해서 부모 프로세스로부터 전달 받은 경우.
 	}
+
+	for _, 경로_후보 := range 경로_후보_모음 {
+		if lb.F파일_존재함(경로_후보) {
+			return 경로_후보, nil
+		}
+	}
+
+	if 경로, 에러 = lb.F파일_검색(filepath.Join(lb.GOPATH(), "src", "github.com", "ghts"), P로그인_정보_화일명); 에러 == nil {
+		return 경로, nil // 개발 환경
+	}
+
+	// 최후의 방법으로 Go루트 소스 디렉토리 검색
+	return lb.F파일_검색(filepath.Join(lb.GOPATH(), "src"), P로그인_정보_화일명)
 }
 
 func F로그인_정보_문자열_읽기(로그인_정보_화일_경로 string) (로그인_정보_문자열 string, 에러 error) {
@@ -44,6 +55,7 @@ func F로그인_정보_문자열_읽기(로그인_정보_화일_경로 string) (
 
 		return "", lb.New에러(버퍼.String(), 로그인_정보_화일_경로, P환경변수_설정_화일_경로)
 	}
+
 	로그인_정보_화일 := lb.F확인2(os.Open(로그인_정보_화일_경로))
 	defer 로그인_정보_화일.Close()
 
@@ -76,6 +88,14 @@ func F로그인_정보_문자열_해석(로그인_정보_문자열 string) (로�
 	return 로그인_정보, nil
 }
 
+// F로그인_설정_화일_경로_설정 : 64비트 프로세스에서 DLL호출 전용 32비트 자식 프로세스를 생성할 때 환경 변수를 통해서 필요한 정보를 전달.
+func F로그인_설정_화일_경로_설정(경로 string) {
+	if 에러 := os.Setenv(P환경변수_설정_화일_경로, 경로); 에러 != nil {
+		panic(에러)
+	}
+}
+
+// F로그인_정보_환경_변수_설정 : 64비트 프로세스에서 DLL호출 전용 32비트 자식 프로세스를 생성할 때 환경 변수를 통해서 로그인 정보를 전달.
 func F로그인_정보_환경_변수_설정(로그인_정보 *S로그인_정보) (에러 error) {
 	defer lb.S예외처리{M에러: &에러}.S실행()
 
@@ -83,15 +103,12 @@ func F로그인_정보_환경_변수_설정(로그인_정보 *S로그인_정보)
 	lb.F확인1(os.Setenv(P환경변수_로그인_암호, 로그인_정보.M로그인_암호))
 	lb.F확인1(os.Setenv(P환경변수_인증서_암호, 로그인_정보.M인증서_암호))
 	lb.F확인1(os.Setenv(P환경변수_계좌_비밀번호, 로그인_정보.M계좌_비밀번호))
-
-	로그인_정보.M모의투자_암호 = lb.F2문자열_공백_제거(로그인_정보.M모의투자_암호)
-	if 로그인_정보.M모의투자_암호 != "" {
-		lb.F확인1(os.Setenv(P환경변수_모의투자_암호, 로그인_정보.M모의투자_암호))
-	}
+	lb.F확인1(os.Setenv(P환경변수_모의투자_암호, 로그인_정보.M모의투자_암호))
 
 	return nil
 }
 
+// F로그인_정보_설정 : 32비트 프로세스에서 환경 변수를 통해서 부모 프로세스의 정보가 전달해 준 정보를 받음.
 func F로그인_정보_설정() (에러 error) {
 	defer lb.S예외처리{M에러: &에러}.S실행()
 
@@ -124,6 +141,7 @@ func F로그인_정보_설정() (에러 error) {
 	}
 }
 
+// F로그인_정보_설정 : 64비트 부모 프로세스와 32비트 자식 프로세스 간 정보 전달이 끝나면 메모리에서 흔적 삭제.
 func F로그인_정보_환경_변수_삭제() {
 	lb.F확인1(os.Setenv(P환경변수_로그인_ID, ""))
 	lb.F확인1(os.Setenv(P환경변수_로그인_암호, ""))

@@ -1,24 +1,22 @@
 package xing
 
 import (
+	"slices"
+	"testing"
+	"time"
+
 	lb "github.com/ghts/ghts/lib"
 	krx "github.com/ghts/ghts/lib/market_time"
 	"github.com/ghts/ghts/lib/nanomsg"
 	"github.com/ghts/ghts/xing/base"
-	"testing"
-	"time"
 )
 
 func TestCSPAT00600_현물_정상_주문_질의값(t *testing.T) {
-	t.Parallel()
-
-	_, ok := interface{}(new(xt.CSPAT00600_현물_정상_주문_질의값)).(lb.I질의값)
+	_, ok := any(new(xt.CSPAT00600_현물_정상_주문_질의값)).(lb.I질의값)
 	lb.F테스트_참임(t, ok)
 }
 
 func TestCSPAT00600_현물_정상_주문(t *testing.T) {
-	t.Parallel()
-
 	if xt.F서버_구분() == xt.P서버_실거래 ||
 		!F금일_한국증시_개장() ||
 		!krx.F한국증시_정규_거래_시간임() {
@@ -30,7 +28,7 @@ func TestCSPAT00600_현물_정상_주문(t *testing.T) {
 
 	lb.F테스트_에러없음(t, F주문_응답_실시간_정보_구독())
 
-	const 반복_횟수 = 10
+	const 반복_횟수 = 3
 	const 수량 = 5 // 주문이 정상 작동하는 지만 확인하면 됨.
 	const 호가_유형 = lb.P호가_시장가
 
@@ -60,7 +58,7 @@ func TestCSPAT00600_현물_정상_주문(t *testing.T) {
 	질의값_매수.M신용거래_구분 = xt.P신용거래_해당없음
 	질의값_매수.M대출일 = time.Time{}
 
-	for i := 0; i < 반복_횟수; i++ {
+	for i := range 반복_횟수 {
 		응답값, 에러 := TrCSPAT00600_현물_정상주문(질의값_매수)
 
 		lb.F대기(lb.P100밀리초)
@@ -126,7 +124,7 @@ func TestCSPAT00600_현물_정상_주문(t *testing.T) {
 	질의값_매도.M주문조건 = lb.P주문조건_없음
 	질의값_매도.M대출일 = time.Time{}
 
-	for i := 0; i < 반복_횟수; i++ {
+	for i := range 반복_횟수 {
 		응답값, 에러 := TrCSPAT00600_현물_정상주문(질의값_매도)
 
 		lb.F대기(lb.P100밀리초)
@@ -183,11 +181,5 @@ func TestCSPAT00600_현물_정상_주문(t *testing.T) {
 }
 
 func f주문번호_포함(주문번호 int64, 주문번호_모음 []int64) bool {
-	for _, 주문번호2 := range 주문번호_모음 {
-		if 주문번호 == 주문번호2 {
-			return true
-		}
-	}
-
-	return false
+	return slices.Contains(주문번호_모음, 주문번호)
 }

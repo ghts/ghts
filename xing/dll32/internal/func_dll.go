@@ -1,11 +1,11 @@
 package dll32
 
 import (
-	lb "github.com/ghts/ghts/lib"
-	"github.com/ghts/ghts/lib/dll"
-	"github.com/ghts/ghts/xing/base"
-	"strings"
 	"syscall"
+
+	lb "github.com/ghts/ghts/lib"
+	"github.com/ghts/ghts/lib/w32"
+	"github.com/ghts/ghts/xing/base"
 
 	"bytes"
 	"os"
@@ -13,12 +13,13 @@ import (
 	"unsafe"
 )
 
-func f초기화_XingAPI() {
-	API_초기화_잠금.Lock()
-	defer func() {
-		API_초기화_완료.S값(true)
+func f초기화_XingAPI() (에러 error) {
+	defer lb.S예외처리{M에러: &에러, M항상_실행: func() {
+		API_초기화_완료.S값(에러 == nil)
 		API_초기화_잠금.Unlock()
-	}()
+	}}.S실행()
+
+	API_초기화_잠금.Lock()
 
 	if API_초기화_완료.G값() {
 		return
@@ -31,10 +32,10 @@ func f초기화_XingAPI() {
 	xing디렉토리 := lb.F확인2(XingAPI디렉토리())
 	lb.F확인1(os.Chdir(xing디렉토리))
 
-	// XingAPI 초기화 ('반드시' DLL파일이 있는 디렉토리에서 실행해야 함.)
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
+	// XingAPI 초기화 ('반드시' DLL파일이 있는 디렉토리에서 실행해야 함.)
 	xing_api_dll = lb.F확인2(syscall.LoadLibrary(xing_dll))
 
 	// 원래 디렉토리로 이동
@@ -76,6 +77,8 @@ func f초기화_XingAPI() {
 	etkReleaseRequestData = lb.F확인2(syscall.GetProcAddress(xing_api_dll, "ETK_ReleaseRequestData"))
 	etkReleaseMessageData = lb.F확인2(syscall.GetProcAddress(xing_api_dll, "ETK_ReleaseMessageData"))
 	etkDecompress = lb.F확인2(syscall.GetProcAddress(xing_api_dll, "ETK_Decompress"))
+
+	return nil
 }
 
 func F접속(서버_구분 xt.T서버_구분) error {
@@ -107,7 +110,7 @@ func F접속(서버_구분 xt.T서버_구분) error {
 
 	참거짓, _, 에러_번호 := syscall.Syscall6(etkConnect, 6,
 		메시지_윈도우,
-		dll.F2ANSI문자열(서버_이름),
+		w32.F2ANSI문자열(서버_이름),
 		uintptr(포트_번호),
 		WM_USER,
 		uintptr(unsafe.Pointer(&마이너스_일)),
@@ -154,16 +157,16 @@ func F로그인() (에러 error) {
 	로그인_ID := xt.V로그인_정보.M로그인_ID
 	로그인_암호 := lb.F조건값(xt.F서버_구분() == xt.P서버_실거래, xt.V로그인_정보.M로그인_암호, xt.V로그인_정보.M모의투자_암호)
 	인증서_암호 := lb.F조건값(xt.F서버_구분() == xt.P서버_실거래, xt.V로그인_정보.M인증서_암호, "")
-	계좌_비밀번호 = lb.F조건값(xt.F서버_구분() == xt.P서버_실거래, xt.V로그인_정보.M계좌_비밀번호, "")
+	V계좌_비밀번호 = lb.F조건값(xt.F서버_구분() == xt.P서버_실거래, xt.V로그인_정보.M계좌_비밀번호, "0000")
 
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
 	참거짓, _, 에러_번호 := syscall.Syscall6(etkLogin, 6,
 		메시지_윈도우,
-		dll.F2ANSI문자열(로그인_ID),
-		dll.F2ANSI문자열(로그인_암호),
-		dll.F2ANSI문자열(인증서_암호),
+		w32.F2ANSI문자열(로그인_ID),
+		w32.F2ANSI문자열(로그인_암호),
+		w32.F2ANSI문자열(인증서_암호),
 		0,
 		uintptr(FALSE))
 
@@ -216,24 +219,19 @@ func F질의(TR코드 string, c데이터 unsafe.Pointer, 길이 int,
 
 	질의ID, _, 에러_번호 := syscall.Syscall9(etkRequest, 7,
 		메시지_윈도우,
-		dll.F2ANSI문자열(TR코드),
+		w32.F2ANSI문자열(TR코드),
 		uintptr(c데이터),
 		uintptr(길이),
 		uintptr(lb.F조건값(연속_조회_여부, TRUE, FALSE)),
-		dll.F2ANSI문자열(연속키),
+		w32.F2ANSI문자열(연속키),
 		uintptr(타임아웃/time.Second),
 		0, 0)
 
+	// MS윈도우 기준 에러 발생 시 '질의ID = 0', 에러_번호(syscall.Errno)에 Win32 OS의 GetLastError() 결과값이 채워짐.
+	// 유닉스/리눅스/맥OS 기준 '질의ID = -1'
+	// MS윈도우 전용 증권사 API를 호출하므로 MS 윈도우 기준으로 에러 처리.
 	if 에러_번호 != 0 {
-		에러 := lb.New에러with출력("F질의() 에러 발생. 에러 코드 : '%v'", 에러_번호)
-
-		if strings.Contains(에러.Error(), "Access is denied.") {
-			lb.F문자열_출력("재시작 콜백 신호 송신")
-			f콜백_동기식(lb.New콜백_신호(lb.P신호_DLL32_접속_끊김))
-
-			lb.F문자열_출력("DLL32 자체 종료.")
-			f종료()
-		}
+		return int(질의ID), lb.New에러with출력("F질의() 에러 발생. 에러 코드 : '%v'", 에러_번호)
 	}
 
 	return int(질의ID), nil
@@ -245,8 +243,8 @@ func F실시간_정보_구독(TR코드 string, 전체_종목코드 string, 단�
 
 	참거짓, _, 에러_번호 := syscall.Syscall6(etkAdviseRealData, 4,
 		메시지_윈도우,
-		dll.F2ANSI문자열(TR코드),
-		dll.F2ANSI문자열(전체_종목코드),
+		w32.F2ANSI문자열(TR코드),
+		w32.F2ANSI문자열(전체_종목코드),
 		uintptr(단위_길이),
 		0, 0)
 
@@ -263,8 +261,8 @@ func F실시간_정보_해지(TR코드 string, 전체_종목코드 string, 단�
 
 	참거짓, _, 에러_번호 := syscall.Syscall6(etkUnadviseRealData, 4,
 		메시지_윈도우,
-		dll.F2ANSI문자열(TR코드),
-		dll.F2ANSI문자열(전체_종목코드),
+		w32.F2ANSI문자열(TR코드),
+		w32.F2ANSI문자열(전체_종목코드),
 		uintptr(단위_길이),
 		0, 0)
 
@@ -331,7 +329,7 @@ func f계좌_수량() (int, error) {
 func f계좌_번호(인덱스 int) (string, error) {
 	버퍼_초기값 := "            " // 12자리 공백문자열
 	버퍼_길이 := len(버퍼_초기값)
-	c버퍼 := dll.F2ANSI문자열(버퍼_초기값)
+	c버퍼 := w32.F2ANSI문자열(버퍼_초기값)
 
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
@@ -347,7 +345,7 @@ func f계좌_번호(인덱스 int) (string, error) {
 		return "", lb.New에러("f계좌_번호() 호출 결과 FALSE.")
 	}
 
-	return string(bytes.Trim(dll.F2Go바이트_모음with길이(unsafe.Pointer(c버퍼), 버퍼_길이), "\x00")), nil
+	return string(bytes.Trim(w32.F2Go바이트_모음with길이(unsafe.Pointer(c버퍼), 버퍼_길이), "\x00")), nil
 }
 
 func F계좌번호_모음(질의 *lb.S채널_질의) {
@@ -357,10 +355,10 @@ func F계좌번호_모음(질의 *lb.S채널_질의) {
 		return
 	}
 
-	계좌번호_모음 = make([]string, 수량)
+	V계좌번호_모음 = make([]string, 수량)
 
-	for i := range 계좌번호_모음 {
-		계좌번호_모음[i], 에러 = f계좌_번호(i)
+	for i := range V계좌번호_모음 {
+		V계좌번호_모음[i], 에러 = f계좌_번호(i)
 
 		if 에러 != nil {
 			질의.Ch에러 <- 에러
@@ -368,11 +366,11 @@ func F계좌번호_모음(질의 *lb.S채널_질의) {
 		}
 	}
 
-	질의.Ch회신값 <- 계좌번호_모음
+	질의.Ch회신값 <- V계좌번호_모음
 }
 
 func F계좌_이름(질의 *lb.S채널_질의) {
-	defer lb.S예외처리{M함수: func() {
+	defer lb.S예외처리{M에러_실행: func() {
 		질의.Ch에러 <- lb.New에러("F계좌_이름() 에러 발생.")
 	}}.S실행()
 
@@ -383,24 +381,24 @@ func F계좌_이름(질의 *lb.S채널_질의) {
 
 	// syscall 방식 호출은 에러 발생
 	버퍼 := "                                         " // 41 바이트
-	c버퍼 := dll.F2ANSI문자열(버퍼)
+	c버퍼 := w32.F2ANSI문자열(버퍼)
 	버퍼_길이 := len(버퍼)
 
 	_, _, 에러_번호 := syscall.Syscall(etkGetAccountName, 3,
-		dll.F2ANSI문자열(계좌_번호),
+		w32.F2ANSI문자열(계좌_번호),
 		c버퍼,
 		uintptr(버퍼_길이))
 
 	switch 에러_번호 {
 	case 0:
-		질의.Ch회신값 <- lb.F2문자열_EUC_KR_공백제거(dll.F2Go바이트_모음with길이(unsafe.Pointer(c버퍼), 버퍼_길이))
+		질의.Ch회신값 <- lb.F2문자열_EUC_KR_공백제거(w32.F2Go바이트_모음with길이(unsafe.Pointer(c버퍼), 버퍼_길이))
 	default:
 		질의.Ch에러 <- lb.New에러("F계좌_이름() 에러 발생.\n'%v'", 에러_번호)
 	}
 }
 
 //func F계좌_상세명(질의 *lb.S채널_질의) {
-//	defer lb.S예외처리{M함수: func() {
+//	defer lb.S예외처리{M에러_실행: func() {
 //		질의.Ch에러 <- lb.New에러("F계좌_상세명() 에러 발생.")
 //	}}.S실행()
 //
@@ -431,7 +429,7 @@ func F계좌_이름(질의 *lb.S채널_질의) {
 //}
 
 func F계좌_별명(질의 *lb.S채널_질의) {
-	defer lb.S예외처리{M함수: func() {
+	defer lb.S예외처리{M에러_실행: func() {
 		질의.Ch에러 <- lb.New에러("F계좌_별명() 에러 발생.")
 	}}.S실행()
 
@@ -442,17 +440,17 @@ func F계좌_별명(질의 *lb.S채널_질의) {
 
 	// syscall 방식 호출은 에러 발생
 	버퍼 := "                                         " // 41 바이트
-	c버퍼 := dll.F2ANSI문자열(버퍼)
+	c버퍼 := w32.F2ANSI문자열(버퍼)
 	버퍼_길이 := len(버퍼)
 
 	_, _, 에러_번호 := syscall.Syscall(etkGetAccountNickName, 3,
-		dll.F2ANSI문자열(계좌_번호),
+		w32.F2ANSI문자열(계좌_번호),
 		c버퍼,
 		uintptr(버퍼_길이))
 
 	switch 에러_번호 {
 	case 0:
-		질의.Ch회신값 <- lb.F2문자열_EUC_KR_공백제거(dll.F2Go바이트_모음with길이(unsafe.Pointer(c버퍼), 버퍼_길이))
+		질의.Ch회신값 <- lb.F2문자열_EUC_KR_공백제거(w32.F2Go바이트_모음with길이(unsafe.Pointer(c버퍼), 버퍼_길이))
 	default:
 		질의.Ch에러 <- lb.New에러("F계좌_별명() 에러 발생.\n'%v'", 에러_번호)
 	}
@@ -460,7 +458,7 @@ func F계좌_별명(질의 *lb.S채널_질의) {
 
 func F서버_이름(질의 *lb.S채널_질의) {
 	버퍼 := "                                                   "
-	c버퍼 := dll.F2ANSI문자열(버퍼)
+	c버퍼 := w32.F2ANSI문자열(버퍼)
 
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
@@ -471,7 +469,7 @@ func F서버_이름(질의 *lb.S채널_질의) {
 
 	switch 에러_번호 {
 	case 0:
-		질의.Ch회신값 <- lb.F2문자열_EUC_KR_공백제거(dll.F2Go바이트_모음with길이(unsafe.Pointer(c버퍼), len(버퍼)))
+		질의.Ch회신값 <- lb.F2문자열_EUC_KR_공백제거(w32.F2Go바이트_모음with길이(unsafe.Pointer(c버퍼), len(버퍼)))
 	default:
 		질의.Ch에러 <- lb.New에러("F서버_이름() 에러 발생.\n'%v'", 에러_번호)
 	}
@@ -495,13 +493,13 @@ func F에러_메시지(질의 *lb.S채널_질의) {
 	에러_코드 := 질의.M값.(*lb.S질의값_정수).M정수값
 
 	go버퍼 := new(bytes.Buffer)
-	for i := 0; i < 512; i++ {
+	for range 512 {
 		go버퍼.WriteString(" ")
 	}
 
 	버퍼 := go버퍼.String()
 	버퍼_길이 := len(버퍼)
-	c버퍼 := dll.F2ANSI문자열(버퍼)
+	c버퍼 := w32.F2ANSI문자열(버퍼)
 
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
@@ -517,7 +515,7 @@ func F에러_메시지(질의 *lb.S채널_질의) {
 	case 에러_메시지_길이 == 0:
 		질의.Ch에러 <- lb.New에러("에러 메시지를 구할 수 없습니다.")
 	default:
-		질의.Ch회신값 <- lb.F2문자열_EUC_KR_공백제거(dll.F2Go바이트_모음with길이(unsafe.Pointer(c버퍼), int(에러_메시지_길이)))
+		질의.Ch회신값 <- lb.F2문자열_EUC_KR_공백제거(w32.F2Go바이트_모음with길이(unsafe.Pointer(c버퍼), int(에러_메시지_길이)))
 	}
 }
 
@@ -545,7 +543,7 @@ func f초당_TR쿼터(TR코드 string) int {
 	defer api_호출_잠금.Unlock()
 
 	초당_전송_가능_횟수, _, 에러_번호 := syscall.Syscall(etkGetTRCountPerSec, 1,
-		dll.F2ANSI문자열(TR코드),
+		w32.F2ANSI문자열(TR코드),
 		0, 0)
 
 	if 에러_번호 != 0 {
@@ -560,7 +558,7 @@ func f초당_TR쿼터_역수(TR코드 string) int {
 	defer api_호출_잠금.Unlock()
 
 	초당_전송_가능_횟수_역수, _, 에러_번호 := syscall.Syscall(etkGetTRCountBaseSec, 1,
-		dll.F2ANSI문자열(TR코드),
+		w32.F2ANSI문자열(TR코드),
 		0, 0)
 
 	if 에러_번호 != 0 {
@@ -575,7 +573,7 @@ func f10분당_TR쿼터(TR코드 string) int {
 	defer api_호출_잠금.Unlock()
 
 	십분당_TR쿼터, _, 에러_번호 := syscall.Syscall(etkGetTRCountLimit, 1,
-		dll.F2ANSI문자열(TR코드),
+		w32.F2ANSI문자열(TR코드),
 		0, 0)
 
 	if 에러_번호 != 0 {
@@ -590,7 +588,7 @@ func f10분간_요청한_TR수량(TR코드 string) int {
 	defer api_호출_잠금.Unlock()
 
 	십분간_요청한_TR수량, _, 에러_번호 := syscall.Syscall(etkGetTRCountRequest, 1,
-		dll.F2ANSI문자열(TR코드),
+		w32.F2ANSI문자열(TR코드),
 		0, 0)
 
 	if 에러_번호 != 0 {

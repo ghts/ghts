@@ -1,8 +1,10 @@
 package nano
 
 import (
+	"strings"
+	"time"
+
 	lb "github.com/ghts/ghts/lib"
-	"github.com/ghts/ghts/lib/nanomsg_context"
 	"go.nanomsg.org/mangos/v3"
 	"go.nanomsg.org/mangos/v3/protocol/pair"
 	"go.nanomsg.org/mangos/v3/protocol/pub"
@@ -12,16 +14,22 @@ import (
 	"go.nanomsg.org/mangos/v3/protocol/req"
 	"go.nanomsg.org/mangos/v3/protocol/sub"
 	_ "go.nanomsg.org/mangos/v3/transport/tcp"
-	"strings"
-	"time"
 )
 
-func NewNano소켓(종류 lb.T소켓_종류, 주소 string, 접속방식 lb.T소켓_접속방식, 옵션_모음 ...interface{}) (소켓 lb.I소켓, 에러 error) {
-	//defer lb.S예외처리{M에러: &에러, M함수: func() { 소켓 = nil }}.S실행()
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 소켓 = nil }, M출력_숨김: true}.S실행()
-
+func NewNano소켓(종류 lb.T소켓_종류, 주소 string, 접속방식 lb.T소켓_접속방식, 옵션_모음 ...any) (소켓 lb.I소켓, 에러 error) {
 	s := new(sNano소켓)
 	s.종류 = 종류
+
+	defer lb.S예외처리{
+		M에러: &에러, M출력_숨김: true,
+		M에러_실행: func() {
+			소켓 = nil
+
+			if s.Socket != nil {
+				s.Socket.Close()
+			}
+		},
+	}.S실행()
 
 	switch 종류 {
 	case lb.P소켓_종류_REQ:
@@ -48,7 +56,7 @@ func NewNano소켓(종류 lb.T소켓_종류, 주소 string, 접속방식 lb.T소
 
 	switch 접속방식 {
 	case lb.P소켓_접속_CONNECT:
-		for i := 0; i < 10; i++ {
+		for range 10 {
 			에러 = s.Socket.Dial(주소)
 
 			switch {
@@ -69,7 +77,7 @@ func NewNano소켓(종류 lb.T소켓_종류, 주소 string, 접속방식 lb.T소
 			}
 		}
 	case lb.P소켓_접속_BIND:
-		for i := 0; i < 10; i++ {
+		for range 10 {
 			에러 = s.Socket.Listen(주소)
 
 			switch {
@@ -91,7 +99,7 @@ func NewNano소켓(종류 lb.T소켓_종류, 주소 string, 접속방식 lb.T소
 	return nil, lb.New에러("소켓 생성 실패.")
 }
 
-func NewNano소켓REQ(주소 lb.T주소, 옵션_모음 ...interface{}) (lb.I소켓_질의, error) {
+func NewNano소켓REQ(주소 lb.T주소, 옵션_모음 ...any) (lb.I소켓_질의, error) {
 	소켓, 에러 := NewNano소켓(lb.P소켓_종류_REQ, 주소.TCP주소(), lb.P소켓_접속_CONNECT, 옵션_모음...)
 
 	if 에러 != nil {
@@ -103,7 +111,7 @@ func NewNano소켓REQ(주소 lb.T주소, 옵션_모음 ...interface{}) (lb.I소�
 	}
 }
 
-func NewNano소켓REP(주소 lb.T주소, 옵션_모음 ...interface{}) (lb.I소켓with컨텍스트, error) {
+func NewNano소켓REP(주소 lb.T주소, 옵션_모음 ...any) (lb.I소켓with컨텍스트, error) {
 	if 소켓, 에러 := NewNano소켓(lb.P소켓_종류_REP, 주소.TCP주소(), lb.P소켓_접속_BIND, 옵션_모음...); 에러 != nil {
 		return nil, 에러
 	} else {
@@ -111,19 +119,19 @@ func NewNano소켓REP(주소 lb.T주소, 옵션_모음 ...interface{}) (lb.I소�
 	}
 }
 
-func NewNano소켓PUB(주소 lb.T주소, 옵션_모음 ...interface{}) (소켓 lb.I소켓, 에러 error) {
+func NewNano소켓PUB(주소 lb.T주소, 옵션_모음 ...any) (소켓 lb.I소켓, 에러 error) {
 	return NewNano소켓(lb.P소켓_종류_PUB, 주소.TCP주소(), lb.P소켓_접속_BIND, 옵션_모음...)
 }
 
-func NewNano소켓SUB(주소 lb.T주소, 옵션_모음 ...interface{}) (소켓 lb.I소켓, 에러 error) {
+func NewNano소켓SUB(주소 lb.T주소, 옵션_모음 ...any) (소켓 lb.I소켓, 에러 error) {
 	return NewNano소켓(lb.P소켓_종류_SUB, 주소.TCP주소(), lb.P소켓_접속_CONNECT, 옵션_모음...)
 }
 
-func NewNano소켓PUSH(주소 lb.T주소, 옵션_모음 ...interface{}) (lb.I소켓, error) {
+func NewNano소켓PUSH(주소 lb.T주소, 옵션_모음 ...any) (lb.I소켓, error) {
 	return NewNano소켓(lb.P소켓_종류_PUSH, 주소.TCP주소(), lb.P소켓_접속_CONNECT, 옵션_모음...)
 }
 
-func NewNano소켓PULL(주소 lb.T주소, 옵션_모음 ...interface{}) (lb.I소켓with컨텍스트, error) {
+func NewNano소켓PULL(주소 lb.T주소, 옵션_모음 ...any) (lb.I소켓with컨텍스트, error) {
 	if 소켓, 에러 := NewNano소켓(lb.P소켓_종류_PULL, 주소.TCP주소(), lb.P소켓_접속_BIND, 옵션_모음...); 에러 != nil {
 		return nil, 에러
 	} else {
@@ -131,11 +139,11 @@ func NewNano소켓PULL(주소 lb.T주소, 옵션_모음 ...interface{}) (lb.I소
 	}
 }
 
-func NewNano소켓PAIR클라이언트(주소 lb.T주소, 옵션_모음 ...interface{}) (lb.I소켓, error) {
+func NewNano소켓PAIR클라이언트(주소 lb.T주소, 옵션_모음 ...any) (lb.I소켓, error) {
 	return NewNano소켓(lb.P소켓_종류_PAIR, 주소.TCP주소(), lb.P소켓_접속_CONNECT, 옵션_모음...)
 }
 
-func NewNano소켓PAIR서버(주소 lb.T주소, 옵션_모음 ...interface{}) (lb.I소켓, error) {
+func NewNano소켓PAIR서버(주소 lb.T주소, 옵션_모음 ...any) (lb.I소켓, error) {
 	return NewNano소켓(lb.P소켓_종류_PAIR, 주소.TCP주소(), lb.P소켓_접속_BIND, 옵션_모음...)
 }
 
@@ -146,7 +154,7 @@ type sNano소켓 struct {
 	종류    lb.T소켓_종류
 }
 
-func (s *sNano소켓) S송신(변환_형식 lb.T변환, 값_모음 ...interface{}) (에러 error) {
+func (s *sNano소켓) S송신(변환_형식 lb.T변환, 값_모음 ...any) (에러 error) {
 	defer lb.S예외처리{M에러: &에러, M출력_숨김: true}.S실행()
 
 	// 소켓 타임아웃이 0초 이면 에러 발생.
@@ -161,7 +169,7 @@ func (s *sNano소켓) S송신(변환_형식 lb.T변환, 값_모음 ...interface{
 }
 
 func (s *sNano소켓) G수신() (값 *lb.S바이트_변환_모음, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }, M출력_숨김: true}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }, M출력_숨김: true}.S실행()
 
 	switch s.종류 {
 	case lb.P소켓_종류_REP, lb.P소켓_종류_PUB:
@@ -193,12 +201,12 @@ func (s *sNano소켓) G컨텍스트() (lb.I송수신, error) {
 		lb.F에러_출력(에러)
 		return nil, 에러
 	} else {
-		return nanomsg_context.New컨텍스트(ctx), nil
+		return New컨텍스트(ctx), nil
 	}
 }
 
-func (s *sNano소켓) G질의_응답(변환_형식 lb.T변환, 값_모음 ...interface{}) (값 *lb.S바이트_변환_모음, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+func (s *sNano소켓) G질의_응답(변환_형식 lb.T변환, 값_모음 ...any) (값 *lb.S바이트_변환_모음, 에러 error) {
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	lb.F확인1(s.S송신(변환_형식, 값_모음...))
 
@@ -210,7 +218,7 @@ func (s *sNano소켓) S타임아웃(타임아웃 time.Duration) lb.I소켓 {
 	return s
 }
 
-func (s *sNano소켓) S옵션(옵션_모음 ...interface{}) {
+func (s *sNano소켓) S옵션(옵션_모음 ...any) {
 	for i, 옵션 := range 옵션_모음 {
 		switch 변환값 := 옵션.(type) {
 		case string:

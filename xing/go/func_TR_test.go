@@ -1,18 +1,17 @@
 package xing
 
 import (
-	lb "github.com/ghts/ghts/lib"
 	"testing"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
 func TestF계좌_관련_함수(t *testing.T) {
-	t.Parallel()
-
 	계좌_수량, 에러 := F계좌_수량()
 	lb.F테스트_에러없음(t, 에러)
 	lb.F테스트_참임(t, 계좌_수량 > 0, 계좌_수량)
 
-	for i := 0; i < 계좌_수량; i++ {
+	for i := range 계좌_수량 {
 		계좌_번호, 에러 := F계좌_번호(i)
 		lb.F테스트_에러없음(t, 에러)
 		lb.F테스트_참임(t, len(계좌_번호) > 0)

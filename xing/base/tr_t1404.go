@@ -3,8 +3,9 @@ package xt
 import (
 	"bytes"
 	"encoding/binary"
-	lb "github.com/ghts/ghts/lib"
 	"strconv"
+
+	lb "github.com/ghts/ghts/lib"
 
 	"time"
 )
@@ -73,10 +74,10 @@ func NewT1404InBlock(질의값 *T1404_관리종목_조회_질의값) (g *T1404In
 }
 
 func NewT1404_관리종목_조회_응답_헤더(b []byte) (값 *T1404_관리종목_조회_응답_헤더, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeT1404OutBlock,
-		"예상하지 못한 길이 : '%v", len(b))
+		"예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(T1404OutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
@@ -88,7 +89,7 @@ func NewT1404_관리종목_조회_응답_헤더(b []byte) (값 *T1404_관리종�
 }
 
 func NewT1404_관리종목_조회_응답_반복값_모음(b []byte) (값_모음 *T1404_관리종목_조회_응답_반복값_모음, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값_모음 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값_모음 = nil }}.S실행()
 
 	나머지 := len(b) % SizeT1404OutBlock1
 	lb.F조건부_패닉(나머지 != 0, "예상하지 못한 길이. '%v' '%v'", len(b), 나머지)

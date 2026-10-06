@@ -335,8 +335,8 @@ const (
 
 type T시장구분 int8
 
-func (p *T시장구분) String() string {
-	switch *p {
+func (p T시장구분) String() string {
+	switch p {
 	case P시장구분_전체:
 		return "전체"
 	case P시장구분_코스피:
@@ -410,7 +410,7 @@ func (p T매도_매수_구분) String() string {
 	}
 }
 
-func (p T매도_매수_구분) F해석(값 interface{}) T매도_매수_구분 {
+func (p T매도_매수_구분) F해석(값 any) T매도_매수_구분 {
 	문자열 := F2문자열_EUC_KR_공백제거(값)
 
 	switch 문자열 {
@@ -611,7 +611,7 @@ func (v T주문응답_구분) String() string {
 	case P주문응답_IOC취소:
 		return "IOC 취소"
 	case P주문응답_FOK취소:
-		return "FOC 취소"
+		return "FOK 취소"
 	default:
 		return F2문자열("잘못된 주문응답 구분값. %v", v)
 	}
@@ -669,6 +669,8 @@ func (v T호가유형) String() string {
 		return "최유리 지정가"
 	case P호가_최우선_지정가:
 		return "최우선 지정가"
+	case P호가_중간가:
+		return "중간가"
 	case P호가_장전_시간외:
 		return "장전 시간외"
 	case P호가_장후_시간외:
@@ -756,7 +758,7 @@ func (t T소켓_접속방식) String() string {
 	case P소켓_접속_CONNECT:
 		return "CONNECT"
 	default:
-		return "예상하지 못한 접속방식 : '" + t.String() + "'"
+		return F2문자열("예상하지 못한 접속방식 : '%v'", uint(t))
 	}
 }
 

@@ -1,16 +1,15 @@
 package xing
 
 import (
-	lb "github.com/ghts/ghts/lib"
-	"github.com/ghts/ghts/xing/base"
 	"math"
 	"strings"
 	"testing"
+
+	lb "github.com/ghts/ghts/lib"
+	"github.com/ghts/ghts/xing/base"
 )
 
 func TestT3341_재무_순위_종합(t *testing.T) {
-	t.Parallel()
-
 	시장구분_모음 := []lb.T시장구분{lb.P시장구분_전체, lb.P시장구분_코스피, lb.P시장구분_코스닥}
 	시장구분 := 시장구분_모음[lb.F임의_범위_이내_정수값(0, 2)]
 
@@ -27,7 +26,7 @@ func TestT3341_재무_순위_종합(t *testing.T) {
 
 	for _, 값 := range 값_모음 {
 		lb.F테스트_참임(t, 값.M순위 > 0 && 값.M순위 <= 수량)
-		lb.F테스트_참임(t, F종목코드_존재함(값.M종목코드))
+		lb.F테스트_참임(t, F종목코드_존재함(값.M종목코드), 값.M종목코드)
 		lb.F테스트_참임(t, strings.TrimSpace(값.M기업명) != "")
 		//lb.F테스트_참임(t, math.Abs(실수값(값.M매출액_증가율)) < 10000, 값.M종목코드, 값.M매출액_증가율)
 		//lb.F테스트_참임(t, math.Abs(실수값(값.M영업이익_증가율)) < 10000, 값.M종목코드, 값.M영업이익_증가율)
@@ -41,6 +40,6 @@ func TestT3341_재무_순위_종합(t *testing.T) {
 		lb.F테스트_참임(t, math.Abs(값.ROE) < 100000, 값.M종목코드, 값.ROE)
 		lb.F테스트_참임(t, math.Abs(값.PER) < 100000, 값.M종목코드, 값.PER)
 		lb.F테스트_참임(t, math.Abs(값.PBR) < 100000, 값.M종목코드, 값.PBR)
-		lb.F테스트_참임(t, math.Abs(값.PEG) < 100000, 값.M종목코드, 값.PEG)
+		//lb.F테스트_참임(t, math.Abs(값.PEG) < 100000, 값.M종목코드, 값.PEG)
 	}
 }

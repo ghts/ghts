@@ -9,8 +9,6 @@ import (
 )
 
 func TestT1102_현물_시세_조회(t *testing.T) {
-	t.Parallel()
-
 	if lb.F지금().Hour() >= 5 && lb.F지금().Hour() < 9 {
 		t.SkipNow() // 이 시간대에 테스트 에러가 발생함.
 	}
@@ -230,4 +228,6 @@ func TestT1102_현물_시세_조회(t *testing.T) {
 	if len(값.M거래소별단축코드) == 7 {
 		lb.F테스트_같음(t, 값.M거래소별단축코드[0], "N", "U")
 	}
+
+	lb.F테스트_참임(t, 값.KRX정규_종가 > 0)
 }

@@ -3,8 +3,9 @@ package xt
 import (
 	"bytes"
 	"encoding/binary"
-	lb "github.com/ghts/ghts/lib"
 	"time"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
 type T8428_증시주변_자금추이_질의값 struct {
@@ -77,10 +78,10 @@ func NewT8428_증시주변자금추이_질의값() *T8428_증시주변_자금추
 }
 
 func NewT8428_증시주변자금추이_응답_헤더(b []byte) (값 *T8428_증시주변_자금추이_응답_헤더, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeT8428OutBlock,
-		"예상하지 못한 길이 : '%v", len(b))
+		"예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(T8428OutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
@@ -93,20 +94,19 @@ func NewT8428_증시주변자금추이_응답_헤더(b []byte) (값 *T8428_증�
 }
 
 func NewT8428_증시주변자금추이_응답_반복값_모음(b []byte) (값 *T8428_증시주변_자금추이_응답_반복값_모음, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	나머지 := len(b) % SizeT8428OutBlock1
 	lb.F조건부_패닉(나머지 != 0, "예상하지 못한 길이. '%v' '%v'", len(b), 나머지)
 
 	버퍼 := bytes.NewBuffer(b)
 	수량 := len(b) / SizeT8428OutBlock1
-	g_모음 := make([]*T8428OutBlock1, 수량)
 
 	값 = new(T8428_증시주변_자금추이_응답_반복값_모음)
-	값.M배열 = make([]*T8428_증시주변_자금추이_응답_반복값, 수량)
+	값.M배열 = make([]*T8428_증시주변_자금추이_응답_반복값, 0, 수량)
 
-	for i, g := range g_모음 {
-		g = new(T8428OutBlock1)
+	for range 수량 {
+		g := new(T8428OutBlock1)
 		lb.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 		s := new(T8428_증시주변_자금추이_응답_반복값)
@@ -127,7 +127,7 @@ func NewT8428_증시주변자금추이_응답_반복값_모음(b []byte) (값 *T
 		s.M채권형_억 = lb.F확인2(lb.F2정수64(g.Bndmoney))
 		s.MMF_억 = lb.F확인2(lb.F2정수64(g.Mmfmsoney))
 
-		값.M배열[i] = s
+		값.M배열 = append(값.M배열, s)
 	}
 
 	return 값, nil

@@ -1,36 +1,35 @@
 package dll32
 
 import (
-	lb "github.com/ghts/ghts/lib"
-	"github.com/ghts/ghts/lib/dll"
-	xt "github.com/ghts/ghts/xing/base"
 	"runtime"
 	"time"
 	"unsafe"
+
+	lb "github.com/ghts/ghts/lib"
+	"github.com/ghts/ghts/lib/w32"
+	xt "github.com/ghts/ghts/xing/base"
 )
 
 // 단일 스레드에서 API를 호출.
 // Win32 함수, 증권사 API 모두 Go언어와 같은 동시/병렬 처리에 대한 고려가 없던 시절에 만들어졌으므로,
 // 가능한 단일 고정 스레드에서 호출하는 게 좋다.
 func go함수_호출_도우미(ch초기화, ch종료 chan lb.T신호) {
-	if lb.F공통_종료_채널_닫힘() {
-		return
-	}
-
-	defer func() {
-		recover()
-
+	defer lb.S예외처리{M항상_실행: func() {
 		if lb.F공통_종료_채널_닫힘() {
 			Ch함수_호출_도우미_종료 <- lb.P신호_종료
 		} else {
 			ch종료 <- lb.P신호_종료
 		}
-	}()
+	}}.S실행()
+
+	if lb.F공통_종료_채널_닫힘() {
+		return
+	}
 
 	runtime.LockOSThread()
 	defer runtime.UnlockOSThread()
 
-	f초기화_XingAPI() // 모든 API 액세스를 단일 스레드에서 하기 위해서 여기에서 API 초기화를 실행함.
+	lb.F확인1(f초기화_XingAPI()) // 모든 API 액세스를 단일 스레드에서 하기 위해서 여기에서 API 초기화를 실행함.
 	F메시지_윈도우_생성()
 
 	ch공통_종료 := lb.Ch공통_종료()
@@ -56,7 +55,7 @@ func go함수_호출_도우미(ch초기화, ch종료 chan lb.T신호) {
 func f질의값_처리(질의 *lb.S채널_질의) {
 	var 에러 error
 
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 질의.Ch에러 <- 에러 }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 질의.Ch에러 <- 에러 }}.S실행()
 
 	switch 질의.M값.TR구분() {
 	case xt.TR조회, xt.TR주문:
@@ -77,7 +76,7 @@ func f질의값_처리(질의 *lb.S채널_질의) {
 		F에러_메시지(질의)
 	case xt.TR계좌_수량:
 		F계좌_수량(질의)
-	case xt.TR계좌번호_모음:
+	case xt.TR계좌_번호:
 		F계좌번호_모음(질의)
 	case xt.TR계좌_이름:
 		F계좌_이름(질의)
@@ -90,7 +89,7 @@ func f질의값_처리(질의 *lb.S채널_질의) {
 	case xt.TR소켓_테스트:
 		질의.Ch회신값 <- lb.P신호_OK
 	case xt.TR서버_구분:
-		질의.Ch회신값 <- int(서버_구분)
+		질의.Ch회신값 <- int(V서버_구분)
 	case xt.TR종료:
 		F종료_질의_처리(질의)
 	//case xt.TR초기화:
@@ -103,7 +102,7 @@ func f질의값_처리(질의 *lb.S채널_질의) {
 
 func F조회_및_주문_질의_처리(질의 *lb.S채널_질의) {
 	var 에러 error
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 질의.Ch에러 <- 에러 }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 질의.Ch에러 <- 에러 }}.S실행()
 
 	var c데이터 unsafe.Pointer
 
@@ -114,68 +113,37 @@ func F조회_및_주문_질의_처리(질의 *lb.S채널_질의) {
 	TR코드 := 질의값.(lb.I질의값).TR코드()
 
 	switch TR코드 {
-	//case xt.TR선물옵션_주문체결내역조회_CFOAQ00600:
-	//	질의값_CFOAQ00600 := 질의값.(*xt.CFOAQ00600_선물옵션_주문체결내역_질의값)
-	//	연속_조회_여부 = 질의값_CFOAQ00600.M연속조회_여부
-	//	연속_조회_키 = 질의값_CFOAQ00600.M연속키
-	//
-	//	c데이터 = unsafe.Pointer(xt.NewCFOAQ00600InBlock1(질의값_CFOAQ00600, 계좌_비밀번호))
-	//	길이 = xt.SizeCFOAQ00600InBlock1
-	//case xt.TR선물옵션_정상주문_CFOAT00100:
-	//	c데이터 = unsafe.Pointer(xt.NewCFOAT00100InBlock1(질의값.(*xt.CFOAT00100_선물옵션_정상주문_질의값), 계좌_비밀번호))
-	//	길이 = xt.SizeCFOAT00100InBlock1
-	//case xt.TR선물옵션_정정주문_CFOAT00200:
-	//	c데이터 = unsafe.Pointer(xt.NewCFOAT00200InBlock1(질의값.(*xt.CFOAT00200_선물옵션_정정주문_질의값), 계좌_비밀번호))
-	//	길이 = xt.SizeCFOAT00200InBlock1
-	//case xt.TR선물옵션_취소주문_CFOAT00300:
-	//	c데이터 = unsafe.Pointer(xt.NewCFOAT00300InBlock1(질의값.(*xt.CFOAT00300_선물옵션_취소주문_질의값), 계좌_비밀번호))
-	//	길이 = xt.SizeCFOAT00300InBlock1
-	//case xt.TR선물옵션_예탁금_증거금_조회_CFOBQ10500:
-	//	질의값_CFOBQ10500 := 질의값.(*xt.CFOBQ10500_선물옵션_예탁금_증거금_조회_질의값)
-	//	연속_조회_여부 = 질의값_CFOBQ10500.M연속조회_여부
-	//	연속_조회_키 = 질의값_CFOBQ10500.M연속키
-	//
-	//	c데이터 = unsafe.Pointer(xt.NewCFOBQ105000InBlock1(질의값_CFOBQ10500, 계좌_비밀번호))
-	//	길이 = xt.SizeCFOBQ10500InBlock1
-	//case xt.TR선물옵션_미결제약정_현황_CFOFQ02400:
-	//	질의값_CFOFQ02400 := 질의값.(*xt.CFOFQ02400_선물옵션_미결제약정_질의값)
-	//	연속_조회_여부 = 질의값_CFOFQ02400.M연속조회_여부
-	//	연속_조회_키 = 질의값_CFOFQ02400.M연속키
-	//
-	//	c데이터 = unsafe.Pointer(xt.NewCFOFQ02400InBlock1(질의값_CFOFQ02400, 계좌_비밀번호))
-	//	길이 = xt.SizeCFOFQ02400InBlock1
 	case xt.TR현물계좌_총평가_CSPAQ12200:
 		계좌번호 := 질의값.(*lb.S질의값_문자열).M문자열
 
-		c데이터 = unsafe.Pointer(xt.NewCSPAQ12200InBlock(계좌번호, f계좌_비밀번호()))
+		c데이터 = unsafe.Pointer(xt.NewCSPAQ12200InBlock(계좌번호, V계좌_비밀번호))
 		길이 = xt.SizeCSPAQ12200InBlock1
 	case xt.TR현물계좌_잔고내역_조회_CSPAQ12300:
 		질의값_CSPAQ12300 := 질의값.(*xt.CSPAQ12300_현물계좌_잔고내역_질의값)
 		연속_조회_여부 = 질의값_CSPAQ12300.M연속조회_여부
 		연속_조회_키 = 질의값_CSPAQ12300.M연속키
 
-		c데이터 = unsafe.Pointer(xt.NewCSPAQ12300InBlock(질의값.(*xt.CSPAQ12300_현물계좌_잔고내역_질의값), f계좌_비밀번호()))
+		c데이터 = unsafe.Pointer(xt.NewCSPAQ12300InBlock(질의값.(*xt.CSPAQ12300_현물계좌_잔고내역_질의값), V계좌_비밀번호))
 		길이 = xt.SizeCSPAQ12300InBlock1
 	case xt.TR현물계좌_주문체결내역_조회_CSPAQ13700:
 		질의값_CSPAQ13700 := 질의값.(*xt.CSPAQ13700_현물계좌_주문체결내역_질의값)
 		연속_조회_여부 = 질의값_CSPAQ13700.M연속조회_여부
 		연속_조회_키 = 질의값_CSPAQ13700.M연속키
 
-		c데이터 = unsafe.Pointer(xt.NewCSPAQ13700InBlock(질의값_CSPAQ13700, f계좌_비밀번호()))
+		c데이터 = unsafe.Pointer(xt.NewCSPAQ13700InBlock(질의값_CSPAQ13700, V계좌_비밀번호))
 		길이 = xt.SizeCSPAQ13700InBlock1
 	case xt.TR현물계좌_예수금_주문가능금액_CSPAQ22200:
 		계좌번호 := 질의값.(*lb.S질의값_문자열).M문자열
-
-		c데이터 = unsafe.Pointer(xt.NewCSPAQ22200InBlock(계좌번호, f계좌_비밀번호()))
+		c데이터 = unsafe.Pointer(xt.NewCSPAQ22200InBlock(계좌번호, V계좌_비밀번호))
 		길이 = xt.SizeCSPAQ22200InBlock1
 	case xt.TR현물_정상_주문_CSPAT00600:
-		c데이터 = unsafe.Pointer(xt.NewCSPAT00600InBlock(질의값.(*xt.CSPAT00600_현물_정상_주문_질의값), f계좌_비밀번호()))
+		c데이터 = unsafe.Pointer(xt.NewCSPAT00600InBlock(질의값.(*xt.CSPAT00600_현물_정상_주문_질의값), V계좌_비밀번호))
 		길이 = xt.SizeCSPAT00600InBlock1
 	case xt.TR현물_정정_주문_CSPAT00700:
-		c데이터 = unsafe.Pointer(xt.NewCSPAT00700InBlock(질의값.(*xt.CSPAT00700_현물_정정_주문_질의값), f계좌_비밀번호()))
+		c데이터 = unsafe.Pointer(xt.NewCSPAT00700InBlock(질의값.(*xt.CSPAT00700_현물_정정_주문_질의값), V계좌_비밀번호))
 		길이 = xt.SizeCSPAT00700InBlock1
 	case xt.TR현물_취소_주문_CSPAT00800:
-		c데이터 = unsafe.Pointer(xt.NewCSPAT00800InBlock(질의값.(*lb.S질의값_취소_주문), f계좌_비밀번호()))
+		c데이터 = unsafe.Pointer(xt.NewCSPAT00800InBlock(질의값.(*lb.S질의값_취소_주문), V계좌_비밀번호))
 		길이 = xt.SizeCSPAT00800InBlock1
 	case xt.TR현물_당일_매매일지_t0150:
 		c데이터 = unsafe.Pointer(xt.NewT0150InBlock(질의값.(*xt.T0150_현물_당일_매매일지_질의값)))
@@ -184,14 +152,11 @@ func F조회_및_주문_질의_처리(질의 *lb.S채널_질의) {
 		c데이터 = unsafe.Pointer(xt.NewT0151InBlock(질의값.(*xt.T0151_현물_일자별_매매일지_질의값)))
 		길이 = xt.SizeT0151InBlock
 	case xt.TR시간_조회_t0167:
-		c데이터 = unsafe.Pointer(dll.F2ANSI문자열(""))
+		c데이터 = unsafe.Pointer(w32.F2ANSI문자열(""))
 		길이 = 0
 	case xt.TR현물_체결_미체결_조회_t0425:
-		c데이터 = unsafe.Pointer(xt.NewT0425InBlock(질의값.(*xt.T0425_현물_체결_미체결_조회_질의값), f계좌_비밀번호()))
+		c데이터 = unsafe.Pointer(xt.NewT0425InBlock(질의값.(*xt.T0425_현물_체결_미체결_조회_질의값), V계좌_비밀번호))
 		길이 = xt.SizeT0425InBlock
-	//case xt.TR선물옵션_체결_미체결_조회_t0434:
-	//	c데이터 = unsafe.Pointer(xt.NewT0434InBlock(질의값.(*xt.T0434_선물옵션_체결_미체결_조회_질의값), 계좌_비밀번호))
-	//	길이 = xt.SizeT0434InBlock
 	case xt.TR현물_호가_조회_t1101:
 		c데이터 = unsafe.Pointer(xt.NewT1101InBlock(질의값.(*lb.S질의값_단일_종목)))
 		길이 = xt.SizeT1101InBlock
@@ -289,16 +254,6 @@ func F조회_및_주문_질의_처리(질의 *lb.S채널_질의) {
 
 		c데이터 = unsafe.Pointer(xt.NewT8412InBlock(질의값.(*xt.T8412_현물_차트_분_질의값)))
 		길이 = xt.SizeT8412InBlock
-	case xt.TR현물_차트_일주월_t8413:
-		연속키 := lb.F2문자열_공백_제거(질의값.(*xt.T8413_현물_차트_일주월_질의값).M연속일자)
-
-		if 연속키 != "" {
-			연속_조회_여부 = true
-			연속_조회_키 = 연속키
-		}
-
-		c데이터 = unsafe.Pointer(xt.NewT8413InBlock(질의값.(*xt.T8413_현물_차트_일주월_질의값)))
-		길이 = xt.SizeT8413InBlock
 	case xt.TR증시_주변_자금_추이_t8428:
 		연속키 := lb.F2문자열_공백_제거(질의값.(*xt.T8428_증시주변_자금추이_질의값).M연속키)
 		if 연속키 != "" {
@@ -308,9 +263,6 @@ func F조회_및_주문_질의_처리(질의 *lb.S채널_질의) {
 
 		c데이터 = unsafe.Pointer(xt.NewT8428InBlock(질의값.(*xt.T8428_증시주변_자금추이_질의값)))
 		길이 = xt.SizeT8428InBlock
-	//case xt.TR지수선물_마스터_조회_t8432:
-	//	c데이터 = unsafe.Pointer(xt.NewT8432InBlock(질의값.(*lb.S질의값_문자열)))
-	//	길이 = xt.SizeT8428InBlock
 	case xt.TR현물_종목_조회_t8436:
 		c데이터 = unsafe.Pointer(xt.NewT8436InBlock(질의값.(*lb.S질의값_문자열)))
 		길이 = xt.SizeT8436InBlock
@@ -368,12 +320,12 @@ func F실시간_정보_구독_해지_처리(질의 *lb.S채널_질의) {
 }
 
 func F접속_처리(질의 *lb.S채널_질의) {
-	서버_구분 = xt.T서버_구분(질의.M값.(*lb.S질의값_정수).M정수값)
+	V서버_구분 = xt.T서버_구분(질의.M값.(*lb.S질의값_정수).M정수값)
 
 	접속_처리_잠금.Lock()
 	defer 접속_처리_잠금.Unlock()
 
-	if 에러_접속 := F접속(서버_구분); 에러_접속 != nil {
+	if 에러_접속 := F접속(V서버_구분); 에러_접속 != nil {
 		질의.Ch에러 <- 에러_접속
 	} else if 에러_로그인 := F로그인(); 에러_로그인 != nil {
 		질의.Ch에러 <- 에러_로그인

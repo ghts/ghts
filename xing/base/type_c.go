@@ -825,335 +825,6 @@ type SC4_OutBlock struct {
 	Ruseableamt      [16]byte
 }
 
-type CFOAT00100InBlock1 struct {
-	AcntNo           [20]byte
-	Pwd              [8]byte
-	FnoIsuNo         [12]byte
-	BnsTpCode        [1]byte
-	FnoOrdprcPtnCode [2]byte
-	OrdPrc           [15]byte
-	OrdQty           [16]byte
-}
-type CFOAT00100OutBlock1 struct {
-	RecCnt            [5]byte
-	OrdMktCode        [2]byte
-	AcntNo            [20]byte
-	Pwd               [8]byte
-	FnoIsuNo          [12]byte
-	BnsTpCode         [1]byte
-	FnoOrdPtnCode     [2]byte
-	FnoOrdprcPtnCode  [2]byte
-	FnoTrdPtnCode     [2]byte
-	OrdPrc            [15]byte
-	OrdQty            [16]byte
-	CommdaCode        [2]byte
-	DscusBnsCmpltTime [9]byte
-	GrpId             [20]byte
-	OrdSeqno          [10]byte
-	PtflNo            [10]byte
-	BskNo             [10]byte
-	TrchNo            [10]byte
-	ItemNo            [16]byte
-	OpDrtnNo          [12]byte
-	MgempNo           [9]byte
-	FundId            [12]byte
-	FundOrdNo         [10]byte
-}
-type CFOAT00100OutBlock2 struct {
-	RecCnt        [5]byte
-	OrdNo         [10]byte
-	BrnNm         [40]byte
-	AcntNm        [40]byte
-	IsuNm         [50]byte
-	OrdAbleAmt    [16]byte
-	MnyOrdAbleAmt [16]byte
-	OrdMgn        [16]byte
-	MnyOrdMgn     [16]byte
-	OrdAbleQty    [16]byte
-}
-type CFOAT00100OutBlock struct {
-	OutBlock1 CFOAT00100OutBlock1
-	OutBlock2 CFOAT00100OutBlock2
-}
-
-type CFOAT00200InBlock1 struct {
-	AcntNo           [20]byte
-	Pwd              [8]byte
-	FnoIsuNo         [12]byte
-	OrgOrdNo         [10]byte
-	FnoOrdprcPtnCode [2]byte
-	OrdPrc           [15]byte
-	MdfyQty          [16]byte
-}
-type CFOAT00200OutBlock1 struct {
-	RecCnt            [5]byte
-	OrdMktCode        [2]byte
-	AcntNo            [20]byte
-	Pwd               [8]byte
-	FnoIsuNo          [12]byte
-	FnoOrdPtnCode     [2]byte
-	OrgOrdNo          [10]byte
-	FnoOrdprcPtnCode  [2]byte
-	OrdPrc            [15]byte
-	MdfyQty           [16]byte
-	CommdaCode        [2]byte
-	DscusBnsCmpltTime [9]byte
-	GrpId             [20]byte
-	OrdSeqno          [10]byte
-	PtflNo            [10]byte
-	BskNo             [10]byte
-	TrchNo            [10]byte
-	ItemNo            [10]byte
-	MgempNo           [9]byte
-	FundId            [12]byte
-	FundOrgOrdNo      [10]byte
-	FundOrdNo         [10]byte
-}
-type CFOAT00200OutBlock2 struct {
-	RecCnt        [5]byte
-	OrdNo         [10]byte
-	BrnNm         [40]byte
-	AcntNm        [40]byte
-	IsuNm         [50]byte
-	OrdAbleAmt    [16]byte
-	MnyOrdAbleAmt [16]byte
-	OrdMgn        [16]byte
-	MnyOrdMgn     [16]byte
-	OrdAbleQty    [16]byte
-}
-type CFOAT00200OutBlock struct {
-	OutBlock1 CFOAT00200OutBlock1
-	OutBlock2 CFOAT00200OutBlock2
-}
-
-type CFOAT00300InBlock1 struct {
-	AcntNo   [20]byte
-	Pwd      [8]byte
-	FnoIsuNo [12]byte
-	OrgOrdNo [10]byte
-	CancQty  [16]byte
-}
-type CFOAT00300OutBlock1 struct {
-	RecCnt            [5]byte
-	OrdMktCode        [2]byte
-	AcntNo            [20]byte
-	Pwd               [8]byte
-	FnoIsuNo          [12]byte
-	FnoOrdPtnCode     [2]byte
-	OrgOrdNo          [10]byte
-	CancQty           [16]byte
-	CommdaCode        [2]byte
-	DscusBnsCmpltTime [9]byte
-	GrpId             [20]byte
-	OrdSeqno          [10]byte
-	PtflNo            [10]byte
-	BskNo             [10]byte
-	TrchNo            [10]byte
-	ItemNo            [10]byte
-	MgempNo           [9]byte
-	FundId            [12]byte
-	FundOrgOrdNo      [10]byte
-	FundOrdNo         [10]byte
-}
-type CFOAT00300OutBlock2 struct {
-	RecCnt        [5]byte
-	OrdNo         [10]byte
-	BrnNm         [40]byte
-	AcntNm        [40]byte
-	IsuNm         [50]byte
-	OrdAbleAmt    [16]byte
-	MnyOrdAbleAmt [16]byte
-	OrdMgn        [16]byte
-	MnyOrdMgn     [16]byte
-	OrdAbleQty    [16]byte
-}
-type CFOAT00300OutBlock struct {
-	OutBlock1 CFOAT00300OutBlock1
-	OutBlock2 CFOAT00300OutBlock2
-}
-
-type CFOAQ00600InBlock1 struct {
-	RecCnt         [5]byte
-	AcntNo         [20]byte
-	InptPwd        [8]byte
-	QrySrtDt       [8]byte
-	QryEndDt       [8]byte
-	FnoClssCode    [2]byte
-	PrdgrpCode     [2]byte
-	PrdtExecTpCode [1]byte
-	StnlnSeqTp     [1]byte
-	CommdaCode     [2]byte
-}
-type CFOAQ00600OutBlock1 struct {
-	RecCnt         [5]byte
-	AcntNo         [20]byte
-	InptPwd        [8]byte
-	QrySrtDt       [8]byte
-	QryEndDt       [8]byte
-	FnoClssCode    [2]byte
-	PrdgrpCode     [2]byte
-	PrdtExecTpCode [1]byte
-	StnlnSeqTp     [1]byte
-	CommdaCode     [2]byte
-}
-type CFOAQ00600OutBlock2 struct {
-	RecCnt      [5]byte
-	AcntNm      [40]byte
-	FutsOrdQty  [16]byte
-	FutsExecQty [16]byte
-	OptOrdQty   [16]byte
-	OptExecQty  [16]byte
-}
-type CFOAQ00600OutBlock3 struct {
-	OrdDt            [8]byte
-	OrdNo            [10]byte
-	OrgOrdNo         [10]byte
-	OrdTime          [9]byte
-	FnoIsuNo         [12]byte
-	IsuNm            [40]byte
-	BnsTpNm          [10]byte
-	MrcTpNm          [10]byte
-	FnoOrdprcPtnCode [2]byte
-	FnoOrdprcPtnNm   [40]byte
-	OrdPrc           [13]byte
-	OrdQty           [16]byte
-	OrdTpNm          [10]byte
-	ExecTpNm         [10]byte
-	ExecPrc          [13]byte
-	ExecQty          [16]byte
-	CtrctTime        [9]byte
-	CtrctNo          [10]byte
-	ExecNo           [10]byte
-	BnsplAmt         [16]byte
-	UnercQty         [16]byte
-	UserId           [16]byte
-	CommdaCode       [2]byte
-	CommdaCodeNm     [40]byte
-}
-
-type CFOBQ10500InBlock1 struct {
-	RecCnt [5]byte
-	AcntNo [20]byte
-	Pwd    [8]byte
-}
-type CFOBQ10500OutBlock1 struct {
-	RecCnt [5]byte
-	AcntNo [20]byte
-	Pwd    [8]byte
-}
-type CFOBQ10500OutBlock2 struct {
-	RecCnt               [5]byte
-	AcntNm               [40]byte
-	DpsamtTotamt         [16]byte
-	Dps                  [16]byte
-	SubstAmt             [16]byte
-	FilupDpsamtTotamt    [16]byte
-	FilupDps             [16]byte
-	FutsPnlAmt           [16]byte
-	WthdwAbleAmt         [16]byte
-	PsnOutAbleCurAmt     [16]byte
-	PsnOutAbleSubstAmt   [16]byte
-	Mgn                  [16]byte
-	MnyMgn               [16]byte
-	OrdAbleAmt           [16]byte
-	MnyOrdAbleAmt        [16]byte
-	AddMgn               [16]byte
-	MnyAddMgn            [16]byte
-	AmtPrdayChckInAmt    [16]byte
-	FnoPrdaySubstSellAmt [16]byte
-	FnoCrdaySubstSellAmt [16]byte
-	FnoPrdayFdamt        [16]byte
-	FnoCrdayFdamt        [16]byte
-	FcurrSubstAmt        [16]byte
-	FnoAcntAfmgnNm       [20]byte
-}
-type CFOBQ10500OutBlock3 struct {
-	PdGrpCodeNm     [20]byte
-	NetRiskMgn      [16]byte
-	PrcMgn          [16]byte
-	SprdMgn         [16]byte
-	PrcFlctMgn      [16]byte
-	MinMgn          [16]byte
-	OrdMgn          [16]byte
-	OptNetBuyAmt    [16]byte
-	CsgnMgn         [16]byte
-	MaintMgn        [16]byte
-	FutsBuyExecAmt  [16]byte
-	FutsSellExecAmt [16]byte
-	OptBuyExecAmt   [16]byte
-	OptSellExecAmt  [16]byte
-	FutsPnlAmt      [16]byte
-	TotRiskCsgnMgn  [16]byte
-	UndCsgnMgn      [16]byte
-	MgnRdctAmt      [16]byte
-}
-
-type CFOFQ02400InBlock1 struct {
-	RecCnt     [5]byte
-	AcntNo     [20]byte
-	Pwd        [8]byte
-	RegMktCode [2]byte
-	BuyDt      [8]byte
-}
-type CFOFQ02400OutBlock1 struct {
-	RecCnt     [5]byte
-	AcntNo     [20]byte
-	Pwd        [8]byte
-	RegMktCode [2]byte
-	BuyDt      [8]byte
-}
-type CFOFQ02400OutBlock2 struct {
-	RecCnt          [5]byte
-	AcntNm          [40]byte
-	FutsCtrctQty    [16]byte
-	OptCtrctQty     [16]byte
-	CtrctQty        [16]byte
-	FutsCtrctAmt    [16]byte
-	FutsBuyctrAmt   [16]byte
-	FutsSlctrAmt    [16]byte
-	CalloptCtrctAmt [16]byte
-	CallBuyAmt      [16]byte
-	CallSellAmt     [16]byte
-	PutoptCtrctAmt  [16]byte
-	PutBuyAmt       [16]byte
-	PutSellAmt      [16]byte
-	AllCtrctAmt     [16]byte
-	BuyctrAsmAmt    [16]byte
-	SlctrAsmAmt     [16]byte
-	FutsPnlSum      [16]byte
-	OptPnlSum       [16]byte
-	AllPnlSum       [16]byte
-}
-type CFOFQ02400OutBlock3 struct {
-	FnoClssCode [1]byte
-	FutsSellQty [16]byte
-	FutsSellPnl [16]byte
-	FutsBuyQty  [16]byte
-	FutsBuyPnl  [16]byte
-	CallSellQty [16]byte
-	CallSellPnl [16]byte
-	CallBuyQty  [16]byte
-	CallBuyPnl  [16]byte
-	PutSellQty  [16]byte
-	PutSellPnl  [16]byte
-	PutBuyQty   [16]byte
-	PutBuyPnl   [16]byte
-}
-type CFOFQ02400OutBlock4 struct {
-	IsuNo        [12]byte
-	IsuNm        [40]byte
-	BnsTpCode    [1]byte
-	BnsTpNm      [10]byte
-	BalQty       [16]byte
-	FnoAvrPrc    [19]byte
-	BgnAmt       [16]byte
-	ThdayLqdtQty [16]byte
-	Curprc       [13]byte
-	EvalAmt      [16]byte
-	EvalPnlAmt   [16]byte
-	EvalErnrat   [12]byte
-}
-
 type CSPAQ12200InBlock1 struct {
 	RecCnt    [5]byte
 	MgmtBrnNo [3]byte
@@ -1227,6 +898,7 @@ type CSPAQ12200OutBlock2 struct {
 	AddCrdtPldgSubst       [16]byte
 	CslLoanAmtdt1          [16]byte
 	DpslRestrcAmt          [16]byte
+	RcvblUablOrdAbleAmt    [16]byte
 }
 type CSPAQ12200OutBlock struct {
 	OutBlock1 CSPAQ12200OutBlock1
@@ -1492,6 +1164,7 @@ type CSPAQ22200OutBlock2 struct {
 	CrdaySellAdjstAmt      [16]byte
 	CrdayBuyAdjstAmt       [16]byte
 	CslLoanAmtdt1          [16]byte
+	RcvblUablOrdAbleAmt    [16]byte
 }
 type CSPAQ22200OutBlock struct {
 	OutBlock1 CSPAQ22200OutBlock1
@@ -1712,36 +1385,6 @@ type T0425OutBlock1 struct {
 	X_loandt     byte
 	Exchname     [3]byte
 	X_exchname   byte
-}
-
-type T0434InBlock struct {
-	Accno   [11]byte
-	Passwd  [8]byte
-	Expcode [8]byte
-	Chegb   [1]byte
-	Sortgb  [1]byte
-	Ordno   [7]byte
-}
-type T0434OutBlock struct {
-	Ordno [7]byte
-}
-type T0434OutBlock1 struct {
-	Ordno      [7]byte
-	Orgordno   [7]byte
-	Medosu     [10]byte
-	Ordgb      [20]byte
-	Qty        [9]byte
-	Price      [9]byte
-	Cheqty     [9]byte
-	Cheprice   [9]byte
-	Ordrem     [9]byte
-	Status     [10]byte
-	Ordtime    [8]byte
-	Ordermtd   [10]byte
-	Expcode    [8]byte
-	Rtcode     [3]byte
-	Sysprocseq [10]byte
-	Hogatype   [1]byte
 }
 
 type T1101InBlock struct {
@@ -2270,6 +1913,8 @@ type T1102OutBlock struct {
 	X_nxt_svi_dnlmtprice byte
 	Ex_shcode            [10]byte
 	X_ex_shcode          byte
+	Krx_mcls_price       [8]byte
+	X_krx_mcls_price     byte
 }
 
 type T1301InBlock struct {
@@ -2528,8 +2173,10 @@ type T1405OutBlock1 struct {
 }
 
 type T1901InBlock struct {
-	Shcode   [6]byte
-	X_shcode byte
+	Shcode      [6]byte
+	X_shcode    byte
+	Exchgubun   [1]byte
+	X_exchgubun byte
 }
 type T1901OutBlock struct {
 	Hname              [20]byte
@@ -2624,11 +2271,11 @@ type T1901OutBlock struct {
 	X_futchange        byte
 	Futdiff            [6]byte
 	X_futdiff          byte
-	Nav                [8]byte
+	Nav                [12]byte
 	X_nav              byte
 	Navsign            [1]byte
 	X_navsign          byte
-	Navchange          [8]byte
+	Navchange          [12]byte
 	X_navchange        byte
 	Navdiff            [6]byte
 	X_navdiff          byte
@@ -2736,11 +2383,11 @@ type T1901OutBlock struct {
 	X_upcode2          byte
 	Upprice2           [7]byte
 	X_upprice2         byte
-	Jnilnav            [8]byte
+	Jnilnav            [12]byte
 	X_jnilnav          byte
 	Jnilnavsign        [1]byte
 	X_jnilnavsign      byte
-	Jnilnavchange      [8]byte
+	Jnilnavchange      [12]byte
 	X_jnilnavchange    byte
 	Jnilnavdiff        [6]byte
 	X_jnilnavdiff      byte
@@ -2800,21 +2447,29 @@ type T1901OutBlock struct {
 	X_ty_text          byte
 	Leverage2          [6]byte
 	X_leverage2        byte
+	Nxt_vi_gubun       [10]byte
+	X_nxt_vi_gubun     byte
+	Ex_shcode          [10]byte
+	X_ex_shcode        byte
 }
 
 type T1902InBlock struct {
-	ShCode   [6]byte
-	X_shcode byte
-	Time     [6]byte
-	X_time   byte
+	Shcode      [6]byte
+	X_shcode    byte
+	Time        [6]byte
+	X_time      byte
+	Exchgubun   [1]byte
+	X_exchgubun byte
 }
 type T1902OutBlock struct {
-	Time     [6]byte
-	X_time   byte
-	HName    [20]byte
-	X_hname  byte
-	UpName   [20]byte
-	X_upname byte
+	Time        [6]byte
+	X_time      byte
+	Hname       [20]byte
+	X_hname     byte
+	Upname      [20]byte
+	X_upname    byte
+	Shcode      [10]byte
+	X_ex_shcode byte
 }
 type T1902OutBlock1 struct {
 	Time        [8]byte
@@ -2827,11 +2482,11 @@ type T1902OutBlock1 struct {
 	X_change    byte
 	Volume      [12]byte
 	X_volume    byte
-	NavDiff     [9]byte
+	Navdiff     [12]byte
 	X_navdiff   byte
-	Nav         [9]byte
+	Nav         [12]byte
 	X_nav       byte
-	NavChange   [9]byte
+	Navchange   [12]byte
 	X_navchange byte
 	Crate       [9]byte
 	X_crate     byte
@@ -2839,235 +2494,259 @@ type T1902OutBlock1 struct {
 	X_grate     byte
 	Jisu        [8]byte
 	X_jisu      byte
-	JiChange    [8]byte
+	Jichange    [8]byte
 	X_jichange  byte
-	JiRate      [8]byte
+	Jirate      [8]byte
 	X_jirate    byte
+	Exchname    [3]byte
+	X_exchname  byte
 }
 
 type T1906InBlock struct {
-	Shcode   [6]byte
-	X_shcode byte
+	Shcode      [6]byte
+	X_shcode    byte
+	Exchgubun   [1]byte
+	X_exchgubun byte
 }
 type T1906OutBlock struct {
-	Hname            [20]byte
-	X_hname          byte
-	Price            [8]byte
-	X_price          byte
-	Sign             [1]byte
-	X_sign           byte
-	Change           [8]byte
-	X_change         byte
-	Diff             [6]byte
-	X_diff           byte
-	Volume           [12]byte
-	X_volume         byte
-	Lp_offerrem1     [12]byte
-	X_lp_offerrem1   byte
-	Lp_bidrem1       [12]byte
-	X_lp_bidrem1     byte
-	Lp_offerrem2     [12]byte
-	X_lp_offerrem2   byte
-	Lp_bidrem2       [12]byte
-	X_lp_bidrem2     byte
-	Lp_offerrem3     [12]byte
-	X_lp_offerrem3   byte
-	Lp_bidrem3       [12]byte
-	X_lp_bidrem3     byte
-	Lp_offerrem4     [12]byte
-	X_lp_offerrem4   byte
-	Lp_bidrem4       [12]byte
-	X_lp_bidrem4     byte
-	Lp_offerrem5     [12]byte
-	X_lp_offerrem5   byte
-	Lp_bidrem5       [12]byte
-	X_lp_bidrem5     byte
-	Lp_offerrem6     [12]byte
-	X_lp_offerrem6   byte
-	Lp_bidrem6       [12]byte
-	X_lp_bidrem6     byte
-	Lp_offerrem7     [12]byte
-	X_lp_offerrem7   byte
-	Lp_bidrem7       [12]byte
-	X_lp_bidrem7     byte
-	Lp_offerrem8     [12]byte
-	X_lp_offerrem8   byte
-	Lp_bidrem8       [12]byte
-	X_lp_bidrem8     byte
-	Lp_offerrem9     [12]byte
-	X_lp_offerrem9   byte
-	Lp_bidrem9       [12]byte
-	X_lp_bidrem9     byte
-	Lp_offerrem10    [12]byte
-	X_lp_offerrem10  byte
-	Lp_bidrem10      [12]byte
-	X_lp_bidrem10    byte
-	Jnilclose        [8]byte
-	X_jnilclose      byte
-	Offerho1         [8]byte
-	X_offerho1       byte
-	Bidho1           [8]byte
-	X_bidho1         byte
-	Offerrem1        [12]byte
-	X_offerrem1      byte
-	Bidrem1          [12]byte
-	X_bidrem1        byte
-	Preoffercha1     [12]byte
-	X_preoffercha1   byte
-	Prebidcha1       [12]byte
-	X_prebidcha1     byte
-	Offerho2         [8]byte
-	X_offerho2       byte
-	Bidho2           [8]byte
-	X_bidho2         byte
-	Offerrem2        [12]byte
-	X_offerrem2      byte
-	Bidrem2          [12]byte
-	X_bidrem2        byte
-	Preoffercha2     [12]byte
-	X_preoffercha2   byte
-	Prebidcha2       [12]byte
-	X_prebidcha2     byte
-	Offerho3         [8]byte
-	X_offerho3       byte
-	Bidho3           [8]byte
-	X_bidho3         byte
-	Offerrem3        [12]byte
-	X_offerrem3      byte
-	Bidrem3          [12]byte
-	X_bidrem3        byte
-	Preoffercha3     [12]byte
-	X_preoffercha3   byte
-	Prebidcha3       [12]byte
-	X_prebidcha3     byte
-	Offerho4         [8]byte
-	X_offerho4       byte
-	Bidho4           [8]byte
-	X_bidho4         byte
-	Offerrem4        [12]byte
-	X_offerrem4      byte
-	Bidrem4          [12]byte
-	X_bidrem4        byte
-	Preoffercha4     [12]byte
-	X_preoffercha4   byte
-	Prebidcha4       [12]byte
-	X_prebidcha4     byte
-	Offerho5         [8]byte
-	X_offerho5       byte
-	Bidho5           [8]byte
-	X_bidho5         byte
-	Offerrem5        [12]byte
-	X_offerrem5      byte
-	Bidrem5          [12]byte
-	X_bidrem5        byte
-	Preoffercha5     [12]byte
-	X_preoffercha5   byte
-	Prebidcha5       [12]byte
-	X_prebidcha5     byte
-	Offerho6         [8]byte
-	X_offerho6       byte
-	Bidho6           [8]byte
-	X_bidho6         byte
-	Offerrem6        [12]byte
-	X_offerrem6      byte
-	Bidrem6          [12]byte
-	X_bidrem6        byte
-	Preoffercha6     [12]byte
-	X_preoffercha6   byte
-	Prebidcha6       [12]byte
-	X_prebidcha6     byte
-	Offerho7         [8]byte
-	X_offerho7       byte
-	Bidho7           [8]byte
-	X_bidho7         byte
-	Offerrem7        [12]byte
-	X_offerrem7      byte
-	Bidrem7          [12]byte
-	X_bidrem7        byte
-	Preoffercha7     [12]byte
-	X_preoffercha7   byte
-	Prebidcha7       [12]byte
-	X_prebidcha7     byte
-	Offerho8         [8]byte
-	X_offerho8       byte
-	Bidho8           [8]byte
-	X_bidho8         byte
-	Offerrem8        [12]byte
-	X_offerrem8      byte
-	Bidrem8          [12]byte
-	X_bidrem8        byte
-	Preoffercha8     [12]byte
-	X_preoffercha8   byte
-	Prebidcha8       [12]byte
-	X_prebidcha8     byte
-	Offerho9         [8]byte
-	X_offerho9       byte
-	Bidho9           [8]byte
-	X_bidho9         byte
-	Offerrem9        [12]byte
-	X_offerrem9      byte
-	Bidrem9          [12]byte
-	X_bidrem9        byte
-	Preoffercha9     [12]byte
-	X_preoffercha9   byte
-	Prebidcha9       [12]byte
-	X_prebidcha9     byte
-	Offerho10        [8]byte
-	X_offerho10      byte
-	Bidho10          [8]byte
-	X_bidho10        byte
-	Offerrem10       [12]byte
-	X_offerrem10     byte
-	Bidrem10         [12]byte
-	X_bidrem10       byte
-	Preoffercha10    [12]byte
-	X_preoffercha10  byte
-	Prebidcha10      [12]byte
-	X_prebidcha10    byte
-	Offer            [12]byte
-	X_offer          byte
-	Bid              [12]byte
-	X_bid            byte
-	Preoffercha      [12]byte
-	X_preoffercha    byte
-	Prebidcha        [12]byte
-	X_prebidcha      byte
-	Hotime           [8]byte
-	X_hotime         byte
-	Yeprice          [8]byte
-	X_yeprice        byte
-	Yevolume         [12]byte
-	X_yevolume       byte
-	Yesign           [1]byte
-	X_yesign         byte
-	Yechange         [8]byte
-	X_yechange       byte
-	Yediff           [6]byte
-	X_yediff         byte
-	Tmoffer          [12]byte
-	X_tmoffer        byte
-	Tmbid            [12]byte
-	X_tmbid          byte
-	Ho_status        [1]byte
-	X_ho_status      byte
-	Shcode           [6]byte
-	X_shcode         byte
-	Uplmtprice       [8]byte
-	X_uplmtprice     byte
-	Dnlmtprice       [8]byte
-	X_dnlmtprice     byte
-	Open             [8]byte
-	X_open           byte
-	High             [8]byte
-	X_high           byte
-	Low              [8]byte
-	X_low            byte
-	Midprice         [8]byte
-	X_midprice       byte
-	Offermidsumrem   [9]byte
-	X_offermidsumrem byte
-	Bidmidsumrem     [9]byte
-	X_bidmidsumrem   byte
+	Hname                [20]byte
+	X_hname              byte
+	Price                [8]byte
+	X_price              byte
+	Sign                 [1]byte
+	X_sign               byte
+	Change               [8]byte
+	X_change             byte
+	Diff                 [6]byte
+	X_diff               byte
+	Volume               [12]byte
+	X_volume             byte
+	Lp_offerrem1         [12]byte
+	X_lp_offerrem1       byte
+	Lp_bidrem1           [12]byte
+	X_lp_bidrem1         byte
+	Lp_offerrem2         [12]byte
+	X_lp_offerrem2       byte
+	Lp_bidrem2           [12]byte
+	X_lp_bidrem2         byte
+	Lp_offerrem3         [12]byte
+	X_lp_offerrem3       byte
+	Lp_bidrem3           [12]byte
+	X_lp_bidrem3         byte
+	Lp_offerrem4         [12]byte
+	X_lp_offerrem4       byte
+	Lp_bidrem4           [12]byte
+	X_lp_bidrem4         byte
+	Lp_offerrem5         [12]byte
+	X_lp_offerrem5       byte
+	Lp_bidrem5           [12]byte
+	X_lp_bidrem5         byte
+	Lp_offerrem6         [12]byte
+	X_lp_offerrem6       byte
+	Lp_bidrem6           [12]byte
+	X_lp_bidrem6         byte
+	Lp_offerrem7         [12]byte
+	X_lp_offerrem7       byte
+	Lp_bidrem7           [12]byte
+	X_lp_bidrem7         byte
+	Lp_offerrem8         [12]byte
+	X_lp_offerrem8       byte
+	Lp_bidrem8           [12]byte
+	X_lp_bidrem8         byte
+	Lp_offerrem9         [12]byte
+	X_lp_offerrem9       byte
+	Lp_bidrem9           [12]byte
+	X_lp_bidrem9         byte
+	Lp_offerrem10        [12]byte
+	X_lp_offerrem10      byte
+	Lp_bidrem10          [12]byte
+	X_lp_bidrem10        byte
+	Jnilclose            [8]byte
+	X_jnilclose          byte
+	Offerho1             [8]byte
+	X_offerho1           byte
+	Bidho1               [8]byte
+	X_bidho1             byte
+	Offerrem1            [12]byte
+	X_offerrem1          byte
+	Bidrem1              [12]byte
+	X_bidrem1            byte
+	Preoffercha1         [12]byte
+	X_preoffercha1       byte
+	Prebidcha1           [12]byte
+	X_prebidcha1         byte
+	Offerho2             [8]byte
+	X_offerho2           byte
+	Bidho2               [8]byte
+	X_bidho2             byte
+	Offerrem2            [12]byte
+	X_offerrem2          byte
+	Bidrem2              [12]byte
+	X_bidrem2            byte
+	Preoffercha2         [12]byte
+	X_preoffercha2       byte
+	Prebidcha2           [12]byte
+	X_prebidcha2         byte
+	Offerho3             [8]byte
+	X_offerho3           byte
+	Bidho3               [8]byte
+	X_bidho3             byte
+	Offerrem3            [12]byte
+	X_offerrem3          byte
+	Bidrem3              [12]byte
+	X_bidrem3            byte
+	Preoffercha3         [12]byte
+	X_preoffercha3       byte
+	Prebidcha3           [12]byte
+	X_prebidcha3         byte
+	Offerho4             [8]byte
+	X_offerho4           byte
+	Bidho4               [8]byte
+	X_bidho4             byte
+	Offerrem4            [12]byte
+	X_offerrem4          byte
+	Bidrem4              [12]byte
+	X_bidrem4            byte
+	Preoffercha4         [12]byte
+	X_preoffercha4       byte
+	Prebidcha4           [12]byte
+	X_prebidcha4         byte
+	Offerho5             [8]byte
+	X_offerho5           byte
+	Bidho5               [8]byte
+	X_bidho5             byte
+	Offerrem5            [12]byte
+	X_offerrem5          byte
+	Bidrem5              [12]byte
+	X_bidrem5            byte
+	Preoffercha5         [12]byte
+	X_preoffercha5       byte
+	Prebidcha5           [12]byte
+	X_prebidcha5         byte
+	Offerho6             [8]byte
+	X_offerho6           byte
+	Bidho6               [8]byte
+	X_bidho6             byte
+	Offerrem6            [12]byte
+	X_offerrem6          byte
+	Bidrem6              [12]byte
+	X_bidrem6            byte
+	Preoffercha6         [12]byte
+	X_preoffercha6       byte
+	Prebidcha6           [12]byte
+	X_prebidcha6         byte
+	Offerho7             [8]byte
+	X_offerho7           byte
+	Bidho7               [8]byte
+	X_bidho7             byte
+	Offerrem7            [12]byte
+	X_offerrem7          byte
+	Bidrem7              [12]byte
+	X_bidrem7            byte
+	Preoffercha7         [12]byte
+	X_preoffercha7       byte
+	Prebidcha7           [12]byte
+	X_prebidcha7         byte
+	Offerho8             [8]byte
+	X_offerho8           byte
+	Bidho8               [8]byte
+	X_bidho8             byte
+	Offerrem8            [12]byte
+	X_offerrem8          byte
+	Bidrem8              [12]byte
+	X_bidrem8            byte
+	Preoffercha8         [12]byte
+	X_preoffercha8       byte
+	Prebidcha8           [12]byte
+	X_prebidcha8         byte
+	Offerho9             [8]byte
+	X_offerho9           byte
+	Bidho9               [8]byte
+	X_bidho9             byte
+	Offerrem9            [12]byte
+	X_offerrem9          byte
+	Bidrem9              [12]byte
+	X_bidrem9            byte
+	Preoffercha9         [12]byte
+	X_preoffercha9       byte
+	Prebidcha9           [12]byte
+	X_prebidcha9         byte
+	Offerho10            [8]byte
+	X_offerho10          byte
+	Bidho10              [8]byte
+	X_bidho10            byte
+	Offerrem10           [12]byte
+	X_offerrem10         byte
+	Bidrem10             [12]byte
+	X_bidrem10           byte
+	Preoffercha10        [12]byte
+	X_preoffercha10      byte
+	Prebidcha10          [12]byte
+	X_prebidcha10        byte
+	Offer                [12]byte
+	X_offer              byte
+	Bid                  [12]byte
+	X_bid                byte
+	Preoffercha          [12]byte
+	X_preoffercha        byte
+	Prebidcha            [12]byte
+	X_prebidcha          byte
+	Hotime               [8]byte
+	X_hotime             byte
+	Yeprice              [8]byte
+	X_yeprice            byte
+	Yevolume             [12]byte
+	X_yevolume           byte
+	Yesign               [1]byte
+	X_yesign             byte
+	Yechange             [8]byte
+	X_yechange           byte
+	Yediff               [6]byte
+	X_yediff             byte
+	Tmoffer              [12]byte
+	X_tmoffer            byte
+	Tmbid                [12]byte
+	X_tmbid              byte
+	Ho_status            [1]byte
+	X_ho_status          byte
+	Shcode               [6]byte
+	X_shcode             byte
+	Uplmtprice           [8]byte
+	X_uplmtprice         byte
+	Dnlmtprice           [8]byte
+	X_dnlmtprice         byte
+	Open                 [8]byte
+	X_open               byte
+	High                 [8]byte
+	X_high               byte
+	Low                  [8]byte
+	X_low                byte
+	Midprice             [8]byte
+	X_midprice           byte
+	Offermidsumrem       [9]byte
+	X_offermidsumrem     byte
+	Bidmidsumrem         [9]byte
+	X_bidmidsumrem       byte
+	Nxt_ho_status        [1]byte
+	X_nxt_ho_status      byte
+	Nxt_midprice         [8]byte
+	X_nxt_midprice       byte
+	Nxt_offermidsumrem   [9]byte
+	X_nxt_offermidsumrem byte
+	Nxt_bidmidsumrem     [9]byte
+	X_nxt_bidmidsumrem   byte
+	Nxt_yeprice          [8]byte
+	X_nxt_yeprice        byte
+	Nxt_yevolume         [12]byte
+	X_nxt_yevolume       byte
+	Nxt_yesign           [1]byte
+	X_nxt_yesign         byte
+	Nxt_yechange         [8]byte
+	X_nxt_yechange       byte
+	Nxt_yediff           [6]byte
+	X_nxt_yediff         byte
+	Ex_shcode            [10]byte
+	X_ex_shcode          byte
 }
 
 type T3320InBlock struct {
@@ -3522,85 +3201,6 @@ type T8412OutBlock1 struct {
 	X_sign      byte
 }
 
-type T8413InBlock struct {
-	Shcode     [6]byte
-	X_shcode   byte
-	Gubun      [1]byte
-	X_gubun    byte
-	Qrycnt     [4]byte
-	X_qrycnt   byte
-	Sdate      [8]byte
-	X_sdate    byte
-	Edate      [8]byte
-	X_edate    byte
-	Cts_date   [8]byte
-	X_cts_date byte
-	Comp_yn    [1]byte
-	X_comp_yn  byte
-}
-type T8413OutBlock struct {
-	Shcode      [6]byte
-	X_shcode    byte
-	Jisiga      [8]byte
-	X_jisiga    byte
-	Jihigh      [8]byte
-	X_jihigh    byte
-	Jilow       [8]byte
-	X_jilow     byte
-	Jiclose     [8]byte
-	X_jiclose   byte
-	Jivolume    [12]byte
-	X_jivolume  byte
-	Disiga      [8]byte
-	X_disiga    byte
-	Dihigh      [8]byte
-	X_dihigh    byte
-	Dilow       [8]byte
-	X_dilow     byte
-	Diclose     [8]byte
-	X_diclose   byte
-	Highend     [8]byte
-	X_highend   byte
-	Lowend      [8]byte
-	X_lowend    byte
-	Cts_date    [8]byte
-	X_cts_date  byte
-	S_time      [6]byte
-	X_s_time    byte
-	E_time      [6]byte
-	X_e_time    byte
-	Dshmin      [2]byte
-	X_dshmin    byte
-	Rec_count   [7]byte
-	X_rec_count byte
-}
-type T8413OutBlock1 struct {
-	Date        [8]byte
-	X_date      byte
-	Open        [8]byte
-	X_open      byte
-	High        [8]byte
-	X_high      byte
-	Low         [8]byte
-	X_low       byte
-	Close       [8]byte
-	X_close     byte
-	Vol         [12]byte
-	X_jdiff_vol byte
-	Value       [12]byte
-	X_value     byte
-	Jongchk     [13]byte
-	X_jongchk   byte
-	Rate        [6]byte
-	X_rate      byte
-	Pricechk    [13]byte
-	X_pricechk  byte
-	Ratevalue   [12]byte
-	X_ratevalue byte
-	Sign        [1]byte
-	X_sign      byte
-}
-
 type T8428InBlock struct {
 	Fdate      [8]byte
 	X_fdate    byte
@@ -3660,37 +3260,22 @@ type T8428OutBlock1 struct {
 	X_mmfmoney  byte
 }
 
-type T8432InBlock struct {
-	Gubun [1]byte
-}
-type T8432OutBlock struct {
-	Hname      [20]byte
-	Shcode     [8]byte
-	Expcode    [12]byte
-	Uplmtprice [6]byte
-	Dnlmtprice [6]byte
-	Jnilclose  [6]byte
-	Jnilhigh   [6]byte
-	Jnillow    [6]byte
-	Recprice   [6]byte
-}
-
 type T8436InBlock struct {
 	Gubun [1]byte
 }
 type T8436OutBlock struct {
-	HName      [20]byte
-	ShCode     [6]byte
-	ExpCode    [12]byte
-	EtfGubun   [1]byte
-	UpLmtPrice [8]byte
-	DnLmtPrice [8]byte
-	JnilClose  [8]byte
-	MeMeDan    [5]byte
-	RecPrice   [8]byte
+	Hname      [20]byte
+	Shcode     [6]byte
+	Expcode    [12]byte
+	Etfgubun   [1]byte
+	Uplmtprice [8]byte
+	Dnlmtprice [8]byte
+	Jnilclose  [8]byte
+	Memedan    [5]byte
+	Recprice   [8]byte
 	Gubun      [1]byte
-	Bu12Gubun  [2]byte
-	SpacGubun  [1]byte
+	Bu12gubun  [2]byte
+	Spac_gubun [1]byte
 	Filler     [32]byte
 }
 

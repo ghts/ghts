@@ -8,6 +8,8 @@ import (
 	lb "github.com/ghts/ghts/lib"
 )
 
+const P로그인_정보_화일명 = "xing_config.ini"
+
 const (
 	P환경변수_서버_구분    = "SERVER_CLASS"
 	P환경변수_주소_TR    = "ADDRESS_TR"
@@ -42,31 +44,6 @@ const (
 	SizeVI_OutBlock         = int(unsafe.Sizeof(VI_OutBlock{}))
 	SizeDVIOutBlock         = int(unsafe.Sizeof(DVIOutBlock{}))
 	SizeJIFOutBlock         = int(unsafe.Sizeof(JIFOutBlock{}))
-	SizeCFOAQ00600InBlock1  = int(unsafe.Sizeof(CFOAQ00600InBlock1{}))
-	SizeCFOAQ00600OutBlock1 = int(unsafe.Sizeof(CFOAQ00600OutBlock1{}))
-	SizeCFOAQ00600OutBlock2 = int(unsafe.Sizeof(CFOAQ00600OutBlock2{}))
-	SizeCFOAQ00600OutBlock3 = int(unsafe.Sizeof(CFOAQ00600OutBlock3{}))
-	SizeCFOAT00100InBlock1  = int(unsafe.Sizeof(CFOAT00100InBlock1{}))
-	SizeCFOAT00100OutBlock  = int(unsafe.Sizeof(CFOAT00100OutBlock{}))
-	SizeCFOAT00100OutBlock1 = int(unsafe.Sizeof(CFOAT00100OutBlock1{}))
-	SizeCFOAT00100OutBlock2 = int(unsafe.Sizeof(CFOAT00100OutBlock2{}))
-	SizeCFOAT00200InBlock1  = int(unsafe.Sizeof(CFOAT00200InBlock1{}))
-	SizeCFOAT00200OutBlock  = int(unsafe.Sizeof(CFOAT00200OutBlock{}))
-	SizeCFOAT00200OutBlock1 = int(unsafe.Sizeof(CFOAT00200OutBlock1{}))
-	SizeCFOAT00200OutBlock2 = int(unsafe.Sizeof(CFOAT00200OutBlock2{}))
-	SizeCFOAT00300InBlock1  = int(unsafe.Sizeof(CFOAT00300InBlock1{}))
-	SizeCFOAT00300OutBlock  = int(unsafe.Sizeof(CFOAT00300OutBlock{}))
-	SizeCFOAT00300OutBlock1 = int(unsafe.Sizeof(CFOAT00300OutBlock1{}))
-	SizeCFOAT00300OutBlock2 = int(unsafe.Sizeof(CFOAT00300OutBlock2{}))
-	SizeCFOBQ10500InBlock1  = int(unsafe.Sizeof(CFOBQ10500InBlock1{}))
-	SizeCFOBQ10500OutBlock1 = int(unsafe.Sizeof(CFOBQ10500OutBlock1{}))
-	SizeCFOBQ10500OutBlock2 = int(unsafe.Sizeof(CFOBQ10500OutBlock2{}))
-	SizeCFOBQ10500OutBlock3 = int(unsafe.Sizeof(CFOBQ10500OutBlock3{}))
-	SizeCFOFQ02400InBlock1  = int(unsafe.Sizeof(CFOFQ02400InBlock1{}))
-	SizeCFOFQ02400OutBlock1 = int(unsafe.Sizeof(CFOFQ02400OutBlock1{}))
-	SizeCFOFQ02400OutBlock2 = int(unsafe.Sizeof(CFOFQ02400OutBlock2{}))
-	SizeCFOFQ02400OutBlock3 = int(unsafe.Sizeof(CFOFQ02400OutBlock3{}))
-	SizeCFOFQ02400OutBlock4 = int(unsafe.Sizeof(CFOFQ02400OutBlock4{}))
 	SizeCSPAQ12200InBlock1  = int(unsafe.Sizeof(CSPAQ12200InBlock1{}))
 	SizeCSPAQ12200OutBlock1 = int(unsafe.Sizeof(CSPAQ12200OutBlock1{}))
 	SizeCSPAQ12200OutBlock2 = int(unsafe.Sizeof(CSPAQ12200OutBlock2{}))
@@ -105,9 +82,6 @@ const (
 	SizeT0425InBlock        = int(unsafe.Sizeof(T0425InBlock{}))
 	SizeT0425OutBlock       = int(unsafe.Sizeof(T0425OutBlock{}))
 	SizeT0425OutBlock1      = int(unsafe.Sizeof(T0425OutBlock1{}))
-	SizeT0434InBlock        = int(unsafe.Sizeof(T0434InBlock{}))
-	SizeT0434OutBlock       = int(unsafe.Sizeof(T0434OutBlock{}))
-	SizeT0434OutBlock1      = int(unsafe.Sizeof(T0434OutBlock1{}))
 	SizeT1101InBlock        = int(unsafe.Sizeof(T1101InBlock{}))
 	SizeT1101OutBlock       = int(unsafe.Sizeof(T1101OutBlock{}))
 	SizeT1102InBlock        = int(unsafe.Sizeof(T1102InBlock{}))
@@ -148,63 +122,45 @@ const (
 	SizeT8412InBlock        = int(unsafe.Sizeof(T8412InBlock{}))
 	SizeT8412OutBlock       = int(unsafe.Sizeof(T8412OutBlock{}))
 	SizeT8412OutBlock1      = int(unsafe.Sizeof(T8412OutBlock1{}))
-	SizeT8413InBlock        = int(unsafe.Sizeof(T8413InBlock{}))
-	SizeT8413OutBlock       = int(unsafe.Sizeof(T8413OutBlock{}))
-	SizeT8413OutBlock1      = int(unsafe.Sizeof(T8413OutBlock1{}))
 	SizeT8428InBlock        = int(unsafe.Sizeof(T8428InBlock{}))
 	SizeT8428OutBlock       = int(unsafe.Sizeof(T8428OutBlock{}))
 	SizeT8428OutBlock1      = int(unsafe.Sizeof(T8428OutBlock1{}))
-	SizeT8432OutBlock       = int(unsafe.Sizeof(T8432OutBlock{}))
 	SizeT8436InBlock        = int(unsafe.Sizeof(T8436InBlock{}))
 	SizeT8436OutBlock       = int(unsafe.Sizeof(T8436OutBlock{}))
 
-	P자료형_nil              = "nil"
-	P자료형_S현물_주문_응답_실시간_정보 = "S현물_주문_응답_실시간_정보"
-	//P자료형_CFOAQ00600_선물옵션_주문체결내역_질의값     = "CFOAQ00600_선물옵션_주문체결내역_질의값"
-	//P자료형_CFOAQ00600OutBlock             = "CFOAQ00600OutBlock"
-	//P자료형_CFOAT00100_선물옵션_정상주문_질의값       = "CFOAT00100_선물옵션_정상주문_질의값"
-	//P자료형_CFOAT00100OutBlock             = "CFOAT00100OutBlock"
-	//P자료형_CFOAT00200_선물옵션_정정주문_질의값       = "CFOAT00200_선물옵션_정정주문_질의값"
-	//P자료형_CFOAT00200OutBlock             = "CFOAT00200OutBlock"
-	//P자료형_CFOAT00300_선물옵션_취소주문_질의값       = "CFOAT00300_선물옵션_취소주문_질의값"
-	//P자료형_CFOAT00300OutBlock             = "CFOAT00300OutBlock"
-	//P자료형_CFOBQ10500_선물옵션_예탁금_증거금_조회_질의값 = "CFOBQ10500_선물옵션_예탁금_증거금_조회_질의값"
-	//P자료형_CFOBQ10500OutBlock             = "CFOBQ10500OutBlock"
-	//P자료형_CFOFQ02400_선물옵션_미결제약정_질의값      = "CFOFQ02400_선물옵션_미결제약정_질의값"
-	//P자료형_CFOFQ02400OutBlock             = "CFOFQ02400OutBlock"
-	P자료형_CSPAQ12200OutBlock         = "CSPAQ12200OutBlock"
-	P자료형_CSPAQ12200OutBlock1        = "CSPAQ12200OutBlock1"
-	P자료형_CSPAQ12200OutBlock2        = "CSPAQ12200OutBlock2"
-	P자료형_CSPAQ12300_현물계좌_잔고내역_질의값   = "CSPAQ12300_현물계좌_잔고내역_질의값"
-	P자료형_CSPAQ12300OutBlock         = "CSPAQ12300OutBlock"
-	P자료형_CSPAQ13700_현물계좌_주문체결내역_질의값 = "CSPAQ13700_현물계좌_주문체결내역_질의값"
-	P자료형_CSPAQ13700OutBlock         = "CSPAQ13700OutBlock"
-	P자료형_CSPAQ22200OutBlock         = "CSPAQ22200OutBlock"
-	P자료형_CSPAQ22200OutBlock1        = "CSPAQ22200OutBlock1"
-	P자료형_CSPAQ22200OutBlock2        = "CSPAQ22200OutBlock2"
-	P자료형_CSPAT00600_현물_정상_주문_질의값    = "CSPAT00600_현물_정상_주문_질의값"
-	P자료형_CSPAT00600OutBlock         = "CSPAT00600OutBlock"
-	P자료형_CSPAT00700_현물_정정_주문_질의값    = "CSPAT00700_현물_정정_주문_질의값"
-	P자료형_CSPAT00700OutBlock         = "CSPAT00700OutBlock"
-	P자료형_CSPAT00800_현물_취소_주문_질의값    = "CSPAT00800_현물_취소_주문_질의값"
-	P자료형_CSPAT00800OutBlock         = "CSPAT00800OutBlock"
-	P자료형_T0150_현물_당일_매매일지_질의값       = "T0150_현물_당일_매매일지_질의값"
-	P자료형_T0150_현물_당일_매매일지_응답        = "T0150_현물_당일_매매일지_응답"
-	P자료형_T0150_현물_당일_매매일지_응답_헤더     = "T0150_현물_당일_매매일지_응답_헤더"
-	P자료형_T0150_현물_당일_매매일지_응답_반복값    = "T0150_현물_당일_매매일지_응답_반복값"
-	P자료형_T0150OutBlock              = "T0150OutBlock"
-	P자료형_T0150OutBlock1             = "T0150OutBlock1"
-	P자료형_T0151_현물_일자별_매매일지_질의값      = "T0151_현물_일자별_매매일지_질의값"
-	P자료형_T0151_현물_일자별_매매일지_응답       = "T0151_현물_일자별_매매일지_응답"
-	P자료형_T0151_현물_일자별_매매일지_응답_헤더    = "T0151_현물_일자별_매매일지_응답_헤더"
-	P자료형_T0151_현물_일자별_매매일지_응답_반복값   = "T0151_현물_일자별_매매일지_응답_반복값"
-	P자료형_T0151OutBlock              = "T0151OutBlock"
-	P자료형_T0151OutBlock1             = "T0151OutBlock1"
-	P자료형_T0167OutBlock              = "T0167OutBlock"
-	P자료형_T0425_현물_체결_미체결_조회_질의값     = "T0425_현물_체결_미체결_조회_질의값"
-	P자료형_T0425OutBlock              = "T0425OutBlock"
-	//P자료형_T0434_선물옵션_체결_미체결_조회_질의값       = "T0434_선물옵션_체결_미체결_조회_질의값"
-	//P자료형_T0434OutBlock                  = "T0434OutBlock"
+	P자료형_nil                         = "nil"
+	P자료형_S현물_주문_응답_실시간_정보            = "S현물_주문_응답_실시간_정보"
+	P자료형_CSPAQ12200OutBlock          = "CSPAQ12200OutBlock"
+	P자료형_CSPAQ12200OutBlock1         = "CSPAQ12200OutBlock1"
+	P자료형_CSPAQ12200OutBlock2         = "CSPAQ12200OutBlock2"
+	P자료형_CSPAQ12300_현물계좌_잔고내역_질의값    = "CSPAQ12300_현물계좌_잔고내역_질의값"
+	P자료형_CSPAQ12300OutBlock          = "CSPAQ12300OutBlock"
+	P자료형_CSPAQ13700_현물계좌_주문체결내역_질의값  = "CSPAQ13700_현물계좌_주문체결내역_질의값"
+	P자료형_CSPAQ13700OutBlock          = "CSPAQ13700OutBlock"
+	P자료형_CSPAQ22200OutBlock          = "CSPAQ22200OutBlock"
+	P자료형_CSPAQ22200OutBlock1         = "CSPAQ22200OutBlock1"
+	P자료형_CSPAQ22200OutBlock2         = "CSPAQ22200OutBlock2"
+	P자료형_CSPAT00600_현물_정상_주문_질의값     = "CSPAT00600_현물_정상_주문_질의값"
+	P자료형_CSPAT00600OutBlock          = "CSPAT00600OutBlock"
+	P자료형_CSPAT00700_현물_정정_주문_질의값     = "CSPAT00700_현물_정정_주문_질의값"
+	P자료형_CSPAT00700OutBlock          = "CSPAT00700OutBlock"
+	P자료형_CSPAT00800_현물_취소_주문_질의값     = "CSPAT00800_현물_취소_주문_질의값"
+	P자료형_CSPAT00800OutBlock          = "CSPAT00800OutBlock"
+	P자료형_T0150_현물_당일_매매일지_질의값        = "T0150_현물_당일_매매일지_질의값"
+	P자료형_T0150_현물_당일_매매일지_응답         = "T0150_현물_당일_매매일지_응답"
+	P자료형_T0150_현물_당일_매매일지_응답_헤더      = "T0150_현물_당일_매매일지_응답_헤더"
+	P자료형_T0150_현물_당일_매매일지_응답_반복값     = "T0150_현물_당일_매매일지_응답_반복값"
+	P자료형_T0150OutBlock               = "T0150OutBlock"
+	P자료형_T0150OutBlock1              = "T0150OutBlock1"
+	P자료형_T0151_현물_일자별_매매일지_질의값       = "T0151_현물_일자별_매매일지_질의값"
+	P자료형_T0151_현물_일자별_매매일지_응답        = "T0151_현물_일자별_매매일지_응답"
+	P자료형_T0151_현물_일자별_매매일지_응답_헤더     = "T0151_현물_일자별_매매일지_응답_헤더"
+	P자료형_T0151_현물_일자별_매매일지_응답_반복값    = "T0151_현물_일자별_매매일지_응답_반복값"
+	P자료형_T0151OutBlock               = "T0151OutBlock"
+	P자료형_T0151OutBlock1              = "T0151OutBlock1"
+	P자료형_T0167OutBlock               = "T0167OutBlock"
+	P자료형_T0425_현물_체결_미체결_조회_질의값      = "T0425_현물_체결_미체결_조회_질의값"
+	P자료형_T0425OutBlock               = "T0425OutBlock"
 	P자료형_T1101_현물_호가_조회_응답           = "T1101_현물_호가_조회_응답"
 	P자료형_T1101OutBlock               = "T1101OutBlock"
 	P자료형_T1102_현물_시세_조회_질의값          = "T1102_현물_시세_조회_질의값"
@@ -275,13 +231,6 @@ const (
 	P자료형_T8412_현물_차트_분_응답_반복값_모음     = "T8412_현물_차트_분_응답_반복값_모음"
 	P자료형_T8412OutBlock               = "T8412OutBlock"
 	P자료형_T8412OutBlock1              = "T8412OutBlock1"
-	P자료형_T8413_현물_차트_일주월_질의값         = "T8413_현물_차트_일주월_질의값"
-	P자료형_T8413_현물_차트_일주월_응답          = "T8413_현물_차트_일주월_응답"
-	P자료형_T8413_현물_차트_일주월_응답_헤더       = "T8413_현물_차트_일주월_응답_헤더"
-	P자료형_T8413_현물_차트_일주월_응답_반복값      = "T8413_현물_차트_일주월_응답_반복값"
-	P자료형_T8413_현물_차트_일주월_응답_반복값_모음   = "T8413_현물_차트_일주월_응답_반복값_모음"
-	P자료형_T8413OutBlock               = "T8413OutBlock"
-	P자료형_T8413OutBlock1              = "T8413OutBlock1"
 	P자료형_T8428_증시주변_자금추이_질의값         = "T8428_증시주변_자금추이_질의값"
 	P자료형_T8428_증시주변_자금추이_응답          = "T8428_증시주변_자금추이_응답"
 	P자료형_T8428_증시주변_자금추이_응답_헤더       = "T8428_증시주변_자금추이_응답_헤더"
@@ -289,20 +238,12 @@ const (
 	P자료형_T8428_증시주변_자금추이_응답_반복값_모음   = "T8428_증시주변_자금추이_응답_반복값_모음"
 	P자료형_T8428OutBlock               = "T8428OutBlock"
 	P자료형_T8428OutBlock1              = "T8428OutBlock1"
-	P자료형_T8432OutBlock               = "T8432OutBlock"
 	P자료형_T8436_현물_종목조회_응답_반복값        = "T8436_현물_종목조회_응답_반복값"
 	P자료형_T8436_현물_종목조회_응답            = "T8436_현물_종목조회_응답"
 	P자료형_T8436OutBlock               = "T8436OutBlock"
 )
 
 const (
-	//TR선물옵션_주문체결내역조회_CFOAQ00600   = "CFOAQ00600"
-	//TR선물옵션_정상주문_CFOAT00100       = "CFOAT00100"
-	//TR선물옵션_정정주문_CFOAT00200       = "CFOAT00200"
-	//TR선물옵션_취소주문_CFOAT00300       = "CFOAT00300"
-	//TR선물옵션_예탁금_증거금_조회_CFOBQ10500 = "CFOBQ10500"
-	//TR선물옵션_미결제약정_현황_CFOFQ02400   = "CFOFQ02400"
-
 	TR현물계좌_총평가_CSPAQ12200        = "CSPAQ12200"
 	TR현물계좌_잔고내역_조회_CSPAQ12300    = "CSPAQ12300"
 	TR현물계좌_주문체결내역_조회_CSPAQ13700  = "CSPAQ13700"
@@ -311,11 +252,10 @@ const (
 	TR현물_정정_주문_CSPAT00700        = "CSPAT00700"
 	TR현물_취소_주문_CSPAT00800        = "CSPAT00800"
 
-	TR현물_당일_매매일지_t0150   = "t0150"
-	TR현물_일자별_매매일지_t0151  = "t0151"
-	TR시간_조회_t0167        = "t0167"
-	TR현물_체결_미체결_조회_t0425 = "t0425"
-	//TR선물옵션_체결_미체결_조회_t0434    = "t0434"
+	TR현물_당일_매매일지_t0150        = "t0150"
+	TR현물_일자별_매매일지_t0151       = "t0151"
+	TR시간_조회_t0167             = "t0167"
+	TR현물_체결_미체결_조회_t0425      = "t0425"
 	TR현물_호가_조회_t1101          = "t1101"
 	TR현물_시세_조회_t1102          = "t1102"
 	TR현물_기간별_조회_t1305         = "t1305"
@@ -331,10 +271,8 @@ const (
 	TR현물_차트_일주월년_t8410        = "t8410"
 	TR현물_차트_틱_t8411           = "t8411"
 	TR현물_차트_분_t8412           = "t8412"
-	TR현물_차트_일주월_t8413         = "t8413"
 	TR증시_주변_자금_추이_t8428       = "t8428"
-	//TR지수선물_마스터_조회_t8432  = "t8432"
-	TR현물_종목_조회_t8436 = "t8436"
+	TR현물_종목_조회_t8436          = "t8436"
 
 	// 구현된 RT코드
 	RT현물_주문_접수_SC0 = "SC0"
@@ -396,7 +334,7 @@ const (
 	TR에러_메시지
 	TR코드별_전송_제한
 	TR계좌_수량
-	TR계좌번호_모음
+	TR계좌_번호
 	TR계좌_이름
 	TR계좌_상세명
 	TR계좌_별명
@@ -436,12 +374,14 @@ func TR구분_String(v lb.TR구분) string {
 		return "TR코드별_전송_제한"
 	case TR계좌_수량:
 		return "계좌_수량"
-	case TR계좌번호_모음:
+	case TR계좌_번호:
 		return "계좌_번호"
 	case TR계좌_이름:
 		return "계좌_이름"
 	case TR계좌_상세명:
 		return "계좌_상세명"
+	case TR계좌_별명:
+		return "계좌_별명"
 	case TR소켓_테스트:
 		return "신호"
 	case TR서버_구분:
@@ -832,18 +772,18 @@ func (p T주문시장구분) String() string {
 type T주문유형 uint8
 
 const (
-	P주문유형_해당없음  T주문유형 = 0
-	P주문_현금매도    T주문유형 = 1
-	P주문_현금매수    T주문유형 = 2
-	P주문_신용매도    T주문유형 = 3
-	P주문_신용매수    T주문유형 = 4
-	P주문_저축매도    T주문유형 = 5
-	P주문_저축매수    T주문유형 = 6
-	P주문_상품매도_대차 T주문유형 = 7
-	P주문_상품매도    T주문유형 = 9
-	P주문_상품매수    T주문유형 = 10
-	//P주문_선물대용매도_일반 T주문유형 = 11
-	//P주문_선물대용매도_반대 T주문유형 = 12
+	P주문유형_해당없음    T주문유형 = 0
+	P주문_현금매도      T주문유형 = 1
+	P주문_현금매수      T주문유형 = 2
+	P주문_신용매도      T주문유형 = 3
+	P주문_신용매수      T주문유형 = 4
+	P주문_저축매도      T주문유형 = 5
+	P주문_저축매수      T주문유형 = 6
+	P주문_상품매도_대차   T주문유형 = 7
+	P주문_상품매도      T주문유형 = 9
+	P주문_상품매수      T주문유형 = 10
+	P주문_선물대용매도_일반 T주문유형 = 11
+	P주문_선물대용매도_반대 T주문유형 = 12
 	P주문_현금매도_프    T주문유형 = 13
 	P주문_현금매수_프    T주문유형 = 14
 	P주문_현금매수_유가   T주문유형 = 15
@@ -876,10 +816,10 @@ func (p T주문유형) String() string {
 		return "상품매도"
 	case P주문_상품매수:
 		return "상품매수"
-	//case P주문_선물대용매도_일반:
-	//	return "선물대용매도(일반)"
-	//case P주문_선물대용매도_반대:
-	//	return "선물대용매도(반대)"
+	case P주문_선물대용매도_일반:
+		return "선물대용매도(일반)"
+	case P주문_선물대용매도_반대:
+		return "선물대용매도(반대)"
 	case P주문_현금매도_프:
 		return "현금매도_프"
 	case P주문_현금매수_프:
@@ -902,6 +842,7 @@ func (p T주문유형) String() string {
 }
 
 const (
+	P증권그룹_Unknown      = T증권그룹(0)
 	P증권그룹_주식           = T증권그룹(1)
 	P증권그룹_예탁증서         = T증권그룹(3)
 	P증권그룹_증권투자회사_뮤추얼펀드 = T증권그룹(4)
@@ -918,6 +859,8 @@ type T증권그룹 uint8
 
 func (p T증권그룹) String() string {
 	switch p {
+	case P증권그룹_Unknown:
+		return "Unknown"
 	case P증권그룹_주식:
 		return "주식"
 	case P증권그룹_예탁증서:
@@ -939,6 +882,8 @@ func (p T증권그룹) String() string {
 	case P증권그룹_ETN:
 		return "ETN"
 	}
+
+	lb.F체크포인트(p)
 
 	panic(lb.F2문자열("예상하지 못한 증권그룹 값. %v", p))
 
@@ -1070,6 +1015,8 @@ func (p T재무순위_구분) String() string {
 		return "매출액 증가율"
 	case P재무순위_영업이익증가율:
 		return "세전계속이익 증가율"
+	case P재무순위_세전계속이익증가율:
+		return "P재무순위 세전계속이익증가율"
 	case P재무순위_부채비율:
 		return "부채비율"
 	case P재무순위_유보율:
@@ -1087,7 +1034,7 @@ func (p T재무순위_구분) String() string {
 	case P재무순위_PEG:
 		return "PEG"
 	default:
-		return lb.F2문자열("예상하지 못한 T재무순위_구분 값 : '%s'" + string(p))
+		return lb.F2문자열("예상하지 못한 T재무순위_구분 값 : '%d'", int(p))
 	}
 }
 
@@ -1291,6 +1238,14 @@ const (
 	P종류주식_상장주식수_미달_5만주_미만             = 5102
 	P종류주식_거래량_요건_미충족_월평균_거래량_1만주_미만   = 5103
 	P종류주식_시가총액_미달_5억원_미달_30일_계속       = 5104
+	ETF_관리종목_지정                       = 5200
+	ETF_신탁원본액_및_순자산총액이_50억원_미만        = 5201
+	ETF_6개월_일평균거래대금_500만원_미만          = 5202
+	ETN_관리종목_지정                       = 5300
+	ETN_발행규모_50억원_미만                  = 5301
+	ETN_6개월__일평균거래대금_500만원_미만         = 5302
+	ETN_기타_투자자_보호                     = 5303
+	P코스피_상장폐지사유_발생                    = 5401
 	P코스닥_상장관련신청서_중요사항_허위_기재_및_누락      = 6001
 	P코스닥_최종부도_또는_당좌거래정지               = 6002
 	P코스닥_주된_영업의_양도                    = 6003
@@ -1333,6 +1288,7 @@ const (
 	P코스닥_시가총액_40억원_미달_30일_연속          = 6045
 	P코스닥_최근_4사업연도_연속_영업손실_발생          = 6046
 	P코스닥_파산_신청                        = 6047
+	SPAC_상장예비심사청구서_미제출                = 6051
 	P코스닥_기타_관리종목_지정                   = 6099
 	P코스닥_보통주의_관리종목_지정                 = 6101
 	P코스닥_종류주식의_상장주식수_요건_미달            = 6102
@@ -1507,6 +1463,22 @@ func (p T관리종목_지정_사유_구분) String() string {
 		return "종류주식_거래량_요건_미충족_월평균_거래량_1만주_미만"
 	case P종류주식_시가총액_미달_5억원_미달_30일_계속:
 		return "종류주식_시가총액_미달_5억원_미달_30일_계속"
+	case ETF_관리종목_지정:
+		return "ETF_관리종목_지정"
+	case ETF_신탁원본액_및_순자산총액이_50억원_미만:
+		return "ETF_신탁원본액_및_순자산총액이_50억원_미만"
+	case ETF_6개월_일평균거래대금_500만원_미만:
+		return "ETF_6개월_일평균거래대금_500만원_미만"
+	case ETN_관리종목_지정:
+		return "ETN_관리종목_지정"
+	case ETN_발행규모_50억원_미만:
+		return "ETN_발행규모_50억원_미만"
+	case ETN_6개월__일평균거래대금_500만원_미만:
+		return "ETN_6개월__일평균거래대금_500만원_미만"
+	case ETN_기타_투자자_보호:
+		return "ETN_기타_투자자_보호"
+	case P코스피_상장폐지사유_발생:
+		return "코스피_상장폐지_사유의_발생"
 	case P코스닥_상장관련신청서_중요사항_허위_기재_및_누락:
 		return "코스닥_상장관련신청서_중요사항_허위_기재_및_누락"
 	case P코스닥_최종부도_또는_당좌거래정지:
@@ -1591,6 +1563,8 @@ func (p T관리종목_지정_사유_구분) String() string {
 		return "코스닥_최근_4사업연도_연속_영업손실_발생"
 	case P코스닥_파산_신청:
 		return "코스닥_파산_신청"
+	case SPAC_상장예비심사청구서_미제출:
+		return "SPAC_상장예비심사청구서_미제출"
 	case P코스닥_기타_관리종목_지정:
 		return "코스닥_기타_관리종목_지정"
 	case P코스닥_보통주의_관리종목_지정:
@@ -1794,7 +1768,7 @@ func (p T통신매체구분) String() string {
 	}
 }
 
-func (p T통신매체구분) F해석(값 interface{}) T통신매체구분 {
+func (p T통신매체구분) F해석(값 any) T통신매체구분 {
 	문자열 := lb.F2문자열_EUC_KR_공백제거(값)
 
 	switch 문자열 {
@@ -1894,3 +1868,7 @@ func (p T거래소_구분) String() string {
 		panic(lb.New에러("예상하지 못한 값 : '%s'", string(p)))
 	}
 }
+
+// P압축_반복값_최대_수량은 증권사 API가 단일 조회의 반복값 행 수로 정해 놓은 상한.
+// 근거: type_c.h qrycnt 필드 "요청건수(최대-압축:2000 비압축:500)".
+const P압축_반복값_최대_수량 = 2000 // t8410/t8411/t8412 등 압축 조회 시 최대 반복값 수

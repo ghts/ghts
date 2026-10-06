@@ -1,10 +1,11 @@
 package dll32
 
 import (
+	"testing"
+
 	lb "github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/lib/nanomsg"
 	xt "github.com/ghts/ghts/xing/base"
-	"testing"
 )
 
 func TestF접속됨(t *testing.T) {

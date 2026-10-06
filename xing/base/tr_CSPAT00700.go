@@ -3,9 +3,10 @@ package xt
 import (
 	"bytes"
 	"encoding/binary"
-	lb "github.com/ghts/ghts/lib"
 	"strings"
 	"time"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
 type CSPAT00700_현물_정정_주문_질의값 struct {
@@ -98,9 +99,9 @@ func NewCSPAT00700_현물_정정_주문_질의값() *CSPAT00700_현물_정정_�
 }
 
 func NewCSPAT00700_현물_정정_주문_응답(b []byte) (값 *CSPAT00700_현물_정정_주문_응답, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
-	lb.F조건부_패닉(len(b) != SizeCSPAT00700OutBlock, "예상하지 못한 길이 : '%v", len(b))
+	lb.F조건부_패닉(len(b) != SizeCSPAT00700OutBlock, "예상하지 못한 길이 : '%v'", len(b))
 
 	값 = new(CSPAT00700_현물_정정_주문_응답)
 	값.M응답1 = lb.F확인2(NewCSPAT00700_현물_정정_주문_응답1(b[:SizeCSPAT00700OutBlock1]))
@@ -110,10 +111,10 @@ func NewCSPAT00700_현물_정정_주문_응답(b []byte) (값 *CSPAT00700_현물
 }
 
 func NewCSPAT00700_현물_정정_주문_응답1(b []byte) (s *CSPAT00700_현물_정정_주문_응답1, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { s = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { s = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeCSPAT00700OutBlock1,
-		"예상하지 못한 길이 : '%v", len(b))
+		"예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(CSPAT00700OutBlock1)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
@@ -141,10 +142,10 @@ func NewCSPAT00700_현물_정정_주문_응답1(b []byte) (s *CSPAT00700_현물_
 }
 
 func NewCSPAT00700_현물_정정_주문_응답2(b []byte) (s *CSPAT00700_현물_정정_주문_응답2, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { s = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { s = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeCSPAT00700OutBlock2,
-		"예상하지 못한 길이 : '%v", len(b))
+		"예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(CSPAT00700OutBlock2)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
@@ -178,12 +179,12 @@ func NewCSPAT00700_현물_정정_주문_응답2(b []byte) (s *CSPAT00700_현물_
 	s.M관리사원_번호 = lb.F2문자열_공백_제거(g.MgempNo)
 	s.M주문금액 = lb.F확인2(lb.F2정수64(g.OrdAmt))
 	s.M매도_매수_구분 = lb.T매도_매수_구분(lb.F확인2(lb.F2정수(g.BnsTpCode)))
-	s.M예비_주문번호 = lb.F확인2(lb.F2정수64(g.SpareOrdNo))
-	s.M반대매매_일련번호 = lb.F확인2(lb.F2정수64(g.CvrgSeqno))
-	s.M예약_주문번호 = lb.F확인2(lb.F2정수64(g.RsvOrdNo))
-	s.M현금_주문금액 = lb.F확인2(lb.F2정수64(g.MnyOrdAmt))
-	s.M대용_주문금액 = lb.F확인2(lb.F2정수64(g.SubstOrdAmt))
-	s.M재사용_주문금액 = lb.F확인2(lb.F2정수64(g.RuseOrdAmt))
+	s.M예비_주문번호 = lb.F확인2(lb.F2정수64_공백은_0(g.SpareOrdNo))
+	s.M반대매매_일련번호 = lb.F확인2(lb.F2정수64_공백은_0(g.CvrgSeqno))
+	s.M예약_주문번호 = lb.F확인2(lb.F2정수64_공백은_0(g.RsvOrdNo))
+	s.M현금_주문금액 = lb.F확인2(lb.F2정수64_공백은_0(g.MnyOrdAmt))
+	s.M대용_주문금액 = lb.F확인2(lb.F2정수64_공백은_0(g.SubstOrdAmt))
+	s.M재사용_주문금액 = lb.F확인2(lb.F2정수64_공백은_0(g.RuseOrdAmt))
 	s.M계좌명 = lb.F2문자열_공백_제거(g.AcntNm)
 	s.M종목명 = lb.F2문자열_공백_제거(g.IsuNm)
 

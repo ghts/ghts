@@ -1,14 +1,13 @@
 package xing
 
 import (
-	lb "github.com/ghts/ghts/lib"
 	"strings"
 	"testing"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
 func TestF샘플_종목_모음(t *testing.T) {
-	t.Parallel()
-
 	샘플_종목_모음 := lb.F샘플_종목_모음_전체()
 
 	lb.F테스트_참임(t, len(샘플_종목_모음) > 0)

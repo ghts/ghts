@@ -1,23 +1,20 @@
 package xing
 
 import (
+	"testing"
+	"time"
+
 	lb "github.com/ghts/ghts/lib"
 	mt "github.com/ghts/ghts/lib/market_time"
 	"github.com/ghts/ghts/xing/base"
-	"testing"
-	"time"
 )
 
 func TestCSPAT00800_현물_취소_주문_질의값(t *testing.T) {
-	t.Parallel()
-
-	_, ok := interface{}(new(lb.S질의값_취소_주문)).(lb.I질의값)
+	_, ok := any(new(lb.S질의값_취소_주문)).(lb.I질의값)
 	lb.F테스트_참임(t, ok)
 }
 
 func TestCSPAT00800_현물_취소_주문(t *testing.T) {
-	t.Parallel()
-
 	if xt.F서버_구분() == xt.P서버_실거래 ||
 		!F금일_한국증시_개장() ||
 		!mt.F한국증시_정규_거래_시간임() {
@@ -28,7 +25,7 @@ func TestCSPAT00800_현물_취소_주문(t *testing.T) {
 
 	var 종목 = lb.New종목("069500", "KODEX 200", lb.P시장구분_ETF)
 
-	하한가, ok := 하한가_맵[종목.G코드()]
+	하한가, ok := F하한가by종목코드(종목.G코드())
 	lb.F테스트_참임(t, ok, "하한가를 찾을 수 없음. %v", 종목.G코드())
 
 	const 수량_정상주문 = int64(25)

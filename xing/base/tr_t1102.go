@@ -3,8 +3,9 @@ package xt
 import (
 	"bytes"
 	"encoding/binary"
-	lb "github.com/ghts/ghts/lib"
 	"time"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
 type T1102_현물_시세_조회_질의값 struct {
@@ -104,6 +105,7 @@ type T1102_현물_시세_조회_응답 struct {
 	NXT정적VI상한가     int64
 	NXT정적VI하한가     int64
 	M거래소별단축코드      string
+	KRX정규_종가       int64
 }
 
 type T1102_거래원_정보 struct {
@@ -138,7 +140,7 @@ func NewT1102InBlock(질의값 *T1102_현물_시세_조회_질의값) (g *T1102I
 func newT1102_거래원_정보_모음(수량 int) []*T1102_거래원_정보 {
 	거래원_정보_모음 := make([]*T1102_거래원_정보, 수량)
 
-	for i := 0; i < 수량; i++ {
+	for i := range 수량 {
 		거래원_정보_모음[i] = new(T1102_거래원_정보)
 	}
 
@@ -146,7 +148,7 @@ func newT1102_거래원_정보_모음(수량 int) []*T1102_거래원_정보 {
 }
 
 func NewT1102_현물_시세_조회_응답(b []byte) (s *T1102_현물_시세_조회_응답, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { s = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { s = nil }}.S실행()
 
 	lb.F조건부_패닉(len(b) != SizeT1102OutBlock,
 		"예상하지 못한 길이 : '%v' '%v'", len(b), SizeT1102OutBlock)
@@ -356,6 +358,7 @@ func NewT1102_현물_시세_조회_응답(b []byte) (s *T1102_현물_시세_조�
 	s.NXT정적VI상한가 = lb.F확인2(lb.F2정수64_공백은_0(g.Nxt_svi_uplmtprice))
 	s.NXT정적VI하한가 = lb.F확인2(lb.F2정수64_공백은_0(g.Nxt_svi_dnlmtprice))
 	s.M거래소별단축코드 = lb.F2문자열_공백_제거(g.Ex_shcode)
+	s.KRX정규_종가 = lb.F확인2(lb.F2정수64_공백은_0(g.Krx_mcls_price))
 
 	return s, nil
 }

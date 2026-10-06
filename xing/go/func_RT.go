@@ -72,15 +72,35 @@ func F실시간_데이터_해지_ETF(종목코드_모음 []string) (에러 error
 func F주문_응답_실시간_정보_구독() (에러 error) {
 	defer lb.S예외처리{M에러: &에러}.S실행()
 
+	RT코드_모음 := []string{
+		xt.RT현물_주문_접수_SC0,
+		xt.RT현물_주문_체결_SC1,
+		xt.RT현물_주문_정정_SC2,
+		xt.RT현물_주문_취소_SC3,
+		xt.RT현물_주문_거부_SC4,
+	}
+
+	주문_응답_구독_잠금.Lock()
+	defer 주문_응답_구독_잠금.Unlock()
+
 	if 주문_응답_구독_중.G값() {
 		return
 	}
 
-	lb.F확인1(F실시간_정보_구독_단순TR(xt.RT현물_주문_접수_SC0))
-	lb.F확인1(F실시간_정보_구독_단순TR(xt.RT현물_주문_체결_SC1))
-	lb.F확인1(F실시간_정보_구독_단순TR(xt.RT현물_주문_정정_SC2))
-	lb.F확인1(F실시간_정보_구독_단순TR(xt.RT현물_주문_취소_SC3))
-	lb.F확인1(F실시간_정보_구독_단순TR(xt.RT현물_주문_거부_SC4))
+	주문_응답_구독_중.S값(true)
+
+	for _, RT코드 := range RT코드_모음 {
+		for range 3 {
+			if 에러 = F실시간_정보_구독_단순TR(RT코드); 에러 == nil {
+				break
+			}
+		}
+
+		if 에러 != nil {
+			주문_응답_구독_중.S값(false)
+			lb.F에러_출력("F주문_응답_실시간_정보_구독 : 구독 에러 발생. '%v'", RT코드)
+		}
+	}
 
 	return nil
 }
@@ -88,17 +108,30 @@ func F주문_응답_실시간_정보_구독() (에러 error) {
 func F주문_응답_실시간_정보_해지() (에러 error) {
 	defer lb.S예외처리{M에러: &에러}.S실행()
 
-	if !주문_응답_구독_중.G값() {
-		return
+	RT코드_모음 := []string{
+		xt.RT현물_주문_접수_SC0,
+		xt.RT현물_주문_체결_SC1,
+		xt.RT현물_주문_정정_SC2,
+		xt.RT현물_주문_취소_SC3,
+		xt.RT현물_주문_거부_SC4,
 	}
 
-	defer 주문_응답_구독_중.S값(false)
+	주문_응답_구독_잠금.Lock()
+	defer 주문_응답_구독_잠금.Unlock()
 
-	lb.F확인1(F실시간_정보_해지_단순TR(xt.RT현물_주문_접수_SC0))
-	lb.F확인1(F실시간_정보_해지_단순TR(xt.RT현물_주문_체결_SC1))
-	lb.F확인1(F실시간_정보_해지_단순TR(xt.RT현물_주문_정정_SC2))
-	lb.F확인1(F실시간_정보_해지_단순TR(xt.RT현물_주문_취소_SC3))
-	lb.F확인1(F실시간_정보_해지_단순TR(xt.RT현물_주문_거부_SC4))
+	주문_응답_구독_중.S값(false)
+
+	for _, RT코드 := range RT코드_모음 {
+		for range 3 {
+			if 에러 = F실시간_정보_해지_단순TR(RT코드); 에러 == nil {
+				break
+			}
+		}
+
+		if 에러 != nil {
+			lb.F에러_출력("F주문_응답_실시간_정보_해지 : 구독 해지 에러 발생. '%v'", RT코드)
+		}
+	}
 
 	return nil
 }

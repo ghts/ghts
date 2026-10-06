@@ -1,10 +1,10 @@
 package nano
 
 import (
-	lb "github.com/ghts/ghts/lib"
-	"math/rand"
 	"testing"
 	"time"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
 func TestNano소켓_REQ_REP(t *testing.T) {
@@ -21,7 +21,7 @@ func TestNano소켓_REQ_REP(t *testing.T) {
 	go 클라이언트_REQ(테스트, 주소, ch초기화, ch종료)
 	<-ch초기화
 
-	for i := 0; i < 2; i++ {
+	for range 2 {
 		<-ch종료
 	}
 }
@@ -74,11 +74,11 @@ func TestNano소켓_PUB_SUB(t *testing.T) {
 	go 서버_PUB(테스트, 주소, ch초기화, ch중지, ch종료)
 	<-ch초기화
 
-	for i := 0; i < 클라이언트_수량; i++ {
+	for range 클라이언트_수량 {
 		go 클라이언트_SUB(테스트, 주소, ch종료)
 	}
 
-	for i := 0; i < 클라이언트_수량; i++ {
+	for range 클라이언트_수량 {
 		<-ch종료
 	}
 
@@ -136,7 +136,7 @@ func TestNano소켓_PUSH_PULL(t *testing.T) {
 	go 클라이언트_PUSH(테스트, 주소, ch초기화, ch종료)
 	<-ch초기화
 
-	for i := 0; i < 2; i++ {
+	for range 2 {
 		<-ch종료
 	}
 }
@@ -150,7 +150,7 @@ func 서버_PULL(t lb.I안전한_테스트, 주소 lb.T주소, ch초기화, ch�
 
 	ch초기화 <- lb.P신호_초기화
 
-	for i := 0; i < 10; i++ {
+	for i := range 10 {
 		바이트_변환_모음, 에러 := 소켓_PULL.G수신()
 		t.G에러없음(에러)
 
@@ -169,7 +169,7 @@ func 클라이언트_PUSH(t lb.I안전한_테스트, 주소 lb.T주소, ch초기
 
 	ch초기화 <- lb.P신호_초기화
 
-	for i := 0; i < 10; i++ {
+	for i := range 10 {
 		문자열 := lb.F2문자열("테스트 PUSH PULL #%v", i)
 		t.G에러없음(소켓_PUSH.S송신(lb.F임의_변환_형식(), 문자열))
 	}
@@ -191,7 +191,7 @@ func TestNano소켓_PAIR(t *testing.T) {
 	go 클라이언트_PAIR(테스트, 주소, ch초기화, ch종료)
 	<-ch초기화
 
-	for i := 0; i < 2; i++ {
+	for range 2 {
 		<-ch종료
 	}
 }
@@ -236,9 +236,20 @@ func 클라이언트_PAIR(t lb.I안전한_테스트, 주소 lb.T주소, ch초기
 	t.G같음(문자열, "테스트 PAIR 응답")
 }
 
+func TestNano소켓_생성실패(t *testing.T) {
+	t.Parallel()
+
+	테스트 := lb.New안전한_테스트(t)
+
+	// 닫혀 있는 포트(1번 포트)에 연결을 시도하면 즉시 실패.
+	// 실패 경로는 panic이 밖으로 새지 않고 에러를 반환해야 함.
+	_, 에러 := NewNano소켓(lb.P소켓_종류_REQ, "tcp://127.0.0.1:1", lb.P소켓_접속_CONNECT)
+	테스트.G에러발생(에러)
+}
+
 func f테스트용_임의_주소() lb.T주소 {
 	for {
-		주소 := lb.T주소(rand.Intn(60000))
+		주소 := lb.T주소(lb.F임의_범위_이내_정수값(0, 60000))
 
 		return 주소
 	}

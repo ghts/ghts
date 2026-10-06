@@ -1,13 +1,14 @@
 package external_process
 
 import (
-	lb "github.com/ghts/ghts/lib"
-	"github.com/mitchellh/go-ps"
 	"os"
 	"os/exec"
 	"strings"
 	"sync"
 	"time"
+
+	lb "github.com/ghts/ghts/lib"
+	"github.com/mitchellh/go-ps"
 )
 
 const p프로세스ID_목록_파일명 = "pid_list.dat"
@@ -42,20 +43,20 @@ func (s *s안전한_프로세스ID_저장소) S제거(프로세스ID int) {
 	lb.F확인1(lb.F파일에_값_저장(s.저장소, s.파일명, nil))
 }
 
-func F파이썬_스크립트_실행(스크립트_경로 string, 실행옵션 ...interface{}) (프로세스ID int, 에러 error) {
-	defer lb.S예외처리{M함수: func() { 프로세스ID = -1 }}.S실행()
+func F파이썬_스크립트_실행(스크립트_경로 string, 실행옵션 ...any) (프로세스ID int, 에러 error) {
+	defer lb.S예외처리{M에러_실행: func() { 프로세스ID = -1 }}.S실행()
 
 	if 파이썬_경로.G값() == "" {
 		파일경로 := lb.F확인2(lb.F파일_검색(lb.F홈_디렉토리(), "python.exe"))
 		파이썬_경로.S값(파일경로)
 	}
 
-	실행옵션 = append([]interface{}{스크립트_경로}, 실행옵션...)
+	실행옵션 = append([]any{스크립트_경로}, 실행옵션...)
 	return F외부_프로세스_실행(파이썬_경로.G값(), 실행옵션...)
 }
 
-func F외부_프로세스_실행(실행화일_경로 string, 실행옵션_모음 ...interface{}) (프로세스ID int, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 프로세스ID = -1 }}.S실행()
+func F외부_프로세스_실행(실행화일_경로 string, 실행옵션_모음 ...any) (프로세스ID int, 에러 error) {
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 프로세스ID = -1 }}.S실행()
 
 	if !lb.F파일_존재함(실행화일_경로) {
 		panic(lb.New에러("실행화일이 존재하지 않습니다.\n%s", 실행화일_경로))
@@ -83,8 +84,8 @@ func F외부_프로세스_실행(실행화일_경로 string, 실행옵션_모음
 	}
 }
 
-func f외부_프로세스_생성(ch프로세스ID chan int, ch에러 chan error, 실행화일_경로 string, 실행옵션_모음 ...interface{}) (에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { ch에러 <- 에러 }}.S실행()
+func f외부_프로세스_생성(ch프로세스ID chan int, ch에러 chan error, 실행화일_경로 string, 실행옵션_모음 ...any) (에러 error) {
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { ch에러 <- 에러 }}.S실행()
 
 	외부_명령어 := exec.Command(실행화일_경로, lb.F2문자열_모음(실행옵션_모음)...)
 	외부_명령어.Stdin = os.Stdin
@@ -102,7 +103,7 @@ func f외부_프로세스_생성(ch프로세스ID chan int, ch에러 chan error,
 }
 
 func f프로세스ID_파일_읽기() (맵 map[int]lb.S비어있음, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 맵 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 맵 = nil }}.S실행()
 
 	if 존재함 := lb.F확인2(f프로세스ID_파일_존재함()); !존재함 {
 		lb.F확인1(f프로세스ID_파일_초기화())
@@ -139,23 +140,22 @@ func f프로세스ID_파일_초기화() error {
 }
 
 func f잔류_프로세스_정리_및_초기화() (수량 int, 에러 error) {
-	defer lb.S예외처리{M에러: &에러}.S실행()
+	defer lb.S예외처리{M에러: &에러, M항상_실행: func() {
+		_ = f프로세스ID_파일_초기화()
+	}}.S실행()
 
 	프로세스ID_저장소 := lb.F확인2(f프로세스ID_파일_읽기())
 
 	수량 = 0
-	for 프로세스ID := range 프로세스ID_저장소 {
-		if 프로세스, 에러 := ps.FindProcess(프로세스ID); 프로세스 == nil && 에러 == nil {
-			// 프로세스 찾을 수 없음.
-			continue
-		}
+	var 프로세스 ps.Process
 
-		if 에러 = F프로세스_종료by프로세스ID(프로세스ID); 에러 == nil {
+	for 프로세스ID := range 프로세스ID_저장소 {
+		if 프로세스, 에러 = ps.FindProcess(프로세스ID); 프로세스 == nil && 에러 == nil {
+			continue // 프로세스 찾을 수 없음.
+		} else if 에러 = F프로세스_종료by프로세스ID(프로세스ID); 에러 == nil {
 			수량++
 		}
 	}
-
-	lb.F확인1(f프로세스ID_파일_초기화())
 
 	return 수량, nil
 }

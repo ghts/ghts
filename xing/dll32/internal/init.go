@@ -1,11 +1,12 @@
 package dll32
 
 import (
+	"runtime"
+	"time"
+
 	lb "github.com/ghts/ghts/lib"
 	nano "github.com/ghts/ghts/lib/nanomsg"
 	xt "github.com/ghts/ghts/xing/base"
-	"runtime"
-	"time"
 )
 
 func init() {
@@ -40,11 +41,11 @@ func F종료_대기() {
 	<-Ch모니터링_루틴_종료
 	<-Ch함수_호출_도우미_종료
 
-	for i := 0; i < 수신_도우미_수량; i++ {
+	for range 수신_도우미_수량 {
 		<-Ch수신_도우미_종료
 	}
 
-	for i := 0; i < 콜백_도우미_수량; i++ {
+	for range 콜백_도우미_수량 {
 		<-Ch콜백_도우미_종료
 	}
 }
@@ -55,7 +56,7 @@ func F소켓_정리() error {
 	질의값 := &lb.S질의값_기본형{M구분: xt.TR조회, M코드: xt.TR시간_조회_t0167}
 	소켓REQ := lb.F확인2(nano.NewNano소켓REQ(xt.F주소_DLL32(), lb.P1초))
 
-	for i := 0; i < 반복_횟수; i++ {
+	for range 반복_횟수 {
 		소켓REQ.S송신(lb.P변환형식_기본값, 질의값)
 		lb.F대기(lb.P100밀리초)
 	}

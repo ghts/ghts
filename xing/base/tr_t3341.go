@@ -3,6 +3,7 @@ package xt
 import (
 	"bytes"
 	"encoding/binary"
+
 	lb "github.com/ghts/ghts/lib"
 )
 
@@ -103,9 +104,9 @@ func NewT3341InBlock(질의값 *T3341_재무순위_질의값) (g *T3341InBlock) 
 }
 
 func NewT3341_재무순위_응답_헤더(b []byte) (값 *T3341_재무순위_응답_헤더, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
-	lb.F조건부_패닉(len(b) != SizeT3341OutBlock, "예상하지 못한 길이 : '%v", len(b))
+	lb.F조건부_패닉(len(b) != SizeT3341OutBlock, "예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(T3341OutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
@@ -118,7 +119,7 @@ func NewT3341_재무순위_응답_헤더(b []byte) (값 *T3341_재무순위_응�
 }
 
 func NewT3341_재무순위_응답_반복값_모음(b []byte) (값 *T3341_재무순위_응답_반복값_모음, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	나머지 := len(b) % SizeT3341OutBlock1
 	lb.F조건부_패닉(나머지 != 0, "예상하지 못한 길이. '%v' '%v'", len(b), 나머지)
@@ -141,7 +142,7 @@ func NewT3341_재무순위_응답_반복값_모음(b []byte) (값 *T3341_재무�
 		s.M매출액_증가율 = lb.F확인2(lb.F2실수_소숫점_추가_공백은_0(g.Salesgrowth, 2))
 		s.M영업이익_증가율 = lb.F확인2(lb.F2실수_소숫점_추가_공백은_0(g.Operatingincomegrowt, 2))
 		s.M경상이익_증가율 = lb.F확인2(lb.F2실수_소숫점_추가_공백은_0(g.Ordinaryincomegrowth, 2))
-		s.M부채비율 = lb.F확인2(lb.F2실수_소숫점_추가(g.Liabilitytoequity, 2))
+		s.M부채비율 = lb.F확인2(lb.F2실수_소숫점_추가_공백은_0(g.Liabilitytoequity, 2))
 		s.M유보율 = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Enterpriseratio, 2)
 		s.EPS = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Eps, 2)
 		s.BPS = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Bps, 2)

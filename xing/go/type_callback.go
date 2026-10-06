@@ -1,10 +1,11 @@
 package xing
 
 import (
-	lb "github.com/ghts/ghts/lib"
-	"github.com/ghts/ghts/xing/base"
 	"sync"
 	"time"
+
+	lb "github.com/ghts/ghts/lib"
+	"github.com/ghts/ghts/xing/base"
 )
 
 func newDLL32_콜백_대기_저장소() *DLL32_콜백_저장소 {
@@ -18,9 +19,9 @@ func newDLL32_콜백_대기_저장소() *DLL32_콜백_저장소 {
 type DLL32_콜백_대기_항목 struct {
 	sync.Mutex
 	식별번호   int
-	ch회신   chan interface{}
+	ch회신   chan any
 	TR코드   string
-	대기값    interface{}
+	대기값    any
 	에러     error
 	데이터_수신 bool
 	메시지_수신 bool
@@ -29,7 +30,7 @@ type DLL32_콜백_대기_항목 struct {
 	생성된_시각 time.Time
 }
 
-func (s *DLL32_콜백_대기_항목) G회신값() interface{} {
+func (s *DLL32_콜백_대기_항목) G회신값() any {
 	switch 변환값 := s.대기값.(type) {
 	case *xt.S이중_응답_일반형:
 		return 변환값.G값(s.TR코드)
@@ -62,7 +63,7 @@ func (s *DLL32_콜백_대기_항목) S회신() {
 	s.회신_완료 = true
 }
 
-// dll32  응답을 기다리는 TR 저장.
+// DLL32_콜백_저장소 : dll32 응답을 기다리는 TR 저장.
 type DLL32_콜백_저장소 struct {
 	sync.RWMutex
 	저장소      map[int]*DLL32_콜백_대기_항목
@@ -79,12 +80,12 @@ func (s *DLL32_콜백_저장소) G값(식별번호 int) *DLL32_콜백_대기_항
 	return 값
 }
 
-func (s *DLL32_콜백_저장소) S추가(식별번호 int, TR코드 string) chan interface{} {
+func (s *DLL32_콜백_저장소) S추가(식별번호 int, TR코드 string) chan any {
 	s.s정리()
 
 	대기_항목 := new(DLL32_콜백_대기_항목)
 	대기_항목.식별번호 = 식별번호
-	대기_항목.ch회신 = make(chan interface{}, 1)
+	대기_항목.ch회신 = make(chan any, 1)
 	대기_항목.TR코드 = TR코드
 	대기_항목.생성된_시각 = lb.F지금()
 
@@ -96,34 +97,32 @@ func (s *DLL32_콜백_저장소) S추가(식별번호 int, TR코드 string) chan
 }
 
 func (s *DLL32_콜백_저장소) S회신(식별번호 int) {
-	if 대기_항목 := s.G값(식별번호); 대기_항목 == nil {
-		lb.New에러("nil 대기 항목.")
-	} else {
+	if 대기_항목 := s.G값(식별번호); 대기_항목 != nil {
 		대기_항목.S회신()
-	}
-
-	s.Lock()
-	delete(s.저장소, 식별번호)
-	s.Unlock()
-}
-
-func (s *DLL32_콜백_저장소) s정리() {
-	s.RLock()
-	최근_정리_시간 := s.최근_정리_시간
-	s.RUnlock()
-
-	지금 := lb.F지금()
-
-	if 지금.Sub(최근_정리_시간) < lb.P1분 {
-		return // 정리한 지 얼마 안 되었음.
 	}
 
 	s.Lock()
 	defer s.Unlock()
 
+	delete(s.저장소, 식별번호)
+}
+
+func (s *DLL32_콜백_저장소) s정리() {
+	s.Lock()
+	defer s.Unlock()
+
+	지금 := lb.F지금()
+
+	if 지금.Sub(s.최근_정리_시간) < lb.P1분 {
+		return // 정리한 지 얼마 안 되었음.
+	}
+
+	// Xing API는 30초 넘어가면 에러 처리 됨. 오래된 질의는 어차피 의미 없으므로 삭제.
 	for idx, 대기_항목 := range s.저장소 {
 		if 지금.Sub(대기_항목.생성된_시각) > lb.P40초 {
 			delete(s.저장소, idx)
 		}
 	}
+
+	s.최근_정리_시간 = 지금
 }

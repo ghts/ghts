@@ -1,22 +1,21 @@
 package xing
 
 import (
+	"testing"
+
 	lb "github.com/ghts/ghts/lib"
 	mt "github.com/ghts/ghts/lib/market_time"
 	"github.com/ghts/ghts/lib/nanomsg"
 	xt "github.com/ghts/ghts/xing/base"
-	"testing"
 )
 
 func TestF체결_실시간_정보(t *testing.T) {
-	t.Parallel()
-
-	if !mt.F한국증시_정규_거래_시간임() {
-		t.SkipNow()
+	if !F당일().Equal(lb.F금일()) || !mt.F한국증시_정규_거래_시간임() {
+		t.Skip()
 	}
 
 	const 종목코드_코스피 = "005930" // 삼성전자
-	const 종목코드_코스닥 = "091990" // 셀트리온 헬스케어
+	const 종목코드_코스닥 = "058470" // 리노공업
 	const 종목코드_ETF = "069500" // KODEX 200
 
 	종목_코스피, 에러 := F종목by코드(종목코드_코스피)
@@ -45,14 +44,21 @@ func TestF체결_실시간_정보(t *testing.T) {
 	var 코스피_수신, 코스닥_수신, ETF_수신 bool
 
 	// 실시간 정보 수신 확인
-	for i := 0; i < 1000; i++ {
+	for range 1000 {
 		바이트_변환_모음, 에러 := 소켓SUB_실시간.G수신()
 		lb.F테스트_에러없음(t, 에러)
 
 		i실시간_정보 := lb.F확인2(바이트_변환_모음.S해석기(xt.F바이트_변환값_해석).G해석값(0))
+		var 값 *xt.S체결
 
-		값, ok := i실시간_정보.(*xt.S체결)
-		if !ok {
+		switch 체결값 := i실시간_정보.(type) {
+		case *xt.S코스피_체결:
+			v := xt.S코스피_체결(*체결값)
+			값 = (*xt.S체결)(&v)
+		case *xt.S코스닥_체결:
+			v := xt.S코스닥_체결(*체결값)
+			값 = (*xt.S체결)(&v)
+		default:
 			continue
 		}
 

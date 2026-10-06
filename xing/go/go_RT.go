@@ -3,7 +3,7 @@ package xing
 //func go_RT_주문처리결과(ch초기화 chan lb.T신호) (에러 error) {
 //	defer lb.S예외처리{M에러: &에러}.S실행()
 //
-//	var i수신값 interface{}
+//	var i수신값 any
 //	var 수신값 *lb.S바이트_변환_모음
 //
 //	ch종료 := lb.Ch공통_종료()

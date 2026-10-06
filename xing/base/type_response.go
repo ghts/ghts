@@ -2,11 +2,12 @@ package xt
 
 import (
 	"errors"
-	lb "github.com/ghts/ghts/lib"
 	"strings"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
-func NewJSON응답(값 interface{}) *JSON응답 {
+func NewJSON응답(값 any) *JSON응답 {
 	switch 값.(type) {
 	case error:
 		return &JSON응답{V: nil, E: 값.(error).Error()}
@@ -16,7 +17,7 @@ func NewJSON응답(값 interface{}) *JSON응답 {
 }
 
 type JSON응답 struct {
-	V interface{}
+	V any
 	E string
 }
 
@@ -49,7 +50,7 @@ type S이중_응답_일반형 struct {
 func (s *S이중_응답_일반형) G응답1() I이중_응답1 { return s.M응답1 }
 func (s *S이중_응답_일반형) G응답2() I이중_응답2 { return s.M응답2 }
 
-func (s *S이중_응답_일반형) G값(TR코드 string) interface{} {
+func (s *S이중_응답_일반형) G값(TR코드 string) any {
 	switch TR코드 {
 	case TR현물_정상_주문_CSPAT00600:
 		g := new(CSPAT00600_현물_정상_주문_응답)
@@ -99,7 +100,7 @@ func (s *S헤더_반복값) G반복값_모음_TR데이터() I반복값_모음_TR
 	return s.M반복값_모음
 }
 
-func (s *S헤더_반복값) G값(TR코드 string) interface{} {
+func (s *S헤더_반복값) G값(TR코드 string) any {
 	switch TR코드 {
 	default:
 		panic(lb.New에러with출력("예상하지 못한 TR코드 : '%v' %v", TR코드, lb.F소스코드_위치(0))) // 패닉 출력을 삭제하지 말 것.
@@ -152,11 +153,6 @@ func (s *S헤더_반복값) G값(TR코드 string) interface{} {
 		값 := new(T8412_현물_차트_분_응답)
 		값.M헤더 = s.M헤더.(*T8412_현물_차트_분_응답_헤더)
 		값.M반복값_모음 = s.M반복값_모음.(*T8412_현물_차트_분_응답_반복값_모음)
-		return 값
-	case TR현물_차트_일주월_t8413:
-		값 := new(T8413_현물_차트_일주월_응답)
-		값.M헤더 = s.M헤더.(*T8413_현물_차트_일주월_응답_헤더)
-		값.M반복값_모음 = s.M반복값_모음.(*T8413_현물_차트_일주월_응답_반복값_모음)
 		return 값
 	case TR증시_주변_자금_추이_t8428:
 		값 := new(T8428_증시주변_자금추이_응답)

@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-func New콜백_대기_항목(식별번호 int, TR코드 string, 값 interface{}) *S콜백_대기_항목 {
+func New콜백_대기_항목(식별번호 int, TR코드 string, 값 any) *S콜백_대기_항목 {
 	s := new(S콜백_대기_항목)
 	s.M식별번호 = 식별번호
 	s.M생성_시각 = time.Now()
@@ -19,7 +19,7 @@ type S콜백_대기_항목 struct {
 	M식별번호  int
 	M생성_시각 time.Time
 	TR코드   string
-	M값     interface{}
+	M값     any
 }
 
 type S콜백_대기_저장소 struct {

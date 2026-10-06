@@ -3,8 +3,9 @@ package xt
 import (
 	"bytes"
 	"encoding/binary"
-	lb "github.com/ghts/ghts/lib"
 	"time"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
 // t1305 기간별 주가
@@ -119,9 +120,9 @@ func NewT1305InBlock(질의값 *T1305_현물_기간별_조회_질의값) (g *T13
 }
 
 func NewT1305_현물_기간별_조회_응답_헤더(b []byte) (값 *T1305_현물_기간별_조회_응답_헤더, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
-	lb.F조건부_패닉(len(b) != SizeT1305OutBlock, "예상하지 못한 길이 : '%v", len(b))
+	lb.F조건부_패닉(len(b) != SizeT1305OutBlock, "예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(T1305OutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
@@ -135,7 +136,7 @@ func NewT1305_현물_기간별_조회_응답_헤더(b []byte) (값 *T1305_현물
 }
 
 func NewT1305_현물_기간별_조회_응답_반복값_모음(b []byte) (값 *T1305_현물_기간별_조회_응답_반복값_모음, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	나머지 := len(b) % SizeT1305OutBlock1
 	lb.F조건부_패닉(나머지 != 0, "예상하지 못한 길이. '%v' '%v'", len(b), 나머지)
@@ -152,13 +153,13 @@ func NewT1305_현물_기간별_조회_응답_반복값_모음(b []byte) (값 *T1
 		lb.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 		일자_문자열_원본 := lb.F2문자열(g.Date)
-		버퍼 := new(bytes.Buffer)
-		버퍼.WriteString(일자_문자열_원본[0:4])
-		버퍼.WriteString("/")
-		버퍼.WriteString(일자_문자열_원본[4:6])
-		버퍼.WriteString("/")
-		버퍼.WriteString(일자_문자열_원본[6:])
-		일자_문자열 := 버퍼.String()
+		일자_문자열_버퍼 := new(bytes.Buffer)
+		일자_문자열_버퍼.WriteString(일자_문자열_원본[0:4])
+		일자_문자열_버퍼.WriteString("/")
+		일자_문자열_버퍼.WriteString(일자_문자열_원본[4:6])
+		일자_문자열_버퍼.WriteString("/")
+		일자_문자열_버퍼.WriteString(일자_문자열_원본[6:])
+		일자_문자열 := 일자_문자열_버퍼.String()
 
 		s := new(T1305_현물_기간별_조회_응답_반복값)
 		s.M종목코드 = lb.F2문자열(g.Shcode)

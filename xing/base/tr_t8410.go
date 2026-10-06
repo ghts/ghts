@@ -3,9 +3,10 @@ package xt
 import (
 	"bytes"
 	"encoding/binary"
-	lb "github.com/ghts/ghts/lib"
 	"strconv"
 	"time"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
 type T8410_현물_차트_일주월년_질의값 struct {
@@ -110,9 +111,9 @@ func NewT8410_현물_차트_일주월년_질의값() *T8410_현물_차트_일주
 }
 
 func NewT8410_현물_차트_일주월년_응답_헤더(b []byte) (값 *T8410_현물_차트_일주월년_응답_헤더, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
-	lb.F조건부_패닉(len(b) != SizeT8410OutBlock, "예상하지 못한 길이 : '%v", len(b))
+	lb.F조건부_패닉(len(b) != SizeT8410OutBlock, "예상하지 못한 길이 : '%v'", len(b))
 
 	g := new(T8410OutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
@@ -142,7 +143,7 @@ func NewT8410_현물_차트_일주월년_응답_헤더(b []byte) (값 *T8410_현
 }
 
 func NewT8410_현물_차트_일주월년_응답_반복값_모음(b []byte) (값 *T8410_현물_차트_일주월년_응답_반복값_모음, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	나머지 := len(b) % SizeT8410OutBlock1
 	lb.F조건부_패닉(나머지 != 0, "예상하지 못한 길이. '%v' '%v'", len(b), 나머지)
@@ -153,7 +154,7 @@ func NewT8410_현물_차트_일주월년_응답_반복값_모음(b []byte) (값 
 	값 = new(T8410_현물_차트_일주월년_응답_반복값_모음)
 	값.M배열 = make([]*T8410_현물_차트_일주월년_응답_반복값, 수량)
 
-	for i := 0; i < 수량; i++ {
+	for i := range 수량 {
 		g := new(T8410OutBlock1)
 		lb.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 

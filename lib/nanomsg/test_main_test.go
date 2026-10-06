@@ -1,9 +1,10 @@
 package nano
 
 import (
-	lb "github.com/ghts/ghts/lib"
 	"os"
 	"testing"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
 func TestMain(m *testing.M) {

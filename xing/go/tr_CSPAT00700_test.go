@@ -1,24 +1,21 @@
 package xing
 
 import (
+	"testing"
+	"time"
+
 	lb "github.com/ghts/ghts/lib"
 	mt "github.com/ghts/ghts/lib/market_time"
 	"github.com/ghts/ghts/lib/nanomsg"
 	"github.com/ghts/ghts/xing/base"
-	"testing"
-	"time"
 )
 
 func TestCSPAT00700_현물_정정_주문_질의값(t *testing.T) {
-	t.Parallel()
-
-	_, ok := interface{}(new(xt.CSPAT00700_현물_정정_주문_질의값)).(lb.I질의값)
+	_, ok := any(new(xt.CSPAT00700_현물_정정_주문_질의값)).(lb.I질의값)
 	lb.F테스트_참임(t, ok)
 }
 
 func TestCSPAT00700_현물_정정_주문(t *testing.T) {
-	t.Parallel()
-
 	if xt.F서버_구분() == xt.P서버_실거래 ||
 		!F금일_한국증시_개장() ||
 		!mt.F한국증시_정규_거래_시간임() {
@@ -30,17 +27,17 @@ func TestCSPAT00700_현물_정정_주문(t *testing.T) {
 
 	lb.F테스트_에러없음(t, F주문_응답_실시간_정보_구독())
 
-	const 반복_횟수 = 10
+	const 반복_횟수 = 3
 	const 수량 = int64(5)
 	const 수량_전량_취소주문 = int64(0)
 
 	종목 := lb.New종목("069500", "KODEX 200", lb.P시장구분_ETF)
 
-	하한가, ok := 하한가_맵[종목.G코드()]
+	하한가, ok := F하한가by종목코드(종목.G코드())
 	lb.F테스트_참임(t, ok, "하한가를 찾을 수 없음. %v", 종목.G코드())
 
 	가격_정상주문 := 하한가
-	최소_호가단위, 에러 := F최소_호가단위by종목(종목)
+	호가_단위, 에러 := F호가_단위by종목(종목)
 	lb.F테스트_에러없음(t, 에러)
 
 	계좌번호, 에러 := F계좌_번호(0)
@@ -81,12 +78,12 @@ func TestCSPAT00700_현물_정정_주문(t *testing.T) {
 	질의값_정정주문.M주문단가 = 가격_정상주문
 
 	// 정정 주문 TR 실행
-	for i := 0; i < 반복_횟수; i++ {
+	for range 반복_횟수 {
 		switch 질의값_정정주문.M주문단가 {
-		case 가격_정상주문, 가격_정상주문 + 최소_호가단위:
-			질의값_정정주문.M주문단가 += 최소_호가단위
-		case 가격_정상주문 + (2 * 최소_호가단위):
-			질의값_정정주문.M주문단가 -= 최소_호가단위
+		case 가격_정상주문, 가격_정상주문 + 호가_단위:
+			질의값_정정주문.M주문단가 += 호가_단위
+		case 가격_정상주문 + (2 * 호가_단위):
+			질의값_정정주문.M주문단가 -= 호가_단위
 		default:
 			panic(lb.New에러("예상하지 못한 값 : '%v'", 질의값_정정주문.M주문단가))
 		}

@@ -1,16 +1,15 @@
 package xing
 
 import (
+	"testing"
+	"time"
+
 	lb "github.com/ghts/ghts/lib"
 	mt "github.com/ghts/ghts/lib/market_time"
 	xt "github.com/ghts/ghts/xing/base"
-	"testing"
-	"time"
 )
 
 func TestT1906_ETF_LP_호가_조회(t *testing.T) {
-	t.Parallel()
-
 	const 종목코드 = "069500" // 코덱스200
 
 	값, 에러 := TrT1906_ETF_LP_호가_조회(종목코드)
@@ -43,7 +42,7 @@ func TestT1906_ETF_LP_호가_조회(t *testing.T) {
 
 	var 매도호가수량합, 매수호가수량합 int64
 
-	for i := 0; i < 10; i++ {
+	for i := range 10 {
 		lb.F테스트_참임(t, 값.M매도_호가_모음[i] >= 0, 값.M매도_호가_모음[i])
 		lb.F테스트_참임(t, 값.M매수_호가_모음[i] >= 0, 값.M매수_호가_모음[i])
 		lb.F테스트_참임(t, 값.M매도_잔량_모음[i] >= 0, 값.M매도_잔량_모음[i])

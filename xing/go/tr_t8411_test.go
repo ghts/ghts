@@ -1,15 +1,14 @@
 package xing
 
 import (
-	lb "github.com/ghts/ghts/lib"
-	xt "github.com/ghts/ghts/xing/base"
 	"testing"
 	"time"
+
+	lb "github.com/ghts/ghts/lib"
+	xt "github.com/ghts/ghts/xing/base"
 )
 
 func TestT8411_F현물_차트_분틱(t *testing.T) {
-	t.Parallel()
-
 	const 종목코드 = "069500" // 코덱스200
 	var 이전_일자_시각 time.Time
 

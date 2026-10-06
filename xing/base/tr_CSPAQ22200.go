@@ -3,6 +3,7 @@ package xt
 import (
 	"bytes"
 	"encoding/binary"
+
 	lb "github.com/ghts/ghts/lib"
 )
 
@@ -44,6 +45,7 @@ type CSPAQ22200_현물계좌_예수금_주문가능금액_응답 struct {
 	M금일매도정산금액         int64
 	M금일매수정산금액         int64
 	M매도대금담보대출금액       int64
+	M미수불가주문가능금액       int64
 }
 
 func NewCSPAQ22200InBlock(계좌번호, 비밀번호 string) (g *CSPAQ22200InBlock1) {
@@ -60,9 +62,9 @@ func NewCSPAQ22200InBlock(계좌번호, 비밀번호 string) (g *CSPAQ22200InBlo
 }
 
 func NewCSPAQ22200_현물계좌_예수금_주문가능금액_응답(b []byte) (값 *CSPAQ22200_현물계좌_예수금_주문가능금액_응답, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M함수: func() { 값 = nil }}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
-	lb.F조건부_패닉(len(b) != SizeCSPAQ22200OutBlock, "예상하지 못한 길이 : '%v", len(b))
+	lb.F조건부_패닉(len(b) != SizeCSPAQ22200OutBlock, "예상하지 못한 길이 : '%v'", len(b))
 
 	g_all := new(CSPAQ22200OutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g_all)) // 네트워크 전송 바이트 순서는 빅엔디언.
@@ -108,6 +110,7 @@ func NewCSPAQ22200_현물계좌_예수금_주문가능금액_응답(b []byte) (�
 	값.M금일매도정산금액 = lb.F확인2(lb.F2정수64(g2.CrdaySellAdjstAmt))
 	값.M금일매수정산금액 = lb.F확인2(lb.F2정수64(g2.CrdayBuyAdjstAmt))
 	값.M매도대금담보대출금액 = lb.F확인2(lb.F2정수64(g2.CslLoanAmtdt1))
+	값.M미수불가주문가능금액 = lb.F확인2(lb.F2정수64(g2.RcvblUablOrdAbleAmt))
 
 	return 값, nil
 }

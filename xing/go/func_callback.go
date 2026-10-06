@@ -1,20 +1,21 @@
 package xing
 
 import (
+	"strings"
+
 	lb "github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/xing/base"
-	"strings"
 )
 
 func f콜백_TR데이터_처리기(값 lb.I콜백) (에러 error) {
 	defer lb.S예외처리{M에러: &에러}.S실행()
 
-	var 식별번호 int
+	var 식별번호 = -1
 	var 대기_항목 *DLL32_콜백_대기_항목
 	var TR코드 string
 
 	// 최대 10초 대기.
-	for i := 0; i < 100; i++ {
+	for range 100 {
 		식별번호, 대기_항목, TR코드 = f콜백_데이터_식별번호(값)
 
 		if 대기_항목 != nil {
@@ -24,7 +25,8 @@ func f콜백_TR데이터_처리기(값 lb.I콜백) (에러 error) {
 		}
 	}
 
-	lb.F조건부_패닉(식별번호 == 0, "식별번호 없음")
+	// 정상적인 식별번호는 양수
+	lb.F조건부_패닉(식별번호 < 0, "식별번호 없음")
 
 	if 대기_항목 == nil {
 		switch 콜백 := 값.G콜백(); 콜백 {
@@ -90,9 +92,7 @@ func f콜백_TR데이터_처리기(값 lb.I콜백) (에러 error) {
 				} else {
 					대기_항목.에러 = lb.New에러("%s : %s : %s", 대기_항목.TR코드, 변환값.M코드, 변환값.M내용)
 				}
-			} else if !strings.Contains(변환값.M내용, "주문이 접수 대기") &&
-				!strings.Contains(변환값.M내용, "원주문번호를 잘못 입력") &&
-				!strings.Contains(변환값.M내용, "주문수량이 매매가능수량을 초과했습니다") {
+			} else if !xt.F무시해야할_에러_메시지(변환값.M내용) {
 				대기_항목.에러 = lb.New에러("%s : %s : %s", 대기_항목.TR코드, 변환값.M코드, 변환값.M내용)
 			}
 		}
@@ -142,10 +142,6 @@ func f콜백_데이터_식별번호(값 lb.I콜백) (식별번호 int, 대기_�
 
 func f콜백_데이터_복원(대기_항목 *DLL32_콜백_대기_항목, 수신값 *lb.S바이트_변환) error {
 	switch 대기_항목.TR코드 {
-	// 선물옵션 관련 TR들 비활성화
-	// xt.TR선물옵션_주문체결내역조회_CFOAQ00600, xt.TR선물옵션_정상주문_CFOAT00100, xt.TR선물옵션_정정주문_CFOAT00200, xt.TR선물옵션_취소주문_CFOAT00300,
-	// xt.TR선물옵션_예탁금_증거금_조회_CFOBQ10500, xt.TR선물옵션_미결제약정_현황_CFOFQ02400,
-	// xt.TR선물옵션_체결_미체결_조회_t0434, xt.TR지수선물_마스터_조회_t8432
 	case
 		xt.TR현물_당일_매매일지_t0150, xt.TR현물_일자별_매매일지_t0151, xt.TR시간_조회_t0167,
 		xt.TR현물_체결_미체결_조회_t0425,
@@ -159,7 +155,7 @@ func f콜백_데이터_복원(대기_항목 *DLL32_콜백_대기_항목, 수신�
 		return f데이터_복원_이중_응답(대기_항목, 수신값) // 이중 응답 질의
 	case xt.TR재무순위_종합_t3341, xt.TR현물_기간별_조회_t1305, xt.TR현물_당일_전일_분틱_조회_t1310,
 		xt.TR관리_불성실_투자유의_조회_t1404, xt.TR투자경고_매매정지_정리매매_조회_t1405,
-		xt.TR_ETF_시간별_추이_t1902, xt.TR현물_차트_일주월년_t8410, xt.TR현물_차트_틱_t8411, xt.TR현물_차트_분_t8412, xt.TR현물_차트_일주월_t8413,
+		xt.TR_ETF_시간별_추이_t1902, xt.TR현물_차트_일주월년_t8410, xt.TR현물_차트_틱_t8411, xt.TR현물_차트_분_t8412,
 		xt.TR증시_주변_자금_추이_t8428:
 		return f데이터_복원_반복_조회(대기_항목, 수신값) // 반복 조회
 	default:

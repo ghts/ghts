@@ -5,7 +5,7 @@ import (
 )
 
 func Go루틴_관리(ch초기화 chan lb.T신호) (에러 error) {
-	lb.S예외처리{M에러: &에러, M함수_항상: func() {
+	defer lb.S예외처리{M에러: &에러, M항상_실행: func() {
 		Ch모니터링_루틴_종료 <- lb.P신호_종료
 	}}.S실행()
 
@@ -17,11 +17,11 @@ func Go루틴_관리(ch초기화 chan lb.T신호) (에러 error) {
 	go go함수_호출_도우미(ch도우미_초기화, ch호출_도우미_종료)
 	<-ch도우미_초기화
 
-	for i := 0; i < 수신_도우미_수량; i++ {
+	for range 수신_도우미_수량 {
 		go go수신_도우미(ch도우미_초기화, ch수신_도우미_종료)
 	}
 
-	for i := 0; i < 콜백_도우미_수량; i++ {
+	for range 콜백_도우미_수량 {
 		go go콜백_도우미(ch도우미_초기화, ch콜백_도우미_종료)
 	}
 
@@ -40,10 +40,13 @@ func Go루틴_관리(ch초기화 chan lb.T신호) (에러 error) {
 			return nil
 		case <-ch수신_도우미_종료:
 			go go수신_도우미(ch도우미_초기화, ch수신_도우미_종료)
+			<-ch도우미_초기화
 		case <-ch호출_도우미_종료:
 			go go함수_호출_도우미(ch도우미_초기화, ch호출_도우미_종료)
+			<-ch도우미_초기화
 		case <-ch콜백_도우미_종료:
 			go go콜백_도우미(ch도우미_초기화, ch콜백_도우미_종료)
+			<-ch도우미_초기화
 		}
 	}
 }

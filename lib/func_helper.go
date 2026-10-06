@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/csv"
 	"encoding/gob"
-	"errors"
 	"io"
 	"math"
 	"math/big"
@@ -12,11 +11,12 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"path"
 	"path/filepath"
 	"reflect"
 	"regexp"
 	"runtime"
-	"sort"
+	"slices"
 	"strings"
 	"sync"
 	"time"
@@ -24,15 +24,68 @@ import (
 	"golang.org/x/exp/constraints"
 )
 
-func F같음(값, 비교값 interface{}) bool {
-	switch 값.(type) {
-	case *big.Int, *big.Rat, *big.Float,
-		int, int8, int16, int32, int64,
-		uint, uint8, uint16, uint32, uint64,
-		float32, float64:
-		if F2문자열(값) == F2문자열(비교값) {
-			return true
+func nan제거[T T숫자](값_모음 []T) []T {
+	var 필터된_값_모음 []T
+
+	switch 모음 := any(값_모음).(type) {
+	case []float32:
+		필터된_값_모음 = make([]T, 0, len(모음))
+
+		for _, 값 := range 모음 {
+			if !math.IsNaN(float64(값)) { // NaN 제외
+				필터된_값_모음 = append(필터된_값_모음, T(값))
+			}
 		}
+	case []float64:
+		필터된_값_모음 = make([]T, 0, len(모음))
+
+		for _, 값 := range 모음 {
+			if !math.IsNaN(값) { // NaN 제외
+				필터된_값_모음 = append(필터된_값_모음, T(값))
+			}
+		}
+	default:
+		// 정수형: NaN 불가능 → 제거 루틴 생략
+		필터된_값_모음 = slices.Clone(값_모음)
+	}
+
+	return 필터된_값_모음
+}
+
+// 값_모음에서 NaN을 제거하고 오름차순 정렬한 새 슬라이스를 반환한다.
+// 정수형은 NaN이 발생할 수 없으므로 제거 루틴 없이 복사만 수행한다.
+func f정렬_NaN_제거[T T숫자](값_모음 []T) []T {
+	필터된_값_모음 := nan제거(값_모음)
+	slices.Sort(필터된_값_모음)
+
+	return 필터된_값_모음
+}
+
+func f2실수값_모음[T T숫자](값_모음 ...T) (실수값_모음 []float64) {
+	필터된_값_모음 := nan제거(값_모음)
+	실수값_모음 = make([]float64, len(필터된_값_모음))
+
+	for i, 값 := range 필터된_값_모음 {
+		실수값_모음[i] = float64(값)
+	}
+
+	return 실수값_모음
+}
+
+func F같음(값, 비교값 any) bool {
+	switch 값.(type) {
+	case *big.Int, int, int8, int16, int32, int64,
+		uint, uint8, uint16, uint32, uint64:
+		return F2문자열(값) == F2문자열(비교값)
+	case *big.Rat, *big.Float, float32, float64:
+		실수값1, 에러1 := F2실수(값)
+		실수값2, 에러2 := F2실수(비교값)
+
+		if 에러1 != nil || 에러2 != nil {
+			return false
+		}
+
+		return math.Abs(실수값1-실수값2) < 1e-6
 	case time.Time:
 		비교_시간값, ok := 비교값.(time.Time)
 		if ok && 값.(time.Time).Equal(비교_시간값) {
@@ -40,7 +93,7 @@ func F같음(값, 비교값 interface{}) bool {
 		}
 	}
 
-	if F2문자열(값) == "<nil>" && F2문자열(값) == "<nil>" {
+	if F2문자열(값) == "<nil>" && F2문자열(비교값) == "<nil>" {
 		return true
 	} else if reflect.DeepEqual(값, 비교값) {
 		return true
@@ -50,23 +103,7 @@ func F같음(값, 비교값 interface{}) bool {
 }
 
 func F동일값_존재[T comparable](값 T, 비교값_모음 ...T) bool {
-	for _, 비교값 := range 비교값_모음 {
-		if 값 == 비교값 {
-			return true
-		}
-	}
-
-	return false
-}
-
-func f2실수값_모음[T T숫자](값_모음 ...T) (실수값_모음 []float64) {
-	실수값_모음 = make([]float64, len(값_모음))
-
-	for i, 값 := range 값_모음 {
-		실수값_모음[i] = float64(값)
-	}
-
-	return 실수값_모음
+	return slices.Contains(비교값_모음, 값)
 }
 
 func F합계[T T숫자](값_모음 ...T) T {
@@ -80,19 +117,66 @@ func F합계[T T숫자](값_모음 ...T) T {
 }
 
 func F평균[T T숫자](값_모음 ...T) float64 {
+	if len(값_모음) == 0 {
+		panic(New에러("F평균 : 입력값이 없습니다."))
+	}
+
 	실수값_모음 := f2실수값_모음(값_모음...)
+
+	if len(실수값_모음) == 0 {
+		panic(New에러("F평균 : 유효한 값이 없습니다. (모두 NaN)"))
+	}
 
 	return F합계(실수값_모음...) / float64(len(실수값_모음))
 }
 
 func F표준_편차[T T숫자](값_모음 ...T) (표준_편차 float64) {
+	if len(값_모음) == 0 {
+		panic(New에러("F표준_편차 : 입력값이 없습니다."))
+	}
+
 	_, 표준_편차 = F평균N표준편차(값_모음...)
 
 	return 표준_편차
 }
 
+// F평균N표준편차 : 평균과 표본 표준편차(분모 N-1, 베셀 보정)를 계산.
+// 유한 데이터로 母 모집단의 분산을 추정할 때 사용(예: 수익률 계열 변동성 지표).
 func F평균N표준편차[T T숫자](값_모음 ...T) (평균, 표준_편차 float64) {
+	if len(값_모음) == 0 {
+		panic(New에러("F평균N표준편차 : 입력값이 없습니다."))
+	}
+
 	실수값_모음 := f2실수값_모음(값_모음...)
+
+	if len(실수값_모음) == 0 {
+		panic(New에러("F평균N표준편차 : 유효한 값이 없습니다. (모두 NaN)"))
+	}
+
+	return f평균N표준편차(실수값_모음, true)
+}
+
+// F평균N모집단표준편차 : 평균과 모집단 표준편차(분모 N)를 계산.
+// 데이터 자체가 분석 대상 전체일 때 사용(예: 볼린저 밴드).
+func F평균N모집단표준편차[T T숫자](값_모음 ...T) (평균, 표준_편차 float64) {
+	if len(값_모음) == 0 {
+		panic(New에러("F평균N모집단표준편차 : 입력값이 없습니다."))
+	}
+
+	실수값_모음 := f2실수값_모음(값_모음...)
+
+	if len(실수값_모음) == 0 {
+		panic(New에러("F평균N모집단표준편차 : 유효한 값이 없습니다. (모두 NaN)"))
+	}
+
+	return f평균N표준편차(실수값_모음, false)
+}
+
+func f평균N표준편차(실수값_모음 []float64, 표본_보정 bool) (평균, 표준_편차 float64) {
+	if len(실수값_모음) == 0 {
+		panic(New에러("f평균N표준편차 : 입력값이 없습니다."))
+	}
+
 	평균 = F평균(실수값_모음...)
 	분산 := 0.0
 
@@ -100,138 +184,159 @@ func F평균N표준편차[T T숫자](값_모음 ...T) (평균, 표준_편차 flo
 		분산 += math.Pow(값-평균, 2)
 	}
 
-	표준_편차 = math.Sqrt(분산 / float64(len(값_모음)-1))
+	분모 := F조건값(표본_보정, float64(len(실수값_모음)-1), float64(len(실수값_모음)))
+	if 분모 == 0 {
+		panic(New에러("f평균N표준편차 : 분모 0. %v, %v", 표본_보정, len(실수값_모음)))
+	}
+
+	표준_편차 = math.Sqrt(분산 / 분모)
 
 	return 평균, 표준_편차
 }
 
+// NaN을 제외한 최대값을 반환한다.
 func F최대값[T T숫자](값_모음 ...T) T {
 	if len(값_모음) == 0 {
-		panic(New에러("입력값이 없습니다."))
+		panic(New에러("F최대값 : 입력값이 없습니다."))
 	}
 
-	최대값 := 값_모음[0]
+	정렬_모음 := f정렬_NaN_제거(값_모음)
 
-	for _, 값 := range 값_모음 {
-		if 값 > 최대값 {
-			최대값 = 값
-		}
+	if len(정렬_모음) == 0 {
+		panic(New에러("F최대값 : 유효한 값이 없습니다. (모두 NaN)"))
 	}
 
-	return 최대값
+	return 정렬_모음[len(정렬_모음)-1]
 }
 
-func F차최대값[T T숫자](값_모음 ...T) T {
-	if len(값_모음) == 0 {
-		panic(New에러("입력값이 없습니다."))
+// 오름차순 정렬된 슬라이스에서 (차최대값, 차최소값)을 계산한다.
+// 차최대값은 최대값보다 작은 값 중 가장 큰 값, 차최소값은 최소값보다 큰 값 중 가장 작은 값이다.
+// 모든 값이 동일할 때만 각각 최대값·최소값과 같다.
+func f차최대_차최소[T T숫자](정렬_모음 []T) (차최대값, 차최소값 T) {
+	if len(정렬_모음) < 2 {
+		panic(New에러("f차최대_차최소 : 입력값이 2개 미만입니다."))
 	}
 
-	최대값, 차최대값 := 값_모음[0], T(0)
+	최대값 := 정렬_모음[len(정렬_모음)-1]
+	차최대값 = 최대값
 
-	for _, 값 := range 값_모음 {
-		if 값 > 최대값 {
-			차최대값 = 최대값
-			최대값 = 값
-		} else if 값 > 차최대값 {
-			차최대값 = 값
+	for i := len(정렬_모음) - 2; i >= 0; i-- {
+		if 정렬_모음[i] < 최대값 {
+			차최대값 = 정렬_모음[i]
+			break
 		}
 	}
 
-	return 차최대값
-}
+	최소값 := 정렬_모음[0]
+	차최소값 = 최소값
 
-func F최소값[T T숫자](값_모음 ...T) T {
-	if len(값_모음) == 0 {
-		panic(New에러("입력값이 없습니다."))
-	}
-
-	최소값 := 값_모음[0]
-
-	for _, 값 := range 값_모음 {
-		if 값 < 최소값 {
-			최소값 = 값
-		}
-	}
-
-	return 최소값
-}
-
-func F차최소값[T T숫자](값_모음 ...T) T {
-	if len(값_모음) == 0 {
-		panic(New에러("입력값이 없습니다."))
-	}
-
-	최소값, 차최소값 := 값_모음[0], 값_모음[0]
-
-	for _, 값 := range 값_모음 {
-		if 값 < 최소값 {
-			차최소값 = 최소값
-			최소값 = 값
-		} else if 값 < 차최소값 {
-			차최소값 = 값
-		}
-	}
-
-	return 차최소값
-}
-
-func F최대N최소[T T숫자](값_모음 ...T) (최대값, 최소값 T) {
-	if len(값_모음) == 0 {
-		panic(New에러("입력값이 없습니다."))
-	}
-
-	최대값, 최소값 = 값_모음[0], 값_모음[0]
-
-	for _, 값 := range 값_모음 {
-		if 값 > 최대값 {
-			최대값 = 값
-		}
-
-		if 값 < 최소값 {
-			최소값 = 값
-		}
-	}
-
-	return 최대값, 최소값
-}
-
-func F차최대N차최소[T T숫자](값_모음 ...T) (차최대값, 차최소값 T) {
-	if len(값_모음) == 0 {
-		panic(New에러("입력값이 없습니다."))
-	}
-
-	최대값, 차최대값, 최소값, 차최소값 := 값_모음[0], 값_모음[0], 값_모음[0], 값_모음[0]
-
-	for _, 값 := range 값_모음 {
-		if 값 > 최대값 {
-			차최대값 = 최대값
-			최대값 = 값
-		} else if 값 > 차최대값 {
-			차최대값 = 값
-		}
-
-		if 값 < 최소값 {
-			차최소값 = 최소값
-			최소값 = 값
-		} else if 값 < 차최소값 {
-			차최소값 = 값
+	for i := 1; i < len(정렬_모음); i++ {
+		if 정렬_모음[i] > 최소값 {
+			차최소값 = 정렬_모음[i]
+			break
 		}
 	}
 
 	return 차최대값, 차최소값
 }
 
+// NaN을 제외한 차최대값을 반환한다. (최대값보다 작은 값 중 가장 큰 값)
+func F차최대값[T T숫자](값_모음 ...T) T {
+	if len(값_모음) < 2 {
+		panic(New에러("F차최대값 : 입력값이 2개 미만입니다."))
+	}
+
+	정렬_모음 := f정렬_NaN_제거(값_모음)
+
+	if len(정렬_모음) < 2 {
+		panic(New에러("F차최대값 : 유효한 값이 2개 미만입니다. (NaN %d개 제외됨)", len(값_모음)-len(정렬_모음)))
+	}
+
+	차최대값, _ := f차최대_차최소(정렬_모음)
+
+	return 차최대값
+}
+
+// NaN을 제외한 최소값을 반환한다.
+func F최소값[T T숫자](값_모음 ...T) T {
+	if len(값_모음) == 0 {
+		panic(New에러("F최소값 : 입력값이 없습니다."))
+	}
+
+	정렬_모음 := f정렬_NaN_제거(값_모음)
+
+	if len(정렬_모음) == 0 {
+		panic(New에러("F최소값 : 유효한 값이 없습니다. (모두 NaN)"))
+	}
+
+	return 정렬_모음[0]
+}
+
+// NaN을 제외한 차최소값을 반환한다. (최소값보다 큰 값 중 가장 작은 값)
+func F차최소값[T T숫자](값_모음 ...T) T {
+	if len(값_모음) < 2 {
+		panic(New에러("F차최소값 : 입력값이 2개 미만입니다."))
+	}
+
+	정렬_모음 := f정렬_NaN_제거(값_모음)
+
+	if len(정렬_모음) < 2 {
+		panic(New에러("F차최소값 : 유효한 값이 2개 미만입니다. (NaN %d개 제외됨)", len(값_모음)-len(정렬_모음)))
+	}
+
+	_, 차최소값 := f차최대_차최소(정렬_모음)
+
+	return 차최소값
+}
+
+// NaN을 제외한 (최대값, 최소값)을 반환한다.
+func F최대N최소[T T숫자](값_모음 ...T) (최대값, 최소값 T) {
+	if len(값_모음) == 0 {
+		panic(New에러("F최대N최소 : 입력값이 없습니다."))
+	}
+
+	정렬_모음 := f정렬_NaN_제거(값_모음)
+
+	if len(정렬_모음) == 0 {
+		panic(New에러("F최대N최소 : 유효한 값이 없습니다. (모두 NaN)"))
+	}
+
+	return 정렬_모음[len(정렬_모음)-1], 정렬_모음[0]
+}
+
+// NaN을 제외한 (차최대값, 차최소값)을 반환한다.
+func F차최대N차최소[T T숫자](값_모음 ...T) (차최대값, 차최소값 T) {
+	if len(값_모음) < 2 {
+		panic(New에러("F차최대N차최소 : 입력값이 2개 미만입니다."))
+	}
+
+	정렬_모음 := f정렬_NaN_제거(값_모음)
+
+	if len(정렬_모음) < 2 {
+		panic(New에러("F차최대N차최소 : 유효한 값이 2개 미만입니다. (NaN %d개 제외됨)", len(값_모음)-len(정렬_모음)))
+	}
+
+	return f차최대_차최소(정렬_모음)
+}
+
 func F중간값[T T숫자](값_모음 ...T) T {
-	실수값_모음 := f2실수값_모음(값_모음...)
-	sort.Float64s(실수값_모음)
+	if len(값_모음) == 0 {
+		panic(New에러("F중간값 : 입력값이 없습니다."))
+	}
 
-	if len(실수값_모음)%2 == 1 {
-		return T(실수값_모음[(len(실수값_모음)-1)/2])
+	정렬_모음 := f정렬_NaN_제거(값_모음)
+
+	if len(정렬_모음) == 0 {
+		panic(New에러("F중간값 : 유효한 값이 없습니다. (모두 NaN)"))
+	}
+
+	if len(정렬_모음)%2 == 1 {
+		return 정렬_모음[(len(정렬_모음)-1)/2]
 	} else {
-		값1 := 실수값_모음[len(실수값_모음)/2-1]
-		값2 := 실수값_모음[len(실수값_모음)/2]
+		값1 := 정렬_모음[len(정렬_모음)/2-1]
+		값2 := 정렬_모음[len(정렬_모음)/2]
 
-		return T((값1 + 값2) / 2)
+		return (값1 + 값2) / 2
 	}
 }
 
@@ -248,9 +353,15 @@ func F절대값_Duration(값 time.Duration) time.Duration {
 }
 
 func F대기(기간 time.Duration) { time.Sleep(기간) }
-func F대기_초[T constraints.Integer | constraints.Float](초 T)      { time.Sleep(P1초 * time.Duration(초)) }
-func F대기_분[T constraints.Integer | constraints.Float](분 T)      { time.Sleep(P1분 * time.Duration(분)) }
-func F대기_시간[T constraints.Integer | constraints.Float](시간 T)    { time.Sleep(P1시간 * time.Duration(시간)) }
+func F대기_초[T constraints.Integer | constraints.Float](초 T) {
+	time.Sleep(P1초 * time.Duration(초))
+}
+func F대기_분[T constraints.Integer | constraints.Float](분 T) {
+	time.Sleep(P1분 * time.Duration(분))
+}
+func F대기_시간[T constraints.Integer | constraints.Float](시간 T) {
+	time.Sleep(P1시간 * time.Duration(시간))
+}
 
 func F신호_수신(채널 <-chan T신호) bool {
 	select {
@@ -262,45 +373,31 @@ func F신호_수신(채널 <-chan T신호) bool {
 }
 
 func HTTP회신_본문(url string) (string, error) {
-	응답, 에러 := http.Get(url)
-	defer func() {
-		if 응답 != nil && 응답.Body != nil {
-			응답.Body.Close()
-		}
-	}()
+	바이트_모음, 에러 := http회신_본문_바이트_모음(url)
 
-	if 에러 != nil || 응답.Body == nil {
-		return "", 에러
-	}
-
-	바이트_모음, 에러 := io.ReadAll(응답.Body)
-
-	if 에러 != nil || 바이트_모음 == nil {
-		return "", 에러
-	}
-
-	return string(바이트_모음), nil
+	return string(바이트_모음), 에러
 }
 
 func HTTP회신_본문_CP949(url string) (string, error) {
-	응답, 에러 := http.Get(url)
-	defer func() {
-		if 응답 != nil && 응답.Body != nil {
-			응답.Body.Close()
-		}
-	}()
+	바이트_모음, 에러 := http회신_본문_바이트_모음(url)
 
-	if 에러 != nil || 응답.Body == nil {
-		return "", 에러
-	}
+	return F2문자열_EUC_KR(바이트_모음), 에러
+}
 
-	바이트_모음, 에러 := io.ReadAll(응답.Body)
+func http회신_본문_바이트_모음(url string) (바이트_모음 []byte, 에러 error) {
+	var 응답 *http.Response
 
-	if 에러 != nil || 바이트_모음 == nil {
-		return "", 에러
-	}
+	defer S예외처리{M에러: &에러,
+		M에러_실행: func() {
+			바이트_모음 = make([]byte, 0)
+		},
+		M항상_실행: func() {
+			if 응답 != nil && 응답.Body != nil {
+				응답.Body.Close()
+			}
+		}}.S실행()
 
-	return F2문자열_EUC_KR(바이트_모음), nil
+	return io.ReadAll(F확인2(http.Get(url)).Body)
 }
 
 func F인터넷에_접속됨() bool {
@@ -374,7 +471,7 @@ func F포트_닫힘_확인(주소 T주소) bool {
 	}
 }
 
-func F조건부_패닉(조건 bool, 포맷_문자열 string, 추가_매개변수 ...interface{}) {
+func F조건부_패닉(조건 bool, 포맷_문자열 string, 추가_매개변수 ...any) {
 	if !조건 {
 		return
 	}
@@ -382,7 +479,7 @@ func F조건부_패닉(조건 bool, 포맷_문자열 string, 추가_매개변수
 	panic(New에러(포맷_문자열, 추가_매개변수...))
 }
 
-func F조건부_실행(조건 bool, 함수 interface{}, 추가_매개변수 ...interface{}) {
+func F조건부_실행(조건 bool, 함수 any, 추가_매개변수 ...any) {
 	if 조건 {
 		인수_모음 := make([]reflect.Value, len(추가_매개변수))
 
@@ -440,19 +537,8 @@ func F확인5[T1, T2, T3, T4 any](값1 T1, 값2 T2, 값3 T3, 값4 T4, 에러 err
 	return 값1, 값2, 값3, 값4
 }
 
-func f에러_제외한_값_추출(에러_후보_모음 ...interface{}) interface{} {
-	switch len(에러_후보_모음) {
-	case 0, 1:
-		return nil
-	case 2:
-		return 에러_후보_모음[0]
-	}
-
-	return 에러_후보_모음[:(len(에러_후보_모음) - 1)]
-}
-
 func F정규식_검색(검색_대상 string, 정규식_문자열_모음 []string) (검색_결과 string) {
-	defer S예외처리{M함수: func() { 검색_결과 = "" }}.S실행()
+	defer S예외처리{M에러_실행: func() { 검색_결과 = "" }}.S실행()
 
 	for _, 정규식_문자열 := range 정규식_문자열_모음 {
 		정규식 := regexp.MustCompile(정규식_문자열)
@@ -468,11 +554,11 @@ func F정규식_검색(검색_대상 string, 정규식_문자열_모음 []string
 	return 검색_결과
 }
 
-func F자료형(값 interface{}) reflect.Type {
+func F자료형(값 any) reflect.Type {
 	return reflect.TypeOf(값)
 }
 
-func F자료형_문자열(값 interface{}) string {
+func F자료형_문자열(값 any) string {
 	자료형 := F자료형(값)
 
 	if 자료형 == nil {
@@ -482,14 +568,14 @@ func F자료형_문자열(값 interface{}) string {
 	}
 }
 
-func F자료형_문자열_단순형(값 interface{}) string {
+func F자료형_문자열_단순형(값 any) string {
 	자료형 := F자료형(값).String()
 	시작_인덱스 := strings.Index(자료형, ".") + 1
 
 	return 자료형[시작_인덱스:]
 }
 
-func F종류(값 interface{}) reflect.Kind {
+func F종류(값 any) reflect.Kind {
 	자료형 := F자료형(값)
 
 	if 자료형 == nil {
@@ -500,7 +586,7 @@ func F종류(값 interface{}) reflect.Kind {
 }
 
 func F올바른_주소_문자열(주소 string) bool {
-	const 주소_정규식 = `tcp://[0-9]+.[0-9]+.[0-9]+.[0-9]+:[0-9]+`
+	const 주소_정규식 = `tcp://[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+:[0-9]+`
 	ok, 에러 := regexp.MatchString(주소_정규식, 주소)
 
 	switch {
@@ -515,17 +601,17 @@ func F올바른_주소_문자열(주소 string) bool {
 	return true
 }
 
-func F인터페이스_입력값_검사(값 interface{}) error {
-	return F인터페이스_모음_입력값_검사([]interface{}{값})
+func F인터페이스_입력값_검사(값 any) error {
+	return F인터페이스_모음_입력값_검사([]any{값})
 }
 
-func F인터페이스_모음_입력값_검사(값_모음 []interface{}) error {
+func F인터페이스_모음_입력값_검사(값_모음 []any) error {
 	switch len(값_모음) {
 	case 0:
 		return nil
 	case 1:
-		if _, ok := 값_모음[0].([]interface{}); ok {
-			return errors.New("배열이 아닌 단일값")
+		if _, ok := 값_모음[0].([]any); ok {
+			return New에러("배열이 아닌 단일값 : 인수로 전달하려면 ...기호를 사용하십시오. ", 값_모음)
 		}
 	}
 
@@ -536,22 +622,22 @@ func F문자열_복사(문자열 string) string {
 	return (문자열 + " ")[:len(문자열)]
 }
 
-func F슬라이스_복사(값, 에러_발생시_반환값 interface{}) interface{} {
+func F슬라이스_복사(값, 에러_발생시_반환값 any) any {
 	리플렉션_값 := reflect.ValueOf(값)
 
 	switch {
 	case 리플렉션_값.IsNil():
-		New에러with출력("nil값. '%v'", 값)
+		F에러_출력("nil값. '%v'", 값)
 		return 에러_발생시_반환값
 	case !리플렉션_값.IsValid():
-		New에러with출력("원본 슬라이스가 유효하지 않은 zero값. '%v'", 값)
+		F에러_출력("원본 슬라이스가 유효하지 않은 zero값. '%v'", 값)
 		return 에러_발생시_반환값
 	case 리플렉션_값.Kind() != reflect.Slice:
-		New에러with출력("원본이 슬라이스가 아님. '%v'", 값)
+		F에러_출력("원본이 슬라이스가 아님. '%v'", 값)
 		return 에러_발생시_반환값
 	case 리플렉션_값.Len() == 0:
 		return 값
-		//New에러with출력("원본 슬라이스 길이가 0임. '%v'", M값)
+		//F에러_출력("원본 슬라이스 길이가 0임. '%v'", M값)
 		//return 에러_발생시_반환값
 	}
 
@@ -644,33 +730,27 @@ func F파일_절대경로(파일경로 string) (string, error) {
 }
 
 func F실행파일_검색(파일명 string) (경로 string, 에러 error) {
-	파일명_소문자 := strings.ToLower(파일명)
-	if !strings.HasSuffix(파일명_소문자, ".exe") &&
-		!strings.HasSuffix(파일명_소문자, ".dll") {
-		return "", New에러with출력("exe 파일이나 dll파일만 가능합니다. %v, 파일명")
+	if runtime.GOOS == "windows" {
+		파일명_소문자 := strings.ToLower(파일명)
+		if !strings.HasSuffix(파일명_소문자, ".exe") &&
+			!strings.HasSuffix(파일명_소문자, ".dll") {
+			return "", New에러with출력("exe 파일이나 dll파일만 가능합니다. %v", 파일명)
+		}
 	}
 
 	return exec.LookPath(파일명)
 }
 
 func F파일_검색(검색_시작_디렉토리, 파일명 string) (string, error) {
-	파일경로_맵_잠금.RLock()
-	파일경로, 존재함 := 파일경로_맵[파일명]
-	파일경로_맵_잠금.RUnlock()
-
-	if 존재함 {
-		return 파일경로, nil
-	}
-
-	ch응답 := make(chan interface{}, 1)
+	ch응답 := make(chan any, 1)
 	go filepath.Walk(검색_시작_디렉토리, func(파일경로 string, 파일정보 os.FileInfo, 에러 error) error {
 		switch {
 		case 에러 != nil:
-			if strings.Contains(에러.Error(), "Access is denied.") {
+			if os.IsPermission(에러) { // OS 및 언어에 무관한 파일 권한 에러 판별
 				return nil
 			}
 
-			F문자열_출력("예상하지 못한 에러 발생 : %v\n%v", 파일정보.Name(), 에러)
+			F문자열_출력("예상하지 못한 에러 발생 : %v\n%v", 파일경로, 에러)
 			ch응답 <- 에러
 			return 에러
 		case 파일정보.IsDir():
@@ -689,15 +769,9 @@ func F파일_검색(검색_시작_디렉토리, 파일명 string) (string, error
 		case error:
 			return "", New에러with출력("'%v' : 파일을 찾을 수 없습니다.\n%v", 파일명, 응답.(error))
 		case string:
-			파일경로 = 응답.(string)
-
-			파일경로_맵_잠금.Lock()
-			파일경로_맵[파일명] = 파일경로
-			파일경로_맵_잠금.Unlock()
-
-			return 파일경로, nil
+			return 응답.(string), nil
 		default:
-			panic(New에러("예상하지 못한 자료형 '%T' '%v'", 응답, 응답))
+			panic(New에러("F파일_검색() 예상하지 못한 자료형 '%T' '%v'", 응답, 응답))
 		}
 	case <-time.After(P30초 * 4):
 		return "", New에러with출력("'%v' : 파일 검색 타임아웃", 파일명)
@@ -766,7 +840,7 @@ func F문자열_삭제(대상_문자열 string, 삭제할_문자열 string, 삭�
 	return 대상_문자열
 }
 
-func F파일에_값_저장(값 interface{}, 파일명 string, 파일_잠금 sync.Locker) (에러 error) {
+func F파일에_값_저장(값 any, 파일명 string, 파일_잠금 sync.Locker) (에러 error) {
 	defer S예외처리{M에러: &에러}.S실행()
 
 	if 파일_잠금 != nil {
@@ -779,7 +853,7 @@ func F파일에_값_저장(값 interface{}, 파일명 string, 파일_잠금 sync
 
 	F확인1(gob.NewEncoder(파일).Encode(값))
 
-	for i := 0; i < 10; i++ {
+	for range 10 {
 		if 에러 = 파일.Sync(); 에러 == nil {
 			break
 		}
@@ -788,8 +862,8 @@ func F파일에_값_저장(값 interface{}, 파일명 string, 파일_잠금 sync
 	return 에러
 }
 
-func F파일에서_값_읽기(값_포인터 interface{}, 파일명 string, 파일_잠금 sync.Locker) (에러 error) {
-	defer S예외처리{M에러: &에러, M함수: func() { 값_포인터 = nil }}.S실행()
+func F파일에서_값_읽기(값_포인터 any, 파일명 string, 파일_잠금 sync.Locker) (에러 error) {
+	defer S예외처리{M에러: &에러, M에러_실행: func() { 값_포인터 = nil }}.S실행()
 
 	switch 잠금 := 파일_잠금.(type) {
 	case nil: // 아무 것도 하지 않음.
@@ -802,7 +876,7 @@ func F파일에서_값_읽기(값_포인터 interface{}, 파일명 string, 파�
 		defer 파일_잠금.Unlock()
 	}
 
-	F조건부_패닉(F종류(값_포인터) != reflect.Ptr, "포인터형이 아님. %T", 값_포인터)
+	F조건부_패닉(F종류(값_포인터) != reflect.Pointer, "포인터형이 아님. %T", 값_포인터)
 
 	파일 := F확인2(os.Open(파일명))
 	defer 파일.Close()
@@ -830,7 +904,7 @@ func F파일에서_값_읽기(값_포인터 interface{}, 파일명 string, 파�
 	return nil
 }
 
-func JSON_파일_저장(값 interface{}, 파일명 string) (에러 error) {
+func JSON_파일_저장(값 any, 파일명 string) (에러 error) {
 	if 바이트_모음, 에러 := F인코딩(JSON, 값); 에러 != nil {
 		return 에러
 	} else {
@@ -838,7 +912,7 @@ func JSON_파일_저장(값 interface{}, 파일명 string) (에러 error) {
 	}
 }
 
-func JSON_파일_읽기(파일명 string, 반환값 interface{}) (에러 error) {
+func JSON_파일_읽기(파일명 string, 반환값 any) (에러 error) {
 	if !F파일_존재함(파일명) {
 		return New에러("해당 파일이 존재하지 않음. '%s'", 파일명)
 	} else if 바이트_모음, 에러 := os.ReadFile(파일명); 에러 != nil {
@@ -851,15 +925,9 @@ func JSON_파일_읽기(파일명 string, 반환값 interface{}) (에러 error) 
 func CSV쓰기(레코드_모음 [][]string, 파일명 string, 파일_잠금 sync.Locker) (에러 error) {
 	defer S예외처리{M에러: &에러}.S실행()
 
-	switch 잠금 := 파일_잠금.(type) {
-	case nil: // 아무 것도 하지 않음.
-		break
-	case *sync.RWMutex: // RWMutex이면 읽기 잠금.
-		잠금.RLock()
-		defer 잠금.RUnlock()
-	default:
+	if 파일_잠금 != nil {
 		파일_잠금.Lock()
-		파일_잠금.Unlock()
+		defer 파일_잠금.Unlock()
 	}
 
 	파일 := F확인2(os.Create(파일명))
@@ -878,7 +946,7 @@ func CSV쓰기(레코드_모음 [][]string, 파일명 string, 파일_잠금 sync
 }
 
 func CSV읽기(파일명 string, 구분자 rune, 파일_잠금 sync.Locker) (레코드_모음 [][]string, 에러 error) {
-	defer S예외처리{M에러: &에러, M함수: func() { 레코드_모음 = nil }}.S실행()
+	defer S예외처리{M에러: &에러, M에러_실행: func() { 레코드_모음 = nil }}.S실행()
 
 	switch 잠금 := 파일_잠금.(type) {
 	case nil: // 아무 것도 하지 않음.
@@ -910,7 +978,7 @@ func F환경변수(키 string) string {
 }
 
 func F홈_디렉토리() string {
-	return F환경변수("USERPROFILE")
+	return F확인2(os.UserHomeDir())
 }
 
 func GOPATH() string {
@@ -924,7 +992,14 @@ func GOPATH() string {
 }
 
 func GOROOT() (GOROOT string) {
-	if GOROOT = F환경변수("GOROOT"); GOROOT == "" {
+	GOROOT = F2문자열_공백_제거(F환경변수("GOROOT"))
+
+	if GOROOT != "" {
+		return GOROOT
+	}
+
+	switch runtime.GOOS {
+	case "windows":
 		if F파일_존재함(`C:\Go\bin\go.exe`) {
 			GOROOT = `C:\Go`
 		} else if F파일_존재함(`C:\Program Files\Go\bin\go.exe`) {
@@ -933,26 +1008,24 @@ func GOROOT() (GOROOT string) {
 			GOROOT = `D:\Program Files\Go`
 		} else if F파일_존재함(`E:\Program Files\Go\bin\go.exe`) {
 			GOROOT = `E:\Program Files\Go`
-		} else {
-			GO실행화일_경로 := F확인2(F파일_검색(`C:\`, "go.exe"))
-			GO실행화일_경로 = strings.TrimSpace(GO실행화일_경로)
-
-			GOROOT = strings.Replace(GO실행화일_경로, `\bin\go.exe`, "", -1)
+		} else if F파일_존재함(path.Join(F홈_디렉토리(), "go", "bin", "go.exe")) {
+			GOROOT = path.Join(F홈_디렉토리(), "go")
+		} else if 경로, 에러 := F실행파일_검색("go.exe"); 에러 == nil && 경로 != "" {
+			경로 = F2문자열_공백_제거(경로)
+			GOROOT = strings.Replace(경로, `\bin\go.exe`, "", -1)
+		}
+	default:
+		if F파일_존재함(`/usr/local/go/bin/go`) {
+			GOROOT = `/usr/local/go`
+		} else if F파일_존재함(path.Join(F홈_디렉토리(), "go", "bin", "go")) {
+			GOROOT = path.Join(F홈_디렉토리(), "go")
+		} else if 경로, 에러 := F실행파일_검색("go"); 에러 == nil && 경로 != "" {
+			경로 = F2문자열_공백_제거(경로)
+			GOROOT = strings.Replace(경로, `/bin/go`, "", -1)
 		}
 	}
 
 	return GOROOT
-}
-
-func F비슷한_실수값(실수1, 실수2 float64) bool {
-	if 실수1 == 실수2 ||
-		math.Abs(실수1-실수2) < 0.00001 ||
-		(실수1 != 0 && math.Abs(실수1-실수2/실수1) < 0.0001) ||
-		(실수2 != 0 && math.Abs(실수1-실수2/실수2) < 0.0001) {
-		return true
-	}
-
-	return false
 }
 
 func F지금() time.Time {
@@ -960,7 +1033,7 @@ func F지금() time.Time {
 }
 
 func F1분전() time.Time {
-	return time.Now().Add(-3 * time.Minute)
+	return time.Now().Add(-1 * time.Minute)
 }
 
 func F3분전() time.Time {

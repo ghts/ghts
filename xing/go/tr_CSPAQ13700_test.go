@@ -1,27 +1,26 @@
 package xing
 
 import (
-	lb "github.com/ghts/ghts/lib"
-	xt "github.com/ghts/ghts/xing/base"
 	"testing"
 	"time"
+
+	lb "github.com/ghts/ghts/lib"
+	xt "github.com/ghts/ghts/xing/base"
 )
 
 func TestCSPAQ13700_현물계좌_주문체결내역_질의값(t *testing.T) {
-	t.Parallel()
-
-	_, ok := interface{}(new(xt.CSPAQ13700_현물계좌_주문체결내역_질의값)).(lb.I질의값)
+	_, ok := any(new(xt.CSPAQ13700_현물계좌_주문체결내역_질의값)).(lb.I질의값)
 
 	lb.F테스트_참임(t, ok)
 }
 
 func TestCSPAQ13700_현물계좌_주문체결내역(t *testing.T) {
-	t.Skip() // t.Parallel()
+	t.Skip() // 모의투자 조회할 내역(자료)이 없습니다. 에러 발생
 
 	계좌번호, 에러 := F계좌_번호(0)
 	lb.F테스트_에러없음(t, 에러)
 
-	for i := 0; i < 30; i++ {
+	for i := range 30 {
 		일자 := F당일().AddDate(0, 0, -1*i)
 		testCSPAQ13700_현물계좌_주문체결내역_도우미(t, 계좌번호, 일자)
 	}
@@ -45,7 +44,7 @@ func testCSPAQ13700_현물계좌_주문체결내역_도우미(t *testing.T, 계�
 			xt.P주문유형_해당없음, xt.P주문_현금매도, xt.P주문_현금매수,
 			xt.P주문_신용매도, xt.P주문_신용매수, xt.P주문_저축매도,
 			xt.P주문_저축매수, xt.P주문_상품매도_대차, xt.P주문_상품매도,
-			xt.P주문_상품매수, xt.P주문_현금매수_유가, xt.P주문_현금매수_정리, xt.P주문_장외매매) //xt.P주문_선물대용매도_일반, xt.P주문_선물대용매도_반대,
+			xt.P주문_상품매수, xt.P주문_현금매수_유가, xt.P주문_현금매수_정리, xt.P주문_장외매매, xt.P주문_선물대용매도_일반, xt.P주문_선물대용매도_반대)
 		lb.F테스트_같음(t, 값.M주문처리유형,
 			xt.CSPAQ13700_정상처리, xt.CSPAQ13700_정정확인, xt.CSPAQ13700_정정거부_채권,
 			xt.CSPAQ13700_취소확인, xt.CSPAQ13700_취소거부_채권)

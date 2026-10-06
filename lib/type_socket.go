@@ -2,18 +2,19 @@ package lib
 
 import (
 	"sync"
+	"sync/atomic"
 	"time"
 )
 
 type I송수신 interface {
-	S송신(변환_형식 T변환, 값_모음 ...interface{}) error
+	S송신(변환_형식 T변환, 값_모음 ...any) error
 	G수신() (*S바이트_변환_모음, error)
 }
 
 type I소켓 interface {
 	I송수신
 	S타임아웃(타임아웃 time.Duration) I소켓
-	S옵션(옵션_모음 ...interface{})
+	S옵션(옵션_모음 ...any)
 	Close() error
 }
 
@@ -24,7 +25,7 @@ type I소켓with컨텍스트 interface {
 
 type I소켓_질의 interface {
 	I소켓
-	G질의_응답(변환_형식 T변환, 값_모음 ...interface{}) (*S바이트_변환_모음, error)
+	G질의_응답(변환_형식 T변환, 값_모음 ...any) (*S바이트_변환_모음, error)
 }
 
 //goland:noinspection GoExportedFuncWithUnexportedType
@@ -42,33 +43,38 @@ type s소켓_저장소 struct {
 	M생성함수 func() (I소켓_질의, error)
 }
 
-var 생성_횟수 int = 1
+var 소켓_생성_실패_횟수 int64
 
 func (s *s소켓_저장소) G소켓() I소켓_질의 {
 	select {
 	case <-Ch공통_종료():
 		return nil
 	case 소켓 := <-s.M저장소:
-
 		return 소켓
 	default:
-		s.Lock()
-		defer s.Unlock()
-
-		for i := 0; i < 3; i++ {
-			if i소켓, 에러 := s.M생성함수(); 에러 == nil {
-				생성_횟수++
-
+		for range 3 {
+			if i소켓, 에러 := s.g소켓(); 에러 == nil {
 				return i소켓
 			}
+
+			// '소켓_생성_실패_횟수++'의 atomic 표현
+			atomic.AddInt64(&소켓_생성_실패_횟수, 1)
+
+			// 'atomic.LoadInt64()'는 int64의 atomic 읽기
+			F문자열_출력("%v번째 소켓 생성 실패", atomic.LoadInt64(&소켓_생성_실패_횟수))
 
 			F대기(P1초)
 		}
 
-		F문자열_출력("%v번째 소켓 생성 실패", 생성_횟수)
-
 		return nil
 	}
+}
+
+func (s *s소켓_저장소) g소켓() (I소켓_질의, error) {
+	s.Lock()
+	defer s.Unlock()
+
+	return s.M생성함수()
 }
 
 func (s *s소켓_저장소) S회수(소켓 I소켓_질의) {

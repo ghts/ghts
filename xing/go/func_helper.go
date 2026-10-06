@@ -1,10 +1,12 @@
 package xing
 
 import (
-	lb "github.com/ghts/ghts/lib"
-	xt "github.com/ghts/ghts/xing/base"
+	"slices"
 	"strings"
 	"time"
+
+	lb "github.com/ghts/ghts/lib"
+	xt "github.com/ghts/ghts/xing/base"
 )
 
 func F당일() time.Time {
@@ -15,40 +17,12 @@ func F전일() time.Time {
 	return xt.F전일()
 }
 
-func F2전일_시각(포맷 string, 값 interface{}) (time.Time, error) {
-	if strings.Contains(포맷, "2") {
-		return time.Time{}, lb.New에러("포맷에 이미 날짜가 포함되어 있습니다. %v", 포맷)
-	}
-
-	시각, 에러 := lb.F2포맷된_시각(포맷, 값)
-	if 에러 != nil {
-		return time.Time{}, 에러
-	}
-
-	전일 := F전일()
-
-	전일_시각 := time.Date(전일.Year(), 전일.Month(), 전일.Day(),
-		시각.Hour(), 시각.Minute(), 시각.Second(), 시각.Nanosecond(), 시각.Location())
-
-	return 전일_시각, nil
+func F2전일_시각(포맷 string, 값 any) (time.Time, error) {
+	return lb.F2일자별_시각(F전일(), 포맷, 값)
 }
 
-func F2당일_시각(포맷 string, 값 interface{}) (time.Time, error) {
-	if strings.Contains(포맷, "2") {
-		return time.Time{}, lb.New에러("포맷에 이미 날짜가 포함되어 있습니다. %v", 포맷)
-	}
-
-	시각, 에러 := lb.F2포맷된_시각(포맷, 값)
-	if 에러 != nil {
-		return time.Time{}, 에러
-	}
-
-	당일 := F당일()
-
-	당일_시각 := time.Date(당일.Year(), 당일.Month(), 당일.Day(),
-		시각.Hour(), 시각.Minute(), 시각.Second(), 시각.Nanosecond(), 시각.Location())
-
-	return 당일_시각, nil
+func F2당일_시각(포맷 string, 값 any) (time.Time, error) {
+	return lb.F2일자별_시각(F당일(), 포맷, 값)
 }
 
 func f에러_발생(TR코드, 코드, 내용 string) bool {
@@ -63,7 +37,6 @@ func f에러_발생(TR코드, 코드, 내용 string) bool {
 		xt.TR현물_일자별_매매일지_t0151,
 		xt.TR시간_조회_t0167,
 		xt.TR현물_체결_미체결_조회_t0425,
-		//xt.TR선물옵션_체결_미체결_조회_t0434,
 		xt.TR현물_호가_조회_t1101,
 		xt.TR현물_시세_조회_t1102,
 		xt.TR현물_기간별_조회_t1305,
@@ -79,23 +52,13 @@ func f에러_발생(TR코드, 코드, 내용 string) bool {
 		xt.TR현물_차트_일주월년_t8410,
 		xt.TR현물_차트_틱_t8411,
 		xt.TR현물_차트_분_t8412,
-		xt.TR현물_차트_일주월_t8413,
 		xt.TR증시_주변_자금_추이_t8428,
-		//xt.TR지수선물_마스터_조회_t8432,
 		xt.TR현물_종목_조회_t8436:
 		return 코드 != "00000"
-	//case xt.TR선물옵션_정상주문_CFOAT00100:
-	//	return 코드 != "00039" && 코드 != "00040"
-	//case xt.TR선물옵션_정정주문_CFOAT00200:
-	//	return 코드 != "00132" && 코드 != "02258"
-	//case xt.TR선물옵션_취소주문_CFOAT00300:
-	//	return 코드 != "00156" && 코드 != "02258"
 	case xt.TR현물계좌_총평가_CSPAQ12200,
 		xt.TR현물계좌_예수금_주문가능금액_CSPAQ22200:
-		//xt.TR선물옵션_예탁금_증거금_조회_CFOBQ10500,
-		//xt.TR선물옵션_미결제약정_현황_CFOFQ02400:
 		return 코드 != "00136"
-	case xt.TR현물계좌_잔고내역_조회_CSPAQ12300: //, xt.TR선물옵션_주문체결내역조회_CFOAQ00600:
+	case xt.TR현물계좌_잔고내역_조회_CSPAQ12300:
 		return 코드 != "00133" && 코드 != "00136"
 	case xt.TR현물계좌_주문체결내역_조회_CSPAQ13700:
 		// 조회내역이 없을 때 : 실서버(00200), 모의서버(09901)
@@ -232,7 +195,13 @@ func f전송_권한_획득(TR코드 string) {
 func f1초_1회_미만_전송_제한_확인(TR코드 string) lb.I전송_권한 {
 	tr전송_제한_초기화_확인(TR코드)
 
-	전송_권한, 존재함 := tr코드별_전송_제한_초당_1회_미만[TR코드]
+	전송_권한, 존재함 := func() (lb.I전송_권한, bool) {
+		전송_제한_잠금.RLock()
+		defer 전송_제한_잠금.RUnlock()
+
+		전송_권한, 존재함 := tr코드별_전송_제한_초당_1회_미만[TR코드]
+		return 전송_권한, 존재함
+	}()
 
 	switch {
 	case !존재함:
@@ -247,7 +216,7 @@ func f1초_1회_미만_전송_제한_확인(TR코드 string) lb.I전송_권한 {
 func f10분당_전송_제한_확인(TR코드 string) lb.I전송_권한 {
 	tr전송_제한_초기화_확인(TR코드)
 
-	전송_권한, 존재함 := tr코드별_전송_제한_10분[TR코드]
+	전송_권한, 존재함 := f10분당_전송_제한_읽기(TR코드)
 
 	switch {
 	case !존재함:
@@ -262,7 +231,7 @@ func f10분당_전송_제한_확인(TR코드 string) lb.I전송_권한 {
 func f초당_전송_제한_확인(TR코드 string) lb.I전송_권한 {
 	tr전송_제한_초기화_확인(TR코드)
 
-	전송_권한, 존재함 := tr코드별_전송_제한_1초[TR코드]
+	전송_권한, 존재함 := f초당_전송_제한_읽기(TR코드)
 
 	switch {
 	case !존재함:
@@ -276,22 +245,40 @@ func f초당_전송_제한_확인(TR코드 string) lb.I전송_권한 {
 	return 전송_권한.G획득()
 }
 
+func f초당_전송_제한_읽기(TR코드 string) (lb.I전송_권한, bool) {
+	전송_제한_잠금.RLock()
+	defer 전송_제한_잠금.RUnlock()
+
+	전송_권한, 존재함 := tr코드별_전송_제한_1초[TR코드]
+
+	return 전송_권한, 존재함
+}
+
+func f10분당_전송_제한_읽기(TR코드 string) (lb.I전송_권한, bool) {
+	전송_제한_잠금.RLock()
+	defer 전송_제한_잠금.RUnlock()
+
+	전송_권한, 존재함 := tr코드별_전송_제한_10분[TR코드]
+
+	return 전송_권한, 존재함
+}
+
 func tr전송_제한_초기화_확인(TR코드 string) {
 	if !f전체TR_전송_제한_초기화_완료() {
-		F초기화_TR전송_제한()
+		F전송_제한_초기화()
 	} else if !f단일TR_전송_제한_초기화_완료(TR코드) {
-		tr전송_제한_초기화([]string{TR코드})
+		f전송_제한_초기화([]string{TR코드})
 	}
 }
 
 func f전송_시각_기록(TR코드 string) {
 	// 10분당 전송 제한 기록
-	if 전송_권한, 존재함 := tr코드별_전송_제한_10분[TR코드]; 존재함 {
+	if 전송_권한, 존재함 := f10분당_전송_제한_읽기(TR코드); 존재함 {
 		전송_권한.S기록()
 	}
 
 	// 초당 전송 제한 기록
-	if 전송_권한, 존재함 := tr코드별_전송_제한_1초[TR코드]; 존재함 {
+	if 전송_권한, 존재함 := f초당_전송_제한_읽기(TR코드); 존재함 {
 		전송_권한.S기록()
 	}
 }
@@ -299,13 +286,7 @@ func f전송_시각_기록(TR코드 string) {
 func F계좌번호_존재함(계좌번호 string) bool {
 	계좌번호_모음 := lb.F확인2(F계좌번호_모음())
 
-	for _, 계좌번호_값 := range 계좌번호_모음 {
-		if 계좌번호 == 계좌번호_값 {
-			return true
-		}
-	}
-
-	return false
+	return slices.Contains(계좌번호_모음, 계좌번호)
 }
 
 //func F계좌_번호(0) (계좌번호 string, 에러 error) {

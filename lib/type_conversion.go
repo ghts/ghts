@@ -15,17 +15,17 @@ import (
 // InterfaceExt
 //
 // codec.BytesExt
-// WriteExt(v interface{}) []byte
-// ReadExt(dst interface{}, src []byte)
+// WriteExt(v any) []byte
+// ReadExt(dst any, src []byte)
 //
 // codec.InterfaceExt
-// ConvertExt(v interface{}) interface{}
-// UpdateExt(dst interface{}, src interface{})
+// ConvertExt(v any) any
+// UpdateExt(dst any, src any)
 //
 //goland:noinspection GoUnusedType
 type s변환기 struct{ 자료형 string }
 
-func (s *s변환기) WriteExt(값 interface{}) []byte {
+func (s *s변환기) WriteExt(값 any) []byte {
 	switch 변환값 := 값.(type) {
 	case error:
 		return []byte(변환값.Error())
@@ -36,14 +36,14 @@ func (s *s변환기) WriteExt(값 interface{}) []byte {
 	panic(New에러("s변환기.WriteExt() 예상하지 못한 자료형. %T", 값))
 }
 
-func (s *s변환기) ReadExt(포인터 interface{}, 바이트_모음 []byte) {
-	defer S예외처리{M함수: func() { 포인터 = nil }}.S실행()
+func (s *s변환기) ReadExt(포인터 any, 바이트_모음 []byte) {
+	defer S예외처리{M에러_실행: func() { 포인터 = nil }}.S실행()
 
 	switch s.자료형 {
 	case "errors.errorString":
 		switch F자료형(포인터).String() {
 		case "*error", "*errors.errorString",
-			"error", "erros.errorString":
+			"error", "errors.errorString":
 			// *errors.errorString 로 직접 변환할 수 없어서 reflect를 사용함.
 			r값 := reflect.ValueOf(errors.New(string(바이트_모음))).Elem()
 			reflect.ValueOf(포인터).Elem().Set(r값)
@@ -73,7 +73,7 @@ func (s *s변환기) ReadExt(포인터 interface{}, 바이트_모음 []byte) {
 	}
 }
 
-func (s *s변환기) ConvertExt(값 interface{}) interface{} {
+func (s *s변환기) ConvertExt(값 any) any {
 	switch 변환값 := 값.(type) {
 	case error:
 		return 변환값.Error()
@@ -86,8 +86,8 @@ func (s *s변환기) ConvertExt(값 interface{}) interface{} {
 	panic(New에러("s변환기.ConvertExt() 예상하지 못한 자료형 : '%T'", 값))
 }
 
-func (s *s변환기) UpdateExt(포인터 interface{}, 값 interface{}) {
-	defer S예외처리{M함수: func() { 포인터 = nil }}.S실행()
+func (s *s변환기) UpdateExt(포인터 any, 값 any) {
+	defer S예외처리{M에러_실행: func() { 포인터 = nil }}.S실행()
 
 	switch s.자료형 {
 	case "errors.errorString",
@@ -104,7 +104,7 @@ type S바이트_변환 struct {
 	변환_형식   T변환
 	자료형_문자열 string
 	값       []byte
-	해석기     func(*S바이트_변환) (interface{}, error)
+	해석기     func(*S바이트_변환) (any, error)
 }
 
 func (s *S바이트_변환) G에러() error {
@@ -123,7 +123,7 @@ func (s *S바이트_변환) G자료형_문자열() string         { return s.자
 func (s *S바이트_변환) G바이트_모음() ([]byte, error) { return s.MarshalBinary() }
 func (s *S바이트_변환) IsNil() bool              { return len(s.값) == 0 }
 
-func (s *S바이트_변환) G값(값_포인터 interface{}) (에러 error) {
+func (s *S바이트_변환) G값(값_포인터 any) (에러 error) {
 	if s.변환_형식 == Raw {
 		if p바이트_모음, ok := 값_포인터.(*[]byte); !ok {
 			return New에러("*[]byte 형식만 가능합니다. '%T'", 값_포인터)
@@ -135,10 +135,10 @@ func (s *S바이트_변환) G값(값_포인터 interface{}) (에러 error) {
 
 	switch 값_포인터.(type) {
 	case *S바이트_변환:
-		값_포인터 = s
+		// 같은 자료형이라서 변환 불필요. PASS
 		return nil
 	case *error: // 에러는 구조체가 아닌 인터페이스이라서 특수하게 처리해 줌.
-		F조건부_패닉(s.자료형_문자열 != P에러_자료형, "S바이트_변환.TCP주소() 예상하지 못한 자료형. %v", s.자료형_문자열)
+		F조건부_패닉(s.자료형_문자열 != P에러_자료형, "S바이트_변환.G값() 예상하지 못한 자료형. %v", s.자료형_문자열)
 
 		var 에러_문자열 string
 		F확인1(F디코딩(s.변환_형식, s.값, &에러_문자열))
@@ -151,7 +151,7 @@ func (s *S바이트_변환) G값(값_포인터 interface{}) (에러 error) {
 	case s.IsNil():
 		reflect.ValueOf(값_포인터).Elem().Set(reflect.Zero(reflect.TypeOf(값_포인터).Elem()))
 		return nil
-	case F종류(값_포인터) != reflect.Ptr:
+	case F종류(값_포인터) != reflect.Pointer:
 		return New에러with출력("포인터형이 아님. %T", 값_포인터)
 	}
 
@@ -168,7 +168,7 @@ func (s *S바이트_변환) G값(값_포인터 interface{}) (에러 error) {
 	return F디코딩(s.변환_형식, s.값, 값_포인터)
 }
 
-func (s *S바이트_변환) G해석값() (interface{}, error) {
+func (s *S바이트_변환) G해석값() (any, error) {
 	if s.G에러() != nil {
 		return nil, s.G에러()
 	} else if s.해석기 == nil {
@@ -178,25 +178,25 @@ func (s *S바이트_변환) G해석값() (interface{}, error) {
 	return s.해석기(s)
 }
 
-func (s *S바이트_변환) S해석기(해석기 func(*S바이트_변환) (interface{}, error)) *S바이트_변환 {
+func (s *S바이트_변환) S해석기(해석기 func(*S바이트_변환) (any, error)) *S바이트_변환 {
 	s.해석기 = 해석기
 
 	return s
 }
 
 func (s *S바이트_변환) MarshalBinary() (바이트_모음 []byte, 에러 error) {
-	defer S예외처리{M에러: &에러, M함수: func() { 바이트_모음 = nil }}.S실행()
+	defer S예외처리{M에러: &에러, M에러_실행: func() { 바이트_모음 = nil }}.S실행()
 
 	자료형_문자열_길이 := make([]byte, 2)
 	binary.LittleEndian.PutUint16(자료형_문자열_길이, uint16(len(s.자료형_문자열))) // 인텔 및 AMD 계열 CPU는 리틀 엔디언
 
-	바이트_모음_길이 := make([]byte, 4)
-	binary.LittleEndian.PutUint32(바이트_모음_길이, uint32(len(s.값)))
+	내용_길이 := make([]byte, 4)
+	binary.LittleEndian.PutUint32(내용_길이, uint32(len(s.값)))
 
 	버퍼 := new(bytes.Buffer)
 	버퍼.Write([]byte{byte(s.변환_형식)})
 	버퍼.Write(자료형_문자열_길이)
-	버퍼.Write(바이트_모음_길이)
+	버퍼.Write(내용_길이)
 	버퍼.Write([]byte(s.자료형_문자열))
 	버퍼.Write(s.값)
 
@@ -206,7 +206,7 @@ func (s *S바이트_변환) MarshalBinary() (바이트_모음 []byte, 에러 err
 func (s *S바이트_변환) UnmarshalBinary(바이트_모음 []byte) (에러 error) {
 	defer S예외처리{
 		M에러: &에러,
-		M함수: func() {
+		M에러_실행: func() {
 			s.변환_형식 = P변환형식_기본값
 			s.자료형_문자열 = F2문자열(nil)
 			s.값 = nil
@@ -243,8 +243,8 @@ func (s *S바이트_변환) UnmarshalBinary(바이트_모음 []byte) (에러 err
 
 func (s *S바이트_변환) Raw바이트_모음() []byte { return s.값 }
 
-func New바이트_변환(변환_형식 T변환, 값 interface{}) (변환값 *S바이트_변환, 에러 error) {
-	defer S예외처리{M에러: &에러, M함수: func() { 변환값 = nil }}.S실행()
+func New바이트_변환(변환_형식 T변환, 값 any) (변환값 *S바이트_변환, 에러 error) {
+	defer S예외처리{M에러: &에러, M에러_실행: func() { 변환값 = nil }}.S실행()
 
 	if _, ok := 값.(*S바이트_변환); ok {
 		return 값.(*S바이트_변환), nil // 이미 변환된 경우에는 그대로 사용함.
@@ -305,7 +305,7 @@ type S바이트_변환_모음 struct {
 	M바이트_변환_모음 []*S바이트_변환
 }
 
-func (s *S바이트_변환_모음) S해석기(해석기 func(*S바이트_변환) (interface{}, error)) *S바이트_변환_모음 {
+func (s *S바이트_변환_모음) S해석기(해석기 func(*S바이트_변환) (any, error)) *S바이트_변환_모음 {
 	for _, 바이트_변환_매개체 := range s.M바이트_변환_모음 {
 		바이트_변환_매개체.S해석기(해석기)
 	}
@@ -331,11 +331,19 @@ func (s *S바이트_변환_모음) G변환_형식(인덱스 int) T변환 {
 }
 
 func (s *S바이트_변환_모음) G자료형_문자열(인덱스 int) string {
+	if 인덱스 < 0 {
+		F에러_출력("*S바이트_변환_모음.G자료형_문자열() : 음수 인덱스 - '%v'", 인덱스)
+		return ""
+	} else if 인덱스 >= len(s.M바이트_변환_모음) {
+		F에러_출력("*S바이트_변환_모음.G자료형_문자열() : 범위 밖 인덱스. %v %v", 인덱스, len(s.M바이트_변환_모음))
+		return ""
+	}
+
 	return s.M바이트_변환_모음[인덱스].G자료형_문자열()
 }
 
-func (s *S바이트_변환_모음) G값(인덱스 int, 값_포인터 interface{}) error {
-	if len(s.M바이트_변환_모음) < (인덱스 + 1) {
+func (s *S바이트_변환_모음) G값(인덱스 int, 값_포인터 any) error {
+	if 인덱스 < 0 || 인덱스 >= len(s.M바이트_변환_모음) {
 		return New에러("해당 위치에 데이터가 존재하지 않음. 길이 : %v, 인덱스 : %v",
 			len(s.M바이트_변환_모음), 인덱스)
 	}
@@ -343,16 +351,30 @@ func (s *S바이트_변환_모음) G값(인덱스 int, 값_포인터 interface{}
 	return s.M바이트_변환_모음[인덱스].G값(값_포인터)
 }
 
-func (s *S바이트_변환_모음) G해석값(인덱스 int) (interface{}, error) {
+func (s *S바이트_변환_모음) G해석값(인덱스 int) (any, error) {
+	if 인덱스 < 0 {
+		return nil, New에러("*S바이트_변환_모음.G해석값() : 음수 인덱스 - '%v'", 인덱스)
+	} else if 인덱스 >= len(s.M바이트_변환_모음) {
+		return nil, New에러("*S바이트_변환_모음.G해석값() : 범위 밖 인덱스. %v %v", 인덱스, len(s.M바이트_변환_모음))
+	}
+
 	return s.M바이트_변환_모음[인덱스].G해석값()
 }
 
 func (s *S바이트_변환_모음) IsNil(인덱스 int) bool {
+	if 인덱스 < 0 {
+		F에러_출력("*S바이트_변환_모음.IsNil() : 음수 인덱스 - '%v'", 인덱스)
+		return false
+	} else if 인덱스 >= len(s.M바이트_변환_모음) {
+		F에러_출력("*S바이트_변환_모음.IsNil() : 범위 밖 인덱스. %v %v", 인덱스, len(s.M바이트_변환_모음))
+		return false
+	}
+
 	return s.M바이트_변환_모음[인덱스].IsNil()
 }
 
 func (s *S바이트_변환_모음) MarshalBinary() (바이트_모음 []byte, 에러 error) {
-	defer S예외처리{M에러: &에러, M함수: func() { 바이트_모음 = nil }}.S실행()
+	defer S예외처리{M에러: &에러, M에러_실행: func() { 바이트_모음 = nil }}.S실행()
 
 	수량 := make([]byte, 2)
 	binary.LittleEndian.PutUint16(수량, uint16(len(s.M바이트_변환_모음))) // 인텔 및 AMD 계열 CPU는 리틀 엔디언
@@ -368,15 +390,18 @@ func (s *S바이트_변환_모음) MarshalBinary() (바이트_모음 []byte, 에
 }
 
 func (s *S바이트_변환_모음) UnmarshalBinary(바이트_모음 []byte) (에러 error) {
-	defer S예외처리{M에러: &에러, M함수: func() { s.M바이트_변환_모음 = nil }}.S실행()
+	defer S예외처리{M에러: &에러, M에러_실행: func() { s.M바이트_변환_모음 = nil }}.S실행()
 
-	const 헤더_길이_복수값 = 3 // 변환형식_길이 1, 수량 길이 2.
+	// *S바이트_변환_모음.MarshalBinary() 헤더 규격
+	const 헤더_길이 = 2 // 수량 길이 2.
+
+	// *S바이트_변환.MarshalBinary() 헤더 규격
 	const 헤더_길이_단일값 = 7 // 변환_형식 1, 자료형_문자열_길이 2, 내용_길이 4
 
 	switch {
 	case len(바이트_모음) == 0:
 		return New에러with출력("비어있는 M값")
-	case len(바이트_모음) < 헤더_길이_복수값:
+	case len(바이트_모음) < 헤더_길이:
 		return New에러with출력("너무 짧은 M값. %v", len(바이트_모음))
 	}
 
@@ -384,15 +409,14 @@ func (s *S바이트_변환_모음) UnmarshalBinary(바이트_모음 []byte) (에
 	s.M바이트_변환_모음 = make([]*S바이트_변환, 수량)
 	시작점 := 2
 
-	for i := 0; i < 수량; i++ {
+	for i := range 수량 {
+		F조건부_패닉(len(바이트_모음) < 시작점+헤더_길이_단일값, "*S바이트_변환_모음.UnmarshalBinary() : 헤더 길이 부족. %v번째 값 %v, %v", i+1, len(바이트_모음), 시작점+헤더_길이_단일값)
 		헤더_단일값 := 바이트_모음[시작점:(시작점 + 헤더_길이_단일값)]
 		자료형_문자열_길이 := int(binary.LittleEndian.Uint16(헤더_단일값[1:3]))
+		내용_길이 := int(binary.LittleEndian.Uint32(헤더_단일값[3:7]))
 
-		바이트_모음_길이 := int(binary.LittleEndian.Uint32(헤더_단일값[3:7]))
-		F조건부_패닉(바이트_모음_길이 < 0, "음수 바이트_모음_길이 : '%v', '%v'", 바이트_모음_길이)
-
-		단일값_길이 := 헤더_길이_단일값 + 자료형_문자열_길이 + 바이트_모음_길이
-		F조건부_패닉(len(바이트_모음) < 시작점+단일값_길이, "너무 짧은 M값. %v %v", len(바이트_모음), 시작점+단일값_길이)
+		단일값_길이 := 헤더_길이_단일값 + 자료형_문자열_길이 + 내용_길이
+		F조건부_패닉(len(바이트_모음) < 시작점+단일값_길이, "*S바이트_변환_모음.UnmarshalBinary() : 내용 길이 부족. %v번째 값 %v, %v", i+1, len(바이트_모음), 시작점+단일값_길이)
 
 		바이트_모음_단일값 := 바이트_모음[시작점:(시작점 + 단일값_길이)]
 
@@ -406,7 +430,7 @@ func (s *S바이트_변환_모음) UnmarshalBinary(바이트_모음 []byte) (에
 	return nil
 }
 
-func New바이트_변환_모음(변환_형식 T변환, 값_모음 ...interface{}) (*S바이트_변환_모음, error) {
+func New바이트_변환_모음(변환_형식 T변환, 값_모음 ...any) (*S바이트_변환_모음, error) {
 	if 에러 := F인터페이스_모음_입력값_검사(값_모음); 에러 != nil {
 		return nil, 에러
 	} else if 에러 := 변환_형식.G검사(); 에러 != nil {

@@ -1,17 +1,15 @@
 package xing
 
 import (
-	lb "github.com/ghts/ghts/lib"
 	"math"
 	"strings"
 	"testing"
+
+	lb "github.com/ghts/ghts/lib"
 )
 
 func TestT3320_F기업정보_요약(t *testing.T) {
-	t.Parallel()
-
-	//종목코드 := "051910" // LG전자
-	종목코드 := "060380"
+	종목코드 := "051910"
 
 	값, 에러 := TrT3320_F기업정보_요약(종목코드)
 	lb.F테스트_에러없음(t, 에러)

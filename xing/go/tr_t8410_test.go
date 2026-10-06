@@ -1,15 +1,14 @@
 package xing
 
 import (
-	lb "github.com/ghts/ghts/lib"
-	xt "github.com/ghts/ghts/xing/base"
 	"testing"
 	"time"
+
+	lb "github.com/ghts/ghts/lib"
+	xt "github.com/ghts/ghts/xing/base"
 )
 
 func TestT8410_현물_차트_일주월년(t *testing.T) {
-	t.Parallel()
-
 	const 종목코드 = "069500" // KODEX 200
 	var 이전_일자 time.Time
 
