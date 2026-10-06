@@ -61,7 +61,7 @@ func TrCSPAT00700_현물_정정주문(질의값 *xt.CSPAT00700_현물_정정_주
 		return 응답값, nil
 	}
 
-	return nil, lb.New에러("정정 주문 TR 실행 실패.")
+	return nil, lb.New에러("TrCSPAT00700_현물_정정주문 : 정정 주문 TR 실행 실패.")
 }
 
 func TrCSPAT00800_현물_취소주문(질의값 *lb.S질의값_취소_주문) (응답값 *xt.CSPAT00800_현물_취소_주문_응답, 에러 error) {
@@ -85,12 +85,12 @@ func TrCSPAT00800_현물_취소주문(질의값 *lb.S질의값_취소_주문) (�
 			return nil, 에러
 		} else if 응답값.M응답2 != nil && 응답값.M응답2.M주문번호 <= 0 {
 			continue // 재시도
-		} else {
-			return 응답값, nil
 		}
+
+		return 응답값, nil
 	}
 
-	return nil, 에러
+	return nil, lb.New에러("TrCSPAT00800_현물_취소주문 : 취소 주문 TR 실행 실패.")
 }
 
 func TrCSPAQ12200_현물계좌_총평가(계좌번호 string) (응답값 *xt.CSPAQ12200_현물계좌_총평가_응답, 에러 error) {
