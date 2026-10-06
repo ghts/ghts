@@ -169,7 +169,7 @@ func (s *sNano소켓) S송신(변환_형식 lb.T변환, 값_모음 ...any) (에�
 }
 
 func (s *sNano소켓) G수신() (값 *lb.S바이트_변환_모음, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }, M출력_숨김: true}.S실행()
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
 
 	switch s.종류 {
 	case lb.P소켓_종류_REP, lb.P소켓_종류_PUB:
@@ -178,14 +178,10 @@ func (s *sNano소켓) G수신() (값 *lb.S바이트_변환_모음, 에러 error)
 		lb.F확인1(s.Socket.SetOption(mangos.OptionRecvDeadline, s.타임아웃))
 	}
 
-	if 바이트_모음, 에러 := s.Socket.Recv(); 에러 != nil {
-		if 에러.Error() == "connection closed" ||
-			에러.Error() == "object closed" {
-			return nil, nil
-		} else {
-			lb.F에러_출력(에러)
-			return nil, 에러
-		}
+	var 바이트_모음 []byte
+
+	if 바이트_모음, 에러 = s.Socket.Recv(); 에러 != nil {
+		return nil, 에러
 	} else {
 		값 = new(lb.S바이트_변환_모음)
 		if 에러 = 값.UnmarshalBinary(바이트_모음); 에러 != nil {
