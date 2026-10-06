@@ -105,7 +105,7 @@ type T1102_현물_시세_조회_응답 struct {
 	NXT정적VI상한가     int64
 	NXT정적VI하한가     int64
 	M거래소별단축코드      string
-	KRX정규_종가       int64
+	KRX정규_종가       int64 // 전일 종가가 아니라 당일 종가임. 폐장 전 정규 운영 시간에는 0
 }
 
 type T1102_거래원_정보 struct {
