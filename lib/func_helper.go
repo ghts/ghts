@@ -404,8 +404,9 @@ func F인터넷에_접속됨() bool {
 	인터넷_접속_확인_잠금.Lock()
 	defer 인터넷_접속_확인_잠금.Unlock()
 
-	if 인터넷_접속_확인_완료 {
-		return 인터넷_접속됨
+	// 접속 확인된 지 5분 미만 경과 시 재확인 건너뜀.
+	if 인터넷_접속_확인_시간.G값().After(F지금().Add(-5 * P1분)) {
+		return true
 	}
 
 	URL모음 := []string{
@@ -419,18 +420,18 @@ func F인터넷에_접속됨() bool {
 		go f인터넷에_접속됨(ch회신, url)
 	}
 
-	ch타임아웃 := time.After(P5초)
+	ch타임아웃 := time.After(P10초)
 
 	for {
 		select {
-		case 회신 := <-ch회신:
-			인터넷_접속됨 = 회신
+		case 접속_여부 := <-ch회신:
+			if 접속_여부 {
+				인터넷_접속_확인_시간.S값(F지금())
+				return true
+			}
 		case <-ch타임아웃:
-			인터넷_접속됨 = false
+			return false
 		}
-
-		인터넷_접속_확인_완료 = true
-		return 인터넷_접속됨
 	}
 }
 
