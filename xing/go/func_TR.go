@@ -1151,7 +1151,9 @@ func F질의(질의값 lb.I질의값, 옵션_모음 ...any) (값 *lb.S바이트_
 	var 에러 error
 
 	defer func() {
-		lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = lb.F확인2(lb.New바이트_변환_모음(lb.P변환형식_기본값, 에러)) }}.S실행()
+		lb.S예외처리{M에러: &에러, M에러_실행: func() {
+			값 = lb.F확인2(lb.New바이트_변환_모음(lb.P변환형식_기본값, 에러))
+		}}.S실행()
 
 		if 에러 != nil {
 			질의_에러_연속_발생_횟수.S값(질의_에러_연속_발생_횟수.G값() + 1)
@@ -1179,7 +1181,8 @@ func F질의(질의값 lb.I질의값, 옵션_모음 ...any) (값 *lb.S바이트_
 	defer 소켓REQ_저장소.S회수(소켓REQ)
 
 	if 소켓REQ == nil {
-		return nil
+		return lb.F확인2(lb.New바이트_변환_모음(lb.P변환형식_기본값,
+			lb.New에러("xing.F질의() : 소켓REQ가 nil입니다.")))
 	} else if len(옵션_모음) > 0 {
 		소켓REQ.S옵션(옵션_모음...)
 	}
