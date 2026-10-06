@@ -50,8 +50,7 @@ func f초기화_DLL32() (에러 error) {
 	defer lb.S예외처리{M에러: &에러, M항상_실행: xt.F로그인_정보_환경_변수_삭제}.S실행()
 
 	if !lb.F인터넷에_접속됨() {
-		lb.F문자열_출력("인터넷을 확인하십시오.")
-		return
+		return lb.New에러("인터넷 접속 상태를 확인하십시오.")
 	}
 
 	switch runtime.GOOS {
