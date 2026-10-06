@@ -41,6 +41,10 @@ func (s S예외처리) S실행() {
 }
 
 func F에러_출력(에러 any, 추가_매개변수 ...any) {
+	if F공통_종료_채널_닫힘() {
+		return // 종료 중에 발생하는 에러 메시지는 무의미한 스팸이므로 출력 보류.
+	}
+
 	switch 변환값 := 에러.(type) {
 	case nil:
 		return
