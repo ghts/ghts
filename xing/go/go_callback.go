@@ -80,8 +80,6 @@ func go루틴_콜백_처리_도우미(ch초기화 chan lb.T신호, ch도우미_�
 				!strings.Contains(에러.Error(), "object closed") {
 				lb.F에러_출력(에러)
 			}
-		} else if 바이트_변환_모음 == nil {
-			continue
 		} else if 바이트_변환_모음.G수량() != 1 {
 			lb.F에러_출력("메시지 길이 : 예상값 1, 실제값 %v.", 바이트_변환_모음.G수량())
 		} else if i값, 에러 := 바이트_변환_모음.S해석기(xt.F바이트_변환값_해석).G해석값(0); 에러 != nil {
