@@ -5,15 +5,15 @@ import (
 	"sort"
 	"time"
 
-	"github.com/ghts/ghts/data/daily_price"
+	dp "github.com/ghts/ghts/data/daily_price"
 	lb "github.com/ghts/ghts/lib"
 )
 
 func New개장일_모음(db *sql.DB) (개장일_모음 *S개장일_모음, 에러 error) {
 	defer lb.S예외처리{M에러: &에러}.S실행()
 
-	일일_가격정보_모음_KODEX200 := lb.F확인2(daily_price.New종목별_일일_가격정보_모음_DB읽기(db, "069500"))
-	일일_가격정보_모음_삼성전자 := lb.F확인2(daily_price.New종목별_일일_가격정보_모음_DB읽기(db, "005930"))
+	일일_가격정보_모음_KODEX200 := lb.F확인2(dp.New종목별_일일_가격정보_모음_DB읽기(db, "069500"))
+	일일_가격정보_모음_삼성전자 := lb.F확인2(dp.New종목별_일일_가격정보_모음_DB읽기(db, "005930"))
 	개장일_맵 := make(map[uint32]lb.S비어있음)
 
 	for _, 일일_정보 := range 일일_가격정보_모음_KODEX200.M저장소 {
