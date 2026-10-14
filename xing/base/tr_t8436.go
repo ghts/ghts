@@ -36,61 +36,60 @@ func NewT8436InBlock(질의값 *lb.S질의값_문자열) (g *T8436InBlock) {
 	return g
 }
 
-func NewT8436_현물_종목조회_응답_반복값_모음(b []byte) (값 *T8436_현물_종목조회_응답, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
+func NewT8436_현물_종목조회_응답_반복값_모음(b []byte) (값_모음 *T8436_현물_종목조회_응답, 에러 error) {
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값_모음 = nil }}.S실행()
 
 	나머지 := len(b) % SizeT8436OutBlock
 	lb.F조건부_패닉(나머지 != 0, "예상하지 못한 길이. '%v' '%v'", len(b), 나머지)
 
 	버퍼 := bytes.NewBuffer(b)
 	수량 := len(b) / SizeT8436OutBlock
-	g_모음 := make([]*T8436OutBlock, 수량)
 
-	값 = new(T8436_현물_종목조회_응답)
-	값.M배열 = make([]*T8436_현물_종목조회_응답_반복값, 수량)
+	값_모음 = new(T8436_현물_종목조회_응답)
+	값_모음.M배열 = make([]*T8436_현물_종목조회_응답_반복값, 0, 수량)
 
-	for i, g := range g_모음 {
-		g = new(T8436OutBlock)
+	for range 수량 {
+		g := new(T8436OutBlock)
 		lb.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
-		s := new(T8436_현물_종목조회_응답_반복값)
-		s.M종목명 = lb.F2문자열_EUC_KR_공백제거(g.Hname)
-		s.M종목코드 = lb.F2문자열_공백_제거(g.Shcode)
+		값 := new(T8436_현물_종목조회_응답_반복값)
+		값.M종목명 = lb.F2문자열_EUC_KR_공백제거(g.Hname)
+		값.M종목코드 = lb.F2문자열_공백_제거(g.Shcode)
 		//s.M주문수량단위 = lb.F확인2(lb.F2정수(g.MeMeDan))
-		s.M상한가 = lb.F확인2(lb.F2정수64(g.Uplmtprice))
-		s.M하한가 = lb.F확인2(lb.F2정수64(g.Dnlmtprice))
-		s.M전일가 = lb.F확인2(lb.F2정수64(g.Jnilclose))
-		s.M기준가 = lb.F확인2(lb.F2정수64(g.Recprice))
-		s.M증권그룹 = T증권그룹(lb.F확인2(lb.F2정수_공백은_0(g.Bu12gubun)))
-		s.M기업인수목적회사여부 = lb.F2참거짓(lb.F2문자열(g.Spac_gubun), "Y", true)
+		값.M상한가 = lb.F확인2(lb.F2정수64(g.Uplmtprice))
+		값.M하한가 = lb.F확인2(lb.F2정수64(g.Dnlmtprice))
+		값.M전일가 = lb.F확인2(lb.F2정수64(g.Jnilclose))
+		값.M기준가 = lb.F확인2(lb.F2정수64(g.Recprice))
+		값.M증권그룹 = T증권그룹(lb.F확인2(lb.F2정수_공백은_0(g.Bu12gubun)))
+		값.M기업인수목적회사여부 = lb.F2참거짓(lb.F2문자열(g.Spac_gubun), "Y", true)
 
 		ETF구분 := lb.F2문자열_공백_제거(g.Etfgubun)
 		시장구분 := lb.F2문자열_공백_제거(g.Gubun)
 
 		switch {
 		case ETF구분 == "1":
-			s.M시장구분 = lb.P시장구분_ETF
+			값.M시장구분 = lb.P시장구분_ETF
 		case ETF구분 == "2":
-			s.M시장구분 = lb.P시장구분_ETN
+			값.M시장구분 = lb.P시장구분_ETN
 		case 시장구분 == "1":
-			s.M시장구분 = lb.P시장구분_코스피
+			값.M시장구분 = lb.P시장구분_코스피
 		case 시장구분 == "2":
-			s.M시장구분 = lb.P시장구분_코스닥
+			값.M시장구분 = lb.P시장구분_코스닥
 		default:
-			lb.F체크포인트(s.M시장구분)
+			lb.F체크포인트(값.M시장구분)
 			panic(lb.New에러("예상하지 못한 경우 : '%v', '%v'", ETF구분, 시장구분))
 		}
 
-		값.M배열[i] = s
-
 		switch {
-		case s.M증권그룹 == P증권그룹_상장지수펀드_ETF && s.M시장구분 == lb.P시장구분_ETN,
-			s.M증권그룹 == P증권그룹_ETN && s.M시장구분 == lb.P시장구분_ETF:
-			lb.F체크포인트("종목코드", s.M종목코드, "증권그룹", s.M증권그룹, "시장구분", s.M시장구분)
+		case 값.M증권그룹 == P증권그룹_상장지수펀드_ETF && 값.M시장구분 == lb.P시장구분_ETN,
+			값.M증권그룹 == P증권그룹_ETN && 값.M시장구분 == lb.P시장구분_ETF:
+			lb.F체크포인트("종목코드", 값.M종목코드, "증권그룹", 값.M증권그룹, "시장구분", 값.M시장구분)
 			lb.F문자열_출력("종목코드 : '%v', 증권그룹 : '%v', 시장구분 : '%v'",
-				s.M종목코드, s.M증권그룹, s.M시장구분)
+				값.M종목코드, 값.M증권그룹, 값.M시장구분)
 		}
+
+		값_모음.M배열 = append(값_모음.M배열, 값)
 	}
 
-	return 값, nil
+	return 값_모음, nil
 }

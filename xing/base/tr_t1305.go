@@ -135,21 +135,20 @@ func NewT1305_현물_기간별_조회_응답_헤더(b []byte) (값 *T1305_현물
 	return 값, nil
 }
 
-func NewT1305_현물_기간별_조회_응답_반복값_모음(b []byte) (값 *T1305_현물_기간별_조회_응답_반복값_모음, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
+func NewT1305_현물_기간별_조회_응답_반복값_모음(b []byte) (값_모음 *T1305_현물_기간별_조회_응답_반복값_모음, 에러 error) {
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값_모음 = nil }}.S실행()
 
 	나머지 := len(b) % SizeT1305OutBlock1
 	lb.F조건부_패닉(나머지 != 0, "예상하지 못한 길이. '%v' '%v'", len(b), 나머지)
 
 	버퍼 := bytes.NewBuffer(b)
 	수량 := len(b) / SizeT1305OutBlock1
-	g_모음 := make([]*T1305OutBlock1, 수량)
 
-	값 = new(T1305_현물_기간별_조회_응답_반복값_모음)
-	값.M배열 = make([]*T1305_현물_기간별_조회_응답_반복값, 수량)
+	값_모음 = new(T1305_현물_기간별_조회_응답_반복값_모음)
+	값_모음.M배열 = make([]*T1305_현물_기간별_조회_응답_반복값, 0, 수량)
 
-	for i, g := range g_모음 {
-		g = new(T1305OutBlock1)
+	for range 수량 {
+		g := new(T1305OutBlock1)
 		lb.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 		일자_문자열_원본 := lb.F2문자열(g.Date)
@@ -161,49 +160,49 @@ func NewT1305_현물_기간별_조회_응답_반복값_모음(b []byte) (값 *T1
 		일자_문자열_버퍼.WriteString(일자_문자열_원본[6:])
 		일자_문자열 := 일자_문자열_버퍼.String()
 
-		s := new(T1305_현물_기간별_조회_응답_반복값)
-		s.M종목코드 = lb.F2문자열(g.Shcode)
-		s.M일자 = lb.F확인2(lb.F2포맷된_일자("2006/01/02", 일자_문자열))
-		s.M시가 = lb.F확인2(lb.F2정수64(g.Open))
-		s.M고가 = lb.F확인2(lb.F2정수64(g.High))
-		s.M저가 = lb.F확인2(lb.F2정수64(g.Low))
-		s.M종가 = lb.F확인2(lb.F2정수64(g.Close))
+		값 := new(T1305_현물_기간별_조회_응답_반복값)
+		값.M종목코드 = lb.F2문자열(g.Shcode)
+		값.M일자 = lb.F확인2(lb.F2포맷된_일자("2006/01/02", 일자_문자열))
+		값.M시가 = lb.F확인2(lb.F2정수64(g.Open))
+		값.M고가 = lb.F확인2(lb.F2정수64(g.High))
+		값.M저가 = lb.F확인2(lb.F2정수64(g.Low))
+		값.M종가 = lb.F확인2(lb.F2정수64(g.Close))
 
 		if 전일대비_구분값, 에러 := lb.F2정수64(g.Sign); 에러 == nil {
-			s.M전일대비구분 = T전일대비_구분(전일대비_구분값)
+			값.M전일대비구분 = T전일대비_구분(전일대비_구분값)
 		} else if lb.F2문자열_공백_제거(g.Sign) == "" &&
 			lb.F확인2(lb.F2정수64(g.Change)) == 0 &&
 			lb.F확인2(lb.F2실수(g.Diff)) == 0.0 {
-			s.M전일대비구분 = P구분_보합
+			값.M전일대비구분 = P구분_보합
 		} else {
-			lb.F문자열_출력("일자 : '%v', 잘못된 전일구분. '%v'", s.M일자, lb.F2문자열(g.Sign))
-			s.M전일대비구분 = T전일대비_구분(0)
+			lb.F문자열_출력("일자 : '%v', 잘못된 전일구분. '%v'", 값.M일자, lb.F2문자열(g.Sign))
+			값.M전일대비구분 = T전일대비_구분(0)
 		}
 
-		s.M전일대비등락폭 = s.M전일대비구분.G부호보정_정수64(lb.F확인2(lb.F2정수64(g.Change)))
-		s.M전일대비등락율 = s.M전일대비구분.G부호보정_실수64(lb.F확인2(lb.F2실수_소숫점_추가(g.Diff, 2)))
-		s.M시가대비구분 = T전일대비_구분(lb.F확인2(lb.F2정수64(g.O_sign)))
-		s.M시가대비등락폭 = s.M시가대비구분.G부호보정_정수64(lb.F확인2(lb.F2정수64(g.O_change)))
-		s.M시가대비등락율 = s.M시가대비구분.G부호보정_실수64(lb.F확인2(lb.F2실수_소숫점_추가(g.O_diff, 2)))
-		s.M고가대비구분 = T전일대비_구분(lb.F확인2(lb.F2정수64(g.H_sign)))
-		s.M고가대비등락폭 = s.M고가대비구분.G부호보정_정수64(lb.F확인2(lb.F2정수64(g.H_change)))
-		s.M고가대비등락율 = s.M고가대비구분.G부호보정_실수64(lb.F확인2(lb.F2실수_소숫점_추가(g.H_diff, 2)))
-		s.M저가대비구분 = T전일대비_구분(lb.F확인2(lb.F2정수64(g.L_sign)))
-		s.M저가대비등락폭 = s.M저가대비구분.G부호보정_정수64(lb.F확인2(lb.F2정수64(g.L_change)))
-		s.M저가대비등락율 = s.M저가대비구분.G부호보정_실수64(lb.F확인2(lb.F2실수_소숫점_추가(g.L_diff, 2)))
-		s.M거래량 = lb.F확인2(lb.F2정수64(g.Volume))
-		s.M거래대금_백만 = lb.F확인2(lb.F2정수64(g.Value))
-		s.M거래_증가율 = lb.F확인2(lb.F2실수_소숫점_추가(g.Diff_vol, 2))
-		s.M체결강도 = lb.F확인2(lb.F2실수_소숫점_추가(g.Chdegree, 2))
-		s.M소진율 = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Sojinrate, 2)
-		s.M회전율 = lb.F확인2(lb.F2실수_소숫점_추가(g.Changerate, 2))
-		s.M외국인_순매수 = lb.F확인2(lb.F2정수64_공백은_0(g.Fpvolume))
-		s.M기관_순매수 = lb.F확인2(lb.F2정수64_공백은_0(g.Covolume))
-		s.M개인_순매수 = lb.F확인2(lb.F2정수64_공백은_0(g.Ppvolume))
-		s.M시가총액_백만 = lb.F확인2(lb.F2정수64(g.Marketcap))
+		값.M전일대비등락폭 = 값.M전일대비구분.G부호보정_정수64(lb.F확인2(lb.F2정수64(g.Change)))
+		값.M전일대비등락율 = 값.M전일대비구분.G부호보정_실수64(lb.F확인2(lb.F2실수_소숫점_추가(g.Diff, 2)))
+		값.M시가대비구분 = T전일대비_구분(lb.F확인2(lb.F2정수64(g.O_sign)))
+		값.M시가대비등락폭 = 값.M시가대비구분.G부호보정_정수64(lb.F확인2(lb.F2정수64(g.O_change)))
+		값.M시가대비등락율 = 값.M시가대비구분.G부호보정_실수64(lb.F확인2(lb.F2실수_소숫점_추가(g.O_diff, 2)))
+		값.M고가대비구분 = T전일대비_구분(lb.F확인2(lb.F2정수64(g.H_sign)))
+		값.M고가대비등락폭 = 값.M고가대비구분.G부호보정_정수64(lb.F확인2(lb.F2정수64(g.H_change)))
+		값.M고가대비등락율 = 값.M고가대비구분.G부호보정_실수64(lb.F확인2(lb.F2실수_소숫점_추가(g.H_diff, 2)))
+		값.M저가대비구분 = T전일대비_구분(lb.F확인2(lb.F2정수64(g.L_sign)))
+		값.M저가대비등락폭 = 값.M저가대비구분.G부호보정_정수64(lb.F확인2(lb.F2정수64(g.L_change)))
+		값.M저가대비등락율 = 값.M저가대비구분.G부호보정_실수64(lb.F확인2(lb.F2실수_소숫점_추가(g.L_diff, 2)))
+		값.M거래량 = lb.F확인2(lb.F2정수64(g.Volume))
+		값.M거래대금_백만 = lb.F확인2(lb.F2정수64(g.Value))
+		값.M거래_증가율 = lb.F확인2(lb.F2실수_소숫점_추가(g.Diff_vol, 2))
+		값.M체결강도 = lb.F확인2(lb.F2실수_소숫점_추가(g.Chdegree, 2))
+		값.M소진율 = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Sojinrate, 2)
+		값.M회전율 = lb.F확인2(lb.F2실수_소숫점_추가(g.Changerate, 2))
+		값.M외국인_순매수 = lb.F확인2(lb.F2정수64_공백은_0(g.Fpvolume))
+		값.M기관_순매수 = lb.F확인2(lb.F2정수64_공백은_0(g.Covolume))
+		값.M개인_순매수 = lb.F확인2(lb.F2정수64_공백은_0(g.Ppvolume))
+		값.M시가총액_백만 = lb.F확인2(lb.F2정수64(g.Marketcap))
 
-		값.M배열[i] = s
+		값_모음.M배열 = append(값_모음.M배열, 값)
 	}
 
-	return 값, nil
+	return 값_모음, nil
 }

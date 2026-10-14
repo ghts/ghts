@@ -118,41 +118,40 @@ func NewT3341_재무순위_응답_헤더(b []byte) (값 *T3341_재무순위_응�
 	return 값, nil
 }
 
-func NewT3341_재무순위_응답_반복값_모음(b []byte) (값 *T3341_재무순위_응답_반복값_모음, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
+func NewT3341_재무순위_응답_반복값_모음(b []byte) (값_모음 *T3341_재무순위_응답_반복값_모음, 에러 error) {
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값_모음 = nil }}.S실행()
 
 	나머지 := len(b) % SizeT3341OutBlock1
 	lb.F조건부_패닉(나머지 != 0, "예상하지 못한 길이. '%v' '%v'", len(b), 나머지)
 
 	버퍼 := bytes.NewBuffer(b)
 	수량 := len(b) / SizeT3341OutBlock1
-	g_모음 := make([]*T3341OutBlock1, 수량)
 
-	값 = new(T3341_재무순위_응답_반복값_모음)
-	값.M배열 = make([]*T3341_재무순위_응답_반복값, 수량)
+	값_모음 = new(T3341_재무순위_응답_반복값_모음)
+	값_모음.M배열 = make([]*T3341_재무순위_응답_반복값, 0, 수량)
 
-	for i, g := range g_모음 {
-		g = new(T3341OutBlock1)
+	for range 수량 {
+		g := new(T3341OutBlock1)
 		lb.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
-		s := new(T3341_재무순위_응답_반복값)
-		s.M종목코드 = lb.F2문자열(g.Shcode)
-		s.M순위 = lb.F확인2(lb.F2정수(g.Rank))
-		s.M기업명 = lb.F2문자열_EUC_KR_공백제거(g.Hname)
-		s.M매출액_증가율 = lb.F확인2(lb.F2실수_소숫점_추가_공백은_0(g.Salesgrowth, 2))
-		s.M영업이익_증가율 = lb.F확인2(lb.F2실수_소숫점_추가_공백은_0(g.Operatingincomegrowt, 2))
-		s.M경상이익_증가율 = lb.F확인2(lb.F2실수_소숫점_추가_공백은_0(g.Ordinaryincomegrowth, 2))
-		s.M부채비율 = lb.F확인2(lb.F2실수_소숫점_추가_공백은_0(g.Liabilitytoequity, 2))
-		s.M유보율 = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Enterpriseratio, 2)
-		s.EPS = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Eps, 2)
-		s.BPS = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Bps, 2)
-		s.ROE = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Roe, 2)
-		s.PER = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Per, 2)
-		s.PBR = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Pbr, 2)
-		s.PEG = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Peg, 2)
+		값 := new(T3341_재무순위_응답_반복값)
+		값.M종목코드 = lb.F2문자열(g.Shcode)
+		값.M순위 = lb.F확인2(lb.F2정수(g.Rank))
+		값.M기업명 = lb.F2문자열_EUC_KR_공백제거(g.Hname)
+		값.M매출액_증가율 = lb.F확인2(lb.F2실수_소숫점_추가_공백은_0(g.Salesgrowth, 2))
+		값.M영업이익_증가율 = lb.F확인2(lb.F2실수_소숫점_추가_공백은_0(g.Operatingincomegrowt, 2))
+		값.M경상이익_증가율 = lb.F확인2(lb.F2실수_소숫점_추가_공백은_0(g.Ordinaryincomegrowth, 2))
+		값.M부채비율 = lb.F확인2(lb.F2실수_소숫점_추가_공백은_0(g.Liabilitytoequity, 2))
+		값.M유보율 = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Enterpriseratio, 2)
+		값.EPS = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Eps, 2)
+		값.BPS = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Bps, 2)
+		값.ROE = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Roe, 2)
+		값.PER = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Per, 2)
+		값.PBR = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Pbr, 2)
+		값.PEG = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Peg, 2)
 
-		값.M배열[i] = s
+		값_모음.M배열 = append(값_모음.M배열, 값)
 	}
 
-	return 값, nil
+	return 값_모음, nil
 }

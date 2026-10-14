@@ -96,13 +96,12 @@ func NewT1404_관리종목_조회_응답_반복값_모음(b []byte) (값_모음 
 
 	버퍼 := bytes.NewBuffer(b)
 	수량 := len(b) / SizeT1404OutBlock1
-	g_모음 := make([]*T1404OutBlock1, 수량)
 
 	값_모음 = new(T1404_관리종목_조회_응답_반복값_모음)
-	값_모음.M배열 = make([]*T1404_관리종목_조회_응답_반복값, 수량)
+	값_모음.M배열 = make([]*T1404_관리종목_조회_응답_반복값, 0, 수량)
 
-	for i, g := range g_모음 {
-		g = new(T1404OutBlock1)
+	for range 수량 {
+		g := new(T1404OutBlock1)
 		lb.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 		값 := new(T1404_관리종목_조회_응답_반복값)
@@ -120,7 +119,7 @@ func NewT1404_관리종목_조회_응답_반복값_모음(b []byte) (값_모음 
 		값.M사유 = T관리종목_지정_사유_구분(lb.F확인2(lb.F2정수64_공백은_0(g.Reason)))
 		값.M해제일 = lb.F2포맷된_일자_단순형_공백은_초기값("20060102", g.Edate)
 
-		값_모음.M배열[i] = 값
+		값_모음.M배열 = append(값_모음.M배열, 값)
 	}
 
 	return 값_모음, nil

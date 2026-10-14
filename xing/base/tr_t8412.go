@@ -136,40 +136,39 @@ func NewT8412_현물_차트_분_응답_헤더(b []byte) (값 *T8412_현물_차�
 	return 값, nil
 }
 
-func NewT8412_현물_차트_분_응답_반복값_모음(b []byte) (값 *T8412_현물_차트_분_응답_반복값_모음, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
+func NewT8412_현물_차트_분_응답_반복값_모음(b []byte) (값_모음 *T8412_현물_차트_분_응답_반복값_모음, 에러 error) {
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값_모음 = nil }}.S실행()
 
 	나머지 := len(b) % SizeT8412OutBlock1
 	lb.F조건부_패닉(나머지 != 0, "예상하지 못한 길이. '%v' '%v'", len(b), 나머지)
 
 	버퍼 := bytes.NewBuffer(b)
 	수량 := len(b) / SizeT8412OutBlock1
-	g_모음 := make([]*T8412OutBlock1, 수량)
 
-	값 = new(T8412_현물_차트_분_응답_반복값_모음)
-	값.M배열 = make([]*T8412_현물_차트_분_응답_반복값, 수량)
+	값_모음 = new(T8412_현물_차트_분_응답_반복값_모음)
+	값_모음.M배열 = make([]*T8412_현물_차트_분_응답_반복값, 0, 수량)
 
-	for i, g := range g_모음 {
-		g = new(T8412OutBlock1)
+	for range 수량 {
+		g := new(T8412OutBlock1)
 		lb.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 		날짜_문자열 := lb.F2문자열_공백_제거(g.Date)
 		시각_문자열 := lb.F2문자열_공백_제거(g.Time[:6])
 
-		s := new(T8412_현물_차트_분_응답_반복값)
-		s.M일자_시각 = lb.F확인2(lb.F2포맷된_시각("20060102 150405", 날짜_문자열+" "+시각_문자열))
-		s.M시가 = lb.F확인2(lb.F2정수64(g.Open))
-		s.M고가 = lb.F확인2(lb.F2정수64(g.High))
-		s.M저가 = lb.F확인2(lb.F2정수64(g.Low))
-		s.M종가 = lb.F확인2(lb.F2정수64(g.Close))
-		s.M거래량 = lb.F확인2(lb.F2정수64(g.Vol))
-		s.M거래대금_백만 = lb.F확인2(lb.F2정수64(g.Value))
-		s.M수정구분 = lb.F확인2(lb.F2정수64_공백은_0(g.Jongchk))
-		s.M수정비율 = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Rate, 2)
-		s.M종가등락구분 = T전일대비_구분(lb.F확인2(lb.F2정수(g.Sign)))
+		값 := new(T8412_현물_차트_분_응답_반복값)
+		값.M일자_시각 = lb.F확인2(lb.F2포맷된_시각("20060102 150405", 날짜_문자열+" "+시각_문자열))
+		값.M시가 = lb.F확인2(lb.F2정수64(g.Open))
+		값.M고가 = lb.F확인2(lb.F2정수64(g.High))
+		값.M저가 = lb.F확인2(lb.F2정수64(g.Low))
+		값.M종가 = lb.F확인2(lb.F2정수64(g.Close))
+		값.M거래량 = lb.F확인2(lb.F2정수64(g.Vol))
+		값.M거래대금_백만 = lb.F확인2(lb.F2정수64(g.Value))
+		값.M수정구분 = lb.F확인2(lb.F2정수64_공백은_0(g.Jongchk))
+		값.M수정비율 = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Rate, 2)
+		값.M종가등락구분 = T전일대비_구분(lb.F확인2(lb.F2정수(g.Sign)))
 
-		값.M배열[i] = s
+		값_모음.M배열 = append(값_모음.M배열, 값)
 	}
 
-	return 값, nil
+	return 값_모음, nil
 }

@@ -89,13 +89,12 @@ func NewT1902_ETF시간별_추이_응답_반복값_모음(b []byte) (값_모음 
 
 	버퍼 := bytes.NewBuffer(b)
 	수량 := len(b) / SizeT1902OutBlock1
-	g_모음 := make([]*T1902OutBlock1, 수량)
 
 	값_모음 = new(T1902_ETF시간별_추이_응답_반복값_모음)
-	값_모음.M배열 = make([]*T1902_ETF시간별_추이_응답_반복값, 수량)
+	값_모음.M배열 = make([]*T1902_ETF시간별_추이_응답_반복값, 0, 수량)
 
-	for i, g := range g_모음 {
-		g = new(T1902OutBlock1)
+	for range 수량 {
+		g := new(T1902OutBlock1)
 		lb.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 		값 := new(T1902_ETF시간별_추이_응답_반복값)
@@ -120,7 +119,7 @@ func NewT1902_ETF시간별_추이_응답_반복값_모음(b []byte) (값_모음 
 			값.M지수_전일대비등락폭 = -1 * 값.M지수_전일대비등락폭
 		}
 
-		값_모음.M배열[i] = 값
+		값_모음.M배열 = append(값_모음.M배열, 값)
 	}
 
 	return 값_모음, nil

@@ -134,12 +134,10 @@ func NewT0150_현물_당일_매매일지_응답_반복값_모음(b []byte) (값_
 
 	버퍼 := bytes.NewBuffer(b)
 	수량 := len(b) / SizeT0150OutBlock1
-	g_모음 := make([]*T0150OutBlock1, 수량)
+	값_모음 = make([]*T0150_현물_당일_매매일지_응답_반복값, 0, 수량)
 
-	값_모음 = make([]*T0150_현물_당일_매매일지_응답_반복값, 0)
-
-	for _, g := range g_모음 {
-		g = new(T0150OutBlock1)
+	for range 수량 {
+		g := new(T0150OutBlock1)
 		lb.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 		if 문자열 := lb.F2문자열_EUC_KR_공백제거(g.Medosu); 문자열 == "종목소계" {
