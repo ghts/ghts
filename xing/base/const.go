@@ -937,16 +937,14 @@ type VI발동해제 uint8
 func (p VI발동해제) String() string {
 	switch p {
 	case VI해제:
-		return "일"
+		return "해제"
 	case VI정적발동:
-		return "주"
+		return "정적 발동"
 	case VI동적발동:
-		return "월"
+		return "동적 발동"
+	default:
+		panic(lb.F2문자열("예상하지 못한 VI발동해제 구분. '%v'", int(p)))
 	}
-
-	panic(lb.F2문자열("예상하지 못한 VI발동해제 구분. '%v'", p))
-
-	return ""
 }
 
 const (
