@@ -304,11 +304,10 @@ func NewCSPAQ12300_현물계좌_잔고내역_조회_응답_반복값_모음(b []
 
 	버퍼 := bytes.NewBuffer(b)
 	수량 := len(b) / SizeCSPAQ12300OutBlock3
-	g_모음 := make([]*CSPAQ12300OutBlock3, 수량)
 	값_모음 = make([]*CSPAQ12300_현물계좌_잔고내역_응답_반복값, 수량)
 
-	for i, g := range g_모음 {
-		g = new(CSPAQ12300OutBlock3)
+	for i := range 수량 {
+		g := new(CSPAQ12300OutBlock3)
 		lb.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 		값 := new(CSPAQ12300_현물계좌_잔고내역_응답_반복값)

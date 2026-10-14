@@ -177,11 +177,10 @@ func NewCSPAQ13700_현물계좌_주문체결내역_반복값_모음(b []byte) (�
 
 	버퍼 := bytes.NewBuffer(b)
 	수량 := len(b) / SizeCSPAQ13700OutBlock3
-	g_모음 := make([]*CSPAQ13700OutBlock3, 수량)
 	값_모음 = make([]*CSPAQ13700_현물계좌_주문체결내역_반복값, 수량)
 
-	for i, g := range g_모음 {
-		g = new(CSPAQ13700OutBlock3)
+	for i := range 수량 {
+		g := new(CSPAQ13700OutBlock3)
 		lb.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 		체결처리시각_문자열 := lb.F2문자열(g.ExecTrxTime)
