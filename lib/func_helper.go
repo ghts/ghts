@@ -2,9 +2,11 @@ package lib
 
 import (
 	"bytes"
+	"context"
 	"encoding/csv"
 	"encoding/gob"
 	"io"
+	"io/fs"
 	"maps"
 	"math"
 	"math/big"
@@ -744,26 +746,38 @@ func F실행파일_검색(파일명 string) (경로 string, 에러 error) {
 }
 
 func F파일_검색(검색_시작_디렉토리, 파일명 string) (string, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), P30초*4)
+	defer cancel()
+
+	파일명_소문자 := strings.ToLower(파일명)
+
 	ch응답 := make(chan any, 1)
-	go filepath.Walk(검색_시작_디렉토리, func(파일경로 string, 파일정보 os.FileInfo, 에러 error) error {
-		switch {
-		case 에러 != nil:
-			if os.IsPermission(에러) { // OS 및 언어에 무관한 파일 권한 에러 판별
-				return nil
+	go func() {
+		_ = filepath.WalkDir(검색_시작_디렉토리, func(파일경로 string, 진입점 fs.DirEntry, 에러 error) error {
+			// 타임아웃을 감지하면 탐색을 즉시 중단하여 goroutine 리크를 방지.
+			if ctx.Err() != nil {
+				return ctx.Err()
 			}
 
-			F문자열_출력("예상하지 못한 에러 발생 : %v\n%v", 파일경로, 에러)
-			ch응답 <- 에러
-			return 에러
-		case 파일정보.IsDir():
-			return nil
-		case strings.ToLower(파일명) == strings.ToLower(파일정보.Name()):
-			ch응답 <- 파일경로
-			return New에러("Done")
-		default:
-			return nil
-		}
-	})
+			switch {
+			case 에러 != nil:
+				if os.IsPermission(에러) { // OS 및 언어에 무관한 파일 권한 에러 판별
+					return nil
+				}
+
+				F문자열_출력("예상하지 못한 에러 발생 : %v\n%v", 파일경로, 에러)
+				ch응답 <- 에러
+				return 에러
+			case 진입점.IsDir():
+				return nil
+			case 파일명_소문자 == strings.ToLower(진입점.Name()):
+				ch응답 <- 파일경로
+				return fs.SkipAll // 탐색 전체 중단
+			default:
+				return nil
+			}
+		})
+	}()
 
 	select {
 	case 응답 := <-ch응답:
@@ -775,7 +789,7 @@ func F파일_검색(검색_시작_디렉토리, 파일명 string) (string, error
 		default:
 			panic(New에러("F파일_검색() 예상하지 못한 자료형 '%T' '%v'", 응답, 응답))
 		}
-	case <-time.After(P30초 * 4):
+	case <-ctx.Done():
 		return "", New에러with출력("'%v' : 파일 검색 타임아웃", 파일명)
 	}
 }
