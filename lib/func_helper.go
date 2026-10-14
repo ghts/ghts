@@ -879,7 +879,10 @@ func F파일에_값_저장(값 any, 파일명 string, 파일_잠금 sync.Locker)
 }
 
 func F파일에서_값_읽기(값_포인터 any, 파일명 string, 파일_잠금 sync.Locker) (에러 error) {
-	defer S예외처리{M에러: &에러, M에러_실행: func() { 값_포인터 = nil }}.S실행()
+	defer S예외처리{M에러: &에러, M에러_실행: func() {
+		// 제로값으로 설정.
+		reflect.ValueOf(값_포인터).Elem().Set(reflect.Zero(reflect.TypeOf(값_포인터).Elem()))
+	}}.S실행()
 
 	switch 잠금 := 파일_잠금.(type) {
 	case nil: // 아무 것도 하지 않음.
