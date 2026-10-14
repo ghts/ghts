@@ -52,11 +52,11 @@ func WndProc(hWnd w32.HWND, msg uint32, wParam, lParam uintptr) uintptr {
 	case XM_RECEIVE_DATA:
 		switch wParam {
 		case RCV_TR_DATA:
-			OnTrData(unsafe.Pointer(lParam))
+			OnTrData(f포인터_생성(lParam))
 			return TRUE
 		case RCV_MSG_DATA,
 			RCV_SYSTEM_ERROR:
-			OnMessageAndError(unsafe.Pointer(lParam))
+			OnMessageAndError(f포인터_생성(lParam))
 			return TRUE
 		case RCV_RELEASE:
 			OnReleaseData(int(lParam))
@@ -64,10 +64,10 @@ func WndProc(hWnd w32.HWND, msg uint32, wParam, lParam uintptr) uintptr {
 		}
 		return FALSE
 	case XM_RECEIVE_REAL_DATA:
-		OnRealtimeData(unsafe.Pointer(lParam))
+		OnRealtimeData(f포인터_생성(lParam))
 		return TRUE
 	case XM_LOGIN:
-		OnLogin(unsafe.Pointer(wParam), unsafe.Pointer(lParam))
+		OnLogin(f포인터_생성(wParam), f포인터_생성(lParam))
 		return TRUE
 	case XM_LOGOUT:
 		OnLogout()

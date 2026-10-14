@@ -1,5 +1,7 @@
 package xt
 
+import "unsafe"
+
 type TR_DATA struct {
 	RequestID           int32
 	DataLength          int32
@@ -14,7 +16,7 @@ type TR_DATA struct {
 	None                [31]byte
 	BlockName           [16]byte
 	X_BlockName         [1]byte
-	Data                uintptr
+	Data                unsafe.Pointer
 }
 
 type MSG_DATA struct {
@@ -23,7 +25,7 @@ type MSG_DATA struct {
 	MsgCode     [5]byte
 	X_MsgCode   [1]byte
 	MsgLength   int32
-	MsgData     uintptr
+	MsgData     unsafe.Pointer
 }
 
 type REALTIME_DATA struct {
@@ -35,7 +37,7 @@ type REALTIME_DATA struct {
 	RegKey     [32]byte
 	X_RegKey   [1]byte
 	DataLength int32
-	Data       uintptr
+	Data       unsafe.Pointer
 }
 
 type TR코드별_전송_제한_정보 struct {

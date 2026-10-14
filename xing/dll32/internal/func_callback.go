@@ -12,6 +12,13 @@ import (
 	"github.com/ghts/ghts/xing/base"
 )
 
+// f포인터_생성 : DLL/OS 콜백으로 전달받은 주소(uint32/uintptr)를 unsafe.Pointer로 변환한다.
+// DLL이 소유한 32비트 메모리 주소를 같은 함수 안에서만 동기적으로 읽는 P/Invoke 전용 헬퍼이며,
+// 정수에서 포인터로의 변환은 의도된 패턴이다. (go vet unsafeptr 경고 대상이나 의도된 형태)
+func f포인터_생성(주소 uintptr) unsafe.Pointer {
+	return unsafe.Pointer(주소)
+}
+
 func F콜백(콜백값 lb.I콜백) (에러 error) {
 	ch콜백 <- 콜백값
 	return nil
@@ -108,10 +115,10 @@ func OnTrData(TR데이터 unsafe.Pointer) {
 	binary.Read(버퍼, binary.LittleEndian, &g.X_BlockName)
 
 	// uintptr형식으로 바로 읽어들이면 제대로 읽어들이지 못함.
-	// uint32형식을 통해서 uintptr형식으로 변환해서 버그 회피.
+	// uint32형식으로 읽은 뒤 f포인터_생성()으로 포인터를 변환하여 버그를 회피.
 	var 주소값 uint32
 	binary.Read(버퍼, binary.LittleEndian, &주소값)
-	g.Data = uintptr(주소값)
+	g.Data = f포인터_생성(uintptr(주소값))
 
 	var raw값 []byte
 
@@ -120,7 +127,7 @@ func OnTrData(TR데이터 unsafe.Pointer) {
 	case "t8410OutBlock1", "t8411OutBlock1", "t8412OutBlock1":
 		raw값 = f압축_반복값_해제(g)
 	default:
-		raw값 = w32.F2Go바이트_모음with길이(unsafe.Pointer(g.Data), int(g.DataLength))
+		raw값 = w32.F2Go바이트_모음with길이(g.Data, int(g.DataLength))
 	}
 
 	자료형_문자열 := lb.F확인2(f자료형_문자열_해석(g))
@@ -164,7 +171,7 @@ func f압축_반복값_해제(g *xt.TR_DATA) []byte {
 
 	// 증권사 API가 반복값 수량 상한을 고정해 놓으므로 최악의 경우만큼 버퍼를 확보한다.
 	버퍼 := make([]byte, 블럭크기*xt.P압축_반복값_최대_수량)
-	길이 := F압축_해제(unsafe.Pointer(g.Data), &버퍼[0], g.DataLength)
+	길이 := F압축_해제(g.Data, &버퍼[0], g.DataLength)
 
 	// etkDecompress는 버퍼 capacity 인자를 받지 않으므로, 결과가 범위를 벗어나면
 	// API 계약 위반이다. 손상된 데이터로 진행하지 말고 명시적으로 중단한다.
@@ -191,10 +198,10 @@ func OnMessageAndError(MSG데이터 unsafe.Pointer) {
 	binary.Read(버퍼, binary.LittleEndian, &g.MsgLength)
 
 	// uintptr형식으로 바로 읽어들이면 제대로 읽어들이지 못함.
-	// uint32형식을 통해서 uintptr형식으로 변환해서 버그 회피.
+	// uint32형식으로 읽은 뒤 f포인터_생성()으로 포인터를 변환하여 버그를 회피.
 	var 주소값 uint32
 	binary.Read(버퍼, binary.LittleEndian, &주소값)
-	g.MsgData = uintptr(주소값)
+	g.MsgData = f포인터_생성(uintptr(주소값))
 
 	var 에러여부 bool
 
@@ -211,7 +218,7 @@ func OnMessageAndError(MSG데이터 unsafe.Pointer) {
 	콜백값.S콜백_기본형 = lb.New콜백_기본형(lb.P콜백_메시지_및_에러)
 	콜백값.M식별번호 = int(g.RequestID)
 	콜백값.M코드 = lb.F2문자열_공백_제거(g.MsgCode)
-	콜백값.M내용 = w32.F2문자열_EUC_KR(unsafe.Pointer(g.MsgData))
+	콜백값.M내용 = w32.F2문자열_EUC_KR(g.MsgData)
 	콜백값.M에러여부 = 에러여부
 
 	F콜백(콜백값)
@@ -237,14 +244,14 @@ func OnRealtimeData(실시간_데이터 unsafe.Pointer) {
 	binary.Read(버퍼, binary.LittleEndian, &g.DataLength)
 
 	// uintptr형식으로 바로 읽어들이면 제대로 읽어들이지 못함.
-	// uint32형식을 통해서 uintptr형식으로 변환해서 버그 회피.
+	// uint32형식으로 읽은 뒤 f포인터_생성()으로 포인터를 변환하여 버그를 회피.
 	var 주소값 uint32
 	binary.Read(버퍼, binary.LittleEndian, &주소값)
-	g.Data = uintptr(주소값)
+	g.Data = f포인터_생성(uintptr(주소값))
 
 	// KeyData, RegKey등이 불필요한 듯 해서 전송 안 함. 필요하면 추가할 것.
 
-	raw값 := w32.F2Go바이트_모음with길이(unsafe.Pointer(g.Data), int(g.DataLength))
+	raw값 := w32.F2Go바이트_모음with길이(g.Data, int(g.DataLength))
 	raw값 = f민감정보_삭제(raw값, lb.F2문자열_공백_제거(g.TrCode))
 	바이트_변환값 := lb.F확인2(lb.New바이트_변환Raw(lb.F2문자열(g.TrCode), raw값, false))
 
