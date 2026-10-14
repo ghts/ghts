@@ -612,8 +612,6 @@ func (s T분틱_구분) String() string {
 	}
 
 	panic(lb.F2문자열("예상하지 못한 분틱 구분. '%v'", s))
-
-	return ""
 }
 
 // XingAPI 에러코드
@@ -667,8 +665,6 @@ func (p T서버_구분) String() string {
 	}
 
 	panic(lb.F2문자열("예상하지 못한 서버 구분값. %v", p))
-
-	return ""
 }
 
 const (
@@ -726,8 +722,6 @@ func (p T시장상태) String() string {
 	}
 
 	panic(lb.F2문자열("예상하지 못한 시장상태. %v", p))
-
-	return ""
 }
 
 const (
@@ -886,8 +880,6 @@ func (p T증권그룹) String() string {
 	lb.F체크포인트(p)
 
 	panic(lb.F2문자열("예상하지 못한 증권그룹 값. %v", p))
-
-	return ""
 }
 
 func (p T증권그룹) XingCode() string {
@@ -922,8 +914,6 @@ func (p T일주월년_구분) String() string {
 	}
 
 	panic(lb.F2문자열("예상하지 못한 일주월 구분. '%v'", p))
-
-	return ""
 }
 
 const (
@@ -987,8 +977,6 @@ func (p T시장구분) String() string {
 	}
 
 	panic(lb.F2문자열("예상하지 못한 시장구분. '%v'", p))
-
-	return ""
 }
 
 type T재무순위_구분 uint8
