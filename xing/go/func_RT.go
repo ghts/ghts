@@ -1,6 +1,8 @@
 package xing
 
 import (
+	"strings"
+
 	lb "github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/xing/base"
 )
@@ -89,26 +91,41 @@ func F주문_응답_실시간_정보_구독() (에러 error) {
 
 	var 구독한_RT코드_모음 []string
 
-	for _, RT코드 := range RT코드_모음 {
+	for _, RT코드_구독 := range RT코드_모음 {
+		var 구독_에러 error
+
 		for range 3 {
-			if 에러 = F실시간_정보_구독_단순TR(RT코드); 에러 == nil {
+			if 구독_에러 = F실시간_정보_구독_단순TR(RT코드_구독); 구독_에러 == nil {
 				break
 			}
+
+			lb.F대기(lb.P1초)
 		}
 
-		if 에러 != nil {
+		if 구독_에러 != nil {
 			// 보상 트랜잭션 : 부분 구독 상태 방지를 위해, 이미 구독한 RT 코드를 순서대로 해지.
+			// 해지 실패가 발생하면 목록으로 누적하여, 최종 에러에 '보상 실패' 사실을 반영.
+			var 해지_실패_모음 []string
+
 			for _, RT코드_해지 := range 구독한_RT코드_모음 {
 				if 해지_에러 := F실시간_정보_해지_단순TR(RT코드_해지); 해지_에러 != nil {
 					lb.F에러_출력("F주문_응답_실시간_정보_구독 : 구독 롤백 해지 실패. '%v' : %v", RT코드_해지, 해지_에러)
+					해지_실패_모음 = append(해지_실패_모음, lb.F2문자열("%v\n%v\n", RT코드_해지, 해지_에러))
 				}
 			}
 
-			에러 = lb.New에러("RT코드 '%v' 구독 실패 : %v", RT코드, 에러)
-			return
+			에러_메시지 := lb.F2문자열("RT코드 '%v' 구독 실패\n%v\n", RT코드_구독, 구독_에러)
+
+			// 보상 트랜잭션 자체가 일부 실패했다면, '해지 안 된 구독'이 남았음을 호출 측에 명시.
+			if len(해지_실패_모음) > 0 {
+				에러_메시지 += lb.F2문자열("\n롤백 해지 에러 발생 : 해지 실패 RT코드 %d개.\n%s",
+					len(해지_실패_모음), strings.Join(해지_실패_모음, "\n"))
+			}
+
+			return lb.New에러("%s", 에러_메시지)
 		}
 
-		구독한_RT코드_모음 = append(구독한_RT코드_모음, RT코드)
+		구독한_RT코드_모음 = append(구독한_RT코드_모음, RT코드_구독)
 	}
 
 	// 모든 RT 코드 구독 성공 후에만 '구독_중'으로 표시.
