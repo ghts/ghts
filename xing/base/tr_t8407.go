@@ -36,6 +36,11 @@ type T8407_현물_멀티_현재가_조회_응답 struct {
 }
 
 func NewT8407InBlock(질의값 *lb.S질의값_복수_종목) (g *T8407InBlock) {
+	if len(질의값.M종목코드_모음) > 50 {
+		// g.Shcode는 최대 300바이트만 수용 가능. 종목당 6바이트이므로, 1번에 최대 50종목까지만 조회 가능.
+		panic(lb.New에러("NewT8407InBlock : 종목 수량 한도 50. 질의값 종목 수량 '%d'", len(질의값.M종목코드_모음)))
+	}
+
 	버퍼 := new(bytes.Buffer)
 
 	for _, 종목코드 := range 질의값.M종목코드_모음 {
