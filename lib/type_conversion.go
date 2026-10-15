@@ -432,7 +432,7 @@ func (s *S바이트_변환_모음) UnmarshalBinary(바이트_모음 []byte) (에
 	}
 
 	if len(바이트_모음) > 시작점 {
-		return New에러("*S바이트_변환_모음.UnmarshalBinary() : 마지막 %d바이트 잔존.", len(바이트_모음)-시작점)
+		return New에러with출력("*S바이트_변환_모음.UnmarshalBinary() : 마지막 %d바이트 잔존.", len(바이트_모음)-시작점)
 	}
 
 	return nil
