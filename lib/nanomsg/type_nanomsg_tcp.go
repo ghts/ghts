@@ -1,7 +1,9 @@
 package nano
 
 import (
-	"strings"
+	"errors"
+	"runtime"
+	"syscall"
 	"time"
 
 	lb "github.com/ghts/ghts/lib"
@@ -54,49 +56,67 @@ func NewNano소켓(종류 lb.T소켓_종류, 주소 string, 접속방식 lb.T소
 
 	s.S옵션(옵션_모음...)
 
-	switch 접속방식 {
-	case lb.P소켓_접속_CONNECT:
-		for range 10 {
+	for range 10 {
+		switch 접속방식 {
+		case lb.P소켓_접속_CONNECT:
 			에러 = s.Socket.Dial(주소)
-
-			switch {
-			case 에러 == nil:
-				return s, nil
-			case strings.Contains(에러.Error(), "Address in use"):
-				// 소켓이 완전히 닫히기 전에 다시 Bind()하면 Address in use 가 발생함.
-				// 이런 경우에는 잠시 기다린 후 재시도 하면 해결됨.
-				time.Sleep(500 * time.Millisecond)
-				continue
-			case strings.Contains(에러.Error(), "connectex: No connection could be made because the target machine actively refused it."):
-				// SUB소켓 생성 시 종종 발생하는 원인을 모르는 에러.
-				// 이런 경우에는 잠시 기다린 후 재시도 하면 해결됨.
-				time.Sleep(500 * time.Millisecond)
-				continue
-			default:
-				return nil, 에러
-			}
-		}
-	case lb.P소켓_접속_BIND:
-		for range 10 {
+		case lb.P소켓_접속_BIND:
 			에러 = s.Socket.Listen(주소)
-
-			switch {
-			case 에러 == nil:
-				return s, nil
-			case strings.Contains(에러.Error(), "Address in use"):
-				// 소켓이 완전히 닫히기 전에 다시 Bind()하면 Address in use 가 발생함.
-				// 이런 경우에는 잠시 기다린 후 재시도 하면 해결됨.
-				time.Sleep(500 * time.Millisecond)
-				continue
-			default:
-				return nil, 에러
-			}
+		default:
+			return nil, lb.New에러("예상하지 못한 접속 방식 : '%v'", 접속방식)
 		}
-	default:
-		return nil, lb.New에러("예상하지 못한 접속 방식 : '%v'", 접속방식)
+
+		if 에러 == nil {
+			return s, nil
+		} else if !f재시도_대상_여부(에러) {
+			return nil, 에러
+		}
+
+		// 일시적 실패(포트 미방출, 대상 미기동 등)라면 잠시 기다린 후 재시도.
+		lb.F대기(lb.P500밀리초)
 	}
 
 	return nil, lb.New에러("소켓 생성 실패.")
+}
+
+// 재시도_대상_에러_코드 — 일시적 접속 실패를 나타내는 OS 에러코드(에러 사슬 바닥의 syscall.Errno 수치).
+// TCP dial/listen 실패는 transport가 net.OpError -> os.SyscallError -> syscall.Errno 래핑 사슬로
+// 그대로 반환하며, 그 바닥 수치는 플랫폼마다 다르다.
+//
+//   - Windows: winsock WSA 코드(EADDRINUSE=10048, ECONNREFUSED=10061).
+//     Go의 syscall.E* 상수는 Windows에서 0x20000000+ 합성 수치라 실제 WSA 코드와 같지 않으므로 직접 사용할 수 없다.
+//   - POSIX(Linux 등): syscall.E* 상수가 실제 errno(ECONNREFUSED=111 등)와 같아 그대로 사용.
+var 재시도_대상_에러_코드 = func() []error {
+	switch runtime.GOOS {
+	case "windows":
+		return []error{
+			syscall.Errno(10048), // WSAEADDRINUSE — 포트가 아직 방출되지 않음
+			syscall.Errno(10061), // WSAECONNREFUSED — 대상이 아직 기동되지 않음
+		}
+	default:
+		return []error{
+			syscall.EADDRINUSE,
+			syscall.ECONNREFUSED,
+		}
+	}
+}()
+
+// f재시도_대상_여부 — 접속 에러가 재시도할 가치가 있는 일시적 실패인지 판별.
+func f재시도_대상_여부(에러 error) bool {
+	if 에러 == nil {
+		return false
+	} else if errors.Is(에러, mangos.ErrAddrInUse) ||
+		errors.Is(에러, mangos.ErrConnRefused) {
+		return true
+	}
+
+	for _, 코드 := range 재시도_대상_에러_코드 {
+		if errors.Is(에러, 코드) {
+			return true
+		}
+	}
+
+	return false
 }
 
 func NewNano소켓REQ(주소 lb.T주소, 옵션_모음 ...any) (lb.I소켓_질의, error) {
