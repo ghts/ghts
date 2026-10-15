@@ -192,7 +192,7 @@ func (s *S질의값_복수_종목) G종목코드_모음() []string {
 		return nil
 	}
 
-	return F슬라이스_복사(s.M종목코드_모음, nil).([]string)
+	return F슬라이스_복사(s.M종목코드_모음)
 }
 
 func (s *S질의값_복수_종목) G전체_종목코드() string {

@@ -626,32 +626,8 @@ func F문자열_복사(문자열 string) string {
 	return (문자열 + " ")[:len(문자열)]
 }
 
-func F슬라이스_복사(값, 에러_발생시_반환값 any) any {
-	리플렉션_값 := reflect.ValueOf(값)
-
-	switch {
-	case 리플렉션_값.IsNil():
-		F에러_출력("nil값. '%v'", 값)
-		return 에러_발생시_반환값
-	case !리플렉션_값.IsValid():
-		F에러_출력("원본 슬라이스가 유효하지 않은 zero값. '%v'", 값)
-		return 에러_발생시_반환값
-	case 리플렉션_값.Kind() != reflect.Slice:
-		F에러_출력("원본이 슬라이스가 아님. '%v'", 값)
-		return 에러_발생시_반환값
-	case 리플렉션_값.Len() == 0:
-		return 값
-		//F에러_출력("원본 슬라이스 길이가 0임. '%v'", M값)
-		//return 에러_발생시_반환값
-	}
-
-	원소_자료형 := 리플렉션_값.Index(0).Type()
-	슬라이스_자료형 := reflect.SliceOf(원소_자료형)
-	슬라이스_복사본 := reflect.MakeSlice(
-		슬라이스_자료형, 리플렉션_값.Len(), 리플렉션_값.Cap())
-	reflect.Copy(슬라이스_복사본, 리플렉션_값)
-
-	return 슬라이스_복사본.Interface()
+func F슬라이스_복사[T ~[]E, E any](값 T) T {
+	return slices.Clone(값)
 }
 
 // 이하 최대 스레드 수량 관련 함수
