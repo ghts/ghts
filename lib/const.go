@@ -394,10 +394,6 @@ func (p T매도_매수_구분) F해석(값 any) T매도_매수_구분 {
 		return P매도
 	case P매수.String():
 		return P매수
-	case P매도.String():
-		return P매도
-	case P매수.String():
-		return P매수
 	case strings.ReplaceAll(P매도_정정.String(), " ", ""):
 		return P매도_정정
 	case strings.ReplaceAll(P매수_정정.String(), " ", ""):
