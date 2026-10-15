@@ -33,7 +33,9 @@ func F당일_일일_가격정보_수집(db *sql.DB) (에러 error) {
 
 	for _, 종목코드 := range xing.F종목코드_모음_전체() {
 		s := new(S종목별_일일_가격정보_모음)
-		s.DB읽기with시작일(db, 종목코드, 한달전)
+		if 에러 := s.DB읽기with시작일(db, 종목코드, 한달전); 에러 != nil {
+			lb.F에러_출력("F당일_일일_가격정보_수집 : DB읽기with시작일 실패 → 재수집 대상 유지. %v\n%v", 종목코드, 에러)
+		}
 
 		if len(s.M저장소) > 0 && s.M저장소[len(s.M저장소)-1].M일자 == 당일 && s.M저장소[len(s.M저장소)-1].M거래량 > 0 {
 			continue
