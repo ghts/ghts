@@ -2,6 +2,7 @@ package daily_price
 
 import (
 	"bytes"
+	"strings"
 
 	lb "github.com/ghts/ghts/lib"
 	mt "github.com/ghts/ghts/lib/market_time"
@@ -13,13 +14,11 @@ import (
 )
 
 func F당일_일일_가격정보_수집(db *sql.DB) (에러 error) {
-	defer func() {
-		lb.S예외처리{M에러: &에러}.S실행()
-
+	defer lb.S예외처리{M에러: &에러, M항상_실행: func() {
 		if 에러 == nil {
 			lb.F문자열_출력("** 당일 가격정보 수집 완료 **")
 		}
-	}()
+	}}.S실행()
 
 	if lb.F지금().Before(mt.F금일_보정_시각(15, 31, 0)) && lb.F금일().Equal(xing.F당일()) {
 		lb.F문자열_출력("폐장 이후 당일 일일 가격정보 수집 예정.")
@@ -27,51 +26,92 @@ func F당일_일일_가격정보_수집(db *sql.DB) (에러 error) {
 		lb.F문자열_출력("폐장 대기 완료.")
 	}
 
+	F일일_가격정보_테이블_생성(db)
+	당일 := lb.F일자2정수(xing.F당일())
+	거래_정지_추정_맵 := make(map[string]bool) // T8407 응답에서 거래량 0(거래 정지 추정)으로 확인된 종목 — 재수집 대상에서 제외
+
+	for i := range 3 {
+		수집_대상, 대상_수집_에러 := f당일_가격정보_수집_대상(db, 거래_정지_추정_맵)
+		if 대상_수집_에러 != nil {
+			lb.F에러_출력("F당일_일일_가격정보_수집 : 수집 대상 확보 중 에러 발생 (제 %d회 시도).\n%v", i+1, 대상_수집_에러)
+			에러 = 대상_수집_에러
+		} else if len(수집_대상) == 0 {
+			에러 = nil
+			return
+		}
+
+		당일_가격정보_맵, 조회_에러 := xing.TrT8407_현물_멀티_현재가_조회(수집_대상)
+		if 조회_에러 != nil {
+			lb.F에러_출력("F당일_일일_가격정보_수집 : T8407 조회 실패(제 %d회 시도)\n%v", i+1, 조회_에러)
+			에러 = 조회_에러
+			lb.F대기(lb.P3초)
+			continue
+		}
+
+		lb.F문자열_출력("당일 일일 가격 정보 수집 제 %d차 시도 : %d개 종목 수집 예정.", i+1, len(수집_대상))
+
+		for _, 종목코드 := range 수집_대상 {
+			if 값, 존재함 := 당일_가격정보_맵[종목코드]; !존재함 {
+				continue
+			} else if 값.M누적_거래량 <= 0 {
+				거래_정지_추정_맵[종목코드] = true // 거래 정지 추정 → 저장·재수집 모두 스킵.
+				continue
+			} else {
+				s := new(S일일_가격정보)
+				s.M종목코드 = 종목코드
+				s.M일자 = 당일
+				s.M시가 = float64(값.M시가)
+				s.M고가 = float64(값.M고가)
+				s.M저가 = float64(값.M저가)
+				s.M종가 = float64(값.M현재가)
+				s.M거래량 = float64(값.M누적_거래량)
+
+				종목별_일일_가격정보_모음 := lb.F확인2(New종목별_일일_가격정보_모음([]*S일일_가격정보{s}))
+				lb.F확인1(종목별_일일_가격정보_모음.DB저장(db))
+			}
+		}
+
+		lb.F대기(lb.P3초)
+	}
+
+	if 수집_대상, 대상_수집_에러 := f당일_가격정보_수집_대상(db, 거래_정지_추정_맵); 대상_수집_에러 != nil {
+		return lb.New에러("F당일_일일_가격정보_수집 : 최종 확인 에러.\n%v", 대상_수집_에러)
+	} else if len(수집_대상) > 0 {
+		return lb.New에러("F당일_일일_가격정보_수집 : 재시도 이후 여전히 미수집 종목 %d개 %v", len(수집_대상), 수집_대상)
+	}
+
+	return nil
+}
+
+func f당일_가격정보_수집_대상(db *sql.DB, 거래_정지_추정_맵 map[string]bool) (수집_대상 []string, 에러 error) {
+	defer lb.S예외처리{M에러: &에러}.S실행()
+
 	당일 := lb.F일자2정수(xing.F당일())
 	한달전 := lb.F일자2정수(lb.F금일().Add(-30 * lb.P1일))
-	종목코드_모음 := make([]string, 0)
+	수집_대상 = make([]string, 0)
 
 	for _, 종목코드 := range xing.F종목코드_모음_전체() {
 		s := new(S종목별_일일_가격정보_모음)
-		if 에러 := s.DB읽기with시작일(db, 종목코드, 한달전); 에러 != nil {
-			lb.F에러_출력("F당일_일일_가격정보_수집 : DB읽기with시작일 실패 → 재수집 대상 유지. %v\n%v", 종목코드, 에러)
-		}
 
-		if len(s.M저장소) > 0 && s.M저장소[len(s.M저장소)-1].M일자 == 당일 && s.M저장소[len(s.M저장소)-1].M거래량 > 0 {
+		if strings.HasPrefix(종목코드, "D") {
+			continue // 채권 종목 가격 정보 보류
+		} else if 에러 = xing.F종목코드_검사(종목코드); 에러 != nil {
+			continue
+		} else if 거래_정지_추정_맵[종목코드] {
+			continue // 거래 정지 종목 가격 정보 수집 보류.
+		} else if 에러 = s.DB읽기with시작일(db, 종목코드, 한달전); 에러 != nil {
+			수집_대상 = append(수집_대상, 종목코드)
+			lb.F에러_출력("F당일_일일_가격정보_수집 : DB읽기with시작일 실패. %v\n%v", xing.F종목_식별_문자열(종목코드), 에러)
+			continue
+		} else if len(s.M저장소) > 0 && s.M저장소[len(s.M저장소)-1].M일자 == 당일 && s.M저장소[len(s.M저장소)-1].M거래량 > 0 {
 			continue
 		}
 
 		// 당일 데이터 없는 경우에만 수집 대상에 추가.
-		종목코드_모음 = append(종목코드_모음, 종목코드)
+		수집_대상 = append(수집_대상, 종목코드)
 	}
 
-	if len(종목코드_모음) == 0 {
-		return
-	}
-
-	F일일_가격정보_테이블_생성(db)
-
-	당일_가격정보_맵 := lb.F확인2(xing.TrT8407_현물_멀티_현재가_조회(종목코드_모음))
-
-	for 종목코드, 값 := range 당일_가격정보_맵 {
-		if 값.M누적_거래량 <= 0 {
-			continue // 거래 정지 종목 DB 저장 안 함.
-		}
-
-		s := new(S일일_가격정보)
-		s.M종목코드 = 종목코드
-		s.M일자 = 당일
-		s.M시가 = float64(값.M시가)
-		s.M고가 = float64(값.M고가)
-		s.M저가 = float64(값.M저가)
-		s.M종가 = float64(값.M현재가)
-		s.M거래량 = float64(값.M누적_거래량)
-
-		종목별_일일_가격정보_모음 := lb.F확인2(New종목별_일일_가격정보_모음([]*S일일_가격정보{s}))
-		lb.F확인1(종목별_일일_가격정보_모음.DB저장(db))
-	}
-
-	return nil
+	return 수집_대상, nil
 }
 
 func F일개월_일일_가격정보_수집(db *sql.DB, 종목코드_모음 []string) (에러 error) {
