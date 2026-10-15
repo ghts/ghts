@@ -327,6 +327,10 @@ func (s *S바이트_변환_모음) G에러() error {
 func (s *S바이트_변환_모음) G수량() int { return len(s.M바이트_변환_모음) }
 
 func (s *S바이트_변환_모음) G변환_형식(인덱스 int) T변환 {
+	if 인덱스 < 0 || 인덱스 >= len(s.M바이트_변환_모음) {
+		panic(New에러("해당 위치에 데이터가 존재하지 않음. 길이 : %v, 인덱스 : %v", len(s.M바이트_변환_모음), 인덱스))
+	}
+
 	return s.M바이트_변환_모음[인덱스].G변환_형식()
 }
 
@@ -427,18 +431,21 @@ func (s *S바이트_변환_모음) UnmarshalBinary(바이트_모음 []byte) (에
 		시작점 = 시작점 + 단일값_길이
 	}
 
+	if len(바이트_모음) > 시작점 {
+		return New에러("*S바이트_변환_모음.UnmarshalBinary() : 마지막 %d바이트 잔존.", len(바이트_모음)-시작점)
+	}
+
 	return nil
 }
 
 func New바이트_변환_모음(변환_형식 T변환, 값_모음 ...any) (*S바이트_변환_모음, error) {
 	if 에러 := F인터페이스_모음_입력값_검사(값_모음); 에러 != nil {
 		return nil, 에러
-	} else if 에러 := 변환_형식.G검사(); 에러 != nil {
+	} else if 에러 = 변환_형식.G검사(); 에러 != nil {
 		return nil, 에러 // 변환형식 검사
 	} else if len(값_모음) == 0 {
-		return nil, New에러with출력("")
-	} else if 변환값, ok := 값_모음[0].(*S바이트_변환_모음); ok &&
-		len(값_모음) == 1 {
+		return nil, New에러with출력("New바이트_변환_모음 : 비어있는 입력값.")
+	} else if 변환값, ok := 값_모음[0].(*S바이트_변환_모음); ok && len(값_모음) == 1 {
 		return 변환값, nil // 이미 변환된 경우에는 그대로 사용함.
 	}
 

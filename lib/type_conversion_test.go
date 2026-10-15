@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func TestS바이트_변환_매개체(t *testing.T) {
+func TestS바이트_변환(t *testing.T) {
 	t.Parallel()
 
 	변환형식_모음 := f테스트용_변환형식_모음()
@@ -35,7 +35,7 @@ func TestS바이트_변환_매개체(t *testing.T) {
 	}
 }
 
-func TestS바이트_변환_매개체_모음(t *testing.T) {
+func TestS바이트_변환_모음(t *testing.T) {
 	t.Parallel()
 
 	변환형식_모음 := f테스트용_변환형식_모음()
