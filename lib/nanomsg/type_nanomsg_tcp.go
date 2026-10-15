@@ -73,7 +73,7 @@ func NewNano소켓(종류 lb.T소켓_종류, 주소 string, 접속방식 lb.T소
 				time.Sleep(500 * time.Millisecond)
 				continue
 			default:
-				panic(lb.New에러(에러))
+				return nil, 에러
 			}
 		}
 	case lb.P소켓_접속_BIND:
