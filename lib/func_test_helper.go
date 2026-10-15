@@ -141,13 +141,25 @@ func f테스트_에러발생(t testing.TB, 에러 error, 출력_문자열_인수
 		return
 	}
 
+	defer func() { t.Fail() }()
+
 	if len(출력_문자열_인수) <= 0 {
 		F에러_출력("에러 없음.")
-	} else {
-		F에러_출력("에러 없음.\n%v", F2문자열(출력_문자열_인수...))
+		return
 	}
 
-	t.Fail()
+	switch 출력_문자열_인수[0].(type) {
+	case string, error:
+		if len(출력_문자열_인수) == 1 {
+			F에러_출력(출력_문자열_인수[0])
+		} else {
+			F에러_출력(출력_문자열_인수[0], 출력_문자열_인수[1:]...)
+		}
+
+		return
+	}
+
+	F에러_출력("에러 없음.\n%v", F2문자열(출력_문자열_인수...))
 }
 
 func F테스트_같음(t testing.TB, 값 any, 비교값1 any, 추가_비교값_모음 ...any) {
