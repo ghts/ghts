@@ -6,6 +6,7 @@ import (
 	"time"
 
 	lb "github.com/ghts/ghts/lib"
+	"github.com/ghts/ghts/lib/trade"
 	xt "github.com/ghts/ghts/xing/base"
 )
 
@@ -352,7 +353,7 @@ func f조건부_지정가_주문_불가(종목코드 string) bool {
 	조건부_지정가_주문_불가_맵_잠금.Lock()
 	defer 조건부_지정가_주문_불가_맵_잠금.Unlock()
 
-	_, 존재함 := 조건부_지정가_주문_불가_맵[종목코드]
+	_, 존재함 := 조건부_지정가_주문_불가_맵[trade.F종목코드_보정(종목코드)]
 
 	return 존재함
 }

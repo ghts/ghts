@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	lb "github.com/ghts/ghts/lib"
+	"github.com/ghts/ghts/lib/trade"
 	"github.com/ghts/ghts/xing/base"
 )
 
@@ -85,7 +86,7 @@ func f콜백_TR데이터_처리기(값 lb.I콜백) (에러 error) {
 
 				if 종목코드 != "" {
 					조건부_지정가_주문_불가_맵_잠금.Lock()
-					조건부_지정가_주문_불가_맵[종목코드] = lb.S비어있음{}
+					조건부_지정가_주문_불가_맵[trade.F종목코드_보정(종목코드)] = lb.S비어있음{}
 					조건부_지정가_주문_불가_맵_잠금.Unlock()
 				} else {
 					대기_항목.에러 = lb.New에러("%s : %s : %s", 대기_항목.TR코드, 변환값.M코드, 변환값.M내용)
