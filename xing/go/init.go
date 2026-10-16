@@ -27,7 +27,7 @@ func F초기화(서버_구분 xt.T서버_구분, 로그인_정보 *xt.S로그인
 	lb.F확인1(f초기화_DLL32())
 	lb.F확인1(F접속_로그인())
 	lb.F조건부_패닉(!f초기화_작동_확인(), "초기화 작동 확인 실패.")
-	lb.F확인1(F전송_제한_초기화())
+	lb.F확인1(F전송_제한_전체_초기화())
 	lb.F확인1(F종목_정보_설정())
 	lb.F확인1(F전일_당일_설정())
 
@@ -334,8 +334,11 @@ func F소켓_정리() {
 	소켓REQ_저장소.S정리()
 }
 
-func F전송_제한_초기화() (에러 error) {
+func F전송_제한_전체_초기화() (에러 error) {
 	defer lb.S예외처리{M에러: &에러}.S실행()
+
+	전송_제한_초기화_잠금.Lock()
+	defer 전송_제한_초기화_잠금.Unlock()
 
 	if f전체TR_전송_제한_초기화_완료() {
 		return nil
@@ -374,26 +377,27 @@ func F전송_제한_초기화() (에러 error) {
 	return f전송_제한_초기화(TR코드_모음)
 }
 
-func f전송_제한_초기화(TR코드_모음 []string) (에러 error) {
-	if len(TR코드_모음) > 1 && f전체TR_전송_제한_초기화_완료() {
-		return nil
-	} else if len(TR코드_모음) == 1 && f단일TR_전송_제한_초기화_완료(TR코드_모음[0]) {
+func F전송_제한_단일_초기화(TR코드 string) (에러 error) {
+	defer lb.S예외처리{M에러: &에러}.S실행()
+
+	전송_제한_초기화_잠금.Lock()
+	defer 전송_제한_초기화_잠금.Unlock()
+
+	if f단일TR_전송_제한_초기화_완료(TR코드) {
 		return nil
 	}
 
+	return f전송_제한_초기화([]string{TR코드})
+}
+
+func f전송_제한_초기화(TR코드_모음 []string) (에러 error) {
 	// 중복 제거
 	TR코드_맵 := make(map[string]lb.S비어있음)
-
 	for _, TR코드 := range TR코드_모음 {
 		TR코드_맵[TR코드] = lb.S비어있음{}
 	}
 
-	TR코드_모음 = make([]string, 0)
-
-	for TR코드 := range TR코드_맵 {
-		TR코드_모음 = append(TR코드_모음, TR코드)
-	}
-
+	TR코드_모음 = lb.F맵_키_모음(TR코드_맵)
 	획득_완료_확인 := false
 
 질의_반복문:

@@ -193,7 +193,7 @@ func f전송_권한_획득(TR코드 string) {
 }
 
 func f1초_1회_미만_전송_제한_확인(TR코드 string) lb.I전송_권한 {
-	tr전송_제한_초기화_확인(TR코드)
+	lb.F확인1(tr전송_제한_초기화_확인(TR코드))
 
 	전송_권한, 존재함 := func() (lb.I전송_권한, bool) {
 		전송_제한_잠금.RLock()
@@ -214,7 +214,7 @@ func f1초_1회_미만_전송_제한_확인(TR코드 string) lb.I전송_권한 {
 }
 
 func f10분당_전송_제한_확인(TR코드 string) lb.I전송_권한 {
-	tr전송_제한_초기화_확인(TR코드)
+	lb.F확인1(tr전송_제한_초기화_확인(TR코드))
 
 	전송_권한, 존재함 := f10분당_전송_제한_읽기(TR코드)
 
@@ -229,7 +229,7 @@ func f10분당_전송_제한_확인(TR코드 string) lb.I전송_권한 {
 }
 
 func f초당_전송_제한_확인(TR코드 string) lb.I전송_권한 {
-	tr전송_제한_초기화_확인(TR코드)
+	lb.F확인1(tr전송_제한_초기화_확인(TR코드))
 
 	전송_권한, 존재함 := f초당_전송_제한_읽기(TR코드)
 
@@ -263,12 +263,14 @@ func f10분당_전송_제한_읽기(TR코드 string) (lb.I전송_권한, bool) {
 	return 전송_권한, 존재함
 }
 
-func tr전송_제한_초기화_확인(TR코드 string) {
+func tr전송_제한_초기화_확인(TR코드 string) error {
 	if !f전체TR_전송_제한_초기화_완료() {
-		F전송_제한_초기화()
+		return F전송_제한_전체_초기화()
 	} else if !f단일TR_전송_제한_초기화_완료(TR코드) {
-		f전송_제한_초기화([]string{TR코드})
+		return F전송_제한_단일_초기화(TR코드)
 	}
+
+	return nil
 }
 
 func f전송_시각_기록(TR코드 string) {
