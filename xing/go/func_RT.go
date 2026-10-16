@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	lb "github.com/ghts/ghts/lib"
+	"github.com/ghts/ghts/lib/trade"
 	"github.com/ghts/ghts/xing/base"
 )
 
@@ -16,19 +17,29 @@ func F실시간_정보_해지_단순TR(RT코드 string) (에러 error) {
 }
 
 func F실시간_정보_구독_단일_종목(RT코드 string, 종목코드 string) (에러 error) {
-	return F질의(lb.New질의값_단일_종목(xt.TR실시간_정보_구독, RT코드, 종목코드)).G에러()
+	return F질의(lb.New질의값_단일_종목(xt.TR실시간_정보_구독, RT코드, trade.F종목코드_보정(종목코드))).G에러()
 }
 
 func F실시간_정보_해지_단일_종목(RT코드 string, 종목코드 string) (에러 error) {
-	return F질의(lb.New질의값_단일_종목(xt.TR실시간_정보_해지, RT코드, 종목코드)).G에러()
+	return F질의(lb.New질의값_단일_종목(xt.TR실시간_정보_해지, RT코드, trade.F종목코드_보정(종목코드))).G에러()
 }
 
 func F실시간_정보_구독_복수_종목(RT코드 string, 종목코드_모음 []string) (에러 error) {
-	return F질의(lb.New질의값_복수_종목(xt.TR실시간_정보_구독, RT코드, 종목코드_모음)).G에러()
+	보정_모음 := make([]string, len(종목코드_모음))
+	for i, 코드 := range 종목코드_모음 {
+		보정_모음[i] = trade.F종목코드_보정(코드)
+	}
+
+	return F질의(lb.New질의값_복수_종목(xt.TR실시간_정보_구독, RT코드, 보정_모음)).G에러()
 }
 
 func F실시간_정보_해지_복수_종목(RT코드 string, 종목코드_모음 []string) (에러 error) {
-	return F질의(lb.New질의값_복수_종목(xt.TR실시간_정보_해지, RT코드, 종목코드_모음)).G에러()
+	보정_모음 := make([]string, len(종목코드_모음))
+	for i, 코드 := range 종목코드_모음 {
+		보정_모음[i] = trade.F종목코드_보정(코드)
+	}
+
+	return F질의(lb.New질의값_복수_종목(xt.TR실시간_정보_해지, RT코드, 보정_모음)).G에러()
 }
 
 func F실시간_정보_일괄_해지() (에러 error) {
