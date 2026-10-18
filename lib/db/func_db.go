@@ -37,7 +37,7 @@ func DB_MySQL(DSN string) (*sql.DB, error) {
 // (데이터 수집과 트레이딩 프로세스가 동시 실행될 때 "database is locked" 방지)
 // 추가 옵션이 이미 포함되어 있으면(문자열에 '?' 존재) 뒤에 이어 붙인다.
 func DSN_SQLite(파일경로 string) string {
-	pragma옵션 := "_pragma=journal_mode(WAL)&_pragma=busy_timeout(5000)"
+	pragma옵션 := "_journal_mode=WAL&_auto_vacuum=INCREMENTAL&_busy_timeout=5000"
 
 	if strings.Contains(파일경로, "?") {
 		return 파일경로 + "&" + pragma옵션
@@ -49,6 +49,9 @@ func DSN_SQLite(파일경로 string) string {
 // DB_SQLite : DSN(파일 경로)으로 SQLite 연결.
 func DB_SQLite(DSN string) (*sql.DB, error) {
 	db, _ := sql.Open("sqlite", DSN)
+	db.SetMaxOpenConns(100)
+	db.SetMaxIdleConns(10)
+	db.SetConnMaxLifetime(lb.P1시간)
 
 	if 에러 := db.Ping(); 에러 != nil {
 		return nil, 에러
