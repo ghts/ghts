@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 	"strings"
-	"sync"
+	"sync/atomic"
 	"time"
 )
 
@@ -26,7 +26,7 @@ func New에러(포맷_문자열or에러 any, 추가_매개변수 ...any) error {
 		에러.시점 = time.Now()
 		에러.에러_메시지 = strings.TrimSpace(변환값.Error())
 		에러.원래_에러 = 변환값
-		에러.출력_완료 = false
+		에러.출력_완료.Store(false)
 		에러.호출_경로_모음 = F호출경로_모음()
 
 		return 에러
@@ -34,7 +34,7 @@ func New에러(포맷_문자열or에러 any, 추가_매개변수 ...any) error {
 		에러 := new(S에러)
 		에러.시점 = time.Now()
 		에러.에러_메시지 = fmt.Sprintf(strings.TrimSpace(변환값), 추가_매개변수...)
-		에러.출력_완료 = false
+		에러.출력_완료.Store(false)
 		에러.호출_경로_모음 = F호출경로_모음()
 
 		return 에러
@@ -51,11 +51,10 @@ func New에러with출력(포맷_문자열or에러 any, 추가_매개변수 ...an
 }
 
 type S에러 struct {
-	sync.Mutex
 	시점       time.Time
 	에러_메시지   string
 	원래_에러    error
-	출력_완료    bool
+	출력_완료    atomic.Bool
 	호출_경로_모음 []string
 }
 
@@ -70,13 +69,6 @@ func (s *S에러) Error() string {
 
 	if !strings.HasSuffix(s.에러_메시지, "\n") {
 		버퍼.WriteString("\n")
-	}
-
-	for _, 호출경로 := range s.호출_경로_모음 {
-		if !strings.Contains(s.에러_메시지, 호출경로) {
-			버퍼.WriteString(호출경로)
-			버퍼.WriteString("\n")
-		}
 	}
 
 	return 버퍼.String()
@@ -94,23 +86,33 @@ func (s *S에러) Is(에러값 error) bool {
 
 func (s *S에러) Unwrap() error { return s.원래_에러 }
 
-func (s *S에러) G출력_완료() bool { return s.출력_완료 }
+func (s *S에러) g출력_완료() bool { return s.출력_완료.Load() }
 
-func (s *S에러) S출력_완료() {
-	s.출력_완료 = true
+func (s *S에러) s출력_완료() { s.출력_완료.Store(true) }
+
+func (s *S에러) g호출_경로_문자열() string {
+	버퍼 := new(strings.Builder)
+
+	for _, 호출경로 := range s.호출_경로_모음 {
+		if strings.Contains(s.에러_메시지, 호출경로) {
+			continue
+		}
+
+		버퍼.WriteString(호출경로)
+		버퍼.WriteString("\n")
+	}
+
+	return 버퍼.String()
 }
 
 func (s *S에러) S출력() {
-	s.Lock()
-	defer s.Unlock()
-
-	if s.출력_완료 {
+	if s.g출력_완료() {
 		return
-	} else if s.에러_메시지 == "" {
+	} else if F2문자열_공백_제거(strings.ReplaceAll(s.에러_메시지, "\n", "")) == "" {
 		return
 	}
 
-	log.Println(strings.TrimSpace(s.Error()))
+	s.s출력_완료()
 
-	s.S출력_완료()
+	log.Println(F2문자열_공백_제거(s.Error()) + s.g호출_경로_문자열())
 }
