@@ -85,7 +85,7 @@ func (s *S개장일_모음) G증분_개장일(일자 uint32, 증분 int) (uint32
 
 func (s *S개장일_모음) G이전_개장일(기간 int) (이전_개장일 uint32, 에러 error) {
 	if len(s.M저장소)-1 < 기간 {
-		return lb.F일자2정수(time.Time{}), lb.New에러("Index out of range. %v %v", len(s.M저장소), 기간)
+		return lb.F일자2정수(time.Time{}), lb.New에러("Index out of range. 저장소_길이(%v) 기간(%v)", len(s.M저장소), 기간)
 	}
 
 	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 이전_개장일 = 0 }}.S실행()
