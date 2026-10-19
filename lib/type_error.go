@@ -14,9 +14,22 @@ func New에러(포맷_문자열or에러 any, 추가_매개변수 ...any) error {
 	case nil:
 		return nil
 	case *S에러:
+		호출_경로_모음 := F호출경로_모음()
+
+		if len(호출_경로_모음) > len(변환값.호출_경로_모음) {
+			변환값.호출_경로_모음 = 호출_경로_모음
+		}
+
 		return 변환값
 	case S에러:
-		return &변환값
+		에러값 := &변환값
+		호출_경로_모음 := F호출경로_모음()
+
+		if len(호출_경로_모음) > len(에러값.호출_경로_모음) {
+			에러값.호출_경로_모음 = 호출_경로_모음
+		}
+
+		return 에러값
 	case error:
 		if len(추가_매개변수) > 0 {
 			panic(New에러("New에러() 예상하지 못한 추가 매개변수 : '%v'", len(추가_매개변수)))
@@ -59,25 +72,16 @@ type S에러 struct {
 }
 
 func (s *S에러) Error() string {
-	버퍼 := new(strings.Builder)
-
-	if !strings.HasPrefix(s.에러_메시지, "\n") {
-		버퍼.WriteString("\n")
-	}
-
-	버퍼.WriteString(s.에러_메시지)
-
-	if !strings.HasSuffix(s.에러_메시지, "\n") {
-		버퍼.WriteString("\n")
-	}
-
-	return 버퍼.String()
+	return strings.TrimSpace(s.에러_메시지)
 }
 
 func (s *S에러) Is(에러값 error) bool {
 	if s.원래_에러 != nil {
 		return errors.Is(s.원래_에러, 에러값)
-	} else if 에러값 != nil && s.에러_메시지 != "" && s.에러_메시지 == 에러값.Error() {
+	} else if 에러값 == nil || s.Error() == "" {
+		return false
+	} else if strings.Contains(s.Error(), 에러값.Error()) ||
+		strings.Contains(에러값.Error(), s.Error()) {
 		return true
 	}
 
@@ -94,10 +98,6 @@ func (s *S에러) g호출_경로_문자열() string {
 	버퍼 := new(strings.Builder)
 
 	for _, 호출경로 := range s.호출_경로_모음 {
-		if strings.Contains(s.에러_메시지, 호출경로) {
-			continue
-		}
-
 		버퍼.WriteString(호출경로)
 		버퍼.WriteString("\n")
 	}
@@ -108,11 +108,28 @@ func (s *S에러) g호출_경로_문자열() string {
 func (s *S에러) S출력() {
 	if s.g출력_완료() {
 		return
-	} else if F2문자열_공백_제거(strings.ReplaceAll(s.에러_메시지, "\n", "")) == "" {
+	} else if s.Error() == "" {
 		return
 	}
 
-	s.s출력_완료()
+	버퍼 := new(strings.Builder)
 
-	log.Println(F2문자열_공백_제거(s.Error()) + s.g호출_경로_문자열())
+	if !strings.HasPrefix(s.에러_메시지, "\n") {
+		버퍼.WriteString("\n")
+	}
+
+	버퍼.WriteString(s.에러_메시지)
+
+	if !strings.HasSuffix(s.에러_메시지, "\n") {
+		버퍼.WriteString("\n")
+	}
+
+	for _, 호출경로 := range s.호출_경로_모음 {
+		버퍼.WriteString(호출경로)
+		버퍼.WriteString("\n")
+	}
+
+	log.Println(버퍼.String())
+
+	s.s출력_완료()
 }
