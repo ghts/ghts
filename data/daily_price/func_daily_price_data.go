@@ -2,6 +2,7 @@ package daily_price
 
 import (
 	"bytes"
+	"fmt"
 	"strings"
 
 	lb "github.com/ghts/ghts/lib"
@@ -235,19 +236,19 @@ func f일일_가격정보_수집_도우미(db *sql.DB, 종목코드 string, 시�
 	}
 
 	if 출력_여부 {
-		lb.F문자열_출력("%v 일일 가격 정보 수집 (%v/%v) %.1f%% : %v %v개\n",
+		fmt.Printf("%v 일일 가격 정보 수집 (%v/%v) %.1f%% : %v %v개\n",
 			lb.F지금().Format("15:04"), i+1, 전체_수량,
 			float64(i+1)/float64(전체_수량)*100,
 			xing.F종목_식별_문자열(종목코드), len(값_모음))
 	} else if i > 0 && i%100 == 0 {
-		lb.F문자열_출력("%v 일일 가격 정보 수집 (%v/%v) %.1f%%",
+		fmt.Printf("%v 일일 가격 정보 수집 (%v/%v) %.1f%%",
 			lb.F지금().Format("15:04"), i+1, 전체_수량,
 			float64(i+1)/float64(전체_수량)*100)
 	} else if 전체_수량 > 100 && i == 전체_수량-1 {
-		lb.F문자열_출력("%v 일일 가격 정보 수집 (%v/%v) 100%%",
+		fmt.Printf("%v 일일 가격 정보 수집 (%v/%v) 100%%",
 			lb.F지금().Format("15:04"), 전체_수량, 전체_수량)
 	} else if len(일일_가격정보_슬라이스) == 0 {
-		//lb.F문자열_출력("%v %v len(일일_데이터) == 0", lb.F지금().Format("15:04"), xing.F종목_식별_문자열(종목코드))
+		//fmt.Printf("%v %v len(일일_데이터) == 0", lb.F지금().Format("15:04"), xing.F종목_식별_문자열(종목코드))
 		return
 	} else if 일일_가격정보_슬라이스[0] == nil {
 		//lb.F문자열_출력("%v %v 일일_데이터[0] == nil", lb.F지금().Format("15:04"), xing.F종목_식별_문자열(종목코드))
