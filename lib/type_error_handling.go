@@ -25,14 +25,15 @@ func (s S예외처리) S실행() {
 		}
 	}()
 
-	if r := recover(); r != nil && s.M에러 != nil {
-		*s.M에러 = New에러(r) // panic 발생 시 에러 필드 갱신.
-	} else if s.M에러 != nil && *s.M에러 != nil {
-		*s.M에러 = New에러(*s.M에러) // *errors.errorString -> *lib.S에러
-	} else if r != nil {
-		F에러_출력(r)
+	if r := recover(); s.M에러 != nil && *s.M에러 != nil {
+		*s.M에러 = New에러(*s.M에러) // 에러값이 설정되어 있으면 r에 우선.
+	} else if r != nil && s.M에러 != nil {
+		*s.M에러 = New에러(r)
+	} else if r != nil && s.M에러 == nil {
+		에러값 := New에러(r)
+		s.M에러 = &에러값
 	} else {
-		return
+		return // 에러값도 없고, r도 nil이므로, 에러/패닉 없음.
 	}
 
 	if s.M에러_실행 != nil {
