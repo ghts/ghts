@@ -621,6 +621,14 @@ func F특수_종목_여부(종목코드 string) bool {
 	return false
 }
 
+func F주식_종목_여부(종목코드 string) bool {
+	return F종목코드_존재함(종목코드) &&
+		!ETF_ETN_종목_여부(종목코드) &&
+		!F특수_종목_여부(종목코드) &&
+		!F채권_종목_여부(종목코드) &&
+		!strings.HasPrefix(종목코드, "J")
+}
+
 func F호가_단위by종목코드(종목코드 string) (값 int64, 에러 error) {
 	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = 0 }}.S실행()
 
