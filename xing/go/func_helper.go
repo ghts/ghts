@@ -10,6 +10,9 @@ import (
 	xt "github.com/ghts/ghts/xing/base"
 )
 
+// F당일 : 초기화 시 KRX TrT1305 최신 일봉 기준. 장 시작 전에 기동하면 금일 바가 없어 '직전 영업일'을 반환.
+// 매일 아침 7시 10분경 Xing API 접속이 강제 종료 됨.
+// 매일 아침 강제 재접속 때, 개장되기를 기다린 후 xt.F전일_당일_설정()을 실행해서 올바른 당일 값이 설정되도록 할 것.
 func F당일() time.Time {
 	return xt.F당일()
 }
