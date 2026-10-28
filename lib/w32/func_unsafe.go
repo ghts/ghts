@@ -19,22 +19,22 @@ func F2ANSI문자열(go문자열 string) unsafe.Pointer {
 	return unsafe.Pointer(&바이트_모음[0])
 }
 
-func F2문자열_EUC_KR(c문자열_포인터 unsafe.Pointer) string {
-	return f2문자열_EUC_KR(F2Go바이트_모음(c문자열_포인터))
+func F2Go문자열(euc_kr_c문자열_포인터 unsafe.Pointer) string {
+	return f2Go문자열(F2Go바이트_모음(euc_kr_c문자열_포인터))
 }
 
-func f2문자열_EUC_KR(바이트_모음 []byte) string {
-	if len(바이트_모음) == 0 {
+func f2Go문자열(바이트_모음_EUC_KR []byte) string {
+	if len(바이트_모음_EUC_KR) == 0 {
 		return ""
-	} else if null문자_인덱스 := strings.Index(string(바이트_모음), "\x00"); null문자_인덱스 >= 0 {
-		바이트_모음 = 바이트_모음[:null문자_인덱스]
+	} else if null문자_인덱스 := strings.Index(string(바이트_모음_EUC_KR), "\x00"); null문자_인덱스 >= 0 {
+		바이트_모음_EUC_KR = 바이트_모음_EUC_KR[:null문자_인덱스]
 	}
 
-	바이트_모음_utf8, 에러 := korean.EUCKR.NewDecoder().Bytes(바이트_모음)
+	바이트_모음_UTF8, 에러 := korean.EUCKR.NewDecoder().Bytes(바이트_모음_EUC_KR)
 	if 에러 == nil {
-		return string(바이트_모음_utf8)
-	} else if len(바이트_모음) > 0 {
-		return f2문자열_EUC_KR(바이트_모음[:len(바이트_모음)-1])
+		return string(바이트_모음_UTF8)
+	} else if len(바이트_모음_EUC_KR) > 0 {
+		return f2Go문자열(바이트_모음_EUC_KR[:len(바이트_모음_EUC_KR)-1])
 	}
 
 	return ""
