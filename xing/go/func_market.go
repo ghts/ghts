@@ -696,15 +696,3 @@ func F호가_필터(종목코드 string, 호가 int64) int64 {
 func F금일_한국증시_개장() bool {
 	return F당일().Equal(lb.F금일())
 }
-
-func F인버스_ETF_ETN_여부(종목코드 string) bool {
-	종목코드 = trade.F종목코드_보정(종목코드)
-
-	if !ETF_ETN_종목_여부(종목코드) {
-		return false
-	} else if 종목명, 에러 := F종목명by코드(종목코드); 에러 != nil {
-		return false
-	} else {
-		return strings.Contains(종목명, "인버스")
-	}
-}
