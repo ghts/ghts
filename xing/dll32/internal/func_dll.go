@@ -106,15 +106,11 @@ func F접속(서버_구분 xt.T서버_구분) error {
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
-	마이너스_일 := -1
-
 	참거짓, _, 에러_번호 := w32.F호출(etkConnect,
 		메시지_윈도우,
 		w32.Go문자열2EUC_KR_바이트_모음(서버_이름),
 		포트_번호,
-		WM_USER,
-		unsafe.Pointer(&마이너스_일),
-		unsafe.Pointer(&마이너스_일))
+		WM_USER, -1, -1)
 
 	if 에러_번호 != 0 {
 		return lb.New에러("F접속() 에러 발생.\n'%v'", 에러_번호)
@@ -215,8 +211,6 @@ func F질의(TR코드 string, c데이터 unsafe.Pointer, 길이 int,
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
-	타임아웃int := int(타임아웃 / time.Second)
-
 	질의ID, _, 에러_번호 := w32.F호출(etkRequest,
 		메시지_윈도우,
 		w32.Go문자열2EUC_KR_바이트_모음(TR코드),
@@ -224,7 +218,7 @@ func F질의(TR코드 string, c데이터 unsafe.Pointer, 길이 int,
 		길이,
 		lb.F조건값(연속_조회_여부, TRUE, FALSE),
 		w32.Go문자열2EUC_KR_바이트_모음(연속키),
-		unsafe.Pointer(&타임아웃int))
+		int(타임아웃/time.Second))
 
 	// MS윈도우 기준 에러 발생 시 '질의ID = 0', 에러_번호(syscall.Errno)에 Win32 OS의 GetLastError() 결과값이 채워짐.
 	// 유닉스/리눅스/맥OS 기준 '질의ID = -1'
