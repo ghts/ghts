@@ -218,7 +218,7 @@ func OnMessageAndError(MSG데이터 unsafe.Pointer) {
 	콜백값.S콜백_기본형 = lb.New콜백_기본형(lb.P콜백_메시지_및_에러)
 	콜백값.M식별번호 = int(g.RequestID)
 	콜백값.M코드 = lb.F2문자열_공백_제거(g.MsgCode)
-	콜백값.M내용 = w32.F2Go문자열(g.MsgData)
+	콜백값.M내용 = w32.EUC_KR_C포인터2Go문자열(g.MsgData)
 	콜백값.M에러여부 = 에러여부
 
 	F콜백(콜백값)
@@ -261,7 +261,7 @@ func OnRealtimeData(실시간_데이터 unsafe.Pointer) {
 }
 
 func OnLogin(wParam, lParam unsafe.Pointer) {
-	코드 := w32.F2Go문자열(wParam)
+	코드 := w32.EUC_KR_C포인터2Go문자열(wParam)
 	정수, 에러 := lb.F2정수(코드)
 	로그인_성공_여부 := 에러 == nil && 정수 == 0
 
@@ -274,7 +274,7 @@ func OnLogin(wParam, lParam unsafe.Pointer) {
 			lb.F문자열_출력("에러 코드 : %v", 정수)
 		}
 
-		lb.F문자열_출력("에러 메세지 : %v", w32.F2Go문자열(lParam))
+		lb.F문자열_출력("에러 메세지 : %v", w32.EUC_KR_C포인터2Go문자열(lParam))
 
 		if f모의투자서버_접속_중() {
 			버퍼 := new(bytes.Buffer)

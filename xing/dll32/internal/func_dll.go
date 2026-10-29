@@ -9,7 +9,6 @@ import (
 
 	"bytes"
 	"os"
-	"runtime"
 	"time"
 	"unsafe"
 )
@@ -109,13 +108,13 @@ func F접속(서버_구분 xt.T서버_구분) error {
 
 	마이너스_일 := -1
 
-	참거짓, _, 에러_번호 := syscall.Syscall6(etkConnect, 6,
+	참거짓, _, 에러_번호 := w32.F호출(etkConnect,
 		메시지_윈도우,
-		uintptr(w32.F2ANSI문자열(서버_이름)),
-		uintptr(포트_번호),
+		w32.Go문자열2EUC_KR_바이트_모음(서버_이름),
+		포트_번호,
 		WM_USER,
-		uintptr(unsafe.Pointer(&마이너스_일)),
-		uintptr(unsafe.Pointer(&마이너스_일)))
+		unsafe.Pointer(&마이너스_일),
+		unsafe.Pointer(&마이너스_일))
 
 	if 에러_번호 != 0 {
 		return lb.New에러("F접속() 에러 발생.\n'%v'", 에러_번호)
@@ -140,7 +139,7 @@ func f접속됨() (bool, error) {
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
-	참거짓, _, 에러_번호 := syscall.Syscall(etkIsConnected, 0, 0, 0, 0)
+	참거짓, _, 에러_번호 := w32.F호출(etkIsConnected)
 
 	switch 에러_번호 {
 	case 0:
@@ -163,13 +162,13 @@ func F로그인() (에러 error) {
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
-	참거짓, _, 에러_번호 := syscall.Syscall6(etkLogin, 6,
+	참거짓, _, 에러_번호 := w32.F호출(etkLogin,
 		메시지_윈도우,
-		uintptr(w32.F2ANSI문자열(로그인_ID)),
-		uintptr(w32.F2ANSI문자열(로그인_암호)),
-		uintptr(w32.F2ANSI문자열(인증서_암호)),
+		w32.Go문자열2EUC_KR_바이트_모음(로그인_ID),
+		w32.Go문자열2EUC_KR_바이트_모음(로그인_암호),
+		w32.Go문자열2EUC_KR_바이트_모음(인증서_암호),
 		0,
-		uintptr(FALSE))
+		FALSE)
 
 	switch {
 	case 에러_번호 != 0:
@@ -187,9 +186,7 @@ func F로그아웃() (에러 error) {
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
-	_, _, 에러_번호 := syscall.Syscall(etkLogout, 1,
-		메시지_윈도우,
-		0, 0)
+	_, _, 에러_번호 := w32.F호출(etkLogout, 메시지_윈도우)
 
 	if 에러_번호 != 0 {
 		return lb.New에러with출력("로그아웃 에러 : '%v'", 에러_번호)
@@ -218,15 +215,16 @@ func F질의(TR코드 string, c데이터 unsafe.Pointer, 길이 int,
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
-	질의ID, _, 에러_번호 := syscall.Syscall9(etkRequest, 7,
+	타임아웃int := int(타임아웃 / time.Second)
+
+	질의ID, _, 에러_번호 := w32.F호출(etkRequest,
 		메시지_윈도우,
-		uintptr(w32.F2ANSI문자열(TR코드)),
-		uintptr(c데이터),
-		uintptr(길이),
-		uintptr(lb.F조건값(연속_조회_여부, TRUE, FALSE)),
-		uintptr(w32.F2ANSI문자열(연속키)),
-		uintptr(타임아웃/time.Second),
-		0, 0)
+		w32.Go문자열2EUC_KR_바이트_모음(TR코드),
+		c데이터,
+		길이,
+		lb.F조건값(연속_조회_여부, TRUE, FALSE),
+		w32.Go문자열2EUC_KR_바이트_모음(연속키),
+		unsafe.Pointer(&타임아웃int))
 
 	// MS윈도우 기준 에러 발생 시 '질의ID = 0', 에러_번호(syscall.Errno)에 Win32 OS의 GetLastError() 결과값이 채워짐.
 	// 유닉스/리눅스/맥OS 기준 '질의ID = -1'
@@ -242,12 +240,11 @@ func F실시간_정보_구독(TR코드 string, 전체_종목코드 string, 단�
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
-	참거짓, _, 에러_번호 := syscall.Syscall6(etkAdviseRealData, 4,
+	참거짓, _, 에러_번호 := w32.F호출(etkAdviseRealData,
 		메시지_윈도우,
-		uintptr(w32.F2ANSI문자열(TR코드)),
-		uintptr(w32.F2ANSI문자열(전체_종목코드)),
-		uintptr(단위_길이),
-		0, 0)
+		w32.Go문자열2EUC_KR_바이트_모음(TR코드),
+		w32.Go문자열2EUC_KR_바이트_모음(전체_종목코드),
+		단위_길이)
 
 	if 에러_번호 != 0 || 참거짓 == FALSE {
 		return lb.New에러with출력("실시간 정보 구독 에러 : '%v', '%v'", TR코드, 전체_종목코드)
@@ -260,12 +257,11 @@ func F실시간_정보_해지(TR코드 string, 전체_종목코드 string, 단�
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
-	참거짓, _, 에러_번호 := syscall.Syscall6(etkUnadviseRealData, 4,
+	참거짓, _, 에러_번호 := w32.F호출(etkUnadviseRealData,
 		메시지_윈도우,
-		uintptr(w32.F2ANSI문자열(TR코드)),
-		uintptr(w32.F2ANSI문자열(전체_종목코드)),
-		uintptr(단위_길이),
-		0, 0)
+		w32.Go문자열2EUC_KR_바이트_모음(TR코드),
+		w32.Go문자열2EUC_KR_바이트_모음(전체_종목코드),
+		단위_길이)
 
 	if 에러_번호 != 0 || 참거짓 == FALSE {
 		return lb.New에러with출력("실시간 정보 해지 에러 : '%v', '%v'", TR코드, 전체_종목코드)
@@ -289,9 +285,7 @@ func f실시간_정보_일괄_해지() error {
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
-	참거짓, _, 에러_번호 := syscall.Syscall(etkUnadviseWindow, 1,
-		메시지_윈도우,
-		0, 0)
+	참거짓, _, 에러_번호 := w32.F호출(etkUnadviseWindow, 메시지_윈도우)
 
 	switch {
 	case 에러_번호 != 0:
@@ -318,7 +312,7 @@ func f계좌_수량() (int, error) {
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
-	계좌_수량, _, 에러_번호 := syscall.Syscall(etkGetAccountListCount, 0, 0, 0, 0)
+	계좌_수량, _, 에러_번호 := w32.F호출(etkGetAccountListCount)
 
 	if 에러_번호 != 0 {
 		return 0, lb.New에러("f계좌_수량() 에러 발생.\n'%v'", 에러_번호)
@@ -330,15 +324,12 @@ func f계좌_수량() (int, error) {
 func f계좌_번호(인덱스 int) (string, error) {
 	버퍼_초기값 := "            " // 12자리 공백문자열
 	버퍼_길이 := len(버퍼_초기값)
-	c버퍼 := w32.F2ANSI문자열(버퍼_초기값)
+	c버퍼 := w32.F2포인터(w32.Go문자열2EUC_KR_바이트_모음(버퍼_초기값))
 
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
-	참거짓, _, 에러_번호 := syscall.Syscall(etkGetAccountList, 3,
-		uintptr(인덱스),
-		uintptr(c버퍼),
-		uintptr(버퍼_길이))
+	참거짓, _, 에러_번호 := w32.F호출(etkGetAccountList, 인덱스, c버퍼, 버퍼_길이)
 
 	if 에러_번호 != 0 {
 		return "", lb.New에러("f계좌_번호() 에러 발생.\n'%v'", 에러_번호)
@@ -347,8 +338,6 @@ func f계좌_번호(인덱스 int) (string, error) {
 	}
 
 	결과 := string(bytes.Trim(w32.F2Go바이트_모음with길이(c버퍼, 버퍼_길이), "\x00"))
-	runtime.KeepAlive(c버퍼)
-
 	return 결과, nil
 }
 
@@ -385,18 +374,16 @@ func F계좌_이름(질의 *lb.S채널_질의) {
 
 	// syscall 방식 호출은 에러 발생
 	버퍼 := "                                         " // 41 바이트
-	c버퍼 := w32.F2ANSI문자열(버퍼)
+	c버퍼 := w32.F2포인터(w32.Go문자열2EUC_KR_바이트_모음(버퍼))
 	버퍼_길이 := len(버퍼)
 
-	_, _, 에러_번호 := syscall.Syscall(etkGetAccountName, 3,
-		uintptr(w32.F2ANSI문자열(계좌_번호)),
-		uintptr(c버퍼),
-		uintptr(버퍼_길이))
+	c계좌_번호 := w32.Go문자열2EUC_KR_바이트_모음(계좌_번호)
+
+	_, _, 에러_번호 := w32.F호출(etkGetAccountName, c계좌_번호, c버퍼, 버퍼_길이)
 
 	switch 에러_번호 {
 	case 0:
-		계좌_이름 := lb.F2문자열_EUC_KR_공백제거(w32.F2Go바이트_모음with길이(c버퍼, 버퍼_길이))
-		runtime.KeepAlive(c버퍼)
+		계좌_이름 := lb.EUC_KR2Go문자열_공백제거(w32.F2Go바이트_모음with길이(c버퍼, 버퍼_길이))
 		질의.Ch회신값 <- 계좌_이름
 	default:
 		질의.Ch에러 <- lb.New에러("F계좌_이름() 에러 발생.\n'%v'", 에러_번호)
@@ -446,18 +433,16 @@ func F계좌_별명(질의 *lb.S채널_질의) {
 
 	// syscall 방식 호출은 에러 발생
 	버퍼 := "                                         " // 41 바이트
-	c버퍼 := w32.F2ANSI문자열(버퍼)
+	c버퍼 := w32.F2포인터(w32.Go문자열2EUC_KR_바이트_모음(버퍼))
 	버퍼_길이 := len(버퍼)
 
-	_, _, 에러_번호 := syscall.Syscall(etkGetAccountNickName, 3,
-		uintptr(w32.F2ANSI문자열(계좌_번호)),
-		uintptr(c버퍼),
-		uintptr(버퍼_길이))
+	c계좌_번호 := w32.Go문자열2EUC_KR_바이트_모음(계좌_번호)
+
+	_, _, 에러_번호 := w32.F호출(etkGetAccountNickName, c계좌_번호, c버퍼, 버퍼_길이)
 
 	switch 에러_번호 {
 	case 0:
-		계좌_별명 := lb.F2문자열_EUC_KR_공백제거(w32.F2Go바이트_모음with길이(c버퍼, 버퍼_길이))
-		runtime.KeepAlive(c버퍼)
+		계좌_별명 := lb.EUC_KR2Go문자열_공백제거(w32.F2Go바이트_모음with길이(c버퍼, 버퍼_길이))
 		질의.Ch회신값 <- 계좌_별명
 	default:
 		질의.Ch에러 <- lb.New에러("F계좌_별명() 에러 발생.\n'%v'", 에러_번호)
@@ -466,19 +451,16 @@ func F계좌_별명(질의 *lb.S채널_질의) {
 
 func F서버_이름(질의 *lb.S채널_질의) {
 	버퍼 := "                                                   "
-	c버퍼 := w32.F2ANSI문자열(버퍼)
+	c버퍼 := w32.F2포인터(w32.Go문자열2EUC_KR_바이트_모음(버퍼))
 
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
-	_, _, 에러_번호 := syscall.Syscall(etkGetServerName, 1,
-		uintptr(c버퍼),
-		0, 0)
+	_, _, 에러_번호 := w32.F호출(etkGetServerName, c버퍼)
 
 	switch 에러_번호 {
 	case 0:
-		서버_이름 := lb.F2문자열_EUC_KR_공백제거(w32.F2Go바이트_모음with길이(c버퍼, len(버퍼)))
-		runtime.KeepAlive(c버퍼)
+		서버_이름 := lb.EUC_KR2Go문자열_공백제거(w32.F2Go바이트_모음with길이(c버퍼, len(버퍼)))
 		질의.Ch회신값 <- 서버_이름
 	default:
 		질의.Ch에러 <- lb.New에러("F서버_이름() 에러 발생.\n'%v'", 에러_번호)
@@ -489,7 +471,7 @@ func F에러_코드(질의 *lb.S채널_질의) {
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
-	에러_코드, _, 에러_번호 := syscall.Syscall(etkGetLastError, 0, 0, 0, 0)
+	에러_코드, _, 에러_번호 := w32.F호출(etkGetLastError)
 
 	switch 에러_번호 {
 	case 0:
@@ -509,15 +491,12 @@ func F에러_메시지(질의 *lb.S채널_질의) {
 
 	버퍼 := go버퍼.String()
 	버퍼_길이 := len(버퍼)
-	c버퍼 := w32.F2ANSI문자열(버퍼)
+	c버퍼 := w32.F2포인터(w32.Go문자열2EUC_KR_바이트_모음(버퍼))
 
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
-	에러_메시지_길이, _, 에러_번호 := syscall.Syscall(etkGetErrorMessage, 3,
-		uintptr(에러_코드),
-		uintptr(c버퍼),
-		uintptr(버퍼_길이))
+	에러_메시지_길이, _, 에러_번호 := w32.F호출(etkGetErrorMessage, 에러_코드, c버퍼, 버퍼_길이)
 
 	switch {
 	case 에러_번호 != 0:
@@ -525,8 +504,7 @@ func F에러_메시지(질의 *lb.S채널_질의) {
 	case 에러_메시지_길이 == 0:
 		질의.Ch에러 <- lb.New에러("에러 메시지를 구할 수 없습니다.")
 	default:
-		에러_메시지 := lb.F2문자열_EUC_KR_공백제거(w32.F2Go바이트_모음with길이(c버퍼, int(에러_메시지_길이)))
-		runtime.KeepAlive(c버퍼)
+		에러_메시지 := lb.EUC_KR2Go문자열_공백제거(w32.F2Go바이트_모음with길이(c버퍼, int(에러_메시지_길이)))
 		질의.Ch회신값 <- 에러_메시지
 	}
 }
@@ -554,9 +532,8 @@ func f초당_TR쿼터(TR코드 string) int {
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
-	초당_전송_가능_횟수, _, 에러_번호 := syscall.Syscall(etkGetTRCountPerSec, 1,
-		uintptr(w32.F2ANSI문자열(TR코드)),
-		0, 0)
+	초당_전송_가능_횟수, _, 에러_번호 := w32.F호출(etkGetTRCountPerSec,
+		w32.Go문자열2EUC_KR_바이트_모음(TR코드))
 
 	if 에러_번호 != 0 {
 		lb.New에러with출력("f초당_TR쿼터() 에러 발생. 에러 코드 : '%v'", 에러_번호)
@@ -569,9 +546,8 @@ func f초당_TR쿼터_역수(TR코드 string) int {
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
-	초당_전송_가능_횟수_역수, _, 에러_번호 := syscall.Syscall(etkGetTRCountBaseSec, 1,
-		uintptr(w32.F2ANSI문자열(TR코드)),
-		0, 0)
+	초당_전송_가능_횟수_역수, _, 에러_번호 := w32.F호출(etkGetTRCountBaseSec,
+		w32.Go문자열2EUC_KR_바이트_모음(TR코드))
 
 	if 에러_번호 != 0 {
 		lb.New에러with출력("f초당_TR쿼터_역수() 에러 발생. 에러 코드 : '%v'", 에러_번호)
@@ -584,9 +560,8 @@ func f10분당_TR쿼터(TR코드 string) int {
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
-	십분당_TR쿼터, _, 에러_번호 := syscall.Syscall(etkGetTRCountLimit, 1,
-		uintptr(w32.F2ANSI문자열(TR코드)),
-		0, 0)
+	십분당_TR쿼터, _, 에러_번호 := w32.F호출(etkGetTRCountLimit,
+		w32.Go문자열2EUC_KR_바이트_모음(TR코드))
 
 	if 에러_번호 != 0 {
 		lb.New에러with출력("f10분당_TR쿼터() 에러 발생. 에러 코드 : '%v'", 에러_번호)
@@ -599,9 +574,8 @@ func f10분간_요청한_TR수량(TR코드 string) int {
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
-	십분간_요청한_TR수량, _, 에러_번호 := syscall.Syscall(etkGetTRCountRequest, 1,
-		uintptr(w32.F2ANSI문자열(TR코드)),
-		0, 0)
+	십분간_요청한_TR수량, _, 에러_번호 := w32.F호출(etkGetTRCountRequest,
+		w32.Go문자열2EUC_KR_바이트_모음(TR코드))
 
 	if 에러_번호 != 0 {
 		lb.New에러with출력("f10분간_요청한_TR수량() 에러 발생. 에러 코드 : '%v'", 에러_번호)
@@ -614,9 +588,7 @@ func F데이터_해제(식별번호 int) {
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
-	_, _, 에러_번호 := syscall.Syscall(etkReleaseRequestData, 1,
-		uintptr(식별번호),
-		0, 0)
+	_, _, 에러_번호 := w32.F호출(etkReleaseRequestData, 식별번호)
 
 	if 에러_번호 != 0 {
 		lb.New에러with출력("F데이터_해제() 에러 발생. 에러 코드 : '%v'", 에러_번호)
@@ -627,9 +599,7 @@ func F메시지_해제(메시지_포인터 unsafe.Pointer) {
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
-	_, _, 에러_번호 := syscall.Syscall(etkReleaseMessageData, 1,
-		uintptr(메시지_포인터),
-		0, 0)
+	_, _, 에러_번호 := w32.F호출(etkReleaseMessageData, 메시지_포인터)
 
 	if 에러_번호 != 0 {
 		lb.New에러with출력("F메시지_해제() 에러 발생. 에러 코드 : '%v'", 에러_번호)
@@ -640,10 +610,7 @@ func F압축_해제(압축된_원본_데이터 unsafe.Pointer, 버퍼 *byte, 원
 	api_호출_잠금.Lock()
 	defer api_호출_잠금.Unlock()
 
-	압축_해제된_데이터_길이, _, 에러_번호 := syscall.Syscall(etkDecompress, 3,
-		uintptr(압축된_원본_데이터),
-		uintptr(unsafe.Pointer(버퍼)),
-		uintptr(원본_데이터_길이))
+	압축_해제된_데이터_길이, _, 에러_번호 := w32.F호출(etkDecompress, 압축된_원본_데이터, unsafe.Pointer(버퍼), 원본_데이터_길이)
 
 	if 에러_번호 != 0 {
 		lb.New에러with출력("F압축_해제() 에러 발생. 에러 코드 : '%v'", 에러_번호)

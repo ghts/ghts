@@ -105,7 +105,6 @@ func F조회_및_주문_질의_처리(질의 *lb.S채널_질의) {
 	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 질의.Ch에러 <- 에러 }}.S실행()
 
 	var c데이터 unsafe.Pointer
-
 	var 길이 int
 	연속_조회_여부 := false
 	연속_조회_키 := ""
@@ -152,7 +151,7 @@ func F조회_및_주문_질의_처리(질의 *lb.S채널_질의) {
 		c데이터 = unsafe.Pointer(xt.NewT0151InBlock(질의값.(*xt.T0151_현물_일자별_매매일지_질의값)))
 		길이 = xt.SizeT0151InBlock
 	case xt.TR시간_조회_t0167:
-		c데이터 = w32.F2ANSI문자열("")
+		c데이터 = w32.F2포인터(w32.Go문자열2EUC_KR_바이트_모음(""))
 		길이 = 0
 	case xt.TR현물_체결_미체결_조회_t0425:
 		c데이터 = unsafe.Pointer(xt.NewT0425InBlock(질의값.(*xt.T0425_현물_체결_미체결_조회_질의값), V계좌_비밀번호))
