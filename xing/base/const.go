@@ -327,17 +327,15 @@ const (
 	TR접속_해제
 	TR초기화
 	TR종료
-
-	// Xing API에서 사용되는 것들
-	TR서버_이름
+	//TR서버_이름
 	TR에러_코드
 	TR에러_메시지
 	TR코드별_전송_제한
 	TR계좌_수량
 	TR계좌_번호
 	TR계좌_이름
-	TR계좌_상세명
-	TR계좌_별명
+	//TR계좌_상세명
+	//TR계좌_별명
 	TR소켓_테스트
 	TR서버_구분
 )
@@ -364,8 +362,8 @@ func TR구분_String(v lb.TR구분) string {
 		return "TR초기화"
 	case TR종료:
 		return "TR종료"
-	case TR서버_이름:
-		return "서버_이름"
+	//case TR서버_이름:
+	//	return "서버_이름"
 	case TR에러_코드:
 		return "에러_코드"
 	case TR에러_메시지:
@@ -378,10 +376,10 @@ func TR구분_String(v lb.TR구분) string {
 		return "계좌_번호"
 	case TR계좌_이름:
 		return "계좌_이름"
-	case TR계좌_상세명:
-		return "계좌_상세명"
-	case TR계좌_별명:
-		return "계좌_별명"
+	//case TR계좌_상세명:
+	//	return "계좌_상세명"
+	//case TR계좌_별명:
+	//	return "계좌_별명"
 	case TR소켓_테스트:
 		return "신호"
 	case TR서버_구분:

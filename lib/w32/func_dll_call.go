@@ -36,11 +36,35 @@ func f인자_변환(인자 ...any) ([]uintptr, []any) {
 
 	for _, 인자값 := range 인자 {
 		switch v := 인자값.(type) {
+		case string:
+			바이트_모음 := Go문자열2EUC_KR_바이트_모음(v)
+			p := F2포인터(바이트_모음)
+
+			uintptr_모음 = append(uintptr_모음, uintptr(p))
+			유지할_인자_모음 = append(유지할_인자_모음, v)
+			유지할_인자_모음 = append(유지할_인자_모음, 바이트_모음)
+			유지할_인자_모음 = append(유지할_인자_모음, p)
 		case []byte:
 			if p := F2포인터(v); p == nil {
-				uintptr_모음 = append(uintptr_모음, 0) // 빈 버퍼 → NULL (보호 불필요).
+				uintptr_모음 = append(uintptr_모음, 0)
 			} else {
 				uintptr_모음 = append(uintptr_모음, uintptr(p))
+				유지할_인자_모음 = append(유지할_인자_모음, v)
+				유지할_인자_모음 = append(유지할_인자_모음, p)
+			}
+		case *byte:
+			if p := unsafe.Pointer(v); p == nil {
+				uintptr_모음 = append(uintptr_모음, 0)
+			} else {
+				uintptr_모음 = append(uintptr_모음, uintptr(p))
+				유지할_인자_모음 = append(유지할_인자_모음, v)
+				유지할_인자_모음 = append(유지할_인자_모음, p)
+			}
+		case unsafe.Pointer: // F호출() 실행 중 대상 메모리는 GC 회수로부터 보호됨. 전체 수명 관리 책임은 호출부.
+			if v == nil {
+				uintptr_모음 = append(uintptr_모음, 0)
+			} else {
+				uintptr_모음 = append(uintptr_모음, uintptr(v))
 				유지할_인자_모음 = append(유지할_인자_모음, v)
 			}
 		case int:
@@ -51,13 +75,6 @@ func f인자_변환(인자 ...any) ([]uintptr, []any) {
 			uintptr_모음 = append(uintptr_모음, uintptr(v))
 		case uintptr:
 			uintptr_모음 = append(uintptr_모음, v)
-		case unsafe.Pointer: // F호출() 실행 중 대상 메모리는 GC 회수로부터 보호됨. 전체 수명 관리 책임은 호출부.
-			if v != nil {
-				uintptr_모음 = append(uintptr_모음, uintptr(v))
-				유지할_인자_모음 = append(유지할_인자_모음, v)
-			} else {
-				uintptr_모음 = append(uintptr_모음, 0)
-			}
 		default:
 			panic(fmt.Sprintf("w32.F호출(): 지원하지 않는 인자 타입 '%T' (지원: []byte / int / int32 / int64 / uintptr / unsafe.Pointer)", 인자값))
 		}
