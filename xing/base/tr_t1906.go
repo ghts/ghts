@@ -75,7 +75,7 @@ func NewT1906_ETF_LP_호가_조회_응답(b []byte) (s *T1906_ETF_LP_호가_조�
 		s.M시각 = lb.F2일자별_시각_단순형_공백은_초기값(당일.G값(), "150405.999", 시각_문자열[:6]+"."+시각_문자열[6:])
 	}
 
-	s.M종목명 = lb.F2문자열_EUC_KR(g.Hname)
+	s.M종목명 = lb.EUC_KR2Go문자열(g.Hname)
 	s.M현재가 = lb.F확인2(lb.F2정수64(g.Price))
 	s.M전일대비구분 = T전일대비_구분(lb.F확인2(lb.F2정수64(g.Sign)))
 	s.M전일대비등락폭 = lb.F확인2(lb.F2정수64(g.Change))

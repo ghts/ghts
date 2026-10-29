@@ -45,7 +45,7 @@ func F2호가유형(xing호가유형코드 int) lb.T호가유형 {
 }
 
 func F2시장구분(값 any) lb.T시장구분 {
-	문자열 := lb.F2문자열_EUC_KR_공백제거(값)
+	문자열 := lb.EUC_KR2Go문자열_공백제거(값)
 
 	switch 문자열 {
 	case "KOSPI", "KOSPI200":

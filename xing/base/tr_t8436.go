@@ -53,7 +53,7 @@ func NewT8436_현물_종목조회_응답_반복값_모음(b []byte) (값_모음 
 		lb.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 		값 := new(T8436_현물_종목조회_응답_반복값)
-		값.M종목명 = lb.F2문자열_EUC_KR_공백제거(g.Hname)
+		값.M종목명 = lb.EUC_KR2Go문자열_공백제거(g.Hname)
 		값.M종목코드 = lb.F2문자열_공백_제거(g.Shcode)
 		//s.M주문수량단위 = lb.F확인2(lb.F2정수(g.MeMeDan))
 		값.M상한가 = lb.F확인2(lb.F2정수64(g.Uplmtprice))

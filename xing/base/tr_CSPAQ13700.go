@@ -203,7 +203,7 @@ func NewCSPAQ13700_현물계좌_주문체결내역_반복값_모음(b []byte) (�
 		값.M주문번호 = lb.F확인2(lb.F2정수64_공백은_0(g.OrdNo))
 		값.M원주문번호 = lb.F확인2(lb.F2정수64_공백은_0(g.OrgOrdNo))
 		값.M종목코드 = lb.F2문자열_공백_제거(g.IsuNo)
-		값.M종목명 = lb.F2문자열_EUC_KR_공백제거(g.IsuNm)
+		값.M종목명 = lb.EUC_KR2Go문자열_공백제거(g.IsuNm)
 
 		switch lb.F2문자열(g.BnsTpCode) {
 		case "1":

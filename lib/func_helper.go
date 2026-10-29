@@ -384,7 +384,7 @@ func HTTP회신_본문(url string) (string, error) {
 func HTTP회신_본문_CP949(url string) (string, error) {
 	바이트_모음, 에러 := http회신_본문_바이트_모음(url)
 
-	return F2문자열_EUC_KR(바이트_모음), 에러
+	return EUC_KR2Go문자열(바이트_모음), 에러
 }
 
 func http회신_본문_바이트_모음(url string) (바이트_모음 []byte, 에러 error) {

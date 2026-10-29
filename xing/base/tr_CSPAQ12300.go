@@ -312,9 +312,9 @@ func NewCSPAQ12300_현물계좌_잔고내역_조회_응답_반복값_모음(b []
 
 		값 := new(CSPAQ12300_현물계좌_잔고내역_응답_반복값)
 		값.M종목코드 = strings.Replace(lb.F2문자열_공백_제거(g.IsuNo), "A", "", 1)
-		값.M종목명 = lb.F2문자열_EUC_KR_공백제거(g.IsuNm)
+		값.M종목명 = lb.EUC_KR2Go문자열_공백제거(g.IsuNm)
 		값.M유가증권잔고유형코드 = lb.F2문자열(g.SecBalPtnCode)
-		값.M유가증권잔고유형명 = lb.F2문자열_EUC_KR_공백제거(g.SecBalPtnNm)
+		값.M유가증권잔고유형명 = lb.EUC_KR2Go문자열_공백제거(g.SecBalPtnNm)
 		값.M잔고수량 = lb.F확인2(lb.F2정수64(g.BalQty))
 		값.M매매기준잔고수량 = lb.F확인2(lb.F2정수64(g.BnsBaseBalQty))
 		값.M금일매수체결수량 = lb.F확인2(lb.F2정수64(g.CrdayBuyExecQty))

@@ -310,11 +310,11 @@ func F2바이트_모음(값 any) []byte {
 	}
 }
 
-func F2문자열_EUC_KR_공백제거(값 any) string {
-	return strings.TrimSpace(F2문자열_EUC_KR(값))
+func EUC_KR2Go문자열_공백제거(값 any) string {
+	return strings.TrimSpace(EUC_KR2Go문자열(값))
 }
 
-func F2문자열_EUC_KR(값 any) string {
+func EUC_KR2Go문자열(값 any) string {
 	바이트_모음 := make([]byte, 0)
 
 	switch 변환값 := 값.(type) {
@@ -354,7 +354,7 @@ func F2문자열_EUC_KR(값 any) string {
 	바이트_모음_utf8, 에러 := korean.EUCKR.NewDecoder().Bytes(바이트_모음)
 	if 에러 != nil {
 		if len(바이트_모음) > 0 {
-			return F2문자열_EUC_KR(바이트_모음[:len(바이트_모음)-1])
+			return EUC_KR2Go문자열(바이트_모음[:len(바이트_모음)-1])
 		}
 
 		return string(바이트_모음)

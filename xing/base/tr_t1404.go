@@ -106,7 +106,7 @@ func NewT1404_관리종목_조회_응답_반복값_모음(b []byte) (값_모음 
 
 		값 := new(T1404_관리종목_조회_응답_반복값)
 		값.M종목코드 = lb.F2문자열(g.Shcode)
-		값.M종목명 = lb.F2문자열_EUC_KR_공백제거(g.Hname)
+		값.M종목명 = lb.EUC_KR2Go문자열_공백제거(g.Hname)
 		값.M현재가 = lb.F확인2(lb.F2정수64(g.Price))
 		값.M전일대비구분 = T전일대비_구분(lb.F확인2(lb.F2정수64(g.Sign)))
 		값.M전일대비_등락폭 = 값.M전일대비구분.G부호보정_정수64(lb.F확인2(lb.F2정수64(g.Change)))

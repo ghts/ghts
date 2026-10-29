@@ -387,7 +387,7 @@ func (p T매도_매수_구분) String() string {
 }
 
 func (p T매도_매수_구분) F해석(값 any) T매도_매수_구분 {
-	문자열 := F2문자열_EUC_KR_공백제거(값)
+	문자열 := EUC_KR2Go문자열_공백제거(값)
 
 	switch 문자열 {
 	case P매도.String():

@@ -137,7 +137,7 @@ func NewT3341_재무순위_응답_반복값_모음(b []byte) (값_모음 *T3341_
 		값 := new(T3341_재무순위_응답_반복값)
 		값.M종목코드 = lb.F2문자열(g.Shcode)
 		값.M순위 = lb.F확인2(lb.F2정수(g.Rank))
-		값.M기업명 = lb.F2문자열_EUC_KR_공백제거(g.Hname)
+		값.M기업명 = lb.EUC_KR2Go문자열_공백제거(g.Hname)
 		값.M매출액_증가율 = lb.F확인2(lb.F2실수_소숫점_추가_공백은_0(g.Salesgrowth, 2))
 		값.M영업이익_증가율 = lb.F확인2(lb.F2실수_소숫점_추가_공백은_0(g.Operatingincomegrowt, 2))
 		값.M경상이익_증가율 = lb.F확인2(lb.F2실수_소숫점_추가_공백은_0(g.Ordinaryincomegrowth, 2))

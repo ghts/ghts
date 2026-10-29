@@ -75,8 +75,8 @@ func NewT1902_ETF시간별_추이_응답_헤더(b []byte) (s *T1902_ETF시간별
 
 	s = new(T1902_ETF시간별_추이_응답_헤더)
 	s.M연속키 = lb.F2문자열_공백_제거(g.Time)
-	s.M종목명 = lb.F2문자열_EUC_KR_공백제거(g.Hname)
-	s.M업종지수명 = lb.F2문자열_EUC_KR_공백제거(g.Upname)
+	s.M종목명 = lb.EUC_KR2Go문자열_공백제거(g.Hname)
+	s.M업종지수명 = lb.EUC_KR2Go문자열_공백제거(g.Upname)
 
 	return s, nil
 }

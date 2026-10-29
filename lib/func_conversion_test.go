@@ -121,9 +121,9 @@ func TestF인터페이스_모음2문자열_모음(t *testing.T) {
 func TestF2문자열_EUC_KR(t *testing.T) {
 	t.Parallel()
 
-	F테스트_같음(t, "아름다운 우리말", F2문자열_EUC_KR("\xbe\xc6\xb8\xa7\xb4\xd9\xbf\xee \xbf\xec\xb8\xae\xb8\xbb"))
-	F테스트_같음(t, "똠방각하", F2문자열_EUC_KR("\x8cc\xb9\xe6\xb0\xa2\xc7\xcf"))
-	F테스트_같음(t, "펩시콜라", F2문자열_EUC_KR("\xc6\xe9\xbd\xc3\xc4\xdd\xb6\xf3"))
+	F테스트_같음(t, "아름다운 우리말", EUC_KR2Go문자열("\xbe\xc6\xb8\xa7\xb4\xd9\xbf\xee \xbf\xec\xb8\xae\xb8\xbb"))
+	F테스트_같음(t, "똠방각하", EUC_KR2Go문자열("\x8cc\xb9\xe6\xb0\xa2\xc7\xcf"))
+	F테스트_같음(t, "펩시콜라", EUC_KR2Go문자열("\xc6\xe9\xbd\xc3\xc4\xdd\xb6\xf3"))
 }
 
 func TestF인코딩_디코딩(t *testing.T) {

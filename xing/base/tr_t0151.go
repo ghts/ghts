@@ -142,7 +142,7 @@ func NewT0151_현물_일자별_매매일지_응답_반복값_모음(b []byte) (�
 		g := new(T0151OutBlock1)
 		lb.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
-		if 문자열 := lb.F2문자열_EUC_KR_공백제거(g.Medosu); 문자열 == "종목소계" {
+		if 문자열 := lb.EUC_KR2Go문자열_공백제거(g.Medosu); 문자열 == "종목소계" {
 			continue
 		} else if 문자열 != "매도" && 문자열 != "매수" {
 			lb.F에러_출력("예상하지 못한 값 : '%v'", 문자열)
