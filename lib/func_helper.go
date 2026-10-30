@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/csv"
 	"encoding/gob"
+	"errors"
 	"io"
 	"io/fs"
 	"maps"
@@ -886,7 +887,7 @@ func F파일에서_값_읽기(값_포인터 any, 파일명 string, 파일_잠금
 	switch {
 	case 에러 != nil:
 		switch {
-		case strings.Contains(에러.Error(), "EOF"):
+		case errors.Is(에러, io.EOF): // 빈 파일(기록 없음)
 			reflect.ValueOf(값_포인터).Elem().Set(reflect.Zero(reflect.TypeOf(값_포인터).Elem()))
 			return nil
 		default:
