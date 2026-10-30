@@ -79,6 +79,10 @@ func f콜백_동기식(콜백값 lb.I콜백) (에러 error) {
 	defer lb.S예외처리{M에러: &에러}.S실행()
 
 	소켓REQ := 소켓REQ_저장소.G소켓()
+	if 소켓REQ == nil {
+		return lb.New에러("f콜백_동기식 : 소켓REQ 확보 실패.")
+	}
+
 	defer 소켓REQ_저장소.S회수(소켓REQ)
 
 	i값 := lb.F확인2(lb.F확인2(소켓REQ.G질의_응답(lb.P변환형식_기본값, 콜백값)).G해석값(0))
