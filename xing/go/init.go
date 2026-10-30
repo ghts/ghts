@@ -256,18 +256,22 @@ func DLL32_종료됨() bool {
 }
 
 func DLL32_종료() (에러 error) {
-	defer lb.S예외처리{M에러: &에러}.S실행()
+	// 에러 출력은 호출부(F종료)가 담당하므로 여기서 숨긴다.
+	defer lb.S예외처리{M에러: &에러, M출력_숨김: true}.S실행()
 
 	if !DLL32_종료됨() {
 		소켓REQ := 소켓REQ_저장소.G소켓()
+		if 소켓REQ == nil {
+			return lb.New에러("DLL32 종료 : 소켓REQ 획득 실패")
+		} else if 송신_에러 := 소켓REQ.S송신(lb.P변환형식_기본값, lb.New질의값_기본형(lb.TR종료, "")); 송신_에러 != nil {
+			return 송신_에러
+		}
 
-		소켓REQ.S송신(lb.P변환형식_기본값, lb.New질의값_기본형(lb.TR종료, ""))
 		소켓REQ_저장소.S회수(소켓REQ)
-
-		lb.F대기(lb.P20초)
+		lb.F대기(lb.P10초)
 	}
 
-	ch타임아웃 := time.After(lb.P2분)
+	ch타임아웃 := time.After(lb.P30초)
 
 	select {
 	case <-ch신호_DLL32_종료:
@@ -299,9 +303,10 @@ func F종료() {
 
 		if lb.F지금().Before(종료_시각.G값().Add(lb.P3분)) {
 			return // 중복 실행 방지.
+		} else if 에러 := DLL32_종료(); 에러 != nil {
+			lb.F문자열_출력("DLL32 종료 실패 : %v", 에러)
 		}
 
-		DLL32_종료()
 		F소켓_정리()
 
 		타임_아웃 := time.After(lb.P1분)
