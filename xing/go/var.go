@@ -31,12 +31,11 @@ var (
 	Ch콜백_도우미_종료  = make(chan lb.T신호, V콜백_도우미_수량)
 	Ch접속_끊김      = make(chan lb.T신호)
 
-	전송_제한_정보_모음          *xt.TR코드별_전송_제한_정보_모음
-	tr코드별_전송_제한_초당_1회_미만 = make(map[string]lb.I전송_권한)
-	tr코드별_전송_제한_1초       = make(map[string]lb.I전송_권한)
-	tr코드별_전송_제한_10분      = make(map[string]lb.I전송_권한)
-	전송_제한_잠금             sync.RWMutex
-	전송_제한_초기화_잠금         sync.Mutex
+	전송_제한_정보_모음     *xt.TR코드별_전송_제한_정보_모음
+	tr코드별_전송_제한_1초  = make(map[string]lb.I전송_권한)
+	tr코드별_전송_제한_10분 = make(map[string]lb.I전송_권한)
+	전송_제한_잠금        sync.RWMutex
+	전송_제한_초기화_잠금    sync.Mutex
 
 	주문_응답_구독_중  = lb.New안전한_bool(false)
 	주문_응답_구독_잠금 = sync.Mutex{}
