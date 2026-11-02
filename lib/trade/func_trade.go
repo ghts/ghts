@@ -344,43 +344,6 @@ func F기간(시작일, 종료일 uint32) int {
 	return int(종료.Sub(시작).Hours() / 24)
 }
 
-func F주문가by퍼센트(매도_매수_구분 lb.T매도_매수_구분, 현재가 int64, 퍼센트 float64) int64 {
-	switch 매도_매수_구분 {
-	case lb.P매도:
-		return F매도_주문가by퍼센트(현재가, 퍼센트)
-	case lb.P매수:
-		return F매수_주문가by퍼센트(현재가, 퍼센트)
-	default:
-		panic(lb.New에러("예상하지 못한 ''매도_매수_구분'값 : %v", 매도_매수_구분))
-	}
-}
-
-func F매도_주문가by퍼센트(현재가 int64, 퍼센트 float64) int64 {
-	기준가 := float64(현재가) * (1 + math.Abs(퍼센트)/100)
-	주문가_후보 := int64(math.Ceil(기준가))
-
-	for {
-		if 주문가_후보%5 == 0 {
-			return 주문가_후보
-		} else {
-			주문가_후보++
-		}
-	}
-}
-
-func F매수_주문가by퍼센트(현재가 int64, 퍼센트 float64) int64 {
-	기준가 := float64(현재가) * (1 - math.Abs(퍼센트)/100)
-	주문가_후보 := int64(math.Ceil(기준가))
-
-	for {
-		if 주문가_후보%5 == 0 {
-			return 주문가_후보
-		} else {
-			주문가_후보--
-		}
-	}
-}
-
 func F종목코드_보정(종목코드 string) string {
 	if len(종목코드) == 7 && strings.HasPrefix(종목코드, "A") {
 		return 종목코드[1:]
