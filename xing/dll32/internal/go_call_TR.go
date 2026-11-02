@@ -47,7 +47,7 @@ func go함수_호출_도우미(ch초기화, ch종료 chan lb.T신호) {
 			return
 		default:
 			F윈도우_메시지_처리()
-			time.Sleep(50)
+			time.Sleep(50 * time.Millisecond)
 		}
 	}
 }
