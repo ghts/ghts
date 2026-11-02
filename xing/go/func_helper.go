@@ -101,7 +101,7 @@ func f데이터_복원_이중_응답(대기_항목 *DLL32_콜백_대기_항목, 
 	switch 변환값 := lb.F확인2(수신값.S해석기(xt.F바이트_변환값_해석).G해석값()).(type) {
 	case nil:
 		대기_항목.대기값 = nil
-		대기_항목.데이터_수신 = true
+		대기_항목.데이터_수신 = false
 		return nil
 	case error:
 		return 변환값
@@ -152,6 +152,10 @@ func f데이터_복원_반복_조회(대기_항목 *DLL32_콜백_대기_항목, 
 	switch 변환값 := lb.F확인2(수신값.S해석기(xt.F바이트_변환값_해석).G해석값()).(type) {
 	default:
 		panic(lb.New에러with출력("f데이터_복원_반복_조회() 예상하지 못한 자료형 : '%T' '%v'", 변환값, 수신값.G자료형_문자열()))
+	case nil:
+		대기_항목.대기값 = nil
+		대기_항목.데이터_수신 = false
+		return nil
 	case error:
 		lb.F에러_출력(변환값.Error())
 		return 변환값
