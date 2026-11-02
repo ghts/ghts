@@ -247,11 +247,10 @@ func f일일_가격정보_수집_도우미(db *sql.DB, 종목코드 string, 시�
 	} else if 전체_수량 > 100 && i == 전체_수량-1 {
 		fmt.Printf("%v 일일 가격 정보 수집 (%v/%v) 100%%",
 			lb.F지금().Format("15:04"), 전체_수량, 전체_수량)
-	} else if len(일일_가격정보_슬라이스) == 0 {
+	}
+
+	if len(일일_가격정보_슬라이스) == 0 {
 		//fmt.Printf("%v %v len(일일_데이터) == 0", lb.F지금().Format("15:04"), xing.F종목_식별_문자열(종목코드))
-		return
-	} else if 일일_가격정보_슬라이스[0] == nil {
-		//lb.F문자열_출력("%v %v 일일_데이터[0] == nil", lb.F지금().Format("15:04"), xing.F종목_식별_문자열(종목코드))
 		return
 	}
 
