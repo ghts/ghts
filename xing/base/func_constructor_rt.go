@@ -381,7 +381,7 @@ func New코스닥_시간외_호가_잔량(b []byte) (값 *S코스닥_시간외_�
 
 	lb.F조건부_패닉(len(b) != SizeHB_OutBlock, "예상하지 못한 길이 : '%v'", len(b))
 
-	g := new(H2_OutBlock)
+	g := new(HB_OutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	값 = new(S코스닥_시간외_호가_잔량_실시간_정보)
