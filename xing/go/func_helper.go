@@ -247,6 +247,19 @@ func f10분당_전송_제한_읽기(TR코드 string) (lb.I전송_권한, bool) {
 	return 전송_권한, 존재함
 }
 
+func F10분당_전송_제한_간격(TR코드 string) time.Duration {
+	전송_제한_잠금.RLock()
+	defer 전송_제한_잠금.RUnlock()
+
+	if 전송_제한_정보, 존재함 := 전송_제한_정보_모음.M맵[TR코드]; 존재함 &&
+		전송_제한_정보 != nil &&
+		전송_제한_정보.M10분당_전송_제한 > 0 {
+		return time.Duration(int64(lb.P10분)/int64(전송_제한_정보.M10분당_전송_제한)) + lb.P100밀리초
+	}
+
+	return time.Duration(0)
+}
+
 func tr전송_제한_초기화_확인(TR코드 string) error {
 	if !f전체TR_전송_제한_초기화_완료() {
 		return F전송_제한_전체_초기화()
