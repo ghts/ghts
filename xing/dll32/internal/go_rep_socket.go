@@ -47,13 +47,12 @@ func go수신_도우미(ch초기화, ch종료 chan lb.T신호) (에러 error) {
 
 	if ctx, 에러 = 소켓REP_TR수신.G컨텍스트(); 에러 != nil {
 		ctx = nil
+		ch초기화 <- lb.P신호_에러
+
 		return lb.New에러(에러)
 	}
 
-	select {
-	case ch초기화 <- lb.P신호_초기화:
-	default:
-	}
+	ch초기화 <- lb.P신호_초기화
 
 	for {
 		if lb.F공통_종료_채널_닫힘() {

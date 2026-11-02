@@ -29,15 +29,17 @@ func go함수_호출_도우미(ch초기화, ch종료 chan lb.T신호) {
 	runtime.LockOSThread()
 	defer runtime.UnlockOSThread()
 
-	lb.F확인1(f초기화_XingAPI()) // 모든 API 액세스를 단일 스레드에서 하기 위해서 여기에서 API 초기화를 실행함.
+	// 모든 API 액세스를 단일 스레드에서 하기 위해서 여기에서 API 초기화를 실행함.
+	if 에러 := f초기화_XingAPI(); 에러 != nil {
+		ch초기화 <- lb.P신호_에러
+		return
+	}
+
 	F메시지_윈도우_생성()
 
-	ch공통_종료 := lb.Ch공통_종료()
+	ch초기화 <- lb.P신호_초기화
 
-	select {
-	case ch초기화 <- lb.P신호_초기화:
-	default:
-	}
+	ch공통_종료 := lb.Ch공통_종료()
 
 	for {
 		select {

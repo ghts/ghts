@@ -36,6 +36,10 @@ func Go루틴_관리(ch초기화 chan lb.T신호) (에러 error) {
 			}
 
 			lb.F에러_출력(에러)
+
+			// 재생성 전 1초 대기: 초기화가 계속 실패할 경우 무한 빠른 재시작(busy-spin)을 방지.
+			lb.F대기(lb.P1초)
+
 			go go루틴_콜백_처리_도우미(ch도우미_초기화, ch도우미_종료)
 			<-ch도우미_초기화
 		}
@@ -67,6 +71,7 @@ func go루틴_콜백_처리_도우미(ch초기화 chan lb.T신호, ch도우미_�
 
 	if ctx, 에러 = 소켓REP_TR콜백.G컨텍스트(); 에러 != nil {
 		ctx = nil
+		ch초기화 <- lb.P신호_에러
 		return lb.New에러(에러)
 	}
 

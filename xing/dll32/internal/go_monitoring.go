@@ -39,12 +39,15 @@ func Go루틴_관리(ch초기화 chan lb.T신호) (에러 error) {
 		case <-ch공통_종료:
 			return nil
 		case <-ch수신_도우미_종료:
+			lb.F대기(lb.P1초)
 			go go수신_도우미(ch도우미_초기화, ch수신_도우미_종료)
 			<-ch도우미_초기화
 		case <-ch호출_도우미_종료:
+			lb.F대기(lb.P1초)
 			go go함수_호출_도우미(ch도우미_초기화, ch호출_도우미_종료)
 			<-ch도우미_초기화
 		case <-ch콜백_도우미_종료:
+			lb.F대기(lb.P1초)
 			go go콜백_도우미(ch도우미_초기화, ch콜백_도우미_종료)
 			<-ch도우미_초기화
 		}
