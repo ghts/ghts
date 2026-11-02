@@ -3,6 +3,7 @@ package xing
 import (
 	"slices"
 	"strings"
+	"sync"
 	"time"
 
 	lb "github.com/ghts/ghts/lib"
@@ -326,14 +327,12 @@ func F종목_식별_문자열(종목코드 string) string {
 	}
 }
 
-func F접속_끊김_설정() {
-	select {
-	case <-Ch접속_끊김: // 이미 닫혔음.
-		return
-	default:
-		close(Ch접속_끊김)
+var once_접속_끊김 sync.Once
 
-	}
+func F접속_끊김_설정() {
+	once_접속_끊김.Do(func() {
+		close(Ch접속_끊김)
+	})
 }
 
 func F접속_끊김_여부() bool {
