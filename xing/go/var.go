@@ -61,6 +61,6 @@ var (
 var (
 	// 호가 적합성 오류가 발생할 경우를 대비한 기록.
 	최근_조건부_지정가_주문_종목코드 atomic.Pointer[string]
-	조건부_지정가_주문_불가_맵    = make(map[string]lb.S비어있음)
+	조건부_지정가_주문_불가_맵    = make(map[string]bool)
 	조건부_지정가_주문_불가_맵_잠금 = new(sync.Mutex)
 )
