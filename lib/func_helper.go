@@ -23,6 +23,7 @@ import (
 	"slices"
 	"strings"
 	"sync"
+	"syscall"
 	"time"
 
 	"golang.org/x/exp/constraints"
@@ -463,8 +464,7 @@ func F포트_닫힘_확인(주소 T주소) bool {
 
 	switch {
 	case 에러 != nil:
-		if !strings.Contains(에러.Error(), "i/o timeout") &&
-			!strings.Contains(에러.Error(), "target machine actively refused it") {
+		if !f정상적_접속_실패(에러) {
 			New에러with출력("접속 에러 발생 : '%v'", 에러)
 		}
 		return true
@@ -474,6 +474,24 @@ func F포트_닫힘_확인(주소 T주소) bool {
 	default:
 		panic(New에러("예상하지 못한 경우 : '%v' '%v'", 연결, 에러))
 	}
+}
+
+// f정상적_접속_실패 — 포트가 닫혀 있어 dial이 실패한 "정상 상태"(타임아웃/연결 거부)인지 판정한다.
+// 다른 원인(DNS 실패 등)의 에러는 false를 반환해 호출부 로그로 남긴다.
+func f정상적_접속_실패(에러 error) bool {
+	// 타임아웃 : Windows는 context.DeadlineExceeded, Unix 계열은 os.ErrDeadlineExceeded
+	if errors.Is(에러, context.DeadlineExceeded) ||
+		errors.Is(에러, os.ErrDeadlineExceeded) {
+		return true
+	}
+
+	// 연결 거부: dial 에러 체인의 *os.SyscallError errno를 비교한다.
+	// Windows의 syscall.ECONNREFUSED는 가상 errno라 실제 코드와 달라 WSAECONNREFUSED(10061)로 별도 비교해야 한다. (Go 1.26 실측 확인)
+	var 시스템_에러 *os.SyscallError
+
+	return errors.As(에러, &시스템_에러) &&
+		(시스템_에러.Err == syscall.ECONNREFUSED || // Unix 계열
+			시스템_에러.Err == syscall.Errno(10061)) // Windows: WSAECONNREFUSED
 }
 
 func F조건부_패닉(조건 bool, 포맷_문자열 string, 추가_매개변수 ...any) {

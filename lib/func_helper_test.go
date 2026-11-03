@@ -1,10 +1,15 @@
 package lib
 
 import (
+	"context"
+	"errors"
 	"math"
+	"net"
+	"os"
 	"path/filepath"
 	"runtime"
 	"strings"
+	"syscall"
 	"testing"
 )
 
@@ -258,4 +263,42 @@ func TestF홈_디렉토리(t *testing.T) {
 	default:
 		t.Errorf("예상하지 못한 경우.")
 	}
+}
+
+func TestF포트_닫힘_확인(t *testing.T) {
+	t.Parallel()
+
+	// 리스너가 열린 포트 → "열림"(닫힘 판정 거짓). T주소의 값은 실제 포트-최소값이므로 역산한다.
+	리스너, 에러 := net.Listen("tcp", "127.0.0.1:0")
+	F테스트_에러없음(t, 에러)
+	defer 리스너.Close()
+
+	열린_포트 := 리스너.Addr().(*net.TCPAddr).Port
+	주소 := T주소(열린_포트 - 포트_번호_최소값)
+
+	F테스트_거짓임(t, F포트_닫힘_확인(주소))
+
+	// 리스너를 닫으면 dial이 연결 거부를 받아 "닫힘"(정상 상태라 로그 출력 없음).
+	리스너.Close()
+	F테스트_참임(t, F포트_닫힘_확인(주소))
+}
+
+func Test정상적_접속_실패(t *testing.T) {
+	t.Parallel()
+
+	// 타임아웃 — OS별 래핑 차이(context.DeadlineExceeded=Windows, os.ErrDeadlineExceeded=Unix 계열)를 모두 수용. (Go 1.26 실측 확인)
+	F테스트_참임(t, f정상적_접속_실패(context.DeadlineExceeded))
+	F테스트_참임(t, f정상적_접속_실패(os.ErrDeadlineExceeded))
+
+	// 연결 거부 — Unix 계열 ECONNREFUSED (모든 OS에서 비교 대상)
+	F테스트_참임(t, f정상적_접속_실패(&os.SyscallError{Err: syscall.ECONNREFUSED}))
+
+	if runtime.GOOS == "windows" {
+		// Windows는 dial 에러 체인에 WSAECONNREFUSED(10061)가 들어온다. (Go 1.26 실측 확인)
+		F테스트_참임(t, f정상적_접속_실패(&os.SyscallError{Err: syscall.Errno(10061)}))
+	}
+
+	// 예상 밖 에러 — 호출부 로그 대상이므로 false.
+	F테스트_거짓임(t, f정상적_접속_실패(&net.DNSError{Name: "x.invalid", Err: "no such host"}))
+	F테스트_거짓임(t, f정상적_접속_실패(errors.New("예상하지 못한 에러")))
 }
