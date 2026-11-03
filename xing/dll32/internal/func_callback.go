@@ -222,7 +222,12 @@ func OnMessageAndError(MSG데이터 unsafe.Pointer) {
 	콜백값.S콜백_기본형 = lb.New콜백_기본형(lb.P콜백_메시지_및_에러)
 	콜백값.M식별번호 = int(g.RequestID)
 	콜백값.M코드 = lb.F2문자열_공백_제거(g.MsgCode)
-	콜백값.M내용 = w32.EUC_KR_C포인터2Go문자열(g.MsgData)
+
+	lb.F조건부_패닉(g.MsgData == nil || g.MsgLength < 0,
+		"OnMessageAndError() 메시지 데이터 비정상. 식별번호 : %d 코드 : '%s' 포인터 : %v 길이 : %d",
+		int(g.RequestID), lb.F2문자열_공백_제거(g.MsgCode), g.MsgData, g.MsgLength)
+
+	콜백값.M내용 = w32.EUC_KR_바이트_모음2Go문자열(w32.F2Go바이트_모음with길이(g.MsgData, int(g.MsgLength)))
 	콜백값.M에러여부 = 에러여부
 
 	F콜백(콜백값)
