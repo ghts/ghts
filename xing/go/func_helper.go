@@ -249,6 +249,8 @@ func f10분당_전송_제한_읽기(TR코드 string) (lb.I전송_권한, bool) {
 }
 
 func F10분당_전송_제한_간격(TR코드 string) time.Duration {
+	lb.F확인1(tr전송_제한_초기화_확인(TR코드))
+
 	전송_제한_잠금.RLock()
 	defer 전송_제한_잠금.RUnlock()
 
