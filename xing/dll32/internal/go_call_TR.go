@@ -2,7 +2,6 @@ package dll32
 
 import (
 	"runtime"
-	"time"
 	"unsafe"
 
 	lb "github.com/ghts/ghts/lib"
@@ -49,7 +48,7 @@ func go함수_호출_도우미(ch초기화, ch종료 chan lb.T신호) {
 			return
 		default:
 			F윈도우_메시지_처리()
-			time.Sleep(50 * time.Millisecond)
+			lb.F대기(lb.P100밀리초)
 		}
 	}
 }
