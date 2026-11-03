@@ -345,6 +345,8 @@ func F기간(시작일, 종료일 uint32) int {
 }
 
 func F종목코드_보정(종목코드 string) string {
+	종목코드 = lb.F2문자열_공백_제거(종목코드)
+
 	if len(종목코드) == 7 && strings.HasPrefix(종목코드, "A") {
 		return 종목코드[1:]
 	} else if len(종목코드) == 7 && strings.HasPrefix(종목코드, "Q") {
