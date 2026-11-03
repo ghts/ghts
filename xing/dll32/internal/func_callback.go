@@ -124,6 +124,10 @@ func OnTrData(TR데이터 unsafe.Pointer) {
 	binary.Read(버퍼, binary.LittleEndian, &주소값)
 	g.Data = f포인터_생성(uintptr(주소값))
 
+	lb.F조건부_패닉(g.Data == nil || g.DataLength < 0 || g.DataLength > g.TotalDataBufferSize,
+		"OnTrData() 데이터 블럭 비정상. TR : '%s' 블럭 : '%s' 길이 : %d 총크기 : %d",
+		lb.F2문자열_공백_제거(g.TrCode), lb.F2문자열(g.BlockName), g.DataLength, g.TotalDataBufferSize)
+
 	var raw값 []byte
 
 	// t8410, t8411, t8412 반복값은 압축 해제가 필요.
@@ -257,6 +261,10 @@ func OnRealtimeData(실시간_데이터 unsafe.Pointer) {
 	var 주소값 uint32
 	binary.Read(버퍼, binary.LittleEndian, &주소값)
 	g.Data = f포인터_생성(uintptr(주소값))
+
+	lb.F조건부_패닉(g.Data == nil || g.DataLength < 0,
+		"OnRealtimeData() 데이터 블럭 비정상. TR : '%s' 길이 : %d",
+		lb.F2문자열_공백_제거(g.TrCode), g.DataLength)
 
 	// KeyData, RegKey등이 불필요한 듯 해서 전송 안 함. 필요하면 추가할 것.
 
