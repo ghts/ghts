@@ -873,6 +873,8 @@ func TrT8407_현물_멀티_현재가_조회(종목코드_모음_전체 []string)
 	for {
 		if len(종목코드_모음_전체) < 시작_인덱스 {
 			break
+		} else if 시작_인덱스 > 0 {
+			lb.F대기(lb.P500밀리초) // 과도한 TR 호출 예방
 		}
 
 		var 종목코드_모음 []string
