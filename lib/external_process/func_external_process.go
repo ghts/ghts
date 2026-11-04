@@ -191,6 +191,29 @@ func F프로세스_종료by프로세스ID(프로세스ID int) (에러 error) {
 	}
 }
 
+// F프로세스_종료by프로세스ID_검증 : 주어진 PID의 프로세스가 실제로 지정된 실행 화일명과 일치하는지 확인 후 종료.
+func F프로세스_종료by프로세스ID_검증(프로세스ID int, 프로세스_이름 string) (에러 error) {
+	defer lb.S예외처리{M에러: &에러, M출력_숨김: true}.S실행()
+
+	프로세스_모음, 에러 := ps.Processes()
+	if 에러 != nil {
+		return 에러
+	}
+
+	for _, 프로세스 := range 프로세스_모음 {
+		if 프로세스.Pid() != 프로세스ID {
+			continue
+		}
+		// PID는 일치하지만 재사용일 수 있으므로, 실행 화일명으로 소유권을 검증한다.
+		if !f실행화일_동일함(프로세스_이름, 프로세스.Executable()) {
+			return nil // 실행 화일명 불일치: 다른 프로세스가 PID를 차지중. 종료하지 않음.
+		}
+		return F프로세스_종료by프로세스ID(프로세스ID)
+	}
+
+	return nil // 해당 PID의 프로세스가 없음(이미 종료됨).
+}
+
 // F프로세스_종료by프로세스_이름 : 주어진 이름의 실행 화일에 해당하는 모든 프로세스를 종료한다.
 func F프로세스_종료by프로세스_이름(프로세스_이름 string, 추가_인수_모음 ...bool) (에러 error) {
 	defer lb.S예외처리{M에러: &에러, M출력_숨김: true}.S실행()
