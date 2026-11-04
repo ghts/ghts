@@ -138,3 +138,10 @@ func F무시해야할_에러_메시지(에러_메시지 string) bool {
 		strings.Contains(에러_메시지, "모의투자 정정주문이 완료 되었습니다.") ||
 		strings.Contains(에러_메시지, "모의투자 취소주문이 완료 되었습니다.")
 }
+
+func F조건부_지정가_호가_적합성_에러_메시지(에러_메시지 string) bool {
+	return strings.Contains(에러_메시지, "호가") &&
+		strings.Contains(에러_메시지, "적합성") &&
+		strings.Contains(에러_메시지, "조건부") &&
+		strings.Contains(에러_메시지, "지정가")
+}
