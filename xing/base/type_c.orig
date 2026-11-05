@@ -128,6 +128,11 @@ type T1405InBlock C.T1405InBlock
 type T1405OutBlock C.T1405OutBlock
 type T1405OutBlock1 C.T1405OutBlock1
 
+// 초저유동성조회 (t1410)
+type T1410InBlock C.T1410InBlock
+type T1410OutBlock C.T1410OutBlock
+type T1410OutBlock1 C.T1410OutBlock1
+
 // ETF 현재가 조회 (t1901)
 type T1901InBlock C.T1901InBlock
 type T1901OutBlock C.T1901OutBlock

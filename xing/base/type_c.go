@@ -2172,6 +2172,35 @@ type T1405OutBlock1 struct {
 	X_shcode byte
 }
 
+type T1410InBlock struct {
+	Gubun        [1]byte
+	X_gubun      byte
+	Cts_shcode   [6]byte
+	X_cts_shcode byte
+	Jong_gbn     [1]byte
+	X_jong_gbn   byte
+}
+type T1410OutBlock struct {
+	Shcode       [6]byte
+	X_cts_shcode byte
+}
+type T1410OutBlock1 struct {
+	Hname    [20]byte
+	X_hname  byte
+	Price    [8]byte
+	X_price  byte
+	Sign     [1]byte
+	X_sign   byte
+	Change   [8]byte
+	X_change byte
+	Diff     [6]byte
+	X_diff   byte
+	Volume   [12]byte
+	X_volume byte
+	Shcode   [6]byte
+	X_shcode byte
+}
+
 type T1901InBlock struct {
 	Shcode      [6]byte
 	X_shcode    byte

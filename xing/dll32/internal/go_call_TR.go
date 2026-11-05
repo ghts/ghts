@@ -199,6 +199,15 @@ func F조회_및_주문_질의_처리(질의 *lb.S채널_질의) {
 
 		c데이터 = unsafe.Pointer(xt.NewT1405InBlock(질의값.(*xt.T1405_투자경고_조회_질의값)))
 		길이 = xt.SizeT1405InBlock
+	case xt.TR초저유동성_조회_t1410:
+		연속키 := lb.F2문자열_공백_제거(질의값.(*xt.T1410_초저유동성_조회_질의값).M연속키)
+		if 연속키 != "" {
+			연속_조회_여부 = true
+			연속_조회_키 = 연속키
+		}
+
+		c데이터 = unsafe.Pointer(xt.NewT1410InBlock(질의값.(*xt.T1410_초저유동성_조회_질의값)))
+		길이 = xt.SizeT1410InBlock
 	case xt.TR_ETF_시세_조회_t1901:
 		c데이터 = unsafe.Pointer(xt.NewT1901InBlock(질의값.(*lb.S질의값_단일_종목)))
 		길이 = xt.SizeT1901InBlock

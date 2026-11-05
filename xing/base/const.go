@@ -98,6 +98,9 @@ const (
 	SizeT1405InBlock        = int(unsafe.Sizeof(T1405InBlock{}))
 	SizeT1405OutBlock       = int(unsafe.Sizeof(T1405OutBlock{}))
 	SizeT1405OutBlock1      = int(unsafe.Sizeof(T1405OutBlock1{}))
+	SizeT1410InBlock        = int(unsafe.Sizeof(T1410InBlock{}))
+	SizeT1410OutBlock       = int(unsafe.Sizeof(T1410OutBlock{}))
+	SizeT1410OutBlock1      = int(unsafe.Sizeof(T1410OutBlock1{}))
 	SizeT1901InBlock        = int(unsafe.Sizeof(T1901InBlock{}))
 	SizeT1901OutBlock       = int(unsafe.Sizeof(T1901OutBlock{}))
 	SizeT1902InBlock        = int(unsafe.Sizeof(T1902InBlock{}))
@@ -190,6 +193,9 @@ const (
 	P자료형_T1405_투자경고_조회_질의값           = "T1405_투자경고_조회_질의값"
 	P자료형_T1405OutBlock               = "T1405OutBlock"
 	P자료형_T1405OutBlock1              = "T1405OutBlock1"
+	P자료형_T1410_초저유동성_조회_질의값          = "T1410_초저유동성_조회_질의값"
+	P자료형_T1410OutBlock               = "T1410OutBlock"
+	P자료형_T1410OutBlock1              = "T1410OutBlock1"
 	P자료형_T1901_ETF_시세_조회_응답          = "T1901_ETF_시세_조회_응답"
 	P자료형_T1902_ETF시간별_추이_응답          = "T1902_ETF시간별_추이_응답"
 	P자료형_T1902_ETF시간별_추이_응답_헤더       = "T1902_ETF시간별_추이_응답_헤더"
@@ -262,6 +268,7 @@ const (
 	TR현물_당일_전일_분틱_조회_t1310    = "t1310"
 	TR관리_불성실_투자유의_조회_t1404    = "t1404"
 	TR투자경고_매매정지_정리매매_조회_t1405 = "t1405"
+	TR초저유동성_조회_t1410          = "t1410"
 	TR_ETF_시세_조회_t1901        = "t1901"
 	TR_ETF_시간별_추이_t1902       = "t1902"
 	TR_ETF_LP호가_조회_t1906      = "t1906"
@@ -1597,6 +1604,24 @@ func (p T투자경고_질의_구분) String() string {
 		return "단기 과열 지정"
 	case P단기과열지정예고:
 		return "단기 과열 지정 예고"
+	default:
+		panic(lb.New에러("예상하지 못한 값 : '%v'", int(p)))
+	}
+}
+
+type T초저유동성_질의_구분 uint8
+
+const (
+	P초저유동성 T초저유동성_질의_구분 = iota
+	P저PBR
+)
+
+func (p T초저유동성_질의_구분) String() string {
+	switch p {
+	case P초저유동성:
+		return "초저유동성"
+	case P저PBR:
+		return "저PBR"
 	default:
 		panic(lb.New에러("예상하지 못한 값 : '%v'", int(p)))
 	}

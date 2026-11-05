@@ -255,6 +255,10 @@ func F바이트_변환값_해석(바이트_변환값 *lb.S바이트_변환) (해
 		s := new(T1405_투자경고_조회_질의값)
 		lb.F확인1(바이트_변환값.G값(s))
 		return s, nil
+	case P자료형_T1410_초저유동성_조회_질의값:
+		s := new(T1410_초저유동성_조회_질의값)
+		lb.F확인1(바이트_변환값.G값(s))
+		return s, nil
 	case P자료형_T1901_ETF_시세_조회_응답:
 		s := new(T1901_ETF_시세_조회_응답)
 		lb.F확인1(바이트_변환값.G값(s))
@@ -497,6 +501,10 @@ func F바이트_변환값_해석_Raw(바이트_변환값 *lb.S바이트_변환) 
 		return NewT1405_투자경고_조회_응답_헤더(b)
 	case P자료형_T1405OutBlock1:
 		return NewT1405_투자경고_조회_응답_반복값_모음(b)
+	case P자료형_T1410OutBlock:
+		return NewT1410_초저유동성_조회_응답_헤더(b)
+	case P자료형_T1410OutBlock1:
+		return NewT1410_초저유동성_조회_응답_반복값_모음(b)
 	case P자료형_T1901_ETF_시세_조회_응답:
 		return NewT1901_ETF_시세_조회_응답(b)
 	case P자료형_T1902OutBlock:

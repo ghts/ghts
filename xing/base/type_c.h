@@ -1960,6 +1960,33 @@ typedef struct {
 } T1405OutBlock1;
 
 //------------------------------------------------------------------------------
+// 초저유동성조회 (t1410)
+//------------------------------------------------------------------------------
+
+// 기본입력
+typedef struct {
+    char    gubun               [   1];    char    _gubun               ;    // [string,    1] 구분(0:전체1:코스피2:코스닥)    StartPos 0, Length 1
+    char    cts_shcode          [   6];    char    _cts_shcode          ;    // [string,    6] 종목코드_CTS                    StartPos 2, Length 6
+    char    jong_gbn            [   1];    char    _jong_gbn            ;    // [string,    1] 종목구분(0:초저유동성1:저PBR)   StartPos 9, Length 1
+} T1410InBlock;
+
+// 출력
+typedef struct {
+    char    cts_shcode          [   6];    char    _cts_shcode          ;    // [string,    6] 종목코드_CTS                    StartPos 0, Length 6
+} T1410OutBlock;
+
+// 출력1                          , occurs
+typedef struct {
+    char    hname               [  20];    char    _hname               ;    // [string,   20] 한글명                          StartPos 0, Length 20
+    char    price               [   8];    char    _price               ;    // [long  ,    8] 현재가                          StartPos 21, Length 8
+    char    sign                [   1];    char    _sign                ;    // [string,    1] 전일대비구분                    StartPos 30, Length 1
+    char    change              [   8];    char    _change              ;    // [long  ,    8] 전일대비                        StartPos 32, Length 8
+    char    diff                [   6];    char    _diff                ;    // [double,  6.2] 등락율                          StartPos 41, Length 6
+    char    volume              [  12];    char    _volume              ;    // [long  ,   12] 누적거래량                      StartPos 48, Length 12
+    char    shcode              [   6];    char    _shcode              ;    // [string,    6] 종목코드                        StartPos 61, Length 6
+} T1410OutBlock1;
+
+//------------------------------------------------------------------------------
 // ETF 현재가(시세) 조회 (t1901)
 //------------------------------------------------------------------------------
 
