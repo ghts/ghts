@@ -427,12 +427,17 @@ func F인터넷에_접속됨() bool {
 
 	ch타임아웃 := time.After(P10초)
 
+	// 3개 URL이 전부 실패하면 타임아웃까지 기다리지 않고 즉시 false를 반환한다.
+	실패_횟수 := 0
+
 	for {
 		select {
 		case 접속_여부 := <-ch회신:
 			if 접속_여부 {
 				인터넷_접속_확인_시간.S값(F지금())
 				return true
+			} else if 실패_횟수++; 실패_횟수 == len(URL모음) {
+				return false
 			}
 		case <-ch타임아웃:
 			return false
