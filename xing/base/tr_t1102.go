@@ -42,7 +42,7 @@ type T1102_현물_시세_조회_응답 struct {
 	M소진율           float64
 	PER            float64
 	PBR            float64
-	M상장주식수_천       int64
+	M보통주_발행_수량_천   int64
 	M증거금율          int64
 	M수량단위          int64
 	M회전율           float64
@@ -184,7 +184,7 @@ func NewT1102_현물_시세_조회_응답(b []byte) (s *T1102_현물_시세_조�
 	s.M소진율 = lb.F확인2(lb.F2실수_소숫점_추가(g.Exhratio, 2))
 	s.PER = lb.F확인2(lb.F2실수_소숫점_추가(g.Per, 2))
 	s.PBR = lb.F확인2(lb.F2실수_소숫점_추가(g.Pbrx, 2))
-	s.M상장주식수_천 = lb.F확인2(lb.F2정수64(g.Listing))
+	s.M보통주_발행_수량_천 = lb.F확인2(lb.F2정수64(g.Listing))
 	s.M증거금율 = lb.F확인2(lb.F2정수64(g.Jkrate))
 	s.M수량단위 = lb.F확인2(lb.F2정수64(g.Memedan))
 	s.M회전율 = lb.F확인2(lb.F2실수_소숫점_추가(g.Vol, 2))
