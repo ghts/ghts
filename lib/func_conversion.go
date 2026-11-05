@@ -99,215 +99,24 @@ func f바이트_배열_초기화(바이트_배열 []byte, 패딩_바이트 byte)
 }
 
 func F2바이트_모음(값 any) []byte {
-	switch 변환값 := 값.(type) {
+	switch v := 값.(type) {
 	case string:
-		return []byte(변환값)
+		return []byte(v)
 	case []byte:
-		return 변환값
-	case [1]byte:
-		return 변환값[:]
-	case [2]byte:
-		return 변환값[:]
-	case [3]byte:
-		return 변환값[:]
-	case [4]byte:
-		return 변환값[:]
-	case [5]byte:
-		return 변환값[:]
-	case [6]byte:
-		return 변환값[:]
-	case [7]byte:
-		return 변환값[:]
-	case [8]byte:
-		return 변환값[:]
-	case [9]byte:
-		return 변환값[:]
-	case [10]byte:
-		return 변환값[:]
-	case [11]byte:
-		return 변환값[:]
-	case [12]byte:
-		return 변환값[:]
-	case [13]byte:
-		return 변환값[:]
-	case [14]byte:
-		return 변환값[:]
-	case [15]byte:
-		return 변환값[:]
-	case [16]byte:
-		return 변환값[:]
-	case [17]byte:
-		return 변환값[:]
-	case [18]byte:
-		return 변환값[:]
-	case [19]byte:
-		return 변환값[:]
-	case [20]byte:
-		return 변환값[:]
-	case [21]byte:
-		return 변환값[:]
-	case [22]byte:
-		return 변환값[:]
-	case [23]byte:
-		return 변환값[:]
-	case [24]byte:
-		return 변환값[:]
-	case [25]byte:
-		return 변환값[:]
-	case [26]byte:
-		return 변환값[:]
-	case [27]byte:
-		return 변환값[:]
-	case [28]byte:
-		return 변환값[:]
-	case [29]byte:
-		return 변환값[:]
-	case [30]byte:
-		return 변환값[:]
-	case [31]byte:
-		return 변환값[:]
-	case [32]byte:
-		return 변환값[:]
-	case [33]byte:
-		return 변환값[:]
-	case [34]byte:
-		return 변환값[:]
-	case [35]byte:
-		return 변환값[:]
-	case [36]byte:
-		return 변환값[:]
-	case [37]byte:
-		return 변환값[:]
-	case [38]byte:
-		return 변환값[:]
-	case [39]byte:
-		return 변환값[:]
-	case [40]byte:
-		return 변환값[:]
-	case [41]byte:
-		return 변환값[:]
-	case [42]byte:
-		return 변환값[:]
-	case [43]byte:
-		return 변환값[:]
-	case [44]byte:
-		return 변환값[:]
-	case [45]byte:
-		return 변환값[:]
-	case [46]byte:
-		return 변환값[:]
-	case [47]byte:
-		return 변환값[:]
-	case [48]byte:
-		return 변환값[:]
-	case [49]byte:
-		return 변환값[:]
-	case [50]byte:
-		return 변환값[:]
-	case [51]byte:
-		return 변환값[:]
-	case [52]byte:
-		return 변환값[:]
-	case [53]byte:
-		return 변환값[:]
-	case [54]byte:
-		return 변환값[:]
-	case [55]byte:
-		return 변환값[:]
-	case [56]byte:
-		return 변환값[:]
-	case [57]byte:
-		return 변환값[:]
-	case [58]byte:
-		return 변환값[:]
-	case [59]byte:
-		return 변환값[:]
-	case [60]byte:
-		return 변환값[:]
-	case [61]byte:
-		return 변환값[:]
-	case [62]byte:
-		return 변환값[:]
-	case [63]byte:
-		return 변환값[:]
-	case [64]byte:
-		return 변환값[:]
-	case [65]byte:
-		return 변환값[:]
-	case [66]byte:
-		return 변환값[:]
-	case [67]byte:
-		return 변환값[:]
-	case [68]byte:
-		return 변환값[:]
-	case [69]byte:
-		return 변환값[:]
-	case [70]byte:
-		return 변환값[:]
-	case [71]byte:
-		return 변환값[:]
-	case [72]byte:
-		return 변환값[:]
-	case [73]byte:
-		return 변환값[:]
-	case [74]byte:
-		return 변환값[:]
-	case [75]byte:
-		return 변환값[:]
-	case [76]byte:
-		return 변환값[:]
-	case [77]byte:
-		return 변환값[:]
-	case [78]byte:
-		return 변환값[:]
-	case [79]byte:
-		return 변환값[:]
-	case [80]byte:
-		return 변환값[:]
-	case [81]byte:
-		return 변환값[:]
-	case [82]byte:
-		return 변환값[:]
-	case [83]byte:
-		return 변환값[:]
-	case [84]byte:
-		return 변환값[:]
-	case [85]byte:
-		return 변환값[:]
-	case [86]byte:
-		return 변환값[:]
-	case [87]byte:
-		return 변환값[:]
-	case [88]byte:
-		return 변환값[:]
-	case [89]byte:
-		return 변환값[:]
-	case [90]byte:
-		return 변환값[:]
-	case [91]byte:
-		return 변환값[:]
-	case [92]byte:
-		return 변환값[:]
-	case [93]byte:
-		return 변환값[:]
-	case [94]byte:
-		return 변환값[:]
-	case [95]byte:
-		return 변환값[:]
-	case [96]byte:
-		return 변환값[:]
-	case [97]byte:
-		return 변환값[:]
-	case [98]byte:
-		return 변환값[:]
-	case [99]byte:
-		return 변환값[:]
-	case [100]byte:
-		return 변환값[:]
-	default:
-		panic(New에러("F2바이트_모음() 예상하지 못한 자료형 : '%T'", 값))
-		//return []byte{}
+		return v
 	}
+
+	// [N]byte 배열 패밀리 (이름 붙은 타입 포함) -- 길이 반사로 처리.
+	// 값으로 전달된 배열은 복사본이므로 주소 가능한 복사본에 옮겨 []byte로 만든다.
+	if rv := reflect.ValueOf(값); rv.Kind() == reflect.Array {
+		if elem := rv.Type().Elem(); elem.Kind() == reflect.Uint8 {
+			주소_복가 := reflect.New(rv.Type()).Elem()
+			주소_복가.Set(rv)
+			return 주소_복가.Bytes()
+		}
+	}
+
+	panic(New에러("F2바이트_모음() 예상하지 못한 자료형 : '%T'", 값))
 }
 
 func EUC_KR2Go문자열_공백제거(값 any) string {

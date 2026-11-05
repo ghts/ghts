@@ -1,6 +1,7 @@
 package lib
 
 import (
+	"bytes"
 	"math/rand"
 	"reflect"
 	"strings"
@@ -393,4 +394,60 @@ func TestF2한국_시간(t *testing.T) {
 	UTC_시간_9 := UTC_시간.Add(9 * P1시간)
 
 	F테스트_같음(t, 한국_시간.Format(P간략한_시간_형식), UTC_시간_9.Format(P간략한_시간_형식))
+}
+
+func TestF2바이트_모음_배열(t *testing.T) {
+	// [1]byte
+	{
+		var a [1]byte
+		a[0] = 0xAB
+		if got := F2바이트_모음(a); !bytes.Equal(got, []byte{0xAB}) {
+			t.Fatalf("[1]byte 실패: %v", got)
+		}
+	}
+	// [6]byte — 원본 변환값[:]은 전체 길이 6을 반환 (뒤 0 패딩 유지)
+	{
+		var b [6]byte
+		b[0], b[1], b[2] = 1, 2, 3
+		if got := F2바이트_모음(b); !bytes.Equal(got, []byte{1, 2, 3, 0, 0, 0}) {
+			t.Fatalf("[6]byte 실패: got=%v want=[1 2 3 0 0 0]", got)
+		}
+	}
+
+	// 이름 붙은 배열 타입
+	{
+		type b6 [6]byte
+		var c b6
+		c[0], c[1] = 9, 8
+		if got := F2바이트_모음(c); !bytes.Equal(got, []byte{9, 8, 0, 0, 0, 0}) {
+			t.Fatalf("이름 붙은 [6]byte 실패: got=%v want=[9 8 0 0 0 0]", got)
+		}
+	}
+	// [100]byte
+	{
+		var d [100]byte
+		for i := range d {
+			d[i] = byte(i)
+		}
+		if got := F2바이트_모음(d); len(got) != 100 || got[0] != 0 || got[99] != 99 {
+			t.Fatalf("[100]byte 실패: len=%d first=%d last=%d", len(got), got[0], got[99])
+		}
+	}
+	// string / []byte
+	if got := F2바이트_모음("한글"); !bytes.Equal(got, []byte("한글")) {
+		t.Fatalf("string 실패: %v", got)
+	}
+	in := []byte{4, 5, 6}
+	if got := F2바이트_모음(in); !bytes.Equal(got, in) {
+		t.Fatalf("[]byte 실패: %v", got)
+	}
+}
+
+func TestF2바이트_모음_알수없는_패닉(t *testing.T) {
+	defer func() {
+		if r := recover(); r == nil {
+			t.Fatalf("알 수 없는 타입은 panic해야 함")
+		}
+	}()
+	_ = F2바이트_모음(123)
 }
