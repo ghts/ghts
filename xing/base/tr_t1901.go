@@ -148,13 +148,13 @@ func NewT1901_ETF_시세_조회_응답(b []byte) (s *T1901_ETF_시세_조회_응
 
 	s.M고가 = lb.F확인2(lb.F2정수64(g.High))
 
-	if s.M고가시각, 에러 = lb.F2금일_시각("150405", g.Opentime); 에러 != nil {
+	if s.M고가시각, 에러 = lb.F2금일_시각("150405", g.Hightime); 에러 != nil {
 		s.M고가시각 = lb.F확인2(lb.F2금일_시각("150405", "090000"))
 	}
 
 	s.M저가 = lb.F확인2(lb.F2정수64(g.Low))
 
-	if s.M저가시각, 에러 = lb.F2금일_시각("150405", g.Opentime); 에러 != nil {
+	if s.M저가시각, 에러 = lb.F2금일_시각("150405", g.Lowtime); 에러 != nil {
 		s.M저가시각 = lb.F확인2(lb.F2금일_시각("150405", "090000"))
 	}
 
