@@ -11,7 +11,8 @@ import (
 
 func TestMain(m *testing.M) {
 	if 에러 := f테스트_준비(); 에러 != nil {
-		return
+		lb.F에러_출력(에러)
+		os.Exit(1)
 	}
 
 	defer f테스트_정리()

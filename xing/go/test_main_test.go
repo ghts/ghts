@@ -1,6 +1,7 @@
 package xing
 
 import (
+	"os"
 	"testing"
 
 	lb "github.com/ghts/ghts/lib"
@@ -11,7 +12,8 @@ func TestMain(m *testing.M) {
 	defer lb.S예외처리{}.S실행()
 
 	if 에러 := f테스트_준비(); 에러 != nil {
-		return
+		lb.F에러_출력(에러)
+		os.Exit(1)
 	}
 
 	defer f테스트_정리()
