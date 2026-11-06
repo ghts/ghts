@@ -382,7 +382,7 @@ func (p T매도_매수_구분) String() string {
 	case P매수_취소:
 		return "매수 취소"
 	default:
-		return F2문자열("예상하지 못한 값 : %v", int(p))
+		return F2문자열("예상하지 못한 매도/매수 구분 : %v", int(p))
 	}
 }
 
@@ -403,7 +403,7 @@ func (p T매도_매수_구분) F해석(값 any) T매도_매수_구분 {
 	case strings.ReplaceAll(P매수_취소.String(), " ", ""):
 		return P매수_취소
 	default:
-		panic(New에러("예상하지 못한 값 : '%v'", 문자열))
+		panic(New에러("예상하지 못한 매도/매수 구분 : '%v'", 문자열))
 	}
 }
 
@@ -433,7 +433,7 @@ func (p T체결_구분) String() string {
 	case P체결구분_미체결:
 		return "미체결"
 	default:
-		panic(New에러("예상하지 못한 값 : '%v'", int(p)))
+		return F2문자열("예상하지 못한 체결 구분 : %v", int(p))
 	}
 }
 
