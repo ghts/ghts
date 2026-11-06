@@ -808,7 +808,7 @@ func TrT3341_재무_순위_종합(시장구분 lb.T시장구분, 재무순위_�
 		lb.P시장구분_코스피,
 		lb.P시장구분_코스닥: // OK
 	default:
-		panic(lb.New에러("잘못된 시장구분값 : '%s' '%d'", 시장구분, 시장구분))
+		return nil, lb.New에러("잘못된 시장 구분 : '%s' '%d'", 시장구분, 시장구분)
 	}
 
 	switch 재무순위_구분 {
@@ -822,10 +822,9 @@ func TrT3341_재무_순위_종합(시장구분 lb.T시장구분, 재무순위_�
 		xt.P재무순위_ROE,
 		xt.P재무순위_PER,
 		xt.P재무순위_PBR,
-		xt.P재무순위_PEG:
-		// OK
+		xt.P재무순위_PEG: // OK
 	default:
-		panic(lb.New에러("잘못된 재무순위 구분값 : '%s' '%s'", string(재무순위_구분), 재무순위_구분.String()))
+		return nil, lb.New에러("잘못된 재무순위 구분 : '%s' '%d'", 재무순위_구분, 재무순위_구분)
 	}
 
 	수량_제한 := -1
