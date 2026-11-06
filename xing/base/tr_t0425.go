@@ -3,6 +3,7 @@ package xt
 import (
 	"bytes"
 	"encoding/binary"
+	"strconv"
 	"strings"
 	"time"
 
@@ -64,23 +65,12 @@ type T0425_현물_체결_미체결_조회_응답_반복값 struct {
 func NewT0425InBlock(질의값 *T0425_현물_체결_미체결_조회_질의값, 비밀번호 string) (g *T0425InBlock) {
 	g = new(T0425InBlock)
 
-	정렬구분 := " "
-
-	switch 질의값.M정렬구분 { // '1' : 역순, '2' : 정순
-	case lb.P정렬_정순:
-		정렬구분 = "1"
-	case lb.P정렬_역순:
-		정렬구분 = "2"
-	default:
-		panic(lb.F2문자열("예상하지 못한 경우 : '%v' '%v'", int(질의값.M정렬구분), 질의값.M정렬구분.String()))
-	}
-
 	lb.F바이트_복사_문자열(g.Accno[:], 질의값.M계좌번호)
 	lb.F바이트_복사_문자열(g.Passwd[:], 비밀번호)
 	lb.F바이트_복사_문자열(g.Expcode[:], 질의값.M종목코드)
 	lb.F바이트_복사_정수(g.Chegb[:], int(질의값.M체결구분))
 	lb.F바이트_복사_정수(g.Medosu[:], int(질의값.M매도_매수_구분))
-	lb.F바이트_복사_문자열(g.Sortgb[:], 정렬구분)
+	lb.F바이트_복사_문자열(g.Sortgb[:], strconv.Itoa(int(질의값.M정렬구분)))
 	lb.F바이트_복사_문자열(g.Ordno[:], 질의값.M연속키)
 
 	f속성값_초기화(g)

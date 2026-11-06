@@ -498,18 +498,18 @@ type T정렬_구분 uint8
 
 const (
 	P정렬구분_해당없음 T정렬_구분 = iota
-	P정렬_정순
 	P정렬_역순
+	P정렬_정순
 )
 
 func (p T정렬_구분) String() string {
 	switch p {
 	case P정렬구분_해당없음:
 		return "해당 없음"
-	case P정렬_정순:
-		return "정순"
 	case P정렬_역순:
 		return "역순"
+	case P정렬_정순:
+		return "정순"
 	default:
 		return F2문자열("예상하지 못한 M값. %v", int(p))
 	}
