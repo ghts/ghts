@@ -895,32 +895,18 @@ func F파일에서_값_읽기(값_포인터 any, 파일명 string, 파일_잠금
 		defer 파일_잠금.Unlock()
 	}
 
+	// nil 값은 reflect.Invalid로 변환되어서 여기서 걸러짐.
 	F조건부_패닉(F종류(값_포인터) != reflect.Pointer, "포인터형이 아님. %T", 값_포인터)
 
 	파일 := F확인2(os.Open(파일명))
 	defer 파일.Close()
 
-	에러 = gob.NewDecoder(파일).Decode(값_포인터)
-
-	if F자료형(값_포인터).Elem().String() == "<nil>" {
-		// nil값일 경우 제로값으로 설정.
+	if 에러 = gob.NewDecoder(파일).Decode(값_포인터); 에러 != nil && errors.Is(에러, io.EOF) { // 빈 파일(기록 없음)
 		reflect.ValueOf(값_포인터).Elem().Set(reflect.Zero(reflect.TypeOf(값_포인터).Elem()))
+		return nil
 	}
 
-	switch {
-	case 에러 != nil:
-		switch {
-		case errors.Is(에러, io.EOF): // 빈 파일(기록 없음)
-			reflect.ValueOf(값_포인터).Elem().Set(reflect.Zero(reflect.TypeOf(값_포인터).Elem()))
-			return nil
-		default:
-			return 에러
-		}
-	case F자료형(값_포인터).Elem().String() == "<nil>":
-		reflect.ValueOf(값_포인터).Elem().Set(reflect.Zero(reflect.TypeOf(값_포인터).Elem())) // 제로값으로 설정.
-	}
-
-	return nil
+	return
 }
 
 func JSON_파일_저장(값 any, 파일명 string) (에러 error) {
