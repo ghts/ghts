@@ -22,7 +22,7 @@ func HTTP_POST(url string, form데이터 url.Values) (바이트_모음 []byte, �
 	http질의.Header.Set("User-Agent", Http_User_Agent)
 
 	// HTTP 클라이언트 생성 및 요청 실행
-	http응답 := F확인2((&http.Client{}).Do(http질의))
+	http응답 := F확인2((&http.Client{Timeout: P30초}).Do(http질의))
 	defer http응답.Body.Close()
 
 	F조건부_패닉(http응답.StatusCode < 200 || http응답.StatusCode >= 300,
