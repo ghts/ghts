@@ -3,6 +3,7 @@ package xt
 import (
 	"bytes"
 	"encoding/binary"
+	"strconv"
 
 	lb "github.com/ghts/ghts/lib"
 )
@@ -61,40 +62,25 @@ func NewT3341_재무순위_질의값() *T3341_재무순위_질의값 {
 }
 
 func NewT3341InBlock(질의값 *T3341_재무순위_질의값) (g *T3341InBlock) {
-	var xing시장구분 string
-	var xing재무순위_구분 string
-
-	switch 질의값.M시장구분 {
-	case lb.P시장구분_전체:
-		xing시장구분 = "0"
-	case lb.P시장구분_코스피:
-		xing시장구분 = "1"
-	case lb.P시장구분_코스닥:
-		xing시장구분 = "2"
+	시장_구분 := strconv.Itoa(int(질의값.M시장구분))
+	switch 시장_구분 {
+	case "0", "1", "2":
+		// OK
 	default:
-		panic(lb.New에러("잘못된 시장구분값 : '%s' '%d'", 질의값.M시장구분, 질의값.M시장구분))
+		panic(lb.New에러("잘못된 시장 구분 : '%s' '%d'", 질의값.M시장구분, 질의값.M시장구분))
 	}
 
-	switch 질의값.M재무순위_구분 {
-	case P재무순위_매출액증가율,
-		P재무순위_영업이익증가율,
-		P재무순위_세전계속이익증가율,
-		P재무순위_부채비율,
-		P재무순위_유보율,
-		P재무순위_EPS,
-		P재무순위_BPS,
-		P재무순위_ROE,
-		P재무순위_PER,
-		P재무순위_PBR,
-		P재무순위_PEG:
-		xing재무순위_구분 = 질의값.M재무순위_구분.T3341()
+	재무순위_구분 := lb.F2문자열("%x", int(질의값.M재무순위_구분))
+	switch 재무순위_구분 {
+	case "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b":
+		// OK
 	default:
-		panic(lb.New에러("잘못된 재무순위 구분값 : '%s' '%s'", string(질의값.M재무순위_구분), 질의값.M재무순위_구분.String()))
+		panic(lb.New에러("잘못된 재무순위 구분 : '%s' '%d'", 질의값.M재무순위_구분, 질의값.M재무순위_구분))
 	}
 
 	g = new(T3341InBlock)
-	lb.F바이트_복사_문자열(g.Gubun[:], xing시장구분)
-	lb.F바이트_복사_문자열(g.Gubun1[:], xing재무순위_구분)
+	lb.F바이트_복사_문자열(g.Gubun[:], 시장_구분)
+	lb.F바이트_복사_문자열(g.Gubun1[:], 재무순위_구분)
 	lb.F바이트_복사_문자열(g.Gubun2[:], "1")
 	lb.F바이트_복사_문자열(g.Idx[:], 질의값.M연속키)
 
