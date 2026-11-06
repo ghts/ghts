@@ -1004,9 +1004,9 @@ func (p T재무순위_구분) String() string {
 	case P재무순위_매출액증가율:
 		return "매출액 증가율"
 	case P재무순위_영업이익증가율:
-		return "세전계속이익 증가율"
+		return "영업이익 증가율"
 	case P재무순위_세전계속이익증가율:
-		return "P재무순위 세전계속이익증가율"
+		return "세전계속이익 증가율"
 	case P재무순위_부채비율:
 		return "부채비율"
 	case P재무순위_유보율:
