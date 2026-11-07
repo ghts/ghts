@@ -1811,7 +1811,7 @@ func (p T예약주문_CSPAQ13700) String() string {
 	case CSPAQ13700_예약주문:
 		return "예약주문"
 	default:
-		return lb.F2문자열("예상하지 예약주문 구분 : %v", int(p))
+		return lb.F2문자열("예상하지 못한 예약주문 구분 : %v", int(p))
 	}
 }
 
@@ -1841,7 +1841,7 @@ func (p T신용_구분_t0425) String() string {
 	case P담보_대출:
 		return "담보 대출"
 	default:
-		return lb.F2문자열("예상하지信用 구분 : %v", int(p))
+		return lb.F2문자열("예상하지 못한 신용 구분 : %v", int(p))
 	}
 }
 
