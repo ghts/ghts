@@ -405,8 +405,8 @@ const (
 
 type T주문_응답_구분 uint8
 
-func (v T주문_응답_구분) String() string {
-	switch v {
+func (p T주문_응답_구분) String() string {
+	switch p {
 	case P주문_응답_신규_주문:
 		return "신규 주문"
 	case P주문_응답_정정_주문:
@@ -416,7 +416,7 @@ func (v T주문_응답_구분) String() string {
 	case P주문_응답_체결_확인:
 		return "체결 확인"
 	default:
-		return lb.F2문자열("예상하지 못한 값 : '%v'", uint8(v))
+		return lb.F2문자열("예상하지 못한 값 : '%v'", uint8(p))
 	}
 }
 
@@ -446,8 +446,8 @@ const (
 
 type T신용거래_구분 uint8
 
-func (v T신용거래_구분) String() string {
-	switch v {
+func (p T신용거래_구분) String() string {
+	switch p {
 	case P신용거래_해당없음:
 		return "해당없음"
 	case P신용거래_유통자기융자신규:
@@ -467,18 +467,18 @@ func (v T신용거래_구분) String() string {
 	case P신용거래_예탁담보대출상환:
 		return "예탁담보대출상환"
 	default:
-		return lb.F2문자열("예상하지 못한 M값. %v", v)
+		return lb.F2문자열("예상하지 못한 M값. %v", int(p))
 	}
 }
 
-func (v T신용거래_구분) G검사() {
-	switch v {
+func (p T신용거래_구분) G검사() {
+	switch p {
 	case P신용거래_해당없음, P신용거래_유통자기융자신규, P신용거래_유통대주신규,
 		P신용거래_자기대주신규, P신용거래_유통융자상환, P신용거래_자기융자상환, P신용거래_유통대주상환,
 		P신용거래_자기대주상환, P신용거래_예탁담보대출상환:
 		return
 	default:
-		panic(lb.New에러("잘못된 신용거래 구분값. %v", v))
+		panic(lb.New에러("잘못된 신용거래 구분값. %v", p))
 	}
 }
 
@@ -1115,7 +1115,7 @@ func (p T수정구분) String() string {
 	case P수정구분_불성실공시종목:
 		return "불성실공시종목"
 	default:
-		return lb.F2문자열("예상하지 못한 값 : '%v'", p)
+		return lb.F2문자열("예상하지 못한 값 : '%v'", int(p))
 	}
 }
 

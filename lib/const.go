@@ -64,14 +64,14 @@ const (
 
 type T증권사 byte
 
-func (v T증권사) String() string {
-	switch v {
+func (p T증권사) String() string {
+	switch p {
 	case P증권사_NH:
 		return "NH"
 	case P증권사_Xing:
 		return "Xing"
 	default:
-		return F2문자열("예상하지 못한 값 : '%v'", int8(v))
+		return F2문자열("예상하지 못한 값 : '%v'", int8(p))
 	}
 }
 
@@ -83,8 +83,8 @@ const (
 
 type T부호 int8
 
-func (v T부호) String() string {
-	switch v {
+func (p T부호) String() string {
+	switch p {
 	case P양수:
 		return "+"
 	case P영:
@@ -92,7 +92,7 @@ func (v T부호) String() string {
 	case P음수:
 		return "-"
 	default:
-		return F2문자열("예상하지 못한 값 : '%v'", int8(v))
+		return F2문자열("예상하지 못한 값 : '%v'", int8(p))
 	}
 }
 
@@ -105,8 +105,8 @@ const (
 
 type T비교 int8
 
-func (v T비교) String() string {
-	switch v {
+func (p T비교) String() string {
+	switch p {
 	case P비교_같음:
 		return "같음"
 	case P비교_큼:
@@ -116,7 +116,7 @@ func (v T비교) String() string {
 	case P비교_불가:
 		return "비교 불가"
 	default:
-		return F2문자열("예상하지 못한 값 : '%v'", int8(v))
+		return F2문자열("예상하지 못한 값 : '%v'", int8(p))
 	}
 }
 
@@ -264,7 +264,7 @@ func (p T신호_32비트_모듈) String() string {
 	case P신호_DLL32_종료:
 		return "C32 종료"
 	default:
-		return F2문자열("예상하지 못한 T신호_32비트_모듈 값 : '%v'", p)
+		return F2문자열("예상하지 못한 T신호_32비트_모듈 값 : '%v'", int(p))
 	}
 }
 
@@ -332,7 +332,7 @@ func (p T시장구분) String() string {
 	case P시장구분_EUREX야간선물옵션:
 		return "EUREX야간선물옵션"
 	default:
-		return F2문자열("예상하지 못한 시장구분값 : '%v'", p)
+		return F2문자열("예상하지 못한 시장구분값 : '%v'", int(p))
 	}
 }
 
@@ -444,14 +444,14 @@ const (
 
 type T가격데이터_구분 uint8
 
-func (v T가격데이터_구분) String() string {
-	switch v {
+func (p T가격데이터_구분) String() string {
+	switch p {
 	case P조정시가:
 		return "조정시가"
 	case P조정종가:
 		return "조정종가"
 	default:
-		return F2문자열("잘못된 구분값. %v", v)
+		return F2문자열("잘못된 구분값. %v", int(p))
 	}
 }
 
@@ -462,14 +462,14 @@ const (
 
 type T장_개시_종료 uint8
 
-func (v T장_개시_종료) String() string {
-	switch v {
+func (p T장_개시_종료) String() string {
+	switch p {
 	case P장_개시:
 		return "장_개시"
 	case P장_종료:
 		return "장_종료"
 	default:
-		return F2문자열("잘못된 구분값. %v", v)
+		return F2문자열("잘못된 구분값. %v", int(p))
 	}
 }
 
@@ -481,8 +481,8 @@ const (
 
 type T장_정보 uint8
 
-func (v T장_정보) String() string {
-	switch v {
+func (p T장_정보) String() string {
+	switch p {
 	case P장_중:
 		return "장_중"
 	case P장_후_시간외:
@@ -490,7 +490,7 @@ func (v T장_정보) String() string {
 	case P장_전_시간외:
 		return "장_전_시간외"
 	default:
-		return F2문자열("잘못된 장 정보 M값. %v", v)
+		return F2문자열("잘못된 장 정보 M값. %v", int(p))
 	}
 }
 
@@ -523,8 +523,8 @@ const (
 	P취소
 )
 
-func (v T신규_정정_취소) String() string {
-	switch v {
+func (p T신규_정정_취소) String() string {
+	switch p {
 	case P신규:
 		return "신규"
 	case P정정:
@@ -532,17 +532,17 @@ func (v T신규_정정_취소) String() string {
 	case P취소:
 		return "취소"
 	default:
-		return F2문자열("예상하지 못한 M값. %v", v)
+		return F2문자열("예상하지 못한 M값. %v", int(p))
 	}
 }
 
-func (v T신규_정정_취소) G검사() error {
-	switch v {
+func (p T신규_정정_취소) G검사() error {
+	switch p {
 	case P신규, P정정, P취소:
 		return nil
 	}
 
-	return New에러with출력("잘못된 신규 정정 취소 구분값. %v", v)
+	return New에러with출력("잘못된 신규 정정 취소 구분값. %v", p)
 }
 
 const (
@@ -557,19 +557,19 @@ const (
 
 type T주문응답_구분 uint8
 
-func (v T주문응답_구분) G검사() error {
-	switch v {
+func (p T주문응답_구분) G검사() error {
+	switch p {
 	case P주문응답_정상, P주문응답_정정, P주문응답_취소,
 		P주문응답_거부, P주문응답_체결,
 		P주문응답_IOC취소, P주문응답_FOK취소:
 		return nil
 	default:
-		return New에러("잘못된 주문응답 구분값. %v", uint8(v))
+		return New에러("잘못된 주문응답 구분값. %v", uint8(p))
 	}
 }
 
-func (v T주문응답_구분) String() string {
-	switch v {
+func (p T주문응답_구분) String() string {
+	switch p {
 	case P주문응답_정상:
 		return "접수"
 	case P주문응답_정정:
@@ -585,7 +585,7 @@ func (v T주문응답_구분) String() string {
 	case P주문응답_FOK취소:
 		return "FOK 취소"
 	default:
-		return F2문자열("잘못된 주문응답 구분값. %v", v)
+		return F2문자열("잘못된 주문응답 구분값. %v", int(p))
 	}
 }
 
@@ -604,8 +604,8 @@ const (
 
 type T호가유형 uint8
 
-func (v T호가유형) Xing코드() uint8 {
-	switch v {
+func (p T호가유형) Xing코드() uint8 {
+	switch p {
 	case P호가_지정가:
 		return 0
 	case P호가_시장가:
@@ -629,8 +629,8 @@ func (v T호가유형) Xing코드() uint8 {
 	}
 }
 
-func (v T호가유형) String() string {
-	switch v {
+func (p T호가유형) String() string {
+	switch p {
 	case P호가_지정가:
 		return "지정가"
 	case P호가_시장가:
@@ -652,19 +652,19 @@ func (v T호가유형) String() string {
 	case P호가_해당없음:
 		return "해당없음"
 	default:
-		return F2문자열("예상하지 못한 M값. %v", uint8(v))
+		return F2문자열("예상하지 못한 M값. %v", uint8(p))
 	}
 }
 
-func (v T호가유형) G검사() {
-	switch v {
+func (p T호가유형) G검사() {
+	switch p {
 	case P호가_지정가, P호가_시장가, P호가_조건부_지정가,
 		P호가_최유리_지정가, P호가_최우선_지정가,
 		P호가_장전_시간외, P호가_장후_시간외,
 		P호가_시간외_단일가, P호가_해당없음:
 		return
 	default:
-		panic(New에러("잘못된 지정가 시장가 구분값. %v", uint8(v)))
+		panic(New에러("잘못된 지정가 시장가 구분값. %v", uint8(p)))
 	}
 }
 
@@ -676,8 +676,8 @@ const (
 
 type T주문조건 uint8
 
-func (v T주문조건) String() string {
-	switch v {
+func (p T주문조건) String() string {
+	switch p {
 	case P주문조건_없음:
 		return "없음"
 	case P주문조건_IOC:
@@ -685,16 +685,16 @@ func (v T주문조건) String() string {
 	case P주문조건_FOK:
 		return "FOK"
 	default:
-		return F2문자열("잘못된 주문조건 구분값. %v", uint8(v))
+		return F2문자열("잘못된 주문조건 구분값. %v", uint8(p))
 	}
 }
 
-func (v T주문조건) G검사() {
-	switch v {
+func (p T주문조건) G검사() {
+	switch p {
 	case P주문조건_없음, P주문조건_IOC, P주문조건_FOK:
 		return
 	default:
-		panic(New에러("잘못된 주문 조건 구분값. %v", uint8(v)))
+		panic(New에러("잘못된 주문 조건 구분값. %v", uint8(p)))
 	}
 }
 
@@ -705,14 +705,14 @@ const (
 
 type T롱숏 byte
 
-func (v T롱숏) String() string {
-	switch v {
+func (p T롱숏) String() string {
+	switch p {
 	case P롱:
 		return "롱"
 	case P숏:
 		return "숏"
 	default:
-		return F2문자열("예상하지 못한 값 : '%v'", byte(v))
+		return F2문자열("예상하지 못한 값 : '%v'", byte(p))
 	}
 }
 
@@ -808,7 +808,7 @@ func (p T콜백) String() string {
 	case P콜백_소켓_테스트:
 		return "소켓_테스트"
 	default:
-		return F2문자열("예상하지 못한 콜백값 : '%v'", p)
+		return F2문자열("예상하지 못한 콜백값 : '%v'", int(p))
 	}
 }
 

@@ -18,8 +18,8 @@ const (
 
 type TR구분 uint8
 
-func (v TR구분) String() string {
-	return TR구분_String(v)
+func (p TR구분) String() string {
+	return TR구분_String(p)
 }
 
 // 증권사 API 패키지에서 오버라이드 될 수 있음.
@@ -59,8 +59,8 @@ const (
 
 type TR응답_구분 int8
 
-func (v TR응답_구분) String() string {
-	switch v {
+func (p TR응답_구분) String() string {
+	switch p {
 	case TR응답_데이터:
 		return "TR응답_데이터"
 	case TR응답_실시간_정보:
@@ -70,6 +70,6 @@ func (v TR응답_구분) String() string {
 	case TR응답_완료:
 		return "TR응답_완료"
 	default:
-		return fmt.Sprintf("예상하지 못한 M값. %v", int8(v))
+		return fmt.Sprintf("예상하지 못한 M값. %v", int8(p))
 	}
 }
