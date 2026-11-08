@@ -14,12 +14,6 @@ func New에러(포맷_문자열or에러 any, 추가_매개변수 ...any) error {
 	case nil:
 		return nil
 	case *S에러:
-		호출_경로_모음 := F호출경로_모음()
-
-		if len(호출_경로_모음) > len(변환값.호출_경로_모음) {
-			변환값.호출_경로_모음 = 호출_경로_모음
-		}
-
 		return 변환값
 	case S에러:
 		에러값 := &변환값
