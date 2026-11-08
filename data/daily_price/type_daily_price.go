@@ -964,6 +964,11 @@ func (s *S종목별_일일_가격정보_모음) VPCI(단기, 장기 int) float64
 func (s *S종목별_일일_가격정보_모음) G전일_VPCI(단기, 장기 int) float64 {
 	vpci_모음 := s.vpci_모음(단기, 장기)
 
+	// 직전일 VPCI는 최소 2개 이상의 데이터가 필요함.
+	if len(vpci_모음) < 2 {
+		return 0
+	}
+
 	return vpci_모음[len(vpci_모음)-2]
 }
 
@@ -979,6 +984,11 @@ func (s *S종목별_일일_가격정보_모음) VPCIs(단기, 장기 int) float6
 
 func (s *S종목별_일일_가격정보_모음) G전일_VPCIs(단기, 장기 int) float64 {
 	VPCIs_모음 := s.vpcis_모음(단기, 장기)
+
+	// 직전일 VPCIs는 최소 2개 이상의 데이터가 필요함.
+	if len(VPCIs_모음) < 2 {
+		return 0
+	}
 
 	return VPCIs_모음[len(VPCIs_모음)-2]
 }
@@ -1006,6 +1016,11 @@ func (s *S종목별_일일_가격정보_모음) G전일_MFI(윈도우_크기 int
 		s.G종가_모음(),
 		s.g거래량_모음())
 
+	// 직전일 MFI는 최소 2개 이상의 데이터가 필요함.
+	if len(MFI_모음) < 2 {
+		return 0
+	}
+
 	return MFI_모음[len(MFI_모음)-2]
 }
 
@@ -1028,6 +1043,11 @@ func (s *S종목별_일일_가격정보_모음) MFIs(윈도우_크기_MFI, 윈�
 
 func (s *S종목별_일일_가격정보_모음) G전일_MFIs(윈도우_크기_MFI, 윈도우_크기_이동평균 int) float64 {
 	MFIs_모음 := s.mfis_모음(윈도우_크기_MFI, 윈도우_크기_이동평균)
+
+	// 직전일 MFIs는 최소 2개 이상의 데이터가 필요함.
+	if len(MFIs_모음) < 2 {
+		return 0
+	}
 
 	return MFIs_모음[len(MFIs_모음)-2]
 }
@@ -1080,8 +1100,13 @@ func (s *S종목별_일일_가격정보_모음) MFI_도우미(윈도우_크기 i
 			sum_negative_money_flow += negative_money_flow[i] - negative_money_flow[i-윈도우_크기]
 		}
 
-		money_flow_ratio := sum_positive_money_flow / sum_negative_money_flow
-		mfi[i] = 100 - 100/(1+money_flow_ratio)
+		if sum_negative_money_flow == 0 {
+			// 음의 흐름 합계가 0이면 자금흐름 비율이 무한대이므로 MFI는 최대값 100.
+			mfi[i] = 100
+		} else {
+			money_flow_ratio := sum_positive_money_flow / sum_negative_money_flow
+			mfi[i] = 100 - 100/(1+money_flow_ratio)
+		}
 	}
 
 	return mfi
