@@ -1,9 +1,9 @@
 package w32
 
 import (
-	"strings"
 	"unsafe"
 
+	lb "github.com/ghts/ghts/lib"
 	"golang.org/x/text/encoding/korean"
 )
 
@@ -30,24 +30,7 @@ func F2포인터(바이트_모음 []byte) unsafe.Pointer {
 }
 
 func EUC_KR_C포인터2Go문자열(EUC_KR_C포인터 unsafe.Pointer) string {
-	return EUC_KR_바이트_모음2Go문자열(F2Go바이트_모음(EUC_KR_C포인터))
-}
-
-func EUC_KR_바이트_모음2Go문자열(EUC_KR_바이트_모음 []byte) string {
-	if len(EUC_KR_바이트_모음) == 0 {
-		return ""
-	} else if null문자_인덱스 := strings.Index(string(EUC_KR_바이트_모음), "\x00"); null문자_인덱스 >= 0 {
-		EUC_KR_바이트_모음 = EUC_KR_바이트_모음[:null문자_인덱스]
-	}
-
-	UTF8_바이트_모음, 에러 := korean.EUCKR.NewDecoder().Bytes(EUC_KR_바이트_모음)
-	if 에러 == nil {
-		return string(UTF8_바이트_모음)
-	} else if len(EUC_KR_바이트_모음) > 0 {
-		return EUC_KR_바이트_모음2Go문자열(EUC_KR_바이트_모음[:len(EUC_KR_바이트_모음)-1])
-	}
-
-	return ""
+	return lb.EUC_KR2Go문자열(F2Go바이트_모음(EUC_KR_C포인터))
 }
 
 func F2Go바이트_모음(c데이터 unsafe.Pointer) []byte {

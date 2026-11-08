@@ -106,13 +106,12 @@ func F2바이트_모음(값 any) []byte {
 		return v
 	}
 
-	// [N]byte 배열 패밀리 (이름 붙은 타입 포함) -- 길이 반사로 처리.
-	// 값으로 전달된 배열은 복사본이므로 주소 가능한 복사본에 옮겨 []byte로 만든다.
+	// [N]byte 배열 패밀리 (이름 붙은 타입 포함) -- reflect로 처리.
 	if rv := reflect.ValueOf(값); rv.Kind() == reflect.Array {
 		if elem := rv.Type().Elem(); elem.Kind() == reflect.Uint8 {
-			주소_복가 := reflect.New(rv.Type()).Elem()
-			주소_복가.Set(rv)
-			return 주소_복가.Bytes()
+			주소_복사본 := reflect.New(rv.Type()).Elem()
+			주소_복사본.Set(rv)
+			return 주소_복사본.Bytes()
 		}
 	}
 
@@ -124,52 +123,25 @@ func EUC_KR2Go문자열_공백제거(값 any) string {
 }
 
 func EUC_KR2Go문자열(값 any) string {
-	바이트_모음 := make([]byte, 0)
-
-	switch 변환값 := 값.(type) {
-	case string:
-		바이트_모음 = []byte(변환값)
-	case []byte, [1]byte, [2]byte, [3]byte, [4]byte, [5]byte,
-		[6]byte, [7]byte, [8]byte, [9]byte, [10]byte,
-		[11]byte, [12]byte, [13]byte, [14]byte, [15]byte,
-		[16]byte, [17]byte, [18]byte, [19]byte, [20]byte,
-		[21]byte, [22]byte, [23]byte, [24]byte, [25]byte,
-		[26]byte, [27]byte, [28]byte, [29]byte, [30]byte,
-		[31]byte, [32]byte, [33]byte, [34]byte, [35]byte,
-		[36]byte, [37]byte, [38]byte, [39]byte, [40]byte,
-		[41]byte, [42]byte, [43]byte, [44]byte, [45]byte,
-		[46]byte, [47]byte, [48]byte, [49]byte, [50]byte,
-		[51]byte, [52]byte, [53]byte, [54]byte, [55]byte,
-		[56]byte, [57]byte, [58]byte, [59]byte, [60]byte,
-		[61]byte, [62]byte, [63]byte, [64]byte, [65]byte,
-		[66]byte, [67]byte, [68]byte, [69]byte, [70]byte,
-		[71]byte, [72]byte, [73]byte, [74]byte, [75]byte,
-		[76]byte, [77]byte, [78]byte, [79]byte, [80]byte,
-		[81]byte, [82]byte, [83]byte, [84]byte, [85]byte,
-		[86]byte, [87]byte, [88]byte, [89]byte, [90]byte,
-		[91]byte, [92]byte, [93]byte, [94]byte, [95]byte,
-		[96]byte, [97]byte, [98]byte, [99]byte, [100]byte:
-		바이트_모음 = F2바이트_모음(변환값)
-	default:
-		panic(New에러("예상치 못한 자료 형식 : '%T'", 값))
-	}
+	바이트_모음 := F2바이트_모음(값)
 
 	null문자_인덱스 := strings.Index(string(바이트_모음), "\x00")
-
 	if null문자_인덱스 >= 0 {
 		바이트_모음 = 바이트_모음[:null문자_인덱스]
 	}
 
-	바이트_모음_utf8, 에러 := korean.EUCKR.NewDecoder().Bytes(바이트_모음)
-	if 에러 != nil {
-		if len(바이트_모음) > 0 {
-			return EUC_KR2Go문자열(바이트_모음[:len(바이트_모음)-1])
-		}
-
-		return string(바이트_모음)
+	if len(바이트_모음) == 0 {
+		return ""
 	}
 
-	return string(바이트_모음_utf8)
+	바이트_모음_utf8, 에러 := korean.EUCKR.NewDecoder().Bytes(바이트_모음)
+	if 에러 == nil {
+		return string(바이트_모음_utf8)
+	} else if len(바이트_모음) > 0 {
+		return EUC_KR2Go문자열(바이트_모음[:len(바이트_모음)-1])
+	}
+
+	return string(바이트_모음)
 }
 
 func F앞뒤_따옴표_제거(값 string) string {
