@@ -1779,21 +1779,21 @@ func (p T통신매체구분) String() string {
 func (p T통신매체구분) F해석(값 any) T통신매체구분 {
 	문자열 := lb.EUC_KR2Go문자열_공백제거(값)
 
-	switch {
-	case strings.Contains(문자열, "아이폰"):
+	switch 문자열 {
+	case "아이폰":
 		return P통신매체_아이폰
-	case strings.Contains(문자열, "안드로이드"):
+	case "안드로이드":
 		return P통신매체_안드로이드
-	case strings.Contains(문자열, "HTS"),
-		strings.Contains(문자열, "xingQ master"),
-		strings.Contains(문자열, "일반"),
-		strings.Contains(문자열, "투혼"):
-		return P통신매체_HTS
-	case strings.Contains(문자열, "API"),
-		strings.Contains(문자열, "씽(X-ing)"):
+	case "API", "씽(X-ing)":
 		return P통신매체_API
+	case "HTS", "xingQ master", "일반":
+		return P통신매체_HTS
 	default:
-		panic(lb.New에러("예상하지 못한 통신매체 구분 : '%v'", 문자열))
+		if strings.Contains(문자열, "투혼") {
+			return P통신매체_HTS
+		}
+
+		panic(lb.New에러("예상하지 못한 값 : '%v'", 문자열))
 	}
 }
 

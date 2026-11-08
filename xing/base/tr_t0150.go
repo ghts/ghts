@@ -3,6 +3,7 @@ package xt
 import (
 	"bytes"
 	"encoding/binary"
+	"strings"
 
 	lb "github.com/ghts/ghts/lib"
 )
@@ -140,11 +141,23 @@ func NewT0150_현물_당일_매매일지_응답_반복값_모음(b []byte) (값_
 		g := new(T0150OutBlock1)
 		lb.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
-		if 문자열 := lb.EUC_KR2Go문자열_공백제거(g.Medosu); 문자열 == "종목소계" {
+		if 매도_매수_구분 := lb.EUC_KR2Go문자열_공백제거(g.Medosu); 매도_매수_구분 == "종목소계" {
 			continue
-		} else if 문자열 != "매도" && 문자열 != "매수" {
-			lb.F에러_출력("예상하지 못한 값 : '%v'", 문자열)
+		} else if 매도_매수_구분 != "매도" && 매도_매수_구분 != "매수" {
+			lb.F에러_출력("예상하지 못한 매도/매수 구분 : '%v'", 매도_매수_구분)
 			continue
+		}
+
+		매체_구분 := lb.EUC_KR2Go문자열_공백제거(g.Middiv)
+
+		switch 매체_구분 {
+		case "아이폰", "안드로이드", "API", "씽(X-ing)", "HTS", "xingQ master", "일반":
+			// OK
+		default:
+			if !strings.Contains(매체_구분, "투혼") {
+				lb.F에러_출력("예상하지 못한 매체 구분 : '%v'", 매체_구분)
+				continue
+			}
 		}
 
 		값 := new(T0150_현물_당일_매매일지_응답_반복값)

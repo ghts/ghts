@@ -3,6 +3,7 @@ package xt
 import (
 	"bytes"
 	"encoding/binary"
+	"strings"
 
 	lb "github.com/ghts/ghts/lib"
 )
@@ -147,6 +148,18 @@ func NewT0151_현물_일자별_매매일지_응답_반복값_모음(b []byte) (�
 		} else if 문자열 != "매도" && 문자열 != "매수" {
 			lb.F에러_출력("예상하지 못한 값 : '%v'", 문자열)
 			continue
+		}
+
+		매체_구분 := lb.EUC_KR2Go문자열_공백제거(g.Middiv)
+
+		switch 매체_구분 {
+		case "아이폰", "안드로이드", "API", "씽(X-ing)", "HTS", "xingQ master", "일반":
+			// OK
+		default:
+			if !strings.Contains(매체_구분, "투혼") {
+				lb.F에러_출력("예상하지 못한 매체 구분 : '%v'", 매체_구분)
+				continue
+			}
 		}
 
 		값 := new(T0151_현물_일자별_매매일지_응답_반복값)
