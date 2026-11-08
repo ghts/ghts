@@ -247,6 +247,17 @@ func TestF2문자열_EUC_KR(t *testing.T) {
 	F테스트_같음(t, "펩시콜라", EUC_KR2Go문자열("\xc6\xe9\xbd\xc3\xc4\xdd\xb6\xf3"))
 }
 
+// 표기 불가능한 바이트가 섞여 있어도 디코딩 실패로 소실되지 않고, U+FFFD(대체 문자)만 들어가서 반환되는지 검증.
+func TestF2문자열_EUC_KR_부정바이트_대체(t *testing.T) {
+	t.Parallel()
+
+	// '아름' 뒤에 표시 불가능한 바이트 \xff가 붙은 입력.
+	결과 := EUC_KR2Go문자열("\xbe\xc6\xb8\xa7\xff")
+
+	F테스트_참임(t, strings.Contains(결과, "아름"), "표기 불가 바이트가 섞여도 유효한 부분은 유지되어야 한다. 결과: %q", 결과)
+	F테스트_참임(t, strings.Contains(결과, "\ufffd"), "표기 불가 바이트는 U+FFFD로 대체되어야 한다. 결과: %q", 결과)
+}
+
 func TestF인코딩_디코딩(t *testing.T) {
 	변환형식_모음 := []T변환{GOB, JSON}
 

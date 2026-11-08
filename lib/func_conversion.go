@@ -125,23 +125,33 @@ func EUC_KR2Go문자열_공백제거(값 any) string {
 func EUC_KR2Go문자열(값 any) string {
 	바이트_모음 := F2바이트_모음(값)
 
-	null문자_인덱스 := strings.Index(string(바이트_모음), "\x00")
-	if null문자_인덱스 >= 0 {
-		바이트_모음 = 바이트_모음[:null문자_인덱스]
+	// null 문자로 끝난 메시지라면 끝부분만 잘라낸다.
+	if 인덱스 := bytes.IndexByte(바이트_모음, 0); 인덱스 >= 0 {
+		바이트_모음 = 바이트_모음[:인덱스]
 	}
 
 	if len(바이트_모음) == 0 {
 		return ""
 	}
 
+	// 디코더는 변환할 수 없는 바이트가 있어도 U+FFFD(대체 문자)로 바꿔줄 뿐
+	// 오류를 반환하지 않는다. 따라서 아래 결과에 U+FFFD가 포함되었는지 검사해
+	// 디코딩 실패를 감지한다.
 	바이트_모음_utf8, 에러 := korean.EUCKR.NewDecoder().Bytes(바이트_모음)
-	if 에러 == nil {
-		return string(바이트_모음_utf8)
-	} else if len(바이트_모음) > 0 {
-		return EUC_KR2Go문자열(바이트_모음[:len(바이트_모음)-1])
+	if 에러 != nil {
+		F에러_출력("EUC_KR2Go문자열 : EUC-KR 디코딩 에러 발생.\n%v", 에러)
 	}
 
-	return string(바이트_모음)
+	문자열 := string(바이트_모음_utf8)
+	if strings.ContainsRune(문자열, '\ufffd') {
+		// U+FFFD는 EUC-KR로 표기할 수 없는 문자이므로,
+		// 정상적으로 디코딩된 한글 메시지에는 절대 나타나지 않는다.
+		// 이 문자가 나왔다는 것은 원본에 표기 불가능한 바이트가 섞였다는 의미.
+		// 원인을 파악할 수 있도록 경고로 남긴다.
+		F에러_출력("EUC_KR2Go문자열 : EUC-KR 디코딩 중 표기 불가능한 바이트를 발견해 U+FFFD로 대체됨.\n원본 바이트: %#v", 바이트_모음)
+	}
+
+	return 문자열
 }
 
 func F앞뒤_따옴표_제거(값 string) string {
