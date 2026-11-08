@@ -1917,53 +1917,6 @@ type T1102OutBlock struct {
 	X_krx_mcls_price     byte
 }
 
-type T1301InBlock struct {
-	Shcode      [6]byte
-	X_shcode    byte
-	Cvolume     [12]byte
-	X_cvolume   byte
-	Starttime   [4]byte
-	X_starttime byte
-	Endtime     [4]byte
-	X_endtime   byte
-	Time        [10]byte
-	X_cts_time  byte
-}
-type T1301OutBlock struct {
-	Time       [10]byte
-	X_cts_time byte
-}
-type T1301OutBlock1 struct {
-	Chetime    [10]byte
-	X_chetime  byte
-	Price      [8]byte
-	X_price    byte
-	Sign       [1]byte
-	X_sign     byte
-	Change     [8]byte
-	X_change   byte
-	Diff       [6]byte
-	X_diff     byte
-	Cvolume    [12]byte
-	X_cvolume  byte
-	Chdegree   [8]byte
-	X_chdegree byte
-	Volume     [12]byte
-	X_volume   byte
-	Mdvolume   [12]byte
-	X_mdvolume byte
-	Mdchecnt   [8]byte
-	X_mdchecnt byte
-	Msvolume   [12]byte
-	X_msvolume byte
-	Mschecnt   [8]byte
-	X_mschecnt byte
-	Revolume   [12]byte
-	X_revolume byte
-	Rechecnt   [8]byte
-	X_rechecnt byte
-}
-
 type T1305InBlock struct {
 	Shcode      [6]byte
 	X_shcode    byte

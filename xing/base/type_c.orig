@@ -103,11 +103,6 @@ type T1101OutBlock C.T1101OutBlock
 type T1102InBlock C.T1102InBlock
 type T1102OutBlock C.T1102OutBlock
 
-// 현물 시간대별 체결 (t1301)
-type T1301InBlock C.T1301InBlock
-type T1301OutBlock C.T1301OutBlock
-type T1301OutBlock1 C.T1301OutBlock1
-
 // 기간별 주가 (t1305)
 type T1305InBlock C.T1305InBlock
 type T1305OutBlock C.T1305OutBlock
