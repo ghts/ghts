@@ -327,20 +327,21 @@ func F2정수64(값 any) (int64, error) {
 
 	문자열 = strings.Replace(strings.TrimSpace(문자열), ",", "", -1)
 
-	if 매치됨, _ := regexp.MatchString("\\.0*$", 문자열); 매치됨 {
-		for {
-			문자열 = 문자열[:len(문자열)-1]
-			if !strings.HasSuffix(문자열, ".") && !strings.Contains(문자열, ".0") {
-				break
-			}
-		}
+	// 소숫점 뒤가 0으로만 끝나는 입력(예: "1.0", "1.00")은 정수부로만 남김.
+	문자열 = regexp.MustCompile(`\.0*$`).ReplaceAllString(문자열, "")
+
+	// 부호만 남는 입력(예: "-.0", "+.0", ".0")은 0으로 처리한다.
+	switch 문자열 {
+	case "", "+", "-":
+		return 0, nil
 	}
 
-	if 반환값, 에러 := strconv.ParseInt(문자열, 10, 64); 에러 != nil {
+	반환값, 에러 := strconv.ParseInt(문자열, 10, 64)
+	if 에러 != nil {
 		return 0, 에러
-	} else {
-		return 반환값, nil
 	}
+
+	return 반환값, nil
 }
 
 func F2정수64_공백은_0(값 any) (int64, error) {
