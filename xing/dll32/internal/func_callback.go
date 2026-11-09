@@ -104,7 +104,10 @@ func OnTrData(TR데이터 unsafe.Pointer) {
 	버퍼 := bytes.NewBuffer(c데이터)
 	g := new(xt.TR_DATA)
 
-	binary.Read(버퍼, binary.LittleEndian, &g.RequestID) // 인텔 및 AMD 계열 CPU는 리틀 엔디언
+	if 에러 := binary.Read(버퍼, binary.LittleEndian, &g.RequestID); 에러 != nil {
+		lb.F에러_출력(에러)
+	}
+
 	binary.Read(버퍼, binary.LittleEndian, &g.DataLength)
 	binary.Read(버퍼, binary.LittleEndian, &g.TotalDataBufferSize)
 	binary.Read(버퍼, binary.LittleEndian, &g.ElapsedTime)
@@ -199,7 +202,10 @@ func OnMessageAndError(MSG데이터 unsafe.Pointer) {
 	버퍼 := bytes.NewBuffer(c데이터)
 	g := new(xt.MSG_DATA)
 
-	binary.Read(버퍼, binary.LittleEndian, &g.RequestID) // 인텔 및 AMD 계열 CPU는 리틀 엔디언
+	if 에러 := binary.Read(버퍼, binary.LittleEndian, &g.RequestID); 에러 != nil {
+		lb.F에러_출력(에러)
+	}
+
 	binary.Read(버퍼, binary.LittleEndian, &g.SystemError)
 	binary.Read(버퍼, binary.LittleEndian, &g.MsgCode)
 	binary.Read(버퍼, binary.LittleEndian, &g.X_MsgCode)
@@ -247,7 +253,10 @@ func OnRealtimeData(실시간_데이터 unsafe.Pointer) {
 	버퍼 := bytes.NewBuffer(c데이터)
 	g := new(xt.REALTIME_DATA)
 
-	binary.Read(버퍼, binary.LittleEndian, &g.TrCode) // 인텔 및 AMD 계열 CPU는 리틀 엔디언
+	if 에러 := binary.Read(버퍼, binary.LittleEndian, &g.TrCode); 에러 != nil {
+		lb.F에러_출력(에러)
+	}
+
 	binary.Read(버퍼, binary.LittleEndian, &g.X_TrCode)
 	binary.Read(버퍼, binary.LittleEndian, &g.KeyLength)
 	binary.Read(버퍼, binary.LittleEndian, &g.KeyData)
