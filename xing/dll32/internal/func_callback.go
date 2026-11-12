@@ -237,7 +237,7 @@ func OnMessageAndError(MSG데이터 unsafe.Pointer) {
 		"OnMessageAndError() 메시지 데이터 비정상. 식별번호 : %d 코드 : '%s' 포인터 : %v 길이 : %d",
 		int(g.RequestID), lb.F2문자열_공백_제거(g.MsgCode), g.MsgData, g.MsgLength)
 
-	콜백값.M내용 = lb.EUC_KR2Go문자열(w32.F2Go바이트_모음with길이(g.MsgData, int(g.MsgLength)))
+	콜백값.M내용 = lb.F확인2(lb.EUC_KR2Go문자열(w32.F2Go바이트_모음with길이(g.MsgData, int(g.MsgLength))))
 	콜백값.M에러여부 = 에러여부
 
 	F콜백(콜백값)

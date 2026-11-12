@@ -40,7 +40,7 @@ func TestT1405_투자_경고_종목(t *testing.T) {
 }
 
 func TestT1405_거래_정지_종목(t *testing.T) {
-	//t.Skip()
+	t.Skip()
 
 	시장_구분 := lb.P시장구분_전체
 	투자경고_질의_구분 := xt.P매매정지

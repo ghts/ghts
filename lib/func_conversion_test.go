@@ -242,9 +242,9 @@ func TestF인터페이스_모음2문자열_모음(t *testing.T) {
 func TestF2문자열_EUC_KR(t *testing.T) {
 	t.Parallel()
 
-	F테스트_같음(t, "아름다운 우리말", EUC_KR2Go문자열("\xbe\xc6\xb8\xa7\xb4\xd9\xbf\xee \xbf\xec\xb8\xae\xb8\xbb"))
-	F테스트_같음(t, "똠방각하", EUC_KR2Go문자열("\x8cc\xb9\xe6\xb0\xa2\xc7\xcf"))
-	F테스트_같음(t, "펩시콜라", EUC_KR2Go문자열("\xc6\xe9\xbd\xc3\xc4\xdd\xb6\xf3"))
+	F테스트_같음(t, "아름다운 우리말", F확인2(EUC_KR2Go문자열("\xbe\xc6\xb8\xa7\xb4\xd9\xbf\xee \xbf\xec\xb8\xae\xb8\xbb")))
+	F테스트_같음(t, "똠방각하", F확인2(EUC_KR2Go문자열("\x8cc\xb9\xe6\xb0\xa2\xc7\xcf")))
+	F테스트_같음(t, "펩시콜라", F확인2(EUC_KR2Go문자열("\xc6\xe9\xbd\xc3\xc4\xdd\xb6\xf3")))
 }
 
 // 표기 불가능한 바이트가 섞여 있어도 디코딩 실패로 소실되지 않고, U+FFFD(대체 문자)만 들어가서 반환되는지 검증.
@@ -252,7 +252,7 @@ func TestF2문자열_EUC_KR_부정바이트_대체(t *testing.T) {
 	t.Parallel()
 
 	// '아름' 뒤에 표시 불가능한 바이트 \xff가 붙은 입력.
-	결과 := EUC_KR2Go문자열("\xbe\xc6\xb8\xa7\xff")
+	결과, _ := EUC_KR2Go문자열("\xbe\xc6\xb8\xa7\xff")
 
 	F테스트_참임(t, strings.Contains(결과, "아름"), "표기 불가 바이트가 섞여도 유효한 부분은 유지되어야 한다. 결과: %q", 결과)
 	F테스트_참임(t, strings.Contains(결과, "\ufffd"), "표기 불가 바이트는 U+FFFD로 대체되어야 한다. 결과: %q", 결과)

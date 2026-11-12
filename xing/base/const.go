@@ -1773,7 +1773,7 @@ func (p T통신매체구분) String() string {
 }
 
 func (p T통신매체구분) F해석(값 any) T통신매체구분 {
-	문자열 := lb.EUC_KR2Go문자열_공백제거(값)
+	문자열 := lb.F확인2(lb.EUC_KR2Go문자열(값))
 
 	switch 문자열 {
 	case "아이폰":

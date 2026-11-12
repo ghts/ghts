@@ -30,7 +30,7 @@ func F2포인터(바이트_모음 []byte) unsafe.Pointer {
 }
 
 func EUC_KR_C포인터2Go문자열(EUC_KR_C포인터 unsafe.Pointer) string {
-	return lb.EUC_KR2Go문자열(F2Go바이트_모음(EUC_KR_C포인터))
+	return lb.F확인2(lb.EUC_KR2Go문자열(F2Go바이트_모음(EUC_KR_C포인터)))
 }
 
 func F2Go바이트_모음(c데이터 unsafe.Pointer) []byte {
