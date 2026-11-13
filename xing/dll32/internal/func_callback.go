@@ -237,7 +237,13 @@ func OnMessageAndError(MSG데이터 unsafe.Pointer) {
 		"OnMessageAndError() 메시지 데이터 비정상. 식별번호 : %d 코드 : '%s' 포인터 : %v 길이 : %d",
 		int(g.RequestID), lb.F2문자열_공백_제거(g.MsgCode), g.MsgData, g.MsgLength)
 
-	콜백값.M내용 = lb.F확인2(lb.EUC_KR2Go문자열(w32.F2Go바이트_모음with길이(g.MsgData, int(g.MsgLength))))
+	var 에러 error
+	콜백값.M내용, 에러 = lb.EUC_KR2Go문자열(w32.F2Go바이트_모음with길이(g.MsgData, int(g.MsgLength)))
+	if 에러 != nil {
+		lb.F에러_출력(에러)
+		콜백값.M내용 = ""
+	}
+
 	콜백값.M에러여부 = 에러여부
 
 	F콜백(콜백값)
@@ -287,20 +293,20 @@ func OnRealtimeData(실시간_데이터 unsafe.Pointer) {
 }
 
 func OnLogin(wParam, lParam unsafe.Pointer) {
-	코드 := w32.EUC_KR_C포인터2Go문자열(wParam)
+	defer lb.S예외처리{}.S실행()
+
+	코드 := lb.F확인2(w32.EUC_KR_C포인터2Go문자열(wParam))
 	정수, 에러 := lb.F2정수(코드)
 	로그인_성공_여부 := 에러 == nil && 정수 == 0
 
 	if 로그인_성공_여부 {
-		//fmt.Println("** Xing LOGIN SUCCESS **")
-
 		F콜백(lb.New콜백_신호(lb.P신호_DLL32_LOGIN))
 	} else {
 		if 에러 == nil {
 			lb.F문자열_출력("에러 코드 : %v", 정수)
 		}
 
-		lb.F문자열_출력("에러 메세지 : %v", w32.EUC_KR_C포인터2Go문자열(lParam))
+		lb.F문자열_출력("에러 메세지 : %v", lb.F확인2(w32.EUC_KR_C포인터2Go문자열(lParam)))
 
 		if f모의투자서버_접속_중() {
 			버퍼 := new(bytes.Buffer)
