@@ -136,7 +136,7 @@ func F접속_로그인() (에러 error) {
 func f초기화_작동_확인() (작동_여부 bool) {
 	defer lb.S예외처리{M에러_실행: func() { 작동_여부 = false }}.S실행()
 
-	ch확인 := make(chan lb.T신호, 1)
+	ch확인 := make(chan bool, 1)
 	ch타임아웃 := time.After(lb.P1분)
 
 	go f접속_확인(ch확인)
@@ -144,14 +144,15 @@ func f초기화_작동_확인() (작동_여부 bool) {
 
 	for range 2 {
 		select {
-		case <-ch확인:
+		case 결과 := <-ch확인:
+			if !결과 {
+				return false
+			}
 		case <-ch타임아웃:
-			lb.New에러with출력("f초기화_작동_확인() 타임아웃.")
+			lb.F에러_출력("f초기화_작동_확인() 타임아웃.")
 			return false
 		}
 	}
-
-	//fmt.Println("** dll32 동작 확인 완료**")
 
 	return true
 }
@@ -168,13 +169,7 @@ func F확인_TR소켓() bool {
 	return false
 }
 
-func f접속_확인(ch완료 chan lb.T신호) {
-	defer func() {
-		if ch완료 != nil {
-			ch완료 <- lb.P신호_종료
-		}
-	}()
-
+func f접속_확인(ch완료 chan bool) {
 	for range 10 {
 		if 접속됨, 에러 := F접속됨(); 에러 == nil && 접속됨 {
 			break
@@ -185,16 +180,14 @@ func f접속_확인(ch완료 chan lb.T신호) {
 		lb.F대기(lb.P1초)
 	}
 
-	if 접속됨, 에러 := F접속됨(); 에러 != nil || !접속됨 {
-		panic(lb.New에러("이 시점에 접속되어 있어야 함."))
+	if 접속됨, 에러 := F접속됨(); 에러 != nil {
+		ch완료 <- false
+	} else {
+		ch완료 <- 접속됨
 	}
-
-	return
 }
 
-func f시간_일치_확인(ch완료 chan lb.T신호) {
-	defer func() { ch완료 <- lb.P신호_종료 }()
-
+func f시간_일치_확인(ch완료 chan bool) {
 	if _, 존재함 := f초당_전송_제한_읽기(xt.TR시간_조회_t0167); !존재함 {
 		func() {
 			전송_제한_잠금.Lock()
@@ -204,19 +197,21 @@ func f시간_일치_확인(ch완료 chan lb.T신호) {
 		}()
 	}
 
-	for range 100 {
+	for range 10 {
 		시각, 에러 := (<-TrT0167_시각_조회()).G값()
 
 		if 에러 != nil || 시각.Equal(time.Time{}) {
+			lb.F대기(lb.P3초)
 			continue
 		} else if 차이 := time.Now().Sub(시각); 차이 < -1*lb.P10분 || 차이 > lb.P10분 {
-			panic(lb.New에러("서버와 시스템 시각 불일치 : 차이 '%v'분", 차이.Minutes()))
+			lb.F에러_출력("서버와 시스템 시각 불일치 : 차이 '%v'분", 차이.Minutes())
+			ch완료 <- false
+			return
+		} else {
+			ch완료 <- true
+			return
 		}
-
-		return
 	}
-
-	panic(lb.New에러("이 시점에 시간 일치 확인이 완료되었어야 함."))
 }
 
 func F전일_당일_설정() (에러 error) {
