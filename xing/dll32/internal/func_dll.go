@@ -92,9 +92,6 @@ func F접속(서버_구분 xt.T서버_구분) error {
 	case xt.P서버_모의투자:
 		서버_이름 = "demo.ls-sec.co.kr"
 		포트_번호 = 20001
-	case xt.P서버_XingACE:
-		서버_이름 = "127.0.0.1"
-		포트_번호 = 0
 	}
 
 	api_호출_잠금.Lock()

@@ -52,10 +52,10 @@ func f속성값_초기화(질의값 any) any {
 }
 
 func F서버_구분() T서버_구분 {
-	if 구분값, 에러 := lb.F2정수(os.Getenv(P환경변수_서버_구분)); 에러 == nil && T서버_구분(구분값) == P서버_실거래 {
-		return P서버_실거래
+	if 구분값, 에러 := lb.F2정수(os.Getenv(P환경변수_서버_구분)); 에러 != nil {
+		return P서버_모름
 	} else {
-		return P서버_모의투자
+		return T서버_구분(구분값)
 	}
 }
 

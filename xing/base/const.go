@@ -651,7 +651,7 @@ const (
 const (
 	P서버_실거래 T서버_구분 = iota
 	P서버_모의투자
-	P서버_XingACE
+	P서버_모름
 )
 
 type T서버_구분 int
@@ -662,8 +662,8 @@ func (p T서버_구분) String() string {
 		return "실거래 서버"
 	case P서버_모의투자:
 		return "모의투자 서버"
-	case P서버_XingACE:
-		return "127.0.0.1"
+	case P서버_모름:
+		return "서버 모름"
 	default:
 		return lb.F2문자열("예상하지 못한 서버 구분 : %v", int(p))
 	}
