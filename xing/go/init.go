@@ -134,12 +134,10 @@ func F접속_로그인() (에러 error) {
 	// 따라서 타임아웃으로 대기하여 실패 시 구체적 에러를 반환한다.
 	select {
 	case <-ch신호_DLL32_로그인:
-		// 로그인 성공 신호 수신.
+		return nil // 로그인 성공 신호 수신.
 	case <-time.After(lb.P30초):
 		return lb.New에러("F접속_로그인 : 로그인 타임아웃")
 	}
-
-	return nil
 }
 
 func f초기화_작동_확인() (작동_여부 bool) {
