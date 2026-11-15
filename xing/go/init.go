@@ -219,6 +219,9 @@ func f시간_일치_확인(ch완료 chan bool) {
 			return
 		}
 	}
+
+	lb.F에러_출력("서버 시각 확인 반복 재시도  실패.")
+	ch완료 <- false
 }
 
 func F전일_당일_설정() (에러 error) {
