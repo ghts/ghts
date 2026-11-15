@@ -296,36 +296,6 @@ func F계좌번호_존재함(계좌번호 string) bool {
 	return slices.Contains(계좌번호_모음, 계좌번호)
 }
 
-//func F계좌_번호(0) (계좌번호 string, 에러 error) {
-//	if 서버_구분 == xt.P서버_모의투자 {
-//		return F계좌번호by상세명("위탁")
-//	} else {
-//		return F계좌번호by상세명("종합매매")
-//	}
-//}
-
-//func 선물옵션_계좌번호() (계좌번호 string, 에러 error) {
-//	return F계좌번호by상세명("선물옵션")
-//}
-
-//func F계좌번호by상세명(상세명 string) (계좌번호 string, 에러 error) {
-//	defer lb.S예외처리{M에러: &에러}.S실행()
-//
-//	계좌번호_모음, 에러 := F계좌번호_모음()
-//	lb.F확인(에러)
-//
-//	for _, 계좌번호 := range 계좌번호_모음 {
-//		계좌_상세명, 에러 := F계좌_상세명(계좌번호)
-//		lb.F확인(에러)
-//
-//		if 계좌_상세명 == 상세명 {
-//			return 계좌번호, nil
-//		}
-//	}
-//
-//	return "", nil
-//}
-
 func F종목_식별_문자열(종목코드 string) string {
 	if 종목, 에러 := F종목by코드(종목코드); 에러 == nil {
 		return 종목.G식별_문자열()
