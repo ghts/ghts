@@ -31,7 +31,8 @@ func SQL실행_INSERT(db *sql.DB, sql문자열 string, 추가_인수 ...any) (id
 	txOpts.Isolation = sql.LevelDefault
 	txOpts.ReadOnly = false
 
-	if tx, 에러 = db.BeginTx(context.TODO(), txOpts); 에러 != nil {
+	// 데드라인이 필요 없는 트랜잭션이므로 context.Background()를 사용한다.
+	if tx, 에러 = db.BeginTx(context.Background(), txOpts); 에러 != nil {
 		tx = nil
 		return
 	}

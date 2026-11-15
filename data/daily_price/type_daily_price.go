@@ -339,7 +339,8 @@ func (s *S종목별_일일_가격정보_모음) DB저장(db *sql.DB) (에러 err
 	txOpts.Isolation = sql.LevelDefault
 	txOpts.ReadOnly = false
 
-	tx = lb.F확인2(db.BeginTx(context.TODO(), txOpts))
+	// 데드라인이 필요 없는 트랜잭션이므로 context.Background()를 사용한다.
+	tx = lb.F확인2(db.BeginTx(context.Background(), txOpts))
 
 	stmt생성 := lb.F확인2(tx.Prepare(SQL생성.String()))
 	defer stmt생성.Close()
