@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"strings"
+	"sync/atomic"
 	"syscall"
 	"unsafe"
 
@@ -346,7 +347,14 @@ func OnRealtimeDataChart() {
 	F콜백(lb.New콜백_기본형(lb.P콜백_실시간_차트_데이터)) // TODO
 }
 
+var destroy호출_완료 atomic.Bool
+
 func OnDestroy() {
+	if destroy호출_완료.Load() {
+		return
+	}
+
+	destroy호출_완료.Store(true)
 	lb.F공통_종료_채널_닫기()
 	syscall.FreeLibrary(xing_api_dll)
 	w32.DestroyWindow(메시지_윈도우)
