@@ -76,7 +76,7 @@ func NewNano소켓(종류 lb.T소켓_종류, 주소 string, 접속방식 lb.T소
 		lb.F대기(lb.P500밀리초)
 	}
 
-	return nil, lb.New에러("소켓 생성 실패.")
+	return nil, lb.New에러("소켓 생성 실패.\n%v", 에러)
 }
 
 // 재시도_대상_에러_코드 — 일시적 접속 실패를 나타내는 OS 에러코드(에러 사슬 바닥의 syscall.Errno 수치).
