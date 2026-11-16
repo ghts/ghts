@@ -105,7 +105,9 @@ func F지수_이동_평균(값_모음 []float64, 윈도우_크기 int) []float64
 }
 
 func F가중_이동_평균(값_모음, 가중치 []float64, 윈도우_크기 int) []float64 {
-	if len(값_모음) != len(가중치) {
+	if 윈도우_크기 <= 0 {
+		panic(lb.New에러("F가중_이동_평균 : 잘못된 윈도우_크기 '%d'", 윈도우_크기))
+	} else if len(값_모음) != len(가중치) {
 		panic(lb.New에러("서로 다른 길이 : %v %v", len(값_모음), len(가중치)))
 	}
 
