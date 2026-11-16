@@ -177,7 +177,7 @@ type sNano소켓 struct {
 func (s *sNano소켓) S송신(변환_형식 lb.T변환, 값_모음 ...any) (에러 error) {
 	defer lb.S예외처리{M에러: &에러, M출력_숨김: true}.S실행()
 
-	// 소켓 타임아웃이 0초 이면 에러 발생.
+	// 소켓 타임아웃 설정.
 	if s.타임아웃 != 0 {
 		lb.F확인1(s.Socket.SetOption(mangos.OptionSendDeadline, s.타임아웃))
 	}
