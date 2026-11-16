@@ -185,54 +185,74 @@ func f데이터_복원_반복_조회(대기_항목 *DLL32_콜백_대기_항목, 
 	return nil
 }
 
-func f전송_권한_획득(TR코드 string) {
+func f전송_권한_획득(TR코드 string) (전송_권한_모음 []lb.I전송_권한, 에러 error) {
 	switch TR코드 {
 	case "", xt.RT현물_주문_접수_SC0, xt.RT현물_주문_체결_SC1, xt.RT현물_주문_정정_SC2, xt.RT현물_주문_취소_SC3, xt.RT현물_주문_거부_SC4,
 		xt.RT코스피_호가_잔량_H1, xt.RT코스피_시간외_호가_잔량_H2, xt.RT코스닥_호가_잔량_HA, xt.RT코스닥_시간외_호가_잔량_HB,
 		xt.RT코스피_체결_S3, xt.RT코스피_예상_체결_YS3, xt.RT코스닥_체결_K3, xt.RT코스닥_예상_체결_YK3,
 		xt.RT코스피_ETF_NAV_I5, xt.RT주식_VI발동해제_VI, xt.RT시간외_단일가VI발동해제_DVI, xt.RT장_운영정보_JIF:
-		return
+		return nil, nil
 	}
 
-	_10분_제한 := f10분당_전송_제한_확인(TR코드)
-	_1초당_제한 := f초당_전송_제한_확인(TR코드)
+	전송_권한_모음 = make([]lb.I전송_권한, 0, 2)
 
-	if _10분_제한 == nil && _1초당_제한 == nil {
-		// 현재 초기화 과정에서 걸려져서 사실상 도달 불가능한 코드.
-		panic(lb.New에러("전송제한을 찾을 수 없음 : '%v'", TR코드))
+	if _10분_제한, 에러 := f10분당_전송_제한_확인(TR코드); 에러 != nil {
+		return 전송_권한_모음, 에러
+	} else if _10분_제한 != nil {
+		전송_권한_모음 = append(전송_권한_모음, _10분_제한)
 	}
+
+	if _1초당_제한, 에러 := f초당_전송_제한_확인(TR코드); 에러 != nil {
+		return 전송_권한_모음, 에러
+	} else if _1초당_제한 != nil {
+		전송_권한_모음 = append(전송_권한_모음, _1초당_제한)
+	}
+
+	if len(전송_권한_모음) == 0 {
+		return nil, lb.New에러("f전송_권한_획득 : 전송제한을 찾을 수 없음 - '%v'", TR코드)
+	}
+
+	return 전송_권한_모음, nil
 }
 
-func f10분당_전송_제한_확인(TR코드 string) lb.I전송_권한 {
-	lb.F확인1(tr전송_제한_초기화_확인(TR코드))
+func f10분당_전송_제한_확인(TR코드 string) (lb.I전송_권한, error) {
+	if 에러 := tr전송_제한_초기화_확인(TR코드); 에러 != nil {
+		return nil, 에러
+	}
 
 	전송_권한, 존재함 := f10분당_전송_제한_읽기(TR코드)
 
 	switch {
 	case !존재함:
-		return nil // 해당 TR코드 관련 제한이 존재하지 않음.
+		return nil, nil // 해당 TR코드 관련 제한이 존재하지 않음.
 	case 전송_권한.TR코드() != TR코드:
-		panic("예상하지 못한 경우.")
+		return nil,
+			lb.New에러("f10분당_전송_제한_확인 : 예상하지 못한 경우. '%v', '%v'",
+				전송_권한.TR코드(), TR코드)
 	}
 
-	return 전송_권한.G획득()
+	return 전송_권한.G획득(), nil
 }
 
-func f초당_전송_제한_확인(TR코드 string) lb.I전송_권한 {
-	lb.F확인1(tr전송_제한_초기화_확인(TR코드))
+func f초당_전송_제한_확인(TR코드 string) (lb.I전송_권한, error) {
+	if 에러 := tr전송_제한_초기화_확인(TR코드); 에러 != nil {
+		return nil, 에러
+	}
 
 	전송_권한, 존재함 := f초당_전송_제한_읽기(TR코드)
 
 	switch {
 	case !존재함:
-		return nil // 초당 전송제한이 없으면 무제한으로 처리 (10분당 확인 함수와 대칭).
+		return nil, nil // 초당 전송제한이 없으면 무제한으로 처리 (10분당 확인 함수와 대칭).
 	case 전송_권한.TR코드() != TR코드:
-		panic(lb.New에러("f초당_전송_제한_확인 : 예상하지 못한 경우. '%v', '%v'", TR코드, 전송_권한.TR코드()))
+		return nil,
+			lb.New에러("f초당_전송_제한_확인 : 예상하지 못한 경우. '%v', '%v'", TR코드, 전송_권한.TR코드())
 	case 전송_권한.G남은_수량() > 100:
-		panic(lb.New에러("f초당_전송_제한_확인 : 전송 한도가 너무 큼. 1초/10분 한도 혼동 의심. %v", 전송_권한.G남은_수량()))
+		return nil,
+			lb.New에러("f초당_전송_제한_확인 : 전송 한도가 너무 큼. 1초/10분 한도 혼동 의심. %v", 전송_권한.G남은_수량())
 	}
 
-	return 전송_권한.G획득()
+	return 전송_권한.G획득(), nil
 }
 
 func f초당_전송_제한_읽기(TR코드 string) (lb.I전송_권한, bool) {
@@ -278,14 +298,12 @@ func tr전송_제한_초기화_확인(TR코드 string) error {
 	return nil
 }
 
-func f전송_시각_기록(TR코드 string) {
-	// 10분당 전송 제한 기록
-	if 전송_권한, 존재함 := f10분당_전송_제한_읽기(TR코드); 존재함 {
-		전송_권한.S기록()
+func f전송_권한_해제(전송_권한_모음 []lb.I전송_권한) {
+	if len(전송_권한_모음) == 0 {
+		return
 	}
 
-	// 초당 전송 제한 기록
-	if 전송_권한, 존재함 := f초당_전송_제한_읽기(TR코드); 존재함 {
+	for _, 전송_권한 := range 전송_권한_모음 {
 		전송_권한.S기록()
 	}
 }
