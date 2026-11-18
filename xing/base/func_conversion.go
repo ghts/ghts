@@ -7,7 +7,7 @@ import (
 )
 
 func F2거래소_구분(거래소_이름 any) T거래소_구분 {
-	switch lb.F2문자열_공백_제거(거래소_이름) {
+	switch lb.F앞뒤_공백_제거(거래소_이름) {
 	case "K", "KRX", "":
 		return P거래소_KRX
 	case "N", "NXT":
@@ -58,7 +58,7 @@ func F2시장구분(값 any) lb.T시장구분 {
 }
 
 func F2중간가_잔량_구분(값 any) lb.T매도_매수_구분 {
-	문자열 := lb.F2문자열_공백_제거(값)
+	문자열 := lb.F앞뒤_공백_제거(값)
 
 	switch 문자열 {
 	case "":

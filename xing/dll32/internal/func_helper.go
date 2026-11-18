@@ -50,7 +50,7 @@ func XingAPI디렉토리() (string, error) {
 func f자료형_문자열_해석(g *xt.TR_DATA) (자료형_문자열 string, 에러 error) {
 	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 자료형_문자열 = "" }}.S실행()
 
-	TR코드 := lb.F2문자열_공백_제거(g.TrCode)
+	TR코드 := lb.F앞뒤_공백_제거(g.TrCode)
 
 	for {
 		if strings.HasSuffix(TR코드, "C#") {

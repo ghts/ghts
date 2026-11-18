@@ -201,7 +201,7 @@ func NewCSPAQ12300_현물계좌_잔고내역_조회_응답_헤더1(b []byte) (�
 
 	값 = new(CSPAQ12300_현물계좌_잔고내역_응답1)
 	값.M레코드_수량 = lb.F확인2(lb.F2정수(g.RecCnt))
-	값.M계좌번호 = lb.F2문자열_공백_제거(g.AcntNo)
+	값.M계좌번호 = lb.F앞뒤_공백_제거(g.AcntNo)
 	값.M잔고생성_구분 = lb.F2문자열(g.BalCreTp)
 	값.M수수료적용_구분 = lb.F2문자열(g.CmsnAppTpCode)
 	값.D2잔고기준조회_구분 = lb.F2문자열(g.D2balBaseQryTp)
@@ -311,7 +311,7 @@ func NewCSPAQ12300_현물계좌_잔고내역_조회_응답_반복값_모음(b []
 		lb.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 		값 := new(CSPAQ12300_현물계좌_잔고내역_응답_반복값)
-		값.M종목코드 = strings.Replace(lb.F2문자열_공백_제거(g.IsuNo), "A", "", 1)
+		값.M종목코드 = strings.Replace(lb.F앞뒤_공백_제거(g.IsuNo), "A", "", 1)
 		값.M종목명 = lb.F확인2(lb.EUC_KR2Go문자열(g.IsuNm))
 		값.M유가증권잔고유형코드 = lb.F2문자열(g.SecBalPtnCode)
 		값.M유가증권잔고유형명 = lb.F확인2(lb.EUC_KR2Go문자열(g.SecBalPtnNm))

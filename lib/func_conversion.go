@@ -140,7 +140,7 @@ func EUC_KR2Go문자열(값 any) (문자열 string, 에러 error) {
 		return "", New에러("EUC_KR2Go문자열 : EUC-KR 디코딩 에러 발생.\n%v", 에러)
 	}
 
-	문자열 = F2문자열_공백_제거(string(바이트_모음_utf8))
+	문자열 = F앞뒤_공백_제거(string(바이트_모음_utf8))
 	if strings.ContainsRune(문자열, '\ufffd') {
 		// U+FFFD는 EUC-KR로 표기할 수 없는 문자이므로,
 		// 정상적으로 디코딩된 한글 메시지에는 절대 나타나지 않는다.
@@ -247,7 +247,7 @@ func F2문자열(값_모음 ...any) string {
 	}
 }
 
-func F2문자열_공백_제거(값 any) string {
+func F앞뒤_공백_제거(값 any) string {
 	return strings.TrimSpace(F2문자열(값))
 }
 
@@ -306,7 +306,7 @@ func F2정수(값 any) (int, error) {
 }
 
 func F2정수_공백은_0(값 any) (int, error) {
-	if F2문자열_공백_제거(값) == "" {
+	if F앞뒤_공백_제거(값) == "" {
 		return 0, nil
 	}
 
@@ -343,7 +343,7 @@ func F2정수64(값 any) (int64, error) {
 }
 
 func F2정수64_공백은_0(값 any) (int64, error) {
-	if F2문자열_공백_제거(값) == "" {
+	if F앞뒤_공백_제거(값) == "" {
 		return 0, nil
 	}
 
@@ -407,7 +407,7 @@ func F2실수(값 any) (float64, error) {
 }
 
 func F2실수_단순형_공백은_0(값 any) float64 {
-	if F2문자열_공백_제거(값) == "" {
+	if F앞뒤_공백_제거(값) == "" {
 		return 0.0
 	}
 
@@ -554,7 +554,7 @@ func F2포맷된_시각(포맷 string, 값 any) (time.Time, error) {
 }
 
 func F2포맷된_시각_단순형_공백은_초기값(포맷 string, 값 any) time.Time {
-	if F2문자열_공백_제거(값) == "" {
+	if F앞뒤_공백_제거(값) == "" {
 		return time.Time{}
 	}
 
@@ -575,7 +575,7 @@ func F2포맷된_일자(포맷 string, 값 any) (time.Time, error) {
 }
 
 func F2포맷된_일자_단순형_공백은_초기값(포맷 string, 값 any) time.Time {
-	if F2문자열_공백_제거(값) == "" {
+	if F앞뒤_공백_제거(값) == "" {
 		return time.Time{}
 	}
 
@@ -617,7 +617,7 @@ func F2일자별_시각(일자 time.Time, 포맷 string, 값 any) (time.Time, er
 }
 
 func F2일자별_시각_단순형_공백은_초기값(일자 time.Time, 포맷 string, 값 any) time.Time {
-	if F2문자열_공백_제거(값) == "" {
+	if F앞뒤_공백_제거(값) == "" {
 		return time.Time{}
 	}
 
@@ -629,7 +629,7 @@ func F2금일_시각(포맷 string, 값 any) (time.Time, error) {
 }
 
 func F2금일_시각_단순형_공백은_초기값(포맷 string, 값 any) time.Time {
-	if F2문자열_공백_제거(값) == "" {
+	if F앞뒤_공백_제거(값) == "" {
 		return time.Time{}
 	}
 

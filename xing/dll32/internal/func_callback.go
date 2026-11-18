@@ -130,7 +130,7 @@ func OnTrData(TR데이터 unsafe.Pointer) {
 
 	lb.F조건부_패닉(g.Data == nil || g.DataLength < 0 || g.DataLength > g.TotalDataBufferSize,
 		"OnTrData() 데이터 블럭 비정상. TR : '%s' 블럭 : '%s' 길이 : %d 총크기 : %d",
-		lb.F2문자열_공백_제거(g.TrCode), lb.F2문자열(g.BlockName), g.DataLength, g.TotalDataBufferSize)
+		lb.F앞뒤_공백_제거(g.TrCode), lb.F2문자열(g.BlockName), g.DataLength, g.TotalDataBufferSize)
 
 	var raw값 []byte
 
@@ -143,7 +143,7 @@ func OnTrData(TR데이터 unsafe.Pointer) {
 	}
 
 	자료형_문자열 := lb.F확인2(f자료형_문자열_해석(g))
-	TR코드 := lb.F2문자열_공백_제거(g.TrCode)
+	TR코드 := lb.F앞뒤_공백_제거(g.TrCode)
 	추가_연속조회_필요_문자열 := lb.F2문자열(g.Cont)
 	추가_연속조회_필요 := false
 	연속키 := ""
@@ -154,7 +154,7 @@ func OnTrData(TR데이터 unsafe.Pointer) {
 		추가_연속조회_필요 = false
 	case "1", "Y":
 		추가_연속조회_필요 = true
-		연속키 = lb.F2문자열_공백_제거(g.ContKey)
+		연속키 = lb.F앞뒤_공백_제거(g.ContKey)
 	default:
 		panic(lb.New에러with출력("예상하지 못한 경우. '%v' '%v'", TR코드, 추가_연속조회_필요_문자열))
 	}
@@ -188,7 +188,7 @@ func f압축_반복값_해제(g *xt.TR_DATA) []byte {
 	// 압축 해제 자체의 실패(DLL 에러 코드 전파)다. 손상된 데이터로 진행하지 말고 명시적으로 중단한다.
 	lb.F조건부_패닉(에러 != nil,
 		"f압축_반복값_해제() 압축 해제에 실패. TR코드 : '%v' 블럭 : '%s' 에러 : %v",
-		lb.F2문자열_공백_제거(g.TrCode), lb.F2문자열(g.BlockName), 에러)
+		lb.F앞뒤_공백_제거(g.TrCode), lb.F2문자열(g.BlockName), 에러)
 
 	// 에러 없이 길이가 0 이하이면, 거래 정지 종목·데이터 없는 기간 등에서 서버가 보낸
 	// 정당한 빈 결과다. 무언 응답으로 정상 처리한다(빈 결과에 대한 패닉·타임아웃을 방지).
@@ -202,7 +202,7 @@ func f압축_반복값_해제(g *xt.TR_DATA) []byte {
 	// API 계약 위반이다. 손상된 데이터로 진행하지 말고 명시적으로 중단한다.
 	lb.F조건부_패닉(길이 > len(버퍼),
 		"f압축_반복값_해제() 압축 해제 결과가 버퍼 범위를 벗어남. TR코드 : '%v' 블럭 : '%s' 길이 : %d 상한 : %d",
-		lb.F2문자열_공백_제거(g.TrCode), lb.F2문자열(g.BlockName), 길이, len(버퍼))
+		lb.F앞뒤_공백_제거(g.TrCode), lb.F2문자열(g.BlockName), 길이, len(버퍼))
 
 	g.DataLength = int32(길이)
 
@@ -245,11 +245,11 @@ func OnMessageAndError(MSG데이터 unsafe.Pointer) {
 	콜백값 := new(lb.S콜백_메시지_및_에러)
 	콜백값.S콜백_기본형 = lb.New콜백_기본형(lb.P콜백_메시지_및_에러)
 	콜백값.M식별번호 = int(g.RequestID)
-	콜백값.M코드 = lb.F2문자열_공백_제거(g.MsgCode)
+	콜백값.M코드 = lb.F앞뒤_공백_제거(g.MsgCode)
 
 	lb.F조건부_패닉(g.MsgData == nil || g.MsgLength < 0,
 		"OnMessageAndError() 메시지 데이터 비정상. 식별번호 : %d 코드 : '%s' 포인터 : %v 길이 : %d",
-		int(g.RequestID), lb.F2문자열_공백_제거(g.MsgCode), g.MsgData, g.MsgLength)
+		int(g.RequestID), lb.F앞뒤_공백_제거(g.MsgCode), g.MsgData, g.MsgLength)
 
 	var 에러 error
 	콜백값.M내용, 에러 = lb.EUC_KR2Go문자열(w32.F2Go바이트_모음with길이(g.MsgData, int(g.MsgLength)))
@@ -293,12 +293,12 @@ func OnRealtimeData(실시간_데이터 unsafe.Pointer) {
 
 	lb.F조건부_패닉(g.Data == nil || g.DataLength < 0,
 		"OnRealtimeData() 데이터 블럭 비정상. TR : '%s' 길이 : %d",
-		lb.F2문자열_공백_제거(g.TrCode), g.DataLength)
+		lb.F앞뒤_공백_제거(g.TrCode), g.DataLength)
 
 	// KeyData, RegKey등이 불필요한 듯 해서 전송 안 함. 필요하면 추가할 것.
 
 	raw값 := w32.F2Go바이트_모음with길이(g.Data, int(g.DataLength))
-	raw값 = f민감정보_삭제(raw값, lb.F2문자열_공백_제거(g.TrCode))
+	raw값 = f민감정보_삭제(raw값, lb.F앞뒤_공백_제거(g.TrCode))
 	바이트_변환값 := lb.F확인2(lb.New바이트_변환Raw(lb.F2문자열(g.TrCode), raw값, false))
 
 	if 에러 := 소켓PUB_실시간_정보.S송신(lb.Raw, 바이트_변환값); 에러 != nil {

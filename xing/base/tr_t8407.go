@@ -71,7 +71,7 @@ func NewT8407_현물_멀티_현재가_조회_응답_모음(b []byte) (응답값 
 		lb.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 		값 := new(T8407_현물_멀티_현재가_조회_응답)
-		값.M종목코드 = lb.F2문자열_공백_제거(g.Shcode)
+		값.M종목코드 = lb.F앞뒤_공백_제거(g.Shcode)
 		값.M종목명 = lb.F확인2(lb.EUC_KR2Go문자열(g.Hname))
 		값.M현재가 = lb.F확인2(lb.F2정수64(g.Price))
 		값.M전일종가대비구분 = T전일대비_구분(lb.F확인2(lb.F2정수64(g.Sign)))

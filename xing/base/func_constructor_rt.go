@@ -20,7 +20,7 @@ func New현물_주문_접수(b []byte) (값 *S현물_주문_응답_실시간_정
 	시각_문자열 := lb.F2문자열(g.Ordtm)
 	시각_문자열 = 시각_문자열[:6] + "." + 시각_문자열[6:]
 	시각 := lb.F확인2(lb.F2금일_시각("150405.999", 시각_문자열))
-	종목코드 := trade.F종목코드_보정(lb.F2문자열_공백_제거(g.Shtcode))
+	종목코드 := trade.F종목코드_보정(lb.F앞뒤_공백_제거(g.Shtcode))
 
 	값 = new(S현물_주문_응답_실시간_정보)
 	값.M주문번호 = lb.F확인2(lb.F2정수64(g.Ordno))
@@ -48,7 +48,7 @@ func New현물_주문_체결(b []byte) (값 *S현물_주문_응답_실시간_정
 	시각_문자열 := lb.F2문자열(g.Exectime)
 	시각_문자열 = 시각_문자열[:6] + "." + 시각_문자열[6:]
 	시각 := lb.F확인2(lb.F2금일_시각("150405.999", 시각_문자열))
-	종목코드 := trade.F종목코드_보정(lb.F2문자열_공백_제거(g.ShtnIsuno))
+	종목코드 := trade.F종목코드_보정(lb.F앞뒤_공백_제거(g.ShtnIsuno))
 
 	값 = new(S현물_주문_응답_실시간_정보)
 	값.M주문번호 = lb.F확인2(lb.F2정수64(g.Ordno))
@@ -75,7 +75,7 @@ func New현물_주문_정정(b []byte) (값 *S현물_주문_응답_실시간_정
 	시각_문자열 := lb.F2문자열(g.Exectime)
 	시각_문자열 = 시각_문자열[:6] + "." + 시각_문자열[6:]
 	시각 := lb.F확인2(lb.F2금일_시각("150405.999", 시각_문자열))
-	종목코드 := trade.F종목코드_보정(lb.F2문자열_공백_제거(g.ShtnIsuno))
+	종목코드 := trade.F종목코드_보정(lb.F앞뒤_공백_제거(g.ShtnIsuno))
 
 	값 = new(S현물_주문_응답_실시간_정보)
 	값.M주문번호 = lb.F확인2(lb.F2정수64(g.Ordno))
@@ -102,7 +102,7 @@ func New현물_주문_취소(b []byte) (값 *S현물_주문_응답_실시간_정
 	시각_문자열 := lb.F2문자열(g.Exectime)
 	시각_문자열 = 시각_문자열[:6] + "." + 시각_문자열[6:]
 	시각 := lb.F확인2(lb.F2금일_시각("150405.999", 시각_문자열))
-	종목코드 := trade.F종목코드_보정(lb.F2문자열_공백_제거(g.ShtnIsuno))
+	종목코드 := trade.F종목코드_보정(lb.F앞뒤_공백_제거(g.ShtnIsuno))
 
 	값 = new(S현물_주문_응답_실시간_정보)
 	값.M주문번호 = lb.F확인2(lb.F2정수64(g.Ordno))
@@ -128,7 +128,7 @@ func New현물_주문_거부(b []byte) (값 *S현물_주문_응답_실시간_정
 	시각_문자열 := lb.F2문자열(g.Exectime)
 	시각_문자열 = 시각_문자열[:6] + "." + 시각_문자열[6:]
 	시각 := lb.F확인2(lb.F2금일_시각("150405.999", 시각_문자열))
-	종목코드 := trade.F종목코드_보정(lb.F2문자열_공백_제거(g.ShtnIsuno))
+	종목코드 := trade.F종목코드_보정(lb.F앞뒤_공백_제거(g.ShtnIsuno))
 
 	값 = new(S현물_주문_응답_실시간_정보)
 	값.M주문번호 = lb.F확인2(lb.F2정수64(g.Ordno))
@@ -438,7 +438,7 @@ func New코스피_체결(b []byte) (값 *S코스피_체결, 에러 error) {
 	값.M매도호가 = lb.F확인2(lb.F2정수64(g.Offerho))
 	값.M매수호가 = lb.F확인2(lb.F2정수64(g.Bidho))
 
-	switch lb.F2문자열_공백_제거(g.Status) {
+	switch lb.F앞뒤_공백_제거(g.Status) {
 	case "0", "00":
 		값.M장_정보 = lb.P장_중
 	case "4", "04":
@@ -446,7 +446,7 @@ func New코스피_체결(b []byte) (값 *S코스피_체결, 에러 error) {
 	case "10":
 		값.M장_정보 = lb.P장_전_시간외
 	default:
-		panic(lb.New에러("예상하지 못한 장 정보 값 : '%v'", lb.F2문자열_공백_제거(g.Status)))
+		panic(lb.New에러("예상하지 못한 장 정보 값 : '%v'", lb.F앞뒤_공백_제거(g.Status)))
 	}
 
 	값.M전일동시간대거래량 = lb.F확인2(lb.F2정수64(g.Jnilvolume))
@@ -523,7 +523,7 @@ func New코스닥_체결(b []byte) (값 *S코스닥_체결, 에러 error) {
 	값.M매도호가 = lb.F확인2(lb.F2정수64(g.Offerho))
 	값.M매수호가 = lb.F확인2(lb.F2정수64(g.Bidho))
 
-	switch lb.F2문자열_공백_제거(g.Status) {
+	switch lb.F앞뒤_공백_제거(g.Status) {
 	case "0", "00":
 		값.M장_정보 = lb.P장_중
 	case "4", "04":
@@ -531,7 +531,7 @@ func New코스닥_체결(b []byte) (값 *S코스닥_체결, 에러 error) {
 	case "10":
 		값.M장_정보 = lb.P장_전_시간외
 	default:
-		panic(lb.New에러("예상하지 못한 장 정보 값 : '%v'", lb.F2문자열_공백_제거(g.Status)))
+		panic(lb.New에러("예상하지 못한 장 정보 값 : '%v'", lb.F앞뒤_공백_제거(g.Status)))
 	}
 
 	값.M전일동시간대거래량 = lb.F확인2(lb.F2정수64(g.Jnilvolume))

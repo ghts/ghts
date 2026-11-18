@@ -110,7 +110,7 @@ func NewT1305InBlock(질의값 *T1305_현물_기간별_조회_질의값) (g *T13
 	lb.F바이트_복사_정수(g.Cnt[:], 질의값.M수량)
 	lb.F바이트_복사_문자열(g.Exchgubun[:], string(질의값.M거래소_구분))
 
-	if lb.F2문자열_공백_제거(질의값.M연속키) == "" {
+	if lb.F앞뒤_공백_제거(질의값.M연속키) == "" {
 		lb.F바이트_복사_문자열(g.Date[:], "       ")
 	}
 
@@ -128,9 +128,9 @@ func NewT1305_현물_기간별_조회_응답_헤더(b []byte) (값 *T1305_현물
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	값 = new(T1305_현물_기간별_조회_응답_헤더)
-	값.M거래소별단축코드 = lb.F2문자열_공백_제거(g.Shcode)
+	값.M거래소별단축코드 = lb.F앞뒤_공백_제거(g.Shcode)
 	값.M수량 = lb.F확인2(lb.F2정수64(g.Cnt))
-	값.M연속키 = lb.F2문자열_공백_제거(g.Date)
+	값.M연속키 = lb.F앞뒤_공백_제거(g.Date)
 
 	return 값, nil
 }
@@ -170,7 +170,7 @@ func NewT1305_현물_기간별_조회_응답_반복값_모음(b []byte) (값_모
 
 		if 전일대비_구분값, 에러 := lb.F2정수64(g.Sign); 에러 == nil {
 			값.M전일대비구분 = T전일대비_구분(전일대비_구분값)
-		} else if lb.F2문자열_공백_제거(g.Sign) == "" &&
+		} else if lb.F앞뒤_공백_제거(g.Sign) == "" &&
 			lb.F확인2(lb.F2정수64(g.Change)) == 0 &&
 			lb.F확인2(lb.F2실수(g.Diff)) == 0.0 {
 			값.M전일대비구분 = P구분_보합

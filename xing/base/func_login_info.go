@@ -79,7 +79,7 @@ func F로그인_정보_문자열_해석(로그인_정보_문자열 string) (로�
 	// 모의투자 암호는 선택사항.
 	if 키, 에러 := 섹션.GetKey("TestPWD"); 에러 != nil {
 		lb.F문자열_출력("TestPWD 값 조회 에러 발생.")
-	} else if 값 := lb.F2문자열_공백_제거(키.String()); 값 == "" {
+	} else if 값 := lb.F앞뒤_공백_제거(키.String()); 값 == "" {
 		lb.F문자열_출력("비어 있는 TestPWD 값.")
 	} else {
 		로그인_정보.M모의투자_암호 = 값

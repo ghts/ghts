@@ -78,7 +78,7 @@ func NewT1310InBlock(질의값 *T1310_현물_전일당일분틱조회_질의값)
 	lb.F바이트_복사_문자열(g.Exchgubun[:], string(질의값.M거래소_구분))
 	lb.F바이트_복사_문자열(g.Time[:], 질의값.M연속키)
 
-	if lb.F2문자열_공백_제거(질의값.M연속키) == "" {
+	if lb.F앞뒤_공백_제거(질의값.M연속키) == "" {
 		lb.F바이트_복사_문자열(g.Time[:], "          ")
 	}
 
@@ -153,7 +153,7 @@ func NewT1310_현물_당일전일분틱조회_응답_반복값_모음(b []byte) 
 		s.M매수체결건수 = lb.F확인2(lb.F2정수64(g.Mschecnt))
 		s.M순체결량 = lb.F확인2(lb.F2정수64(g.Revolume))
 		s.M순체결건수 = lb.F확인2(lb.F2정수64(g.Rechecnt))
-		s.M거래소_구분 = F2거래소_구분(lb.F2문자열_공백_제거(g.Exchname))
+		s.M거래소_구분 = F2거래소_구분(lb.F앞뒤_공백_제거(g.Exchname))
 
 		값.M배열 = append(값.M배열, s)
 	}

@@ -127,7 +127,7 @@ func NewT1901_ETF_시세_조회_응답(b []byte) (s *T1901_ETF_시세_조회_응
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	s = new(T1901_ETF_시세_조회_응답)
-	s.M종목코드 = lb.F2문자열_공백_제거(g.Shcode)
+	s.M종목코드 = lb.F앞뒤_공백_제거(g.Shcode)
 	s.M종목명 = lb.F확인2(lb.EUC_KR2Go문자열(g.Hname))
 	s.M현재가 = lb.F확인2(lb.F2정수64(g.Price))
 	s.M전일대비구분 = T전일대비_구분(lb.F확인2(lb.F2정수64(g.Sign)))
@@ -303,7 +303,7 @@ func NewT1901_ETF_시세_조회_응답(b []byte) (s *T1901_ETF_시세_조회_응
 	s.ETN유동성공급자_보유수량 = lb.F확인2(lb.F2정수64(g.Lp_holdvol))
 	s.M상장일 = lb.F확인2(lb.F2포맷된_일자("20060102", g.Listdate))
 	s.ETP상품구분코드 = lb.F2문자열(g.Etp_gb)
-	s.ETN조기상환가능여부 = lb.F2문자열_공백_제거(lb.F2문자열(g.Etn_elback_yn)) != ""
+	s.ETN조기상환가능여부 = lb.F앞뒤_공백_제거(lb.F2문자열(g.Etn_elback_yn)) != ""
 	s.M최종결제 = lb.F2문자열(g.Settletype)
 	s.M지수자산대분류코드 = lb.F확인2(lb.EUC_KR2Go문자열(g.Idx_asset_class1))
 	s.ETF_ETN_투자유의 = lb.F확인2(lb.EUC_KR2Go문자열(g.Ty_text))

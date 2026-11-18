@@ -136,10 +136,10 @@ func NewCSPAQ13700_현물계좌_주문체결내역_헤더1(b []byte) (값 *CSPAQ
 
 	값 = new(CSPAQ13700_현물계좌_주문체결내역_헤더1)
 	값.M레코드_수량 = lb.F확인2(lb.F2정수(g.RecCnt))
-	값.M계좌번호 = lb.F2문자열_공백_제거(g.AcntNo)
+	값.M계좌번호 = lb.F앞뒤_공백_제거(g.AcntNo)
 	값.M주문시장코드 = lb.F2문자열(g.OrdMktCode)
 	값.M매매구분 = lb.F2문자열(g.BnsTpCode)
-	값.M종목코드 = lb.F2문자열_공백_제거(g.IsuNo)
+	값.M종목코드 = lb.F앞뒤_공백_제거(g.IsuNo)
 	값.M체결여부 = lb.F2문자열(g.ExecYn)
 	값.M주문일 = lb.F확인2(lb.F2포맷된_일자("20060102", g.OrdDt))
 	값.M연속키 = lb.F확인2(lb.F2정수64(g.SrtOrdNo2))
@@ -192,7 +192,7 @@ func NewCSPAQ13700_현물계좌_주문체결내역_반복값_모음(b []byte) (�
 		주문시각_문자열 := lb.F2문자열(g.OrdTime)
 		주문시각_문자열 = 주문시각_문자열[:6] + "." + 주문시각_문자열[6:]
 
-		if lb.F2문자열_공백_제거(lb.F2문자열(g.OrdDt)) == "" {
+		if lb.F앞뒤_공백_제거(lb.F2문자열(g.OrdDt)) == "" {
 			continue
 		}
 
@@ -202,7 +202,7 @@ func NewCSPAQ13700_현물계좌_주문체결내역_반복값_모음(b []byte) (�
 		값.M주문시장코드 = lb.F2문자열(g.OrdMktCode)
 		값.M주문번호 = lb.F확인2(lb.F2정수64_공백은_0(g.OrdNo))
 		값.M원주문번호 = lb.F확인2(lb.F2정수64_공백은_0(g.OrgOrdNo))
-		값.M종목코드 = lb.F2문자열_공백_제거(g.IsuNo)
+		값.M종목코드 = lb.F앞뒤_공백_제거(g.IsuNo)
 		값.M종목명 = lb.F확인2(lb.EUC_KR2Go문자열(g.IsuNm))
 
 		switch lb.F2문자열(g.BnsTpCode) {
@@ -215,7 +215,7 @@ func NewCSPAQ13700_현물계좌_주문체결내역_반복값_모음(b []byte) (�
 		}
 
 		시각_문자열_해석 := func(시각_문자열 string) time.Time {
-			if lb.F2문자열_공백_제거(시각_문자열) == "." {
+			if lb.F앞뒤_공백_제거(시각_문자열) == "." {
 				return time.Time{}
 			}
 			return lb.F확인2(lb.F2일자별_시각(값.M주문일, "150405.999", 시각_문자열))
