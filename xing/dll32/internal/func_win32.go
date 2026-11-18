@@ -12,13 +12,11 @@ func F메시지_윈도우_생성() {
 	타이틀, _ := syscall.UTF16PtrFromString("Simple Window.")
 	hInstance := w32.GetModuleHandle(nil)
 
-	wcex := w32.WNDCLASSEX{
+	w32.RegisterClassEx(new(w32.WNDCLASSEX{
 		CbSize:        uint32(unsafe.Sizeof(w32.WNDCLASSEX{})),
 		LpfnWndProc:   syscall.NewCallback(WndProc),
 		HInstance:     hInstance,
-		LpszClassName: lpszClassName}
-
-	w32.RegisterClassEx(&wcex)
+		LpszClassName: lpszClassName}))
 
 	윈도우_핸들 := w32.CreateWindowEx(
 		0, lpszClassName, 타이틀,

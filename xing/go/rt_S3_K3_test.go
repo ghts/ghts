@@ -53,11 +53,9 @@ func TestF체결_실시간_정보(t *testing.T) {
 
 		switch 체결값 := i실시간_정보.(type) {
 		case *xt.S코스피_체결:
-			v := xt.S코스피_체결(*체결값)
-			값 = (*xt.S체결)(&v)
+			값 = (*xt.S체결)(체결값)
 		case *xt.S코스닥_체결:
-			v := xt.S코스닥_체결(*체결값)
-			값 = (*xt.S체결)(&v)
+			값 = (*xt.S체결)(체결값)
 		default:
 			continue
 		}
