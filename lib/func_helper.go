@@ -771,8 +771,10 @@ func F파일_검색(검색_시작_디렉토리, 파일명 string) (string, error
 	defer cancel()
 
 	파일명_소문자 := strings.ToLower(파일명)
-
 	ch응답 := make(chan any, 1)
+	응답_보냄 := false
+	파일_없음_신호 := errors.New("지정된 파일이 해당 위치에서 발견되지 않았습니다")
+
 	go func() {
 		_ = filepath.WalkDir(검색_시작_디렉토리, func(파일경로 string, 진입점 fs.DirEntry, 에러 error) error {
 			// 타임아웃을 감지하면 탐색을 즉시 중단하여 goroutine 리크를 방지.
@@ -788,16 +790,23 @@ func F파일_검색(검색_시작_디렉토리, 파일명 string) (string, error
 
 				F문자열_출력("예상하지 못한 에러 발생 : %v\n%v", 파일경로, 에러)
 				ch응답 <- 에러
+				응답_보냄 = true
 				return 에러
 			case 진입점.IsDir():
 				return nil
 			case 파일명_소문자 == strings.ToLower(진입점.Name()):
 				ch응답 <- 파일경로
+				응답_보냄 = true
 				return fs.SkipAll // 탐색 전체 중단
 			default:
 				return nil
 			}
 		})
+
+		// WalkDir이 파일을 찾지 못하고 탐색을 끝냈을 때 '파일_없음_신호'를 보낸다.
+		if !응답_보냄 {
+			ch응답 <- 파일_없음_신호
+		}
 	}()
 
 	select {
