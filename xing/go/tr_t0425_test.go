@@ -29,8 +29,8 @@ func TestT0425_현물_체결_미체결_확인(t *testing.T) {
 	lb.F테스트_에러없음(t, 에러)
 
 	if F당일().Equal(lb.F2일자(time.Now())) &&
-		time.Now().Hour() >= 9 &&
-		time.Now().Hour() < 4 {
+		lb.F지금().After(mt.F금일_보정_시각(9, 0, 0)) &&
+		lb.F지금().Before(mt.F금일_보정_시각(15, 30, 0)) {
 		lb.F테스트_다름(t, len(값_모음), 0)
 	}
 
