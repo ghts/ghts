@@ -32,7 +32,7 @@ func F테스트_모드_종료() error {
 }
 
 func F패닉2에러(함수 any, 추가_매개변수 ...any) (에러 error) {
-	defer S예외처리{M에러: &에러, M출력_숨김: true}.S실행()
+	defer S예외처리{M에러: &에러, M출력_숨김: new(true)}.S실행()
 
 	인수_모음 := make([]reflect.Value, len(추가_매개변수))
 

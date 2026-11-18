@@ -82,7 +82,8 @@ func TrCSPAT00700_현물_정정주문(질의값 *xt.CSPAT00700_현물_정정_주
 }
 
 func TrCSPAT00800_현물_취소주문(질의값 *lb.S질의값_취소_주문) (응답값 *xt.CSPAT00800_현물_취소_주문_응답, 에러 error) {
-	예외_처리 := lb.S예외처리{M에러: &에러, M에러_실행: func() { 응답값 = nil }}
+	출력_숨김 := false // 포인터를 공유해야, 실행 중 변경이 종료 시 S실행()에 반영된다.
+	예외_처리 := lb.S예외처리{M에러: &에러, M출력_숨김: &출력_숨김, M에러_실행: func() { 응답값 = nil }}
 	defer 예외_처리.S실행()
 
 	// ETN 종목코드 보정
@@ -96,7 +97,7 @@ func TrCSPAT00800_현물_취소주문(질의값 *lb.S질의값_취소_주문) (�
 				strings.Contains(에러.Error(), "접수 대기 상태") {
 				continue // 재시도
 			} else if strings.Contains(에러.Error(), "주문수량이 매매가능수량을 초과했습니다") {
-				예외_처리.M출력_숨김 = true
+				출력_숨김 = true
 			}
 
 			return nil, 에러
@@ -1400,7 +1401,8 @@ func F질의(질의값 lb.I질의값, 옵션_모음 ...any) (값 *lb.S바이트_
 }
 
 func F질의_단일TR[T응답값 any](질의값 lb.I질의값, 옵션_모음 ...any) (응답값 *T응답값, 에러 error) {
-	예외_처리 := lb.S예외처리{M에러: &에러, M에러_실행: func() { 응답값 = nil }}
+	출력_숨김 := false // 포인터를 공유해야, 실행 중 변경이 종료 시 S실행()에 반영된다.
+	예외_처리 := lb.S예외처리{M에러: &에러, M출력_숨김: &출력_숨김, M에러_실행: func() { 응답값 = nil }}
 	defer 예외_처리.S실행()
 
 	타임아웃 := lb.P1분
@@ -1439,7 +1441,7 @@ func F질의_단일TR[T응답값 any](질의값 lb.I질의값, 옵션_모음 ...
 		switch 변환값 := i값.(type) {
 		case error:
 			if xt.F무시해야할_에러_메시지(변환값.Error()) {
-				예외_처리.M출력_숨김 = true
+				출력_숨김 = true
 				return nil, 변환값
 			}
 

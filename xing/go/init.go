@@ -262,7 +262,7 @@ func DLL32_종료됨() bool {
 
 func DLL32_종료() (에러 error) {
 	// 에러 출력은 호출부(F종료)가 담당하므로 여기서 숨긴다.
-	defer lb.S예외처리{M에러: &에러, M출력_숨김: true}.S실행()
+	defer lb.S예외처리{M에러: &에러, M출력_숨김: new(true)}.S실행()
 
 	if !DLL32_종료됨() {
 		소켓REQ := 소켓REQ_저장소.G소켓()

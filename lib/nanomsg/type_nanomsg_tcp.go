@@ -23,7 +23,7 @@ func NewNano소켓(종류 lb.T소켓_종류, 주소 string, 접속방식 lb.T소
 	s.종류 = 종류
 
 	defer lb.S예외처리{
-		M에러: &에러, M출력_숨김: true,
+		M에러: &에러, M출력_숨김: new(true),
 		M에러_실행: func() {
 			소켓 = nil
 
@@ -175,7 +175,7 @@ type sNano소켓 struct {
 }
 
 func (s *sNano소켓) S송신(변환_형식 lb.T변환, 값_모음 ...any) (에러 error) {
-	defer lb.S예외처리{M에러: &에러, M출력_숨김: true}.S실행()
+	defer lb.S예외처리{M에러: &에러, M출력_숨김: new(true)}.S실행()
 
 	// 소켓 타임아웃 설정.
 	if s.타임아웃 != 0 {

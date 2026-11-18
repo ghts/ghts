@@ -18,7 +18,7 @@ type s컨텍스트 struct {
 }
 
 func (s *s컨텍스트) S송신(변환_형식 lb.T변환, 값_모음 ...any) (에러 error) {
-	defer lb.S예외처리{M에러: &에러, M출력_숨김: true}.S실행()
+	defer lb.S예외처리{M에러: &에러, M출력_숨김: new(true)}.S실행()
 
 	매개체 := lb.F확인2(lb.New바이트_변환_모음(변환_형식, 값_모음...))
 	바이트_모음 := lb.F확인2(매개체.MarshalBinary())

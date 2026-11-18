@@ -182,7 +182,7 @@ func f실행화일_동일함(기대_실행화일 string, 실제_실행화일 str
 }
 
 func F프로세스_종료by프로세스ID(프로세스ID int) (에러 error) {
-	defer lb.S예외처리{M에러: &에러, M출력_숨김: true}.S실행()
+	defer lb.S예외처리{M에러: &에러, M출력_숨김: new(true)}.S실행()
 
 	if 프로세스, 에러 := os.FindProcess(프로세스ID); 에러 != nil || 프로세스 == nil {
 		return lb.New에러("프로세스를 찾을 수 없습니다. PID %v\n%v", 프로세스ID, 에러)
@@ -193,7 +193,7 @@ func F프로세스_종료by프로세스ID(프로세스ID int) (에러 error) {
 
 // F프로세스_종료by프로세스ID_검증 : 주어진 PID의 프로세스가 실제로 지정된 실행 화일명과 일치하는지 확인 후 종료.
 func F프로세스_종료by프로세스ID_검증(프로세스ID int, 프로세스_이름 string) (에러 error) {
-	defer lb.S예외처리{M에러: &에러, M출력_숨김: true}.S실행()
+	defer lb.S예외처리{M에러: &에러, M출력_숨김: new(true)}.S실행()
 
 	프로세스_모음, 에러 := ps.Processes()
 	if 에러 != nil {
@@ -216,7 +216,7 @@ func F프로세스_종료by프로세스ID_검증(프로세스ID int, 프로세�
 
 // F프로세스_종료by프로세스_이름 : 주어진 이름의 실행 화일에 해당하는 모든 프로세스를 종료한다.
 func F프로세스_종료by프로세스_이름(프로세스_이름 string, 추가_인수_모음 ...bool) (에러 error) {
-	defer lb.S예외처리{M에러: &에러, M출력_숨김: true}.S실행()
+	defer lb.S예외처리{M에러: &에러, M출력_숨김: new(true)}.S실행()
 
 	if 프로세스_이름 = strings.TrimSpace(프로세스_이름); 프로세스_이름 == "" {
 		return lb.New에러("'프로세스_이름'이 공백 문자.")
