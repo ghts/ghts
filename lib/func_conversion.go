@@ -313,6 +313,10 @@ func F2정수_공백은_0(값 any) (int, error) {
 	return F2정수(값)
 }
 
+// 정규식_f2정수64는 소숫점 뒤가 0으로만 끝나는 입력(예: "1.0", "1.00")의 후미를 제거하는 패턴입니다.
+// F2정수64가 TR/RT 응답 파싱·호가·체결 콜백 등 핫패스에서 자주 호출되므로, 한 번만 컴파일하여 재사용합니다.
+var 정규식_f2정수64 = regexp.MustCompile(`\.0*$`)
+
 func F2정수64(값 any) (int64, error) {
 	문자열 := ""
 
@@ -326,7 +330,7 @@ func F2정수64(값 any) (int64, error) {
 	문자열 = strings.Replace(strings.TrimSpace(문자열), ",", "", -1)
 
 	// 소숫점 뒤가 0으로만 끝나는 입력(예: "1.0", "1.00")은 정수부로만 남김.
-	문자열 = regexp.MustCompile(`\.0*$`).ReplaceAllString(문자열, "")
+	문자열 = 정규식_f2정수64.ReplaceAllString(문자열, "")
 
 	// 부호만 남는 입력(예: "-.0", "+.0", ".0")은 0으로 처리한다.
 	switch 문자열 {
