@@ -4,6 +4,7 @@ import (
 	"syscall"
 	"unsafe"
 
+	lb "github.com/ghts/ghts/lib"
 	"github.com/ghts/ghts/lib/w32"
 )
 
@@ -43,6 +44,8 @@ func F윈도우_메시지_처리() {
 }
 
 func WndProc(hWnd w32.HWND, msg uint32, wParam, lParam uintptr) uintptr {
+	defer lb.S예외처리{}.S실행()
+
 	switch msg {
 	case XM_DISCONNECT:
 		OnDisconnected()

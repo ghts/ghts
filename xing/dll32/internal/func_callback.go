@@ -307,8 +307,6 @@ func OnRealtimeData(실시간_데이터 unsafe.Pointer) {
 }
 
 func OnLogin(wParam, lParam unsafe.Pointer) {
-	defer lb.S예외처리{}.S실행()
-
 	코드 := lb.F확인2(w32.EUC_KR_C포인터2Go문자열(wParam))
 	정수, 에러 := lb.F2정수(코드)
 	로그인_성공_여부 := 에러 == nil && 정수 == 0
