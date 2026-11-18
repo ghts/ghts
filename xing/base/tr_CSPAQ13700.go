@@ -214,6 +214,13 @@ func NewCSPAQ13700_현물계좌_주문체결내역_반복값_모음(b []byte) (�
 			panic(lb.New에러("예상하지 못한 매매구분_코드 : '%v'", lb.F2문자열(g.BnsTpCode)))
 		}
 
+		시각_문자열_해석 := func(시각_문자열 string) time.Time {
+			if lb.F2문자열_공백_제거(시각_문자열) == "." {
+				return time.Time{}
+			}
+			return lb.F확인2(lb.F2일자별_시각(값.M주문일, "150405.999", 시각_문자열))
+		}
+
 		값.M주문유형 = T주문유형(lb.F확인2(lb.F2정수64_공백은_0(g.OrdPtnCode)))
 		값.M주문처리유형 = T주문처리_유형_CSPAQ13700(lb.F확인2(lb.F2정수64_공백은_0(g.OrdTrxPtnCode)))
 		값.M정정취소구분 = lb.T신규_정정_취소(lb.F확인2(lb.F2정수64_공백은_0(g.MrcTpCode)))
@@ -223,19 +230,8 @@ func NewCSPAQ13700_현물계좌_주문체결내역_반복값_모음(b []byte) (�
 		값.M주문가격 = lb.F확인2(lb.F2실수_소숫점_추가_공백은_0(g.OrdPrc, 2))
 		값.M체결수량 = lb.F확인2(lb.F2정수64_공백은_0(g.ExecQty))
 		값.M체결가 = lb.F확인2(lb.F2실수_소숫점_추가_공백은_0(g.ExecPrc, 2))
-
-		if strings.TrimSpace(체결처리시각_문자열) == "." {
-			값.M체결처리시각 = time.Time{}
-		} else {
-			값.M체결처리시각 = lb.F확인2(lb.F2일자별_시각(값.M주문일, "150405.999", 체결처리시각_문자열))
-		}
-
-		if strings.TrimSpace(최종체결시각_문자열) == "." {
-			값.M최종체결시각 = time.Time{}
-		} else {
-			값.M최종체결시각 = lb.F확인2(lb.F2일자별_시각(값.M주문일, "150405.999", 최종체결시각_문자열))
-		}
-
+		값.M체결처리시각 = 시각_문자열_해석(체결처리시각_문자열)
+		값.M최종체결시각 = 시각_문자열_해석(최종체결시각_문자열)
 		값.M호가유형 = F2호가유형(lb.F확인2(lb.F2정수_공백은_0(g.OrdprcPtnCode)))
 		값.M주문조건 = lb.T주문조건(lb.F확인2(lb.F2정수64_공백은_0(g.OrdCndiTpCode)))
 		값.M전체체결수량 = lb.F확인2(lb.F2정수64_공백은_0(g.AllExecQty))
@@ -243,7 +239,7 @@ func NewCSPAQ13700_현물계좌_주문체결내역_반복값_모음(b []byte) (�
 		값.M회원번호 = lb.F2문자열(g.MbrNo)
 		값.M예약주문여부 = T예약주문_CSPAQ13700(lb.F확인2(lb.F2정수64_공백은_0(g.RsvOrdYn)))
 		값.M대출일 = lb.F2포맷된_일자_단순형_공백은_초기값("20060102", g.LoanDt)
-		값.M주문시각 = lb.F확인2(lb.F2일자별_시각(값.M주문일, "150405.999", 주문시각_문자열))
+		값.M주문시각 = 시각_문자열_해석(주문시각_문자열)
 		값.M운용지시번호 = lb.F2문자열(g.OpDrtnNo)
 		값.M주문자ID = lb.F2문자열(g.OdrrId)
 
