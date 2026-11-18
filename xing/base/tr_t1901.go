@@ -264,8 +264,8 @@ func NewT1901_ETF_시세_조회_응답(b []byte) (s *T1901_ETF_시세_조회_응
 
 	s.M전일NAV = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Jnilnav, 2)
 	s.M전일NAV_전일대비구분 = T전일대비_구분(lb.F확인2(lb.F2정수64_공백은_0(g.Jnilnavsign)))
-	s.M전일NAV_전일대비등락폭 = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Jnilnavchange, 2)
-	s.M전일NAV_전일대비등락율 = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Jnilnavdiff, 2)
+	s.M전일NAV_전일대비등락폭 = s.M전일NAV_전일대비구분.G부호보정_실수64(lb.F2실수_소숫점_추가_단순형_공백은_0(g.Jnilnavchange, 2))
+	s.M전일NAV_전일대비등락율 = s.M전일NAV_전일대비구분.G부호보정_실수64(lb.F2실수_소숫점_추가_단순형_공백은_0(g.Jnilnavdiff, 2))
 
 	s.M순자산총액_억 = lb.F확인2(lb.F2정수64(g.Etftotcap))
 	s.M스프레드 = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Spread, 2)
