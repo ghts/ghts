@@ -12,7 +12,6 @@ import (
 	"math"
 	"math/big"
 	"net"
-	"net/http"
 	"os"
 	"os/exec"
 	"path"
@@ -404,28 +403,6 @@ func F신호_수신(채널 <-chan T신호) bool {
 	}
 }
 
-func HTTP회신_본문(url string) (string, error) {
-	바이트_모음, 에러 := http회신_본문_바이트_모음(url)
-
-	return string(바이트_모음), 에러
-}
-
-func http회신_본문_바이트_모음(url string) (바이트_모음 []byte, 에러 error) {
-	var 응답 *http.Response
-
-	defer S예외처리{M에러: &에러,
-		M에러_실행: func() {
-			바이트_모음 = make([]byte, 0)
-		},
-		M항상_실행: func() {
-			if 응답 != nil && 응답.Body != nil {
-				응답.Body.Close()
-			}
-		}}.S실행()
-
-	return io.ReadAll(F확인2(http.Get(url)).Body)
-}
-
 func F인터넷에_접속됨() bool {
 	인터넷_접속_확인_잠금.Lock()
 	defer 인터넷_접속_확인_잠금.Unlock()
@@ -467,13 +444,13 @@ func F인터넷에_접속됨() bool {
 }
 
 func f인터넷에_접속됨(ch회신 chan<- bool, url string) {
-	본문, 에러 := HTTP회신_본문(url)
+	바이트_모음, 에러 := HTTP_GET(url)
 
 	switch {
 	case 에러 != nil:
 		ch회신 <- false
 		return
-	case 본문 == "":
+	case len(바이트_모음) == 0:
 		ch회신 <- false
 		return
 	}
