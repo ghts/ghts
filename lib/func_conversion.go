@@ -132,26 +132,36 @@ func EUC_KR2Go문자열(값 any) (문자열 string, 에러 error) {
 		return "", nil
 	}
 
-	// 디코더는 변환할 수 없는 바이트가 있어도 U+FFFD(대체 문자)로 바꿔줄 뿐
-	// 오류를 반환하지 않는다. 따라서 아래 결과에 U+FFFD가 포함되었는지 검사해
-	// 디코딩 실패를 감지한다.
-	바이트_모음_utf8, 에러 := korean.EUCKR.NewDecoder().Bytes(바이트_모음)
-	if 에러 != nil {
-		return "", New에러("EUC_KR2Go문자열 : EUC-KR 디코딩 에러 발생.\n%v", 에러)
+	디코딩_결과, 디코딩_에러 := korean.EUCKR.NewDecoder().Bytes(바이트_모음)
+	if 디코딩_에러 != nil {
+		return "", New에러("EUC_KR2Go문자열 : EUC-KR 디코딩 에러 발생.\n%v", 디코딩_에러)
 	}
 
-	문자열 = F앞뒤_공백_제거(string(바이트_모음_utf8))
-	if strings.ContainsRune(문자열, '\ufffd') {
-		// U+FFFD는 EUC-KR로 표기할 수 없는 문자이므로,
-		// 정상적으로 디코딩된 한글 메시지에는 절대 나타나지 않는다.
-		// 이 문자가 나왔다는 것은 원본에 표기 불가능한 바이트가 섞였다는 의미.
-		// 원인을 파악할 수 있도록 경고로 남긴다.
-		return 문자열, New에러(
-			"EUC_KR2Go문자열 : EUC-KR 디코딩 중 표기 불가능한 바이트를 발견해 U+FFFD로 대체됨.\n원본 바이트 : %#v\n문자열 : '%v'",
-			바이트_모음, string(바이트_모음))
+	문자열 = F앞뒤_공백_제거(string(디코딩_결과))
+	if !strings.ContainsRune(문자열, '\ufffd') {
+		return 문자열, nil // 정상적으로 디코딩됨.
 	}
 
-	return 문자열, nil
+	// 변환 불가를 의미하는 U+FFFD가 발생.
+	// 원본이 고정 길이 바이트 필드에서 잘려, 마지막 한글의 앞자리 바이트만 남은 경우일 수 있다.
+	// EUC-KR 앞자리 바이트는 0x81~0xFE 범위이므로, 마지막 바이트가 이 범위이고,
+	// 끝 바이트 1개를 제거해 다시 디코딩한 결과에 U+FFFD가 없다면 잘린 것으로 간주해서 제거된 결과를 에러 없이 반환한다.
+	// EUC-KR은 2바이트 문자 인코딩이라서 잘린 바이트는 최대 1개이고, 반복은 필요 없음.
+	if len(바이트_모음) > 1 {
+		if 마지막_바이트 := 바이트_모음[len(바이트_모음)-1]; 마지막_바이트 >= 0x81 && 마지막_바이트 <= 0xFE {
+			자른_결과, 자른_에러 := korean.EUCKR.NewDecoder().Bytes(바이트_모음[:len(바이트_모음)-1])
+			if 자른_에러 == nil {
+				if 자른_문자열 := F앞뒤_공백_제거(string(자른_결과)); !strings.ContainsRune(자른_문자열, '\ufffd') {
+					return 자른_문자열, nil
+				}
+			}
+		}
+	}
+
+	// 그 외: 원본에 표기 불가능한 바이트가 섞인 진짜 손상. 원인을 파악할 수 있도록 에러 반환.
+	return 문자열, New에러(
+		"EUC_KR2Go문자열 : EUC-KR 디코딩 중 표기 불가능한 바이트를 발견해 U+FFFD로 대체됨.\n원본 바이트 : %#v\n문자열 : '%v'",
+		바이트_모음, string(디코딩_결과))
 }
 
 func F앞뒤_따옴표_제거(값 string) string {

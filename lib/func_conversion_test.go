@@ -258,6 +258,19 @@ func TestF2문자열_EUC_KR_부정바이트_대체(t *testing.T) {
 	F테스트_참임(t, strings.Contains(결과, "\ufffd"), "표기 불가 바이트는 U+FFFD로 대체되어야 한다. 결과: %q", 결과)
 }
 
+// 고정 길이 바이트 필드에서 한글이 잘려 마지막 앞자리 바이트만 남은 경우, 에러 없이 잘린 문자열만 반환.
+func TestEUC_KR2Go문자열_잘린_마지막_바이트_제거(t *testing.T) {
+	t.Parallel()
+
+	// "RISE " + 완성된 한글 7자 + 잘린 앞자리 바이트(0xBD).
+	잘린_입력 := "\x52\x49\x53\x45\x20\xc6\xc8\xb6\xf3\xb5\xe3\xbc\xb1\xb9\xb0\xc0\xce\xb9\xf6\xbd"
+
+	결과, 에러 := EUC_KR2Go문자열(잘린_입력)
+	F테스트_에러없음(t, 에러, "잘린 마지막 바이트는 표기 불가 문자와 달리 에러로 반환되면 안 됨: %v", 에러)
+	F테스트_참임(t, !strings.Contains(결과, "\ufffd"), "U+FFFD가 남아 있으면 안 됨: %q", 결과)
+	F테스트_참임(t, strings.HasPrefix(결과, "RISE "), "RISE 접두사 유지: %q", 결과)
+}
+
 func TestF인코딩_디코딩(t *testing.T) {
 	변환형식_모음 := []T변환{GOB, JSON}
 
