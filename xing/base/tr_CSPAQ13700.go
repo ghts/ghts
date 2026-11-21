@@ -178,10 +178,14 @@ func NewCSPAQ13700_현물계좌_주문체결내역_반복값_모음(b []byte) (�
 	버퍼 := bytes.NewBuffer(b)
 	수량 := len(b) / SizeCSPAQ13700OutBlock3
 	값_모음 = make([]*CSPAQ13700_현물계좌_주문체결내역_반복값, 0, 수량)
+	g := new(CSPAQ13700OutBlock3)
 
-	for range 수량 {
-		g := new(CSPAQ13700OutBlock3)
-		lb.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
+	newCSPAQ13700_반복값 := func(g *CSPAQ13700OutBlock3) (값 *CSPAQ13700_현물계좌_주문체결내역_반복값) {
+		defer lb.S예외처리{M에러_실행: func() { 값 = nil }, M출력_숨김: new(true)}.S실행()
+
+		if lb.F앞뒤_공백_제거(lb.F2문자열(g.OrdDt)) == "" {
+			return nil
+		}
 
 		체결처리시각_문자열 := lb.F2문자열(g.ExecTrxTime)
 		체결처리시각_문자열 = 체결처리시각_문자열[:6] + "." + 체결처리시각_문자열[6:]
@@ -192,11 +196,7 @@ func NewCSPAQ13700_현물계좌_주문체결내역_반복값_모음(b []byte) (�
 		주문시각_문자열 := lb.F2문자열(g.OrdTime)
 		주문시각_문자열 = 주문시각_문자열[:6] + "." + 주문시각_문자열[6:]
 
-		if lb.F앞뒤_공백_제거(lb.F2문자열(g.OrdDt)) == "" {
-			continue
-		}
-
-		값 := new(CSPAQ13700_현물계좌_주문체결내역_반복값)
+		값 = new(CSPAQ13700_현물계좌_주문체결내역_반복값)
 		값.M주문일 = lb.F2포맷된_일자_단순형_공백은_초기값("20060102", g.OrdDt)
 		값.M관리지점번호 = lb.F2문자열(g.MgmtBrnNo)
 		값.M주문시장코드 = lb.F2문자열(g.OrdMktCode)
@@ -211,7 +211,8 @@ func NewCSPAQ13700_현물계좌_주문체결내역_반복값_모음(b []byte) (�
 		case "2":
 			값.M매도_매수_구분 = lb.P매수
 		default:
-			panic(lb.New에러("예상하지 못한 매매구분_코드 : '%v'", lb.F2문자열(g.BnsTpCode)))
+			lb.F에러_출력("예상하지 못한 매매구분_코드 : '%v'", lb.F2문자열(g.BnsTpCode))
+			return nil
 		}
 
 		시각_문자열_해석 := func(시각_문자열 string) time.Time {
@@ -247,7 +248,15 @@ func NewCSPAQ13700_현물계좌_주문체결내역_반복값_모음(b []byte) (�
 			값.M종목코드 = 값.M종목코드[1:]
 		}
 
-		값_모음 = append(값_모음, 값)
+		return 값
+	}
+
+	for range 수량 {
+		if 에러 = binary.Read(버퍼, binary.BigEndian, g); 에러 != nil {
+			continue
+		} else if 값 := newCSPAQ13700_반복값(g); 값 != nil {
+			값_모음 = append(값_모음, 값)
+		}
 	}
 
 	return 값_모음, nil
