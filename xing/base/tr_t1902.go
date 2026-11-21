@@ -92,15 +92,17 @@ func NewT1902_ETF시간별_추이_응답_반복값_모음(b []byte) (값_모음 
 
 	값_모음 = new(T1902_ETF시간별_추이_응답_반복값_모음)
 	값_모음.M배열 = make([]*T1902_ETF시간별_추이_응답_반복값, 0, 수량)
+	g := new(T1902OutBlock1)
 
-	for range 수량 {
-		g := new(T1902OutBlock1)
-		lb.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
+	newT1902_반복값 := func(g *T1902OutBlock1) (값 *T1902_ETF시간별_추이_응답_반복값) {
+		defer lb.S예외처리{M에러_실행: func() { 값 = nil }, M출력_숨김: new(true)}.S실행()
 
-		값 := new(T1902_ETF시간별_추이_응답_반복값)
+		값 = new(T1902_ETF시간별_추이_응답_반복값)
 
-		if 값.M시각, 에러 = lb.F2일자별_시각(당일.G값(), "15:04:05", g.Time); 에러 != nil {
+		if 시각, 시각_에러 := lb.F2일자별_시각(당일.G값(), "15:04:05", g.Time); 시각_에러 != nil {
 			값.M시각 = time.Time{} // ETF_시간별_추이_t1902() 에서 수정
+		} else {
+			값.M시각 = 시각
 		}
 		값.M현재가 = lb.F확인2(lb.F2정수64(g.Price))
 		값.M전일대비구분 = T전일대비_구분(lb.F확인2(lb.F2정수(g.Sign)))
@@ -120,7 +122,15 @@ func NewT1902_ETF시간별_추이_응답_반복값_모음(b []byte) (값_모음 
 			값.M지수_전일대비등락폭 = -1 * 값.M지수_전일대비등락폭
 		}
 
-		값_모음.M배열 = append(값_모음.M배열, 값)
+		return 값
+	}
+
+	for range 수량 {
+		if 에러 = binary.Read(버퍼, binary.BigEndian, g); 에러 != nil {
+			continue
+		} else if 값 := newT1902_반복값(g); 값 != nil {
+			값_모음.M배열 = append(값_모음.M배열, 값)
+		}
 	}
 
 	return 값_모음, nil
