@@ -93,8 +93,8 @@ func NewT8428_증시주변자금추이_응답_헤더(b []byte) (값 *T8428_증�
 	return 값, nil
 }
 
-func NewT8428_증시주변자금추이_응답_반복값_모음(b []byte) (값 *T8428_증시주변_자금추이_응답_반복값_모음, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
+func NewT8428_증시주변자금추이_응답_반복값_모음(b []byte) (값_모음 *T8428_증시주변_자금추이_응답_반복값_모음, 에러 error) {
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값_모음 = nil }}.S실행()
 
 	나머지 := len(b) % SizeT8428OutBlock1
 	lb.F조건부_패닉(나머지 != 0, "예상하지 못한 길이. '%v' '%v'", len(b), 나머지)
@@ -102,33 +102,41 @@ func NewT8428_증시주변자금추이_응답_반복값_모음(b []byte) (값 *T
 	버퍼 := bytes.NewBuffer(b)
 	수량 := len(b) / SizeT8428OutBlock1
 
-	값 = new(T8428_증시주변_자금추이_응답_반복값_모음)
-	값.M배열 = make([]*T8428_증시주변_자금추이_응답_반복값, 0, 수량)
+	값_모음 = new(T8428_증시주변_자금추이_응답_반복값_모음)
+	값_모음.M배열 = make([]*T8428_증시주변_자금추이_응답_반복값, 0, 수량)
+	g := new(T8428OutBlock1)
 
-	for range 수량 {
-		g := new(T8428OutBlock1)
-		lb.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
+	newT8428_반복값 := func(g *T8428OutBlock1) (값 *T8428_증시주변_자금추이_응답_반복값) {
+		defer lb.S예외처리{M에러_실행: func() { 값 = nil }, M출력_숨김: new(true)}.S실행()
 
-		s := new(T8428_증시주변_자금추이_응답_반복값)
+		값 = new(T8428_증시주변_자금추이_응답_반복값)
 
 		if 일자_문자열 := lb.F앞뒤_공백_제거(lb.F2문자열(g.Date)); 일자_문자열 == "" {
-			continue
+			return nil
 		} else {
-			s.M일자 = lb.F확인2(lb.F2포맷된_시각("20060102", lb.F2문자열(g.Date)))
+			값.M일자 = lb.F확인2(lb.F2포맷된_시각("20060102", lb.F2문자열(g.Date)))
 		}
 
-		s.M고객예탁금_억 = lb.F확인2(lb.F2정수64(g.Custmoney))
-		s.M미수금_억 = lb.F확인2(lb.F2정수64(g.Outmoney))
-		s.M신용잔고_억 = lb.F확인2(lb.F2정수64(g.Trjango))
-		s.M선물예수금_억 = lb.F확인2(lb.F2정수64(g.Futymoney))
-		s.M주식형_억 = lb.F확인2(lb.F2정수64(g.Stkmoney))
-		s.M혼합형_주식_억 = lb.F확인2(lb.F2정수64(g.Mstkmoney))
-		s.M혼합형_채권_억 = lb.F확인2(lb.F2정수64(g.Mbndmoney))
-		s.M채권형_억 = lb.F확인2(lb.F2정수64(g.Bndmoney))
-		s.MMF_억 = lb.F확인2(lb.F2정수64(g.Mmfmsoney))
+		값.M고객예탁금_억 = lb.F확인2(lb.F2정수64(g.Custmoney))
+		값.M미수금_억 = lb.F확인2(lb.F2정수64(g.Outmoney))
+		값.M신용잔고_억 = lb.F확인2(lb.F2정수64(g.Trjango))
+		값.M선물예수금_억 = lb.F확인2(lb.F2정수64(g.Futymoney))
+		값.M주식형_억 = lb.F확인2(lb.F2정수64(g.Stkmoney))
+		값.M혼합형_주식_억 = lb.F확인2(lb.F2정수64(g.Mstkmoney))
+		값.M혼합형_채권_억 = lb.F확인2(lb.F2정수64(g.Mbndmoney))
+		값.M채권형_억 = lb.F확인2(lb.F2정수64(g.Bndmoney))
+		값.MMF_억 = lb.F확인2(lb.F2정수64(g.Mmfmsoney))
 
-		값.M배열 = append(값.M배열, s)
+		return 값
 	}
 
-	return 값, nil
+	for range 수량 {
+		if 에러 = binary.Read(버퍼, binary.BigEndian, g); 에러 != nil {
+			continue
+		} else if 값 := newT8428_반복값(g); 값 != nil {
+			값_모음.M배열 = append(값_모음.M배열, 값)
+		}
+	}
+
+	return 값_모음, nil
 }
