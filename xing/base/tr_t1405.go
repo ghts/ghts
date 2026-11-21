@@ -93,12 +93,12 @@ func NewT1405_투자경고_조회_응답_반복값_모음(b []byte) (값_모음 
 
 	값_모음 = new(T1405_투자경고_조회_응답_반복값_모음)
 	값_모음.M배열 = make([]*T1405_투자경고_조회_응답_반복값, 0, 수량)
+	g := new(T1405OutBlock1)
 
-	for range 수량 {
-		g := new(T1405OutBlock1)
-		lb.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
+	newT1405_반복값 := func(g *T1405OutBlock1) (값 *T1405_투자경고_조회_응답_반복값) {
+		defer lb.S예외처리{M에러_실행: func() { 값 = nil }, M출력_숨김: new(true)}.S실행()
 
-		값 := new(T1405_투자경고_조회_응답_반복값)
+		값 = new(T1405_투자경고_조회_응답_반복값)
 		값.M종목코드 = lb.F2문자열(g.Shcode)
 		값.M종목명 = lb.F확인2(lb.EUC_KR2Go문자열(g.Hname))
 		값.M현재가 = lb.F확인2(lb.F2정수64(g.Price))
@@ -109,7 +109,15 @@ func NewT1405_투자경고_조회_응답_반복값_모음(b []byte) (값_모음 
 		값.M지정일 = lb.F2포맷된_일자_단순형_공백은_초기값("20060102", g.Date)
 		값.M해제일 = lb.F2포맷된_일자_단순형_공백은_초기값("20060102", g.Edate)
 
-		값_모음.M배열 = append(값_모음.M배열, 값)
+		return 값
+	}
+
+	for range 수량 {
+		if 에러 = binary.Read(버퍼, binary.BigEndian, g); 에러 != nil {
+			continue
+		} else if 값 := newT1405_반복값(g); 값 != nil {
+			값_모음.M배열 = append(값_모음.M배열, 값)
+		}
 	}
 
 	return 값_모음, nil
