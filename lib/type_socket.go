@@ -93,8 +93,12 @@ func (s *s소켓_저장소) S회수(소켓 I소켓_질의) {
 }
 
 func (s *s소켓_저장소) S정리() {
-	for i := 0; i < len(s.M저장소); i++ {
-		소켓 := <-s.M저장소
-		소켓.Close()
+	for {
+		select {
+		case 소켓 := <-s.M저장소:
+			소켓.Close()
+		default:
+			return
+		}
 	}
 }
