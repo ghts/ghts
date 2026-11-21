@@ -155,24 +155,24 @@ func NewT8410_현물_차트_일주월년_응답_반복값_모음(b []byte) (값_
 	값_모음.M배열 = make([]*T8410_현물_차트_일주월년_응답_반복값, 0, 수량)
 	g := new(T8410OutBlock1)
 
-	newT8410_반복값 := func(g *T8410OutBlock1) (반환값 *T8410_현물_차트_일주월년_응답_반복값) {
-		defer lb.S예외처리{M에러_실행: func() { 반환값 = nil }, M출력_숨김: new(true)}.S실행()
+	newT8410_반복값 := func(g *T8410OutBlock1) (값 *T8410_현물_차트_일주월년_응답_반복값) {
+		defer lb.S예외처리{M에러_실행: func() { 값 = nil }, M출력_숨김: new(true)}.S실행()
 
-		반환값 = new(T8410_현물_차트_일주월년_응답_반복값)
-		반환값.M일자 = lb.F2일자(lb.F확인2(lb.F2포맷된_시각("20060102", lb.F앞뒤_공백_제거(g.Date))))
-		반환값.M시가 = lb.F확인2(lb.F2정수64(g.Open))
-		반환값.M고가 = lb.F확인2(lb.F2정수64(g.High))
-		반환값.M저가 = lb.F확인2(lb.F2정수64(g.Low))
-		반환값.M종가 = lb.F확인2(lb.F2정수64(g.Close))
-		반환값.M거래량 = lb.F확인2(lb.F2정수64(g.Vol))
-		반환값.M거래대금_백만 = lb.F확인2(lb.F2정수64(g.Value))
-		반환값.M수정구분 = lb.F확인2(lb.F2정수64_공백은_0(g.Jongchk))
-		반환값.M수정비율 = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Rate, 2)
-		반환값.M수정주가반영항목 = lb.F확인2(lb.F2정수64_공백은_0(g.Pricechk))
-		반환값.M수정비율반영거래대금 = lb.F확인2(lb.F2정수64_공백은_0(g.Ratevalue))
+		값 = new(T8410_현물_차트_일주월년_응답_반복값)
+		값.M일자 = lb.F2일자(lb.F확인2(lb.F2포맷된_시각("20060102", lb.F앞뒤_공백_제거(g.Date))))
+		값.M시가 = lb.F확인2(lb.F2정수64(g.Open))
+		값.M고가 = lb.F확인2(lb.F2정수64(g.High))
+		값.M저가 = lb.F확인2(lb.F2정수64(g.Low))
+		값.M종가 = lb.F확인2(lb.F2정수64(g.Close))
+		값.M거래량 = lb.F확인2(lb.F2정수64(g.Vol))
+		값.M거래대금_백만 = lb.F확인2(lb.F2정수64(g.Value))
+		값.M수정구분 = lb.F확인2(lb.F2정수64_공백은_0(g.Jongchk))
+		값.M수정비율 = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Rate, 2)
+		값.M수정주가반영항목 = lb.F확인2(lb.F2정수64_공백은_0(g.Pricechk))
+		값.M수정비율반영거래대금 = lb.F확인2(lb.F2정수64_공백은_0(g.Ratevalue))
 		//반환값.M종가등락구분 = T전일대비_구분(lb.F확인2(lb.F2정수(g.Sign)))
 
-		return 반환값
+		return 값
 	}
 
 	for range 수량 {
