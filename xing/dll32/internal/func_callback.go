@@ -361,11 +361,10 @@ func OnRealtimeDataChart() {
 var destroy호출_완료 atomic.Bool
 
 func OnDestroy() {
-	if destroy호출_완료.Load() {
+	if !destroy호출_완료.CompareAndSwap(false, true) {
 		return
 	}
 
-	destroy호출_완료.Store(true)
 	lb.F공통_종료_채널_닫기()
 	syscall.FreeLibrary(xing_api_dll)
 	w32.DestroyWindow(메시지_윈도우)
