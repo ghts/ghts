@@ -122,8 +122,8 @@ func NewT1310_현물_당일전일분틱조회_응답_헤더(b []byte) (값 *T131
 	return 값, nil
 }
 
-func NewT1310_현물_당일전일분틱조회_응답_반복값_모음(b []byte) (값 *T1310_현물_전일당일분틱조회_응답_반복값_모음, 에러 error) {
-	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값 = nil }}.S실행()
+func NewT1310_현물_당일전일분틱조회_응답_반복값_모음(b []byte) (값_모음 *T1310_현물_전일당일분틱조회_응답_반복값_모음, 에러 error) {
+	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 값_모음 = nil }}.S실행()
 
 	나머지 := len(b) % SizeT1310OutBlock1
 	lb.F조건부_패닉(나머지 != 0, "예상하지 못한 길이. '%v' '%v'", len(b), 나머지)
@@ -131,32 +131,40 @@ func NewT1310_현물_당일전일분틱조회_응답_반복값_모음(b []byte) 
 	버퍼 := bytes.NewBuffer(b)
 	수량 := len(b) / SizeT1310OutBlock1
 
-	값 = new(T1310_현물_전일당일분틱조회_응답_반복값_모음)
-	값.M배열 = make([]*T1310_현물_전일당일분틱조회_응답_반복값, 0, 수량)
+	값_모음 = new(T1310_현물_전일당일분틱조회_응답_반복값_모음)
+	값_모음.M배열 = make([]*T1310_현물_전일당일분틱조회_응답_반복값, 0, 수량)
+	g := new(T1310OutBlock1)
 
-	for range 수량 {
-		g := new(T1310OutBlock1)
-		lb.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
+	newT1310_반복값 := func(g *T1310OutBlock1) (값 *T1310_현물_전일당일분틱조회_응답_반복값) {
+		defer lb.S예외처리{M에러_실행: func() { 값 = nil }, M출력_숨김: new(true)}.S실행()
 
-		s := new(T1310_현물_전일당일분틱조회_응답_반복값)
-		s.M시각 = lb.F확인2(lb.F2금일_시각("150405", g.Chetime[:6]))
-		s.M현재가 = lb.F확인2(lb.F2정수64(g.Price))
-		s.M전일대비구분 = T전일대비_구분(lb.F확인2(lb.F2정수64(g.Sign)))
-		s.M전일대비등락폭 = s.M전일대비구분.G부호보정_정수64(lb.F확인2(lb.F2정수64(g.Change)))
-		s.M전일대비등락율 = s.M전일대비구분.G부호보정_실수64(lb.F확인2(lb.F2실수_소숫점_추가(g.Diff, 2)))
-		s.M체결수량 = lb.F확인2(lb.F2정수64(g.Cvolume))
-		s.M체결강도 = lb.F확인2(lb.F2실수_소숫점_추가(g.Chdegree, 2))
-		s.M거래량 = lb.F확인2(lb.F2정수64(g.Volume))
-		s.M매도체결수량 = lb.F확인2(lb.F2정수64(g.Mdvolume))
-		s.M매도체결건수 = lb.F확인2(lb.F2정수64(g.Mdchecnt))
-		s.M매수체결수량 = lb.F확인2(lb.F2정수64(g.Msvolume))
-		s.M매수체결건수 = lb.F확인2(lb.F2정수64(g.Mschecnt))
-		s.M순체결량 = lb.F확인2(lb.F2정수64(g.Revolume))
-		s.M순체결건수 = lb.F확인2(lb.F2정수64(g.Rechecnt))
-		s.M거래소_구분 = F2거래소_구분(lb.F앞뒤_공백_제거(g.Exchname))
+		값 = new(T1310_현물_전일당일분틱조회_응답_반복값)
+		값.M시각 = lb.F확인2(lb.F2금일_시각("150405", g.Chetime[:6]))
+		값.M현재가 = lb.F확인2(lb.F2정수64(g.Price))
+		값.M전일대비구분 = T전일대비_구분(lb.F확인2(lb.F2정수64(g.Sign)))
+		값.M전일대비등락폭 = 값.M전일대비구분.G부호보정_정수64(lb.F확인2(lb.F2정수64(g.Change)))
+		값.M전일대비등락율 = 값.M전일대비구분.G부호보정_실수64(lb.F확인2(lb.F2실수_소숫점_추가(g.Diff, 2)))
+		값.M체결수량 = lb.F확인2(lb.F2정수64(g.Cvolume))
+		값.M체결강도 = lb.F확인2(lb.F2실수_소숫점_추가(g.Chdegree, 2))
+		값.M거래량 = lb.F확인2(lb.F2정수64(g.Volume))
+		값.M매도체결수량 = lb.F확인2(lb.F2정수64(g.Mdvolume))
+		값.M매도체결건수 = lb.F확인2(lb.F2정수64(g.Mdchecnt))
+		값.M매수체결수량 = lb.F확인2(lb.F2정수64(g.Msvolume))
+		값.M매수체결건수 = lb.F확인2(lb.F2정수64(g.Mschecnt))
+		값.M순체결량 = lb.F확인2(lb.F2정수64(g.Revolume))
+		값.M순체결건수 = lb.F확인2(lb.F2정수64(g.Rechecnt))
+		값.M거래소_구분 = F2거래소_구분(lb.F앞뒤_공백_제거(g.Exchname))
 
-		값.M배열 = append(값.M배열, s)
+		return 값
 	}
 
-	return 값, nil
+	for range 수량 {
+		if 에러 = binary.Read(버퍼, binary.BigEndian, g); 에러 != nil {
+			continue
+		} else if 값 := newT1310_반복값(g); 값 != nil {
+			값_모음.M배열 = append(값_모음.M배열, 값)
+		}
+	}
+
+	return 값_모음, nil
 }
