@@ -1,6 +1,7 @@
 package xing
 
 import (
+	"os"
 	"strings"
 
 	lb "github.com/ghts/ghts/lib"
@@ -212,7 +213,10 @@ func f콜백_신호_처리기(콜백 lb.I콜백) (에러 error) {
 	case lb.P신호_DLL32_접속_끊김:
 		lb.F문자열_출력("%v 접속 끊김 신호 수신", lb.F지금().Format("15:04"))
 		F접속_끊김_설정()
-		go F종료()
+		go func() {
+			F종료()
+			os.Exit(0)
+		}()
 	case lb.P신호_DLL32_종료:
 		lb.F문자열_출력("%v DLL32_종료 신호 수신", lb.F지금().Format("01/02 15:04"))
 		select {
