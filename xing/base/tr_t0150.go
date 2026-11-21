@@ -136,16 +136,16 @@ func NewT0150_현물_당일_매매일지_응답_반복값_모음(b []byte) (값_
 	버퍼 := bytes.NewBuffer(b)
 	수량 := len(b) / SizeT0150OutBlock1
 	값_모음 = make([]*T0150_현물_당일_매매일지_응답_반복값, 0, 수량)
+	g := new(T0150OutBlock1)
 
-	for range 수량 {
-		g := new(T0150OutBlock1)
-		lb.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
+	newT0150_반복값 := func(g *T0150OutBlock1) (값 *T0150_현물_당일_매매일지_응답_반복값) {
+		defer lb.S예외처리{M에러_실행: func() { 값 = nil }, M출력_숨김: new(true)}.S실행()
 
 		if 매도_매수_구분 := lb.F확인2(lb.EUC_KR2Go문자열(g.Medosu)); 매도_매수_구분 == "종목소계" {
-			continue
+			return nil
 		} else if 매도_매수_구분 != "매도" && 매도_매수_구분 != "매수" {
 			lb.F에러_출력("예상하지 못한 매도/매수 구분 : '%v'", 매도_매수_구분)
-			continue
+			return nil
 		}
 
 		매체_구분 := lb.F확인2(lb.EUC_KR2Go문자열(g.Middiv))
@@ -156,11 +156,11 @@ func NewT0150_현물_당일_매매일지_응답_반복값_모음(b []byte) (값_
 		default:
 			if !strings.Contains(매체_구분, "투혼") {
 				lb.F에러_출력("예상하지 못한 매체 구분 : '%v'", 매체_구분)
-				continue
+				return nil
 			}
 		}
 
-		값 := new(T0150_현물_당일_매매일지_응답_반복값)
+		값 = new(T0150_현물_당일_매매일지_응답_반복값)
 		값.M매도_매수_구분 = lb.T매도_매수_구분(0).F해석(g.Medosu)
 		값.M종목코드 = lb.F앞뒤_공백_제거(g.Expcode)
 		값.M수량 = lb.F확인2(lb.F2정수64(g.Qty))
@@ -172,7 +172,15 @@ func NewT0150_현물_당일_매매일지_응답_반복값_모음(b []byte) (값_
 		값.M정산금액 = lb.F확인2(lb.F2정수64(g.Adjamt))
 		값.M매체 = T통신매체구분(0).F해석(g.Middiv)
 
-		값_모음 = append(값_모음, 값)
+		return 값
+	}
+
+	for range 수량 {
+		if 에러 = binary.Read(버퍼, binary.BigEndian, g); 에러 != nil {
+			continue
+		} else if 값 := newT0150_반복값(g); 값 != nil {
+			값_모음 = append(값_모음, 값)
+		}
 	}
 
 	return 값_모음, nil
