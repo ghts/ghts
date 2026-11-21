@@ -147,15 +147,15 @@ func NewT8412_현물_차트_분_응답_반복값_모음(b []byte) (값_모음 *T
 
 	값_모음 = new(T8412_현물_차트_분_응답_반복값_모음)
 	값_모음.M배열 = make([]*T8412_현물_차트_분_응답_반복값, 0, 수량)
+	g := new(T8412OutBlock1)
 
-	for range 수량 {
-		g := new(T8412OutBlock1)
-		lb.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
+	newT8412_반복값 := func(g *T8412OutBlock1) (값 *T8412_현물_차트_분_응답_반복값) {
+		defer lb.S예외처리{M에러_실행: func() { 값 = nil }, M출력_숨김: new(true)}.S실행()
 
 		날짜_문자열 := lb.F앞뒤_공백_제거(g.Date)
 		시각_문자열 := lb.F앞뒤_공백_제거(g.Time[:6])
 
-		값 := new(T8412_현물_차트_분_응답_반복값)
+		값 = new(T8412_현물_차트_분_응답_반복값)
 		값.M일자_시각 = lb.F확인2(lb.F2포맷된_시각("20060102 150405", 날짜_문자열+" "+시각_문자열))
 		값.M시가 = lb.F확인2(lb.F2정수64(g.Open))
 		값.M고가 = lb.F확인2(lb.F2정수64(g.High))
@@ -167,7 +167,15 @@ func NewT8412_현물_차트_분_응답_반복값_모음(b []byte) (값_모음 *T
 		값.M수정비율 = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Rate, 2)
 		값.M종가등락구분 = T전일대비_구분(lb.F확인2(lb.F2정수(g.Sign)))
 
-		값_모음.M배열 = append(값_모음.M배열, 값)
+		return 값
+	}
+
+	for range 수량 {
+		if 에러 = binary.Read(버퍼, binary.BigEndian, g); 에러 != nil {
+			continue
+		} else if 값 := newT8412_반복값(g); 값 != nil {
+			값_모음.M배열 = append(값_모음.M배열, 값)
+		}
 	}
 
 	return 값_모음, nil
