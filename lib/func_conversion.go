@@ -570,11 +570,12 @@ func F2포맷된_시각(포맷 string, 값 any) (time.Time, error) {
 }
 
 func F2포맷된_시각_단순형_공백은_초기값(포맷 string, 값 any) time.Time {
-	if F앞뒤_공백_제거(값) == "" {
+	문자열 := F앞뒤_공백_제거(값)
+	if 문자열 == "" {
 		return time.Time{}
 	}
 
-	return F확인2(F2포맷된_시각(포맷, 값))
+	return F확인2(F2포맷된_시각(포맷, 문자열))
 }
 
 func F2포맷된_일자(포맷 string, 값 any) (time.Time, error) {
