@@ -146,10 +146,10 @@ func NewT1305_현물_기간별_조회_응답_반복값_모음(b []byte) (값_모
 
 	값_모음 = new(T1305_현물_기간별_조회_응답_반복값_모음)
 	값_모음.M배열 = make([]*T1305_현물_기간별_조회_응답_반복값, 0, 수량)
+	g := new(T1305OutBlock1)
 
-	for range 수량 {
-		g := new(T1305OutBlock1)
-		lb.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
+	newT1305_반복값 := func(g *T1305OutBlock1) (값 *T1305_현물_기간별_조회_응답_반복값) {
+		defer lb.S예외처리{M에러_실행: func() { 값 = nil }, M출력_숨김: new(true)}.S실행()
 
 		일자_문자열_원본 := lb.F2문자열(g.Date)
 		일자_문자열_버퍼 := new(bytes.Buffer)
@@ -168,7 +168,7 @@ func NewT1305_현물_기간별_조회_응답_반복값_모음(b []byte) (값_모
 			return T전일대비_구분(0)
 		}
 
-		값 := new(T1305_현물_기간별_조회_응답_반복값)
+		값 = new(T1305_현물_기간별_조회_응답_반복값)
 		값.M종목코드 = lb.F2문자열(g.Shcode)
 		값.M일자 = lb.F확인2(lb.F2포맷된_일자("2006/01/02", 일자_문자열))
 		값.M시가 = lb.F확인2(lb.F2정수64(g.Open))
@@ -198,7 +198,15 @@ func NewT1305_현물_기간별_조회_응답_반복값_모음(b []byte) (값_모
 		값.M개인_순매수 = lb.F확인2(lb.F2정수64_공백은_0(g.Ppvolume))
 		값.M시가총액_백만 = lb.F확인2(lb.F2정수64(g.Marketcap))
 
-		값_모음.M배열 = append(값_모음.M배열, 값)
+		return 값
+	}
+
+	for range 수량 {
+		if 에러 = binary.Read(버퍼, binary.BigEndian, g); 에러 != nil {
+			continue
+		} else if 값 := newT1305_반복값(g); 값 != nil {
+			값_모음.M배열 = append(값_모음.M배열, 값)
+		}
 	}
 
 	return 값_모음, nil
