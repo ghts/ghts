@@ -88,12 +88,12 @@ func NewT1410_초저유동성_조회_응답_반복값_모음(b []byte) (값_모�
 
 	값_모음 = new(T1410_초저유동성_조회_응답_반복값_모음)
 	값_모음.M배열 = make([]*T1410_초저유동성_조회_응답_반복값, 0, 수량)
+	g := new(T1410OutBlock1)
 
-	for range 수량 {
-		g := new(T1410OutBlock1)
-		lb.F확인1(binary.Read(버퍼, binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
+	newT1410_반복값 := func(g *T1410OutBlock1) (값 *T1410_초저유동성_조회_응답_반복값) {
+		defer lb.S예외처리{M에러_실행: func() { 값 = nil }, M출력_숨김: new(true)}.S실행()
 
-		값 := new(T1410_초저유동성_조회_응답_반복값)
+		값 = new(T1410_초저유동성_조회_응답_반복값)
 		값.M종목코드 = lb.F2문자열(g.Shcode)
 		값.M종목명 = lb.F확인2(lb.EUC_KR2Go문자열(g.Hname))
 		값.M현재가 = lb.F확인2(lb.F2정수64(g.Price))
@@ -102,7 +102,15 @@ func NewT1410_초저유동성_조회_응답_반복값_모음(b []byte) (값_모�
 		값.M전일대비_등락율 = 값.M전일대비구분.G부호보정_실수64(lb.F확인2(lb.F2실수_소숫점_추가(g.Diff, 2)))
 		값.M거래량 = lb.F확인2(lb.F2정수64(g.Volume))
 
-		값_모음.M배열 = append(값_모음.M배열, 값)
+		return 값
+	}
+
+	for range 수량 {
+		if 에러 = binary.Read(버퍼, binary.BigEndian, g); 에러 != nil {
+			continue
+		} else if 값 := newT1410_반복값(g); 값 != nil {
+			값_모음.M배열 = append(값_모음.M배열, 값)
+		}
 	}
 
 	return 값_모음, nil
