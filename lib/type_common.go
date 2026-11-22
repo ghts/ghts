@@ -319,13 +319,13 @@ type I문자열_집합 interface {
 
 func New문자열_집합() I문자열_집합 {
 	s := new(s문자열_집합)
-	s.맵 = make(map[string]S비어있음)
+	s.맵 = make(map[string]bool)
 	return s
 }
 
 // 중복 없고 무작위 순서의 문자열 모음.
 type s문자열_집합 struct {
-	맵 map[string]S비어있음
+	맵 map[string]bool
 }
 
 func (s *s문자열_집합) G슬라이스() []string {
@@ -344,16 +344,10 @@ func (s *s문자열_집합) G슬라이스() []string {
 func (s *s문자열_집합) G길이() int { return len(s.맵) }
 
 func (s *s문자열_집합) G포함(값 string) bool {
-	for 문자열 := range s.맵 {
-		if 값 == 문자열 {
-			return true
-		}
-	}
-
-	return false
+	return s.맵[값]
 }
 
-func (s *s문자열_집합) S추가(값 string) { s.맵[값] = S비어있음{} }
+func (s *s문자열_집합) S추가(값 string) { s.맵[값] = true }
 
 func (s *s문자열_집합) S삭제(값 string) { delete(s.맵, 값) }
 
