@@ -134,7 +134,7 @@ func NewCSPAT00800_현물_취소_주문_응답2(b []byte) (s *CSPAT00800_S현물
 	s.M레코드_수량 = lb.F확인2(lb.F2정수(g.RecCnt))
 	s.M주문번호 = lb.F확인2(lb.F2정수64(g.OrdNo))
 	s.M모_주문번호 = lb.F확인2(lb.F2정수64(g.PrntOrdNo))
-	s.M주문시각 = lb.F2금일_6자리_시각(g.OrdTime)
+	s.M주문시각 = f2당일_6자리_시각(g.OrdTime)
 	s.M주문시장_코드 = lb.F조건값(lb.F앞뒤_공백_제거(g.OrdMktCode) == "", P주문시장_코스피, T주문시장구분(lb.F확인2(lb.F2정수64_공백은_0(g.OrdMktCode))))
 	s.M주문유형_코드 = lb.F앞뒤_공백_제거(g.OrdPtnCode)
 	s.M종목코드 = trade.F종목코드_보정(g.ShtnIsuNo)

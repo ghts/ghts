@@ -69,7 +69,7 @@ func NewT1906_ETF_LP_호가_조회_응답(b []byte) (s *T1906_ETF_LP_호가_조�
 
 	s = new(T1906_ETF_LP_호가_조회_응답)
 	s.M종목코드 = trade.F종목코드_보정(g.Shcode)
-	s.M시각 = lb.F2금일_6자리_시각(g.Hotime)
+	s.M시각 = f2당일_6자리_시각_공백은_제로값(g.Hotime)
 	s.M종목명 = lb.F확인2(lb.EUC_KR2Go문자열(g.Hname))
 	s.M현재가 = lb.F확인2(lb.F2정수64(g.Price))
 	s.M전일대비구분 = T전일대비_구분(lb.F확인2(lb.F2정수64(g.Sign)))

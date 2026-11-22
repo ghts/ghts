@@ -3,6 +3,7 @@ package xt
 import (
 	"strings"
 	"testing"
+	"time"
 
 	lb "github.com/ghts/ghts/lib"
 )
@@ -88,4 +89,81 @@ func TestF2수정구분_모음(t *testing.T) {
 			lb.F테스트_같음(t, 실제, testcase.기대값)
 		})
 	}
+}
+
+// f테스트_당일_초기화 : xt 패키지의 TestMain 은 xing.F초기화() 를 호출하지 않아,
+// 패키지 전역 '당일' 이 nil/제로값이다. 시각 헬퍼는 일자 성분을 당일.G값() 에 묶으므로
+// 테스트 전에 금일(F금일) 로 임시 초기화한다. 원래 값이 있으면 회복한다.
+func f테스트_당일_초기화(t *testing.T) {
+	t.Helper()
+	기존 := 당일
+	if 당일 == nil || 당일.G값().IsZero() {
+		당일 = lb.New안전한_시각(lb.F금일())
+		t.Cleanup(func() { 당일 = 기존 })
+	}
+}
+
+// f시간_성분_같음 : 시각-of-day(시/분/초/나노) 성분만 비교한다.
+// 일자·시간대는 당일 임시 초기화 값에 종속되므로 비교 대상에서 제외한다.
+func f시간_성분_같음(t *testing.T, 실제 time.Time, 시, 분, 초, 나노 int) {
+	t.Helper()
+	lb.F테스트_같음(t, 실제.Hour(), 시)
+	lb.F테스트_같음(t, 실제.Minute(), 분)
+	lb.F테스트_같음(t, 실제.Second(), 초)
+	lb.F테스트_같음(t, 실제.Nanosecond(), 나노)
+}
+
+// TestF2당일_6자리_시각_공백은_제로값 : 공백 문자열/6자 미만이면 제로값을 반환하고,
+// 그 외에는 HHMMSSmmm(Xing 시간 필드 포맷) 으로 해석한다. 앞뒤 공백은 제거한다.
+func TestF2당일_6자리_시각_공백은_제로값(t *testing.T) {
+	f테스트_당일_초기화(t)
+
+	tests := []struct {
+		이름          string
+		입력          any
+		제로값         bool
+		시, 분, 초, 나노 int
+	}{
+		{"9자리_HHMMSSmmm", "150405123", false, 15, 4, 5, 123000000},
+		{"尾部_공백_패딩_제거", "150405123 ", false, 15, 4, 5, 123000000},
+		{"전후_공백_제거", "  090000500  ", false, 9, 0, 0, 500000000},
+		{"공백_문자열은_제로값", "", true, 0, 0, 0, 0},
+		{"공백_만은_제로값", "   ", true, 0, 0, 0, 0},
+		{"6자_미만은_제로값", "1504", true, 0, 0, 0, 0},
+	}
+
+	for _, testcase := range tests {
+		t.Run(testcase.이름, func(t *testing.T) {
+			실제 := f2당일_6자리_시각_공백은_제로값(testcase.입력)
+
+			if testcase.제로값 {
+				lb.F테스트_같음(t, 실제.IsZero(), true)
+				return
+			}
+
+			lb.F테스트_같음(t, 실제.IsZero(), false)
+			f시간_성분_같음(t, 실제, testcase.시, testcase.분, testcase.초, testcase.나노)
+		})
+	}
+}
+
+// TestF2당일_6자리_시각 : 공백 문자열/6자 미만이면 panic 하고, 그 외에는 해석한다.
+func TestF2당일_6자리_시각(t *testing.T) {
+	f테스트_당일_초기화(t)
+
+	t.Run("정상_9자리", func(t *testing.T) {
+		실제 := f2당일_6자리_시각("150405123")
+		lb.F테스트_같음(t, 실제.IsZero(), false)
+		f시간_성분_같음(t, 실제, 15, 4, 5, 123000000)
+	})
+
+	t.Run("앞뒤_공백_제거_후_해석", func(t *testing.T) {
+		실제 := f2당일_6자리_시각("  090000500  ")
+		f시간_성분_같음(t, 실제, 9, 0, 0, 500000000)
+	})
+
+	// 공백 문자열과 6자 미만은 정상 처리되지 않아야 하므로 panic 한다.
+	lb.F테스트_패닉_발생(t, f2당일_6자리_시각, "")
+	lb.F테스트_패닉_발생(t, f2당일_6자리_시각, "   ")
+	lb.F테스트_패닉_발생(t, f2당일_6자리_시각, "1504")
 }

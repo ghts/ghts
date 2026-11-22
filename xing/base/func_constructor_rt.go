@@ -26,7 +26,7 @@ func New현물_주문_접수(b []byte) (값 *S현물_주문_응답_실시간_정
 	값.M수량 = lb.F확인2(lb.F2정수64(g.Ordqty))
 	값.M가격 = lb.F확인2(lb.F2정수64(g.Ordprice))
 	값.M잔량 = 0
-	값.M시각 = lb.F2금일_6자리_시각(g.Ordtm)
+	값.M시각 = f2당일_6자리_시각(g.Ordtm)
 
 	return 값, nil
 }
@@ -49,7 +49,7 @@ func New현물_주문_체결(b []byte) (값 *S현물_주문_응답_실시간_정
 	값.M수량 = lb.F확인2(lb.F2정수64(g.Execqty))
 	값.M가격 = lb.F확인2(lb.F2정수64(g.Execprc))
 	값.M잔량 = lb.F확인2(lb.F2정수64(g.Unercqty))
-	값.M시각 = lb.F2금일_6자리_시각(g.Exectime)
+	값.M시각 = f2당일_6자리_시각(g.Exectime)
 
 	return 값, nil
 }
@@ -71,7 +71,7 @@ func New현물_주문_정정(b []byte) (값 *S현물_주문_응답_실시간_정
 	값.M수량 = lb.F확인2(lb.F2정수64(g.Mdfycnfqty))
 	값.M가격 = lb.F확인2(lb.F2정수64(g.Mdfycnfprc))
 	값.M잔량 = lb.F확인2(lb.F2정수64(g.Unercqty))
-	값.M시각 = lb.F2금일_6자리_시각(g.Exectime)
+	값.M시각 = f2당일_6자리_시각(g.Exectime)
 
 	return 값, nil
 }
@@ -92,7 +92,7 @@ func New현물_주문_취소(b []byte) (값 *S현물_주문_응답_실시간_정
 	값.M종목코드 = trade.F종목코드_보정(g.ShtnIsuno)
 	값.M수량 = lb.F확인2(lb.F2정수64(g.Canccnfqty))
 	값.M잔량 = lb.F확인2(lb.F2정수64(g.Orgordunercqty))
-	값.M시각 = lb.F2금일_6자리_시각(g.Exectime)
+	값.M시각 = f2당일_6자리_시각(g.Exectime)
 
 	return 값, nil
 }
@@ -113,7 +113,7 @@ func New현물_주문_거부(b []byte) (값 *S현물_주문_응답_실시간_정
 	값.M종목코드 = trade.F종목코드_보정(g.ShtnIsuno)
 	값.M수량 = lb.F확인2(lb.F2정수64(g.Rjtqty))
 	값.M잔량 = lb.F확인2(lb.F2정수64(g.Unercqty))
-	값.M시각 = lb.F2금일_6자리_시각(g.Exectime)
+	값.M시각 = f2당일_6자리_시각(g.Exectime)
 
 	return 값, nil
 }
@@ -128,7 +128,7 @@ func New코스피_호가_잔량(b []byte) (값 *S호가_잔량_실시간_정보,
 
 	값 = new(S호가_잔량_실시간_정보)
 	값.M종목코드 = trade.F종목코드_보정(g.Shcode)
-	값.M시각 = lb.F확인2(lb.F2금일_시각("150405", g.Hotime))
+	값.M시각 = f2당일_6자리_시각(g.Hotime)
 	값.M동시호가_구분 = T동시호가_구분(lb.F확인2(lb.F2정수64(g.Donsigubun)))
 	값.M배분적용_구분 = lb.F2참거짓(g.Gubun, " ", false)
 	값.M누적_거래량 = lb.F확인2(lb.F2정수64(g.Volume))
@@ -235,7 +235,7 @@ func New코스피_시간외_호가_잔량(b []byte) (값 *S코스피_시간외_�
 
 	값 = new(S코스피_시간외_호가_잔량_실시간_정보)
 	값.M종목코드 = trade.F종목코드_보정(g.Shcode)
-	값.M시각 = lb.F확인2(lb.F2금일_시각("150405", g.Hotime))
+	값.M시각 = f2당일_6자리_시각(g.Hotime)
 	값.M매도잔량 = lb.F확인2(lb.F2정수64(g.Tmofferrem))
 	값.M매수잔량 = lb.F확인2(lb.F2정수64(g.Tmbidrem))
 	값.M매도수량_직전대비 = lb.F확인2(lb.F2정수64(g.Pretmoffercha))
@@ -254,7 +254,7 @@ func New코스닥_호가_잔량(b []byte) (값 *S호가_잔량_실시간_정보,
 
 	값 = new(S호가_잔량_실시간_정보)
 	값.M종목코드 = trade.F종목코드_보정(g.Shcode)
-	값.M시각 = lb.F확인2(lb.F2금일_시각("150405", g.Hotime))
+	값.M시각 = f2당일_6자리_시각(g.Hotime)
 	값.M동시호가_구분 = T동시호가_구분(lb.F확인2(lb.F2정수64(g.Donsigubun)))
 	값.M배분적용_구분 = lb.F2참거짓(g.Gubun, " ", false)
 	값.M누적_거래량 = lb.F확인2(lb.F2정수64(g.Volume))
@@ -361,7 +361,7 @@ func New코스닥_시간외_호가_잔량(b []byte) (값 *S코스닥_시간외_�
 
 	값 = new(S코스닥_시간외_호가_잔량_실시간_정보)
 	값.M종목코드 = trade.F종목코드_보정(g.Shcode)
-	값.M시각 = lb.F확인2(lb.F2금일_시각("150405", g.Hotime))
+	값.M시각 = f2당일_6자리_시각(g.Hotime)
 	값.M매도잔량 = lb.F확인2(lb.F2정수64(g.Tmofferrem))
 	값.M매수잔량 = lb.F확인2(lb.F2정수64(g.Tmbidrem))
 	값.M매도수량_직전대비 = lb.F확인2(lb.F2정수64(g.Pretmoffercha))
@@ -380,16 +380,16 @@ func New코스피_체결(b []byte) (값 *S코스피_체결, 에러 error) {
 
 	값 = new(S코스피_체결)
 	값.M종목코드 = trade.F종목코드_보정(g.Shcode)
-	값.M시각 = lb.F확인2(lb.F2금일_시각("150405", g.Chetime))
+	값.M시각 = f2당일_6자리_시각(g.Chetime)
 	값.M전일대비구분 = T전일대비_구분(lb.F확인2(lb.F2정수64(g.Sign)))
 	값.M전일대비등락폭 = 값.M전일대비구분.G부호보정_정수64(lb.F확인2(lb.F2정수64(g.Change)))
 	값.M전일대비등락율 = 값.M전일대비구분.G부호보정_실수64(lb.F확인2(lb.F2실수(g.Drate)))
 	값.M현재가 = lb.F확인2(lb.F2정수64(g.Price))
-	값.M시가시각 = lb.F확인2(lb.F2금일_시각("150405", g.Opentime))
+	값.M시가시각 = f2당일_6자리_시각(g.Opentime)
 	값.M시가 = lb.F확인2(lb.F2정수64(g.Open))
-	값.M고가시각 = lb.F확인2(lb.F2금일_시각("150405", g.Hightime))
+	값.M고가시각 = f2당일_6자리_시각(g.Hightime)
 	값.M고가 = lb.F확인2(lb.F2정수64(g.High))
-	값.M저가시각 = lb.F확인2(lb.F2금일_시각("150405", g.Lowtime))
+	값.M저가시각 = f2당일_6자리_시각(g.Lowtime)
 	값.M저가 = lb.F확인2(lb.F2정수64(g.Low))
 
 	switch lb.F2문자열(g.Cgubun) {
@@ -440,7 +440,7 @@ func New코스피_예상_체결(b []byte) (값 *S코스피_예상_체결, 에러
 
 	값 = new(S코스피_예상_체결)
 	값.M종목코드 = trade.F종목코드_보정(g.Shcode)
-	값.M시각 = lb.F확인2(lb.F2금일_시각("150405", g.Hotime))
+	값.M시각 = f2당일_6자리_시각(g.Hotime)
 	값.M예상체결가격 = lb.F확인2(lb.F2정수64(g.Yeprice))
 	값.M예상체결수량 = lb.F확인2(lb.F2정수64(g.Yevolume))
 	값.M예상체결가전일종가대비구분 = T전일대비_구분(lb.F확인2(lb.F2정수64(g.Jnilysign)))
@@ -465,16 +465,16 @@ func New코스닥_체결(b []byte) (값 *S코스닥_체결, 에러 error) {
 
 	값 = new(S코스닥_체결)
 	값.M종목코드 = trade.F종목코드_보정(g.Shcode)
-	값.M시각 = lb.F확인2(lb.F2금일_시각("150405", g.Chetime))
+	값.M시각 = f2당일_6자리_시각(g.Chetime)
 	값.M전일대비구분 = T전일대비_구분(lb.F확인2(lb.F2정수64(g.Sign)))
 	값.M전일대비등락폭 = 값.M전일대비구분.G부호보정_정수64(lb.F확인2(lb.F2정수64(g.Change)))
 	값.M전일대비등락율 = 값.M전일대비구분.G부호보정_실수64(lb.F확인2(lb.F2실수(g.Drate)))
 	값.M현재가 = lb.F확인2(lb.F2정수64(g.Price))
-	값.M시가시각 = lb.F확인2(lb.F2금일_시각("150405", g.Opentime))
+	값.M시가시각 = f2당일_6자리_시각(g.Opentime)
 	값.M시가 = lb.F확인2(lb.F2정수64(g.Open))
-	값.M고가시각 = lb.F확인2(lb.F2금일_시각("150405", g.Hightime))
+	값.M고가시각 = f2당일_6자리_시각(g.Hightime)
 	값.M고가 = lb.F확인2(lb.F2정수64(g.High))
-	값.M저가시각 = lb.F확인2(lb.F2금일_시각("150405", g.Lowtime))
+	값.M저가시각 = f2당일_6자리_시각(g.Lowtime)
 	값.M저가 = lb.F확인2(lb.F2정수64(g.Low))
 
 	switch lb.F2문자열(g.Cgubun) {
@@ -525,7 +525,7 @@ func New코스닥_예상_체결(b []byte) (값 *S코스닥_예상_체결, 에러
 
 	값 = new(S코스닥_예상_체결)
 	값.M종목코드 = trade.F종목코드_보정(g.Shcode)
-	값.M시각 = lb.F확인2(lb.F2금일_시각("150405", g.Hotime))
+	값.M시각 = f2당일_6자리_시각(g.Hotime)
 	값.M예상체결가격 = lb.F확인2(lb.F2정수64(g.Yeprice))
 	값.M예상체결수량 = lb.F확인2(lb.F2정수64(g.Yevolume))
 	값.M예상체결가전일종가대비구분 = T전일대비_구분(lb.F확인2(lb.F2정수64(g.Jnilysign)))
@@ -578,7 +578,7 @@ func New주식_VI발동해제(b []byte) (값 *S주식_VI발동해제, 에러 err
 	값 = new(S주식_VI발동해제)
 	값.M종목코드 = trade.F종목코드_보정(g.Shcode)
 	값.M참조코드 = lb.F2문자열(g.Ref_shcode)
-	값.M시각 = lb.F확인2(lb.F2금일_시각("150405", g.Time))
+	값.M시각 = f2당일_6자리_시각(g.Time)
 	값.M구분 = VI발동해제(lb.F확인2(lb.F2정수64(g.Vi_gubun)))
 	값.M정적VI발동_기준가격 = lb.F확인2(lb.F2정수64(g.Svi_recprice))
 	값.M동적VI발동_기준가격 = lb.F확인2(lb.F2정수64(g.Dvi_recprice))
@@ -599,7 +599,7 @@ func New시간외_단일가VI발동해제(b []byte) (값 *S시간외_단일가VI
 	값 = new(S시간외_단일가VI발동해제)
 	값.M종목코드 = trade.F종목코드_보정(g.Shcode)
 	값.M참조코드 = lb.F2문자열(g.Ref_shcode)
-	값.M시각 = lb.F확인2(lb.F2금일_시각("150405", g.Time))
+	값.M시각 = f2당일_6자리_시각(g.Time)
 	값.M구분 = VI발동해제(lb.F확인2(lb.F2정수64(g.Vi_gubun)))
 	값.M정적VI발동_기준가격 = lb.F확인2(lb.F2정수64(g.Svi_recprice))
 	값.M동적VI발동_기준가격 = lb.F확인2(lb.F2정수64(g.Dvi_recprice))
