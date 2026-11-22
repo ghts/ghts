@@ -121,8 +121,6 @@ func NewT0425_현물_체결_미체결_조회_응답_반복값_모음(b []byte) (
 
 	버퍼 := bytes.NewBuffer(b)
 	수량 := len(b) / SizeT0425OutBlock1
-	값_모음 = make([]*T0425_현물_체결_미체결_조회_응답_반복값, 0, 수량)
-	g := new(T0425OutBlock1)
 
 	newT0425_반복값 := func(g *T0425OutBlock1) (값 *T0425_현물_체결_미체결_조회_응답_반복값) {
 		defer lb.S예외처리{M에러_실행: func() { 값 = nil }, M출력_숨김: new(true)}.S실행()
@@ -160,13 +158,7 @@ func NewT0425_현물_체결_미체결_조회_응답_반복값_모음(b []byte) (
 		return 값
 	}
 
-	for range 수량 {
-		if 에러 = binary.Read(버퍼, binary.BigEndian, g); 에러 != nil {
-			continue
-		} else if 값 := newT0425_반복값(g); 값 != nil {
-			값_모음 = append(값_모음, 값)
-		}
-	}
+	값_모음 = f반복값_집계("T0425", 버퍼, 수량, newT0425_반복값)
 
 	return 값_모음, nil
 }

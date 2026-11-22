@@ -1,6 +1,8 @@
 package xt
 
 import (
+	"bytes"
+	"encoding/binary"
 	"os"
 	"reflect"
 	"strconv"
@@ -142,4 +144,31 @@ func F조건부_지정가_호가_적합성_에러_메시지(에러_메시지 str
 		strings.Contains(에러_메시지, "적합성") &&
 		strings.Contains(에러_메시지, "조건부") &&
 		strings.Contains(에러_메시지, "지정가")
+}
+
+// f반복값_집계: 반복값 바이너리 버퍼를 Go 자료형 슬라이스로 집계
+func f반복값_집계[T입력, T결과 any](
+	TR코드 string,
+	버퍼 *bytes.Buffer,
+	수량 int,
+	new반복값 func(*T입력) *T결과,
+) []*T결과 {
+	g := new(T입력)
+	결과_모음 := make([]*T결과, 0, 수량)
+
+	폐기_수량 := 0
+	for range 수량 {
+		if binary.Read(버퍼, binary.BigEndian, g) != nil {
+			continue
+		} else if 값 := new반복값(g); 값 != nil {
+			결과_모음 = append(결과_모음, 값)
+		} else {
+			폐기_수량++
+		}
+	}
+
+	if 폐기_수량 > 0 {
+		lb.F에러_출력("%s 응답 : 파싱 실패로 %d행 폐기", TR코드, 폐기_수량)
+	}
+	return 결과_모음
 }

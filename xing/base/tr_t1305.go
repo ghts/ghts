@@ -145,8 +145,6 @@ func NewT1305_현물_기간별_조회_응답_반복값_모음(b []byte) (값_모
 	수량 := len(b) / SizeT1305OutBlock1
 
 	값_모음 = new(T1305_현물_기간별_조회_응답_반복값_모음)
-	값_모음.M배열 = make([]*T1305_현물_기간별_조회_응답_반복값, 0, 수량)
-	g := new(T1305OutBlock1)
 
 	newT1305_반복값 := func(g *T1305OutBlock1) (값 *T1305_현물_기간별_조회_응답_반복값) {
 		defer lb.S예외처리{M에러_실행: func() { 값 = nil }, M출력_숨김: new(true)}.S실행()
@@ -201,13 +199,7 @@ func NewT1305_현물_기간별_조회_응답_반복값_모음(b []byte) (값_모
 		return 값
 	}
 
-	for range 수량 {
-		if 에러 = binary.Read(버퍼, binary.BigEndian, g); 에러 != nil {
-			continue
-		} else if 값 := newT1305_반복값(g); 값 != nil {
-			값_모음.M배열 = append(값_모음.M배열, 값)
-		}
-	}
+	값_모음.M배열 = f반복값_집계("T1305", 버퍼, 수량, newT1305_반복값)
 
 	return 값_모음, nil
 }

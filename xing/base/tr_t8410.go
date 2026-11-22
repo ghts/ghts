@@ -152,8 +152,6 @@ func NewT8410_현물_차트_일주월년_응답_반복값_모음(b []byte) (값_
 	수량 := len(b) / SizeT8410OutBlock1
 
 	값_모음 = new(T8410_현물_차트_일주월년_응답_반복값_모음)
-	값_모음.M배열 = make([]*T8410_현물_차트_일주월년_응답_반복값, 0, 수량)
-	g := new(T8410OutBlock1)
 
 	newT8410_반복값 := func(g *T8410OutBlock1) (값 *T8410_현물_차트_일주월년_응답_반복값) {
 		defer lb.S예외처리{M에러_실행: func() { 값 = nil }, M출력_숨김: new(true)}.S실행()
@@ -175,13 +173,7 @@ func NewT8410_현물_차트_일주월년_응답_반복값_모음(b []byte) (값_
 		return 값
 	}
 
-	for range 수량 {
-		if 에러 = binary.Read(버퍼, binary.BigEndian, g); 에러 != nil {
-			continue
-		} else if 값 := newT8410_반복값(g); 값 != nil {
-			값_모음.M배열 = append(값_모음.M배열, 값)
-		}
-	}
+	값_모음.M배열 = f반복값_집계("T8410", 버퍼, 수량, newT8410_반복값)
 
 	return 값_모음, nil
 }

@@ -304,8 +304,6 @@ func NewCSPAQ12300_현물계좌_잔고내역_조회_응답_반복값_모음(b []
 
 	버퍼 := bytes.NewBuffer(b)
 	수량 := len(b) / SizeCSPAQ12300OutBlock3
-	값_모음 = make([]*CSPAQ12300_현물계좌_잔고내역_응답_반복값, 0, 수량)
-	g := new(CSPAQ12300OutBlock3)
 
 	newCSPAQ12300_반복값 := func(g *CSPAQ12300OutBlock3) (값 *CSPAQ12300_현물계좌_잔고내역_응답_반복값) {
 		defer lb.S예외처리{M에러_실행: func() { 값 = nil }, M출력_숨김: new(true)}.S실행()
@@ -357,13 +355,7 @@ func NewCSPAQ12300_현물계좌_잔고내역_조회_응답_반복값_모음(b []
 		return 값
 	}
 
-	for range 수량 {
-		if 에러 = binary.Read(버퍼, binary.BigEndian, g); 에러 != nil {
-			continue
-		} else if 값 := newCSPAQ12300_반복값(g); 값 != nil {
-			값_모음 = append(값_모음, 값)
-		}
-	}
+	값_모음 = f반복값_집계("CSPAQ12300", 버퍼, 수량, newCSPAQ12300_반복값)
 
 	return 값_모음, nil
 }
