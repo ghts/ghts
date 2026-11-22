@@ -34,10 +34,10 @@ func F전일() time.Time {
 	return 전일.G값()
 }
 
-func f속성값_초기화(질의값 any) any {
+func f속성값_초기화(질의값 any) {
 	값 := reflect.ValueOf(질의값).Elem()
 
-	for i := 0; i < 값.NumField(); i++ {
+	for i := range 값.NumField() {
 		switch {
 		case !strings.HasPrefix(값.Type().Field(i).Name, "X_"),
 			값.Field(i).Kind() != reflect.Uint8,
@@ -47,8 +47,6 @@ func f속성값_초기화(질의값 any) any {
 
 		값.Field(i).SetUint(0x20)
 	}
-
-	return 값.Interface()
 }
 
 func F서버_구분() T서버_구분 {

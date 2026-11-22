@@ -308,7 +308,5 @@ func NewT1901_ETF_시세_조회_응답(b []byte) (s *T1901_ETF_시세_조회_응
 	s.M지수자산대분류코드 = lb.F확인2(lb.EUC_KR2Go문자열(g.Idx_asset_class1))
 	s.ETF_ETN_투자유의 = lb.F확인2(lb.EUC_KR2Go문자열(g.Ty_text))
 
-	f속성값_초기화(g)
-
 	return s, nil
 }

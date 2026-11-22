@@ -176,7 +176,5 @@ func NewT1101_현물_호가_조회_응답(b []byte) (s *T1101_현물_호가_조�
 	s.KRX중간가잔량합계수량 = lb.F확인2(lb.F2정수64(g.Krx_midsumrem))
 	s.KRX중간가잔량구분 = F2중간가_잔량_구분(g.Krx_midsumremgubun)
 
-	f속성값_초기화(g)
-
 	return s, nil
 }
