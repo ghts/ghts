@@ -26,7 +26,7 @@ func New현물_주문_접수(b []byte) (값 *S현물_주문_응답_실시간_정
 	값.M수량 = lb.F확인2(lb.F2정수64(g.Ordqty))
 	값.M가격 = lb.F확인2(lb.F2정수64(g.Ordprice))
 	값.M잔량 = 0
-	값.M시각 = lb.F2금일_6자리_시각_공백은_0(g.Ordtm)
+	값.M시각 = lb.F2금일_6자리_시각(g.Ordtm)
 
 	return 값, nil
 }
@@ -49,7 +49,7 @@ func New현물_주문_체결(b []byte) (값 *S현물_주문_응답_실시간_정
 	값.M수량 = lb.F확인2(lb.F2정수64(g.Execqty))
 	값.M가격 = lb.F확인2(lb.F2정수64(g.Execprc))
 	값.M잔량 = lb.F확인2(lb.F2정수64(g.Unercqty))
-	값.M시각 = lb.F2금일_6자리_시각_공백은_0(g.Exectime)
+	값.M시각 = lb.F2금일_6자리_시각(g.Exectime)
 
 	return 값, nil
 }
@@ -71,7 +71,7 @@ func New현물_주문_정정(b []byte) (값 *S현물_주문_응답_실시간_정
 	값.M수량 = lb.F확인2(lb.F2정수64(g.Mdfycnfqty))
 	값.M가격 = lb.F확인2(lb.F2정수64(g.Mdfycnfprc))
 	값.M잔량 = lb.F확인2(lb.F2정수64(g.Unercqty))
-	값.M시각 = lb.F2금일_6자리_시각_공백은_0(g.Exectime)
+	값.M시각 = lb.F2금일_6자리_시각(g.Exectime)
 
 	return 값, nil
 }
@@ -92,7 +92,7 @@ func New현물_주문_취소(b []byte) (값 *S현물_주문_응답_실시간_정
 	값.M종목코드 = trade.F종목코드_보정(g.ShtnIsuno)
 	값.M수량 = lb.F확인2(lb.F2정수64(g.Canccnfqty))
 	값.M잔량 = lb.F확인2(lb.F2정수64(g.Orgordunercqty))
-	값.M시각 = lb.F2금일_6자리_시각_공백은_0(g.Exectime)
+	값.M시각 = lb.F2금일_6자리_시각(g.Exectime)
 
 	return 값, nil
 }
@@ -113,7 +113,7 @@ func New현물_주문_거부(b []byte) (값 *S현물_주문_응답_실시간_정
 	값.M종목코드 = trade.F종목코드_보정(g.ShtnIsuno)
 	값.M수량 = lb.F확인2(lb.F2정수64(g.Rjtqty))
 	값.M잔량 = lb.F확인2(lb.F2정수64(g.Unercqty))
-	값.M시각 = lb.F2금일_6자리_시각_공백은_0(g.Exectime)
+	값.M시각 = lb.F2금일_6자리_시각(g.Exectime)
 
 	return 값, nil
 }

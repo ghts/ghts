@@ -138,7 +138,7 @@ func NewT0425_현물_체결_미체결_조회_응답_반복값_모음(b []byte) (
 		값.M상태 = lb.F확인2(lb.EUC_KR2Go문자열(g.Status))
 		값.M원_주문_번호 = lb.F확인2(lb.F2정수64(g.Orgordno))
 		값.M유형 = lb.F확인2(lb.EUC_KR2Go문자열(g.Ordgb))
-		값.M주문_시간 = lb.F2금일_6자리_시각_공백은_0(g.Ordtime)
+		값.M주문_시간 = lb.F2금일_6자리_시각(g.Ordtime)
 		값.M주문_매체 = lb.F확인2(lb.EUC_KR2Go문자열(g.Ordermtd))
 		값.M처리_순번 = lb.F확인2(lb.F2정수64(g.Sysprocseq))
 		값.M호가_유형 = F2호가유형(lb.F확인2(lb.F2정수_공백은_0(g.Hogagb)))
