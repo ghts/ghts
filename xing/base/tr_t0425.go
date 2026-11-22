@@ -125,9 +125,6 @@ func NewT0425_현물_체결_미체결_조회_응답_반복값_모음(b []byte) (
 	newT0425_반복값 := func(g *T0425OutBlock1) (값 *T0425_현물_체결_미체결_조회_응답_반복값) {
 		defer lb.S예외처리{M에러_실행: func() { 값 = nil }, M출력_숨김: new(true)}.S실행()
 
-		주문시간_문자열 := string(g.Ordtime[:])
-		주문시간_문자열 = 주문시간_문자열[:6] + "." + 주문시간_문자열[6:]
-
 		값 = new(T0425_현물_체결_미체결_조회_응답_반복값)
 		값.M주문_번호 = lb.F확인2(lb.F2정수64(g.Ordno))
 		값.M종목코드 = lb.F앞뒤_공백_제거(g.Expcode)
@@ -141,7 +138,7 @@ func NewT0425_현물_체결_미체결_조회_응답_반복값_모음(b []byte) (
 		값.M상태 = lb.F확인2(lb.EUC_KR2Go문자열(g.Status))
 		값.M원_주문_번호 = lb.F확인2(lb.F2정수64(g.Orgordno))
 		값.M유형 = lb.F확인2(lb.EUC_KR2Go문자열(g.Ordgb))
-		값.M주문_시간 = lb.F확인2(lb.F2일자별_시각(당일.G값(), "150405.99", 주문시간_문자열))
+		값.M주문_시간 = lb.F2금일_6자리_시각_공백은_0(g.Ordtime)
 		값.M주문_매체 = lb.F확인2(lb.EUC_KR2Go문자열(g.Ordermtd))
 		값.M처리_순번 = lb.F확인2(lb.F2정수64(g.Sysprocseq))
 		값.M호가_유형 = F2호가유형(lb.F확인2(lb.F2정수_공백은_0(g.Hogagb)))

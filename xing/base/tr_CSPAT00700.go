@@ -154,11 +154,6 @@ func NewCSPAT00700_현물_정정_주문_응답2(b []byte) (s *CSPAT00700_현물_
 		return nil, lb.New에러("NewCSPAT00700_현물_정정_주문_응답2() : 주문번호 생성 에러.")
 	}
 
-	시각_문자열 := lb.F앞뒤_공백_제거(g.OrdTime)
-	if 시각_문자열 != "" {
-		시각_문자열 = lb.F문자열_삽입(lb.F앞뒤_공백_제거(g.OrdTime), ".", 6)
-	}
-
 	if lb.F2문자열(g.LoanDt) == "00000000" {
 		lb.F바이트_복사_문자열(g.LoanDt[:], "")
 	}
@@ -167,7 +162,7 @@ func NewCSPAT00700_현물_정정_주문_응답2(b []byte) (s *CSPAT00700_현물_
 	s.M레코드_수량 = lb.F확인2(lb.F2정수(g.RecCnt))
 	s.M주문번호 = lb.F확인2(lb.F2정수64(g.OrdNo))
 	s.M모_주문번호 = lb.F확인2(lb.F2정수64(g.PrntOrdNo))
-	s.M주문시각 = lb.F2금일_시각_단순형_공백은_초기값("150405.999999", 시각_문자열)
+	s.M주문시각 = lb.F2금일_6자리_시각_공백은_0(g.OrdTime)
 	s.M주문시장_코드 = T주문시장구분(lb.F확인2(lb.F2정수64(g.OrdMktCode)))
 	s.M주문유형_코드 = lb.F앞뒤_공백_제거(g.OrdPtnCode)
 	s.M종목코드 = lb.F앞뒤_공백_제거(g.ShtnIsuNo) // 단축종목번호

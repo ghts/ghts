@@ -17,21 +17,16 @@ func New현물_주문_접수(b []byte) (값 *S현물_주문_응답_실시간_정
 	g := new(SC0_OutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
-	시각_문자열 := lb.F2문자열(g.Ordtm)
-	시각_문자열 = 시각_문자열[:6] + "." + 시각_문자열[6:]
-	시각 := lb.F확인2(lb.F2금일_시각("150405.999", 시각_문자열))
-	종목코드 := trade.F종목코드_보정(lb.F앞뒤_공백_제거(g.Shtcode))
-
 	값 = new(S현물_주문_응답_실시간_정보)
 	값.M주문번호 = lb.F확인2(lb.F2정수64(g.Ordno))
 	값.M원_주문번호 = lb.F확인2(lb.F2정수64_공백은_0(g.Orgordno))
 	값.RT코드 = RT현물_주문_접수_SC0
 	값.M응답_구분 = F2주문_응답_구분(g.Trcode)
-	값.M종목코드 = 종목코드
+	값.M종목코드 = trade.F종목코드_보정(g.Shtcode)
 	값.M수량 = lb.F확인2(lb.F2정수64(g.Ordqty))
 	값.M가격 = lb.F확인2(lb.F2정수64(g.Ordprice))
 	값.M잔량 = 0
-	값.M시각 = 시각
+	값.M시각 = lb.F2금일_6자리_시각_공백은_0(g.Ordtm)
 
 	return 값, nil
 }
@@ -45,21 +40,16 @@ func New현물_주문_체결(b []byte) (값 *S현물_주문_응답_실시간_정
 	g := new(SC1_OutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
-	시각_문자열 := lb.F2문자열(g.Exectime)
-	시각_문자열 = 시각_문자열[:6] + "." + 시각_문자열[6:]
-	시각 := lb.F확인2(lb.F2금일_시각("150405.999", 시각_문자열))
-	종목코드 := trade.F종목코드_보정(lb.F앞뒤_공백_제거(g.ShtnIsuno))
-
 	값 = new(S현물_주문_응답_실시간_정보)
 	값.M주문번호 = lb.F확인2(lb.F2정수64(g.Ordno))
 	값.M원_주문번호 = lb.F확인2(lb.F2정수64(g.Orgordno))
 	값.RT코드 = RT현물_주문_체결_SC1
 	값.M응답_구분 = F2주문_응답_구분(g.Trcode)
-	값.M종목코드 = 종목코드
+	값.M종목코드 = trade.F종목코드_보정(g.ShtnIsuno)
 	값.M수량 = lb.F확인2(lb.F2정수64(g.Execqty))
 	값.M가격 = lb.F확인2(lb.F2정수64(g.Execprc))
 	값.M잔량 = lb.F확인2(lb.F2정수64(g.Unercqty))
-	값.M시각 = 시각
+	값.M시각 = lb.F2금일_6자리_시각_공백은_0(g.Exectime)
 
 	return 값, nil
 }
@@ -72,21 +62,16 @@ func New현물_주문_정정(b []byte) (값 *S현물_주문_응답_실시간_정
 	g := new(SC2_OutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
-	시각_문자열 := lb.F2문자열(g.Exectime)
-	시각_문자열 = 시각_문자열[:6] + "." + 시각_문자열[6:]
-	시각 := lb.F확인2(lb.F2금일_시각("150405.999", 시각_문자열))
-	종목코드 := trade.F종목코드_보정(lb.F앞뒤_공백_제거(g.ShtnIsuno))
-
 	값 = new(S현물_주문_응답_실시간_정보)
 	값.M주문번호 = lb.F확인2(lb.F2정수64(g.Ordno))
 	값.M원_주문번호 = lb.F확인2(lb.F2정수64(g.Orgordno))
 	값.RT코드 = RT현물_주문_정정_SC2
 	값.M응답_구분 = F2주문_응답_구분(g.Trcode)
-	값.M종목코드 = 종목코드
+	값.M종목코드 = trade.F종목코드_보정(g.ShtnIsuno)
 	값.M수량 = lb.F확인2(lb.F2정수64(g.Mdfycnfqty))
 	값.M가격 = lb.F확인2(lb.F2정수64(g.Mdfycnfprc))
 	값.M잔량 = lb.F확인2(lb.F2정수64(g.Unercqty))
-	값.M시각 = 시각
+	값.M시각 = lb.F2금일_6자리_시각_공백은_0(g.Exectime)
 
 	return 값, nil
 }
@@ -99,20 +84,15 @@ func New현물_주문_취소(b []byte) (값 *S현물_주문_응답_실시간_정
 	g := new(SC3_OutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
-	시각_문자열 := lb.F2문자열(g.Exectime)
-	시각_문자열 = 시각_문자열[:6] + "." + 시각_문자열[6:]
-	시각 := lb.F확인2(lb.F2금일_시각("150405.999", 시각_문자열))
-	종목코드 := trade.F종목코드_보정(lb.F앞뒤_공백_제거(g.ShtnIsuno))
-
 	값 = new(S현물_주문_응답_실시간_정보)
 	값.M주문번호 = lb.F확인2(lb.F2정수64(g.Ordno))
 	값.M원_주문번호 = lb.F확인2(lb.F2정수64(g.Orgordno))
 	값.RT코드 = RT현물_주문_취소_SC3
 	값.M응답_구분 = F2주문_응답_구분(g.Trcode)
-	값.M종목코드 = 종목코드
+	값.M종목코드 = trade.F종목코드_보정(g.ShtnIsuno)
 	값.M수량 = lb.F확인2(lb.F2정수64(g.Canccnfqty))
 	값.M잔량 = lb.F확인2(lb.F2정수64(g.Orgordunercqty))
-	값.M시각 = 시각
+	값.M시각 = lb.F2금일_6자리_시각_공백은_0(g.Exectime)
 
 	return 값, nil
 }
@@ -125,20 +105,15 @@ func New현물_주문_거부(b []byte) (값 *S현물_주문_응답_실시간_정
 	g := new(SC4_OutBlock)
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
-	시각_문자열 := lb.F2문자열(g.Exectime)
-	시각_문자열 = 시각_문자열[:6] + "." + 시각_문자열[6:]
-	시각 := lb.F확인2(lb.F2금일_시각("150405.999", 시각_문자열))
-	종목코드 := trade.F종목코드_보정(lb.F앞뒤_공백_제거(g.ShtnIsuno))
-
 	값 = new(S현물_주문_응답_실시간_정보)
 	값.M주문번호 = lb.F확인2(lb.F2정수64(g.Ordno))
 	값.M원_주문번호 = lb.F확인2(lb.F2정수64(g.Orgordno))
 	값.RT코드 = RT현물_주문_거부_SC4
 	값.M응답_구분 = F2주문_응답_구분(g.Trcode)
-	값.M종목코드 = 종목코드
+	값.M종목코드 = trade.F종목코드_보정(g.ShtnIsuno)
 	값.M수량 = lb.F확인2(lb.F2정수64(g.Rjtqty))
 	값.M잔량 = lb.F확인2(lb.F2정수64(g.Unercqty))
-	값.M시각 = 시각
+	값.M시각 = lb.F2금일_6자리_시각_공백은_0(g.Exectime)
 
 	return 값, nil
 }

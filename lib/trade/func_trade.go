@@ -328,8 +328,8 @@ func F기간(시작일, 종료일 uint32) int {
 	return int(종료.Sub(시작).Hours() / 24)
 }
 
-func F종목코드_보정(종목코드 string) string {
-	종목코드 = lb.F앞뒤_공백_제거(종목코드)
+func F종목코드_보정(값 any) string {
+	종목코드 := lb.F앞뒤_공백_제거(값)
 
 	if len(종목코드) == 7 && strings.HasPrefix(종목코드, "A") {
 		return 종목코드[1:]
