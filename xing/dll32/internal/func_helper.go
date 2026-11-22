@@ -31,6 +31,12 @@ func XingAPI디렉토리() (string, error) {
 	}
 
 	for _, 드라이브 := range []string{`C:\`, `D:\`, `E:\`} {
+		if _, 에러 := os.Stat(드라이브); 에러 != nil {
+			continue // 존재하지 않는 드라이브는 탐색을 건너뛴다.
+		}
+
+		lb.F문자열_출력("DLL 검색 중 : %s", 드라이브)
+
 		파일경로, 에러 = lb.F파일_검색(드라이브, xing_dll)
 
 		if 에러 == nil {
