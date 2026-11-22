@@ -6,6 +6,7 @@ import (
 	"time"
 
 	lb "github.com/ghts/ghts/lib"
+	trade "github.com/ghts/ghts/lib/trade"
 )
 
 // t1906 ETF LP 호가 조회 응답
@@ -67,14 +68,8 @@ func NewT1906_ETF_LP_호가_조회_응답(b []byte) (s *T1906_ETF_LP_호가_조�
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	s = new(T1906_ETF_LP_호가_조회_응답)
-	s.M종목코드 = lb.F앞뒤_공백_제거(g.Shcode)
-
-	if 시각_문자열 := lb.F앞뒤_공백_제거(g.Hotime); len(시각_문자열) <= 6 {
-		s.M시각 = time.Time{}
-	} else {
-		s.M시각 = lb.F2일자별_시각_단순형_공백은_초기값(당일.G값(), "150405.999", 시각_문자열[:6]+"."+시각_문자열[6:])
-	}
-
+	s.M종목코드 = trade.F종목코드_보정(g.Shcode)
+	s.M시각 = lb.F2금일_6자리_시각(g.Hotime)
 	s.M종목명 = lb.F확인2(lb.EUC_KR2Go문자열(g.Hname))
 	s.M현재가 = lb.F확인2(lb.F2정수64(g.Price))
 	s.M전일대비구분 = T전일대비_구분(lb.F확인2(lb.F2정수64(g.Sign)))

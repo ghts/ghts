@@ -6,6 +6,7 @@ import (
 	"time"
 
 	lb "github.com/ghts/ghts/lib"
+	trade "github.com/ghts/ghts/lib/trade"
 )
 
 type T1101_현물_호가_조회_응답 struct {
@@ -66,7 +67,7 @@ func NewT1101_현물_호가_조회_응답(b []byte) (s *T1101_현물_호가_조�
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	s = new(T1101_현물_호가_조회_응답)
-	s.M종목코드 = lb.F앞뒤_공백_제거(g.Shcode)
+	s.M종목코드 = trade.F종목코드_보정(g.Shcode)
 
 	if 시각_문자열 := lb.F앞뒤_공백_제거(g.Hotime); len(시각_문자열) <= 6 {
 		s.M시각 = time.Time{}

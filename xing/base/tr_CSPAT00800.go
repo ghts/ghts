@@ -3,10 +3,10 @@ package xt
 import (
 	"bytes"
 	"encoding/binary"
-	"strings"
 	"time"
 
 	lb "github.com/ghts/ghts/lib"
+	trade "github.com/ghts/ghts/lib/trade"
 )
 
 type CSPAT00800_현물_취소_주문_응답 struct {
@@ -99,7 +99,7 @@ func NewCSPAT00800_현물_취소_주문_응답1(b []byte) (s *CSPAT00800_현물_
 	s.M원_주문번호 = lb.F확인2(lb.F2정수64(g.OrgOrdNo))
 	s.M계좌번호 = lb.F앞뒤_공백_제거(g.AcntNo)
 	//s.M계좌_비밀번호 = lb.F2문자열_공백_제거(g.InptPwd)
-	s.M종목코드 = lb.F앞뒤_공백_제거(g.IsuNo)
+	s.M종목코드 = trade.F종목코드_보정(g.IsuNo)
 	s.M주문수량 = lb.F확인2(lb.F2정수64(g.OrdQty))
 	s.M통신매체_코드 = lb.F앞뒤_공백_제거(g.CommdaCode)
 	s.M그룹ID = lb.F앞뒤_공백_제거(g.GrpId)
@@ -137,7 +137,7 @@ func NewCSPAT00800_현물_취소_주문_응답2(b []byte) (s *CSPAT00800_S현물
 	s.M주문시각 = lb.F2금일_6자리_시각(g.OrdTime)
 	s.M주문시장_코드 = lb.F조건값(lb.F앞뒤_공백_제거(g.OrdMktCode) == "", P주문시장_코스피, T주문시장구분(lb.F확인2(lb.F2정수64_공백은_0(g.OrdMktCode))))
 	s.M주문유형_코드 = lb.F앞뒤_공백_제거(g.OrdPtnCode)
-	s.M종목코드 = lb.F앞뒤_공백_제거(g.ShtnIsuNo)
+	s.M종목코드 = trade.F종목코드_보정(g.ShtnIsuNo)
 	s.M공매도_호가구분 = lb.F앞뒤_공백_제거(g.StslOrdprcTpCode)
 	s.M공매도_가능 = lb.F문자열_비교(g.StslAbleYn, "Y", true)
 	s.M신용거래_코드 = T신용거래_구분(lb.F확인2(lb.F2정수64_공백은_0(g.MgntrnCode)))
@@ -150,10 +150,6 @@ func NewCSPAT00800_현물_취소_주문_응답2(b []byte) (s *CSPAT00800_S현물
 	s.M예약_주문번호 = lb.F확인2(lb.F2정수64_공백은_0(g.RsvOrdNo))
 	s.M계좌명 = lb.F앞뒤_공백_제거(g.AcntNm)
 	s.M종목명 = lb.F앞뒤_공백_제거(g.IsuNm)
-
-	if strings.HasPrefix(s.M종목코드, "A") {
-		s.M종목코드 = s.M종목코드[1:]
-	}
 
 	return s, nil
 }

@@ -3,10 +3,10 @@ package xt
 import (
 	"bytes"
 	"encoding/binary"
-	"strings"
 	"time"
 
 	lb "github.com/ghts/ghts/lib"
+	trade "github.com/ghts/ghts/lib/trade"
 )
 
 type CSPAQ12300_현물계좌_잔고내역_질의값 struct {
@@ -309,7 +309,7 @@ func NewCSPAQ12300_현물계좌_잔고내역_조회_응답_반복값_모음(b []
 		defer lb.S예외처리{M에러_실행: func() { 값 = nil }, M출력_숨김: new(true)}.S실행()
 
 		값 = new(CSPAQ12300_현물계좌_잔고내역_응답_반복값)
-		값.M종목코드 = strings.Replace(lb.F앞뒤_공백_제거(g.IsuNo), "A", "", 1)
+		값.M종목코드 = trade.F종목코드_보정(g.IsuNo)
 		값.M종목명 = lb.F확인2(lb.EUC_KR2Go문자열(g.IsuNm))
 		값.M유가증권잔고유형코드 = lb.F2문자열(g.SecBalPtnCode)
 		값.M유가증권잔고유형명 = lb.F확인2(lb.EUC_KR2Go문자열(g.SecBalPtnNm))

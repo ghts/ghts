@@ -7,6 +7,7 @@ import (
 	"time"
 
 	lb "github.com/ghts/ghts/lib"
+	trade "github.com/ghts/ghts/lib/trade"
 )
 
 type CSPAT00600_현물_정상_주문_질의값 struct {
@@ -146,7 +147,7 @@ func NewCSPAT00600_현물_정상_주문_응답1(b []byte) (s *CSPAT00600_현물_
 	s = new(CSPAT00600_현물_정상_주문_응답1)
 	s.M레코드_수량 = lb.F확인2(lb.F2정수(g.RecCnt))
 	s.M계좌번호 = lb.F앞뒤_공백_제거(g.AcntNo)
-	s.M종목코드 = lb.F앞뒤_공백_제거(g.IsuNo)
+	s.M종목코드 = trade.F종목코드_보정(g.IsuNo)
 	s.M주문수량 = lb.F확인2(lb.F2정수64(g.OrdQty))
 	s.M주문가격 = lb.F확인2(lb.F2정수64(g.OrdPrc))
 	s.M매도_매수_구분 = lb.T매도_매수_구분(lb.F확인2(lb.F2정수(g.BnsTpCode)))
@@ -191,7 +192,7 @@ func NewCSPAT00600_현물_정상_주문_응답2(b []byte) (s *CSPAT00600_현물_
 	s.M주문시각 = lb.F2금일_6자리_시각(g.OrdTime)
 	s.M주문시장_코드 = T주문시장구분(lb.F확인2(lb.F2정수(g.OrdMktCode)))
 	s.M주문유형_코드 = lb.F앞뒤_공백_제거(g.OrdPtnCode)
-	s.M종목코드 = lb.F앞뒤_공백_제거(g.ShtnIsuNo)
+	s.M종목코드 = trade.F종목코드_보정(g.ShtnIsuNo)
 	s.M관리사원_번호 = lb.F앞뒤_공백_제거(g.MgempNo)
 	s.M주문금액 = lb.F확인2(lb.F2정수64(g.OrdAmt))
 	s.M예비_주문번호 = lb.F확인2(lb.F2정수64(g.SpareOrdNo))

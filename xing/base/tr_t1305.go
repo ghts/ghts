@@ -6,6 +6,7 @@ import (
 	"time"
 
 	lb "github.com/ghts/ghts/lib"
+	trade "github.com/ghts/ghts/lib/trade"
 )
 
 // t1305 기간별 주가
@@ -167,7 +168,7 @@ func NewT1305_현물_기간별_조회_응답_반복값_모음(b []byte) (값_모
 		}
 
 		값 = new(T1305_현물_기간별_조회_응답_반복값)
-		값.M종목코드 = lb.F2문자열(g.Shcode)
+		값.M종목코드 = trade.F종목코드_보정(g.Shcode)
 		값.M일자 = lb.F확인2(lb.F2포맷된_일자("2006/01/02", 일자_문자열))
 		값.M시가 = lb.F확인2(lb.F2정수64(g.Open))
 		값.M고가 = lb.F확인2(lb.F2정수64(g.High))

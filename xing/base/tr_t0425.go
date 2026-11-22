@@ -8,6 +8,7 @@ import (
 	"time"
 
 	lb "github.com/ghts/ghts/lib"
+	trade "github.com/ghts/ghts/lib/trade"
 )
 
 type T0425_현물_체결_미체결_조회_질의값 struct {
@@ -127,7 +128,7 @@ func NewT0425_현물_체결_미체결_조회_응답_반복값_모음(b []byte) (
 
 		값 = new(T0425_현물_체결_미체결_조회_응답_반복값)
 		값.M주문_번호 = lb.F확인2(lb.F2정수64(g.Ordno))
-		값.M종목코드 = lb.F앞뒤_공백_제거(g.Expcode)
+		값.M종목코드 = trade.F종목코드_보정(g.Expcode)
 		값.M매매_구분 = lb.F확인2(lb.EUC_KR2Go문자열(g.Medosu))
 		값.M주문_수량 = lb.F확인2(lb.F2정수64(g.Qty))
 		값.M주문_가격 = lb.F확인2(lb.F2정수64(g.Price))

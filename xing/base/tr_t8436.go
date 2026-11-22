@@ -4,6 +4,7 @@ import (
 	"bytes"
 
 	lb "github.com/ghts/ghts/lib"
+	trade "github.com/ghts/ghts/lib/trade"
 )
 
 type T8436_현물_종목조회_응답_반복값 struct {
@@ -51,7 +52,7 @@ func NewT8436_현물_종목조회_응답_반복값_모음(b []byte) (값_모음 
 
 		값 = new(T8436_현물_종목조회_응답_반복값)
 		값.M종목명 = lb.F확인2(lb.EUC_KR2Go문자열(g.Hname))
-		값.M종목코드 = lb.F앞뒤_공백_제거(g.Shcode)
+		값.M종목코드 = trade.F종목코드_보정(g.Shcode)
 		//s.M주문수량단위 = lb.F확인2(lb.F2정수(g.MeMeDan))
 		값.M상한가 = lb.F확인2(lb.F2정수64(g.Uplmtprice))
 		값.M하한가 = lb.F확인2(lb.F2정수64(g.Dnlmtprice))

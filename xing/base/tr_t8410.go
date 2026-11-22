@@ -7,6 +7,7 @@ import (
 	"time"
 
 	lb "github.com/ghts/ghts/lib"
+	trade "github.com/ghts/ghts/lib/trade"
 )
 
 type T8410_현물_차트_일주월년_질의값 struct {
@@ -119,7 +120,7 @@ func NewT8410_현물_차트_일주월년_응답_헤더(b []byte) (값 *T8410_현
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	값 = new(T8410_현물_차트_일주월년_응답_헤더)
-	값.M종목코드 = lb.F2문자열(g.Shcode)
+	값.M종목코드 = trade.F종목코드_보정(g.Shcode)
 	값.M전일시가 = lb.F확인2(lb.F2정수64(g.Jisiga))
 	값.M전일고가 = lb.F확인2(lb.F2정수64(g.Jihigh))
 	값.M전일저가 = lb.F확인2(lb.F2정수64(g.Jilow))

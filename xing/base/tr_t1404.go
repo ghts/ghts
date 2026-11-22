@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	lb "github.com/ghts/ghts/lib"
+	trade "github.com/ghts/ghts/lib/trade"
 
 	"time"
 )
@@ -103,7 +104,7 @@ func NewT1404_관리종목_조회_응답_반복값_모음(b []byte) (값_모음 
 		defer lb.S예외처리{M에러_실행: func() { 값 = nil }, M출력_숨김: new(true)}.S실행()
 
 		값 = new(T1404_관리종목_조회_응답_반복값)
-		값.M종목코드 = lb.F2문자열(g.Shcode)
+		값.M종목코드 = trade.F종목코드_보정(g.Shcode)
 		값.M종목명 = lb.F확인2(lb.EUC_KR2Go문자열(g.Hname))
 		값.M현재가 = lb.F확인2(lb.F2정수64(g.Price))
 		값.M전일대비구분 = T전일대비_구분(lb.F확인2(lb.F2정수64(g.Sign)))

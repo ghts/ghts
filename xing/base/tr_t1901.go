@@ -6,6 +6,7 @@ import (
 	"time"
 
 	lb "github.com/ghts/ghts/lib"
+	trade "github.com/ghts/ghts/lib/trade"
 )
 
 // t1901 ETF 시세 조회 응답
@@ -127,7 +128,7 @@ func NewT1901_ETF_시세_조회_응답(b []byte) (s *T1901_ETF_시세_조회_응
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	s = new(T1901_ETF_시세_조회_응답)
-	s.M종목코드 = lb.F앞뒤_공백_제거(g.Shcode)
+	s.M종목코드 = trade.F종목코드_보정(g.Shcode)
 	s.M종목명 = lb.F확인2(lb.EUC_KR2Go문자열(g.Hname))
 	s.M현재가 = lb.F확인2(lb.F2정수64(g.Price))
 	s.M전일대비구분 = T전일대비_구분(lb.F확인2(lb.F2정수64(g.Sign)))

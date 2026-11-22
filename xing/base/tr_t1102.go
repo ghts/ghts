@@ -6,6 +6,7 @@ import (
 	"time"
 
 	lb "github.com/ghts/ghts/lib"
+	trade "github.com/ghts/ghts/lib/trade"
 )
 
 type T1102_현물_시세_조회_질의값 struct {
@@ -157,7 +158,7 @@ func NewT1102_현물_시세_조회_응답(b []byte) (s *T1102_현물_시세_조�
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	s = new(T1102_현물_시세_조회_응답)
-	s.M종목코드 = lb.F앞뒤_공백_제거(g.Shcode)
+	s.M종목코드 = trade.F종목코드_보정(g.Shcode)
 	s.M일자 = 당일.G값()
 	s.M종목명 = lb.F확인2(lb.EUC_KR2Go문자열(g.Hname))
 	s.M현재가 = lb.F확인2(lb.F2정수64(g.Price))

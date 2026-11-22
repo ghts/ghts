@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	lb "github.com/ghts/ghts/lib"
+	trade "github.com/ghts/ghts/lib/trade"
 )
 
 type T3341_재무순위_질의값 struct {
@@ -130,7 +131,7 @@ func NewT3341_재무순위_응답_반복값_모음(b []byte) (값_모음 *T3341_
 		defer lb.S예외처리{M에러_실행: func() { 값 = nil }, M출력_숨김: new(true)}.S실행()
 
 		값 = new(T3341_재무순위_응답_반복값)
-		값.M종목코드 = lb.F2문자열(g.Shcode)
+		값.M종목코드 = trade.F종목코드_보정(g.Shcode)
 		값.M순위 = lb.F확인2(lb.F2정수(g.Rank))
 		값.M기업명 = lb.F확인2(lb.EUC_KR2Go문자열(g.Hname))
 		값.M매출액_증가율 = lb.F확인2(lb.F2실수_소숫점_추가_공백은_0(g.Salesgrowth, 2))

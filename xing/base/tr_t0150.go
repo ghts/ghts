@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	lb "github.com/ghts/ghts/lib"
+	trade "github.com/ghts/ghts/lib/trade"
 )
 
 type T0150_현물_당일_매매일지_질의값 struct {
@@ -160,7 +161,7 @@ func NewT0150_현물_당일_매매일지_응답_반복값_모음(b []byte) (값_
 
 		값 = new(T0150_현물_당일_매매일지_응답_반복값)
 		값.M매도_매수_구분 = lb.T매도_매수_구분(0).F해석(g.Medosu)
-		값.M종목코드 = lb.F앞뒤_공백_제거(g.Expcode)
+		값.M종목코드 = trade.F종목코드_보정(g.Expcode)
 		값.M수량 = lb.F확인2(lb.F2정수64(g.Qty))
 		값.M단가 = lb.F확인2(lb.F2정수64(g.Price))
 		값.M약정금액 = lb.F확인2(lb.F2정수64(g.Amt))

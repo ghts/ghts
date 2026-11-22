@@ -7,6 +7,7 @@ import (
 	"time"
 
 	lb "github.com/ghts/ghts/lib"
+	trade "github.com/ghts/ghts/lib/trade"
 )
 
 type CSPAQ13700_현물계좌_주문체결내역_질의값 struct {
@@ -139,7 +140,7 @@ func NewCSPAQ13700_현물계좌_주문체결내역_헤더1(b []byte) (값 *CSPAQ
 	값.M계좌번호 = lb.F앞뒤_공백_제거(g.AcntNo)
 	값.M주문시장코드 = lb.F2문자열(g.OrdMktCode)
 	값.M매매구분 = lb.F2문자열(g.BnsTpCode)
-	값.M종목코드 = lb.F앞뒤_공백_제거(g.IsuNo)
+	값.M종목코드 = trade.F종목코드_보정(g.IsuNo)
 	값.M체결여부 = lb.F2문자열(g.ExecYn)
 	값.M주문일 = lb.F확인2(lb.F2포맷된_일자("20060102", g.OrdDt))
 	값.M연속키 = lb.F확인2(lb.F2정수64(g.SrtOrdNo2))
@@ -191,7 +192,7 @@ func NewCSPAQ13700_현물계좌_주문체결내역_반복값_모음(b []byte) (�
 		값.M주문시장코드 = lb.F2문자열(g.OrdMktCode)
 		값.M주문번호 = lb.F확인2(lb.F2정수64_공백은_0(g.OrdNo))
 		값.M원주문번호 = lb.F확인2(lb.F2정수64_공백은_0(g.OrgOrdNo))
-		값.M종목코드 = lb.F앞뒤_공백_제거(g.IsuNo)
+		값.M종목코드 = trade.F종목코드_보정(g.IsuNo)
 		값.M종목명 = lb.F확인2(lb.EUC_KR2Go문자열(g.IsuNm))
 
 		switch lb.F2문자열(g.BnsTpCode) {
