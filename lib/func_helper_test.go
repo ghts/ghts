@@ -210,7 +210,7 @@ func TestF파일경로_검색(t *testing.T) {
 		파일명 = "go"
 	}
 
-	파일경로, 에러 := F파일_검색(filepath.Join(GOROOT(), "bin"), 파일명)
+	파일경로, 에러 := F파일_검색(filepath.Join(GOROOT(), "bin"), 파일명, P1분)
 	F테스트_에러없음(t, 에러)
 	F테스트_다름(t, strings.TrimSpace(파일경로), "")
 	F테스트_참임(t, strings.HasSuffix(파일경로, 파일명))

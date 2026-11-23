@@ -37,7 +37,8 @@ func XingAPI디렉토리() (string, error) {
 
 		lb.F문자열_출력("DLL 검색 중 : %s", 드라이브)
 
-		파일경로, 에러 = lb.F파일_검색(드라이브, xing_dll)
+		// 드라이브 전체(WalkDir) 탐색은 오래 걸릴 수 있어서 타임아웃 길게 설정.
+		파일경로, 에러 = lb.F파일_검색(드라이브, xing_dll, lb.P3분)
 
 		if 에러 == nil {
 			lb.F실행경로_추가(파일경로)

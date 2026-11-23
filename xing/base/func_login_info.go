@@ -35,12 +35,12 @@ func F로그인_설정_화일_경로() (경로 string, 에러 error) {
 		}
 	}
 
-	if 경로, 에러 = lb.F파일_검색(filepath.Join(lb.GOPATH(), "src", "github.com", "ghts"), P로그인_정보_화일명); 에러 == nil {
+	if 경로, 에러 = lb.F파일_검색(filepath.Join(lb.GOPATH(), "src", "github.com", "ghts"), P로그인_정보_화일명, lb.P1분); 에러 == nil {
 		return 경로, nil // 개발 환경
 	}
 
-	// 최후의 방법으로 Go루트 소스 디렉토리 검색
-	return lb.F파일_검색(filepath.Join(lb.GOPATH(), "src"), P로그인_정보_화일명)
+	// 최후의 방법으로 Go루트 소스 디렉토리 검색 (GOPATH 한정이라 탐색 범위가 작아 1분으로 충분)
+	return lb.F파일_검색(filepath.Join(lb.GOPATH(), "src"), P로그인_정보_화일명, lb.P1분)
 }
 
 func F로그인_정보_문자열_읽기(로그인_정보_화일_경로 string) (로그인_정보_문자열 string, 에러 error) {

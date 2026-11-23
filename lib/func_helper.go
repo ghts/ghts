@@ -743,8 +743,8 @@ func F실행파일_검색(파일명 string) (경로 string, 에러 error) {
 	return exec.LookPath(파일명)
 }
 
-func F파일_검색(검색_시작_디렉토리, 파일명 string) (string, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), P1분)
+func F파일_검색(검색_시작_디렉토리, 파일명 string, 기간 time.Duration) (string, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 기간)
 	defer cancel()
 
 	파일명_소문자 := strings.ToLower(파일명)
