@@ -22,14 +22,6 @@ func F전일() time.Time {
 	return xt.F전일()
 }
 
-func F2전일_시각(포맷 string, 값 any) (time.Time, error) {
-	return lb.F2일자별_시각(F전일(), 포맷, 값)
-}
-
-func F2당일_시각(포맷 string, 값 any) (time.Time, error) {
-	return lb.F2일자별_시각(F당일(), 포맷, 값)
-}
-
 func f에러_발생(TR코드, 코드, 내용 string) bool {
 	switch TR코드 {
 	case xt.TR현물_정상_주문_CSPAT00600:
