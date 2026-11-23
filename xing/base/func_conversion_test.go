@@ -1,6 +1,8 @@
 package xt
 
 import (
+	"bytes"
+	"log"
 	"strings"
 	"testing"
 	"time"
@@ -88,6 +90,28 @@ func TestF2수정구분_모음(t *testing.T) {
 			lb.F테스트_에러없음(t, 에러)
 			lb.F테스트_같음(t, 실제, testcase.기대값)
 		})
+	}
+}
+
+func TestF2수정구분_모음_알려지지_않은_값(t *testing.T) {
+	var 버퍼 bytes.Buffer
+	기존_출력 := log.Writer()
+	log.SetOutput(&버퍼)
+	t.Cleanup(func() { log.SetOutput(기존_출력) })
+
+	// 정의된 비트(권리락) 하나와 정의되지 않은 고비트(2^32)를 동시에 보낸다.
+	미정의_비트 := int64(1) << 32
+	입력 := int64(P수정구분_권리락) | 미정의_비트
+
+	실제, 에러 := F2수정구분_모음(입력)
+	lb.F테스트_에러없음(t, 에러)
+	// 미정의 비트는 제외되고 정의된 비트만 분해되어야 한다.
+	lb.F테스트_같음(t, 실제, []T수정구분{P수정구분_권리락})
+
+	// 경고 로그에 미정의 비트 감지 메시지가 포함되어야 한다.
+	출력된_로그 := 버퍼.String()
+	if !strings.Contains(출력된_로그, "예상하지 못한") {
+		t.Fatalf("예상한 경고 로그가 출력되지 않았습니다. 실제 로그: %q", 출력된_로그)
 	}
 }
 
