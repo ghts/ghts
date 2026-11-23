@@ -5,12 +5,8 @@
 package w32
 
 import (
-	"errors"
-	"fmt"
 	"syscall"
 	"unsafe"
-
-	"golang.org/x/sys/windows"
 )
 
 func PeekMessage(lpMsg *MSG, hWnd uintptr, wMsgFilterMin, wMsgFilterMax, wRemoveMsg uint32) bool {
@@ -129,16 +125,6 @@ func PostMessage(hWnd HWND, msg uint32, wParam, lParam uintptr) uintptr {
 		0)
 
 	return ret
-}
-
-func IsUserAnAdmin() (bool, error) {
-	ret, _, winError := isUserAnAdminProc.Call()
-
-	if !errors.Is(winError, windows.NTE_OP_OK) {
-		return false, fmt.Errorf("IsUserAnAdmin returns error code %d", winError)
-	}
-
-	return ret != 0, nil
 }
 
 func GetConsoleWindow() HWND {
