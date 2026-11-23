@@ -127,8 +127,8 @@ func NewT8411_현물_차트_틱_응답_헤더(b []byte) (값 *T8411_현물_차�
 	값.M하한가 = lb.F확인2(lb.F2정수64(g.Lowend))
 	값.M연속일자 = lb.F2문자열(g.Cts_date)
 	값.M연속시간 = lb.F2문자열(g.Cts_time)
-	값.M장시작시간 = lb.F확인2(lb.F2일자별_시각(당일.G값(), "150405", g.S_time))
-	값.M장종료시간 = lb.F확인2(lb.F2일자별_시각(당일.G값(), "150405", g.E_time))
+	값.M장시작시간 = f2당일_6자리_시각(g.S_time)
+	값.M장종료시간 = f2당일_6자리_시각(g.E_time)
 	값.M동시호가처리시간 = lb.F확인2(lb.F2정수(g.Dshmin))
 	값.M수량 = lb.F확인2(lb.F2정수64(g.Rec_count))
 
