@@ -550,7 +550,7 @@ func New코스피_ETF_NAV(b []byte) (값 *S코스피_ETF_NAV, 에러 error) {
 
 	값 = new(S코스피_ETF_NAV)
 	값.M종목코드 = trade.F종목코드_보정(g.Shcode)
-	값.M시각 = lb.F확인2(lb.F2금일_시각("15:04:05", g.Time))
+	값.M시각 = f2당일_8자리_시각(g.Time)
 	값.M현재가 = lb.F확인2(lb.F2정수64(g.Price))
 	값.M전일대비구분 = T전일대비_구분(lb.F확인2(lb.F2정수64(g.Sign)))
 	값.M전일대비등락폭 = 값.M전일대비구분.G부호보정_정수64(lb.F확인2(lb.F2정수64(g.Change)))
