@@ -843,6 +843,8 @@ func F현재_디렉토리() string {
 func F문자열_삽입(대상_문자열 string, 삽입할_문자열 string, 위치 int) string {
 	if len(대상_문자열) < 위치 {
 		panic(New에러("대상 문자열의 길이가 너무 짧습니다. %v %v '%v'", len(대상_문자열), 위치, 대상_문자열))
+	} else if len(대상_문자열) == 위치 {
+		return 대상_문자열
 	}
 
 	버퍼 := new(bytes.Buffer)
