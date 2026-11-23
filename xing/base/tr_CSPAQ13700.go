@@ -180,7 +180,7 @@ func NewCSPAQ13700_현물계좌_주문체결내역_반복값_모음(b []byte) (�
 	수량 := len(b) / SizeCSPAQ13700OutBlock3
 
 	newCSPAQ13700_반복값 := func(g *CSPAQ13700OutBlock3) (값 *CSPAQ13700_현물계좌_주문체결내역_반복값) {
-		defer lb.S예외처리{M에러_실행: func() { 값 = nil }, M출력_숨김: new(true)}.S실행()
+		defer lb.S예외처리{M에러_실행: func() { 값 = nil }}.S실행() //, M출력_숨김: new(true
 
 		if lb.F앞뒤_공백_제거(lb.F2문자열(g.OrdDt)) == "" {
 			return nil
@@ -214,8 +214,8 @@ func NewCSPAQ13700_현물계좌_주문체결내역_반복값_모음(b []byte) (�
 		값.M주문가격 = lb.F확인2(lb.F2실수_소숫점_추가_공백은_0(g.OrdPrc, 2))
 		값.M체결수량 = lb.F확인2(lb.F2정수64_공백은_0(g.ExecQty))
 		값.M체결가 = lb.F확인2(lb.F2실수_소숫점_추가_공백은_0(g.ExecPrc, 2))
-		값.M체결처리시각 = f2당일_6자리_시각(g.ExecTrxTime)
-		값.M최종체결시각 = f2당일_6자리_시각(g.LastExecTime)
+		값.M체결처리시각 = f2당일_6자리_시각_공백은_제로값(g.ExecTrxTime)
+		값.M최종체결시각 = f2당일_6자리_시각_공백은_제로값(g.LastExecTime)
 		값.M호가유형 = F2호가유형(lb.F확인2(lb.F2정수_공백은_0(g.OrdprcPtnCode)))
 		값.M주문조건 = lb.T주문조건(lb.F확인2(lb.F2정수64_공백은_0(g.OrdCndiTpCode)))
 		값.M전체체결수량 = lb.F확인2(lb.F2정수64_공백은_0(g.AllExecQty))
