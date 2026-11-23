@@ -32,7 +32,8 @@ func (s S예외처리) S실행() {
 		if s.M에러 != nil {
 			*s.M에러 = New에러(r)
 		} else if s.M에러 == nil {
-			s.M에러 = new(New에러(r))
+			에러값 := New에러(r)
+			s.M에러 = &에러값
 		}
 	} else if s.M에러 != nil && *s.M에러 != nil {
 		*s.M에러 = New에러(*s.M에러)
