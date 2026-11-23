@@ -16,6 +16,36 @@ func TestI안전한_bool(t *testing.T) {
 	F테스트_참임(t, 안전한_bool.G값())
 }
 
+func TestI안전한_정수64(t *testing.T) {
+	t.Parallel()
+
+	안전한_정수64 := New안전한_정수64(0)
+
+	F테스트_같음(t, 안전한_정수64.G값(), int64(0))
+	안전한_정수64.S값(10)
+	F테스트_같음(t, 안전한_정수64.G값(), int64(10))
+	F테스트_같음(t, 안전한_정수64.S증가(), int64(11))
+
+	// 동시 실행: 증가분이 유실되지 않아야 한다.
+	const 고루틴_수량 = 10
+	const 고루틴별_증가_횟수 = 1000
+
+	ch종료 := make(chan struct{}, 고루틴_수량)
+	for range 고루틴_수량 {
+		go func() {
+			for range 고루틴별_증가_횟수 {
+				안전한_정수64.S증가()
+			}
+			ch종료 <- struct{}{}
+		}()
+	}
+	for range 고루틴_수량 {
+		<-ch종료
+	}
+
+	F테스트_같음(t, 안전한_정수64.G값(), 11+int64(고루틴_수량*고루틴별_증가_횟수))
+}
+
 func TestI안전한_string(t *testing.T) {
 	t.Parallel()
 
