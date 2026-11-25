@@ -41,7 +41,7 @@ func F2호가유형(xing호가유형코드 int) lb.T호가유형 {
 	case 82:
 		return lb.P호가_시간외_단일가
 	default:
-		return lb.P호가_지정가
+		panic(lb.New에러("예상하지 못한 호가유형코드. %v", xing호가유형코드))
 	}
 }
 

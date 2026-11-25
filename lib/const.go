@@ -624,8 +624,10 @@ func (p T호가유형) Xing코드() uint8 {
 		return 81
 	case P호가_시간외_단일가:
 		return 82
+	case P호가_해당없음:
+		return 0 // 서버 전송 대상이 없는 유효값. 지정가로 폴백.
 	default:
-		return 0 // 예상하지 못한 입력값은 지정가로 대체.
+		panic(New에러("예상하지 못한 호가유형값. %v", uint8(p)))
 	}
 }
 
@@ -665,7 +667,7 @@ func (p T호가유형) G검사() {
 		P호가_시간외_단일가, P호가_해당없음:
 		return
 	default:
-		panic(New에러("잘못된 지정가 시장가 구분값. %v", uint8(p)))
+		panic(New에러("잘못된 호가유형값. %v", uint8(p)))
 	}
 }
 
