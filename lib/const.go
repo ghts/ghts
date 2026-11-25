@@ -251,6 +251,7 @@ const (
 	P신호_DLL32_LOGIN
 	P신호_DLL32_접속_끊김
 	P신호_DLL32_종료
+	P신호_DLL32_초기화_실패
 )
 
 func (p T신호_32비트_모듈) String() string {
@@ -263,6 +264,8 @@ func (p T신호_32비트_모듈) String() string {
 		return "C32 접속 끊김"
 	case P신호_DLL32_종료:
 		return "C32 종료"
+	case P신호_DLL32_초기화_실패:
+		return "C32 초기화 실패"
 	default:
 		return F2문자열("예상하지 못한 T신호_32비트_모듈 값 : '%v'", int(p))
 	}

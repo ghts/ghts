@@ -32,7 +32,9 @@ func f테스트_준비() error {
 	xing.F소켓_생성()
 	xing.F초기화_Go루틴()
 	lb.F확인2(xt.F로그인_설정_화일_읽기())
-	F초기화()
+	if 에러 := F초기화(); 에러 != nil {
+		return 에러
+	}
 	xing.F접속_로그인()
 	xing.F전송_제한_전체_초기화()
 

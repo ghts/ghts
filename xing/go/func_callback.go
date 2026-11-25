@@ -200,7 +200,7 @@ func f콜백_신호_처리기(콜백 lb.I콜백) (에러 error) {
 	신호 := lb.T신호_32비트_모듈(정수값)
 
 	switch 신호 {
-	case lb.P신호_DLL32_초기화:
+	case lb.P신호_DLL32_초기화, lb.P신호_DLL32_초기화_실패:
 		select {
 		case ch신호_DLL32_초기화 <- 신호:
 		default:

@@ -13,11 +13,29 @@ func init() {
 	lb.TR구분_String = xt.TR구분_String
 }
 
-func F초기화() {
+func F초기화() (에러 error) {
+	defer lb.S예외처리{M에러: &에러}.S실행()
+
 	ch초기화 := make(chan lb.T신호)
 	go Go루틴_관리(ch초기화)
-	<-ch초기화
-	F콜백(lb.New콜백_신호(lb.P신호_DLL32_초기화))
+
+	switch <-ch초기화 {
+	case lb.P신호_초기화:
+		F콜백(lb.New콜백_신호(lb.P신호_DLL32_초기화))
+	case lb.P신호_에러:
+		// XingAPI 초기화 실패(DLL 누락·LoadLibrary/GetProcAddress 실패 등).
+		// F콜백은 채널에 비동기로만 넣는 것이므로, 부모가 신호를 확실히 받아
+		// 자식 프로세스가 종료될 때까지 전달 완료를 동기적으로 확인한다.
+		lb.F에러_출력("XingAPI 초기화 실패. xingAPI.dll 파일 존재 여부와 32비트(GOARCH=386) 환경을 확인하십시오.")
+		if 에러_콜백 := f콜백_동기식(lb.New콜백_신호(lb.P신호_DLL32_초기화_실패)); 에러_콜백 != nil {
+			lb.F에러_출력("초기화 실패 신호 부모 전달 실패 : %v", 에러_콜백)
+		}
+		return lb.New에러("XingAPI 초기화 실패.")
+	default:
+		panic(lb.New에러("F초기화 : 예상하지 못한 초기화 신호."))
+	}
+
+	return nil
 }
 
 func f종료_질의_송신() {
