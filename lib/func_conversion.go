@@ -682,16 +682,6 @@ func F2참거짓(값 any, 조건 any, 결과 bool) bool {
 	}
 }
 
-func F2종목코드_모음(종목_모음 []*S종목) []string {
-	종목코드_모음 := make([]string, 0)
-
-	for _, 종목 := range 종목_모음 {
-		종목코드_모음 = append(종목코드_모음, 종목.G코드())
-	}
-
-	return 종목코드_모음
-}
-
 func F문자열_비교(값 any, 비교_문자열 string, 결과 bool) bool {
 	if F2문자열(값) == 비교_문자열 {
 		return 결과
