@@ -14,10 +14,6 @@ func TestCSPAQ12300_현물계좌_잔고내역_질의값(t *testing.T) {
 }
 
 func TestCSPAQ12300_현물계좌_잔고내역_조회(t *testing.T) {
-	const 수량 = 5
-	const 가격_정상주문 = int64(0) // 현재가 주문은 가격이 0
-	const 호가_유형 = lb.P호가_시장가
-
 	계좌번호, 에러 := F계좌_번호(0)
 	lb.F테스트_에러없음(t, 에러)
 
