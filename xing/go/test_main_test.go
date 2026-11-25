@@ -11,6 +11,12 @@ import (
 func TestMain(m *testing.M) {
 	defer lb.S예외처리{}.S실행()
 
+	// 인터넷 미접속 환경에서는 브로커 접속이 불가하므로 패키지 전체를 스킵한다.
+	if !lb.F인터넷에_접속됨() {
+		lb.F문자열_출력("TestMain : 인터넷 미접속. xing/go 테스트를 건너뜀.")
+		os.Exit(0)
+	}
+
 	if 에러 := f테스트_준비(); 에러 != nil {
 		lb.F에러_출력(에러)
 		os.Exit(1)

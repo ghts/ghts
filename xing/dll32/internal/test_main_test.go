@@ -10,6 +10,18 @@ import (
 )
 
 func TestMain(m *testing.M) {
+	// DLL32 모듈은 32비트 전용. 64비트 호스트에서는 실행 불가하므로 패키지 전체를 스킵한다. (GOARCH=386 go test 로 실행할 것)
+	if Go아키텍처 := lb.F환경변수("GOARCH"); Go아키텍처 != "386" {
+		lb.F문자열_출력("TestMain : GOARCH='%v'. DLL32 테스트는 32비트 전용이므로 건너뜀.", Go아키텍처)
+		os.Exit(0)
+	}
+
+	// 인터넷 미접속 환경에서는 브로커 접속이 불가하므로 패키지 전체를 스킵한다.
+	if !lb.F인터넷에_접속됨() {
+		lb.F문자열_출력("TestMain : 인터넷 미접속. DLL32 테스트를 건너뜀.")
+		os.Exit(0)
+	}
+
 	if 에러 := f테스트_준비(); 에러 != nil {
 		lb.F에러_출력(에러)
 		os.Exit(1)
@@ -23,10 +35,6 @@ func TestMain(m *testing.M) {
 
 func f테스트_준비() error {
 	defer lb.S예외처리{}.S실행()
-
-	if lb.F환경변수("GOARCH") != "386" {
-		return lb.New에러with출력("DLL32 모듈은 32비트 전용입니다.")
-	}
 
 	lb.F테스트_모드_시작()
 	xing.F소켓_생성()
