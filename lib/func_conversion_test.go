@@ -277,7 +277,7 @@ func TestF인코딩_디코딩(t *testing.T) {
 	r := F임의값_생성기()
 
 	값_모음 := []any{
-		r.Int(), r.Int63(), r.Float64(), r.Intn(1) == 0,
+		r.Int(), r.Int63(), r.Float64(), F임의_참거짓(),
 		F임의_문자열(5, 100), []string{"test1", "test2"}, F임의_시각(),
 		[]int{r.Int(), r.Int(), r.Int()}}
 
