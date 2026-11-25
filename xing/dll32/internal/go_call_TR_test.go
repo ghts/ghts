@@ -9,11 +9,7 @@ import (
 )
 
 func TestF접속됨(t *testing.T) {
-	t.Parallel()
-
-	if !lb.F인터넷에_접속됨() {
-		t.SkipNow()
-	}
+	lb.F테스트_인터넷_접속_여부(t)
 
 	소켓REQ, 에러 := nano.NewNano소켓REQ(xt.F주소_DLL32(), lb.P10초)
 	lb.F테스트_에러없음(t, 에러)
