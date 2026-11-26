@@ -330,9 +330,9 @@ var 정규식_f2정수64 = regexp.MustCompile(`\.0*$`)
 func F2정수64(값 any) (int64, error) {
 	문자열 := ""
 
-	switch 값.(type) {
+	switch 변환값 := 값.(type) {
 	case string:
-		문자열 = 값.(string)
+		문자열 = 변환값
 	default:
 		문자열 = F2문자열(값)
 	}
@@ -538,9 +538,9 @@ func f포맷_시간대_포함(포맷 string) bool {
 func F2포맷된_시각(포맷 string, 값 any) (time.Time, error) {
 	문자열 := ""
 
-	switch 값.(type) {
+	switch 변환값 := 값.(type) {
 	case string:
-		문자열 = 값.(string)
+		문자열 = 변환값
 	default:
 		문자열 = F2문자열(값)
 	}
@@ -724,13 +724,13 @@ func f안전한_전달값_자료형(전달값 any) bool {
 		// PASS. 코드 검사 통과를 위해서 default문 추가.
 	}
 
-	switch 전달값.(type) {
+	switch 변환값 := 전달값.(type) {
 	case error, time.Time,
 		string, []string, []byte,
 		*S바이트_변환, []*S바이트_변환:
 		return true
 	case []any:
-		값_모음 := 전달값.([]any)
+		값_모음 := 변환값
 
 		for _, 값 := range 값_모음 {
 			if f안전한_전달값_자료형(값) {

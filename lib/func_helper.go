@@ -788,11 +788,11 @@ func F파일_검색(검색_시작_디렉토리, 파일명 string, 기간 time.Du
 
 	select {
 	case 응답 := <-ch응답:
-		switch 응답.(type) {
+		switch 변환값 := 응답.(type) {
 		case error:
-			return "", New에러with출력("'%v' : 파일을 찾을 수 없습니다.\n%v", 파일명, 응답.(error))
+			return "", New에러with출력("'%v' : 파일을 찾을 수 없습니다.\n%v", 파일명, 변환값)
 		case string:
-			return 응답.(string), nil
+			return 변환값, nil
 		default:
 			panic(New에러("F파일_검색() 예상하지 못한 자료형 '%T' '%v'", 응답, 응답))
 		}

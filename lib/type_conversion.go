@@ -133,7 +133,7 @@ func (s *S바이트_변환) G값(값_포인터 any) (에러 error) {
 		}
 	}
 
-	switch 값_포인터.(type) {
+	switch 변환값 := 값_포인터.(type) {
 	case *S바이트_변환:
 		// 같은 자료형이라서 변환 불필요. PASS
 		return nil
@@ -142,7 +142,7 @@ func (s *S바이트_변환) G값(값_포인터 any) (에러 error) {
 
 		var 에러_문자열 string
 		F확인1(F디코딩(s.변환_형식, s.값, &에러_문자열))
-		*(값_포인터.(*error)) = errors.New(에러_문자열)
+		*변환값 = errors.New(에러_문자열)
 
 		return nil
 	}

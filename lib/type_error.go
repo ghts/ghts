@@ -1,7 +1,6 @@
 package lib
 
 import (
-	"errors"
 	"fmt"
 	"log"
 	"strings"
@@ -67,19 +66,6 @@ type S에러 struct {
 
 func (s *S에러) Error() string {
 	return strings.TrimSpace(s.에러_메시지)
-}
-
-func (s *S에러) Is(에러값 error) bool {
-	if s.원래_에러 != nil {
-		return errors.Is(s.원래_에러, 에러값)
-	} else if 에러값 == nil || s.Error() == "" {
-		return false
-	} else if strings.Contains(s.Error(), 에러값.Error()) ||
-		strings.Contains(에러값.Error(), s.Error()) {
-		return true
-	}
-
-	return false
 }
 
 func (s *S에러) Unwrap() error { return s.원래_에러 }

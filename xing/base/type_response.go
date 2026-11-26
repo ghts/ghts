@@ -8,11 +8,11 @@ import (
 )
 
 func NewJSON응답(값 any) *JSON응답 {
-	switch 값.(type) {
+	switch 변환값 := 값.(type) {
 	case error:
-		return &JSON응답{V: nil, E: 값.(error).Error()}
+		return &JSON응답{V: nil, E: 변환값.(error).Error()}
 	default:
-		return &JSON응답{V: 값, E: ""}
+		return &JSON응답{V: 변환값, E: ""}
 	}
 }
 
