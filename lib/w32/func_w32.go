@@ -10,38 +10,33 @@ import (
 )
 
 func PeekMessage(lpMsg *MSG, hWnd uintptr, wMsgFilterMin, wMsgFilterMax, wRemoveMsg uint32) bool {
-	ret, _, _ := syscall.Syscall6(peekMessage.Addr(), 5,
+	ret, _, _ := syscall.SyscallN(peekMessage.Addr(),
 		uintptr(unsafe.Pointer(lpMsg)),
 		hWnd,
 		uintptr(wMsgFilterMin),
 		uintptr(wMsgFilterMax),
-		uintptr(wRemoveMsg),
-		0)
+		uintptr(wRemoveMsg))
 
 	return ret != 0
 
 }
 
 func DispatchMessage(msg *MSG) uintptr {
-	ret, _, _ := syscall.Syscall(dispatchMessage.Addr(), 1,
-		uintptr(unsafe.Pointer(msg)),
-		0,
-		0)
+	ret, _, _ := syscall.SyscallN(dispatchMessage.Addr(),
+		uintptr(unsafe.Pointer(msg)))
 
 	return ret
 }
 
 func RegisterClassEx(windowClass *WNDCLASSEX) ATOM {
-	ret, _, _ := syscall.Syscall(registerClassEx.Addr(), 1,
-		uintptr(unsafe.Pointer(windowClass)),
-		0,
-		0)
+	ret, _, _ := syscall.SyscallN(registerClassEx.Addr(),
+		uintptr(unsafe.Pointer(windowClass)))
 
 	return ATOM(ret)
 }
 
 func CreateWindowEx(dwExStyle uint32, lpClassName, lpWindowName *uint16, dwStyle uint32, x, y, nWidth, nHeight int32, hWndParent HWND, hMenu HMENU, hInstance HINSTANCE, lpParam unsafe.Pointer) uintptr {
-	ret, _, _ := syscall.Syscall12(createWindowEx.Addr(), 12,
+	ret, _, _ := syscall.SyscallN(createWindowEx.Addr(),
 		uintptr(dwExStyle),
 		uintptr(unsafe.Pointer(lpClassName)),
 		uintptr(unsafe.Pointer(lpWindowName)),
@@ -59,29 +54,23 @@ func CreateWindowEx(dwExStyle uint32, lpClassName, lpWindowName *uint16, dwStyle
 }
 
 func PostQuitMessage(exitCode int32) {
-	syscall.Syscall(postQuitMessage.Addr(), 1,
-		uintptr(exitCode),
-		0,
-		0)
+	syscall.SyscallN(postQuitMessage.Addr(),
+		uintptr(exitCode))
 }
 
 func DestroyWindow(hWnd uintptr) bool {
-	ret, _, _ := syscall.Syscall(destroyWindow.Addr(), 1,
-		hWnd,
-		0,
-		0)
+	ret, _, _ := syscall.SyscallN(destroyWindow.Addr(),
+		hWnd)
 
 	return ret != 0
 }
 
 func DefWindowProc(hWnd HWND, Msg uint32, wParam, lParam uintptr) uintptr {
-	ret, _, _ := syscall.Syscall6(defWindowProc.Addr(), 4,
+	ret, _, _ := syscall.SyscallN(defWindowProc.Addr(),
 		uintptr(hWnd),
 		uintptr(Msg),
 		wParam,
-		lParam,
-		0,
-		0)
+		lParam)
 
 	return ret
 }
@@ -95,52 +84,41 @@ func GetModuleHandle(lpModuleName *uint16) HINSTANCE {
 		pLpModuleName = uintptr(unsafe.Pointer(lpModuleName))
 	}
 
-	ret, _, _ := syscall.Syscall(getModuleHandle.Addr(), 1,
-		pLpModuleName,
-		0,
-		0)
+	ret, _, _ := syscall.SyscallN(getModuleHandle.Addr(),
+		pLpModuleName)
 
 	return HINSTANCE(ret)
 }
 
 func SendMessage(hWnd HWND, msg uint32, wParam, lParam uintptr) uintptr {
-	ret, _, _ := syscall.Syscall6(sendMessage.Addr(), 4,
+	ret, _, _ := syscall.SyscallN(sendMessage.Addr(),
 		uintptr(hWnd),
 		uintptr(msg),
 		wParam,
-		lParam,
-		0,
-		0)
+		lParam)
 
 	return ret
 }
 
 func PostMessage(hWnd HWND, msg uint32, wParam, lParam uintptr) uintptr {
-	ret, _, _ := syscall.Syscall6(postMessage.Addr(), 4,
+	ret, _, _ := syscall.SyscallN(postMessage.Addr(),
 		uintptr(hWnd),
 		uintptr(msg),
 		wParam,
-		lParam,
-		0,
-		0)
+		lParam)
 
 	return ret
 }
 
 func GetConsoleWindow() HWND {
-	ret, _, _ := syscall.Syscall(getConsoleWindow.Addr(), 0,
-		0,
-		0,
-		0)
+	ret, _, _ := syscall.SyscallN(getConsoleWindow.Addr())
 
 	return HWND(ret)
 }
 
 func SetForegroundWindow(hWnd HWND) bool {
-	ret, _, _ := syscall.Syscall(setForegroundWindow.Addr(), 1,
-		uintptr(hWnd),
-		0,
-		0)
+	ret, _, _ := syscall.SyscallN(setForegroundWindow.Addr(),
+		uintptr(hWnd))
 
 	return ret != 0
 }
