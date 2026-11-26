@@ -273,7 +273,7 @@ func f숫자_문자열_정리(문자열 string) string {
 		}
 	}
 
-	strings.TrimSuffix(문자열, ".")
+	문자열 = strings.TrimSuffix(문자열, ".")
 
 	return 문자열
 }
