@@ -10,7 +10,7 @@ import (
 func TestNano소켓_REQ_REP(t *testing.T) {
 	t.Parallel()
 
-	주소 := f테스트용_임의_주소()
+	주소 := lb.F테스트용_임의_주소()
 	ch초기화 := make(chan lb.T신호, 2)
 	ch종료 := make(chan lb.T신호, 2)
 	테스트 := lb.New안전한_테스트(t)
@@ -126,7 +126,7 @@ func 클라이언트_SUB(t lb.I안전한_테스트, 주소 lb.T주소, ch종료 
 func TestNano소켓_PUSH_PULL(t *testing.T) {
 	t.Parallel()
 
-	주소 := f테스트용_임의_주소()
+	주소 := lb.F테스트용_임의_주소()
 	ch초기화 := make(chan lb.T신호, 2)
 	ch종료 := make(chan lb.T신호, 2)
 	테스트 := lb.New안전한_테스트(t)
@@ -181,7 +181,7 @@ func 클라이언트_PUSH(t lb.I안전한_테스트, 주소 lb.T주소, ch초기
 func TestNano소켓_PAIR(t *testing.T) {
 	t.Parallel()
 
-	주소 := f테스트용_임의_주소()
+	주소 := lb.F테스트용_임의_주소()
 	ch초기화 := make(chan lb.T신호, 2)
 	ch종료 := make(chan lb.T신호, 2)
 	테스트 := lb.New안전한_테스트(t)
@@ -246,12 +246,4 @@ func TestNano소켓_생성실패(t *testing.T) {
 	// 실패 경로는 panic이 밖으로 새지 않고 에러를 반환해야 함.
 	_, 에러 := NewNano소켓(lb.P소켓_종류_REQ, "tcp://127.0.0.1:1", lb.P소켓_접속_CONNECT)
 	테스트.G에러발생(에러)
-}
-
-func f테스트용_임의_주소() lb.T주소 {
-	for {
-		주소 := lb.T주소(lb.F임의_범위_이내_정수값(0, 60000))
-
-		return 주소
-	}
 }
