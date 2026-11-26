@@ -1,6 +1,8 @@
 package xing
 
 import (
+	"regexp"
+	"strconv"
 	"testing"
 	"time"
 
@@ -14,10 +16,12 @@ func TestT1901_ETF_시세_조회(t *testing.T) {
 	값, 에러 := TrT1901_ETF_시세_조회(종목코드)
 	lb.F테스트_에러없음(t, 에러)
 
+	lb.F테스트_참임(t, 값.M종목코드 != "")
 	lb.F테스트_다름(t, 값.M종목명, "")
 	lb.F테스트_참임(t, 값.M현재가 >= 0)
-	lb.F테스트_같음(t, 값.M전일대비구분, xt.P구분_상한, xt.P구분_상승, xt.P구분_보합, xt.P구분_하한, xt.P구분_하락)
 
+	// M전일대비구분 / M전일대비등락폭 / M전일대비등락율
+	lb.F테스트_같음(t, 값.M전일대비구분, xt.P구분_상한, xt.P구분_상승, xt.P구분_보합, xt.P구분_하한, xt.P구분_하락)
 	switch 값.M전일대비구분 { // 등락율 확인
 	case xt.P구분_상한, xt.P구분_상승:
 		lb.F테스트_참임(t, 값.M전일대비등락폭 >= 0)
@@ -30,8 +34,46 @@ func TestT1901_ETF_시세_조회(t *testing.T) {
 		lb.F테스트_같음(t, 값.M전일대비등락율, 0)
 	}
 
-	lb.F테스트_같음(t, 값.M업종_전일대비구분, xt.P구분_상한, xt.P구분_상승, xt.P구분_보합, xt.P구분_하한, xt.P구분_하락)
+	lb.F테스트_참임(t, 값.M거래량 >= 0)
+	lb.F테스트_참임(t, 값.M기준가 >= 0)
+	lb.F테스트_참임(t, 값.M가중평균 >= 0)
+	lb.F테스트_참임(t, 값.M상한가 >= 0)
+	lb.F테스트_참임(t, 값.M하한가 >= 0)
+	lb.F테스트_참임(t, 값.M상한가 >= 값.M하한가)
+	lb.F테스트_참임(t, 값.M전일_거래량 >= 0)
+	lb.F테스트_참임(t, 값.M거래량차 >= 0)
+	lb.F테스트_참임(t, 값.M시가 >= 0)
+	lb.F테스트_참임(t, 값.M시가시각.After(lb.F확인2(lb.F2금일_한국_시각(8, 30, 0))))
+	lb.F테스트_참임(t, 값.M시가시각.Before(lb.F확인2(lb.F2금일_한국_시각(9, 5, 0))))
+	lb.F테스트_참임(t, 값.M고가 >= 값.M시가)
+	lb.F테스트_참임(t, 값.M고가 >= 값.M현재가)
+	lb.F테스트_참임(t, 값.M고가 >= 값.M가중평균)
+	lb.F테스트_참임(t, 값.M고가시각.After(lb.F확인2(lb.F2금일_한국_시각(8, 30, 0))))
+	lb.F테스트_참임(t, 값.M고가시각.Before(lb.F확인2(lb.F2금일_한국_시각(15, 35, 0))))
+	lb.F테스트_참임(t, 값.M저가 <= 값.M시가)
+	lb.F테스트_참임(t, 값.M저가 <= 값.M현재가)
+	lb.F테스트_참임(t, 값.M저가 <= 값.M가중평균)
+	lb.F테스트_참임(t, 값.M저가시각.After(lb.F확인2(lb.F2금일_한국_시각(8, 30, 0))))
+	lb.F테스트_참임(t, 값.M저가시각.Before(lb.F확인2(lb.F2금일_한국_시각(15, 35, 0))))
+	lb.F테스트_참임(t, 값.M52주_최고가 >= 값.M52주_최저가)
+	lb.F테스트_참임(t, !값.M52주_최고가일.After(lb.F금일()))
+	lb.F테스트_참임(t, !값.M52주_최저가일.After(lb.F금일()))
+	lb.F테스트_참임(t, 값.M소진율 >= 0)
+	lb.F테스트_참임(t, 값.M외국인_보유수량 > 0)
+	lb.F테스트_참임(t, 값.PER >= 0)
+	lb.F테스트_참임(t, 값.M상장주식수_천 >= 0)
+	lb.F테스트_참임(t, 값.M증거금율 >= 0)
+	lb.F테스트_참임(t, 값.M회전율 >= 0)
+	lb.F테스트_참임(t, 값.M거래대금 >= 0)
+	lb.F테스트_참임(t, 값.M연중_최고가 >= 값.M연중_최저가)
+	lb.F테스트_참임(t, !값.M연중_최고일자.After(lb.F금일()))
+	lb.F테스트_참임(t, !값.M연중_최저일자.After(lb.F금일()))
+	lb.F테스트_같음(t, 값.M업종명, "KOSPI200")
+	lb.F테스트_같음(t, 값.M업종코드, "101")
+	lb.F테스트_참임(t, 값.M업종_현재가 > 0)
 
+	// M업종_전일대비구분 / M업종_전일대비등락폭 / M업종_전일대비등락율
+	lb.F테스트_같음(t, 값.M업종_전일대비구분, xt.P구분_상한, xt.P구분_상승, xt.P구분_보합, xt.P구분_하한, xt.P구분_하락)
 	switch 값.M업종_전일대비구분 { // 등락율 확인
 	case xt.P구분_상한, xt.P구분_상승:
 		lb.F테스트_참임(t, 값.M업종_전일대비등락폭 >= 0)
@@ -44,6 +86,13 @@ func TestT1901_ETF_시세_조회(t *testing.T) {
 		lb.F테스트_같음(t, 값.M업종_전일대비등락율, 0)
 	}
 
+	lb.F테스트_참임(t, regexp.MustCompile(`^F 2\d{3}(0[1-9]|1[0-2])$`).MatchString(값.M선물_최근_월물명))
+	f선물_월물_코드_검사(t, 값.M선물_최근_월물_코드)
+	lb.F테스트_참임(t, 값.M선물_현재가 >= 0)
+	lb.F테스트_참임(t, 값.M선물_전일대비구분.G검사() == nil)
+	lb.F테스트_유효한_숫자(t, 값.M선물_전일대비등락폭)
+	lb.F테스트_유효한_숫자(t, 값.M선물_전일대비등락율)
+	lb.F테스트_참임(t, 값.NAV >= 0, 값.NAV)
 	lb.F테스트_같음(t, 값.NAV_전일대비구분, xt.P구분_상한, xt.P구분_상승, xt.P구분_보합, xt.P구분_하한, xt.P구분_하락)
 
 	switch 값.NAV_전일대비구분 { // 등락율 확인
@@ -58,8 +107,58 @@ func TestT1901_ETF_시세_조회(t *testing.T) {
 		lb.F테스트_같음(t, 값.NAV_전일대비등락율, 0)
 	}
 
-	lb.F테스트_같음(t, 값.M전일NAV_전일대비구분, xt.P구분_상한, xt.P구분_상승, xt.P구분_보합, xt.P구분_하한, xt.P구분_하락)
+	lb.F테스트_참임(t, 값.M추적_오차율 >= 0)
+	lb.F테스트_참임(t, 값.M괴리율 < 10.0)
+	lb.F테스트_참임(t, 값.M대용가 >= 0)
+	lb.F테스트_참임(t, len(값.M매도_증권사_코드) == 5)
+	lb.F테스트_참임(t, len(값.M매수_증권사_코드) == 5)
 
+	// M총매도수량
+	매도수량_모두_양수_범위 := true
+	for _, v := range 값.M총매도수량 {
+		매도수량_모두_양수_범위 = 매도수량_모두_양수_범위 && v >= 0
+	}
+	lb.F테스트_참임(t, len(값.M총매도수량) == 5 && 매도수량_모두_양수_범위)
+
+	// M총매수수량
+	매수수량_모두_양수_범위 := true
+	for _, v := range 값.M총매수수량 {
+		매수수량_모두_양수_범위 = 매수수량_모두_양수_범위 && v >= 0
+	}
+	lb.F테스트_참임(t, len(값.M총매수수량) == 5 && 매수수량_모두_양수_범위)
+
+	// M매도증감 / M매수증감
+	lb.F테스트_참임(t, len(값.M매도증감) == 5)
+	lb.F테스트_참임(t, len(값.M매수증감) == 5)
+
+	// M매도비율
+	매도비율_모두_양수_범위 := true
+	for _, v := range 값.M매도비율 {
+		매도비율_모두_양수_범위 = 매도비율_모두_양수_범위 && v >= 0
+	}
+	lb.F테스트_참임(t, len(값.M매도비율) == 5 && 매도비율_모두_양수_범위)
+
+	// M매수비율
+	매수비율_모두_양수_범위 := true
+	for _, v := range 값.M매수비율 {
+		매수비율_모두_양수_범위 = 매수비율_모두_양수_범위 && v >= 0
+	}
+
+	lb.F테스트_참임(t, len(값.M매수비율) == 5 && 매수비율_모두_양수_범위)
+
+	lb.F테스트_참임(t, 값.M외국계_매도_합계_수량 >= 0)
+	lb.F테스트_같음(t, int(값.M외국계_매도_직전_대비), 0)
+	lb.F테스트_참임(t, 값.M외국계_매도_비율 >= 0)
+	lb.F테스트_참임(t, 값.M외국계_매수_합계_수량 >= 0)
+	lb.F테스트_같음(t, int(값.M외국계_매수_직전_대비), 0)
+	lb.F테스트_참임(t, 값.M외국계_매수_비율 >= 0)
+	lb.F테스트_같음(t, 값.M참고지수명, "")
+	lb.F테스트_같음(t, 값.M참고지수코드, "")
+	lb.F테스트_참임(t, 값.M참고지수현재가 > 0)
+	lb.F테스트_참임(t, 값.M전일NAV > 0)
+
+	// M전일NAV_전일대비구분 / M전일NAV_전일대비등락폭 / M전일NAV_전일대비등락율
+	lb.F테스트_같음(t, 값.M전일NAV_전일대비구분, xt.P구분_상한, xt.P구분_상승, xt.P구분_보합, xt.P구분_하한, xt.P구분_하락)
 	switch 값.M전일NAV_전일대비구분 { // 전일NAV 등락율 확인
 	case xt.P구분_상한, xt.P구분_상승:
 		lb.F테스트_참임(t, 값.M전일NAV_전일대비등락폭 >= 0)
@@ -72,165 +171,127 @@ func TestT1901_ETF_시세_조회(t *testing.T) {
 		lb.F테스트_같음(t, 값.M전일NAV_전일대비등락율, 0)
 	}
 
-	lb.F중복없는_문자열_출력("t1901 테스트 보완 필요.")
-	lb.F테스트_참임(t, 값.M시가 >= 0)
-	lb.F테스트_참임(t, 값.M시가시각.After(lb.F확인2(lb.F2금일_한국_시각(8, 30, 0))))
-	lb.F테스트_참임(t, 값.M시가시각.Before(lb.F확인2(lb.F2금일_한국_시각(9, 5, 0))))
-	lb.F테스트_참임(t, 값.M고가 >= 값.M시가)
-	lb.F테스트_참임(t, 값.M고가시각.After(lb.F확인2(lb.F2금일_한국_시각(8, 30, 0))))
-	lb.F테스트_참임(t, 값.M고가시각.Before(lb.F확인2(lb.F2금일_한국_시각(15, 35, 0))))
-	lb.F테스트_참임(t, 값.M저가 <= 값.M시가)
-	lb.F테스트_참임(t, 값.M저가시각.After(lb.F확인2(lb.F2금일_한국_시각(8, 30, 0))))
-	lb.F테스트_참임(t, 값.M저가시각.Before(lb.F확인2(lb.F2금일_한국_시각(15, 35, 0))))
-
-	//s.M52주_최고가 = lb.F확인2(lb.F2정수64(g.High52w)
-	//lb.F체크포인트(lb.F2문자열(g.High52wdate))
-	//s.M52주_최고가일 = lb.F확인2(lb.F2포맷된_일자("20060102", g.High52wdate)
-	//
-	//s.M52주_최저가 = lb.F확인2(lb.F2정수64(g.Low52w)
-	//lb.F체크포인트(lb.F2문자열(g.Low52wdate))
-	//s.M52주_최저가일 = lb.F확인2(lb.F2포맷된_일자("20060102", g.Low52wdate)
-	//
-	//s.M소진율 = lb.F확인2(lb.F2실수_소숫점_추가(g.Exhratio, 2)
-	//s.M외국인_보유수량 = lb.F확인2(lb.F2실수(g.Flmtvol)
-	//s.PER = lb.F확인2(lb.F2실수_소숫점_추가(g.Per, 2)
-	//s.M상장주식수_천 = lb.F확인2(lb.F2정수64(g.Listing)
-	//s.M증거금율 = lb.F확인2(lb.F2정수64(g.Jkrate)
-	//s.M회전율 = lb.F확인2(lb.F2실수_소숫점_추가(g.Vol, 2)
-	//s.M거래대금 = lb.F확인2(lb.F2정수64(g.Value)
-	//
-	//s.M연중_최고가 = lb.F확인2(lb.F2정수64(g.Highyear)
-	//lb.F체크포인트(g.Highyeardate[:])
-	//s.M연중_최고일자 = lb.F확인2(lb.F2포맷된_일자("20060102", g.Highyeardate)
-	//
-	//s.M연중_최저가 = lb.F확인2(lb.F2정수64(g.Lowyear)
-	//lb.F체크포인트(g.Lowyeardate[:])
-	//s.M연중_최저일자 = lb.F확인2(lb.F2포맷된_일자("20060102", g.Lowyeardate)
-	//
-	//s.M업종명 = lb.F2문자열(g.Upname)
-	//s.M업종코드 = lb.F2문자열(g.Upcode)
-	//s.M업종_현재가 = lb.F확인2(lb.F2실수_소숫점_추가(g.Upprice, 2)
-	//s.M업종_전일대비구분 = T전일대비_구분(lb.F확인2(lb.F2정수64(g.Upsign))
-	//s.M업종_전일대비등락폭 = lb.F확인2(lb.F2실수_소숫점_추가(g.Upchange, 2)
-	//s.M업종_전일대비등락율 = lb.F확인2(lb.F2실수_소숫점_추가(g.Updiff, 2)
-	//s.M선물_최근_월물명 = lb.F2문자열(g.Futname)
-	//s.M선물_최근_월물_코드 = lb.F2문자열(g.Futcode)
-	//s.M선물_현재가 = lb.F확인2(lb.F2실수_소숫점_추가(g.Futprice, 2)
-	//s.M선물_전일대비구분 = T전일대비_구분(lb.F확인2(lb.F2정수64(g.Futsign))
-	//s.M선물_전일대비등락폭 = lb.F확인2(lb.F2실수_소숫점_추가(g.Futchange, 2)
-	//s.M선물_전일대비등락율 = lb.F확인2(lb.F2실수_소숫점_추가(g.Futdiff, 2)
-
-	lb.F테스트_참임(t, 값.NAV >= 0, 값.NAV)
-
-	//s.NAV_전일대비구분 = T전일대비_구분(lb.F확인2(lb.F2정수64(g.Navsign))
-	//s.NAV_전일대비등락폭 = lb.F확인2(lb.F2실수_소숫점_추가(g.Navchange, 2)
-	//s.NAV_전일대비등락율 = lb.F확인2(lb.F2실수_소숫점_추가(g.Navdiff, 2)
-	//s.M추적_오차율 = lb.F확인2(lb.F2실수_소숫점_추가(g.Cocrate, 2)
-	//s.M괴리율 = lb.F확인2(lb.F2실수_소숫점_추가(g.Kasis, 2)
-	//s.M대용가 = lb.F확인2(lb.F2정수64(g.Subprice)
-	//s.M매도_증권사_코드 = []string{
-	//	lb.F2문자열(g.Offerno1),
-	//	lb.F2문자열(g.Offerno2),
-	//	lb.F2문자열(g.Offerno3),
-	//	lb.F2문자열(g.Offerno4),
-	//	lb.F2문자열(g.Offerno5)}
-	//s.M매수_증권사_코드 = []string{
-	//	lb.F2문자열(g.Bidno1),
-	//	lb.F2문자열(g.Bidno2),
-	//	lb.F2문자열(g.Bidno3),
-	//	lb.F2문자열(g.Bidno4),
-	//	lb.F2문자열(g.Bidno5)}
-	//
-	//s.M총매도수량 = []int64{
-	//	lb.F확인2(lb.F2정수64(g.Dvol1),
-	//	lb.F확인2(lb.F2정수64(g.Dvol2),
-	//	lb.F확인2(lb.F2정수64(g.Dvol3),
-	//	lb.F확인2(lb.F2정수64(g.Dvol4),
-	//	lb.F확인2(lb.F2정수64(g.Dvol5)}
-	//
-	//s.M총매수수량 = []int64{
-	//	lb.F확인2(lb.F2정수64(g.Svol1),
-	//	lb.F확인2(lb.F2정수64(g.Svol2),
-	//	lb.F확인2(lb.F2정수64(g.Svol3),
-	//	lb.F확인2(lb.F2정수64(g.Svol4),
-	//	lb.F확인2(lb.F2정수64(g.Svol5)}
-	//
-	//s.M매도증감 = []int64{
-	//	lb.F확인2(lb.F2정수64(g.Dcha1),
-	//	lb.F확인2(lb.F2정수64(g.Dcha2),
-	//	lb.F확인2(lb.F2정수64(g.Dcha3),
-	//	lb.F확인2(lb.F2정수64(g.Dcha4),
-	//	lb.F확인2(lb.F2정수64(g.Dcha5)}
-	//
-	//s.M매수증감 = []int64{
-	//	lb.F확인2(lb.F2정수64(g.Scha1),
-	//	lb.F확인2(lb.F2정수64(g.Scha2),
-	//	lb.F확인2(lb.F2정수64(g.Scha3),
-	//	lb.F확인2(lb.F2정수64(g.Scha4),
-	//	lb.F확인2(lb.F2정수64(g.Scha5)}
-	//
-	//s.M매도비율 = []float64{
-	//	lb.F확인2(lb.F2실수_소숫점_추가(g.Ddiff1, 2),
-	//	lb.F확인2(lb.F2실수_소숫점_추가(g.Ddiff2, 2),
-	//	lb.F확인2(lb.F2실수_소숫점_추가(g.Ddiff3, 2),
-	//	lb.F확인2(lb.F2실수_소숫점_추가(g.Ddiff4, 2),
-	//	lb.F확인2(lb.F2실수_소숫점_추가(g.Ddiff5, 2)}
-	//
-	//s.M매수비율 = []float64{
-	//	lb.F확인2(lb.F2실수_소숫점_추가(g.Sdiff1, 2),
-	//	lb.F확인2(lb.F2실수_소숫점_추가(g.Sdiff2, 2),
-	//	lb.F확인2(lb.F2실수_소숫점_추가(g.Sdiff3, 2),
-	//	lb.F확인2(lb.F2실수_소숫점_추가(g.Sdiff4, 2),
-	//	lb.F확인2(lb.F2실수_소숫점_추가(g.Sdiff5, 2)}
-	//
-	//s.M외국계_매도_합계_수량 = lb.F확인2(lb.F2정수64(g.Fwdvl)
-	//s.M외국계_매도_직전_대비 = T전일대비_구분(lb.F확인2(lb.F2정수64(g.Ftradmdcha))
-	//s.M외국계_매도_비율 = lb.F확인2(lb.F2실수_소숫점_추가(g.Ftradmddiff, 2)
-	//
-	//s.M외국계_매수_합계_수량 = lb.F확인2(lb.F2정수64(g.Fwsvl)
-	//s.M외국계_매수_직전_대비 = T전일대비_구분(lb.F확인2(lb.F2정수64(g.Ftradmscha))
-	//s.M외국계_매수_비율 = lb.F확인2(lb.F2실수_소숫점_추가(g.Ftradmsdiff, 2)
-	//
-	//s.M참고지수명 = lb.F2문자열(g.Upname2)
-	//s.M참고지수코드 = lb.F2문자열(g.Upcode2)
-	//s.M참고지수현재가 = lb.F확인2(lb.F2실수_소숫점_추가(g.Upprice2, 2)
-	//
-	//s.M전일NAV = lb.F확인2(lb.F2실수_소숫점_추가(g.Jnilnav, 2)
-	//s.M전일NAV_전일대비구분 = T전일대비_구분(lb.F확인2(lb.F2정수64(g.Jnilnavsign))
-	//s.M전일NAV_전일대비등락폭 = lb.F확인2(lb.F2실수_소숫점_추가(g.Jnilnavchange, 2)
-	//s.M전일NAV_전일대비등락율 = lb.F확인2(lb.F2실수_소숫점_추가(g.Jnilnavdiff, 2)
-	//
-	//s.M순자산총액_억 = lb.F확인2(lb.F2정수64(g.Etftotcap)
-	//s.M스프레드 = lb.F확인2(lb.F2실수_소숫점_추가(g.Spread, 2)
-
+	lb.F테스트_참임(t, 값.M순자산총액_억 >= 0)
+	lb.F테스트_참임(t, 값.M스프레드 >= 0)
 	lb.F테스트_다름(t, 값.M레버리지, 0.0)
-	//s.M과세구분 = uint8(lb.F확인2(lb.F2정수64(g.Taxgubun))
-	//s.M운용사 = lb.F2문자열(g.Opcom_nmk)
-	//s.M유동성공급자 = []string{
-	//	lb.F2문자열(g.Lp_nm1),
-	//	lb.F2문자열(g.Lp_nm2),
-	//	lb.F2문자열(g.Lp_nm3),
-	//	lb.F2문자열(g.Lp_nm4),
-	//	lb.F2문자열(g.Lp_nm5)}
-	//
+	// M과세구분 필드 테스트 제외.
+	lb.F테스트_참임(t, 값.M운용사 != "")
+	lb.F테스트_참임(t, len(값.M유동성공급자) == 5)
 	lb.F테스트_같음(t, 값.M복제방법, "실물패시브", "합성패시브", "실물액티브", "합성액티브")
-	//s.M상품유형 = lb.F2문자열(g.Etf_kind)
-	//s.VI발동해제 = lb.F2문자열(g.Vi_gubun)
-	//s.ETN상품분류 = lb.F2문자열(g.Etn_kind_cd)
-	lb.F테스트_참임(t, 값.ETN만기일.Equal(time.Time{}) || 값.ETN만기일.After(lb.F금일()))
-	lb.F테스트_참임(t, 값.ETN지급일.Equal(time.Time{}) || 값.ETN지급일.After(lb.F금일()))
-	//s.ETN지급일 = lb.F확인2(lb.F2포맷된_일자("20060102", g.Payday)
-	//s.ETN최종거래일 = lb.F확인2(lb.F2포맷된_일자("20060102", g.Lastdate)
-	//s.ETN발행시장참가자 = lb.F2문자열(g.Issuernmk)
-	//s.ETN만기상환가격결정_시작일 = lb.F확인2(lb.F2포맷된_일자("20060102", g.Last_sdate)
-	//s.ETN만기상환가격결정_종료일 = lb.F확인2(lb.F2포맷된_일자("20060102", g.Last_edate)
-	//s.ETN유동성공급자_보유수량 = lb.F확인2(lb.F2정수64(g.Lp_holdvol)
-
+	lb.F테스트_같음(t, 값.M상품유형, "")
+	lb.F테스트_같음(t, 값.VI발동해제, "")
+	lb.F테스트_같음(t, 값.ETN상품분류, "")
+	lb.F테스트_참임(t, 값.ETN만기일.IsZero() || 값.ETN만기일.After(lb.F금일()))
+	lb.F테스트_참임(t, 값.ETN지급일.IsZero() || 값.ETN지급일.After(lb.F금일()))
+	lb.F테스트_참임(t, 값.ETN최종거래일.IsZero() || !값.ETN최종거래일.After(lb.F금일()))
+	lb.F테스트_같음(t, 값.ETN발행시장참가자, "")
+	lb.F테스트_참임(t, 값.ETN만기상환가격결정_시작일.IsZero() || !값.ETN만기상환가격결정_시작일.After(lb.F금일()))
+	lb.F테스트_참임(t, 값.ETN만기상환가격결정_종료일.IsZero() || !값.ETN만기상환가격결정_종료일.After(lb.F금일()))
+	lb.F테스트_참임(t, 값.ETN유동성공급자_보유수량 >= 0)
 	lb.F테스트_참임(t, 값.M상장일.After(time.Time{}) && 값.M상장일.Before(lb.F금일()))
-	//s.M상장일 = lb.F확인2(lb.F2포맷된_일자("20060102", g.Listdate)
-	//s.ETP상품구분코드 = lb.F2문자열(g.Etp_gb)
-	//s.ETN조기상환가능여부 = lb.F2문자열(g.Etn_elback_yn) != "N"
-	//s.M최종결제 = lb.F2문자열(g.Settletype)
-	//s.M지수자산대분류코드 = lb.F2문자열(g.Idx_asset_class1)
-	//s.ETF_ETN_투자유의 = lb.F2문자열(g.Ty_text)
+	lb.F테스트_같음(t, 값.ETP상품구분코드, "2")
+	// ETN조기상환가능여부 필드 테스트 제외
+	lb.F테스트_같음(t, 값.M최종결제, "")
+	lb.F테스트_같음(t, 값.M지수자산대분류코드, "01")
+	lb.F테스트_같음(t, 값.ETF_ETN_투자유의, "")
+}
+
+// f선물_월물_코드_검사(KOSPI200 선물 월물 코드가 규칙에 맞는지 검증합니다.
+//
+// 코드 구조(8자리):
+//
+//	1자리   상품구분 : 선물 A, 콜옵션 B, 풋옵션 C
+//	2~3자리 기초자산 : 코스피200 = 01
+//	4자리   만기 연도 : 30년 주기 코드 (연도 % 10)
+//	5자리   만기 월물 : 1~9월은 1~9, 10월 A, 11월 B, 12월 C
+//	6~8자리 세부구분 : 선물 000
+//
+// 만기 연도·월물은 현재 시점에서 가장 가까운(만기 임박) 선물 월물과 비교해 검증하므로,
+// 월물 롤오버가 생겨도captured 고정값 없이 항상 최신 물 기준으로 통과합니다.
+func f선물_월물_코드_검사(t *testing.T, 코드 string) error {
+	lb.F테스트_같음(t, len(코드), 8)
+	lb.F테스트_같음(t, 코드[0], 'A')
+	lb.F테스트_같음(t, 코드[1:3], "01")
+
+	만기_년, 만기_월 := f최단_선물_월(lb.F지금())
+	기대_연도_코드 := strconv.Itoa(만기_년 % 10)
+	lb.F테스트_같음(t, string(코드[3]), 기대_연도_코드)
+	lb.F테스트_같음(t, string(코드[4]), f월물_코드_문자(만기_월))
+	lb.F테스트_같음(t, 코드[5:8], "000")
+
+	return nil
+}
+
+// f월물_코드_문자(만기 월(1~12)을 선물 월물 코드 문자(1~9, A, B, C)로 바꿉니다.
+func f월물_코드_문자(월 int) string {
+	if 1 <= 월 && 월 <= 9 {
+		return strconv.Itoa(월)
+	}
+	switch 월 {
+	case 10:
+		return "A"
+	case 11:
+		return "B"
+	case 12:
+		return "C"
+	}
+	return ""
+}
+
+// f최단_선물_월(주어진 시점에서 가장 가까운(만기 임박) KOSPI200 선물 월물을 (연도, 월)로 돌려줍니다.
+// KOSPI200 선물은 3·6·9·12월 분기 물이며, 만기는 각 월의 세 번째 수요일입니다.
+func f최단_선물_월(시점 time.Time) (int, int) {
+	분기_월 := map[time.Month]bool{time.March: true, time.June: true, time.September: true, time.December: true}
+	년 := 시점.Year()
+	월 := 시점.Month()
+
+	if 분기_월[월] {
+		// 이번 분기 물이 아직 만기 전이면 이번 물이 가장 가깝다.
+		if 시점.Before(f삼번째_수요일(time.Date(년, 월, 1, 0, 0, 0, 0, 시점.Location()))) {
+			return 년, int(월)
+		}
+		// 만기를 지났으면 다음 분기 물이 가장 가깝다.
+		년, 월 = f다음_분기_월(년, 월)
+	} else {
+		// 이번 월이 분기 물이 아니면 다가오는 분기 물이 가장 가깝다.
+		for !분기_월[월] {
+			if 월 == time.December {
+				월 = time.January
+				년++
+			} else {
+				월++
+			}
+		}
+	}
+
+	return 년, int(월)
+}
+
+// f다음_분기_월(주어진 분기 물의 다음 분기 물(연도 포함)을 돌려줍니다.
+func f다음_분기_월(년 int, 월 time.Month) (int, time.Month) {
+	switch 월 {
+	case time.March:
+		return 년, time.June
+	case time.June:
+		return 년, time.September
+	case time.September:
+		return 년, time.December
+	default:
+		return 년 + 1, time.March
+	}
+}
+
+// f삼번째_수요일(주어진 날짜를 시작으로 그달 세 번째 수요일을 돌려줍니다.
+func f삼번째_수요일(시작일 time.Time) time.Time {
+	세번째_도착 := 0
+	오늘 := 시작일
+	for {
+		if 오늘.Weekday() == time.Wednesday {
+			세번째_도착++
+			if 세번째_도착 == 3 {
+				return 오늘
+			}
+		}
+		오늘 = 오늘.AddDate(0, 0, 1)
+	}
 }

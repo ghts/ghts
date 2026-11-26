@@ -175,14 +175,14 @@ func NewT1901_ETF_시세_조회_응답(b []byte) (s *T1901_ETF_시세_조회_응
 	s.M연중_최고일자 = lb.F확인2(lb.F2포맷된_일자("20060102", g.Highyeardate))
 	s.M연중_최저가 = lb.F확인2(lb.F2정수64(g.Lowyear))
 	s.M연중_최저일자 = lb.F확인2(lb.F2포맷된_일자("20060102", g.Lowyeardate))
-	s.M업종명 = lb.F2문자열(g.Upname)
+	s.M업종명 = lb.F앞뒤_공백_제거(g.Upname)
 	s.M업종코드 = lb.F2문자열(g.Upcode)
 	s.M업종_현재가 = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Upprice, 2)
 	s.M업종_전일대비구분 = T전일대비_구분(lb.F확인2(lb.F2정수64_공백은_0(g.Upsign)))
 	s.M업종_전일대비등락폭 = s.M업종_전일대비구분.G부호보정_실수64(lb.F2실수_소숫점_추가_단순형_공백은_0(g.Upchange, 2))
 	s.M업종_전일대비등락율 = s.M업종_전일대비구분.G부호보정_실수64(lb.F2실수_소숫점_추가_단순형_공백은_0(g.Updiff, 2))
-	s.M선물_최근_월물명 = lb.F2문자열(g.Futname)
-	s.M선물_최근_월물_코드 = lb.F2문자열(g.Futcode)
+	s.M선물_최근_월물명 = lb.F앞뒤_공백_제거(g.Futname)
+	s.M선물_최근_월물_코드 = lb.F앞뒤_공백_제거(g.Futcode)
 	s.M선물_현재가 = lb.F확인2(lb.F2실수_소숫점_추가(g.Futprice, 2))
 	s.M선물_전일대비구분 = T전일대비_구분(lb.F확인2(lb.F2정수64(g.Futsign)))
 	s.M선물_전일대비등락폭 = s.M선물_전일대비구분.G부호보정_실수64(lb.F2실수_소숫점_추가_단순형_공백은_0(g.Futchange, 2))
@@ -259,8 +259,8 @@ func NewT1901_ETF_시세_조회_응답(b []byte) (s *T1901_ETF_시세_조회_응
 	s.M외국계_매수_직전_대비 = T전일대비_구분(lb.F확인2(lb.F2정수64(g.Ftradmscha)))
 	s.M외국계_매수_비율 = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Ftradmsdiff, 2)
 
-	s.M참고지수명 = lb.F2문자열(g.Upname2)
-	s.M참고지수코드 = lb.F2문자열(g.Upcode2)
+	s.M참고지수명 = lb.F앞뒤_공백_제거(g.Upname2)
+	s.M참고지수코드 = lb.F앞뒤_공백_제거(g.Upcode2)
 	s.M참고지수현재가 = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Upprice2, 2)
 
 	s.M전일NAV = lb.F2실수_소숫점_추가_단순형_공백은_0(g.Jnilnav, 2)
@@ -305,7 +305,7 @@ func NewT1901_ETF_시세_조회_응답(b []byte) (s *T1901_ETF_시세_조회_응
 	s.M상장일 = lb.F확인2(lb.F2포맷된_일자("20060102", g.Listdate))
 	s.ETP상품구분코드 = lb.F2문자열(g.Etp_gb)
 	s.ETN조기상환가능여부 = lb.F앞뒤_공백_제거(lb.F2문자열(g.Etn_elback_yn)) != ""
-	s.M최종결제 = lb.F2문자열(g.Settletype)
+	s.M최종결제 = lb.F앞뒤_공백_제거(g.Settletype)
 	s.M지수자산대분류코드 = lb.F확인2(lb.EUC_KR2Go문자열(g.Idx_asset_class1))
 	s.ETF_ETN_투자유의 = lb.F확인2(lb.EUC_KR2Go문자열(g.Ty_text))
 
