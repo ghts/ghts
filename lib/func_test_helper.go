@@ -106,7 +106,7 @@ func f테스트_거짓임(t testing.TB, false이어야_하는_조건 bool, 출�
 
 	출력_문자열 := "false이어야 하는 조건이 true임. "
 
-	if 출력값_모음 != nil && len(출력값_모음) != 0 {
+	if len(출력값_모음) > 0 {
 		출력_문자열 += F변수값_자료형_문자열(출력값_모음...)
 	}
 
@@ -542,10 +542,8 @@ func F중복없는_문자열_출력(포맷_문자열 string, 인수 ...any) {
 		}
 
 		log.Println(f포맷된_문자열("%s %s", 문자열, 호출경로))
-		break
+		return
 	}
-
-	return
 }
 
 func F출력_문자열_확보(함수 func()) (문자열 string, 에러 error) {

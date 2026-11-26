@@ -227,9 +227,7 @@ func NewCSPAQ13700_현물계좌_주문체결내역_반복값_모음(b []byte) (�
 		값.M운용지시번호 = lb.F2문자열(g.OpDrtnNo)
 		값.M주문자ID = lb.F2문자열(g.OdrrId)
 
-		if strings.HasPrefix(값.M종목코드, "A") {
-			값.M종목코드 = 값.M종목코드[1:]
-		}
+		값.M종목코드 = strings.TrimPrefix(값.M종목코드, "A")
 
 		return 값
 	}

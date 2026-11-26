@@ -618,8 +618,8 @@ func New장_운영정보(b []byte) (값 *S장_운영정보, 에러 error) {
 	lb.F확인1(binary.Read(bytes.NewBuffer(b), binary.BigEndian, g)) // 네트워크 전송 바이트 순서는 빅엔디언.
 
 	값 = new(S장_운영정보)
-	값.M장_구분 = T시장구분(lb.F2문자열(g.Jangubun))
-	값.M장_상태 = T시장상태(lb.F확인2(lb.F2정수(g.Jstatus)))
+	값.M장_구분 = F2장_구분(lb.F2문자열(g.Jangubun))
+	값.M장_상태 = F2장_상태(lb.F확인2(lb.F2정수(g.Jstatus)))
 
 	return 값, nil
 }

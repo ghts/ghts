@@ -273,9 +273,7 @@ func f숫자_문자열_정리(문자열 string) string {
 		}
 	}
 
-	if strings.HasSuffix(문자열, ".") {
-		문자열 = 문자열[:len(문자열)-1]
-	}
+	strings.TrimSuffix(문자열, ".")
 
 	return 문자열
 }

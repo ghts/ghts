@@ -25,8 +25,7 @@ func TestS종목_MarshalBinary(t *testing.T) {
 	예상_버퍼.Write([]byte{0x40, 0x9C, 0, 0, 0, 0, 0, 0}) // 하한가 40000
 	예상_버퍼.Write([]byte{0x38, 0xC7, 0, 0, 0, 0, 0, 0}) // 기준가 51000
 
-	F테스트_참임(t, bytes.Equal(바이트_모음, 예상_버퍼.Bytes()),
-		string(바이트_모음), string(예상_버퍼.Bytes()))
+	F테스트_참임(t, bytes.Equal(바이트_모음, 예상_버퍼.Bytes()), string(바이트_모음), 예상_버퍼.String())
 }
 
 func TestS종목_Marshal_Unmarshal_Binary(t *testing.T) {

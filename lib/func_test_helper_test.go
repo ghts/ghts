@@ -102,9 +102,6 @@ func TestF문자열_호출경로_출력(t *testing.T) {
 
 func TestNew에러(t *testing.T) {
 	에러 := New에러("테스트용 에러. %v", 100)
-	_, ok := 에러.(error)
-
-	F테스트_참임(t, ok)
 	F테스트_같음(t, strings.Count(에러.Error(), "테스트용 에러. 100"), 1)
 }
 

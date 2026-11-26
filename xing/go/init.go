@@ -218,7 +218,7 @@ func f시간_일치_확인(ch완료 chan bool) {
 		if 에러 != nil || 시각.Equal(time.Time{}) {
 			lb.F대기(lb.P3초)
 			continue
-		} else if 차이 := time.Now().Sub(시각); 차이 < -1*lb.P10분 || 차이 > lb.P10분 {
+		} else if 차이 := time.Since(시각); 차이 < -1*lb.P10분 || 차이 > lb.P10분 {
 			lb.F에러_출력("서버와 시스템 시각 불일치 : 차이 '%v'분", 차이.Minutes())
 			ch완료 <- false
 			return

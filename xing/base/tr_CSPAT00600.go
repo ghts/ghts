@@ -205,9 +205,7 @@ func NewCSPAT00600_현물_정상_주문_응답2(b []byte) (s *CSPAT00600_현물_
 	s.M계좌명 = lb.F앞뒤_공백_제거(g.AcntNm)
 	s.M종목명 = lb.F앞뒤_공백_제거(g.IsuNm)
 
-	if strings.HasPrefix(s.M종목코드, "A") {
-		s.M종목코드 = s.M종목코드[1:]
-	}
+	s.M종목코드 = strings.TrimPrefix(s.M종목코드, "A")
 
 	return s, nil
 }
