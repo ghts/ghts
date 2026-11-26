@@ -169,9 +169,8 @@ func NewNano소켓PAIR서버(주소 lb.T주소, 옵션_모음 ...any) (lb.I소�
 
 type sNano소켓 struct {
 	mangos.Socket
-	변환_형식 lb.T변환        // 전송하는 자료를 변환하는 형식.
-	타임아웃  time.Duration // 질의 후 타임 아웃까지의 시간
-	종류    lb.T소켓_종류
+	타임아웃 time.Duration // 질의 후 타임 아웃까지의 시간
+	종류   lb.T소켓_종류
 }
 
 func (s *sNano소켓) S송신(변환_형식 lb.T변환, 값_모음 ...any) (에러 error) {

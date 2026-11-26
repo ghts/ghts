@@ -13,8 +13,7 @@ func New컨텍스트(ctx mangos.Context) lb.I송수신 {
 }
 
 type s컨텍스트 struct {
-	ctx   mangos.Context
-	변환_형식 lb.T변환 // 전송하는 자료를 변환하는 형식.
+	ctx mangos.Context
 }
 
 func (s *s컨텍스트) S송신(변환_형식 lb.T변환, 값_모음 ...any) (에러 error) {
