@@ -372,6 +372,8 @@ const (
 
 func (p T매도_매수_구분) String() string {
 	switch p {
+	case P매도_매수_전체:
+		return "전체"
 	case P매도:
 		return "매도"
 	case P매수:
