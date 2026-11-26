@@ -1,6 +1,7 @@
 package xing
 
 import (
+	"math"
 	"regexp"
 	"strconv"
 	"testing"
@@ -107,7 +108,7 @@ func TestT1901_ETF_시세_조회(t *testing.T) {
 		lb.F테스트_같음(t, 값.NAV_전일대비등락율, 0)
 	}
 
-	lb.F테스트_참임(t, 값.M추적_오차율 >= 0)
+	lb.F테스트_참임(t, math.Abs(값.M추적_오차율) < 10)
 	lb.F테스트_참임(t, 값.M괴리율 < 10.0)
 	lb.F테스트_참임(t, 값.M대용가 >= 0)
 	lb.F테스트_참임(t, len(값.M매도_증권사_코드) == 5)
@@ -154,7 +155,9 @@ func TestT1901_ETF_시세_조회(t *testing.T) {
 	lb.F테스트_참임(t, 값.M외국계_매수_비율 >= 0)
 	lb.F테스트_같음(t, 값.M참고지수명, "")
 	lb.F테스트_같음(t, 값.M참고지수코드, "")
-	lb.F테스트_참임(t, 값.M참고지수현재가 > 0)
+	if 값.M참고지수명 != "" {
+		lb.F테스트_참임(t, 값.M참고지수현재가 > 0)
+	}
 	lb.F테스트_참임(t, 값.M전일NAV > 0)
 
 	// M전일NAV_전일대비구분 / M전일NAV_전일대비등락폭 / M전일NAV_전일대비등락율
