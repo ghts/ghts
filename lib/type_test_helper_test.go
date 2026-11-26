@@ -38,6 +38,7 @@ func (s *S모의_테스트) Errorf(format string, args ...any) { s.S값(false) }
 func (s *S모의_테스트) Fail()                             { s.S값(false) }
 func (s *S모의_테스트) FailNow()                          { s.S값(false) }
 func (s *S모의_테스트) Failed() bool                      { return !s.G값() }
+func (s *S모의_테스트) Helper()                           {} // I임베드된 nil *testing.T의 Helper() 호출을 방지하기 위함.
 
 //goland:noinspection GoUnusedParameter
 func (s *S모의_테스트) Fatal(args ...any) { s.S값(false) }
