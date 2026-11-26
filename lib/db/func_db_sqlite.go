@@ -32,12 +32,16 @@ func DSN_SQLite(파일경로 string) string {
 
 // DB_SQLite : DSN(파일 경로)으로 SQLite 연결.
 func DB_SQLite(DSN string) (*sql.DB, error) {
-	db, _ := sql.Open("sqlite", DSN)
+	db, 에러 := sql.Open("sqlite", DSN)
+	if 에러 != nil {
+		return nil, 에러
+	}
+
 	db.SetMaxOpenConns(10)
 	db.SetMaxIdleConns(10)
 	db.SetConnMaxLifetime(lb.P1시간)
 
-	if 에러 := db.Ping(); 에러 != nil {
+	if 에러 = db.Ping(); 에러 != nil {
 		return nil, 에러
 	}
 
