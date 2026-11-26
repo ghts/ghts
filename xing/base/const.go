@@ -577,7 +577,7 @@ func (p T전일대비_구분) String() string {
 		return "하락"
 	}
 
-	return strconv.Itoa(int(p))
+	return lb.F2문자열("예상하지 못한 전일대비 구분 : %v", int(p))
 }
 
 const (
