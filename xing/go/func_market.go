@@ -198,8 +198,8 @@ func F종목by코드(종목코드 string) (종목 *lb.S종목, 에러 error) {
 
 	종목코드 = trade.F종목코드_보정(종목코드)
 
-	if strings.HasPrefix(종목코드, "B") {
-		return nil, lb.New에러("%v : B로 시작하는 채권 종목입니다.", 종목코드)
+	if F채권_종목_여부(종목코드) {
+		return nil, lb.New에러("%v : 채권 종목입니다.", 종목코드)
 	}
 
 	종목, ok := 정보.M맵_전체[종목코드]
@@ -358,8 +358,9 @@ func ETF_ETN_종목_여부(종목코드 string) bool {
 	}
 }
 
+// F채권_종목_여부 : 채권 종목 코드 접두어 판정. 채권은 "B"/"D" 접두로 시작하므로 두 접두어를 모두 채권으로 인식한다.
 func F채권_종목_여부(종목_코드 string) bool {
-	return strings.HasPrefix(종목_코드, "D")
+	return strings.HasPrefix(종목_코드, "B") || strings.HasPrefix(종목_코드, "D")
 }
 
 func F레버리지_종목_여부(종목코드 string) bool {

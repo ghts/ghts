@@ -1040,7 +1040,7 @@ func TrT8407_현물_멀티_현재가_조회(종목코드_모음_전체 []string)
 	for _, 종목코드 := range 종목코드_모음_전체 {
 		종목코드 = trade.F종목코드_보정(종목코드)
 
-		if strings.HasPrefix(종목코드, "D") {
+		if F채권_종목_여부(종목코드) {
 			continue // 채권 종목은 무시
 		} else if 에러 := F종목코드_검사(종목코드); 에러 != nil {
 			continue

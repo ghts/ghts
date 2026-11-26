@@ -2,7 +2,6 @@ package daily_price
 
 import (
 	"bytes"
-	"strings"
 
 	lb "github.com/ghts/ghts/lib"
 	mt "github.com/ghts/ghts/lib/market_time"
@@ -107,7 +106,7 @@ func f당일_가격정보_수집_대상(db *sql.DB, 거래_정지_추정_맵 map
 	for _, 종목코드 := range xing.F종목코드_모음_전체() {
 		s := new(S종목별_일일_가격정보_모음)
 
-		if strings.HasPrefix(종목코드, "D") {
+		if xing.F채권_종목_여부(종목코드) {
 			continue // 채권 종목 가격 정보 보류
 		} else if 거래_정지_추정_맵[종목코드] {
 			continue // 거래 정지 종목 가격 정보 수집 보류.
