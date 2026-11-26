@@ -69,11 +69,14 @@ func F오차율_퍼센트(값1 any, 값2 any) float64 {
 }
 
 func F테스트_참임(t testing.TB, true이어야_하는_조건 bool, 에러_발생_시_출력할_변수_모음 ...any) {
+	t.Helper()
 	// I안전한_테스트와 건너뛰는 단계를 같게 맞추기 위함.
 	f테스트_참임(t, true이어야_하는_조건, 에러_발생_시_출력할_변수_모음...)
 }
 
 func f테스트_참임(t testing.TB, true이어야_하는_조건 bool, 에러_발생_시_출력할_변수_모음 ...any) {
+	t.Helper()
+
 	if true이어야_하는_조건 {
 		return
 	}
@@ -260,6 +263,11 @@ func f패닉_발생_여부_확인(함수 any, 추가_매개변수 []any) (패닉
 	함수_리플렉션_값.Call(인수_모음)
 
 	return 패닉_발생함, nil
+}
+
+func F테스트_유효한_숫자[T T숫자](t testing.TB, 값 T) {
+	t.Helper()
+	f테스트_참임(t, !math.IsNaN(float64(값)) && !math.IsInf(float64(값), 0), 값)
 }
 
 func F호출경로_문자열() string {
