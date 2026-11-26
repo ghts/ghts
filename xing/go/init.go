@@ -1,7 +1,6 @@
 package xing
 
 import (
-	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -31,7 +30,7 @@ func F초기화(서버_구분 xt.T서버_구분, 로그인_정보 *xt.S로그인
 	lb.F확인1(F종목_정보_설정())
 	lb.F확인1(F전일_당일_설정())
 
-	fmt.Println("** Xing API 초기화 완료 **")
+	lb.F문자열_출력("** Xing API 초기화 완료 **")
 
 	return nil
 }
