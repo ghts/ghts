@@ -2,102 +2,11 @@ package lib
 
 import (
 	"bytes"
-	"encoding"
 	"encoding/binary"
 	"errors"
-	"math/big"
 	"reflect"
 	"strings"
 )
-
-// codec.Ext
-// BytesExt
-// InterfaceExt
-//
-// codec.BytesExt
-// WriteExt(v any) []byte
-// ReadExt(dst any, src []byte)
-//
-// codec.InterfaceExt
-// ConvertExt(v any) any
-// UpdateExt(dst any, src any)
-//
-//goland:noinspection GoUnusedType
-type s변환기 struct{ 자료형 string }
-
-func (s *s변환기) WriteExt(값 any) []byte {
-	switch 변환값 := 값.(type) {
-	case error:
-		return []byte(변환값.Error())
-	case *big.Int, *big.Rat, *big.Float:
-		return F확인2(값.(encoding.TextMarshaler).MarshalText())
-	}
-
-	panic(New에러("s변환기.WriteExt() 예상하지 못한 자료형. %T", 값))
-}
-
-func (s *s변환기) ReadExt(포인터 any, 바이트_모음 []byte) {
-	defer S예외처리{M에러_실행: func() { 포인터 = nil }}.S실행()
-
-	switch s.자료형 {
-	case "errors.errorString":
-		switch F자료형(포인터).String() {
-		case "*error", "*errors.errorString",
-			"error", "errors.errorString":
-			// *errors.errorString 로 직접 변환할 수 없어서 reflect를 사용함.
-			r값 := reflect.ValueOf(errors.New(string(바이트_모음))).Elem()
-			reflect.ValueOf(포인터).Elem().Set(r값)
-		default:
-			panic(New에러("부적절한 포인터 형식 : '%T'", 포인터))
-		}
-	case "big.Int":
-		if 변환된_포인터, ok := 포인터.(*big.Int); ok {
-			F확인1(변환된_포인터.UnmarshalText(바이트_모음))
-		} else {
-			panic(New에러("부적절한 포인터 형식 : '%T'", 포인터))
-		}
-	case "big.Rat":
-		if 변환된_포인터, ok := 포인터.(*big.Rat); ok {
-			F확인1(변환된_포인터.UnmarshalText(바이트_모음))
-		} else {
-			panic(New에러("부적절한 포인터 형식 : '%T'", 포인터))
-		}
-	case "big.Float":
-		if 변환된_포인터, ok := 포인터.(*big.Float); ok {
-			F확인1(변환된_포인터.UnmarshalText(바이트_모음))
-		} else {
-			panic(New에러("부적절한 포인터 형식 : '%T'", 포인터))
-		}
-	default:
-		panic(New에러("예상하지 못한 M값 : '%v'", s.자료형))
-	}
-}
-
-func (s *s변환기) ConvertExt(값 any) any {
-	switch 변환값 := 값.(type) {
-	case error:
-		return 변환값.Error()
-	case big.Int, *big.Int,
-		big.Rat, *big.Rat,
-		big.Float, *big.Float:
-		return string(s.WriteExt(값))
-	}
-
-	panic(New에러("s변환기.ConvertExt() 예상하지 못한 자료형 : '%T'", 값))
-}
-
-func (s *s변환기) UpdateExt(포인터 any, 값 any) {
-	defer S예외처리{M에러_실행: func() { 포인터 = nil }}.S실행()
-
-	switch s.자료형 {
-	case "errors.errorString",
-		"big.Int", "big.Rat", "big.Float":
-		s.ReadExt(포인터, []byte(값.(string)))
-		return
-	}
-
-	panic(New에러("s변환기.UpdateExt() 예상하지 못한 자료형. %v", s.자료형))
-}
 
 // S바이트_변환 : 바이트 슬라이스로 인코딩 된 M값
 type S바이트_변환 struct {
