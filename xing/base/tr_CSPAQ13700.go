@@ -180,7 +180,7 @@ func NewCSPAQ13700_현물계좌_주문체결내역_반복값_모음(b []byte) (�
 	수량 := len(b) / SizeCSPAQ13700OutBlock3
 
 	newCSPAQ13700_반복값 := func(g *CSPAQ13700OutBlock3) (값 *CSPAQ13700_현물계좌_주문체결내역_반복값) {
-		defer lb.S예외처리{M에러_실행: func() { 값 = nil }}.S실행() //, M출력_숨김: new(true
+		defer lb.S예외처리{M에러_실행: func() { 값 = nil }}.S실행()
 
 		if lb.F앞뒤_공백_제거(lb.F2문자열(g.OrdDt)) == "" {
 			return nil
