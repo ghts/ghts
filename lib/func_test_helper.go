@@ -93,11 +93,14 @@ func f테스트_참임(t testing.TB, true이어야_하는_조건 bool, 에러_�
 }
 
 func F테스트_거짓임(t testing.TB, false이어야_하는_조건 bool, 에러_발생_시_출력할_변수_모음 ...any) {
+	t.Helper()
 	// I안전한_테스트와 건너뛰는 단계를 같게 맞추기 위함.
 	f테스트_거짓임(t, false이어야_하는_조건, 에러_발생_시_출력할_변수_모음...)
 }
 
 func f테스트_거짓임(t testing.TB, false이어야_하는_조건 bool, 출력값_모음 ...any) {
+	t.Helper()
+
 	if 에러 := F인터페이스_모음_입력값_검사(출력값_모음); 에러 != nil {
 		panic(에러)
 	} else if !false이어야_하는_조건 {
@@ -116,11 +119,15 @@ func f테스트_거짓임(t testing.TB, false이어야_하는_조건 bool, 출�
 }
 
 func F테스트_에러없음(t testing.TB, 에러 error, 출력_문자열_인수 ...any) {
+	t.Helper()
+
 	// I안전한_테스트와 건너뛰는 단계를 같게 맞추기 위함.
 	f테스트_에러없음(t, 에러, 출력_문자열_인수...)
 }
 
 func f테스트_에러없음(t testing.TB, 에러 error, 출력_문자열_인수 ...any) {
+	t.Helper()
+
 	if 에러 == nil {
 		return
 	}
@@ -135,11 +142,15 @@ func f테스트_에러없음(t testing.TB, 에러 error, 출력_문자열_인수
 }
 
 func F테스트_에러발생(t testing.TB, 에러 error, 출력_문자열_인수 ...any) {
+	t.Helper()
+
 	// I안전한_테스트와 건너뛰는 단계를 같게 맞추기 위함.
 	f테스트_에러발생(t, 에러, 출력_문자열_인수...)
 }
 
 func f테스트_에러발생(t testing.TB, 에러 error, 출력_문자열_인수 ...any) {
+	t.Helper()
+
 	if 에러 != nil {
 		return
 	}
@@ -166,11 +177,15 @@ func f테스트_에러발생(t testing.TB, 에러 error, 출력_문자열_인수
 }
 
 func F테스트_같음(t testing.TB, 값 any, 비교값1 any, 추가_비교값_모음 ...any) {
+	t.Helper()
+
 	// I안전한_테스트와 건너뛰는 단계를 같게 맞추기 위함.
 	f테스트_같음(t, 값, 비교값1, 추가_비교값_모음...)
 }
 
 func f테스트_같음(t testing.TB, 값 any, 비교값1 any, 추가_비교값_모음 ...any) {
+	t.Helper()
+
 	비교값_모음 := []any{비교값1}
 	비교값_모음 = append(비교값_모음, 추가_비교값_모음...)
 
@@ -189,11 +204,15 @@ func f테스트_같음(t testing.TB, 값 any, 비교값1 any, 추가_비교값_�
 }
 
 func F테스트_다름(t testing.TB, 값 any, 비교값1 any, 추가_비교값_모음 ...any) {
+	t.Helper()
+
 	// I안전한_테스트와 건너뛰는 단계를 같게 맞추기 위함.
 	f테스트_다름(t, 값, 비교값1, 추가_비교값_모음...)
 }
 
 func f테스트_다름(t testing.TB, 값 any, 비교값1 any, 추가_비교값_모음 ...any) {
+	t.Helper()
+
 	비교값_모음 := []any{비교값1}
 	비교값_모음 = append(비교값_모음, 추가_비교값_모음...)
 
@@ -214,7 +233,7 @@ func f테스트_다름(t testing.TB, 값 any, 비교값1 any, 추가_비교값_�
 func F테스트_패닉_발생(t testing.TB, 함수 any, 추가_매개변수 ...any) {
 	t.Helper()
 
-	if 패닉_발생함, 에러 := f패닉_발생_여부_확인(함수, 추가_매개변수); 에러 != nil {
+	if 패닉_발생함, 에러 := f패닉_발생_여부_확인(t, 함수, 추가_매개변수); 에러 != nil {
 		t.Errorf("잘못된 호출 : %v", 에러)
 	} else if !패닉_발생함 {
 		t.Errorf("패닉이 발생해야 하지만 발생하지 않았습니다.")
@@ -224,14 +243,16 @@ func F테스트_패닉_발생(t testing.TB, 함수 any, 추가_매개변수 ...a
 func F테스트_패닉_없음(t testing.TB, 함수 any, 추가_매개변수 ...any) {
 	t.Helper()
 
-	if 패닉_발생함, 에러 := f패닉_발생_여부_확인(함수, 추가_매개변수); 에러 != nil {
+	if 패닉_발생함, 에러 := f패닉_발생_여부_확인(t, 함수, 추가_매개변수); 에러 != nil {
 		t.Errorf("잘못된 호출 : %v", 에러)
 	} else if 패닉_발생함 {
 		t.Errorf("패닉이 발생하지 않아야 하지만 패닉이 발생합니다.")
 	}
 }
 
-func f패닉_발생_여부_확인(함수 any, 추가_매개변수 []any) (패닉_발생함 bool, 에러 error) {
+func f패닉_발생_여부_확인(t testing.TB, 함수 any, 추가_매개변수 []any) (패닉_발생함 bool, 에러 error) {
+	t.Helper()
+
 	함수_리플렉션_값 := reflect.ValueOf(함수)
 
 	// 컴파일 타임 대신, 진입 시점에 함수 타입인지 엄격하게 검증합니다.
@@ -357,26 +378,6 @@ func f건너뛰는_호출경로(호출경로 string) bool {
 
 func F호출경로_포함(문자열 string) bool {
 	return F정규식_검색(문자열, []string{".go:[0-9]+"}) != ""
-}
-
-func F호출경로_추가(문자열 string) string {
-	버퍼 := new(bytes.Buffer)
-	버퍼.WriteString(문자열)
-
-	if !strings.HasSuffix(문자열, "\n") {
-		버퍼.WriteString("\n")
-	}
-
-	for _, 호출경로 := range F호출경로_모음() {
-		if f건너뛰는_호출경로(호출경로) {
-			continue
-		} else if !strings.Contains(문자열, 호출경로) {
-			버퍼.WriteString(호출경로)
-			버퍼.WriteString("\n")
-		}
-	}
-
-	return 버퍼.String()
 }
 
 // 소스코드 위치를 나타내는 함수. runtime.Caller()의 한글화 버전임.
