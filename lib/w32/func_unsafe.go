@@ -15,7 +15,10 @@ const 단위_오프셋 = unsafe.Sizeof(byte(0))
 // 주의: uintptr()로 변환해 syscall에 넘기면 Go 참조가 사라져 DLL 호출 중 GC가 버퍼를 회수할 수 있다 — 로컬 변수에 유지해도 마지막 사용(F2포인터 추출) 시점에 liveness가 끝나므로 의지하면 안 된다. (실험으로 확인됨.)
 // DLL 호출은 F호출()을 사용할 것 ([]byte 인자를 포인터로 변환하고 호출 완료까지 자동으로 보호한다). syscall을 직접 호출하는 경우는 로컬 변수 유지 후 syscall 완료에 반드시 runtime.KeepAlive().
 func Go문자열2EUC_KR_바이트_모음(go문자열 string) []byte {
-	바이트_모음, _ := korean.EUCKR.NewEncoder().Bytes([]byte(go문자열))
+	바이트_모음, 에러 := korean.EUCKR.NewEncoder().Bytes([]byte(go문자열))
+	if 에러 != nil {
+		lb.F에러_출력(에러)
+	}
 
 	return append(바이트_모음, 0)
 }
