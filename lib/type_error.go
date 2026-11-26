@@ -74,17 +74,6 @@ func (s *S에러) g출력_완료() bool { return s.출력_완료.Load() }
 
 func (s *S에러) s출력_완료() { s.출력_완료.Store(true) }
 
-func (s *S에러) g호출_경로_문자열() string {
-	버퍼 := new(strings.Builder)
-
-	for _, 호출경로 := range s.호출_경로_모음 {
-		버퍼.WriteString(호출경로)
-		버퍼.WriteString("\n")
-	}
-
-	return 버퍼.String()
-}
-
 func (s *S에러) S출력() {
 	if s.g출력_완료() {
 		return
