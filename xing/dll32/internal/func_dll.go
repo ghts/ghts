@@ -92,6 +92,8 @@ func F접속(서버_구분 xt.T서버_구분) error {
 	case xt.P서버_모의투자:
 		서버_이름 = "demo.ls-sec.co.kr"
 		포트_번호 = 20001
+	default:
+		return lb.New에러("F접속() : 예상하지 못한 서버 구분 - '%v'", 서버_구분)
 	}
 
 	api_호출_잠금.Lock()
