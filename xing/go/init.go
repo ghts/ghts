@@ -166,13 +166,20 @@ func f초기화_작동_확인() (작동_여부 bool) {
 }
 
 func F확인_TR소켓() bool {
+	var 마지막_에러 error
+
 	for range 100 {
-		if 응답 := F질의(lb.New질의값_기본형(xt.TR소켓_테스트, ""), lb.P5초); 응답.G에러() == nil {
+		응답 := F질의(lb.New질의값_기본형(xt.TR소켓_테스트, ""), lb.P5초)
+		if 에러 := 응답.G에러(); 에러 == nil {
 			return true
+		} else {
+			마지막_에러 = 에러
 		}
 
-		lb.F대기(lb.P500밀리초)
+		lb.F대기(lb.P1초)
 	}
+
+	lb.F에러_출력("F확인_TR소켓() : DLL32 프로세스 REP소켓 접속 확인 실패.\n%v", 마지막_에러)
 
 	return false
 }
