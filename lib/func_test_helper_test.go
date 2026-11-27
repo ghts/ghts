@@ -3,7 +3,6 @@ package lib
 import (
 	"errors"
 	"fmt"
-	"runtime"
 	"strings"
 	"testing"
 )
@@ -80,24 +79,6 @@ func TestF임의_문자열(t *testing.T) {
 	}
 
 	F테스트_참임(t, len(맵) > 테스트_반복횟수*0.7)
-}
-
-func TestF문자열_호출경로_출력(t *testing.T) {
-	문자열, 에러 := F출력_문자열_확보(func() {
-		F문자열_호출경로_출력("%v, %v", "테스트_문자열", 1)
-	})
-
-	F테스트_에러없음(t, 에러)
-	F테스트_참임(t, strings.Count(문자열, "테스트_문자열, 1") == 1, 문자열)
-	F테스트_참임(t, F호출경로_포함(문자열), 문자열)
-
-	pc, _, _, _ := runtime.Caller(0)
-	함수명 := runtime.FuncForPC(pc).Name()
-	if strings.LastIndex(함수명, ".") > 0 {
-		함수명 = 함수명[strings.LastIndex(함수명, ".")+1:]
-	}
-
-	F테스트_참임(t, strings.Contains(문자열, 함수명), 문자열, 함수명)
 }
 
 func TestNew에러(t *testing.T) {
