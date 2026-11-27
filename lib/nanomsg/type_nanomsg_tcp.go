@@ -236,13 +236,6 @@ func (s *sNano소켓) S타임아웃(타임아웃 time.Duration) lb.I소켓 {
 func (s *sNano소켓) S옵션(옵션_모음 ...any) {
 	for i, 옵션 := range 옵션_모음 {
 		switch 변환값 := 옵션.(type) {
-		case string:
-			switch 변환값 {
-			//case mangos.OptionRaw:
-			//	lb.F확인(s.Socket.SetOption(mangos.OptionRaw, true))
-			default:
-				panic(lb.New에러("예상하지 못한 옵션값 : '%v' '%v'", i, 변환값))
-			}
 		case time.Duration:
 			s.타임아웃 = 변환값
 		default:
