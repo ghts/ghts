@@ -304,7 +304,7 @@ func F실시간_정보_구독_해지_처리(질의 *lb.S채널_질의) {
 	case xt.TR실시간_정보_해지:
 		함수 = F실시간_정보_해지
 	default:
-		panic(lb.F2문자열("예상하지 못한 경우 : '%v' '%v'", int(TR구분), TR구분.String()))
+		panic(lb.New에러("예상하지 못한 경우 : '%v' '%v'", int(TR구분), TR구분.String()))
 	}
 
 	switch 변환값 := 질의값.(type) {

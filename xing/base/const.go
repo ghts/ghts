@@ -525,7 +525,7 @@ func (p T전일대비_구분) G부호보정_정수64(등락폭 int64) int64 {
 	case P구분_보합, T전일대비_구분(0):
 		// PASS	// 0의 경우 어떻게 처리해야 할 지 모르겠음. 일단 무시
 	default:
-		panic(lb.F2문자열("예상하지 못한 경우 : '%v'", int(p)))
+		panic(lb.New에러("예상하지 못한 경우 : '%v'", int(p)))
 	}
 
 	return 등락폭
@@ -544,7 +544,7 @@ func (p T전일대비_구분) G부호보정_실수64(등락율 float64) float64 
 	case P구분_보합, T전일대비_구분(0):
 		// PASS	// 0의 경우 어떻게 처리해야 할 지 모르겠음. 일단 무시
 	default:
-		panic(lb.F2문자열("예상하지 못한 경우 : '%v'", int(p)))
+		panic(lb.New에러("예상하지 못한 경우 : '%v'", int(p)))
 	}
 
 	return 등락율

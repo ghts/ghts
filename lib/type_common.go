@@ -270,7 +270,7 @@ func New종목(코드 string, 이름 string, 시장_구분 T시장구분) *S종�
 			panic(New에러with출력("잘못된 코드 '%v' '%v' '%v'", 코드, 이름, 시장_구분))
 		}
 	default:
-		panic(F2문자열("예상하지 못한 경우 : '%v' '%v'", int(시장_구분), 시장_구분.String()))
+		panic(New에러("예상하지 못한 경우 : '%v' '%v'", int(시장_구분), 시장_구분.String()))
 	}
 
 	s := new(S종목)
