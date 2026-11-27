@@ -372,7 +372,15 @@ func F중간값[T T숫자](값_모음 ...T) T {
 }
 
 func F절대값[T T숫자](값 T) T {
-	return T(math.Abs(float64(값)))
+	if 값 < 0 {
+		// 부호 정수 최솟값(예: math.MinInt64)은 음수를 취하면 자기 자신으로 래핑되어
+		// 절대값으로 표현할 수 없으므로 명시적으로 실패한다.
+		F조건부_패닉(-값 == 값, "F절대값 : 입력값 %v 은(는) 정수 최솟값이라 절대값으로 표현할 수 없습니다.", 값)
+
+		return -값
+	}
+
+	return 값
 }
 
 func F절대값_Duration(값 time.Duration) time.Duration {
