@@ -294,6 +294,8 @@ func (s *S종목별_일일_가격정보_모음) DB읽기with시작일(db *sql.DB
 		s.M저장소 = append(s.M저장소, 일일_가격정보)
 	}
 
+	lb.F확인1(rows.Err())
+
 	s.S정렬_및_인덱스_설정()
 
 	return nil
