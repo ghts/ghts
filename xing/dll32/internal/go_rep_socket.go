@@ -70,8 +70,10 @@ func go수신_도우미(ch초기화, ch종료 chan lb.T신호) (에러 error) {
 			continue
 		} else if 바이트_변환_모음.G수량() != 1 {
 			lb.F에러_출력("메시지 길이 : 예상값 1, 실제값 %v.", 바이트_변환_모음.G수량())
+			ctx.S송신(lb.JSON, lb.New에러("메시지 길이 : 예상값 1, 실제값 %v.", 바이트_변환_모음.G수량()))
 		} else if i값, 에러 := 바이트_변환_모음.S해석기(xt.F바이트_변환값_해석).G해석값(0); 에러 != nil {
 			lb.F에러_출력(에러)
+			ctx.S송신(lb.JSON, 에러)
 		} else if 질의값, ok := i값.(lb.I질의값); !ok {
 			panic(lb.New에러("'I질의값'형이 아님 : '%T'", i값))
 		} else {
