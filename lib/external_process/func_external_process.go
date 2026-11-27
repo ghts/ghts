@@ -65,7 +65,7 @@ func F외부_프로세스_실행(실행화일_경로 string, 실행옵션_모음
 	ch프로세스ID := make(chan int, 1)
 	ch에러 := make(chan error, 1)
 
-	go f외부_프로세스_생성(ctx, ch프로세스ID, ch에러, 실행화일_경로, 실행옵션_모음...)
+	go f외부_프로세스_생성(ctx, 취소함수, ch프로세스ID, ch에러, 실행화일_경로, 실행옵션_모음...)
 
 	select {
 	case 프로세스ID = <-ch프로세스ID:
@@ -79,7 +79,7 @@ func F외부_프로세스_실행(실행화일_경로 string, 실행옵션_모음
 	}
 }
 
-func f외부_프로세스_생성(ctx context.Context, ch프로세스ID chan int, ch에러 chan error, 실행화일_경로 string, 실행옵션_모음 ...any) (에러 error) {
+func f외부_프로세스_생성(ctx context.Context, 취소함수 context.CancelFunc, ch프로세스ID chan int, ch에러 chan error, 실행화일_경로 string, 실행옵션_모음 ...any) (에러 error) {
 	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { ch에러 <- 에러 }}.S실행()
 
 	// ctx가 취소되면(호출부 타임아웃/실패) 생성된 프로세스가 자동 종료된다.
@@ -94,6 +94,7 @@ func f외부_프로세스_생성(ctx context.Context, ch프로세스ID chan int,
 	프로세스ID_저장소.S추가(프로세스ID, 외부_명령어.Path)
 	외부_명령어.Wait()
 	프로세스ID_저장소.S제거(프로세스ID)
+	취소함수() // 프로세스가 종료되었으므로 컨텍스트도 종료. (이미 호출부에서 취소했다면 no-op.)
 
 	return nil
 }
