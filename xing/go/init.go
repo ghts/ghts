@@ -98,12 +98,10 @@ func DLL32_소스_코드_화일_경로() string {
 }
 
 func DLL32_빌드() error {
-	if lb.F파일_존재함(DLL32_실행_화일_경로()) {
-		if lb.F파일_없음(DLL32_소스_코드_화일_경로()) {
-			return nil // 컴파일 준비되어 있지 않으면 이미 존재하는 실행 화일 그대로 사용.
-		}
-
-		os.Remove(DLL32_실행_화일_경로()) // 컴파일 준비되어 있으면 삭제 후 최신 버전 재생성
+	if lb.F파일_없음(DLL32_소스_코드_화일_경로()) {
+		return nil // 컴파일 준비되어 있지 않으면 이미 존재하는 실행 화일 그대로 사용.
+	} else if lb.F파일_존재함(DLL32_실행_화일_경로()) {
+		os.Remove(DLL32_실행_화일_경로()) // 컴파일 준비되어 있으면 기존 실행 파일 삭제 (최신 버전 재생성)
 	}
 
 	GOARCH_원래값 := os.Getenv("GOARCH")
@@ -113,10 +111,6 @@ func DLL32_빌드() error {
 	CGO_ENABLED_원래값 := os.Getenv("CGO_ENABLED")
 	os.Setenv("CGO_ENABLED", "0") // cgo 비활성화
 	defer os.Setenv("CGO_ENABLED", CGO_ENABLED_원래값)
-
-	PATH_원래값 := os.Getenv("PATH")
-	os.Setenv("PATH", lb.GOROOT()+`\bin;C:\msys64\mingw32\bin;C:\msys64\usr\bin`)
-	defer os.Setenv("PATH", PATH_원래값)
 
 	return exec.Command("go", "build", "-o", "dll32_xing.exe", "github.com/ghts/ghts/xing/dll32").Run()
 }
