@@ -52,8 +52,8 @@ var (
 	종목정보_초기화_잠금 sync.Mutex // 중복 TR 조회 방지용. 읽기 경로와 무관.
 
 	// 계좌번호 모음도 같은 "1회 조회 후 불변 캐시" 패턴.
-	계좌번호_모음_캐시 atomic.Pointer[[]string]
-	계좌번호_모음_잠금 sync.Mutex // 중복 TR 조회 방지용. 읽기 경로와 무관.
+	계좌번호_모음_저장소 atomic.Pointer[[]string]
+	계좌번호_모음_잠금  sync.Mutex // 중복 TR 조회 방지용. 읽기 경로와 무관.
 
 	프로세스ID_DLL32 int
 )
