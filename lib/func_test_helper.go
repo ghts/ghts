@@ -479,7 +479,7 @@ func F문자열_출력_도우미(호출경로_포함_여부 bool, 포맷_문자�
 		버퍼.WriteString("\n")
 	}
 
-	fmt.Println(f포맷된_문자열(버퍼.String(), 추가_매개변수...))
+	fmt.Fprintln(log.Writer(), f포맷된_문자열(버퍼.String(), 추가_매개변수...))
 }
 
 func F문자열_중복_확인(문자열 string) bool {
@@ -545,28 +545,6 @@ func F중복없는_문자열_출력(포맷_문자열 string, 인수 ...any) {
 		log.Println(f포맷된_문자열("%s %s", 문자열, 호출경로))
 		return
 	}
-}
-
-func F출력_문자열_확보(함수 func()) (문자열 string, 에러 error) {
-	화면_출력_잠금.Lock()
-	defer 화면_출력_잠금.Unlock()
-
-	defer S예외처리{M에러: &에러, M에러_실행: func() { 문자열 = "" }}.S실행()
-
-	원래_출력장치 := os.Stdout
-	임시_입력장치, 임시_출력장치 := F확인3(os.Pipe())
-	os.Stdout = 임시_출력장치
-
-	함수()
-
-	임시_출력장치.Close()
-	os.Stdout = 원래_출력장치
-
-	버퍼 := new(bytes.Buffer)
-	io.Copy(버퍼, 임시_입력장치)
-	임시_입력장치.Close()
-
-	return 버퍼.String(), nil
 }
 
 func F고루틴_식별자() string {
