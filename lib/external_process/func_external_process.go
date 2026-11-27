@@ -1,6 +1,7 @@
 package external_process
 
 import (
+	"context"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -60,24 +61,29 @@ func F외부_프로세스_실행(실행화일_경로 string, 실행옵션_모음
 		}
 	}
 
+	ctx, 취소함수 := context.WithCancel(context.Background())
 	ch프로세스ID := make(chan int, 1)
 	ch에러 := make(chan error, 1)
-	go f외부_프로세스_생성(ch프로세스ID, ch에러, 실행화일_경로, 실행옵션_모음...)
+
+	go f외부_프로세스_생성(ctx, ch프로세스ID, ch에러, 실행화일_경로, 실행옵션_모음...)
 
 	select {
 	case 프로세스ID = <-ch프로세스ID:
 		return 프로세스ID, nil
 	case 에러 = <-ch에러:
+		취소함수() // 생성된 프로세스 종료.
 		return -1, 에러
 	case <-time.After(lb.P20초):
+		취소함수() // 생성된 프로세스 종료.
 		return -1, lb.New에러("외부프로세스 실행 타임아웃. %v", 실행화일_경로)
 	}
 }
 
-func f외부_프로세스_생성(ch프로세스ID chan int, ch에러 chan error, 실행화일_경로 string, 실행옵션_모음 ...any) (에러 error) {
+func f외부_프로세스_생성(ctx context.Context, ch프로세스ID chan int, ch에러 chan error, 실행화일_경로 string, 실행옵션_모음 ...any) (에러 error) {
 	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { ch에러 <- 에러 }}.S실행()
 
-	외부_명령어 := exec.Command(실행화일_경로, lb.F2문자열_모음(실행옵션_모음)...)
+	// ctx가 취소되면(호출부 타임아웃/실패) 생성된 프로세스가 자동 종료된다.
+	외부_명령어 := exec.CommandContext(ctx, 실행화일_경로, lb.F2문자열_모음(실행옵션_모음)...)
 	외부_명령어.Stdin = os.Stdin
 	외부_명령어.Stdout = os.Stdout
 	외부_명령어.Stderr = os.Stderr
