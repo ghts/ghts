@@ -1529,27 +1529,29 @@ func F계좌번호_모음() (응답값 []string, 에러 error) {
 		응답값 = make([]string, 0)
 	}}.S실행()
 
-	// 캐시 히트: 원자 로드 (읽기 경로 잠금 없음).
-	if 캐시 := 계좌번호_모음_캐시.Load(); 캐시 != nil {
-		return *캐시, nil
+	if 저장소 := 계좌번호_모음_저장소.Load(); 저장소 != nil {
+		return *저장소, nil
 	}
 
 	// 캐시 미스: TR 중복 조회 방지를 위해 잠금 후 재확인 (더블 체크).
 	계좌번호_모음_잠금.Lock()
 	defer 계좌번호_모음_잠금.Unlock()
 
-	if 캐시 := 계좌번호_모음_캐시.Load(); 캐시 != nil {
-		return *캐시, nil
+	if 저장소 := 계좌번호_모음_저장소.Load(); 저장소 != nil {
+		return *저장소, nil
 	}
 
 	질의값 := lb.New질의값_기본형(xt.TR계좌_번호, "")
-
+	응답 := F질의(질의값, lb.P10초)
 	모음 := make([]string, 0)
-	if 에러 = F질의(질의값, lb.P10초).G값(0, &모음); 에러 != nil {
+
+	if 에러 = 응답.G에러(); 에러 != nil {
+		return nil, 에러
+	} else if 에러 = 응답.G값(0, &모음); 에러 != nil {
 		return nil, 에러
 	}
 
-	계좌번호_모음_캐시.Store(&모음) // 이후 불변으로 유지.
+	계좌번호_모음_저장소.Store(&모음) // 이후 불변으로 유지.
 
 	return 모음, nil
 }
