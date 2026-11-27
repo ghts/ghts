@@ -50,6 +50,8 @@ func F2Go바이트_모음(c데이터 unsafe.Pointer) []byte {
 		바이트_모음 = append(바이트_모음, 바이트)
 	}
 
+	lb.F에러_출력("F2Go바이트_모음 : null문자를 찾지 못해 4096바이트에서 잘림 (c데이터=%p)", c데이터)
+
 	return 바이트_모음
 }
 
