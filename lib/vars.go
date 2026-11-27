@@ -16,8 +16,6 @@ var (
 
 	테스트_모드 = New안전한_bool(false)
 
-	화면_출력_잠금 sync.Mutex
-
 	문자열_출력_중복_방지_잠금 = new(sync.Mutex)
 	문자열_출력_중복_방지_맵  = make(map[string]S비어있음)
 
