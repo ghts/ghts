@@ -276,38 +276,38 @@ func f자료형_문자열_해석(g *xt.TR_DATA) (자료형_문자열 string, 에
 }
 
 func f민감정보_삭제(raw값 []byte, 구분_문자열 string) []byte {
-
 	switch 구분_문자열 {
 	case xt.P자료형_CSPAQ12300OutBlock,
 		xt.P자료형_CSPAQ13700OutBlock,
 		xt.P자료형_CSPAT00600OutBlock:
-		f민감정보_삭제_도우미(raw값, 25, 8)
+		raw값 = f민감정보_삭제_도우미(raw값, 25, 8)
 	case xt.P자료형_CSPAQ22200OutBlock1,
 		xt.P자료형_CSPAQ22200OutBlock,
 		xt.P자료형_CSPAQ12200OutBlock1,
 		xt.P자료형_CSPAQ12200OutBlock:
-		f민감정보_삭제_도우미(raw값, 28, 8)
+		raw값 = f민감정보_삭제_도우미(raw값, 28, 8)
 	case xt.P자료형_CSPAT00700OutBlock,
 		xt.P자료형_CSPAT00800OutBlock:
-		f민감정보_삭제_도우미(raw값, 35, 8)
+		raw값 = f민감정보_삭제_도우미(raw값, 35, 8)
 	case xt.RT현물_주문_접수_SC0:
-		f민감정보_삭제_도우미(raw값, 277, 8)
-
+		raw값 = f민감정보_삭제_도우미(raw값, 277, 8)
 	}
 
 	return raw값
 }
 
-func f민감정보_삭제_도우미(raw값 []byte, 시작_인덱스, 길이 int) {
+func f민감정보_삭제_도우미(raw값 []byte, 시작_인덱스, 길이 int) []byte {
+	raw값 = lb.F슬라이스_복사(raw값)
+
 	끝_인덱스 := 시작_인덱스 + 길이
 
 	// 경계값 검사
 	if 시작_인덱스 < 0 {
 		lb.F에러_출력("f민감정보_삭제_도우미() : '시작_인덱스'가 음수입니다.")
-		return
+		return raw값
 	} else if 시작_인덱스 > len(raw값) {
 		lb.F에러_출력("f민감정보_삭제_도우미() : 시작 인덱스가 슬라이스 크기를 벗어났습니다. '%d', '%d'", 시작_인덱스, len(raw값))
-		return
+		return raw값
 	} else if 끝_인덱스 > len(raw값) {
 		lb.F에러_출력("f민감정보_삭제_도우미() : 인덱스 범위가 슬라이스 크기를 벗어났습니다. '%d', '%d'", 끝_인덱스, len(raw값))
 		끝_인덱스 = len(raw값)
@@ -315,6 +315,8 @@ func f민감정보_삭제_도우미(raw값 []byte, 시작_인덱스, 길이 int)
 
 	// Go 내장 기능을 사용해 한 번에 0으로 초기화
 	clear(raw값[시작_인덱스:끝_인덱스])
+
+	return raw값
 }
 
 func f모의투자서버_접속_중() bool {
