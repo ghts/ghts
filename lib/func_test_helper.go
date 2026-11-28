@@ -5,17 +5,18 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"math"
 	"os"
 	"path/filepath"
-	"reflect"
 	"regexp"
 	"runtime"
 	"strconv"
 	"strings"
-	"testing"
 	"time"
 )
+
+// 테스트 전용 assert 헬퍼(F테스트_참임, F테스트_같음 등)는
+// 프로덕션 바이너리에 testing 패키지가 링크되지 않도록
+// lib/test_helper(th) 패키지로 이동했다.
 
 func F테스트_모드_실행_중() bool {
 	return 테스트_모드.G값()
@@ -30,240 +31,6 @@ func F테스트_모드_시작() error {
 func F테스트_모드_종료() error {
 	에러 := 테스트_모드.S값(false)
 	return 에러
-}
-
-func F테스트_참임(t testing.TB, true이어야_하는_조건 bool, 에러_발생_시_출력할_변수_모음 ...any) {
-	t.Helper()
-	// I안전한_테스트와 건너뛰는 단계를 같게 맞추기 위함.
-	f테스트_참임(t, true이어야_하는_조건, 에러_발생_시_출력할_변수_모음...)
-}
-
-func f테스트_참임(t testing.TB, true이어야_하는_조건 bool, 에러_발생_시_출력할_변수_모음 ...any) {
-	t.Helper()
-
-	if true이어야_하는_조건 {
-		return
-	}
-
-	출력_문자열 := "true이어야 하는 조건이 false임."
-
-	if len(에러_발생_시_출력할_변수_모음) > 0 {
-		출력_문자열 += F변수값_문자열(에러_발생_시_출력할_변수_모음...)
-	}
-
-	f문자열_출력_도우미(true, 출력_문자열)
-
-	t.Fail()
-}
-
-func F테스트_거짓임(t testing.TB, false이어야_하는_조건 bool, 에러_발생_시_출력할_변수_모음 ...any) {
-	t.Helper()
-	// I안전한_테스트와 건너뛰는 단계를 같게 맞추기 위함.
-	f테스트_거짓임(t, false이어야_하는_조건, 에러_발생_시_출력할_변수_모음...)
-}
-
-func f테스트_거짓임(t testing.TB, false이어야_하는_조건 bool, 출력값_모음 ...any) {
-	t.Helper()
-
-	if 에러 := F인터페이스_모음_입력값_검사(출력값_모음); 에러 != nil {
-		panic(에러)
-	} else if !false이어야_하는_조건 {
-		return // OK
-	}
-
-	출력_문자열 := "false이어야 하는 조건이 true임. "
-
-	if len(출력값_모음) > 0 {
-		출력_문자열 += F변수값_자료형_문자열(출력값_모음...)
-	}
-
-	F문자열_출력(출력_문자열)
-
-	t.Fail()
-}
-
-func F테스트_에러없음(t testing.TB, 에러 error, 출력_문자열_인수 ...any) {
-	t.Helper()
-
-	// I안전한_테스트와 건너뛰는 단계를 같게 맞추기 위함.
-	f테스트_에러없음(t, 에러, 출력_문자열_인수...)
-}
-
-func f테스트_에러없음(t testing.TB, 에러 error, 출력_문자열_인수 ...any) {
-	t.Helper()
-
-	if 에러 == nil {
-		return
-	}
-
-	if len(출력_문자열_인수) == 0 {
-		F에러_출력(에러)
-	} else {
-		F에러_출력("%v\n%v", F2문자열(출력_문자열_인수...), 에러)
-	}
-
-	t.Fail()
-}
-
-func F테스트_에러발생(t testing.TB, 에러 error, 출력_문자열_인수 ...any) {
-	t.Helper()
-
-	// I안전한_테스트와 건너뛰는 단계를 같게 맞추기 위함.
-	f테스트_에러발생(t, 에러, 출력_문자열_인수...)
-}
-
-func f테스트_에러발생(t testing.TB, 에러 error, 출력_문자열_인수 ...any) {
-	t.Helper()
-
-	if 에러 != nil {
-		return
-	}
-
-	defer func() { t.Fail() }()
-
-	if len(출력_문자열_인수) <= 0 {
-		F에러_출력("에러 없음.")
-		return
-	}
-
-	switch 출력_문자열_인수[0].(type) {
-	case string, error:
-		if len(출력_문자열_인수) == 1 {
-			F에러_출력(출력_문자열_인수[0])
-		} else {
-			F에러_출력(출력_문자열_인수[0], 출력_문자열_인수[1:]...)
-		}
-
-		return
-	}
-
-	F에러_출력("에러 없음.\n%v", F2문자열(출력_문자열_인수...))
-}
-
-func F테스트_같음(t testing.TB, 값 any, 비교값1 any, 추가_비교값_모음 ...any) {
-	t.Helper()
-
-	// I안전한_테스트와 건너뛰는 단계를 같게 맞추기 위함.
-	f테스트_같음(t, 값, 비교값1, 추가_비교값_모음...)
-}
-
-func f테스트_같음(t testing.TB, 값 any, 비교값1 any, 추가_비교값_모음 ...any) {
-	t.Helper()
-
-	비교값_모음 := []any{비교값1}
-	비교값_모음 = append(비교값_모음, 추가_비교값_모음...)
-
-	for _, 비교값 := range 비교값_모음 {
-		if F같음(값, 비교값) {
-			return
-		}
-	}
-
-	값_모음 := []any{값}
-	값_모음 = append(값_모음, 비교값_모음...)
-
-	f문자열_출력_도우미(true, "같은 값을 발견하지 못함.\n%v", F변수값_자료형_문자열(값_모음...))
-
-	t.Fail()
-}
-
-func F테스트_다름(t testing.TB, 값 any, 비교값1 any, 추가_비교값_모음 ...any) {
-	t.Helper()
-
-	// I안전한_테스트와 건너뛰는 단계를 같게 맞추기 위함.
-	f테스트_다름(t, 값, 비교값1, 추가_비교값_모음...)
-}
-
-func f테스트_다름(t testing.TB, 값 any, 비교값1 any, 추가_비교값_모음 ...any) {
-	t.Helper()
-
-	비교값_모음 := []any{비교값1}
-	비교값_모음 = append(비교값_모음, 추가_비교값_모음...)
-
-	for _, 비교값 := range 비교값_모음 {
-		if !F같음(값, 비교값) {
-			continue
-		}
-
-		값_모음 := []any{값}
-		값_모음 = append(값_모음, 비교값_모음...)
-
-		f문자열_출력_도우미(true, "같은 값을 발견함.\n%v", F변수값_자료형_문자열(값_모음...))
-
-		t.Fail()
-	}
-}
-
-func F테스트_패닉_발생(t testing.TB, 함수 any, 추가_매개변수 ...any) {
-	t.Helper()
-
-	if 패닉_발생함, 에러 := f패닉_발생_여부_확인(t, 함수, 추가_매개변수); 에러 != nil {
-		t.Errorf("잘못된 호출 : %v", 에러)
-	} else if !패닉_발생함 {
-		t.Errorf("패닉이 발생해야 하지만 발생하지 않았습니다.")
-	}
-}
-
-func F테스트_패닉_없음(t testing.TB, 함수 any, 추가_매개변수 ...any) {
-	t.Helper()
-
-	if 패닉_발생함, 에러 := f패닉_발생_여부_확인(t, 함수, 추가_매개변수); 에러 != nil {
-		t.Errorf("잘못된 호출 : %v", 에러)
-	} else if 패닉_발생함 {
-		t.Errorf("패닉이 발생하지 않아야 하지만 패닉이 발생합니다.")
-	}
-}
-
-func f패닉_발생_여부_확인(t testing.TB, 함수 any, 추가_매개변수 []any) (패닉_발생함 bool, 에러 error) {
-	t.Helper()
-
-	함수_리플렉션_값 := reflect.ValueOf(함수)
-
-	// 컴파일 타임 대신, 진입 시점에 함수 타입인지 엄격하게 검증합니다.
-	if 함수_리플렉션_값.Kind() != reflect.Func {
-		return false, New에러("f패닉_발생_여부_확인 : 오직 '함수' 타입만 전달할 수 있습니다.'%v'", 함수_리플렉션_값.Kind())
-	}
-
-	함수_리플렉션_자료형 := 함수_리플렉션_값.Type()
-
-	// 가변 인자(...)가 아닌 경우, 전달된 매개변수 개수가 일치하는지 검증
-	if !함수_리플렉션_자료형.IsVariadic() && len(추가_매개변수) != 함수_리플렉션_자료형.NumIn() {
-		return false, New에러(
-			"인수 수량 불일치 : 함수는 %d개의 인수를 받지만, 실제로 %d개의 인수를 받았습니다.",
-			함수_리플렉션_자료형.NumIn(), len(추가_매개변수))
-	}
-
-	인수_모음 := make([]reflect.Value, len(추가_매개변수))
-
-	for i, v := range 추가_매개변수 {
-		인수_모음[i] = reflect.ValueOf(v)
-	}
-
-	패닉_발생함 = false
-	defer func() {
-		if r := recover(); r != nil {
-			패닉_발생함 = true
-		}
-	}()
-	함수_리플렉션_값.Call(인수_모음)
-
-	return 패닉_발생함, nil
-}
-
-func F테스트_유효한_숫자[T T숫자](t testing.TB, 값 T) {
-	t.Helper()
-	f테스트_참임(t, !math.IsNaN(float64(값)) && !math.IsInf(float64(값), 0), 값)
-}
-
-func F호출경로_문자열() string {
-	버퍼 := new(bytes.Buffer)
-
-	for _, 호출경로 := range F호출경로_모음() {
-		버퍼.WriteString(호출경로)
-		버퍼.WriteString("\n")
-	}
-
-	return 버퍼.String()
 }
 
 func F호출경로_모음() []string {
@@ -298,7 +65,6 @@ var (
 	정규식_doPrintf      = regexp.MustCompile(`print.go:[0-9]+:doPrintf()`)
 	정규식_Sprintf       = regexp.MustCompile(`print.go:[0-9]+:Sprintf()`)
 	정규식_함수명없는_프레임     = regexp.MustCompile(`.go:[0-9]+:]()`)
-	정규식_호출경로          = regexp.MustCompile(`.go:[0-9]+`)
 )
 
 func f건너뛰는_호출경로(호출경로 string) bool {
@@ -355,10 +121,6 @@ func f건너뛰는_호출경로(호출경로 string) bool {
 	default:
 		return false
 	}
-}
-
-func F호출경로_포함(문자열 string) bool {
-	return 정규식_호출경로.FindString(문자열) != ""
 }
 
 // 소스코드 위치를 나타내는 함수. runtime.Caller()의 한글화 버전임.
@@ -418,39 +180,6 @@ func F문자열_출력(포맷_문자열 string, 추가_매개변수 ...any) {
 	log.Printf(버퍼.String(), 추가_매개변수...)
 }
 
-func f문자열_출력_도우미(호출경로_포함_여부 bool, 포맷_문자열 string, 추가_매개변수 ...any) {
-	if 호출경로_포함_여부 && F문자열_중복_확인(포맷_문자열) {
-		return // 호출경로가 포함되어 있을 때만 중복 방지가 필요함.
-	}
-
-	버퍼 := new(bytes.Buffer)
-
-	if 호출경로_포함_여부 {
-		버퍼.WriteString("\n")
-	}
-
-	if !strings.HasPrefix(포맷_문자열, "\n") {
-		버퍼.WriteString("\n")
-	}
-
-	버퍼.WriteString(strings.TrimSpace(포맷_문자열))
-
-	if !strings.HasSuffix(포맷_문자열, "\n") {
-		버퍼.WriteString("\n")
-	}
-
-	if 호출경로_포함_여부 && !F호출경로_포함(포맷_문자열) {
-		버퍼.WriteString(" ")
-		버퍼.WriteString(F호출경로_문자열())
-	}
-
-	if 호출경로_포함_여부 {
-		버퍼.WriteString("\n")
-	}
-
-	fmt.Fprintln(log.Writer(), F포맷된_문자열(버퍼.String(), 추가_매개변수...))
-}
-
 // 문자열이 최근에 확인된 적이 있으면 true를 반환한다.
 func F문자열_중복_확인(문자열 string) bool {
 	중복, _ := 문자열_출력_중복_방지_캐시.ContainsOrAdd(문자열, S비어있음{})
@@ -473,23 +202,6 @@ func F변수값_문자열(값_모음 ...any) string {
 	return F포맷된_문자열(버퍼.String(), 값_모음...)
 }
 
-func F변수값_자료형_문자열(값_모음 ...any) string {
-	switch len(값_모음) {
-	case 0:
-		return ""
-	case 1:
-		return F포맷된_문자열("\t'%T' : '%v'", 값_모음[0], 값_모음[0])
-	}
-
-	버퍼 := new(bytes.Buffer)
-
-	for _, 값 := range 값_모음 {
-		버퍼.WriteString(F포맷된_문자열("'%T' : '%v'\n", 값, 값))
-	}
-
-	return 버퍼.String()
-}
-
 // 메모 해야할 일을 소스코드 위치와 함께 표기해 주는 메소드.
 func F중복없는_문자열_출력(포맷_문자열 string, 인수 ...any) {
 	문자열 := F포맷된_문자열(포맷_문자열, 인수...)
@@ -506,19 +218,6 @@ func F중복없는_문자열_출력(포맷_문자열 string, 인수 ...any) {
 
 		log.Println(F포맷된_문자열("%s %s", 문자열, 호출경로))
 		return
-	}
-}
-
-func F마지막_에러값(값_모음 ...any) error {
-	마지막_값 := 값_모음[len(값_모음)-1]
-
-	switch 변환값 := 마지막_값.(type) {
-	case error:
-		return 변환값
-	case nil:
-		return nil
-	default:
-		panic(New에러with출력("F마지막_에러값() 예상하지 못한 자료형 : '%T'", 마지막_값))
 	}
 }
 
@@ -589,13 +288,5 @@ func f로그_파일_정리() {
 		} else if 생성_시각.Before(지금.AddDate(0, -1, 0)) {
 			os.Remove(파일명) // 1달 지난 로그 파일 삭제
 		}
-	}
-}
-
-func F테스트_인터넷_접속_여부(t *testing.T) {
-	t.Helper()
-
-	if !F인터넷에_접속됨() {
-		t.Skip("인터넷 미접속. 테스트를 건너뜀")
 	}
 }

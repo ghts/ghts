@@ -1,10 +1,9 @@
 package w32
 
 import (
+	"github.com/ghts/ghts/lib/test_helper"
 	"testing"
 	"unsafe"
-
-	lb "github.com/ghts/ghts/lib"
 )
 
 // TestF인자_변환 : f인자_변환()이 지원되는 각 인자 타입을 syscall 전달값으로 정확히 변환하고, 호출 완료까지 보호해야 할 값을 정확히 분리하는지 검증.
@@ -40,19 +39,19 @@ func TestF인자_변환(t *testing.T) {
 		uintptr(unsafe.Pointer(&b1[0])),
 	}
 
-	lb.F테스트_같음(t, len(변환된_인자_모음), len(기대값))
+	th.F테스트_같음(t, len(변환된_인자_모음), len(기대값))
 	for i := range 기대값 {
 		if i < len(변환된_인자_모음) {
-			lb.F테스트_같음(t, 변환된_인자_모음[i], 기대값[i])
+			th.F테스트_같음(t, 변환된_인자_모음[i], 기대값[i])
 		}
 	}
 
 	// 보호 대상: [0] = b1 슬라이스 그 자체(복사가 아닌 동일 객체), [1] = b1 슬라이스의 포인터, [2] = unsafe.Pointer(&b1[0]).
-	lb.F테스트_같음(t, len(유지할_인자_모음), 3)
+	th.F테스트_같음(t, len(유지할_인자_모음), 3)
 
 	슬라이스, 슬라이스인가 := 유지할_인자_모음[0].([]byte)
-	lb.F테스트_참임(t, 슬라이스인가 && &슬라이스[0] == &b1[0], 유지할_인자_모음[0])
+	th.F테스트_참임(t, 슬라이스인가 && &슬라이스[0] == &b1[0], 유지할_인자_모음[0])
 
 	포인터, 포인터인가 := 유지할_인자_모음[1].(unsafe.Pointer)
-	lb.F테스트_참임(t, 포인터인가 && 포인터 == unsafe.Pointer(&b1[0]), 유지할_인자_모음[1])
+	th.F테스트_참임(t, 포인터인가 && 포인터 == unsafe.Pointer(&b1[0]), 유지할_인자_모음[1])
 }

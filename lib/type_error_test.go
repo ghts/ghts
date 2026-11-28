@@ -2,6 +2,7 @@ package lib
 
 import (
 	"errors"
+	"github.com/ghts/ghts/lib/test_helper"
 	"strings"
 	"testing"
 )
@@ -10,7 +11,7 @@ const 에러_메시지 = "에러 메시지 본문"
 
 func TestS에러(t *testing.T) {
 	에러 := f함수1()
-	F테스트_에러발생(t, 에러)
+	th.F테스트_에러발생(t, 에러)
 
 	함수명_모음 := []string{"f함수1", "f함수2", "f함수3", "f함수4", "f함수5"}
 
@@ -22,7 +23,7 @@ func TestS에러(t *testing.T) {
 			}
 		}
 
-		F테스트_참임(t, 포함)
+		th.F테스트_참임(t, 포함)
 	}
 }
 

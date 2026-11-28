@@ -2,6 +2,7 @@ package lib
 
 import (
 	"bytes"
+	"github.com/ghts/ghts/lib/test_helper"
 	"log"
 	"strings"
 	"testing"
@@ -16,16 +17,16 @@ func TestS예외처리_출력_숨김_실행중_변경(t *testing.T) {
 		버퍼 := F로그_출력_캡처(t)
 		에러 := f출력_숨김_실행중_변경_도우미("테스트_에러_출력에서_숨김으로_변경", new(false), new(true))
 
-		F테스트_에러발생(t, 에러)
-		F테스트_거짓임(t, strings.Contains(버퍼.String(), "테스트_에러_출력에서_숨김으로_변경"), "실행 중 숨김으로 변경했으므로, 에러가 출력되면 안 된다.")
+		th.F테스트_에러발생(t, 에러)
+		th.F테스트_거짓임(t, strings.Contains(버퍼.String(), "테스트_에러_출력에서_숨김으로_변경"), "실행 중 숨김으로 변경했으므로, 에러가 출력되면 안 된다.")
 	})
 
 	t.Run("숨김에서_출력으로_변경", func(t *testing.T) {
 		버퍼 := F로그_출력_캡처(t)
 		에러 := f출력_숨김_실행중_변경_도우미("테스트_에러_숨김에서_출력으로_변경", new(true), new(false))
 
-		F테스트_에러발생(t, 에러)
-		F테스트_참임(t, strings.Contains(버퍼.String(), "테스트_에러_숨김에서_출력으로_변경"), "실행 중 출력으로 변경했으므로, 에러가 출력되어야 한다.")
+		th.F테스트_에러발생(t, 에러)
+		th.F테스트_참임(t, strings.Contains(버퍼.String(), "테스트_에러_숨김에서_출력으로_변경"), "실행 중 출력으로 변경했으므로, 에러가 출력되어야 한다.")
 	})
 
 	t.Run("nil이면_출력_기본값", func(t *testing.T) {
@@ -33,16 +34,16 @@ func TestS예외처리_출력_숨김_실행중_변경(t *testing.T) {
 
 		에러 := f출력_숨김_실행중_변경_도우미("테스트_에러_nil_기본값", nil, nil)
 
-		F테스트_에러발생(t, 에러)
-		F테스트_참임(t, strings.Contains(버퍼.String(), "테스트_에러_nil_기본값"), "M출력_숨김이 nil이면 출력(숨김 false)이 기본값이다.")
+		th.F테스트_에러발생(t, 에러)
+		th.F테스트_참임(t, strings.Contains(버퍼.String(), "테스트_에러_nil_기본값"), "M출력_숨김이 nil이면 출력(숨김 false)이 기본값이다.")
 	})
 
 	t.Run("변경없이_숨김", func(t *testing.T) {
 		버퍼 := F로그_출력_캡처(t)
 		에러 := f출력_숨김_실행중_변경_도우미("테스트_에러_변경없이_숨김", new(true), nil)
 
-		F테스트_에러발생(t, 에러)
-		F테스트_거짓임(t, strings.Contains(버퍼.String(), "테스트_에러_변경없이_숨김"), "변경 없으면 초기 숨김 상태를 유지해야 한다.")
+		th.F테스트_에러발생(t, 에러)
+		th.F테스트_거짓임(t, strings.Contains(버퍼.String(), "테스트_에러_변경없이_숨김"), "변경 없으면 초기 숨김 상태를 유지해야 한다.")
 	})
 }
 

@@ -1,17 +1,17 @@
 package xing
 
 import (
-	"testing"
-	"time"
-
 	lb "github.com/ghts/ghts/lib"
 	mt "github.com/ghts/ghts/lib/market_time"
+	"github.com/ghts/ghts/lib/test_helper"
 	"github.com/ghts/ghts/xing/base"
+	"testing"
+	"time"
 )
 
 func TestCSPAT00800_현물_취소_주문_질의값(t *testing.T) {
 	_, ok := any(new(lb.S질의값_취소_주문)).(lb.I질의값)
-	lb.F테스트_참임(t, ok)
+	th.F테스트_참임(t, ok)
 }
 
 func TestCSPAT00800_현물_취소_주문(t *testing.T) {
@@ -21,12 +21,12 @@ func TestCSPAT00800_현물_취소_주문(t *testing.T) {
 		t.SkipNow()
 	}
 
-	lb.F테스트_에러없음(t, F주문_응답_실시간_정보_구독())
+	th.F테스트_에러없음(t, F주문_응답_실시간_정보_구독())
 
 	var 종목 = lb.New종목("069500", "KODEX 200", lb.P시장구분_ETF)
 
 	하한가, ok := F하한가by종목코드(종목.G코드())
-	lb.F테스트_참임(t, ok, "하한가를 찾을 수 없음. %v", 종목.G코드())
+	th.F테스트_참임(t, ok, "하한가를 찾을 수 없음. %v", 종목.G코드())
 
 	const 수량_정상주문 = int64(25)
 	const 수량_일부_취소_주문 = int64(10)
@@ -34,7 +34,7 @@ func TestCSPAT00800_현물_취소_주문(t *testing.T) {
 	var 가격_정상주문 = 하한가
 
 	계좌번호, 에러 := F계좌_번호(0)
-	lb.F테스트_에러없음(t, 에러)
+	th.F테스트_에러없음(t, 에러)
 
 	질의값 := xt.NewCSPAT00600_현물_정상_주문_질의값()
 	질의값.M계좌번호 = 계좌번호
@@ -48,8 +48,8 @@ func TestCSPAT00800_현물_취소_주문(t *testing.T) {
 	질의값.M대출일 = time.Time{} // 신용주문이 아닐 경우는 NewCSPAT00600InBlock1()에서 공백문자로 바꿔줌.
 
 	정상주문_응답값, 에러 := TrCSPAT00600_현물_정상주문(질의값)
-	lb.F테스트_에러없음(t, 에러)
-	lb.F테스트_참임(t, 정상주문_응답값.M응답2.M주문번호 > 0, 정상주문_응답값.M응답2.M주문번호)
+	th.F테스트_에러없음(t, 에러)
+	th.F테스트_참임(t, 정상주문_응답값.M응답2.M주문번호 > 0, 정상주문_응답값.M응답2.M주문번호)
 
 	lb.F대기(lb.P100밀리초)
 
@@ -62,8 +62,8 @@ func TestCSPAT00800_현물_취소_주문(t *testing.T) {
 	질의값_취소주문.M주문수량 = 수량_일부_취소_주문
 
 	취소주문_응답값, 에러 := TrCSPAT00800_현물_취소주문(질의값_취소주문)
-	lb.F테스트_에러없음(t, 에러)
-	lb.F테스트_참임(t, 취소주문_응답값.M응답2.M주문번호 > 0, 취소주문_응답값.M응답2.M주문번호)
+	th.F테스트_에러없음(t, 에러)
+	th.F테스트_참임(t, 취소주문_응답값.M응답2.M주문번호 > 0, 취소주문_응답값.M응답2.M주문번호)
 
 	lb.F대기(lb.P100밀리초)
 
@@ -77,10 +77,10 @@ func TestCSPAT00800_현물_취소_주문(t *testing.T) {
 	질의값_취소주문.M주문수량 = 수량_전량_취소_주문
 
 	취소주문_응답값, 에러 = TrCSPAT00800_현물_취소주문(질의값_취소주문)
-	lb.F테스트_에러없음(t, 에러)
-	lb.F테스트_참임(t, 취소주문_응답값.M응답2.M주문번호 > 0, 취소주문_응답값.M응답2.M주문번호)
+	th.F테스트_에러없음(t, 에러)
+	th.F테스트_참임(t, 취소주문_응답값.M응답2.M주문번호 > 0, 취소주문_응답값.M응답2.M주문번호)
 
 	lb.F대기(lb.P100밀리초)
 
-	lb.F테스트_에러없음(t, F주문_응답_실시간_정보_해지())
+	th.F테스트_에러없음(t, F주문_응답_실시간_정보_해지())
 }

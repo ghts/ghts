@@ -1,12 +1,12 @@
 package xing
 
 import (
+	lb "github.com/ghts/ghts/lib"
+	"github.com/ghts/ghts/lib/test_helper"
+	"github.com/ghts/ghts/xing/base"
 	"strings"
 	"testing"
 	"time"
-
-	lb "github.com/ghts/ghts/lib"
-	"github.com/ghts/ghts/xing/base"
 )
 
 func TestT1405_투자_경고_종목(t *testing.T) {
@@ -17,24 +17,24 @@ func TestT1405_투자_경고_종목(t *testing.T) {
 	투자경고_질의_구분 := 투자경고_질의_구분_모음[lb.F임의_범위_이내_정수값(0, len(투자경고_질의_구분_모음)-1)]
 
 	값_모음, 에러 := TrT1405_투자경고_조회(시장_구분, 투자경고_질의_구분)
-	lb.F테스트_에러없음(t, 에러)
+	th.F테스트_에러없음(t, 에러)
 
 	for _, 값 := range 값_모음 {
-		//lb.F테스트_참임(t, F종목코드_존재함(값.M종목코드), 값.M종목코드, 값.M종목명)	// 상장폐지된 경우에는 종목코드가 존재하지 않음.
-		lb.F테스트_다름(t, 값.M종목명, "")
+		//th.F테스트_참임(t, F종목코드_존재함(값.M종목코드), 값.M종목코드, 값.M종목명)	// 상장폐지된 경우에는 종목코드가 존재하지 않음.
+		th.F테스트_다름(t, 값.M종목명, "")
 
 		if 종목, 에러 := F종목by코드(값.M종목코드); 에러 == nil && 종목 != nil {
-			lb.F테스트_참임(t, strings.Contains(값.M종목명, 종목.G이름()) ||
+			th.F테스트_참임(t, strings.Contains(값.M종목명, 종목.G이름()) ||
 				strings.Contains(종목.G이름(), 값.M종목명),
 				종목.G이름(), 값.M종목명)
 		}
 
-		lb.F테스트_참임(t, 값.M현재가 >= 0)
-		lb.F테스트_에러없음(t, 값.M전일대비구분.G검사())
-		lb.F테스트_같음(t, 값.M전일대비_등락폭, 값.M전일대비구분.G부호보정_정수64(값.M전일대비_등락폭))
-		lb.F테스트_같음(t, 값.M전일대비_등락율, 값.M전일대비구분.G부호보정_실수64(값.M전일대비_등락율))
-		lb.F테스트_참임(t, 값.M거래량 >= 0)
-		lb.F테스트_참임(t, 값.M지정일.After(lb.F금일().AddDate(-30, 0, 0)) || 값.M지정일.Equal(time.Time{}), 값.M지정일, 값.M종목명, 값.M종목코드)
-		lb.F테스트_참임(t, 값.M해제일.Equal(time.Time{}) || 값.M해제일.After(lb.F금일().AddDate(-30, 0, 0)))
+		th.F테스트_참임(t, 값.M현재가 >= 0)
+		th.F테스트_에러없음(t, 값.M전일대비구분.G검사())
+		th.F테스트_같음(t, 값.M전일대비_등락폭, 값.M전일대비구분.G부호보정_정수64(값.M전일대비_등락폭))
+		th.F테스트_같음(t, 값.M전일대비_등락율, 값.M전일대비구분.G부호보정_실수64(값.M전일대비_등락율))
+		th.F테스트_참임(t, 값.M거래량 >= 0)
+		th.F테스트_참임(t, 값.M지정일.After(lb.F금일().AddDate(-30, 0, 0)) || 값.M지정일.Equal(time.Time{}), 값.M지정일, 값.M종목명, 값.M종목코드)
+		th.F테스트_참임(t, 값.M해제일.Equal(time.Time{}) || 값.M해제일.After(lb.F금일().AddDate(-30, 0, 0)))
 	}
 }

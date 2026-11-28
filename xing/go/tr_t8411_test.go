@@ -1,11 +1,11 @@
 package xing
 
 import (
+	lb "github.com/ghts/ghts/lib"
+	"github.com/ghts/ghts/lib/test_helper"
+	xt "github.com/ghts/ghts/xing/base"
 	"testing"
 	"time"
-
-	lb "github.com/ghts/ghts/lib"
-	xt "github.com/ghts/ghts/xing/base"
 )
 
 func TestT8411_F현물_차트_분틱(t *testing.T) {
@@ -16,12 +16,12 @@ func TestT8411_F현물_차트_분틱(t *testing.T) {
 	종료일자 := F전일()
 
 	값_모음, 에러 := TrT8411_현물_차트_틱(종목코드, 시작일자, 종료일자, 3000)
-	lb.F테스트_에러없음(t, 에러)
+	th.F테스트_에러없음(t, 에러)
 
 	for _, 값 := range 값_모음 {
-		lb.F테스트_참임(t, lb.F2일자(값.M일자_시각).Equal(시작일자) || lb.F2일자(값.M일자_시각).After(시작일자), 값.M일자_시각)
-		lb.F테스트_참임(t, lb.F2일자(값.M일자_시각).Equal(종료일자) || lb.F2일자(값.M일자_시각).Before(종료일자), 값.M일자_시각)
-		lb.F테스트_참임(t, 값.M일자_시각.After(이전_일자_시각) || 값.M일자_시각.Equal(이전_일자_시각))
+		th.F테스트_참임(t, lb.F2일자(값.M일자_시각).Equal(시작일자) || lb.F2일자(값.M일자_시각).After(시작일자), 값.M일자_시각)
+		th.F테스트_참임(t, lb.F2일자(값.M일자_시각).Equal(종료일자) || lb.F2일자(값.M일자_시각).Before(종료일자), 값.M일자_시각)
+		th.F테스트_참임(t, 값.M일자_시각.After(이전_일자_시각) || 값.M일자_시각.Equal(이전_일자_시각))
 		이전_일자_시각 = 값.M일자_시각
 
 		F테스트_현물_차트_틱_응답_반복값_t8411(t, 값, 종목코드)
@@ -29,11 +29,11 @@ func TestT8411_F현물_차트_분틱(t *testing.T) {
 }
 
 func F테스트_현물_차트_틱_응답_반복값_t8411(t *testing.T, 값 *xt.T8411_현물_차트_틱_응답_반복값, 종목코드 string) {
-	lb.F테스트_같음(t, 값.M종목코드, 종목코드)
-	lb.F테스트_참임(t, 값.M일자_시각.Before(lb.F금일()) || 값.M일자_시각.Equal(lb.F금일()))
-	lb.F테스트_같음(t, 값.M시가, 값.M고가)
-	lb.F테스트_같음(t, 값.M시가, 값.M저가)
-	lb.F테스트_참임(t, 값.M시가 == 값.M종가, 값.M일자_시각, 값.M시가, 값.M종가)
-	lb.F테스트_참임(t, 값.M거래량 > 0)
-	lb.F테스트_에러없음(t, lb.F마지막_에러값(값.G수정구분_모음()))
+	th.F테스트_같음(t, 값.M종목코드, 종목코드)
+	th.F테스트_참임(t, 값.M일자_시각.Before(lb.F금일()) || 값.M일자_시각.Equal(lb.F금일()))
+	th.F테스트_같음(t, 값.M시가, 값.M고가)
+	th.F테스트_같음(t, 값.M시가, 값.M저가)
+	th.F테스트_참임(t, 값.M시가 == 값.M종가, 값.M일자_시각, 값.M시가, 값.M종가)
+	th.F테스트_참임(t, 값.M거래량 > 0)
+	th.F테스트_에러없음(t, th.F마지막_에러값(값.G수정구분_모음()))
 }

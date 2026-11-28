@@ -2,12 +2,12 @@ package xt
 
 import (
 	"bytes"
+	lb "github.com/ghts/ghts/lib"
+	"github.com/ghts/ghts/lib/test_helper"
 	"log"
 	"strings"
 	"testing"
 	"time"
-
-	lb "github.com/ghts/ghts/lib"
 )
 
 func TestF바이트_변환값_해석(t *testing.T) {
@@ -33,13 +33,13 @@ func TestF바이트_변환값_해석(t *testing.T) {
 	for _, 변환_형식 := range 변환_형식_모음 {
 		for _, 원본값 := range 원본값_모음 {
 			매개체, 에러 := lb.New바이트_변환(변환_형식, 원본값)
-			lb.F테스트_에러없음(t, 에러)
+			th.F테스트_에러없음(t, 에러)
 
 			해석값, 에러 := 매개체.S해석기(F바이트_변환값_해석).G해석값()
-			lb.F테스트_에러없음(t, 에러)
+			th.F테스트_에러없음(t, 에러)
 
 			자료형_문자열 := strings.Replace(f자료형_문자열(해석값), "*", "", -1)
-			lb.F테스트_같음(t, 자료형_문자열, 매개체.G자료형_문자열())
+			th.F테스트_같음(t, 자료형_문자열, 매개체.G자료형_문자열())
 		}
 	}
 }
@@ -87,8 +87,8 @@ func TestF2수정구분_모음(t *testing.T) {
 	for _, testcase := range tests {
 		t.Run(testcase.이름, func(t *testing.T) {
 			실제, 에러 := F2수정구분_모음(testcase.입력_값)
-			lb.F테스트_에러없음(t, 에러)
-			lb.F테스트_같음(t, 실제, testcase.기대값)
+			th.F테스트_에러없음(t, 에러)
+			th.F테스트_같음(t, 실제, testcase.기대값)
 		})
 	}
 }
@@ -104,9 +104,9 @@ func TestF2수정구분_모음_알려지지_않은_값(t *testing.T) {
 	입력 := int64(P수정구분_권리락) | 미정의_비트
 
 	실제, 에러 := F2수정구분_모음(입력)
-	lb.F테스트_에러없음(t, 에러)
+	th.F테스트_에러없음(t, 에러)
 	// 미정의 비트는 제외되고 정의된 비트만 분해되어야 한다.
-	lb.F테스트_같음(t, 실제, []T수정구분{P수정구분_권리락})
+	th.F테스트_같음(t, 실제, []T수정구분{P수정구분_권리락})
 
 	// 경고 로그에 미정의 비트 감지 메시지가 포함되어야 한다.
 	출력된_로그 := 버퍼.String()
@@ -131,10 +131,10 @@ func f테스트_당일_초기화(t *testing.T) {
 // 일자·시간대는 당일 임시 초기화 값에 종속되므로 비교 대상에서 제외한다.
 func f시간_성분_같음(t *testing.T, 실제 time.Time, 시, 분, 초, 나노 int) {
 	t.Helper()
-	lb.F테스트_같음(t, 실제.Hour(), 시)
-	lb.F테스트_같음(t, 실제.Minute(), 분)
-	lb.F테스트_같음(t, 실제.Second(), 초)
-	lb.F테스트_같음(t, 실제.Nanosecond(), 나노)
+	th.F테스트_같음(t, 실제.Hour(), 시)
+	th.F테스트_같음(t, 실제.Minute(), 분)
+	th.F테스트_같음(t, 실제.Second(), 초)
+	th.F테스트_같음(t, 실제.Nanosecond(), 나노)
 }
 
 // TestF2당일_6자리_시각_공백은_제로값 : 공백 문자열/6자 미만이면 제로값을 반환하고,
@@ -164,11 +164,11 @@ func TestF2당일_6자리_시각_공백은_제로값(t *testing.T) {
 			실제 := f2당일_6자리_시각_공백은_제로값(testcase.입력)
 
 			if testcase.제로값 {
-				lb.F테스트_같음(t, 실제.IsZero(), true)
+				th.F테스트_같음(t, 실제.IsZero(), true)
 				return
 			}
 
-			lb.F테스트_같음(t, 실제.IsZero(), false)
+			th.F테스트_같음(t, 실제.IsZero(), false)
 			f시간_성분_같음(t, 실제, testcase.시, testcase.분, testcase.초, testcase.나노)
 		})
 	}
@@ -180,7 +180,7 @@ func TestF2당일_6자리_시각(t *testing.T) {
 
 	t.Run("정상_9자리", func(t *testing.T) {
 		실제 := f2당일_6자리_시각("150405123")
-		lb.F테스트_같음(t, 실제.IsZero(), false)
+		th.F테스트_같음(t, 실제.IsZero(), false)
 		f시간_성분_같음(t, 실제, 15, 4, 5, 123000000)
 	})
 
@@ -190,7 +190,7 @@ func TestF2당일_6자리_시각(t *testing.T) {
 	})
 
 	// 공백 문자열과 6자 미만은 정상 처리되지 않아야 하므로 panic 한다.
-	lb.F테스트_패닉_발생(t, f2당일_6자리_시각, "")
-	lb.F테스트_패닉_발생(t, f2당일_6자리_시각, "   ")
-	lb.F테스트_패닉_발생(t, f2당일_6자리_시각, "1504")
+	th.F테스트_패닉_발생(t, f2당일_6자리_시각, "")
+	th.F테스트_패닉_발생(t, f2당일_6자리_시각, "   ")
+	th.F테스트_패닉_발생(t, f2당일_6자리_시각, "1504")
 }

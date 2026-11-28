@@ -3,6 +3,7 @@ package lib
 import (
 	"testing"
 
+	"github.com/ghts/ghts/lib/test_helper"
 	"golang.org/x/text/encoding/korean"
 )
 
@@ -21,7 +22,7 @@ func TestT매도_매수_구분_F해석(t *testing.T) {
 
 	var 구분 T매도_매수_구분
 
-	F테스트_같음(t, 구분.F해석(f테스트용_EUC_KR("매도")), P매도)
-	F테스트_같음(t, 구분.F해석(f테스트용_EUC_KR("매수")), P매수)
-	F테스트_패닉_발생(t, func() { _ = 구분.F해석(f테스트용_EUC_KR("매도 매도")) })
+	th.F테스트_같음(t, 구분.F해석(f테스트용_EUC_KR("매도")), P매도)
+	th.F테스트_같음(t, 구분.F해석(f테스트용_EUC_KR("매수")), P매수)
+	th.F테스트_패닉_발생(t, func() { _ = 구분.F해석(f테스트용_EUC_KR("매도 매도")) })
 }

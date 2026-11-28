@@ -1,10 +1,10 @@
 package nano
 
 import (
+	lb "github.com/ghts/ghts/lib"
+	"github.com/ghts/ghts/lib/test_helper"
 	"testing"
 	"time"
-
-	lb "github.com/ghts/ghts/lib"
 )
 
 func TestNano소켓_REQ_REP(t *testing.T) {
@@ -13,7 +13,7 @@ func TestNano소켓_REQ_REP(t *testing.T) {
 	주소 := lb.F테스트용_임의_주소()
 	ch초기화 := make(chan lb.T신호, 2)
 	ch종료 := make(chan lb.T신호, 2)
-	테스트 := lb.New안전한_테스트(t)
+	테스트 := th.New안전한_테스트(t)
 
 	go 서버_REP(테스트, 주소, ch초기화, ch종료)
 	<-ch초기화
@@ -26,7 +26,7 @@ func TestNano소켓_REQ_REP(t *testing.T) {
 	}
 }
 
-func 서버_REP(t lb.I안전한_테스트, 주소 lb.T주소, ch초기화, ch종료 chan lb.T신호) {
+func 서버_REP(t th.I안전한_테스트, 주소 lb.T주소, ch초기화, ch종료 chan lb.T신호) {
 	defer func() { ch종료 <- lb.P신호_종료 }()
 
 	소켓_REP, 에러 := NewNano소켓REP(주소)
@@ -45,7 +45,7 @@ func 서버_REP(t lb.I안전한_테스트, 주소 lb.T주소, ch초기화, ch종
 	t.G에러없음(소켓_REP.S송신(lb.F임의_변환_형식(), time.Now()))
 }
 
-func 클라이언트_REQ(t lb.I안전한_테스트, 주소 lb.T주소, ch초기화, ch종료 chan lb.T신호) {
+func 클라이언트_REQ(t th.I안전한_테스트, 주소 lb.T주소, ch초기화, ch종료 chan lb.T신호) {
 	defer func() { ch종료 <- lb.P신호_종료 }()
 
 	소켓_REQ, 에러 := NewNano소켓REQ(주소)
@@ -67,7 +67,7 @@ func TestNano소켓_PUB_SUB(t *testing.T) {
 
 	const 클라이언트_수량 = 10
 	주소 := lb.F테스트용_임의_주소()
-	테스트 := lb.New안전한_테스트(t)
+	테스트 := th.New안전한_테스트(t)
 	ch초기화 := make(chan lb.T신호, 1)
 	ch중지 := make(chan lb.T신호, 1)
 	ch종료 := make(chan lb.T신호, 클라이언트_수량)
@@ -87,7 +87,7 @@ func TestNano소켓_PUB_SUB(t *testing.T) {
 	<-ch종료
 }
 
-func 서버_PUB(t lb.I안전한_테스트, 주소 lb.T주소, ch초기화, ch중지, ch종료 chan lb.T신호) {
+func 서버_PUB(t th.I안전한_테스트, 주소 lb.T주소, ch초기화, ch중지, ch종료 chan lb.T신호) {
 	defer func() { ch종료 <- lb.P신호_종료 }()
 
 	소켓_PUB, 에러 := NewNano소켓PUB(주소)
@@ -107,7 +107,7 @@ func 서버_PUB(t lb.I안전한_테스트, 주소 lb.T주소, ch초기화, ch중
 	}
 }
 
-func 클라이언트_SUB(t lb.I안전한_테스트, 주소 lb.T주소, ch종료 chan lb.T신호) {
+func 클라이언트_SUB(t th.I안전한_테스트, 주소 lb.T주소, ch종료 chan lb.T신호) {
 	defer func() { ch종료 <- lb.P신호_종료 }()
 
 	소켓_SUB, 에러 := NewNano소켓SUB(주소)
@@ -129,7 +129,7 @@ func TestNano소켓_PUSH_PULL(t *testing.T) {
 	주소 := lb.F테스트용_임의_주소()
 	ch초기화 := make(chan lb.T신호, 2)
 	ch종료 := make(chan lb.T신호, 2)
-	테스트 := lb.New안전한_테스트(t)
+	테스트 := th.New안전한_테스트(t)
 
 	go 서버_PULL(테스트, 주소, ch초기화, ch종료)
 	<-ch초기화
@@ -142,7 +142,7 @@ func TestNano소켓_PUSH_PULL(t *testing.T) {
 	}
 }
 
-func 서버_PULL(t lb.I안전한_테스트, 주소 lb.T주소, ch초기화, ch종료 chan lb.T신호) {
+func 서버_PULL(t th.I안전한_테스트, 주소 lb.T주소, ch초기화, ch종료 chan lb.T신호) {
 	defer func() { ch종료 <- lb.P신호_종료 }()
 
 	소켓_PULL, 에러 := NewNano소켓PULL(주소)
@@ -161,7 +161,7 @@ func 서버_PULL(t lb.I안전한_테스트, 주소 lb.T주소, ch초기화, ch�
 	}
 }
 
-func 클라이언트_PUSH(t lb.I안전한_테스트, 주소 lb.T주소, ch초기화, ch종료 chan lb.T신호) {
+func 클라이언트_PUSH(t th.I안전한_테스트, 주소 lb.T주소, ch초기화, ch종료 chan lb.T신호) {
 	defer func() { ch종료 <- lb.P신호_종료 }()
 
 	소켓_PUSH, 에러 := NewNano소켓PUSH(주소)
@@ -184,7 +184,7 @@ func TestNano소켓_PAIR(t *testing.T) {
 	주소 := lb.F테스트용_임의_주소()
 	ch초기화 := make(chan lb.T신호, 2)
 	ch종료 := make(chan lb.T신호, 2)
-	테스트 := lb.New안전한_테스트(t)
+	테스트 := th.New안전한_테스트(t)
 
 	go 서버_PAIR(테스트, 주소, ch초기화, ch종료)
 	<-ch초기화
@@ -197,7 +197,7 @@ func TestNano소켓_PAIR(t *testing.T) {
 	}
 }
 
-func 서버_PAIR(t lb.I안전한_테스트, 주소 lb.T주소, ch초기화, ch종료 chan lb.T신호) {
+func 서버_PAIR(t th.I안전한_테스트, 주소 lb.T주소, ch초기화, ch종료 chan lb.T신호) {
 	defer func() { ch종료 <- lb.P신호_종료 }()
 
 	소켓_PAIR, 에러 := NewNano소켓PAIR서버(주소)
@@ -218,7 +218,7 @@ func 서버_PAIR(t lb.I안전한_테스트, 주소 lb.T주소, ch초기화, ch�
 	lb.F대기(lb.P500밀리초) // 값이 송신될 동안 대기
 }
 
-func 클라이언트_PAIR(t lb.I안전한_테스트, 주소 lb.T주소, ch초기화, ch종료 chan lb.T신호) {
+func 클라이언트_PAIR(t th.I안전한_테스트, 주소 lb.T주소, ch초기화, ch종료 chan lb.T신호) {
 	defer func() { ch종료 <- lb.P신호_종료 }()
 
 	소켓_PAIR, 에러 := NewNano소켓PAIR클라이언트(주소)
@@ -240,7 +240,7 @@ func 클라이언트_PAIR(t lb.I안전한_테스트, 주소 lb.T주소, ch초기
 func TestNano소켓_생성실패(t *testing.T) {
 	t.Parallel()
 
-	테스트 := lb.New안전한_테스트(t)
+	테스트 := th.New안전한_테스트(t)
 
 	// 닫혀 있는 포트(1번 포트)에 연결을 시도하면 ECONNREFUSED로 재시도(10회) 후 실패.
 	// 실패 경로는 panic이 밖으로 새지 않고 에러를 반환해야 함.

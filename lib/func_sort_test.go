@@ -1,6 +1,7 @@
 package lib
 
 import (
+	"github.com/ghts/ghts/lib/test_helper"
 	"testing"
 	"time"
 )
@@ -15,7 +16,7 @@ func TestF정렬_시각(t *testing.T) {
 	시각_모음 := []time.Time{오늘, 어제, 내일}
 	시각_모음 = F시각_정순_정렬(시각_모음)
 
-	F테스트_같음(t, 시각_모음[0], 어제)
-	F테스트_같음(t, 시각_모음[1], 오늘)
-	F테스트_같음(t, 시각_모음[2], 내일)
+	th.F테스트_같음(t, 시각_모음[0], 어제)
+	th.F테스트_같음(t, 시각_모음[1], 오늘)
+	th.F테스트_같음(t, 시각_모음[2], 내일)
 }
