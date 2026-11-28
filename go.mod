@@ -4,6 +4,7 @@ go 1.26.0
 
 require (
 	github.com/go-sql-driver/mysql v1.10.1
+	github.com/hashicorp/golang-lru/v2 v2.0.7
 	github.com/mitchellh/go-ps v1.0.0
 	go.nanomsg.org/mangos/v3 v3.5.0
 	golang.org/x/exp v0.0.0-20261005173118-76772065c9b0

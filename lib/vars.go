@@ -3,7 +3,11 @@ package lib
 import (
 	"sync"
 	"time"
+
+	lru "github.com/hashicorp/golang-lru/v2"
 )
+
+const p문자열_출력_중복_방지_캐시_용량 = 4096
 
 var (
 	ch공통_종료_채널 = make(chan T신호)
@@ -16,8 +20,7 @@ var (
 
 	테스트_모드 = New안전한_bool(false)
 
-	문자열_출력_중복_방지_잠금 = new(sync.Mutex)
-	문자열_출력_중복_방지_맵  = make(map[string]S비어있음)
+	문자열_출력_중복_방지_캐시 = F확인2(lru.New[string, S비어있음](p문자열_출력_중복_방지_캐시_용량))
 
 	소켓_테스트용_주소_중복_방지_잠금 = new(sync.Mutex)
 	소켓_테스트용_주소_중복_방지_맵  = make(map[string]S비어있음)
