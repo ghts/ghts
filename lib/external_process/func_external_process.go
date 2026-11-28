@@ -47,7 +47,11 @@ func (s *s안전한_프로세스ID_저장소) S제거(프로세스ID int) {
 	lb.F확인1(lb.F파일에_값_저장(s.저장소, s.파일명, nil))
 }
 
-func F외부_프로세스_실행(실행화일_경로 string, 실행옵션_모음 ...any) (프로세스ID int, 에러 error) {
+// F외부_프로세스_실행 : 외부 프로세스를 실행하고 프로세스ID를 반환한다.
+// 환경_변수_모음이 비어 있으면 자식 프로세스는 현재 프로세스의 환경을 그대로 물려받으며,
+// 비어 있지 않으면 현재 프로세스 환경에 명시된 환경 변수를 추가한 자식 전용 환경을 구성한다.
+// (키가 중복되면 나중에 추가된 명시 값이 우선한다.)
+func F외부_프로세스_실행(실행화일_경로 string, 환경_변수_모음 map[string]string, 실행옵션_모음 ...any) (프로세스ID int, 에러 error) {
 	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { 프로세스ID = -1 }}.S실행()
 
 	if !lb.F파일_존재함(실행화일_경로) {
@@ -65,7 +69,7 @@ func F외부_프로세스_실행(실행화일_경로 string, 실행옵션_모음
 	ch프로세스ID := make(chan int, 1)
 	ch에러 := make(chan error, 1)
 
-	go f외부_프로세스_생성(ctx, 취소함수, ch프로세스ID, ch에러, 실행화일_경로, 실행옵션_모음...)
+	go go외부_프로세스_생성(ctx, 취소함수, ch프로세스ID, ch에러, 실행화일_경로, 환경_변수_모음, 실행옵션_모음...)
 
 	select {
 	case 프로세스ID = <-ch프로세스ID:
@@ -79,11 +83,16 @@ func F외부_프로세스_실행(실행화일_경로 string, 실행옵션_모음
 	}
 }
 
-func f외부_프로세스_생성(ctx context.Context, 취소함수 context.CancelFunc, ch프로세스ID chan int, ch에러 chan error, 실행화일_경로 string, 실행옵션_모음 ...any) (에러 error) {
+func go외부_프로세스_생성(ctx context.Context, 취소함수 context.CancelFunc, ch프로세스ID chan int, ch에러 chan error, 실행화일_경로 string, 환경_변수_모음 map[string]string, 실행옵션_모음 ...any) (에러 error) {
 	defer lb.S예외처리{M에러: &에러, M에러_실행: func() { ch에러 <- 에러 }}.S실행()
 
 	// ctx가 취소되면(호출부 타임아웃/실패) 생성된 프로세스가 자동 종료된다.
 	외부_명령어 := exec.CommandContext(ctx, 실행화일_경로, lb.F2문자열_모음(실행옵션_모음)...)
+	if len(환경_변수_모음) > 0 {
+		// 자식 프로세스 전용 환경: 현재 프로세스의 환경을 기본으로 하되,
+		// 명시적으로 전달된 환경 변수가 나중에 추가되어 동일 키의 기존 값보다 우선한다.
+		외부_명령어.Env = append(os.Environ(), f환경_변수_목록(환경_변수_모음)...)
+	}
 	외부_명령어.Stdin = os.Stdin
 	외부_명령어.Stdout = os.Stdout
 	외부_명령어.Stderr = os.Stderr
@@ -97,6 +106,16 @@ func f외부_프로세스_생성(ctx context.Context, 취소함수 context.Cance
 	취소함수() // 프로세스가 종료되었으므로 컨텍스트도 종료. (이미 호출부에서 취소했다면 no-op.)
 
 	return nil
+}
+
+// f환경_변수_목록 : 환경 변수 맵을 '이름=값' 형식의 목록으로 변환한다.
+func f환경_변수_목록(환경_변수_모음 map[string]string) []string {
+	환경_목록 := make([]string, 0, len(환경_변수_모음))
+	for 이름, 값 := range 환경_변수_모음 {
+		환경_목록 = append(환경_목록, 이름+"="+값)
+	}
+
+	return 환경_목록
 }
 
 func f프로세스ID_파일_읽기() (맵 map[int]string, 에러 error) {
