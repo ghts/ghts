@@ -236,11 +236,16 @@ func f테스트용_위험한_전달값_모음() []any {
 	구조체_1 := F샘플_구조체_1()
 	구조체_2 := F샘플_구조체_2()
 
+	분모 := r.Int63()
+	for 분모 == 0 {
+		분모 = r.Int63()
+	}
+
 	return []any{
 		구조체_1, &구조체_1,
 		구조체_2, &구조체_2,
 		big.NewInt(r.Int63()),
-		big.NewRat(r.Int63(), r.Int63()),
+		big.NewRat(r.Int63(), 분모),
 		big.NewFloat(r.Float64())}
 	//big.NewInt(rand.Int64()),
 	//big.NewRat(rand.Int64(), rand.Int64()),
