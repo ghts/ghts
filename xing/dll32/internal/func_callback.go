@@ -53,18 +53,26 @@ func go콜백_도우미(ch초기화, ch종료 chan lb.T신호) (에러 error) {
 		ch종료 <- lb.P신호_종료
 	}}.S실행()
 
-	for {
-		if lb.F포트_열림_확인(xt.F주소_콜백()) {
+	포트_열림_여부 := false
+
+	for range 20 {
+		if lb.F공통_종료_채널_닫힘() {
+			return nil
+		} else if lb.F포트_열림_확인(xt.F주소_콜백()) {
+			포트_열림_여부 = true
 			break
 		}
 
-		lb.F대기(lb.P500밀리초)
+		lb.F대기(lb.P1초)
 	}
 
-	select {
-	case ch초기화 <- lb.P신호_초기화:
-	default:
+	if !포트_열림_여부 {
+		ch초기화 <- lb.P신호_에러
+		return lb.New에러("go콜백_도우미 : 콜백 포트 대기 타임아웃. 부모 프로세스의 콜백 리스너(%s)가 열리지 않았습니다.",
+			xt.F주소_콜백().G단축값())
 	}
+
+	ch초기화 <- lb.P신호_초기화
 
 	for {
 		select {
