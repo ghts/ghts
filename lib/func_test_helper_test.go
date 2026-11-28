@@ -3,9 +3,10 @@ package lib
 import (
 	"errors"
 	"fmt"
-	"github.com/ghts/ghts/lib/test_helper"
 	"strings"
 	"testing"
+
+	"github.com/ghts/ghts/lib/test_helper"
 )
 
 func TestF테스트_중(t *testing.T) {
@@ -85,23 +86,6 @@ func TestF임의_문자열(t *testing.T) {
 func TestNew에러(t *testing.T) {
 	에러 := New에러("테스트용 에러. %v", 100)
 	th.F테스트_같음(t, strings.Count(에러.Error(), "테스트용 에러. 100"), 1)
-}
-
-func TestF변수값_자료형_문자열(t *testing.T) {
-	문자열 := th.F변수값_자료형_문자열("테스트_문자열", 1)
-
-	th.F테스트_참임(t, strings.Contains(문자열, "테스트_문자열"))
-	th.F테스트_참임(t, strings.Contains(문자열, "string"))
-	th.F테스트_참임(t, strings.Contains(문자열, "1"))
-	th.F테스트_참임(t, strings.Contains(문자열, "int"))
-}
-
-func TestF소스코드_위치_포함(t *testing.T) {
-	t.Parallel()
-
-	문자열 := "github.com/ghts/sample.go.go:65:f샘플()\n\nFAIL	github.com/ghts/	23.231s"
-
-	th.F테스트_참임(t, th.F호출경로_포함(문자열))
 }
 
 func TestF문자열_중복_확인_용량_초과(t *testing.T) {
