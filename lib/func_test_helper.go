@@ -543,14 +543,6 @@ func F중복없는_문자열_출력(포맷_문자열 string, 인수 ...any) {
 	}
 }
 
-func F고루틴_식별자() string {
-	buf := make([]byte, 100)
-	runtime.Stack(buf, true)
-	buf = bytes.Split(buf, []byte{'\n'})[0]
-	buf = buf[:len(buf)-1]
-	return string(bytes.TrimSuffix(buf, []byte("[running]")))
-}
-
 func F마지막_에러값(값_모음 ...any) error {
 	마지막_값 := 값_모음[len(값_모음)-1]
 
