@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"regexp"
 	"runtime"
 	"strconv"
 	"strings"
@@ -320,6 +321,21 @@ func F호출경로_모음() []string {
 	return 호출경로_모음
 }
 
+// 호출 경로에서 건너뛸 프레임을 판별하는 고정 정규식.
+// 패턴은 실행 중 변하지 않으므로 패키지 초기 시점에 1회만 컴파일해 재사용한다.
+var (
+	정규식_S실행           = regexp.MustCompile(`type_error_handling.go:[0-9]+:S실행()`)
+	정규식_S실행_No출력      = regexp.MustCompile(`type_error_handling.go:[0-9]+:S실행_No출력()`)
+	정규식_s실행           = regexp.MustCompile(`type_error_handling.go:[0-9]+:s실행()`)
+	정규식_handleMethods = regexp.MustCompile(`print.go:[0-9]+:handleMethods()`)
+	정규식_printValue    = regexp.MustCompile(`print.go:[0-9]+:printValue()`)
+	정규식_printArg      = regexp.MustCompile(`print.go:[0-9]+:printArg()`)
+	정규식_doPrintf      = regexp.MustCompile(`print.go:[0-9]+:doPrintf()`)
+	정규식_Sprintf       = regexp.MustCompile(`print.go:[0-9]+:Sprintf()`)
+	정규식_함수명없는_프레임     = regexp.MustCompile(`.go:[0-9]+:]()`)
+	정규식_호출경로          = regexp.MustCompile(`.go:[0-9]+`)
+)
+
 func f건너뛰는_호출경로(호출경로 string) bool {
 	switch {
 	case
@@ -360,15 +376,15 @@ func f건너뛰는_호출경로(호출경로 string) bool {
 		strings.HasPrefix(호출경로, "signal_windows.go:"),
 		strings.HasPrefix(호출경로, "syscall_windows.go:"),
 		strings.HasPrefix(호출경로, "testing.go:"),
-		F정규식_검색(호출경로, []string{`type_error_handling.go:[0-9]+:S실행()`}) != "",
-		F정규식_검색(호출경로, []string{`type_error_handling.go:[0-9]+:S실행_No출력()`}) != "",
-		F정규식_검색(호출경로, []string{`type_error_handling.go:[0-9]+:s실행()`}) != "",
-		F정규식_검색(호출경로, []string{`print.go:[0-9]+:handleMethods()`}) != "",
-		F정규식_검색(호출경로, []string{`print.go:[0-9]+:printValue()`}) != "",
-		F정규식_검색(호출경로, []string{`print.go:[0-9]+:printArg()`}) != "",
-		F정규식_검색(호출경로, []string{`print.go:[0-9]+:doPrintf()`}) != "",
-		F정규식_검색(호출경로, []string{`print.go:[0-9]+:Sprintf()`}) != "",
-		F정규식_검색(호출경로, []string{`.go:[0-9]+:]()`}) != "",
+		정규식_S실행.FindString(호출경로) != "",
+		정규식_S실행_No출력.FindString(호출경로) != "",
+		정규식_s실행.FindString(호출경로) != "",
+		정규식_handleMethods.FindString(호출경로) != "",
+		정규식_printValue.FindString(호출경로) != "",
+		정규식_printArg.FindString(호출경로) != "",
+		정규식_doPrintf.FindString(호출경로) != "",
+		정규식_Sprintf.FindString(호출경로) != "",
+		정규식_함수명없는_프레임.FindString(호출경로) != "",
 		호출경로 == ".:0:()":
 		return true
 	default:
@@ -377,7 +393,7 @@ func f건너뛰는_호출경로(호출경로 string) bool {
 }
 
 func F호출경로_포함(문자열 string) bool {
-	return F정규식_검색(문자열, []string{".go:[0-9]+"}) != ""
+	return 정규식_호출경로.FindString(문자열) != ""
 }
 
 // 소스코드 위치를 나타내는 함수. runtime.Caller()의 한글화 버전임.
@@ -478,15 +494,21 @@ func F문자열_출력_도우미(호출경로_포함_여부 bool, 포맷_문자�
 	fmt.Fprintln(log.Writer(), f포맷된_문자열(버퍼.String(), 추가_매개변수...))
 }
 
+// 문자열이 P1일(24시간) 안에 이미 확인된 적이 있으면 true를 반환한다.
+// 만료된 항목은 삭제되므로, 동일 문자열은 24시간마다 다시 허용된다.
 func F문자열_중복_확인(문자열 string) bool {
 	문자열_출력_중복_방지_잠금.Lock()
 	defer 문자열_출력_중복_방지_잠금.Unlock()
 
-	if _, 중복 := 문자열_출력_중복_방지_맵[문자열]; 중복 {
-		return true
+	if 첫_확인_시각, 존재 := 문자열_출력_중복_방지_맵[문자열]; 존재 {
+		if time.Since(첫_확인_시각) < P1일 {
+			return true
+		}
+
+		delete(문자열_출력_중복_방지_맵, 문자열)
 	}
 
-	문자열_출력_중복_방지_맵[문자열] = S비어있음{}
+	문자열_출력_중복_방지_맵[문자열] = time.Now()
 
 	return false
 }
