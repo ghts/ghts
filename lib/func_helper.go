@@ -6,6 +6,7 @@ import (
 	"encoding/csv"
 	"encoding/gob"
 	"errors"
+	"fmt"
 	"io"
 	"io/fs"
 	"maps"
@@ -596,7 +597,7 @@ func F자료형_문자열(값 any) string {
 	자료형 := F자료형(값)
 
 	if 자료형 == nil {
-		return f포맷된_문자열("%T", nil)
+		return F포맷된_문자열("%T", nil)
 	} else {
 		return 자료형.String()
 	}
@@ -1158,4 +1159,49 @@ func F2맵[T comparable](값_모음 []T) (맵 map[T]S비어있음) {
 	}
 
 	return 맵
+}
+
+func F패닉2에러(함수 any, 추가_매개변수 ...any) (에러 error) {
+	defer S예외처리{M에러: &에러, M출력_숨김: new(true)}.S실행()
+
+	인수_모음 := make([]reflect.Value, len(추가_매개변수))
+
+	for i := range 인수_모음 {
+		인수_모음[i] = reflect.ValueOf(추가_매개변수[i])
+	}
+
+	reflect.ValueOf(함수).Call(인수_모음)
+
+	return nil
+}
+
+func F패닉억제_호출(함수 any, 추가_매개변수 ...any) {
+	F패닉2에러(함수, 추가_매개변수...)
+}
+
+func F오차(값1 any, 값2 any) float64 {
+	return math.Abs(F확인2(F2실수(값1)) - F확인2(F2실수(값2)))
+}
+
+func F오차율_퍼센트(값1 any, 값2 any) float64 {
+	실수1, 실수2 := F확인2(F2실수(값1)), F확인2(F2실수(값2))
+	오차율1, 오차율2 := float64(0), float64(0)
+
+	if 실수1 != 0 {
+		오차율1 = math.Abs((실수1-실수2)/실수1) * 100
+	}
+
+	if 실수2 != 0 {
+		오차율2 = math.Abs((실수2-실수1)/실수2) * 100
+	}
+
+	return math.Max(오차율1, 오차율2)
+}
+
+func F포맷된_문자열(포맷_문자열 string, 추가_매개변수 ...any) string {
+	if len(추가_매개변수) == 0 {
+		return 포맷_문자열
+	}
+
+	return fmt.Sprintf(포맷_문자열, 추가_매개변수...)
 }

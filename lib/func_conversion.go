@@ -176,7 +176,7 @@ func F2문자열(값_모음 ...any) string {
 		panic(New에러("F2문자열() 입력값이 없습니다."))
 	} else if len(값_모음) > 1 {
 		if _, ok := 값_모음[0].(string); ok {
-			return f포맷된_문자열(값_모음[0].(string), 값_모음[1:]...)
+			return F포맷된_문자열(값_모음[0].(string), 값_모음[1:]...)
 		}
 
 		panic(New에러("1번째 요소가 포맷 문자열이 아닙니다. '%T'", 값_모음[0]))
@@ -190,7 +190,7 @@ func F2문자열(값_모음 ...any) string {
 	case uint, uint8, uint16, uint32, uint64,
 		int, int8, int16, int32, int64, bool:
 		// 많이 쓰는 형식들은 이 단계에서 바로 처리해서 속도 향상 도모.
-		return f포맷된_문자열("%v", 값)
+		return F포맷된_문자열("%v", 값)
 	case float32:
 		return strconv.FormatFloat(float64(변환값), 'f', -1, 32)
 	case float64:
@@ -258,7 +258,7 @@ func F2문자열(값_모음 ...any) string {
 			}
 		}
 
-		return f포맷된_문자열("%v", 값)
+		return F포맷된_문자열("%v", 값)
 	}
 }
 

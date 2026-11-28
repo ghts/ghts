@@ -147,7 +147,7 @@ func (t T변환) String() string {
 	case Raw:
 		return "Raw"
 	default:
-		return f포맷된_문자열("예상하지 못한 변환 형식 : '%v'", string(t))
+		return F포맷된_문자열("예상하지 못한 변환 형식 : '%v'", string(t))
 	}
 }
 

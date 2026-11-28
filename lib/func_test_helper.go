@@ -32,43 +32,6 @@ func F테스트_모드_종료() error {
 	return 에러
 }
 
-func F패닉2에러(함수 any, 추가_매개변수 ...any) (에러 error) {
-	defer S예외처리{M에러: &에러, M출력_숨김: new(true)}.S실행()
-
-	인수_모음 := make([]reflect.Value, len(추가_매개변수))
-
-	for i := range 인수_모음 {
-		인수_모음[i] = reflect.ValueOf(추가_매개변수[i])
-	}
-
-	reflect.ValueOf(함수).Call(인수_모음)
-
-	return nil
-}
-
-func F패닉억제_호출(함수 any, 추가_매개변수 ...any) {
-	F패닉2에러(함수, 추가_매개변수...)
-}
-
-func F오차(값1 any, 값2 any) float64 {
-	return math.Abs(F확인2(F2실수(값1)) - F확인2(F2실수(값2)))
-}
-
-func F오차율_퍼센트(값1 any, 값2 any) float64 {
-	실수1, 실수2 := F확인2(F2실수(값1)), F확인2(F2실수(값2))
-	오차율1, 오차율2 := float64(0), float64(0)
-
-	if 실수1 != 0 {
-		오차율1 = math.Abs((실수1-실수2)/실수1) * 100
-	}
-
-	if 실수2 != 0 {
-		오차율2 = math.Abs((실수2-실수1)/실수2) * 100
-	}
-
-	return math.Max(오차율1, 오차율2)
-}
-
 func F테스트_참임(t testing.TB, true이어야_하는_조건 bool, 에러_발생_시_출력할_변수_모음 ...any) {
 	t.Helper()
 	// I안전한_테스트와 건너뛰는 단계를 같게 맞추기 위함.
@@ -88,7 +51,7 @@ func f테스트_참임(t testing.TB, true이어야_하는_조건 bool, 에러_�
 		출력_문자열 += F변수값_문자열(에러_발생_시_출력할_변수_모음...)
 	}
 
-	F문자열_출력_도우미(true, 출력_문자열)
+	f문자열_출력_도우미(true, 출력_문자열)
 
 	t.Fail()
 }
@@ -199,7 +162,7 @@ func f테스트_같음(t testing.TB, 값 any, 비교값1 any, 추가_비교값_�
 	값_모음 := []any{값}
 	값_모음 = append(값_모음, 비교값_모음...)
 
-	F문자열_출력_도우미(true, "같은 값을 발견하지 못함.\n%v", F변수값_자료형_문자열(값_모음...))
+	f문자열_출력_도우미(true, "같은 값을 발견하지 못함.\n%v", F변수값_자료형_문자열(값_모음...))
 
 	t.Fail()
 }
@@ -225,7 +188,7 @@ func f테스트_다름(t testing.TB, 값 any, 비교값1 any, 추가_비교값_�
 		값_모음 := []any{값}
 		값_모음 = append(값_모음, 비교값_모음...)
 
-		F문자열_출력_도우미(true, "같은 값을 발견함.\n%v", F변수값_자료형_문자열(값_모음...))
+		f문자열_출력_도우미(true, "같은 값을 발견함.\n%v", F변수값_자료형_문자열(값_모음...))
 
 		t.Fail()
 	}
@@ -440,14 +403,6 @@ func F체크포인트(값_모음 ...any) {
 	fmt.Printf(버퍼.String(), F소스코드_위치(1), time.Now().Format("15:04:05.999"))
 }
 
-func f포맷된_문자열(포맷_문자열 string, 추가_매개변수 ...any) string {
-	if len(추가_매개변수) == 0 {
-		return 포맷_문자열
-	}
-
-	return fmt.Sprintf(포맷_문자열, 추가_매개변수...)
-}
-
 func F문자열_출력(포맷_문자열 string, 추가_매개변수 ...any) {
 	버퍼 := new(bytes.Buffer)
 	버퍼.WriteString(strings.TrimSpace(포맷_문자열))
@@ -463,7 +418,7 @@ func F문자열_출력(포맷_문자열 string, 추가_매개변수 ...any) {
 	log.Printf(버퍼.String(), 추가_매개변수...)
 }
 
-func F문자열_출력_도우미(호출경로_포함_여부 bool, 포맷_문자열 string, 추가_매개변수 ...any) {
+func f문자열_출력_도우미(호출경로_포함_여부 bool, 포맷_문자열 string, 추가_매개변수 ...any) {
 	if 호출경로_포함_여부 && F문자열_중복_확인(포맷_문자열) {
 		return // 호출경로가 포함되어 있을 때만 중복 방지가 필요함.
 	}
@@ -493,7 +448,7 @@ func F문자열_출력_도우미(호출경로_포함_여부 bool, 포맷_문자�
 		버퍼.WriteString("\n")
 	}
 
-	fmt.Fprintln(log.Writer(), f포맷된_문자열(버퍼.String(), 추가_매개변수...))
+	fmt.Fprintln(log.Writer(), F포맷된_문자열(버퍼.String(), 추가_매개변수...))
 }
 
 // 문자열이 최근에 확인된 적이 있으면 true를 반환한다.
@@ -515,7 +470,7 @@ func F변수값_문자열(값_모음 ...any) string {
 
 	버퍼.WriteString("\n")
 
-	return f포맷된_문자열(버퍼.String(), 값_모음...)
+	return F포맷된_문자열(버퍼.String(), 값_모음...)
 }
 
 func F변수값_자료형_문자열(값_모음 ...any) string {
@@ -523,13 +478,13 @@ func F변수값_자료형_문자열(값_모음 ...any) string {
 	case 0:
 		return ""
 	case 1:
-		return f포맷된_문자열("\t'%T' : '%v'", 값_모음[0], 값_모음[0])
+		return F포맷된_문자열("\t'%T' : '%v'", 값_모음[0], 값_모음[0])
 	}
 
 	버퍼 := new(bytes.Buffer)
 
 	for _, 값 := range 값_모음 {
-		버퍼.WriteString(f포맷된_문자열("'%T' : '%v'\n", 값, 값))
+		버퍼.WriteString(F포맷된_문자열("'%T' : '%v'\n", 값, 값))
 	}
 
 	return 버퍼.String()
@@ -537,7 +492,7 @@ func F변수값_자료형_문자열(값_모음 ...any) string {
 
 // 메모 해야할 일을 소스코드 위치와 함께 표기해 주는 메소드.
 func F중복없는_문자열_출력(포맷_문자열 string, 인수 ...any) {
-	문자열 := f포맷된_문자열(포맷_문자열, 인수...)
+	문자열 := F포맷된_문자열(포맷_문자열, 인수...)
 
 	if F문자열_중복_확인(문자열) {
 		return
@@ -549,7 +504,7 @@ func F중복없는_문자열_출력(포맷_문자열 string, 인수 ...any) {
 			continue
 		}
 
-		log.Println(f포맷된_문자열("%s %s", 문자열, 호출경로))
+		log.Println(F포맷된_문자열("%s %s", 문자열, 호출경로))
 		return
 	}
 }
